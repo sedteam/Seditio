@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/textboxer2.pfs.stndl.php
-Version=173
+Version=175
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro
@@ -27,7 +27,7 @@ Order=10
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
+<title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript($morejavascript)."
 <script type=\"text/javascript\">
 <!--
 function help(rcode,c1,c2)

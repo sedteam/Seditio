@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.home.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Administration panel
@@ -17,7 +17,7 @@ Description=Administration panel
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-$adminpath[] = array ('admin.php?m=home', $L['Home']);
+$adminpath[] = array (sed_url("admin", "m=home"), $L['Home']);
 
 $pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
 $pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
@@ -32,8 +32,8 @@ if (!function_exists('gd_info') && $cfg['th_amode']!='Disabled')
 if (!empty($adminwarnings))
 	{ $adminmain .= "<div class=\"error\">".$L['adm_warnings']." :".$adminwarnings."</div>"; }
 
-$adminmain .= "<h4>".$L['adm_valqueue']." :</h4><ul>";
-$adminmain .= "<li><a href=\"admin.php?m=page\">".$L['Pages']." : ".$pagesqueued."</a></li>";
+$adminmain .= "<h4>".$L['adm_valqueue']." :</h4><ul class=\"arrow_list\">";
+$adminmain .= "<li><a href=\"".sed_url("admin", "m=page")."\">".$L['Pages']." : ".$pagesqueued."</a></li>";
 $adminmain .= "</ul>";
 
 // --------------------------
@@ -46,7 +46,7 @@ if ($sys['user_istopadmin'])
 		sed_check_xg();
 		$forcesql = sed_import('forcesql','P',INT);
 		sed_stat_set('version', $forcesql);
-		sed_redirect("admin.php");
+		sed_redirect(sed_url("admin", "", "", true));
 		exit;
 		}
 
@@ -58,8 +58,8 @@ if ($sys['user_istopadmin'])
 
 	$adminmain .= "<h4>".$L['upg_upgrade']." :</h4>";
 
-	$adminmain .= "<form id=\"forcesqlversion\" action=\"admin.php?a=force&amp;".sed_xg()."\" method=\"post\">";
-	$adminmain .= "<table class=\"cells\" >";
+	$adminmain .= "<form id=\"forcesqlversion\" action=\"".sed_url("admin", "a=force&".sed_xg())."\" method=\"post\">";
+	$adminmain .= "<table class=\"cells striped\" >";
 	$adminmain .= "<tr><td>".$L['upg_codeversion']." :</td><td style=\"text-align:center;\">".$cfg['version']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['upg_sqlversion']." :</td><td style=\"text-align:center;\">".$cfg['sqlversion']."</td></tr>";
 	$adminmain .= "<tr><td>";
@@ -72,7 +72,7 @@ if ($sys['user_istopadmin'])
     
 		if (file_exists($upg_file))
 		   {
-	     	$adminmain .= "<br /><strong><a href=\"admin.php?m=upgrade&amp;".sed_xg()."\">".$L['upg_upgradenow']."</a></strong>";
+	     	$adminmain .= "<br /><strong><a href=\"".sed_url("admin", "m=upgrade&".sed_xg())."\">".$L['upg_upgradenow']."</a></strong>";
 	     	$adminmain .= "<br />".$L['upg_manual'];
 	    	}
   		else
@@ -103,17 +103,15 @@ if ($sys['user_istopadmin'])
 		}
 
 	$adminmain .= "</select>";
-	$adminmain .= "<input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" />";
+	$adminmain .= " <input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" />";
 	$adminmain .= "</td></tr></table></form>";
 
 	}
 
 $adminmain .= "<h4>".$L['adm_infos'];
-$adminmain .= " (<a onclick=\"return toggleblock('infos')\" href=\"#\">".$L['Show']."</a>) :</h4>";
+$adminmain .= " (<a onclick=\"return toggleblock('infos')\" href=\"".sed_url('admin', '', '#')."\">".$L['Show']."</a>) :</h4>";
 $adminmain .= "<div name=\"log\" id=\"infos\" style=\"display:none;\" >";
-
-
-$adminmain .= "<table class=\"cells\" >";	
+$adminmain .= "<table class=\"cells striped\" >";	
 $adminmain .= (function_exists('phpversion')) ? "<tr><td>".$L['adm_phpver']." :</td><td style=\"text-align:center;\">".@phpversion()."</td></tr>" : '' ;
 $adminmain .= (function_exists('zend_version')) ? "<tr><td>".$L['adm_zendver']." :</td><td style=\"text-align:center;\">".@zend_version()."</td></tr>" : '';
 $adminmain .= (function_exists('php_sapi_name')) ? "<tr><td>".$L['adm_interface']." :</td><td style=\"text-align:center;\">".@php_sapi_name()."</td></tr>" : '';

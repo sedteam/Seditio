@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=datas/config.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Config
 Author=Neocrome
 Description=Configuration
@@ -45,6 +45,8 @@ $cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) defaul
 $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
 $cfg['textmode'] = 'html';				// 'bbcode' for BBcode content, or 'html' (default)
+
+$cfg['multihost'] = TRUE;            // Allow multiple host names for this site 
 
 // ========================
 // Name of MySQL tables

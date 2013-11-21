@@ -13,7 +13,7 @@ Localization done by : Antar, http://subs.com.ru;
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/message.lang.php
-Version=173
+Version=175
 Updated=2012-may-16
 Type=Lang
 Author=Neocrome

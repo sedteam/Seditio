@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=index.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Home page
@@ -36,8 +36,6 @@ require("system/header.php");
 
 $mskin = sed_skinfile('index');
 $t = new XTemplate($mskin);
-
-
 
 /* === Hook === */
 $extp = sed_getextplugins('index.tags');

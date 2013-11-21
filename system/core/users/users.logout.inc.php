@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.logout.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=User authication
@@ -38,13 +38,15 @@ if ($cfg['authmode']==2 || $cfg['authmode']==3)
 
 if ($usr['id']>0)
 	{
-	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='".$usr['ip']."'");
-	sed_redirect("message.php?msg=102");
+	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='".$usr['ip']."'");	
+  $rmdpass_secret = md5(sed_unique(16)); // New sed175
+	$sql = sed_sql_query("UPDATE $db_users SET user_secret = '".$rmdpass_secret."', user_lastip='".$usr['ip']."' WHERE user_id='".$usr['id']."' LIMIT 1");
+  sed_redirect(sed_url("message", "msg=102", "", true));
 	exit;
 	}
 else
 	{
-	sed_redirect("message.php?msg=101");
+	sed_redirect(sed_url("message", "msg=101", "", true));
 	exit;
 	}
 

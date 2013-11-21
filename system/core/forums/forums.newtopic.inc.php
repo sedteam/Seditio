@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -60,8 +60,7 @@ else
 
 if ($fs_state)
 	{
-	header("Location: message.php?msg=602");
-	exit;
+	sed_redirect(sed_url("message", "msg=602", "", true));
 	}
 
 if ($a=='newtopic')
@@ -168,8 +167,7 @@ if ($a=='newtopic')
 			/* ===== */
 
 			sed_shield_update(45, "New topic");
-			header("Location: forums.php?m=posts&q=$q&n=last#bottom");
-			exit;
+			sed_redirect(sed_url("forums", "m=posts&q=".$q."&n=last", "#bottom", true));
 			}
 		}	
 	}
@@ -191,7 +189,7 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'n
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 $post_main = "<div id=\"nt\"><textarea name=\"newmsg\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($newmsg, ENT_QUOTES)."</textarea></div>";
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
+$toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums", "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
@@ -218,7 +216,7 @@ $t->assign(array(
 
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_bbcode($fs_desc),
-	"FORUMS_NEWTOPIC_SEND" => "forums.php?m=newtopic&amp;a=newtopic&amp;s=".$s,
+	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s),
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_TEXT" => $post_main.$bbcodes." ".$smilies." ".$pfs.$poll_form,

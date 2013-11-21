@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -21,10 +21,11 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 sed_block($usr['auth_read']);
 
 $id = sed_import('id','G','INT');
-$al = sed_import('al','G','ALP');
+$al = sed_sql_prep(sed_import('al','G','TXT'));
 $r = sed_import('r','G','ALP');
 $c = sed_import('c','G','TXT');
 $pg = sed_import('pg','G','INT');
+
 $comments = sed_import('comments','G','BOL');
 $ratings = sed_import('ratings','G','BOL');
 
@@ -35,22 +36,24 @@ if (is_array($extp))
 /* ===== */
 
 if (!empty($al))
-	{ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
+	{ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar, u.user_maingrp FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE page_alias='$al' LIMIT 1"); }
 else
-	{ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
+	{ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar, u.user_maingrp FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE page_id='$id'"); }
 
 sed_die(sed_sql_numrows($sql)==0);
 $pag = sed_sql_fetchassoc($sql);
 
+$sys['catcode'] = $pag['page_cat']; //new in v175
+
 $pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
 $pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
 $pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
-$pag['page_tab'] = (empty($pg)) ? 1 : $pg;
-$pag['page_pageurl'] = (empty($pag['page_alias'])) ? "page.php?id=".$pag['page_id'] : "page.php?al=".$pag['page_alias'];
+$pag['page_tab'] = (empty($pg)) ? 0 : $pg;
+$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']) : sed_url("page", "al=".$pag['page_alias']);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
 sed_block($usr['auth_read']);
@@ -58,15 +61,15 @@ sed_block($usr['auth_read']);
 if ($pag['page_state']==1 && !$usr['isadmin'])
 	{
 	sed_log("Attempt to directly access an un-validated page", 'sec');
-	header("Location: message.php?msg=930");
+	sed_redirect(sed_url("message", "msg=930", "", true));
 	exit;
 	}
 
-if (mb_substr($pag['page_text'], 0, 6)=='redir:')
+if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 	{
 	$redir = str_replace('redir:', '', trim($pag['page_text']));
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
-	header("Location: ".$redir);
+	sed_redirect($redir);
 	exit;
 	}
 elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
@@ -79,8 +82,16 @@ if($pag['page_file'] && $a=='dl')
 	$file_size = @filesize($row['page_url']);
 	$pag['page_filecount']++;
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
-	header("Location: ".$pag['page_url']);
-	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
+
+  if(preg_match('#^(http|ftp)s?://#', $pag['page_url'])) 
+    { 
+        sed_redirect($pag['page_url']);
+    }
+  else {
+        sed_redirect($sys['abs_url'].$pag['page_url']);
+    }  
+
+//	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
 	exit;
 	}
 
@@ -89,6 +100,8 @@ if ($n!='modup' && $n!='moddown' && $n!='delete')
   $pag['page_count']++;
   $sql = sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'");
   }
+
+// Multitabs, modify in Sed v175
 
 $pag['page_tabs'] = explode('[newpage]', $pag['page_text'], 99);
 $pag['page_totaltabs'] = count($pag['page_tabs']);
@@ -109,38 +122,38 @@ if ($pag['page_totaltabs']>1)
 		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
 		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
 
-		if ($p2>$p1 && $p1<4)
+		if ($p2 > $p1 && $p1 <4)
 			{
-			$pag['page_tabtitle'][$i] = substr ($pag['page_tabs'][$i], $p1+7, ($p2-$p1)-7);
-			if ($i+1==$pag['page_tab'])
+			$pag['page_tabtitle'][$i] = mb_substr($pag['page_tabs'][$i], $p1+7, ($p2-$p1)-7);
+			if ($i == $pag['page_tab'])
 				{
 				$pag['page_tabs'][$i] = trim(str_replace('[title]'.$pag['page_tabtitle'][$i].'[/title]', '', $pag['page_tabs'][$i]));
 				}
 			}
 		else
-			{ $pag['page_tabtitle'][$i] = ''; }
-
-		$pag['page_tabtitles'][] .= "<a href=\"".$pag['page_pageurl']."&amp;pg=".($i+1)."\">".($i+1).". ".$pag['page_tabtitle'][$i]."</a>";
-		$pag['page_tabnav'] .= ($i+1==$pag['page_tab']) ? '&gt; ' : '[';
-		$pag['page_tabnav'] .= "<a href=\"".$pag['page_pageurl']."&amp;pg=".($i+1)."\">".($i+1)."</a>";
-		$pag['page_tabnav'] .= ($i+1==$pag['page_tab']) ? ' &lt; ' : '] ';
+			{ $pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1); }
+		
+    $tab_url = empty($pag['page_alias']) ? sed_url("page", "id=".$pag['page_id']."&pg=".$i) : sed_url("page", "al=".$pag['page_alias']."&pg=".($i+1));     
+    
+    $pag['page_tabtitles'][] .= "<a href=\"".$tab_url."\">".($i+1).". ".$pag['page_tabtitle'][$i]."</a>";		
 		$pag['page_tabs'][$i] = trim(str_replace('[newpage]', '', $pag['page_tabs'][$i]));
-		$selected = ($i+1==$pag['page_tab']) ? "selected=\"selected\"" : '';
-		$pag['page_tabselect'] .= "<option $selected value=\"".$pag['page_pageurl']."&amp;pg=".($i+1)."\">".($i+1)." - ".$pag['page_tabtitle'][$i]."</option>";
-		}
+		$selected = ($i==$pag['page_tab']) ? "selected=\"selected\"" : '';
+		$pag['page_tabselect'] .= "<option $selected value=\"".$tab_url."\">".($i+1)." - ".$pag['page_tabtitle'][$i]."</option>";	
+  	}
 
 	$pag['page_tabtitles'] = implode('<br />', $pag['page_tabtitles']);
-	$pag['page_text'] = $pag['page_tabs'][$pag['page_tab']-1];
+	$pag['page_text'] = $pag['page_tabs'][$pag['page_tab']];
 	$pag['page_tabselect'] .= "</select>";
+  
+  $pag['page_tabnav'] = sed_pagination($pag['page_pageurl'], $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');  
+  list($pag['page_tabprev'], $pag['page_tabnext']) = sed_pagination_pn($pag['page_pageurl'], $pag['page_tab'], $pag['page_totaltabs'], 1, true, 'pg');	
+  }
 
-	$pag['page_tabprev'] = ($pag['page_tab']>1) ?  "<a href=\"".$pag['page_pageurl']."&amp;pg=".($pag['page_tab']-1)."\">".$sed_img_left."</a>" : '&nbsp;';
-	$pag['page_tabnext'] = ($pag['page_tab']<$pag['page_totaltabs']) ? "<a href=\"".$pag['page_pageurl']."&amp;pg=".($pag['page_tab']+1)."\">".$sed_img_right."</a>" : '&nbsp;';
-	}
+$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"); 
 
-
-$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"list.php?c=%1\$s\">%2\$s</a>");
-$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
-$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".$pag['page_tabtitle'][$pag['page_tab']-1].")" : '';
+$pag['page_fulltitle'] = empty($catpath) ? "" : $catpath ." ".$cfg['separator']." "; 
+$pag['page_fulltitle'] .= "<a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
+$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']])) ? " (".$pag['page_tabtitle'][$pag['page_tab']].")" : '';
 
 $item_code = 'p'.$pag['page_id'];
 
@@ -153,11 +166,17 @@ $allowcommentspage = $pag['page_allowcomments'];
 $allowratingspage = $pag['page_allowratings'];
 
 $comments = $cfg['showcommentsonpage'] ? $cfg['showcommentsonpage'] : $comments;
-if ($allowcommentscat) { list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $pag['page_pageurl'], $comments, $allowcommentspage); }
-if ($allowratingscat) { list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $pag['page_pageurl'], $ratings, $allowratingspage); }
+
+//fix for sed_url()
+$url_param = (empty($pag['page_alias'])) ? "id=".$pag['page_id'] : "al=".$pag['page_alias'];
+$url_page = array('part' => 'page', 'params' => $url_param);
+
+if ($allowcommentscat) { list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $url_page, $comments, $allowcommentspage); }
+if ($allowratingscat) { list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $url_page, $ratings, $allowratingspage); }
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = $pag['page_title'];
+$out['canonical_url'] = $pag['page_pageurl'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
@@ -167,7 +186,8 @@ if (is_array($extp))
 
 require("system/header.php");
 
-$mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));
+$mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));  
+
 $t = new XTemplate($mskin);
 
 $t->assign(array(
@@ -189,7 +209,7 @@ $t->assign(array(
 	"PAGE_EXTRA5" => $pag['page_extra5'],
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
-	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
 	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar']),
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
@@ -206,7 +226,6 @@ $t->assign(array(
 		$t->assign(array(
 			"PAGE_MULTI_TABNAV" => $pag['page_tabnav'],
 			"PAGE_MULTI_TABTITLES" => $pag['page_tabtitles'],
-			"PAGE_MULTI_CURTAB" => $pag['page_tab'],
 			"PAGE_MULTI_MAXTAB" => $pag['page_totaltabs'],
 			"PAGE_MULTI_SELECT" => $pag['page_tabselect'],
 			"PAGE_MULTI_PREV" => $pag['page_tabprev'],
@@ -220,8 +239,8 @@ $t->assign(array(
 		{
 		$t-> assign(array(
 			"PAGE_ADMIN_COUNT" => $pag['page_count'],
-			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"admin.php?m=page&amp;a=unvalidate&amp;id=".$pag['page_id']."&amp;".sed_xg()."\">".$L['Putinvalidationqueue']."</a>",
-			"PAGE_ADMIN_EDIT" => "<a href=\"page.php?m=edit&amp;id=".$pag['page_id']."&amp;r=list\">".$L['Edit']."</a>"
+			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"".sed_url("admin", "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a>",
+			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>"
 			));
 
 		$t->parse("MAIN.PAGE_ADMIN");
@@ -253,7 +272,7 @@ $t->assign(array(
 			{ $pag['page_fileicon'] = ''; }
 
 		$t->assign(array(
-			"PAGE_FILE_URL" => "page.php?id=".$pag['page_id']."&amp;a=dl",
+			"PAGE_FILE_URL" => sed_url("page", "id=".$pag['page_id']."&a=dl"),
 			"PAGE_FILE_SIZE" => $pag['page_size'],
 			"PAGE_FILE_COUNT" => $pag['page_filecount'],
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],

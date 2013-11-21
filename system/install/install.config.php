@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=install.config.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.install
 Author=Neocrome
 Description=Configuration builder
@@ -62,6 +62,8 @@ $cfg_data .= "\$cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot
 $cfg_data .= "\$cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed\n";
 $cfg_data .= "\$cfg['textmode'] = '".$textmode."';				// 'bbcode' for BBcode content, or 'html' (default)\n";
 // $cfg_data .= "\$cfg['cacheparsed'] = TRUE;  				// Will cache the parsed output, when Input mode = 'bbcode'.\n";
+
+$cfg_data .= "\$cfg['multihost'] = TRUE;            // Allow multiple host names for this site\n"; 
 
 $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// Name of MySQL tables\n";

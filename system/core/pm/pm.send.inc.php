@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=pm.send.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Private messages
@@ -119,7 +119,7 @@ if (is_array($extp))
 					$rusername = sed_cc($row['user_name']);
 					$remail = $row['user_email'];
 					$rsubject = $cfg['maintitle']." - ".$L['pm_notifytitle'];
-					$rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl']."/pm.php");
+					$rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl']."/".sed_url("pm", "", "", false, false));
 					sed_mail($remail, $rsubject, $rbody);
 					sed_stat_inc('totalmailpmnot');
 					}
@@ -134,7 +134,7 @@ if (is_array($extp))
 
 		sed_stat_inc('totalpms');
 		sed_shield_update(30, "New private message (".$totalrecipients.")");
-		header("Location: message.php?msg=502");
+		sed_redirect(sed_url("message", "msg=502", "", true));
 		exit;
 		}
 	}
@@ -205,7 +205,7 @@ else { $bbcodes = ''; $smilies = ''; }
 	
 $pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
-$pm_sendlink = ($usr['auth_write']) ? "<a href=\"pm.php?m=send\">".$L['pm_sendnew']."</a>" : '';
+$pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url("pm", "m=send")."\">".$L['pm_sendnew']."</a>" : '';
 
 $out['subtitle'] = $L['Private_Messages'];
 
@@ -225,18 +225,18 @@ if (!empty($error_string))
 	}
 
 $t->assign(array(
-	"PMSEND_TITLE" => "<a href=\"pm.php\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
+	"PMSEND_TITLE" => "<a href=\"".sed_url("pm")."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
-	"PMSEND_INBOX" => "<a href=\"pm.php\">".$L['pm_inbox']."</a>:".$totalinbox,
-	"PMSEND_ARCHIVES" => "<a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>:".$totalarchives,
-	"PMSEND_SENTBOX" => "<a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>:".$totalsentbox,
-	"PMSEND_FORM_SEND" => "pm.php?m=send&amp;a=send&amp;to=".$to,
+	"PMSEND_INBOX" => "<a href=\"".sed_url("pm")."\">".$L['pm_inbox']."</a>:".$totalinbox,
+	"PMSEND_ARCHIVES" => "<a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a>:".$totalarchives,
+	"PMSEND_SENTBOX" => "<a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
+	"PMSEND_FORM_SEND" => sed_url("pm", "m=send&a=send&to=".$to),
 	"PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".$newpmtitle."\" size=\"64\" maxlength=\"64\" />",
 	"PMSEND_FORM_TEXT" =>  "<div><textarea name=\"newpmtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".$newpmtext."</textarea></div>".$bbcodes." ".$smilies." ".$pfs,
 	"PMSEND_FORM_TEXTBOXER" => "<div><textarea name=\"newpmtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".$newpmtext."</textarea></div>".$bbcodes." ".$smilies." ".$pfs,
-    "PMSEND_FORM_BBCODES" => $bbcodes,
-    "PMSEND_FORM_SMILIES" => $smilies, 
+  "PMSEND_FORM_BBCODES" => $bbcodes,
+  "PMSEND_FORM_SMILIES" => $smilies, 
 	"PMSEND_FORM_MYPFS" => $pfs,
 	"PMSEND_FORM_TOUSER" => "<div><textarea name=\"newpmrecipient\" rows=\"3\" cols=\"".$cfg['textarea_default_width']."\" class=\"noeditor\">".$touser."</textarea></div>"
 		));

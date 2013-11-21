@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=view.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome / Enhancements by Dimitar Hubenov (dux) - 2006-may-10
 Description=HTML/TXT viewer
@@ -19,7 +19,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','TXT');
 
-if (mb_strpos($v, "\.") !== FALSE || mb_strpos($v, "/") !== FALSE))
+if (mb_strpos($v, "\.") !== FALSE || mb_strpos($v, "/") !== FALSE)
 	{ die('Wrong URL.'); }
 
 $incl_html = "datas/html/".$v.".html";

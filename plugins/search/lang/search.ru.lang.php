@@ -3,7 +3,7 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.ru.lang.php
-Version=173
+Version=175
 Updated=2012-may-16
 Type=
 Author=Neocrome, Translated by Amro - http://seditio.org

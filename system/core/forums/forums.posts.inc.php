@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -105,8 +105,7 @@ if ($row = sed_sql_fetchassoc($sql))
 
 	if ($fs_state)
 		{
-		header("Location: message.php?msg=602");
-		exit;
+		sed_redirect(sed_url("message", "msg=602", "", true));
 		}
 	}
 else
@@ -193,8 +192,7 @@ if ($a=='newpost' && $usr['auth_write'])
 
 		sed_forum_sectionsetlast($s);
 		sed_shield_update(30, "New post");
-		header("Location: forums.php?m=posts&q=$q&n=last#bottom");
-		exit;
+		sed_redirect(sed_url("forums", "m=posts&q=".$q."&n=last", "#bottom", true));
 		}
 	}
 
@@ -264,7 +262,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			sed_log("Delete topic #".$q." (no post left)",'for');
 			sed_forum_sectionsetlast($s);
 			}
-		header("Location: forums.php?m=topics&s=".$s);
+		sed_redirect(sed_url("forums", "m=topics&s=".$s, "", true));
 		exit;
 		}
 	else
@@ -297,8 +295,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 			if ($row = sed_sql_fetchassoc($sql))
 				{
-				header("Location: forums.php?m=posts&p=".$row['fp_id']."#".$row['fp_id']);
-					exit;
+				  sed_redirect(sed_url("forums", "m=posts&p=".$row['fp_id'], "#".$row['fp_id'], true));
 				}
 			}
 		}
@@ -412,7 +409,7 @@ if (!$cfg['disable_polls'] && $ft_poll>0)
 		if ($alreadyvoted || $ft_state)
 			{ $poll_result .= $row6['po_text']; }
 		else
-			{ $poll_result .= "<a href=\"forums.php?m=posts&amp;q=$q&amp;a=send&amp;".sed_xg()."&amp;poll=".$ft_poll."&amp;vote=".$po_id."\">".$row6['po_text']."</a>"; }
+			{ $poll_result .= "<a href=\"".sed_url("forums", "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll."&vote=".$po_id)."\">".$row6['po_text']."</a>"; }
 
 		$poll_result .= "</td><td style=\"text-align:right;\">".$percent."%</td><td style=\"text-align:center; width:24px;\">(".$po_count.")</td>";
 		$poll_result .= "<td style=\"text-align:left;\"><img src=\"skins/$skin/img/system/poll-bar1.gif\" height=\"12\" alt=\"\" />";
@@ -431,8 +428,8 @@ $nbpages = ceil($totalposts / $cfg['maxtopicsperpage']);
 $curpage = $d / $cfg['maxtopicsperpage'];
 $notlastpage = (($d + $cfg['maxtopicsperpage'])<$totalposts) ? TRUE : FALSE;
 
-$pages = sed_pagination("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage'], TRUE);
+$pages = sed_pagination(sed_url("forums", "m=posts&q=".$q), $d, $totalposts, $cfg['maxtopicsperpage']);
+list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=posts&q=".$q), $d, $totalposts, $cfg['maxtopicsperpage'], TRUE);
 
 /* ============ For Subforums Sed 172 ================ */
 
@@ -440,9 +437,9 @@ $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_parentcat
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
     ORDER by fn_path ASC, fs_order ASC");
 	
-$movebox = "<input type=\"submit\" class=\"submit\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
+$movebox = "<input type=\"submit\" class=\"submit btn-fix\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
 $jumpbox .= "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
-$jumpbox .= "<option value=\"forums.php\">".$L['Forums']."</option>";
+$jumpbox .= "<option value=\"".sed_url("forums")."\">".$L['Forums']."</option>";
 
 while ($row1 = sed_sql_fetchassoc($sql1))
 	{
@@ -464,10 +461,10 @@ foreach ($forum_sections as $key => $value)
 	if ($row1['fs_id'] != $s && $usr['isadmin'])
 		{ $movebox .= "<option value=\"".$forum_sections[$key]['fs_id']."\">".$cfs."</option>"; }
    	$selected = ($forum_sections[$key]['fs_id']==$s) ? "selected=\"selected\"" : '';
-	$jumpbox .= "<option $selected value=\"forums.php?m=topics&amp;s=".$forum_sections[$key]['fs_id']."\">".$cfs."</option>";
+	$jumpbox .= "<option $selected value=\"".sed_url("forums", "m=topics&s=".$forum_sections[$key]['fs_id'])."\">".$cfs."</option>";
 	}
 
-$movebox .= "</select> ".$L['Ghost']."<input type=\"checkbox\" class=\"checkbox\" name=\"ghost\" checked=\"checked\" />";
+$movebox .= "</select> ".$L['Ghost']." <input type=\"checkbox\" class=\"checkbox\" name=\"ghost\" checked=\"checked\" />";
 $jumpbox .= "</select>";
 
 if ($fs_parentcat > 0) 
@@ -481,25 +478,25 @@ else { $parentcat = FALSE; }
 
 if ($usr['isadmin'])
 	{
-	$adminoptions = "<form id=\"movetopic\" action=\"forums.php?m=topics&amp;a=move&amp;".sed_xg()."&amp;s=".$s."&amp;q=".$q."\" method=\"post\">";
-	$adminoptions .= $L['Topicoptions']." : <a href=\"forums.php?m=topics&amp;a=bump&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Bump'];
-	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=lock&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Lock'];
-	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=sticky&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Makesticky'];
-	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=announcement&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Announcement'];
-	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=private&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Private']." (#)";
-	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=clear&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Default'];
-  $adminoptions .= "</a> &nbsp; ".$L['Delete'].":[<a href=\"forums.php?m=topics&amp;a=delete&amp;".sed_xg()."&amp;s=".$s."&amp;q=".$q."\">x</a>]&nbsp;<br />".$movebox."</form> &nbsp;";
+	$adminoptions = "<div class=\"box\"><form id=\"movetopic\" action=\"".sed_url("forums", "m=topics&a=move&".sed_xg()."&s=".$s."&q=".$q)."\" method=\"post\">";
+	$adminoptions .= $L['Topicoptions']." : <a href=\"".sed_url("forums", "m=topics&a=bump&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Bump'];
+	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=lock&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Lock'];
+	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=sticky&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Makesticky'];
+	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=announcement&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Announcement'];
+	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=private&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Private']." (#)";
+	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=clear&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Default'];
+  $adminoptions .= "</a> &nbsp; ".$L['Delete'].":[<a href=\"".sed_url("forums", "m=topics&a=delete&".sed_xg()."&s=".$s."&q=".$q)."\">x</a>]&nbsp;<br />".$movebox."</form></div>";
 	}
 else
-	{ $adminoptions = "&nbsp;"; }
+	{ $adminoptions = ""; }
 
 if ($ft_poll>0)
 	{ $ft_title = $L['Poll'].": ".$ft_title; }
 
 $ft_title = ($ft_mode==1) ? "# ".sed_cc($ft_title) : sed_cc($ft_title);
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, TRUE, $parentcat);
-$toptitle .= " ".$cfg['separator']." <a href=\"forums.php?m=posts&amp;q=".$q."\">".$ft_title."</a>";
+$toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, TRUE, $parentcat);
+$toptitle .= " ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&q=".$q)."\">".$ft_title."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
@@ -536,9 +533,9 @@ while ($row = sed_sql_fetchassoc($sql))
 	$lastposterip = $row['fp_posterip'];
 	$fp_num++;
 
-	$adminoptions = ($usr['id']>0) ? "<a href=\"forums.php?m=posts&amp;s=".$s."&amp;q=".$q."&amp;quote=".$row['fp_id']."&amp;n=last#np\">".$L['Quote']."</a>" : "&nbsp;";
-	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? " &nbsp; <a href=\"forums.php?m=editpost&amp;s=".$s."&amp;q=".$q."&amp;p=".$row['fp_id']."&amp;".sed_xg()."\">".$L['Edit']."</a>" : '';
-	$adminoptions .= ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? " &nbsp; ".$L['Delete'].":[<a href=\"forums.php?m=posts&amp;a=delete&amp;".sed_xg()."&amp;s=".$s."&amp;q=".$q."&amp;p=".$row['fp_id']."\">x</a>]" : '';
+	$adminoptions = ($usr['id']>0) ? "<a href=\"".sed_url("forums", "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
+	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? " &nbsp; <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
+	$adminoptions .= ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? " &nbsp; ".$L['Delete'].":[<a href=\"".sed_url("forums", "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\">x</a>]" : '';
 	$adminoptions .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
 
 	if ($usr['id']>0 && $n=='unread' && !$unread_done && $row['fp_creation']>$usr['lastvisit'])
@@ -576,13 +573,13 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$t-> assign(array(
 		"FORUMS_POSTS_ROW_ID" => $row['fp_id'],
-		"FORUMS_POSTS_ROW_IDURL" => "<a id=\"".$row['fp_id']."\" href=\"forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."\">".$row['fp_id']."</a>",
+		"FORUMS_POSTS_ROW_IDURL" => "<a id=\"".$row['fp_id']."\" href=\"".sed_url("forums", "m=posts&p=".$row['fp_id'], "#".$row['fp_id'])."\">".$row['fp_id']."</a>",
 		"FORUMS_POSTS_ROW_CREATION" => $row['fp_created'],
 		"FORUMS_POSTS_ROW_UPDATED" => $row['fp_updated'],
 		"FORUMS_POSTS_ROW_UPDATER" => sed_cc($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
 		"FORUMS_POSTS_ROW_TEXT" => $row['fp_text'],
-		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], sed_cc($row['fp_postername'])),
+		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], sed_cc($row['fp_postername']), $row['user_maingrp']),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_MAINGRP" => sed_build_group($row['user_maingrp']),
 		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
@@ -638,13 +635,13 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		$sql4 = sed_sql_query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_sectionid='$s' AND fp_id='$quote' LIMIT 1");
 
 		if ($row4 = sed_sql_fetchassoc($sql4))
-			{ $newmsg = "<blockquote><a href=\"forums.php?m=posts&p=".$row4['fp_id']."#".$row4['fp_id']."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; }
+			{ $newmsg = "<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; }
 		}
 
 	$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
-	$post_mark = "<div id=\"np\">";
-	$post_main = $post_mark."<textarea name=\"newmsg\" rows=\"12\" cols=\"80\">".sed_cc($newmsg)."</textarea></div>";
+
+	$post_main = "<div id=\"np\"><textarea name=\"newmsg\" rows=\"12\" cols=\"80\">".sed_cc($newmsg)."</textarea></div>";
 
 // ---------
 if ($cfg['textmode']=='bbcode')
@@ -658,7 +655,7 @@ else { $bbcodes = ''; $bbcodes_local =''; $smilies = ''; $smilies_local = ''; }
 // ---------
 
 	$t->assign(array(
-		"FORUMS_POSTS_NEWPOST_SEND" => "forums.php?m=posts&amp;a=newpost&amp;s=".$s."&amp;q=".$q,
+		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=".$s."&q=".$q),
 		"FORUMS_POSTS_NEWPOST_TEXT" => $post_main.$bbcodes." ".$smilies." ".$pfs,
 		"FORUMS_POSTS_NEWPOST_TEXTONLY" => $post_main,
 		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main.$bbcodes." ".$smilies." ".$pfs,

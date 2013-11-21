@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=gallery.browse.inc
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -26,12 +26,17 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-
 $sql_pff = sed_sql_query("SELECT f.*, u.user_name FROM $db_pfs_folders f
 LEFT JOIN $db_users AS u ON f.pff_userid=u.user_id
 WHERE pff_id='$f' AND pff_type=2");
 sed_die(sed_sql_numrows($sql_pff)==0);
 $pff = sed_sql_fetchassoc($sql_pff);
+
+$pff['pff_desc'] = sed_parse($pff['pff_desc'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $pff['pfs_desc_ishtml']);
+if (!$pff['pff_desc_ishtml'] && $cfg['textmode'] == 'html')
+	{
+	$sql3 = sed_sql_query("UPDATE $db_pfs_folders SET pff_desc_ishtml=1, pff_desc='".sed_sql_prep($pff['pff_desc'])."' WHERE pff_id=".$pff['pff_id']); 
+	}	
 
 $sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_folderid='$f' ORDER BY pfs_id ASC");
 $nbitems = sed_sql_numrows($sql_pff);
@@ -40,7 +45,7 @@ $userid = $pff['pff_userid'];
 
 $sql2 = sed_sql_query("UPDATE $db_pfs_folders SET pff_count=pff_count+1 WHERE pff_id='".$f."' LIMIT 1");
 
-$title = "<a href=\"gallery.php\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"gallery.php?f=".$pff['pff_id']."\">".$pff['pff_title']."</a>";
+$title = "<a href=\"".sed_url("gallery")."\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "f=".$pff['pff_id'])."\">".$pff['pff_title']."</a>";
 $subtitle = '';
 $out['subtitle'] = '';
 
@@ -50,7 +55,6 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-
 require("system/header.php");
 $t = new XTemplate("skins/".$skin."/gallery.browse.tpl");
 
@@ -59,11 +63,9 @@ $t-> assign(array(
 	"GALLERY_BROWSE_SUBTITLE" => $subtitle
 		));
 
-
-
 $t->assign(array(
 	"GALLERY_BROWSE_ID" => $pff['pff_id'],
-	"GALLERY_BROWSE_DESC" => sed_cc($pff['pff_desc']),
+	"GALLERY_BROWSE_DESC" => $pff['pff_desc'],
 	"GALLERY_BROWSE_COUNT" => $pff['pff_count']
 		));
 
@@ -131,23 +133,30 @@ while ($pfs = sed_sql_fetchassoc($sql))
 		$pfs['cond2'] = '';
 		}
 
-	$pfs['popup'] = "<a href=\"javascript:picture('pfs.php?m=view&amp;v=".$pfs['pfs_file']."',200,200)\">";
+	$pfs['popup'] = "<a href=\"javascript:picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
 
 	if ($usr['isadmin'])
 		{
-		$pfs['admin'] = "<a href=\"pfs.php?m=edit&amp;id=".$pfs['pfs_id']."&amp;userid=".$userid."\">".$out['img_edit']."</a>";
+		$pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$userid)."\">".$out['img_edit']."</a>";
 		}
-
-	$t-> assign(array(
+	
+  $pfs['pfs_desc'] = sed_parse($pfs['pfs_desc'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $pfs['pfs_desc_ishtml']);
+  if (!$pfs['pfs_desc_ishtml'] && $cfg['textmode'] == 'html')
+  	{
+  	$sql3 = sed_sql_query("UPDATE $db_pfs SET pfs_desc_ishtml=1, pfs_desc='".sed_sql_prep($pfs['pfs_desc'])."' WHERE pfs_id=".$pfs['pfs_id']); 
+  	}	
+    
+  $t-> assign(array(
 		"GALLERY_BROWSE_ROW_ID" => $pfs['pfs_id'],
-		"GALLERY_BROWSE_ROW_VIEWURL" => "gallery.php?id=".$pfs['pfs_id'],
+		"GALLERY_BROWSE_ROW_VIEWURL" => sed_url("gallery", "id=".$pfs['pfs_id']),
 		"GALLERY_BROWSE_ROW_VIEWPOPUP" => $pfs['popup'],
 		"GALLERY_BROWSE_ROW_FILE" => $pfs['pfs_file'],
 		"GALLERY_BROWSE_ROW_FULLFILE" => $pfs['pfs_fullfile'],
 		"GALLERY_BROWSE_ROW_THUMB" => "<img src=\"".$cfg['th_dir'].$pfs['pfs_file']."\" alt=\"\" />",
 		"GALLERY_BROWSE_ROW_ICON" => $icon[$pfs['pfs_extension']],
-		"GALLERY_BROWSE_ROW_DESC" => sed_parse($pfs['pfs_desc'],1,1,1),
-		"GALLERY_BROWSE_ROW_SHORTDESC" => sed_cutstring(sed_cc($pfs['pfs_desc']), 48),
+    "GALLERY_BROWSE_ROW_TITLE" => sed_cc($pfs['pfs_title']),
+		"GALLERY_BROWSE_ROW_DESC" => $pfs['pfs_desc'],
+		"GALLERY_BROWSE_ROW_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
 		"GALLERY_BROWSE_ROW_DATE" => date($cfg['dateformat'], $pfs['pfs_date'] + $usr['timezone'] * 3600),
 		"GALLERY_BROWSE_ROW_SIZE" => $pfs['pfs_filesize'].$L['kb'],
 		"GALLERY_BROWSE_ROW_COUNT" => $pfs['pfs_count'],
@@ -157,8 +166,6 @@ while ($pfs = sed_sql_fetchassoc($sql))
 			));
 	$t->parse("MAIN.ROW");
 	}
-
-
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.browse.tags');

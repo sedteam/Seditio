@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/skineditor/skineditor.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -50,7 +50,7 @@ switch ($n)
     { die ('Wrong skin code.'); }
     
   $info = sed_infoget($skininfo);
-  $adminpath[] = array ("admin.php?m=tools&p=skineditor&sk=".$sk, $info['Name']);
+  $adminpath[] = array (sed_url("admin", "m=tools&p=skineditor&sk=".$sk), $info['Name']);
 
   if ($a=='makbak')
     {
@@ -96,7 +96,7 @@ switch ($n)
       { $backupfile[$x] = TRUE; }
     }
     
-  $adminmain .= "<table class=\"cells\">";
+  $adminmain .= "<table class=\"cells striped\">";
   $adminmain .= "<tr>";
   $adminmain .= "<td class=\"coltop\" style=\"width:8%;\">".$L['Edit']."</td>";
   $adminmain .= "<td class=\"coltop\" style=\"width:25%;\">".$L['File']."</td>";
@@ -111,7 +111,7 @@ switch ($n)
     $extension = mb_substr($f, $dotpos, 5);
     $file_size = @filesize($skindir.$x);
     $adminmain .= "<tr>";
-    $adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=tools&amp;p=skineditor&amp;sk=".$sk."&amp;f=".$x."\">".$out['img_edit']."</a></td>"; 
+    $adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&f=".$x)."\">".$out['img_edit']."</a></td>"; 
     $adminmain .= "<td><strong>".$x."</strong></td>";
     $adminmain .= "<td style=\"text-align:center;\">".$file_size."</td>";
        
@@ -120,15 +120,15 @@ switch ($n)
     if ($backupfile[$xbak])
       {
       $adminmain .= "<td style=\"width:10%; text-align:center;\">";
-      $adminmain .= "<a href=\"admin.php?m=tools&amp;p=skineditor&amp;sk=".$sk."&amp;fb=".$x."&amp;a=delbak&amp;".sed_xg()."\">".$out['img_unchecked']."</a> &nbsp; ";
-      $adminmain .= "<a href=\"admin.php?m=tools&amp;p=skineditor&amp;sk=".$sk."&amp;fb=".$x."&amp;a=resbak&amp;".sed_xg()."\">".$out['img_reset']."</a>";
+      $adminmain .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=delbak&".sed_xg())."\">".$out['img_unchecked']."</a> &nbsp; ";
+      $adminmain .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=resbak&".sed_xg())."\">".$out['img_reset']."</a>";
       $adminmain .= "</td>"; 
       $adminmain .= "<td>".$xbak."</td>";      
       }
     else
       {
       $adminmain .= "<td style=\"width:10%; text-align:center;\">";
-      $adminmain .= "<a href=\"admin.php?m=tools&amp;p=skineditor&amp;sk=".$sk."&amp;fb=".$x."&amp;a=makbak&amp;".sed_xg()."\">".$out['img_checked']."</a>";
+      $adminmain .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=makbak&".sed_xg())."\">".$out['img_checked']."</a>";
       $adminmain .= "</td>";
       $adminmain .= "<td>&nbsp;</td>";      
       }
@@ -162,7 +162,7 @@ switch ($n)
     sed_die('Wrong file name');
   
   $info = sed_infoget($skininfo);
-  $adminpath[] = array ("admin.php?m=tools&p=skineditor&sk=".$sk, $info['Name']);
+  $adminpath[] = array (sed_url("admin", "m=tools&p=skineditor&sk=".$sk), $info['Name']);
     
   $editfile = "skins/".$sk."/".$f;
     
@@ -179,12 +179,12 @@ switch ($n)
       {
       if($b1)
         {
-        header("Location: admin.php?m=tools&p=skineditor&sk=".$sk);
+        sed_redirect(sed_url("admin", "m=tools&p=skineditor&sk=".$sk, "", true));
         exit;
         }
       else
         {
-        header("Location: admin.php?m=tools&p=skineditor&sk=".$sk."&f=".$f);
+        sed_redirect(sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&f=".$f, "", true));
         exit;
         }
       }
@@ -200,17 +200,17 @@ switch ($n)
   $filecont = fread($fp, 256000);
   @fclose($fp);
     
-  $adminmain .= "<form id=\"update\" action=\"admin.php?m=tools&amp;p=skineditor&amp;sk=".$sk."&amp;f=".$f."&amp;a=update&amp;".sed_xg()."\" method=\"post\">";
-  $adminmain .= "<table class=\"cells\">";
+  $adminmain .= "<form id=\"update\" action=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&f=".$f."&a=update&".sed_xg())."\" method=\"post\">";
+  $adminmain .= "<table class=\"cells striped\">";
   $adminmain .= "<tr>";
   $adminmain .= "<td style=\"width:15%;\">".$L['File']." :</td>";
-  $adminmain .= "<td><strong>".$editfile."</strong></td><td style=\"text-align:center;\"><a href=\"admin.php?m=tools&amp;p=skineditor&sk=".$sk."\">".$L['Cancel']."</td></tr>";
+  $adminmain .= "<td><strong>".$editfile."</strong></td><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk)."\">".$L['Cancel']."</td></tr>";
   $adminmain .= "<tr><td colspan=\"3\">";
   $adminmain .= "<textarea cols=\"96\" rows=\"16\" name=\"content\" class=\"noeditor\">".$filecont."</textarea>";    
   $adminmain .= "</td></tr>";
   $adminmain .= "<tr><td style=\"text-align:center;\" colspan=\"3\">";
-  $adminmain .= "<input type=\"submit\" class=\"submit\" name=\"b1\" value=\"".$L['Update']."\">";
-  $adminmain .= " <input type=\"submit\" class=\"submit\" name=\"b2\" value=\"".$L['plu_reopen']."\">";  
+  $adminmain .= "<input type=\"submit\" class=\"submit btn\" name=\"b1\" value=\"".$L['Update']."\">";
+  $adminmain .= " <input type=\"submit\" class=\"submit btn\" name=\"b2\" value=\"".$L['plu_reopen']."\">";  
   $adminmain .= "</td></tr>";
   $adminmain .= "</table></form>";
         
@@ -231,7 +231,7 @@ while ($f = readdir($handle))
 closedir($handle);
 sort($skinlist);
 
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<table class=\"cells striped\">";
 $adminmain .= "<tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:8%;\">".$L['Edit']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Skin']."</td>";
@@ -248,7 +248,7 @@ while(list($i,$x) = each($skinlist))
 	$skininfo = "skins/".$x."/".$x.".php";
 	$info = sed_infoget($skininfo);
   $adminmain .= "<tr>";
-  $adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=tools&p=skineditor&sk=".$x."\">".$out['img_edit']."</a></td>"; 
+  $adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$x)."\">".$out['img_edit']."</a></td>"; 
   $adminmain .= "<td><strong>".$info['Name']."</strong></td>";
   $adminmain .= "<td style=\"text-align:center;\">".$x."</td>";
   $adminmain .= "<td style=\"text-align:center;\">".$info['Version']."</td>";

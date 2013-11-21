@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/common.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Common
@@ -16,6 +16,16 @@ Description=Common
 ==================== */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
+if (get_magic_quotes_gpc()) //New in 175
+{ 
+    function sed_disable_mqgpc(&$value) 
+    { 
+        $value = stripslashes($value); 
+    } 
+    $gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST); 
+    array_walk_recursive($gpc, 'sed_disable_mqgpc'); 
+} 
 
 error_reporting(E_ALL ^ E_NOTICE);  
 
@@ -61,12 +71,59 @@ $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $online_timedout = $sys['now'] - $cfg['timedout'];
 $cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 $cfg['css'] = $cfg['defaultskin'];
-$usr['ip'] = ($cfg['clustermode']) ? $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'] : $_SERVER['REMOTE_ADDR'] ;
+
+if($cfg['clustermode'])  //Fix 175
+  {
+  	if(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+  	elseif(isset($_SERVER['HTTP_X_REAL_IP'])) $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
+  	elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+  	else $usr['ip'] = $_SERVER['REMOTE_ADDR'];
+  }
+else
+  {
+  	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
+  }
+if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip']))  //Fix 175
+  {
+  	$usr['ip'] = '0.0.0.0';
+  }
+
 $cfg['mobile_client'] = sed_mobile_detect();
-$sys['unique'] = sed_unique(16);
-$sys['url'] = base64_encode($_SERVER['REQUEST_URI']);
+$sys['unique'] = sed_unique(16); 
+
+// ------------------ New in 175
+
+$sys['request_uri'] = $_SERVER['REQUEST_URI'];  
+
+$sys['url'] = base64_encode($sys['request_uri']);
 $sys['url_redirect'] = 'redirect='.$sys['url'];
 $redirect = sed_import('redirect','G','SLU');
+
+$url_default = parse_url($cfg['mainurl']);
+$sys['secure'] = sed_is_ssl();
+$sys['scheme'] = $sys['secure'] ? 'https' : 'http';
+$sys['domain'] = preg_replace('#^www\.#', '', $url_default['host']);
+
+$sys['http_host'] = sed_set_host($sys['domain']);
+
+if ($sys['http_host'] == $url_default['host']
+  || $cfg['multihost']	
+  || $sys['http_host'] != 'www.'.$sys['domain'] 
+      && preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $sys['http_host'])) 
+  {          
+    $sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $sys['http_host']) ? $sys['http_host'] : $url_default['host']; 
+    $sys['domain'] = preg_replace('#^www\.#', '', $sys['host']); 
+  }
+else { $sys['host'] = $url_default['host']; }
+  
+$sys['port'] = empty($url_default['port']) ? '' : ':'.$url_default['port'];
+$sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'];
+
+$sys['canonical_url'] = $sys['abs_url'].$sys['request_uri']; 
+
+if ($sys['abs_url'][mb_strlen($sys['abs_url']) - 1] != '/') { $sys['abs_url'] .= '/'; }     
+
+// -----------------------------
 
 $ishtml = ($cfg['textmode'] == 'html') ? 1 : 0; //New v172
 $usr['user_agent'] = $_SERVER['HTTP_USER_AGENT']; //New v173
@@ -127,6 +184,7 @@ if (!$sed_groups )
 				'title' => sed_cc($row['grp_title']),
 				'desc' => sed_cc($row['grp_desc']),
 				'icon' => $row['grp_icon'],
+        'color' => $row['grp_color'],
 				'pfs_maxfile' => $row['grp_pfs_maxfile'],
 				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
 				'ownerid' => $row['grp_ownerid']
@@ -377,7 +435,6 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
       }
 	}
 
-
 /* ======== Max users ======== */
 
 if (!$cfg['disablehitstats'])
@@ -454,11 +511,13 @@ if (!$cfg['disablehitstats'])
 	else
 		{ sed_stat_create($sys['day']); }
 
-	$sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
+	$sys['referer'] = mb_substr(mb_strtolower($_SERVER['HTTP_REFERER']), 0, 255);
+  $sys['httphost'] = mb_strtolower($_SERVER['HTTP_HOST']); // New Sed175
 
 	if (!empty($sys['referer'])
 		&& mb_stripos($sys['referer'], $cfg['mainurl']) === FALSE
 		&& mb_stripos($sys['referer'], $cfg['hostip']) === FALSE
+    && mb_stripos($sys['referer'], $sys['httphost']) === FALSE 
 		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === FALSE
 		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === FALSE)
 	{
@@ -513,7 +572,6 @@ $out['img_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
 $out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
 $out['img_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
 
-
 $sed_yesno[0] = $L['No'];
 $sed_yesno[1] = $L['Yes'];
 $sed_img_up = $out['img_up'];
@@ -539,6 +597,14 @@ if (!$sed_smilies)
 $usr['timetext'] = sed_build_timezone($usr['timezone']);
 $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
+
+/* ======== Maintenance Mode ======== */  // New in 175
+
+if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel'] && !defined('SED_USERS'))
+  {
+  sed_redirect(sed_url("users", "m=auth", "", true));
+  }
+
 /* ======== Global hook ======== */
 
 $extp = sed_getextplugins('global');
@@ -548,5 +614,13 @@ if (is_array($extp))
 /* ======== Pre-loads ======== */
 
 $sed_bbcodes = sed_loadbbcodes();
+
+/* ======== 301 Redirect to SEF URL's ======== */
+
+if ($cfg['sefurls'] && $cfg['sefurls301']) 
+{      
+   sed_sefurlredirect();
+}
+
 
 ?>

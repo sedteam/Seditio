@@ -7,13 +7,13 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Forums
 [END_SED]
-==================== */
+==================== */ 
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -67,8 +67,7 @@ if ($row = sed_sql_fetchassoc($sql))
 	{
 	if ($row['fs_state'])
 		{
-		header("Location: message.php?msg=602");
-		exit;
+		sed_redirect(sed_url('message','msg=602','',true));
 		}
 
 	$fs_title = $row['fs_title'];
@@ -83,8 +82,7 @@ if ($row = sed_sql_fetchassoc($sql))
 	{
 	if ($row['ft_state'] && !$usr['isadmin'])
 		{
-		header("Location: message.php?msg=603");
-		exit;
+		sed_redirect(sed_url('message','msg=603','',true));
 		}
 	$ft_title = sed_cc($row['ft_title']);
 	$ft_desc = sed_cc($row['ft_desc']);
@@ -134,8 +132,7 @@ if ($a=='update')
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
-	header("Location: forums.php?m=posts&p=$p#$p");
-	exit;
+	sed_redirect(sed_url('forums','m=posts&p='.$p, '#'.$p, true));
 	}
 
 $sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
@@ -162,12 +159,12 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "r
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
 $editpost_text = "<div id=\"ep\"><textarea name=\"rtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($fp_text, ENT_QUOTES)."</textarea></div>";
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
+$toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums","m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." <a href=\"forums.php?m=topics&amp;s=".$s."\">  ".$cfg['separator']." <a href=\"forums.php?m=posts&amp;p=$p#$p\">".$ft_fulltitle."</a> ";
-$toptitle .= $cfg['separator']." <a href=\"forums.php?m=editpost&amp;s=$s&amp;q=$q&amp;p=$p&amp;".sed_xg()."\">".$L['Edit']."</a>";
+$toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
+$toptitle .= $cfg['separator']." <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
@@ -193,7 +190,7 @@ if (!empty($error_string))
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600)." ".$usr['timetext'],
-	"FORUMS_EDITPOST_SEND" => "forums.php?m=editpost&amp;a=update&amp;s=".$s."&amp;q=".$q."&amp;p=".$p."&amp;".sed_xg(),
+	"FORUMS_EDITPOST_SEND" => sed_url("forums","m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
 	"FORUMS_EDITPOST_TEXT" => $editpost_text.$bbcodes." ".$smilies." ".$pfs,
 	"FORUMS_EDITPOST_TEXTONLY" => $editpost_text,
 	"FORUMS_EDITPOST_TEXTBOXER" => $editpost_text.$bbcodes." ".$smilies." ".$pfs,

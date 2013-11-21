@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/search/search.php
-Version=173
+Version=175
 Date=2008-jun-04
 Type=Plugin
 Author=Olivier C. & Spartan
@@ -97,7 +97,7 @@ if ($a=='search')
 
     if ($items>0)
       {
-		  $plugin_body .= "<table class=\"cells\" width=\"100%\">";      
+		  $plugin_body .= "<table class=\"cells striped\" width=\"100%\">";      
       $plugin_body .= "<tr>";
       $plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Category']."</td>";
       $plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Page']."</td>";
@@ -111,8 +111,8 @@ if ($a=='search')
         if (sed_auth('page', $row['page_cat'], 'R'))
 				  {
           $ownername = sed_sql_fetchassoc(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
-          $plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
-		  		$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."\">".sed_cc($row['page_title'])."</a></td>";
+          $plugin_body .= "<tr><td><a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
+		  		$plugin_body .= "<td><a href=\"".sed_url("page", "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a></td>";
           $plugin_body .= "<td style=\"text-align:center;\">".@date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)."</td>";          
 	   			$plugin_body .= "<td style=\"text-align:center;\">".sed_build_user($row['page_ownerid'], $ownername['user_name'])."</td>";
           $plugin_body .= "</tr>";
@@ -148,7 +148,7 @@ if ($a=='search')
        
     if ($items>0)
       {
-		  $plugin_body .= "<table class=\"cells\" width=\"100%\">";
+		  $plugin_body .= "<table class=\"cells striped\" width=\"100%\">";
       $plugin_body .= "<tr>";
       $plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Section']."</td>";
       $plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Topic']."</td>";
@@ -162,7 +162,7 @@ if ($a=='search')
           {
 				  $plugin_body .= "<tr>";
           $plugin_body .= "<td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td>";
-          $plugin_body .= "<td><a href=\"forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."\">".sed_cc($row['ft_title'])."</a></td>";
+          $plugin_body .= "<td><a href=\"".sed_url("forums", "m=posts&p=".$row['fp_id'], "#".$row['fp_id'])."\">".sed_cc($row['ft_title'])."</a></td>";
           $plugin_body .= "<td style=\"text-align:center;\">".@date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600)."</td>";
           $plugin_body .= "<td style=\"text-align:center;\">".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td>";
 
@@ -177,8 +177,8 @@ if ($a=='search')
 
  
 $plugin_body .= "<h4>&nbsp;</h4>";
-$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;a=search\" method=\"post\">";
-$plugin_body .= "<table class=\"cells\">";
+$plugin_body .= "<form id=\"search\" action=\"".sed_url("plug", "e=search&a=search")."\" method=\"post\">";
+$plugin_body .= "<table class=\"cells striped\">";
 $plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin']." :</td>";
 $plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"40\" maxlength=\"64\" /></td></tr>";
 
@@ -221,7 +221,7 @@ if (!$cfg['disable_forums'])
   
 
   
-$plugin_body .= "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></td></tr>";
+$plugin_body .= "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" class=\"submit btn btn-big\" value=\"".$L['Search']."\" /></td></tr>";
 $plugin_body .= "</table></form>";
 
 ?>

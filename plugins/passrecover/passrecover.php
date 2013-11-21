@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -58,13 +58,13 @@ if ($a=='request' && $email!='')
 		
 		if ($generate_password == "no") 
 			{
-				$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&a=auth&v=".$validationkey;
+				$ractivate = $cfg['mainurl']."/".sed_url("plug", "e=passrecover&a=auth&v=".$validationkey, "", false, false);
 				$email_text = $L['plu_email1'];
 				$plugin_body = $L['plu_mailsent'];
 			}
 		else 
 			{
-				$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&a=newpassword&v=".$validationkey;
+				$ractivate = $cfg['mainurl']."/".sed_url("plug", "e=passrecover&a=newpassword&v=".$validationkey, "", false, false);
 				$email_text = $L['plu_email2'];
 				$plugin_body = $L['plu_mailsent2'];
 			}	
@@ -77,7 +77,7 @@ if ($a=='request' && $email!='')
 		sed_shield_update(10,"Password recovery requested");
 
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: message.php?msg=151");
+		sed_redirect(sed_url("message", "msg=151", "", true));
 		exit;
 		}
 	}
@@ -98,14 +98,14 @@ elseif (($a=='auth' || $a=='newpassword') && mb_strlen($v)==32)
 		if ($row['user_maingrp']==2)
 			{
 			sed_log("Password recovery failed, user inactive : ".$rusername);
-			header("Location: message.php?msg=152");
+			sed_redirect(sed_url("message", "msg=152", "", true));
 			exit;
 			}
 
 	 	if ($row['user_maingrp']==3)
 			{
 			sed_log("Password recovery failed, user banned : ".$rusername);
-			header("Location: message.php?msg=153&num=".$row['user_banexpire']);
+      sed_redirect(sed_url("message", "msg=153&num=".$row['user_banexpire'], "", true));
 			exit;
 			}
 		
@@ -150,17 +150,16 @@ elseif (($a=='auth' || $a=='newpassword') && mb_strlen($v)==32)
 		{
 		sed_shield_update(7,"Log in");
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: message.php?msg=151");
+		sed_redirect(sed_url("message", "msg=151", "", true));
 		exit;
 		}
 	}
 else
 	{
 	$plugin_body .= $L['plu_explain1']."<br />".$L['plu_explain2']."<br />".$L['plu_explain3']."<br />&nbsp;<br />";
-	$plugin_body .= "<form name=\"reqauth\" action=\"plug.php?e=passrecover&amp;a=request\" method=\"post\">";
+	$plugin_body .= "<form name=\"reqauth\" action=\"".sed_url("plug", "e=passrecover&a=request")."\" method=\"post\">";
 	$plugin_body .= $L['plu_youremail']."<input type=\"text\" class=\"text\" name=\"email\" value=\"\" size=\"40\" maxlength=\"64\" />";
-	$plugin_body .= "<input type=\"submit\" class=\"submit\" value=\"".$L['plu_request']."\" /></form><br />&nbsp;<br />".$L['plu_explain4'];
-
+	$plugin_body .= "<input type=\"submit\" class=\"submit btn\" value=\"".$L['plu_request']."\" /></form><br />&nbsp;<br />".$L['plu_explain4'];
 	}
 
 ?>

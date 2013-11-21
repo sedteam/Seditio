@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.profile.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=User profile
@@ -21,7 +21,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if ($usr['id']<1)
 	{
-	header("Location: message.php?msg=100&".$sys['url_redirect']);
+	sed_redirect(sed_url("message", "msg=100&".$sys['url_redirect'], "", true));
 	exit;
 	}
 
@@ -61,7 +61,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_avatar='' WHERE user_id='".$usr['id']."'");
-	header("Location: users.php?m=profile#avatar");
+  sed_redirect(sed_url("users", "m=profile", "#avatar", true));
 	exit;
 
 	break;
@@ -80,7 +80,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_photo='' WHERE user_id='".$usr['id']."'");
-	header("Location: users.php?m=profile#photo");
+	sed_redirect(sed_url("users", "m=profile", "#photo", true));
 	exit;
 
 	break;
@@ -99,7 +99,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_signature='' WHERE user_id='".$usr['id']."'");
-	header("Location: users.php?m=profile#signature");
+	sed_redirect(sed_url("users", "m=profile", "#signature", true));
 	exit;
 
 	break;
@@ -113,7 +113,7 @@ switch ($a)
 	$avatar = str_replace(array("'", ",", chr(0x00)), "", $avatar);
 	if (file_exists($avatar))
 		{ $sql = sed_sql_query("UPDATE $db_users SET user_avatar='".sed_sql_prep($avatar)."' WHERE user_id='".$usr['id']."'"); }
-	header("Location: users.php?m=profile#avatar");
+	sed_redirect(sed_url("users", "m=profile", "#avatar", true));
 	exit;
 
 	break;
@@ -377,7 +377,7 @@ switch ($a)
 			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		header("Location: message.php?msg=113");
+		sed_redirect(sed_url("message", "msg=113", "", true));
 		exit;
 		}
 	break;
@@ -408,17 +408,17 @@ $profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
 $profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
 $profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />" : sed_cc($urr['user_email']);
 
-$profile_form_avatar .= (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"users.php?m=profile&amp;a=avatardelete&amp;".sed_xg()."\">x</a>]<br />&nbsp;<br />" : '';
+$profile_form_avatar .= (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=avatardelete&".sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
 $profile_form_avatar .= $L['pro_avatarsupload']." (".$cfg['av_maxx']."x".$cfg['av_maxy']."x".$cfg['av_maxsize'].$L['b'].")<br />";
 $profile_form_avatar .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['av_maxsize']*1024)."\" />";
 $profile_form_avatar .= "<input name=\"userfile\" type=\"file\" class=\"file\" size=\"24\" /><br />";
 
-$profile_form_photo .= (!empty($urr['user_photo'])) ? "<img src=\"".$urr['user_photo']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"users.php?m=profile&amp;a=phdelete&amp;".sed_xg()."\">x</a>]" : '';
+$profile_form_photo .= (!empty($urr['user_photo'])) ? "<img src=\"".$urr['user_photo']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=phdelete&".sed_xg())."\">x</a>]" : '';
 $profile_form_photo .= $L['pro_photoupload']." (".$cfg['ph_maxx']."x".$cfg['ph_maxy']."x".$cfg['ph_maxsize'].$L['b'].")<br />";
 $profile_form_photo .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['ph_maxsize']*1024)."\" />";
 $profile_form_photo .= "<input name=\"userphoto\" type=\"file\" class=\"file\" size=\"24\" /><br />";
 
-$profile_form_signature .= (!empty($urr['user_signature'])) ? "<img src=\"".$urr['user_signature']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"users.php?m=profile&amp;a=sigdelete&amp;".sed_xg()."\">x</a>]" : '';
+$profile_form_signature .= (!empty($urr['user_signature'])) ? "<img src=\"".$urr['user_signature']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=sigdelete&".sed_xg())."\">x</a>]" : '';
 $profile_form_signature .= $L['pro_sigupload']." (".$cfg['sig_maxx']."x".$cfg['sig_maxy']."x".$cfg['sig_maxsize'].$L['b'].")<br />";
 $profile_form_signature .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['sig_maxsize']*1024)."\" />";
 $profile_form_signature .= "<input name=\"usersig\" type=\"file\" class=\"file\" size=\"24\" /><br />";
@@ -431,12 +431,12 @@ if ($a=='avatarchoose')
 	while ($f = readdir($handle))
 		{
 		if ($f != "." && $f != "..")
-			{ $profile_form_avatar .= "<a href=\"users.php?m=profile&amp;a=avatarselect&amp;".sed_xg()."&amp;id=".urlencode($f)."#avatar\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> "; }
+			{ $profile_form_avatar .= "<a href=\"".sed_url("users", "m=profile&a=avatarselect&".sed_xg()."&id=".urlencode($f), "#avatar")."\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> "; }
 		}
 	closedir($handle);
 	}
 else
-	{ $profile_form_avatar .= "<a href=\"users.php?m=profile&amp;a=avatarchoose&amp;".sed_xg()."#list\">".$L['pro_avatarspreset']."</a>"; }
+	{ $profile_form_avatar .= "<a href=\"".sed_url("users", "m=profile&a=avatarchoose&".sed_xg(), "#list")."\">".$L['pro_avatarspreset']."</a>"; }
 
 $user_form_extra1 = ($cfg['extra1uchange']) ? "<input type=\"text\" class=\"text\" name=\"ruserextra1\" value=\"".sed_cc($urr['user_extra1'])."\" size=\"32\" maxlength=\"".$cfg['extra1tsetting']."\" /><input type=\"hidden\" name=\"ruserextra1_p\" value=\"1\" />" : $urr['user_extra1'];
 $user_form_extra2 = ($cfg['extra2uchange']) ? "<input type=\"text\" class=\"text\" name=\"ruserextra2\" value=\"".sed_cc($urr['user_extra2'])."\" size=\"32\" maxlength=\"".$cfg['extra2tsetting']."\" /><input type=\"hidden\" name=\"ruserextra2_p\" value=\"1\" />" : $urr['user_extra2'];
@@ -478,9 +478,9 @@ if (!empty($error_string))
 	}
 
 $t->assign(array(
-	"USERS_PROFILE_TITLE" => "<a href=\"users.php?m=profile\">".$L['pro_title']."</a>",
+	"USERS_PROFILE_TITLE" => "<a href=\"".sed_url("users", "m=profile")."\">".$L['pro_title']."</a>",
 	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
-	"USERS_PROFILE_FORM_SEND" => "users.php?m=profile&amp;a=update&amp;".sed_xg(),
+	"USERS_PROFILE_FORM_SEND" => sed_url("users", "m=profile&a=update&".sed_xg()),
 	"USERS_PROFILE_ID" => $urr['user_id'],
 	"USERS_PROFILE_NAME" => sed_cc($urr['user_name']),
 	"USERS_PROFILE_MAINGRP" => sed_build_group($urr['user_maingrp']),

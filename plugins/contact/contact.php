@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -79,7 +79,7 @@ if ($a=='send')
 		if (!empty($cfg['plugin']['contact']['admincopy2']))
 		  { sed_mail(trim($cfg['plugin']['contact']['admincopy2']), "COPY: ".$sender_subject, $fbody, $fheaders); }    
 
-		header("Location: plug.php?e=contact&a=done");
+		sed_redirect(sed_url("plug", "e=contact&a=done", "", true));
 		exit;
 		}
 	}
@@ -126,9 +126,9 @@ if (!empty($error_string))
 	}
 
 $t->assign(array(
-  "PLUGIN_CONTACT_TITLE" => "<a href=\"plug.php?e=contact\">".$L['plu_title'] ."</a>",
+  "PLUGIN_CONTACT_TITLE" => "<a href=\"".sed_url("plug", "e=contact")."\">".$L['plu_title'] ."</a>",
   "PLUGIN_CONTACT_EXPLAIN" => $L['plu_explain'],
-  "PLUGIN_CONTACT_FORM" => " plug.php?e=contact&amp;a=send",
+  "PLUGIN_CONTACT_FORM" => sed_url("plug", "e=contact&a=send"),
   "PLUGIN_CONTACT_RECIPIENTS_TITLE" => $L['plu_recipients_title'],
   "PLUGIN_CONTACT_RECIPIENTS" => $recipients,
   "PLUGIN_CONTACT_EMAIL_TITLE" => $L['plu_email_title'],

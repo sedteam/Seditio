@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=install.database.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.install
 Author=Neocrome
 Description=Database builder
@@ -20,8 +20,8 @@ if ( !defined('SED_CODE') || !defined('SED_INSTALL') ) { die('Wrong URL.'); }
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."auth (
   auth_id mediumint(8) NOT NULL auto_increment,
   auth_groupid int(11) NOT NULL default '0',
-  auth_code varchar(24) NOT NULL default '',
-  auth_option varchar(24) NOT NULL default '',
+  auth_code varchar(255) NOT NULL default '',
+  auth_option varchar(255) NOT NULL default '',
   auth_rights tinyint(1) unsigned NOT NULL default '0',
   auth_rights_lock tinyint(1) unsigned NOT NULL default '0',
   auth_setbyuserid int(11) unsigned NOT NULL default '0',
@@ -181,6 +181,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."groups (
   grp_title varchar(64) NOT NULL default '',
   grp_desc varchar(255) NOT NULL default '',
   grp_icon varchar(128) NOT NULL default '',
+  grp_color varchar(24) NOT NULL default 'inherit',  
   grp_pfs_maxfile int(11) NOT NULL default '0',
   grp_pfs_maxtotal int(11) NOT NULL default '0',
   grp_ownerid int(11) NOT NULL default '0',
@@ -226,7 +227,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_id int(11) unsigned NOT NULL auto_increment,
   page_state tinyint(1) unsigned NOT NULL default '0',
   page_type tinyint(1) default '0',
-  page_cat varchar(16) default NULL,
+  page_cat varchar(255) default NULL,
   page_key varchar(16) default NULL,
   page_extra1 varchar(255) NOT NULL default '',
   page_extra2 varchar(255) NOT NULL default '',
@@ -252,7 +253,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_rating decimal(5,2) NOT NULL default '0.00',
   page_comcount mediumint(8) unsigned default '0',
   page_filecount mediumint(8) unsigned default '0',
-  page_alias varchar(24) NOT NULL default '',
+  page_alias varchar(255) NOT NULL default '',
   PRIMARY KEY  (page_id),
   KEY page_cat (page_cat)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
@@ -278,7 +279,9 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pfs (
   pfs_file varchar(255) NOT NULL default '',
   pfs_extension varchar(8) NOT NULL default '',
   pfs_folderid int(11) NOT NULL default '0',
-  pfs_desc TEXT NOT NULL,
+  pfs_title varchar(255) NOT NULL default '',  
+  pfs_desc text NOT NULL,
+  pfs_desc_ishtml tinyint(1) DEFAULT '1',
   pfs_size int(11) NOT NULL default '0',
   pfs_count int(11) NOT NULL default '0',
   PRIMARY KEY  (pfs_id),
@@ -290,8 +293,9 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pfs_folders (
   pff_userid int(11) NOT NULL default '0',
   pff_date int(11) NOT NULL default '0',
   pff_updated int(11) NOT NULL default '0',
-  pff_title varchar(64) NOT NULL default '',
-  pff_desc varchar(255) NOT NULL default '',
+  pff_title varchar(255) NOT NULL default '',
+  pff_desc text NOT NULL,
+  pff_desc_ishtml tinyint(1) DEFAULT '1',  
   pff_type tinyint(1) NOT NULL default '0',
   pff_sample int(11) NOT NULL default '0',
   pff_count int(11) NOT NULL default '0',
@@ -398,11 +402,13 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."stats (
 
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."structure (
   structure_id mediumint(8) NOT NULL auto_increment,
-  structure_code varchar(16) NOT NULL default '',
-  structure_path varchar(16) NOT NULL default '',
+  structure_code varchar(255) NOT NULL default '',
+  structure_path varchar(255) NOT NULL default '',
   structure_tpl varchar(64) NOT NULL default '',
-  structure_title varchar(32) NOT NULL default '',
+  structure_title varchar(100) NOT NULL default '',
   structure_desc varchar(255) NOT NULL default '',
+  structure_text text,
+  structure_text_ishtml tinyint(1) DEFAULT '1',
   structure_icon varchar(128) NOT NULL default '',
   structure_group tinyint(1) NOT NULL default '0',
   structure_order varchar(16) NOT NULL default 'title.asc',
@@ -473,10 +479,20 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   PRIMARY KEY (user_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', 1 ,'title.asc', 1, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '',  0 ,'title.asc', 1, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '',  0 ,'title.asc', 1, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 0 ,'date.desc', 1, 1);");
+if ($textmode == "html") 
+{
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', 1, '', '', 1 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', 1, '',  0 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', 1, '',  0 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 1,  '', 0 ,'date.desc', 1, 1);");
+}
+else 
+{
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', 0, '', '', 1 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', 0, '',  0 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', 0, '',  0 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 0,  '', 0 ,'date.desc', 1, 1);");
+}
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 0, 'General chat.', 'system/img/admin/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 0, 'Various and off-topic.', 'system/img/admin/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0);");
@@ -489,13 +505,13 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (4, ':)', 's
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (5, ':cry', 'system/smilies/icon_cry.gif', 'Cry', 44);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (6, ':dontgetit', 'system/smilies/icon_dontgetit.gif', 'Don\'t get it', 41);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (7, ':dozingoff', 'system/smilies/icon_dozingoff.gif', 'Dozing off', 40);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (8, ':love', 'system/smilies/icon_love.gif', 'Love', 10);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (9, ':((', 'system/smilies/icon_mad.gif', 'Mad', 50);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (8, ':(', 'system/smilies/icon_sad.gif', 'Sad', 50);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (9, ':((', 'system/smilies/icon_mad.gif', 'Mad', 46);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (10, ':|', 'system/smilies/icon_neutral.gif', 'Neutral', 43);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (11, ':no', 'system/smilies/icon_no.gif', 'No', 12);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (12, ':O_o', 'system/smilies/icon_o_o.gif', 'Suspicious', 7);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (13, ':p', 'system/smilies/icon_razz.gif', 'Razz', 6);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (14, ':(', 'system/smilies/icon_sad.gif', 'Sad', 46);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (14, ':love', 'system/smilies/icon_love.gif', 'Love', 10);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (15, ':satisfied', 'system/smilies/icon_satisfied.gif', 'Satisfied', 2);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (16, '8)', 'system/smilies/icon_cool.gif', 'Cool', 4);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."smilies VALUES (17, ':wink', 'system/smilies/icon_wink.gif', 'Wink', 3);");
@@ -524,12 +540,12 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (12, 'users', '
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (13, 'trash', 'Trash Can', '110', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (14, 'gallery', 'Gallery', '150', 1, 0);");
 
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (1, 'guests', 0, 0, 0, 'Guests', '', '', 0, 0, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 0, 0, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (3, 'banned', 1, 0, 0, 'Banned', '', '', 0, 0, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (4, 'members', 1, 0, 0, 'Members', '', '', 0, 0, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (5, 'administrators', 99, 0, 0, 'Administrators', '', '', 256, 1024, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (6, 'moderators', 50, 0, 0, 'Moderators', '', '', 256, 1024, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (1, 'guests', 0, 0, 0, 'Guests', '', '', 'darkmagenta', 0, 0, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 'white', 0, 0, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (3, 'banned', 1, 0, 0, 'Banned', '', '', 'gray', 0, 0, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (4, 'members', 1, 0, 0, 'Members', '', '', 'black', 0, 0, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (5, 'administrators', 99, 0, 0, 'Administrators', '', '', 'red', 256, 1024, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (6, 'moderators', 50, 0, 0, 'Moderators', '', '', 'green', 256, 1024, 1);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (1, 1, 'admin', 'a', 0, 255, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (2, 2, 'admin', 'a', 0, 255, 1);");

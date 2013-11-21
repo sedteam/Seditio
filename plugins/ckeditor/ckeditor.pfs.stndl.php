@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.pfs.stndl.php
-Version=173
+Version=175
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro
@@ -20,7 +20,7 @@ Part=pfs
 File=ckeditor.pfs.stndl
 Hooks=pfs.stndl
 Tags=
-Order=10
+Order=11
 [END_SED_EXTPLUGIN]
 ==================== */
 
@@ -28,8 +28,9 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $auto_popup_close = $cfg['plugin']['ckeditor']['auto_popup_close'];
 
-$pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
+$pfs_header1 = $cfg['doctype']."<html>
+<head>
+<title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript($morejavascript).$moremetas."
 <script type=\"text/javascript\">
 <!--
 

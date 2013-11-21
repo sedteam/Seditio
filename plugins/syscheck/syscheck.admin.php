@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -189,7 +189,7 @@ $skinfiles[] = 'users.profile.tpl';
 $skinfiles[] = 'users.register.tpl';
 $skinfiles[] = 'users.tpl';
 
-$table_header = "<table class=\"cells\">";
+$table_header = "<table class=\"cells striped\">";
 $table_header .= "<tr>";
 $table_header .= "<td class=\"coltop\" style=\"width:40%;\">File</td>";
 $table_header .= "<td class=\"coltop\" style=\"width:15%;\">Type</td>";
@@ -242,7 +242,7 @@ $adminmain .= "</table>";
 
 $adminmain .= "<h4>Skin files (templates) :</h4>";
 
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<table class=\"cells striped\">";
 $adminmain .= "<tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:40%;\">Skin file</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";

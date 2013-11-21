@@ -87,9 +87,11 @@ if ($usr['maingrp'] > 3) {
   $smiley_descriptions = mb_substr($smiley_descriptions, 0, $pointpos_sd-1);	
   $smiley_path .= "]";
   $smiley_descriptions .= "]";      	
+  $ck_config = "sed_config.js";     	
   /* ===== Init Ckeditor ===== */  
   if ($ckeditor_other_textarea == "Yes") {  
   $ck_other = "if (textareas[i].getAttribute('class') != 'noeditor') {      
+        CKEDITOR.config.customConfig = '".$ck_config."';
         CKEDITOR.replace(textareas[i], {toolbar: '".$ckeditor_other_toolbar."', skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
         smiley_descriptions: ".$smiley_descriptions.",         
         height: ".$ckeditor_other_height."});             
@@ -102,6 +104,7 @@ if ($usr['maingrp'] > 3) {
     var textareas = document.getElementsByTagName('textarea');
   	for (var i = 0; i < textareas.length; i++) { 
       if (CkTextareasName[textareas[i].getAttribute('name')] != undefined) {
+        CKEDITOR.config.customConfig = '".$ck_config."';
         CKEDITOR.replace(textareas[i], {toolbar: CkTextareasName[textareas[i].getAttribute('name')], skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
         smiley_descriptions: ".$smiley_descriptions.",         
         height: CkTextareasHeight[textareas[i].getAttribute('name')]}); 

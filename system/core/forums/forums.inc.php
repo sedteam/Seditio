@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -91,7 +91,7 @@ if (!$sed_sections_vw)
 
 unset($pcat);
 $secact_max = max($sed_sections_act);
-$out['markall'] = ($usr['id']>0) ? "<a href=\"forums.php?n=markall\">".$L['for_markallasread']."</a>" : '';
+$out['markall'] = ($usr['id']>0) ? "<a href=\"".sed_url("forums","n=markall")."\">".$L['for_markallasread']."</a>" : '';
 
 $out['subtitle'] = $L['Forums'];
 
@@ -107,8 +107,11 @@ $mskin = "skins/".$skin."/forums.sections.tpl";
 $t = new XTemplate($mskin);
 
 $t->assign(array(
-	"FORUMS_SECTIONS_PAGETITLE" => "<a href=\"forums.php\">".$L['Forums']."</a>",
+	"FORUMS_SECTIONS_PAGETITLE" => "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a>",
 	"FORUMS_SECTIONS_MARKALL" =>  $out['markall'],
+  "FORUMS_SECTIONS_SEARCH" => sed_url("plug", "e=search&frm=1"),
+  "FORUMS_SECTIONS_FOLDALL" => sed_url("forums", "c=fold", "#top"),
+  "FORUMS_SECTIONS_UNFOLDALL" => sed_url("forums", "c=unfold", "#top"),
 	"FORUMS_SECTIONS_GMTTIME" => $L['Alltimesare']." ".$usr['timetext'],
 	"FORUMS_SECTIONS_WHOSONLINE" => $out['whosonline']." : ".$out['whosonline_reg_list']
 		));
@@ -178,7 +181,7 @@ while ($fsn = sed_sql_fetchassoc($sql))
 
 		if ($fsn['fs_lt_id']>0)
 			{
-			$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread#unread\">" : "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last#bottom\">";
+			$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url("forums","m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">" : "<a href=\"".sed_url("forums","m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom")."\">";
 			$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
 			}
 		else
@@ -223,7 +226,7 @@ while ($fsn = sed_sql_fetchassoc($sql))
 			"FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
 			"FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
 			"FORUMS_SECTIONS_ROW_VIEWERS" => $sed_sections_vw_cur,
-			"FORUMS_SECTIONS_ROW_URL" => "forums.php?m=topics&amp;s=".$fsn['fs_id'],
+			"FORUMS_SECTIONS_ROW_URL" => sed_url("forums","m=topics&s=".$fsn['fs_id']),
 			"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsn['fs_lt_date'],
 			"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsn['fs_lt_postername'],
 			"FORUMS_SECTIONS_ROW_LASTPOST" => $fsn['lastpost'],
@@ -240,39 +243,39 @@ if (is_array($forum_subforums))
 {
 $ii = 0;
 foreach ($forum_subforums as $key => $row)
-{
-	if ($forum_subforums[$key]['fs_parentcat'] == $fsn['fs_id'])
 	{
+	if ($forum_subforums[$key]['fs_parentcat'] == $fsn['fs_id'])
+		{
 		if ($row['fs_lt_date'] > $lt_date)
-        {			
+			{
 			$fsnn = $forum_subforums[$key];
 			$fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $fsnn['fs_lt_date'] + $usr['timezone'] * 3600);
-			$fsnn['lastpost'] = ($usr['id']>0 && $fsnn['fs_lt_date']>$usr['lastvisit'] && $fsnn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsnn['fs_lt_id']."&amp;n=unread#unread\">" : "<a href=\"forums.php?m=posts&amp;q=".$fsnn['fs_lt_id']."&amp;n=last#bottom\">";			
+			$fsnn['lastpost'] = ($usr['id']>0 && $fsnn['fs_lt_date']>$usr['lastvisit'] && $fsnn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=unread", "#unread").">" : "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom")."\">";
 			$fsnn['lastpost'] .= sed_cutstring($fsnn['fs_lt_title'], 32)."</a>";
-            $fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);
+			$fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);
 
-            $t-> assign(array(
-                "FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fs_lt_date'],
-                "FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fs_lt_posterid'], sed_cc($fsnn['fs_lt_postername'])),
-                "FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
-                "FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
-                ));
+			$t-> assign(array(
+				"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fs_lt_date'],
+				"FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fs_lt_posterid'], sed_cc($fsnn['fs_lt_postername'])),
+				"FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
+				"FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
+				));
 
-            $lt_date = $row['fs_lt_date'];
-        }
+			$lt_date = $row['fs_lt_date'];
+			}
    
-        if ($usr['id']>0 && $row['fs_lt_date']>$usr['lastvisit'] && $row['fs_lt_posterid']!=$usr['id'])
-  			{
-    			$row['fs_title'] = "+ ".$row['fs_title'];
-  			}        
-        
+		if ($usr['id']>0 && $row['fs_lt_date']>$usr['lastvisit'] && $row['fs_lt_posterid']!=$usr['id'])
+			{
+			$row['fs_title'] = "+ ".$row['fs_title'];
+			}        
+
         $ii++;
         $t->assign(array(
             "FORUMS_SECTIONS_ROW_SUBFORUMS_ID" => $row['fs_id'],
             "FORUMS_SECTIONS_ROW_SUBFORUMS_TITLE" => $row['fs_title'],
             "FORUMS_SECTIONS_ROW_SUBFORUMS_DESC" => $row['fs_desc'],
             "FORUMS_SECTIONS_ROW_SUBFORUMS_ICON" => $row['fs_icon'],
-            "FORUMS_SECTIONS_ROW_SUBFORUMS_URL" => "forums.php?m=topics&amp;s=".$row['fs_id'],
+            "FORUMS_SECTIONS_ROW_SUBFORUMS_URL" => sed_url("forums","m=topics&s=".$row['fs_id']),
             "FORUMS_SECTIONS_ROW_SUBFORUMS_ODDEVEN" => sed_build_oddeven($ii),
             "FORUMS_SECTIONS_ROW_SUBFORUMS_NUM" => $ii,
             "FORUMS_SECTIONS_ROW_SUBFORUMS" => $row

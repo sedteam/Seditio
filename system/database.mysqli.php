@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/functions/database.mysqli.php
-Version=173
+Version=175
 Updated=2012-may-24
 Type=Core
 Author=Neocrome

@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 
 /* ====================
 Seditio - Website engine
@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=rss.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Seditio Team
 Description=Rss Creator
@@ -36,7 +36,7 @@ function sed_rel2abs($text)
 }
 /* ==== ======= ====*/
 
-$c = sed_import('c', 'G', 'ALP');
+$c = sed_import('c', 'G', 'TXT');
 $m = sed_import('m', 'G', 'ALP');
 $id = sed_import('id', 'G', 'INT');
 $q = sed_import('q', 'G', 'INT');
@@ -83,9 +83,7 @@ switch ($m)
 				if (sed_auth('page', $row['page_cat'], 'R'))
 					{
 					$rss_title = $L['rss_lastcomments']." ".$cfg['separator']." ".$row['page_title']." ".$cfg['separator']." ".$cfg['maintitle'];
-					$rss_description = $row['page_desc']; 
-					
-					$page_args = empty($row['page_alias']) ? "id=".$id : "al=".$row['page_alias'];
+					$rss_description = $row['page_desc']; 				
 				
 					$sql1 = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
 						LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
@@ -103,7 +101,10 @@ switch ($m)
 						  }				
 										
 						$items[$i]['description'] = $row1['com_text'];
-						$items[$i]['link'] = $cfg['mainurl']."/"."page.php?".$page_args."&comments=1&b=".$row1['com_id']."#c".$row1['com_id'];
+						
+            $page_url = empty($row['page_alias']) ? sed_url("page", "id=".$id."&comments=1&b=".$row1['com_id'], "#c".$row1['com_id'], false, false) : sed_url("page", "al=".$row['page_alias']."&comments=1&b=".$row1['com_id'], "#c".$row1['com_id'], false, false);
+            
+            $items[$i]['link'] = $cfg['mainurl']."/".$page_url;
 						$items[$i]['pubDate'] = date('r', $row1['com_date']);
 						$i++;
 						}
@@ -142,7 +143,7 @@ switch ($m)
 													   WHERE fp_id=".$row['fp_id']); 
 								}				
 							$items[$i]['description'] = $row['fp_text'];
-							$items[$i]['link'] = $cfg['mainurl']."/"."forums.php?m=posts&p=".$row['fp_id']."#".$row['fp_id'];
+							$items[$i]['link'] = $cfg['mainurl']."/".sed_url("forums", "m=posts&p=".$row['fp_id'], "#".$row['fp_id'], false, false);
 							$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 						
 							if (!empty($s)) 
@@ -188,7 +189,7 @@ switch ($m)
 			
 			while ($row = sed_sql_fetchassoc($sql))
 				{
-				$row['page_pageurl'] = (empty($row['page_alias'])) ? "page.php?id=".$row['page_id'] : "page.php?al=".$row['page_alias'];
+				$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'], "", false, false) : sed_url("page", "al=".$row['page_alias'], "", false, false);
 				
 				$ishtml_page = ($row['page_type']==1 || $row['page_text_ishtml']);				
 				$row['page_text'] = sed_parse($row['page_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $ishtml_page);
@@ -227,7 +228,7 @@ if (count($items)>0)
 		$out .= "<title>".htmlspecialchars($item['title'])."</title>\n";
 		$out .= "<description><![CDATA[".sed_rel2abs($item['description'])."]]></description>\n";
 		$out .= "<pubDate>".$item['pubDate']."</pubDate>\n";
-		$out .= "<link><![CDATA[".sed_rel2abs($item['link'])."]]></link>\n";
+		$out .= "<link><![CDATA[".sed_rel2abs(str_replace('&amp;', '&', $item['link']))."]]></link>\n";
 		$out .= "</item>\n";
 	}
 }

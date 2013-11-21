@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -19,7 +19,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $id = sed_import('id','G','INT');
 $r = sed_import('r','G','ALP');
-$c = sed_import('c','G','ALP');
+$c = sed_import('c','G','TXT');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['auth_write']);
@@ -42,7 +42,7 @@ if ($a=='add')
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
 	$newpagekey = sed_import('newpagekey','P','TXT');
-	$newpagealias = sed_import('newpagealias','P','ALP');
+	$newpagealias = sed_replacespace(sed_import('newpagealias','P','TXT'));  //New in175
 	$newpageextra1 = sed_import('newpageextra1','P','TXT');
  	$newpageextra2 = sed_import('newpageextra2','P','TXT');
 	$newpageextra3 = sed_import('newpageextra3','P','TXT');
@@ -69,6 +69,9 @@ if ($a=='add')
 	
 	$newpageallowcomments = sed_import('newpageallowcomments','P','BOL');
 	$newpageallowratings = sed_import('newpageallowratings','P','BOL');
+  
+  $newpageallowcomments  = (empty($newpageallowcomments )) ? 1 : $newpageallowcomments ;  //Fix 175
+  $newpageallowratings = (empty($newpageallowratings)) ? 1 : $newpageallowratings; //Fix 175
 		
 	$newpagebegin = sed_mktime($newpagehour_beg, $newpageminute_beg, 0, $newpagemonth_beg, $newpageday_beg, $newpageyear_beg) - $usr['timezone'] * 3600;
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
@@ -157,7 +160,7 @@ if ($a=='add')
 		/* ===== */
 
 		sed_shield_update(30, "New page");
-		header("Location: message.php?msg=300");
+		sed_redirect(sed_url("message", "msg=300", "", true));
 		exit;
 		}
 	}
@@ -241,10 +244,10 @@ $t->assign(array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
-	"PAGEADD_FORM_SEND" => "page.php?m=add&amp;a=add",
+	"PAGEADD_FORM_SEND" => sed_url("page", "m=add&a=add"),
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
 	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".sed_cc($newpagekey)."\" size=\"16\" maxlength=\"16\" />",
-	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"16\" maxlength=\"24\" />",
+	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"newpageextra1\" value=\"".sed_cc($newpageextra1)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"newpageextra2\" value=\"".sed_cc($newpageextra2)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"newpageextra3\" value=\"".sed_cc($newpageextra3)."\" size=\"56\" maxlength=\"255\" />",

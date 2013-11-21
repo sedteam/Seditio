@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=pfs.edit.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -34,8 +34,7 @@ if (!$usr['isadmin'] || $userid=='')
 	}
 else
 	{
-	$more1 = "?userid=".$userid;
-	$more = "&userid=".$userid;
+	$more = "userid=".$userid;
 	}
 
 if ($userid!=$usr['id'])
@@ -54,15 +53,14 @@ foreach ($sed_extensions as $k => $line)
 
 if (!empty($c1) || !empty($c2))
 	{
-	$more .= "&c1=".$c1."&c2=".$c2;
-	$more1 .= ($more1=='') ? "?c1=".$c1."&c2=".$c2 : "&c1=".$c1."&c2=".$c2;
+	$more = "c1=".$c1."&c2=".$c2."&".$more;
 	$standalone = TRUE;
 	}
 
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"pfs.php".$more1."\">".$L['pfs_title']."</a>";
+$title = "<a href=\"".sed_url("pfs", $more)."\">".$L['pfs_title']."</a>";
 
 if ($userid!=$usr['id'])
 	{
@@ -81,7 +79,8 @@ if ($row = sed_sql_fetchassoc($sql))
 	$pfs_date = @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600);
 	$pfs_folderid = $row['pfs_folderid'];
 	$pfs_extension = $row['pfs_extension'];
-	$pfs_desc = sed_cc($row['pfs_desc']);
+	$pfs_desc = $row['pfs_desc'];
+	$pfs_title = sed_cc($row['pfs_title']);
 	$pfs_size = floor($row['pfs_size']/1024);
 	$ff = $cfg['pfs_dir'].$pfs_file;
 	}
@@ -92,7 +91,8 @@ $title .= " ".$cfg['separator']." ".sed_cc($pfs_file);
 
 if ($a=='update' && !empty($id))
 	{
-	$rdesc = sed_import('rdesc','P','TXT');
+	$rdesc = sed_import('rdesc','P','HTM');
+  $rtitle = sed_import('rtitle','P','TXT');
 	$folderid = sed_import('folderid','P','INT');
 	if ($folderid>0)
 		{
@@ -104,22 +104,25 @@ if ($a=='update' && !empty($id))
 
 	$sql = sed_sql_query("UPDATE $db_pfs SET
 		pfs_desc='".sed_sql_prep($rdesc)."',
+		pfs_desc_ishtml='".$ishtml."',
+		pfs_title='".sed_sql_prep($rtitle)."',
 		pfs_folderid='$folderid'
 		WHERE pfs_userid='$userid' AND pfs_id='$id'");
 
-	header("Location: pfs.php?f=$pfs_folderid".$more);
+	sed_redirect(sed_url("pfs", "f=".$pfs_folderid."&".$more, "", true));
 	exit;
 	}
 
-$body .= "<table class=\"cells\">";
-$body .= "<form id=\"edit\" action=\"pfs.php?m=edit&amp;a=update&amp;id=".$pfs_id.$more."\" method=\"post\">";
+$body .= "<table class=\"cells striped\">";
+$body .= "<form id=\"edit\" action=\"".sed_url("pfs", "m=edit&a=update&id=".$pfs_id."&".$more)."\" method=\"post\">";
 $body .= "<tr><td>".$L['File']." : </td><td>".$pfs_file."</td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$pfs_date."</td></tr>";
 $body .= "<tr><td>".$L['Folder']." : </td><td>".sed_selectbox_folders($userid, "", $pfs_folderid)."</td></tr>";
 $body .= "<tr><td>".$L['URL']." : </td><td><a href=\"".$ff."\">".$ff."</a></td></tr>";
 $body .= "<tr><td>".$L['Size']." : </td><td>".$pfs_size." ".$L['kb']."</td></tr>";
-$body .= "<tr><td>".$L['Description']." : </td><td><textarea name=\"rdesc\" rows=\"8\" cols=\"56\">".$pfs_desc."</textarea></td></tr>";
-$body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
+$body .= "<tr><td>".$L['Title']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pfs_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
+$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br /><textarea name=\"rdesc\" rows=\"8\" cols=\"56\">".sed_cc($pfs_desc, ENT_QUOTES)."</textarea></td></tr>";
+$body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 $body .= "</form></table>";
 
 /* ============= */
@@ -151,6 +154,12 @@ function ratings(rcode)
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
 
+	/* === New Hook Sed 175 === */
+	$extp = sed_getextplugins('pfs.stndl');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ================================ */		
+	
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 
 	$t->assign(array(
@@ -186,7 +195,4 @@ else
 
 	require("system/footer.php");
 	}
-
-
-
 ?>

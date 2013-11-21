@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/templates.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Xtemplate class
@@ -298,7 +298,7 @@ class XTemplate {
 				$comment = array_pop($any_comments);
 			}
 			$v = rtrim(implode($this->comment_delim, $any_comments));
-
+      
 			if ($this->allow_callbacks) {
 				$callback_funcs = explode($this->callback_delim, $v);
 				$v = rtrim($callback_funcs[0]);

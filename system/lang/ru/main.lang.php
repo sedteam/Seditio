@@ -12,7 +12,7 @@ Localization done by : Antar, Antony & Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
-Version=173
+Version=175
 Updated=2012-май-16
 Type=Lang
 Author=Neocrome
@@ -214,6 +214,8 @@ $L['Preview'] = "Предосмотр";
 $L['Previous'] = "Предыдущая страница";
 $L['Private'] = "Приватная";
 $L['Private_Messages'] = "Личные сообщения";
+$L['Print'] = "Печать";  // New in v175
+$L['Printversion'] = "Версия для печати";  // New in v175
 $L['Profile'] = "Профиль";
 $L['Prune'] = "Очистить";
 $L['Public'] = "Публичная";
@@ -302,6 +304,7 @@ $L['Version'] = "Версия";
 $L['View'] = "Просмотр";
 $L['Views'] = "Просмотров";
 $L['Vote'] = "Голос";
+$L['Voteto'] = "Голосовать";
 $L['Votes'] = "Голоса(ов)";
 $L['Website'] = "Вебсайт";
 $L['Wipe'] = "Удалить окончательно";                
@@ -451,6 +454,20 @@ $L['bbcodes_ex_style8'] = "Стиль 8";
 $L['bbcodes_ex_style9'] = "Стиль 9";
 $L['bbcodes_ex_preview'] = "Переключение режимов Редактирование / Предосмотр";
 
+$L['bbcodes_ex_vk'] = "Vkontakte, вставить видео";   // New in v175
+$L['bbcodes_ex_youtube'] = "YouTube, вставить видео";  // New in v175
+$L['bbcodes_ex_vimeo'] = "Vimeo, вставить видео"; // New in v175
+$L['bbcodes_ex_metacafe'] = "Metacafe, вставить видео"; // New in v175
+$L['bbcodes_ex_googlevideo'] = "GoogleVideo, вставить видео";  // New in v175
+$L['bbcodes_ex_rutube'] = "RuTube, вставить видео"; // New in v175
+
+$L['bbcodes_vk'] = "Vkontakte";   // New in v175
+$L['bbcodes_youtube'] = "YouTube";  // New in v175
+$L['bbcodes_vimeo'] = "Vimeo"; // New in v175
+$L['bbcodes_metacafe'] = "Metacafe"; // New in v175
+$L['bbcodes_googlevideo'] = "GoogleVideo";  // New in v175
+$L['bbcodes_rutube'] = "RuTube"; // New in v175
+
 /* ====== Common ====== */
 
 $L['com_skinfail'] = "Предупреждение: не удалось загрузить выбранное оформление, проверь настройки, установленные в профиле.";
@@ -465,11 +482,17 @@ $L['gallery_details_title'] = "Изображение";         // New in v150
 
 /* ====== Header ====== */
 
-$L['hea_privatemessages'] = "<img src=\"skins/".$cfg['defaultskin']."/img/system/icon-pm-new.gif\" title=\"pm\"/ alt=\"pm\"/>";
+$L['hea_privatemessages'] = "Новые сообщения";
 $L['hea_noprivatemessages'] = "Личные сообщения";
 $L['hea_youareloggedas'] = "Здравствуй,";
 $L['hea_youarenotlogged'] = "";
-$L['hea_valqueues'] = "В очереди на публикацию : ";
+$L['hea_valqueues'] = "На публикацию : ";
+$L['hea_logout'] = "Выход";  // New in v175
+$L['hea_profile'] = "Профиль"; // New in v175
+$L['hea_private_messages'] = "Личные сообщения";  // New in v175
+$L['hea_mypfs'] = "Мои файлы"; // New in v175
+$L['hea_users'] = "Пользователи"; // New in v175
+$L['hea_administration'] = "Администрирование";  // New in v175
 
 /* ====== Footer ====== */
 

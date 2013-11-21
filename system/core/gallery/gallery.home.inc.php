@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=gallery.home.inc
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -135,12 +135,18 @@ while ($row = sed_sql_fetchassoc($sql_gal))
 		$pfs['cond2'] = '';
 		}
 
+  $row['pff_desc'] = sed_parse($row['pff_desc'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $row['pfs_desc_ishtml']);
+  if (!$row['pff_desc_ishtml'] && $cfg['textmode'] == 'html')
+  	{
+  	$sql3 = sed_sql_query("UPDATE $db_pfs_folders SET pff_desc_ishtml=1, pff_desc='".sed_sql_prep($row['pff_desc'])."' WHERE pff_id=".$row['pff_id']); 
+  	}
+
 	$t-> assign(array(
-		"GALLERY_HOME_GALLERIES_ROW_URL" => 'gallery.php?f='.$row['pff_id'],
+		"GALLERY_HOME_GALLERIES_ROW_URL" => sed_url("gallery", "f=".$row['pff_id']),
 		"GALLERY_HOME_GALLERIES_ROW_SAMPLE" =>  $cfg['th_dir'].$row['pfs_file'],
 		"GALLERY_HOME_GALLERIES_ROW_TITLE" => sed_cc($row['pff_title']),
 		"GALLERY_HOME_GALLERIES_ROW_SHORTTITLE" => sed_cutstring(sed_cc($row['pff_title']), 64),
-		"GALLERY_HOME_GALLERIES_ROW_DESC" => sed_cc($row['pff_desc']),
+		"GALLERY_HOME_GALLERIES_ROW_DESC" => $row['pff_desc'],
 		"GALLERY_HOME_GALLERIES_ROW_COUNT" => $galcount[$row['pff_id']],
   	"GALLERY_HOME_GALLERIES_ROW_USER" => sed_build_user($row['pff_userid'], sed_cc($row['user_name'])),
     "GALLERY_HOME_GALLERIES_ROW_DATE" => date($cfg['formatyearmonthday'], $row['pff_date'] + $usr['timezone'] * 3600),

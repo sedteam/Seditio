@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/cleaner/cleaner.php
-Version=173
+Version=175
 Updated=2006-sep-07
 Type=Plugin
 Author=Neocrome

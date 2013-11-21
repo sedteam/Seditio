@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=pfs.view.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -40,7 +40,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $cfg['gd_suppo
 	echo ("<html><head>
 	<meta name=\"title\" content=\"".$cfg['maintitle']."\" />
 	<meta name=\"description\" content=\"".$cfg['maintitle']."\" />
-	<meta name=\"generator\" content=\"Seditio Copyright Neocrome http://www.neocrome.net\" />
+	<meta name=\"generator\" content=\"Seditio Copyright Neocrome & Seditio Team http://www.seditio.org\" />
 	<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
 	<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
 	<meta http-equiv=\"pragma\" content\"=no-cache\" />

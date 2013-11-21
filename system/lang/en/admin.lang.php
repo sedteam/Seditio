@@ -12,8 +12,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/core/admin/lang/en/admin.lang.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Lang
 Author=Neocrome
 Description=Admin panel
@@ -116,6 +116,13 @@ $L['cfg_showsqlstats'] = array("Show SQL queries statistics", "In footer.tpl");
 $L['cfg_shieldenabled'] = array("Enable the Shield", "Anti-spamming and anti-hammering");
 $L['cfg_shieldtadjust'] = array("Adjust Shield timers (in %)", "The higher, the harder to spam");
 $L['cfg_shieldzhammer'] = array("Anti-hammer after * fast hits", "The smaller, the faster the auto-ban 3 minutes happens");
+$L['cfg_maintenance'] = array("Maintenance mode", "Wake up the technical work on the site");  // New in v175
+$L['cfg_maintenancelevel'] = array("User Access Level", "Select the level of access users"); // New in v175
+$L['cfg_maintenancereason'] = array("Reason maintenance", "Describe the cause of maintenance"); // New in v175
+$L['cfg_multihost'] = array("Multihost mode", "To enable multiple hosts");  // New in v175
+$L['cfg_absurls'] = array("Absolute URL", "Enables the use of the absolute URL");  // New in v175
+$L['cfg_sefurls'] = array("SEF URLs", "To enables SEF URLs on the site");  // New in v175
+$L['cfg_sefurls301'] = array("301 redirect to the SEF URLs", "Enable 301 redirect from the old URL to SEF URLs");  // New in v175
 $L['cfg_dateformat'] = array("Main date mask", "Default: Y-m-d H:i");
 $L['cfg_formatmonthday'] = array("Short date mask", "Default: m-d");
 $L['cfg_formatyearmonthday'] = array("Medium date mask", "Default: Y-m-d");
@@ -255,6 +262,8 @@ $L['cfg_parsesmiliespages'] = array("Parse smilies in pages", "");
 $L['cfg_parsesmiliesusertext'] = array("Parse smilies in user signature", "");
 $L['cfg_parsesmiliesforums'] = array("Parse smilies in forums", "");
 
+$L['cfg_color_group'] = array("Colorize group of users", "Default: No, for better performance");  // New in v175
+
 /* ====== Rss ====== */
 
 $L['cfg_disable_rss'] = array("Disable RSS feeds", "");
@@ -388,6 +397,7 @@ $L['adm_rights_allow10'] = "Allowed";
 $L['adm_rights_allow00'] = "Denied";
 $L['adm_rights_allow11'] = "Allowed and locked for security reasons";
 $L['adm_rights_allow01'] = "Denied and locked for security reasons";
+$L['adm_color'] = "Color for group"; // New in v175
 
 /* ====== Plugins ====== */
 

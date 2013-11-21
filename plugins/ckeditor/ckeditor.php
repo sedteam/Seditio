@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.php
-Version=172
-Updated=2012-feb-16
+Version=175
+Updated=2013-oct-09
 Type=Plugin
 Author=Amro
 Description=
@@ -19,7 +19,7 @@ Description=
 Code=ckeditor
 Part=Loader
 File=ckeditor
-Hooks=header.first
+Hooks=header.first,pfs.stndl
 Tags=
 Minlevel=0
 Order=10
@@ -57,17 +57,21 @@ if ($usr['maingrp'] > 3) {
   $ck_newmsg_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newmsg'] : $ckeditor_global_toolbar; 
   $ck_newpagetext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newpagetext'] : $ckeditor_global_toolbar;
   $ck_rpagetext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['rpagetext'] : $ckeditor_global_toolbar;
+  $ck_rstext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['rpagetext'] : $ckeditor_global_toolbar; 
   $ck_newpmtext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newpmtext'] : $ckeditor_global_toolbar; 
   //
   $ck_rusertext_height = $cfg['plugin']['ckeditor']['rusertext_height'];  
   $ck_rtext_height = $cfg['plugin']['ckeditor'][$cfnh];
   $ck_newmsg_height = $cfg['plugin']['ckeditor']['newmsg_height'];
   $ck_newpagetext_height = $cfg['plugin']['ckeditor']['newpagetext_height'];
+  $ck_rstext_height = $cfg['plugin']['ckeditor']['newpagetext_height'];  
   $ck_rpagetext_height = $cfg['plugin']['ckeditor']['rpagetext_height'];
   $ck_newpmtext_height = $cfg['plugin']['ckeditor']['newpmtext_height'];
   //
   $CkTextareas_option = "CkTextareasName['rusertext'] = '".$ck_rusertext_toolbar."'; "."CkTextareasHeight['rusertext'] = '".$ck_rusertext_height."';";
   $CkTextareas_option .= "CkTextareasName['rtext'] = '".$ck_rtext_toolbar."'; "."CkTextareasHeight['rtext'] = '".$ck_rtext_height."';";
+  $CkTextareas_option .= "CkTextareasName['rstext'] = '".$ck_rstext_toolbar."'; "."CkTextareasHeight['rstext'] = '".$ck_rstext_height."';";
+  $CkTextareas_option .= "CkTextareasName['rdesc'] = '".$ck_rusertext_toolbar."'; "."CkTextareasHeight['rdesc'] = '".$ck_rusertext_height."';";
   $CkTextareas_option .= "CkTextareasName['newmsg'] = '".$ck_newmsg_toolbar."'; "."CkTextareasHeight['newmsg'] = '".$ck_newmsg_height."';";
   $CkTextareas_option .= "CkTextareasName['newpagetext'] = '".$ck_newpagetext_toolbar."'; "."CkTextareasHeight['newpagetext'] = '".$ck_newpagetext_height."';";
   $CkTextareas_option .= "CkTextareasName['rpagetext'] = '".$ck_rpagetext_toolbar."'; "."CkTextareasHeight['rpagetext'] = '".$ck_rpagetext_height."';";
@@ -86,10 +90,13 @@ if ($usr['maingrp'] > 3) {
   $pointpos_sd = mb_strrpos($smiley_descriptions,",")+1;
   $smiley_descriptions = mb_substr($smiley_descriptions, 0, $pointpos_sd-1);	
   $smiley_path .= "]";
-  $smiley_descriptions .= "]";      	
+  $smiley_descriptions .= "]"; 
+  $ck_config = "sed_config.js"."?".sed_unique(5);     	
   /* ===== Init Ckeditor ===== */  
   if ($ckeditor_other_textarea == "Yes") {  
   $ck_other = "if (textareas[i].getAttribute('class') != 'noeditor') {      
+        CKEDITOR.config.customConfig = '".$ck_config."';
+        CKEDITOR.config.baseHref = '".$sys['abs_url']."';
         CKEDITOR.replace(textareas[i], {toolbar: '".$ckeditor_other_toolbar."', skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
         smiley_descriptions: ".$smiley_descriptions.",         
         height: ".$ckeditor_other_height."});             
@@ -102,6 +109,8 @@ if ($usr['maingrp'] > 3) {
     var textareas = document.getElementsByTagName('textarea');
   	for (var i = 0; i < textareas.length; i++) { 
       if (CkTextareasName[textareas[i].getAttribute('name')] != undefined) {
+        CKEDITOR.config.customConfig = '".$ck_config."';
+        CKEDITOR.config.baseHref = '".$sys['abs_url']."';
         CKEDITOR.replace(textareas[i], {toolbar: CkTextareasName[textareas[i].getAttribute('name')],  skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
         smiley_descriptions: ".$smiley_descriptions.",         
         height: CkTextareasHeight[textareas[i].getAttribute('name')]}); 
@@ -115,4 +124,3 @@ if ($usr['maingrp'] > 3) {
 }
 
 ?>
-

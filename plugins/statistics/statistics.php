@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/statistics/statistics.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -39,8 +39,8 @@ if ($m=='share')
 	$totaldbtopics += sed_sql_result($sql,0,"SUM(fs_topiccount_pruned)");
 	$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
 	$totaldbposts += sed_sql_result($sql,0,"SUM(fs_postcount_pruned)");
-	$output = "Seditio - Website engine<br />Copyright Neocrome<br />";
-	$output .= "<a href=\"http://www.neocrome.net\">http://www.neocrome.net</a><br />";
+	$output = "Seditio - Website engine<br />Copyright Neocrome & Seditio Team<br />";
+	$output .= "<a href=\"http://www.seditio.org\">http://www.seditio.org</a><br />";
 	$output .= "&nbsp;<br />[BEGIN_SED]<br />Title=".$cfg['maintitle']."<br />";
 	$output .= "Subtitle=".$cfg['subtitle']."<br />Version=".$cfg['version']."<br />";
 	$output .= "Pages=".sed_sql_rowcount($db_pages)."<br />Users=".sed_sql_rowcount($db_users)."<br />";
@@ -96,7 +96,7 @@ $row = sed_sql_fetchassoc($sql);
 $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
-$plugin_body .= "<h4>".$L['Main'].": </h4><table class=\"cells\">";
+$plugin_body .= "<h4>".$L['Main'].": </h4><table class=\"cells striped\">";
 $plugin_body .= "<tr><td colspan=\"2\">".$L['plu_maxwasreached']." ".$max_date.", ".$max_hits." ";
 $plugin_body .= $L['plu_pagesdisplayedthisday']."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_totalpagessince']." ".$since."</td><td style=\"text-align:right;\">".$totalpages."</td></tr>";
@@ -109,7 +109,7 @@ $plugin_body .= "<td style=\"text-align:right;\">".$totaldbcomments."</td></tr>"
 $plugin_body .= "<tr><td>".$L['plu_totalmails']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totalmailsent."</td></tr></table>";
 
-$plugin_body .= "<h4>".$L['plu_pm']." :</h4><table class=\"cells\">";
+$plugin_body .= "<h4>".$L['plu_pm']." :</h4><table class=\"cells striped\">";
 $plugin_body .= "<tr><td>".$L['plu_totalpms']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totalpmsent."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_totalactivepms']."</td>";
@@ -117,7 +117,7 @@ $plugin_body .= "<td style=\"text-align:right;\">".$totalpmactive."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_totalarchivedpms']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totalpmarchived."</td></tr></table>";
 
-$plugin_body .= "<h4>".$L['Forums']." :</h4><table class=\"cells\">";
+$plugin_body .= "<h4>".$L['Forums']." :</h4><table class=\"cells striped\">";
 $plugin_body .= "<tr><td>".$L['plu_viewsforums']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totaldbviews."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_postsforums']."</td>";
@@ -127,7 +127,7 @@ $plugin_body .= "<tr><td>".$L['plu_topicsforums']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".($totaldbtopics+$totaldbtopicspruned);
 $plugin_body .= " (".$totaldbtopics." ".$L['Active']." + ".$totaldbtopicspruned." ".$L['plu_pruned'].")</td></tr></table>";
 
-$plugin_body .= "<h4>".$L['plu_pollsratings']." :</h4><table class=\"cells\">";
+$plugin_body .= "<h4>".$L['plu_pollsratings']." :</h4><table class=\"cells striped\">";
 $plugin_body .= "<tr><td>".$L['plu_pagesrated']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totaldbratings."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_votesratings']."</td>";
@@ -137,13 +137,13 @@ $plugin_body .= "<td style=\"text-align:right;\">".$totaldbpolls."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_votespolls']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totaldbpollsvotes."</td></tr></table>";
 
-$plugin_body .= "<h4>".$L['plu_pfs']." :</h4><table class=\"cells\">";
+$plugin_body .= "<h4>".$L['plu_pfs']." :</h4><table class=\"cells striped\">";
 $plugin_body .= "<tr><td>".$L['plu_pfsspace']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totaldbfiles."</td></tr>";
 $plugin_body .= "<tr><td>".$L['plu_pfssize']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".floor($totaldbfilesize/1024)." ".$L['kb']."</td></tr></table>";
 
-$plugin_body .= "<h4>".$L['plu_contributions']." :</h4><table class=\"cells\">";
+$plugin_body .= "<h4>".$L['plu_contributions']." :</h4><table class=\"cells striped\">";
 
 if ($usr['id']>0)
 	{
@@ -178,9 +178,9 @@ else
 $sqltotal = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
 $totalusers = sed_sql_result($sqltotal,0,"COUNT(*)");
 
-$plugin_body .= "<h4>".$L['plu_membersbycountry']." :</h4><table class=\"cells\">";
-$plugin_body .= "<tr><td colspan=\"2\" class=\"coltop\"><a href=\"plug.php?e=statistics\">$sed_img_down</a> ".$L['plu_country']."</td>";
-$plugin_body .= "<td style=\"text-align:center;\" class=\"coltop\"><a href=\"plug.php?e=statistics&amp;s=usercount\">$sed_img_down</a> ".$L['Users']."</td></tr>";
+$plugin_body .= "<h4>".$L['plu_membersbycountry']." :</h4><table class=\"cells striped\">";
+$plugin_body .= "<tr><td colspan=\"2\" class=\"coltop\"><a href=\"".sed_url("plug", "e=statistics")."\">$sed_img_down</a> ".$L['plu_country']."</td>";
+$plugin_body .= "<td style=\"text-align:center;\" class=\"coltop\"><a href=\"".sed_url("plug", "e=statistics&s=usercount")."\">$sed_img_down</a> ".$L['Users']."</td></tr>";
 
 $ii = 0;
 

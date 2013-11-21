@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.config.skin.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -24,7 +24,7 @@ if ($setskin == "update")
 	sed_check_xg();
 	$skin_name = mb_strtolower(sed_import('skin_name','G','ALP'));
 	$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($skin_name)."' WHERE config_name='defskin' AND config_owner='core'");	
-	header("Location: admin.php?m=config&n=edit&o=core&p=skin");
+	sed_redirect(sed_url("admin", "m=config&n=edit&o=core&p=skin", "", true));
 }
 
 $adminmain .= "<h3>".$L['core_skin']." :</h3>";
@@ -40,9 +40,9 @@ while ($f = readdir($handle))
 closedir($handle);
 sort($skinlist);
 
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<table class=\"cells striped\">";
 $adminmain .= "<tr><td class=\"coltop\">".$L['core_skin']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Preview']."</td>";
+$adminmain .= "<td class=\"coltop\" width=\"200\">".$L['Preview']."</td>";
 $adminmain .= "<td class=\"coltop\">&nbsp;</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Default']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Set']."</td></tr>";
@@ -56,7 +56,7 @@ while(list($i,$x) = each($skinlist))
 	$adminmain .= (!empty($info['Error'])) ? $x." (".$info['Error'].")" : $info['Name'];
 	$adminmain .= "</strong>";	
 	$adminmain .= "</td><td><img src=\"skins/$x/$x.png\" alt=\"".$info['Name']."\" />";
-	$adminmain .= "<td style=\"width:60%;\">"; 	   
+	$adminmain .= "<td style=\"width:30%;\">"; 	   
 	$adminmain .= $L['Version']." : ".$info['Version']."<br />";
 	$adminmain .= $L['Updated']." : ".$info['Updated']."<br />";
 	$adminmain .= $L['Author']." : ".$info['Author']."<br />";
@@ -65,10 +65,9 @@ while(list($i,$x) = each($skinlist))
 	$adminmain .= "</td><td style=\"text-align:center; vertical-align:middle; width:10%;\">";  
 	$adminmain .= ($x == $cfg['defaultskin']) ? $out['img_checked'] : $out['img_unchecked'];
 	$adminmain .= "</td><td style=\"text-align:center; vertical-align:middle; width:10%;\">";
-	$adminmain .= ($x == $cfg['defaultskin']) ? $out['img_checked'] : "<a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=skin&amp;setskin=update&amp;skin_name=".$x."&amp;".sed_xg()."\">".$out['img_set']."</a>";
+	$adminmain .= ($x == $cfg['defaultskin']) ? $out['img_checked'] : "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=skin&setskin=update&skin_name=".$x."&".sed_xg())."\">".$out['img_set']."</a>";
 	$adminmain .= "</td></tr>"; 
   }
 $adminmain .= "</table>";
-
 
 ?>

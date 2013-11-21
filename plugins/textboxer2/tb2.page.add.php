@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/tb2.page.add.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Arkkimaagi
 Description=
@@ -100,16 +100,25 @@ require_once("plugins/textboxer2/inc/textboxer2.inc.php");
 			'post',
 			'pm',
 		'}',
-
+    //********************************
+		9,
+			'youtube',
+			'googlevideo',
+			'metacafe',
+			'rutube',
+      'vimeo',
+			'vk',
+		'}',
+    //*******************************
 		1,
 			'smilies',
 		'}',
-		//'more',
+		'more',
 		'title',
 		'preview'
 	);
 
-$tb2DropdownIcons = array(-1,49,1,7,10,15,19,23,35);
+$tb2DropdownIcons = array(-1,49,1,7,10,15,19,23,35,50);
 $tb2MaxSmilieDropdownHeight = 300; 	// Height in px for smilie dropdown
 $tb2InitialSmilieLimit = 20;		// Smilies loaded by default to dropdown
 $tb2TextareaRows = 24;				// Rows of the textarea

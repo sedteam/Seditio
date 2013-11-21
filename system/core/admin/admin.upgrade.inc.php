@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.upgrade.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.upgrade
 Author=Neocrome
 Description=Users
@@ -21,14 +21,14 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=upgrade", $L['upg_upgrade']);
+$adminpath[] = array (sed_url("admin", "m=upgrade"), $L['upg_upgrade']);
 
 $cfg['sqlversion'] = sed_stat_get('version');
 $upg_file = "system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".php";
 
 if ($cfg['version'] <= $cfg['sqlversion'] || !file_exists($upg_file))
 	{
-  header("Location: admin.php");
+  sed_redirect(sed_url("admin", "", "", true));
 	exit;
   }
 
@@ -37,7 +37,6 @@ $adminmain .= $cfg['sqlversion']." --> ".$cfg['version']."<br />".$L['File']." :
 $upg_status = FALSE;
 require($upg_file);
 
-$adminmain .= ($upg_status) ? "<a href=\"admin.php\">".$L['upg_success']."</a>" : "<a href=\"admin.php\">".$L['upg_failure']."</a>"; 
-
+$adminmain .= ($upg_status) ? "<a href=\"".sed_url("admin")."\">".$L['upg_success']."</a>" : "<a href=\"".sed_url("admin")."\">".$L['upg_failure']."</a>"; 
 
 ?>

@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=polls.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Polls
@@ -69,6 +69,8 @@ else
 			{
 			$poll_state = $row['poll_state'];
 			$poll_minlevel = $row['poll_minlevel'];
+      $poll_title = $row['poll_text'];
+      $poll_creationdate = $row['poll_creationdate'];
 
 			if ($usr['id']>0)
 			 	{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
@@ -91,7 +93,7 @@ else
 			$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
 			$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 
-			$sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
+			$sql1 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
 			$error_string = (sed_sql_numrows($sql1)<1) ? $L['wrongURL'] : '';
 			}
        	else
@@ -124,7 +126,7 @@ if (!empty($error_string))
 	}
 elseif ($id=='viewall')
 	{
-	$result = "<table class=\"cells\">";
+	$result = "<table class=\"cells striped\">";
 
 	if (sed_sql_numrows($sql)==0)
 		{ $result .= "<tr><td>".$L['None']."</td></tr>"; }
@@ -134,7 +136,7 @@ elseif ($id=='viewall')
 			{
 			$result .= "<tr>";
 			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
-			$result .= "<td><a href=\"polls.php?id=".$row['poll_id']."\"><img src=\"system/img/admin/polls.png\" alt=\"\" /></a></td>";
+			$result .= "<td><a href=\"".sed_url("polls", "id=".$row['poll_id'])."\"><img src=\"system/img/admin/polls.png\" alt=\"\" /></a></td>";
 			$result .= "<td>".$row['poll_text']."</td>";
 			$result .= "</tr>";
 			}
@@ -149,7 +151,7 @@ elseif ($id=='viewall')
 	}
 else
 	{
-	$result = "<table class=\"cells\">";
+	$result = "<table class=\"cells striped\">";
 
 	while ($row1 = sed_sql_fetchassoc($sql1))
 		{
@@ -159,7 +161,7 @@ else
 		$percentbar = floor($percent * 2.24);
 
 		$result .= "<tr><td>";
-		$result .= ($alreadyvoted) ? $row1['po_text'] : "<a href=\"polls.php?a=send&amp;".sed_xg()."&amp;id=".$id."&amp;vote=".$po_id."\">".sed_cc($row1['po_text'])."</a>";
+		$result .= ($alreadyvoted) ? $row1['po_text'] : "<a href=\"".sed_url("polls", "a=send&".sed_xg()."&id=".$id."&vote=".$po_id)."\">".sed_cc($row1['po_text'])."</a>";
 		$result .= "</td><td><div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
 
 		}
@@ -167,16 +169,19 @@ else
 	$result .= "</table>";
 
 	$item_code = 'v'.$id;
-	list($comments_link, $comments_display) = sed_build_comments($item_code, "polls.php?id=".$id, $comments);
+  
+  $url_poll = array('part' => 'polls', 'params' => "id=".$id."&comments=1");
+  
+	list($comments_link, $comments_display) = sed_build_comments($item_code, $url_poll, $comments);
 
 	$t->assign(array(
 		"POLLS_VOTERS" => $totalvotes,
-		"POLLS_SINCE" => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-		"POLLS_TITLE" => $row['poll_text'],
+		"POLLS_SINCE" => date($cfg['dateformat'], $poll_creationdate + $usr['timezone'] * 3600),
+		"POLLS_TITLE" => $poll_title,
 		"POLLS_RESULTS" => $result,
 		"POLLS_COMMENTS" => $comments_link,
 		"POLLS_COMMENTS_DISPLAY" => $comments_display,
-		"POLLS_VIEWALL" => "<a href=\"polls.php?id=viewall\">".$L['polls_viewarchives']."</a>",
+		"POLLS_VIEWALL" => "<a href=\"".sed_url("polls", "id=viewall")."\">".$L['polls_viewarchives']."</a>",
 		));
 
 	$t->parse("MAIN.POLLS_VIEW");

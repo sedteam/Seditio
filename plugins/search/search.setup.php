@@ -3,7 +3,7 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/search.setup.php
-Version=173
+Version=175
 Date=2010-feb-05
 Type=Plugin
 Author=Neocrome
@@ -14,7 +14,7 @@ Description=
 Code=search
 Name=Search
 Description=Search for words in pages and forums
-Version=173
+Version=175
 Date=2008-jun-04
 Author=Neocrome
 Copyright=

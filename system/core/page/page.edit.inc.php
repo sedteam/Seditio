@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -41,7 +41,7 @@ if ($a=='update')
 	/* ===== */
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
-	$rpagealias = sed_import('rpagealias','P','ALP');
+	$rpagealias = sed_replacespace(sed_import('rpagealias','P','TXT')); //New in175
 	$rpageextra1 = sed_import('rpageextra1','P','TXT');
 	$rpageextra2 = sed_import('rpageextra2','P','TXT');
 	$rpageextra3 = sed_import('rpageextra3','P','TXT');
@@ -64,6 +64,9 @@ if ($a=='update')
 	
 	$rpageallowcomments = sed_import('rpageallowcomments','P','BOL');
 	$rpageallowratings = sed_import('rpageallowratings','P','BOL');
+  
+  $rpageallowcomment = (empty($rpageallowcomments)) ? 1 : $rpageallowcomment;
+  $rpageallowratings = (empty($rpageallowratings)) ? 1 : $rpageallowratings;
 
 	$ryear = sed_import('ryear','P','INT');
 	$rmonth = sed_import('rmonth','P','INT');
@@ -105,7 +108,7 @@ if ($a=='update')
 				$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 				$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 				sed_log("Deleted page #".$id,'adm');
-				header("Location: list.php?c=".$row1['page_cat']);
+				sed_redirect(sed_url("list", "c=".$row1['page_cat'], "", true));
 				exit;
 				}
 			}
@@ -161,8 +164,10 @@ if ($a=='update')
 				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
-			sed_log("Edited page #".$id,'adm');
-			header("Location: page.php?id=".$id);
+			$sys['catcode'] = $rpagecat; //new in v175
+      
+      sed_log("Edited page #".$id,'adm');
+			sed_redirect(sed_url("page", "id=".$id, "", true));
 			exit;
 			}
 		}
@@ -254,12 +259,12 @@ if ($cfg['textmode']=='bbcode')
 $t->assign(array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
-	"PAGEEDIT_FORM_SEND" => "page.php?m=edit&amp;a=update&amp;id=".$pag['page_id']."&amp;r=".$r."&amp;".sed_xg(),
+	"PAGEEDIT_FORM_SEND" => sed_url("page", "m=edit&a=update&id=".$pag['page_id']."&r=".$r."&".sed_xg()),
 	"PAGEEDIT_FORM_ID" => $pag['page_id'],
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],
 	"PAGEEDIT_FORM_CAT" => $page_form_categories,
 	"PAGEEDIT_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"rpagekey\" value=\"".sed_cc($pag['page_key'])."\" size=\"16\" maxlength=\"16\" />",
-	"PAGEEDIT_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"rpagealias\" value=\"".sed_cc($pag['page_alias'])."\" size=\"16\" maxlength=\"24\" />",
+	"PAGEEDIT_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"rpagealias\" value=\"".sed_cc($pag['page_alias'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"rpageextra1\" value=\"".sed_cc($pag['page_extra1'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"rpageextra2\" value=\"".sed_cc($pag['page_extra2'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"rpageextra3\" value=\"".sed_cc($pag['page_extra3'])."\" size=\"56\" maxlength=\"255\" />",

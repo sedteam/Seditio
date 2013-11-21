@@ -12,8 +12,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Lang
 Author=Neocrome
 Description=Language main
@@ -214,6 +214,8 @@ $L['Preview'] = "Preview";
 $L['Previous'] = "Previous page";
 $L['Private'] = "Private";
 $L['Private_Messages'] = "Private messages";
+$L['Print'] = "Print"; // New in v175
+$L['Printversion'] = "Print version";  // New in v175
 $L['Profile'] = "Profile";
 $L['Prune'] = "Prune";
 $L['Public'] = "Public";
@@ -302,6 +304,7 @@ $L['Version'] = "Version";
 $L['View'] = "View";
 $L['Views'] = "Views";
 $L['Vote'] = "Vote";
+$L['Voteto'] = "Vote";
 $L['Votes'] = "Votes";
 $L['Website'] = "Website";
 $L['Wipe'] = "Wipe";
@@ -451,6 +454,20 @@ $L['bbcodes_ex_style8'] = "Style 8";
 $L['bbcodes_ex_style9'] = "Style 9";
 $L['bbcodes_ex_preview'] = "Toggle between edit and preview mode";
 
+$L['bbcodes_ex_vk'] = "Vkontakte, insert a video";   // New in v175
+$L['bbcodes_ex_youtube'] = "YouTube, insert a video";  // New in v175
+$L['bbcodes_ex_vimeo'] = "Vimeo, insert a video"; // New in v175
+$L['bbcodes_ex_metacafe'] = "Metacafe, insert a video"; // New in v175
+$L['bbcodes_ex_googlevideo'] = "GoogleVideo, insert a video";  // New in v175
+$L['bbcodes_ex_rutube'] = "RuTube, insert a video"; // New in v175
+
+$L['bbcodes_vk'] = "Vkontakte";   // New in v175
+$L['bbcodes_youtube'] = "YouTube";  // New in v175
+$L['bbcodes_vimeo'] = "Vimeo"; // New in v175
+$L['bbcodes_metacafe'] = "Metacafe"; // New in v175
+$L['bbcodes_googlevideo'] = "GoogleVideo";  // New in v175
+$L['bbcodes_rutube'] = "RuTube"; // New in v175
+
 /* ====== Common ====== */
 
 $L['com_skinfail'] = "Warning, failed to load your prefered skin, check your profile.";
@@ -470,6 +487,13 @@ $L['hea_noprivatemessages'] = "No private messages";
 $L['hea_youareloggedas'] = "Logged in as";
 $L['hea_youarenotlogged'] = "You're not logged in.";
 $L['hea_valqueues'] = "In validation queues : ";
+
+$L['hea_logout'] = "Logout";  // New in v175
+$L['hea_profile'] = "Profile"; // New in v175
+$L['hea_private_messages'] = "Private messages";  // New in v175
+$L['hea_mypfs'] = "My files"; // New in v175
+$L['hea_users'] = "Users"; // New in v175
+$L['hea_administration'] = "Administration";  // New in v175
 
 /* ====== Footer ====== */
 

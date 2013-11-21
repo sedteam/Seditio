@@ -10,11 +10,7 @@ CREATE TABLE IF NOT EXISTS `sed_parser` (
   `parser_code2` mediumtext COLLATE utf8_unicode_ci,
   `parser_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`parser_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=56 ;
-
---
--- Dumping data for table `sed_parser`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=58 ;
 
 INSERT INTO `sed_parser` (`parser_id`, `parser_title`, `parser_type`, `parser_mode`, `parser_order`, `parser_bb1`, `parser_bb2`, `parser_code1`, `parser_code2`, `parser_active`) VALUES
 (1, 'Bold', 0, 0, 1, '[b]', '[/b]', '<strong>', '</strong>', 1),
@@ -53,7 +49,7 @@ INSERT INTO `sed_parser` (`parser_id`, `parser_title`, `parser_type`, `parser_mo
 (34, 'user', 0, 1, 120, '/\\[user=([0-9]+)\\]([A-z0-9_\\. -]+)\\[\\/user\\]/i', NULL, '<a href="users.php?m=details&amp;id=$1">$2</a>', NULL, 1),
 (35, 'Page 2', 0, 1, 130, '/\\[page=([0-9]+)\\]([^\\\\[]*)\\[\\/page\\]/i', NULL, '<a href="page.php?id=$1">$2</a>', NULL, 1),
 (36, 'Page 1', 0, 1, 140, '/\\[page\\]([0-9]+)\\[\\/page\\]/i', NULL, '<a href="page.php?id=$1">Page #$1</a>', NULL, 1),
-(37, 'Group', 0, 0, 150, '/\\[group=([0-9]+)\\]([^\\\\([]*)\\[\\/group\\]/i', NULL, '<a href="users.php?g=$1">$2</a>', NULL, 1),
+(37, 'Group', 0, 1, 150, '/\\[group=([0-9]+)\\]([^\\\\([]*)\\[\\/group\\]/i', NULL, '<a href="users.php?g=$1">$2</a>', NULL, 1),
 (38, 'Forum topic', 0, 1, 160, '/\\[topic\\]([0-9]+)\\[\\/topic\\]/i', NULL, '<a href="forums.php?m=posts&amp;q=$1">Topic #$1</a>', NULL, 1),
 (39, 'Forum post', 0, 1, 170, '/\\[post\\]([0-9]+)\\[\\/post\\]/i', NULL, '<a href="forums.php?m=posts&amp;p=$1#$1">Post #$1</a>', NULL, 1),
 (40, 'Private messages', 0, 1, 180, '/\\[pm\\]([0-9]+)\\[\\/pm\\]/i', NULL, '<a href="pm.php?m=send&amp;to=$1">PM</a>', NULL, 1),
@@ -62,13 +58,15 @@ INSERT INTO `sed_parser` (`parser_id`, `parser_title`, `parser_type`, `parser_mo
 (43, 'Deleted', 0, 1, 210, '/\\[del\\]([^\\\\[]*)\\[\\/del\\]/i', NULL, '<del>$1</del>', NULL, 1),
 (44, 'Quote 2', 0, 1, 220, '/\\[quote=([^\\\\[]*)\\]/i', NULL, '<blockquote>$1<p>', NULL, 1),
 (45, 'Spoiler', 0, 1, 230, '/\\[spoiler=([^\\\\[]*)\\]/i', '/\\[\\/spoiler\\]/i', '<div style="margin:0; margin-top:8px"><div style="margin-bottom:4px"><input type="button" value="Show : $1" onClick="if (this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''''; this.innerText = ''''; this.value = ''Hide : : $1''; } else { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''none''; this.innerText = ''''; this.value = ''Show : $1''; }"></div><div class="spoiler"><div style="display: none;">', '</div></div></div>', 1),
-(46, 'Fold', 0, 1, 240, '/\\[fold=([^\\\\[]*)\\]/i', '/\\[\\/fold\\]/i', '<div style="margin:0;"><div class="fhead"><a href="#fold" onClick="if (this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''''; this.value = ''$1''; } else { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''none''; this.value = ''$1''; }">$1</a></div><div><div style="display: none;" class="fblock">', '</div></div></div>', 1),
-(47, 'Youtube', 0, 1, 250, '/\\[youtube=([^\\\\[]*)\\]/i', NULL, '<object width="425" height="350">\r\n<param name="movie" value="http://www.youtube.com/v/$1"></param>\r\n<embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" width="425" height="350"></embed>\r\n</object>', NULL, 1),
-(48, 'Google Video', 0, 1, 260, '/\\[googlevideo=([^\\\\[]*)\\]/i', NULL, '<embed style="width:425px; height:326px;" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docId=$1&hl=en-GB"> </embed>', NULL, 1),
-(49, 'MetaCafe video', 0, 1, 270, '/\\[metacafe=([^\\\\[]*)\\]/i', NULL, '<embed style="width:425px; height:345px;" src="http://www.metacafe.com/fplayer/$1" width="400" height="345" wmode="transparent" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>', NULL, 1),
-(50, 'Column left', 0, 1, 280, '/\\[colleft\\]([^\\\\[]*)\\[\\/colleft\\]/i', NULL, '<div class="colleft">$1</div>', NULL, 1),
-(51, 'Column right', 0, 1, 290, '/\\[colright\\]([^\\\\[]*)\\[\\/colright\\]/i', NULL, '<div class="colright">$1</div>', NULL, 1),
-(52, 'Center', 0, 1, 300, '/\\[center\\]([^\\\\[]*)\\[\\/center\\]/i', NULL, '<div style="text-align:center;">$1</div>', NULL, 1),
-(53, 'Align left', 0, 1, 310, '/\\[left\\]([^\\\\[]*)\\[\\/left\\]/i', NULL, '<div style="text-align:left;">$1</div>', NULL, 1),
-(54, 'Align right', 0, 1, 320, '/\\[right\\]([^\\\\[]*)\\[\\/right\\]/i', NULL, '<div style="text-align:right;">$1</div>', NULL, 1),
-(55, 'Columns', 0, 1, 330, '/\\[c1\\:([^\\\\[]*)\\]([^\\\\[]*)\\[c2\\:([^\\\\[]*)\\]([^\\\\[]*)\\[c3\\]/i', NULL, '<table style="margin:0; vertical-align:top; width:100%;"><tr><td style="padding:0 16px 16px 0; vertical-align:top; width:$1%;">$2</td><td  style="padding:0 0 16px 16px; vertical-align:top; width:$3%;">$4</td></tr></table>', NULL, 1);
+(46, 'Spoiler 2', 0, 1, 230, '/\\[spoiler\\]/i', '/\\[\\/spoiler\\]/i', '<div style="margin:0; margin-top:8px"><div style="margin-bottom:4px"><input type="button" value="Show" onClick="if (this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''''; this.innerText = ''''; this.value = ''Hide''; } else { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''none''; this.innerText = ''''; this.value = ''Show''; }"></div><div class="spoiler"><div style="display: none;">', '</div></div></div>', 1),
+(47, 'Fold', 0, 1, 240, '/\\[fold=([^\\\\[]*)\\]/i', '/\\[\\/fold\\]/i', '<div style="margin:0;"><div class="fhead"><a href="#fold" onClick="if (this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''''; this.value = ''$1''; } else { this.parentNode.parentNode.getElementsByTagName(''div'')[1].getElementsByTagName(''div'')[0].style.display = ''none''; this.value = ''$1''; }">$1</a></div><div><div style="display: none;" class="fblock">', '</div></div></div>', 1),
+(48, 'Youtube', 0, 1, 250, '/\\[youtube=([^\\\\[]*)\\]/i', NULL, '<object width="425" height="350">\r\n<param name="movie" value="http://www.youtube.com/v/$1"></param>\r\n<embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" width="425" height="350"></embed>\r\n</object>', NULL, 1),
+(49, 'Google Video', 0, 1, 260, '/\\[googlevideo=([^\\\\[]*)\\]/i', NULL, '<embed style="width:425px; height:326px;" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docId=$1&hl=en-GB"> </embed>', NULL, 1),
+(50, 'MetaCafe video', 0, 1, 270, '/\\[metacafe=([^\\\\[]*)\\]/i', NULL, '<embed style="width:425px; height:345px;" src="http://www.metacafe.com/fplayer/$1" width="400" height="345" wmode="transparent" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>', NULL, 1),
+(51, 'Column left', 0, 1, 280, '/\\[colleft\\]([^\\\\[]*)\\[\\/colleft\\]/i', NULL, '<div class="colleft">$1</div>', NULL, 1),
+(52, 'Column right', 0, 1, 290, '/\\[colright\\]([^\\\\[]*)\\[\\/colright\\]/i', NULL, '<div class="colright">$1</div>', NULL, 1),
+(53, 'Center', 0, 1, 300, '/\\[center\\]([^\\\\[]*)\\[\\/center\\]/i', NULL, '<div style="text-align:center;">$1</div>', NULL, 1),
+(54, 'Align left', 0, 1, 310, '/\\[left\\]([^\\\\[]*)\\[\\/left\\]/i', NULL, '<div style="text-align:left;">$1</div>', NULL, 1),
+(55, 'Align right', 0, 1, 320, '/\\[right\\]([^\\\\[]*)\\[\\/right\\]/i', NULL, '<div style="text-align:right;">$1</div>', NULL, 1),
+(56, 'Columns', 0, 1, 330, '/\\[c1\\:([^\\\\[]*)\\]([^\\\\[]*)\\[c2\\:([^\\\\[]*)\\]([^\\\\[]*)\\[c3\\]/i', NULL, '<table style="margin:0; vertical-align:top; width:100%;"><tr><td style="padding:0 16px 16px 0; vertical-align:top; width:$1%;">$2</td><td  style="padding:0 0 16px 16px; vertical-align:top; width:$3%;">$4</td></tr></table>', NULL, 1),
+(57, 'Paragraph', 0, 0, 23, '[p]', '[/p]', '<p>', '</p>', 1);

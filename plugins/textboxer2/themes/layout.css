@@ -4,7 +4,7 @@
 #txb #bb, #txb #explain{ border:1px solid #999999;padding:2px; margin:0; }
 #txb #explain { border-width:0 0 1px 0; text-align:center; border-style:dashed;}
 #txb #bb {border-bottom:0; width:100%; background-color:#EEEEEE;}
-#txb textarea, #txb #preview {width: 100%;border:1px solid #999999;	left:-999%;top:-999%;padding:2px; margin:0; line-height: normal;}
+#txb textarea, #txb #preview {position:static; width: 100%; border:1px solid #999999;	left:-999%;top:-999%;padding:2px; margin:0; line-height: normal;}
 #txb #preview{visibility: hidden;position:absolute;}
 #txb #bb ul { margin:0; padding:0; list-style:none;}
 #txb #bb li { margin:0; padding:0; float:left; position:relative;}
@@ -28,7 +28,7 @@
 #txb div.cut span{font-weight:bold;}
 #txb .clearBoth { clear:both; }
 
-#txb { font-size:11px;}
+/*#txb { font-size:11px;} */
 #txb #explain { height:1em; color:#000000;}
 #txb #bb a {-moz-border-radius:0; color:#000000!important;}
 #txb #bb a:hover { color:#000000!important;}
@@ -38,4 +38,4 @@
 #txb #bb .dropdown a:hover span{ background-color:#FFCC00;}
 #txb div.cut,#txb div.previewInfo{border-color:#999999;}
 
-div#txb { font-size:11px;}
+/*div#txb { font-size:11px;}*/ 

@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/jevix/jevix.import.filter.php
-Version=173
+Version=175
 Updated=2012-may-22
 Type=Plugin
 Author=Amro

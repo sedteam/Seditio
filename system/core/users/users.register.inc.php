@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.register.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=User auth
@@ -19,9 +19,16 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','ALP');
 
+if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel']) 
+  { 
+  sed_redirect(sed_url("users", "m=auth", "", true)); 
+  exit; 
+  } 
+
+
 if ($cfg['disablereg'])
 	{
-	sed_redirect("message.php?msg=117");
+	sed_redirect(sed_url("message", "msg=117", "", true));
 	exit;
 	}
 
@@ -214,7 +221,7 @@ if ($a=='add')
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
 			{
-			sed_redirect("message.php?msg=106");
+			sed_redirect(sed_url("message", "msg=106", "", true));
 			exit;
 			}
 
@@ -226,20 +233,20 @@ if ($a=='add')
 			sed_mail ($ruseremail, $rsubject, $rbody);
 
 			$rsubject = $cfg['maintitle']." - ".$L['aut_regreqnoticetitle'];
-			$rinactive = $cfg['mainurl']."/users.php?gm=2&s=regdate&w=desc";
+			$rinactive = $cfg['mainurl']."/".sed_url("users", "gm=2&s=regdate&w=desc", "", false, false);
 			$rbody = sprintf($L['aut_regreqnotice'], $rusername, $rinactive);
 			sed_mail ($cfg['adminemail'], $rsubject, $rbody);
-			sed_redirect("message.php?msg=118");
+			sed_redirect(sed_url("message", "msg=118", "", true));
 			exit;
 			}
 		else
 			{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl']."/users.php?m=register&a=validate&v=".$validationkey;
+			$ractivate = $cfg['mainurl']."/".sed_url("users", "m=register&a=validate&v=".$validationkey, "", false, false);
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
-			sed_redirect("message.php?msg=105");
+			sed_redirect(sed_url("message", "msg=105", "", true));
 			exit;
 			}
 		}
@@ -255,14 +262,14 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
 		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 		sed_auth_clear($row['user_id']);
-		sed_redirect("message.php?msg=106");
+		sed_redirect(sed_url("message", "msg=106", "", true));
 		exit;
 		}
 	else
 		{
 		sed_shield_update(7, "Account validation");
 		sed_log("Wrong validation URL", 'sec');
-		sed_redirect("message.php?msg=157");
+		sed_redirect(sed_url("message", "msg=157", "", true));
 		exit;
 		}
 	}
@@ -310,7 +317,7 @@ $t->assign(array(
 	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
-	"USERS_REGISTER_SEND" => "users.php?m=register&amp;a=add",
+	"USERS_REGISTER_SEND" => sed_url("users", "m=register&a=add"),
 	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($rusername)."\" size=\"24\" maxlength=\"24\" />",
 	"USERS_REGISTER_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($ruseremail)."\" size=\"24\" maxlength=\"64\" />",
 	"USERS_REGISTER_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword1\" size=\"8\" maxlength=\"16\" />",

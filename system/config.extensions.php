@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/config.extensions.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=PFS extensions
@@ -19,6 +19,7 @@ $sed_extensions = array();
 
 $sed_extensions[] = array ('rar', 'Archive', 'rar');
 $sed_extensions[] = array ('zip', 'Archive', 'zip');
+$sed_extensions[] = array ('7z', 'Archive', '7zip');
 $sed_extensions[] = array ('avi', 'Video', 'mov');
 $sed_extensions[] = array ('qt', 'Video', 'mov');
 $sed_extensions[] = array ('mov', 'Video', 'mov');
@@ -33,6 +34,13 @@ $sed_extensions[] = array ('png', 'Picture', 'png');
 $sed_extensions[] = array ('mp3', 'Music', 'mp3');
 $sed_extensions[] = array ('wav', 'Music', 'wav');
 $sed_extensions[] = array ('txt', 'Text', 'txt');
+$sed_extensions[] = array ('doc', 'MS Word', 'doc');
+$sed_extensions[] = array ('docx', 'MS Word', 'doc');
+$sed_extensions[] = array ('xls', 'MS Excel', 'xls');
+$sed_extensions[] = array ('xlsx', 'MS Excel', 'xls');
+$sed_extensions[] = array ('ppt', 'MS Power Point', 'ppt');
+$sed_extensions[] = array ('pptx', 'MS Power Point', 'ppt');
 $sed_extensions[] = array ('pdf', 'Adobe document', 'pdf');
+$sed_extensions[] = array ('psd', 'Adobe Photoshop', 'psd');
 
 ?>

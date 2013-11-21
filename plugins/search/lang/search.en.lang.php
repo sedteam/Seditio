@@ -3,8 +3,8 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.en.lang.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=
 Author=Neocrome
 Description=

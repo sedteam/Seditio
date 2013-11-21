@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.tools.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -20,7 +20,7 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=tools", $L['adm_manage']);
+$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminhelp = $L['adm_help_tools'];
 
 $p = sed_import('p','G','ALP');
@@ -48,7 +48,7 @@ if (!empty($p))
 
 	if (count($extp)==0)
 		{
-		header("Location: message.php?msg=907");
+		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
 		}
 
@@ -60,11 +60,11 @@ if (!empty($p))
 		}
 	else
 		{
-		header("Location: message.php?msg=907");
+		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
 		}
 
-	$adminpath[] = array ("admin.php?m=tools&amp;p=$p", $info['Name']);
+	$adminpath[] = array (sed_url("admin", "m=tools&p=".$p), $info['Name']);
   $adminmain .= "<h2>".sed_plugin_icon($p)." ".$info['Name']."</h2>";
 
 	if (is_array($extp))
@@ -99,9 +99,9 @@ while ($row = sed_sql_fetchassoc($sql))
 $sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'forums', 'users', 'plug', 'page', 'trash') ORDER BY ct_title ASC");
 $lines = array();
 
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<table class=\"cells striped\">";
 $adminmain .= "<tr>";
-$adminmain .= "<td class=\"coltop\">".$L['Modules']." ".$L['adm_clicktoedit']."</td>";
+$adminmain .= "<td class=\"coltop\">".$L['Modules']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:80px;\">".$L['Rights']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:128px;\">".$L['Configuration']."</td>";
 
@@ -113,71 +113,42 @@ while ($row = sed_sql_fetchassoc($sql))
 	$adminmain .= "<td>";
 	
 	$row['ct_title_loc'] = (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']];
-	$adminmain .= sed_linkif("admin.php?m=".$row['ct_code'], "<img src=\"system/img/admin/".$row['ct_code'].".png\" alt=\"\" /> ".$row['ct_title_loc'], sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code']!='admin' && $row['ct_code']!='index' && $row['ct_code']!='message');
+	$adminmain .= sed_linkif(sed_url("admin", "m=".$row['ct_code']), "<img src=\"system/img/admin/".$row['ct_code'].".png\" alt=\"\" /> ".$row['ct_title_loc'], sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code']!='admin' && $row['ct_code']!='index' && $row['ct_code']!='message');
 	$adminmain .= "</td>";
 
 	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= ($authentries[$row['ct_code']]>0) ? "<a href=\"admin.php?m=rightsbyitem&amp;ic=".$row['ct_code']."&amp;io=a\"><img src=\"system/img/admin/rights2.png\" alt=\"\" /></a>" : '&nbsp;';
+	$adminmain .= ($authentries[$row['ct_code']]>0) ? "<a href=\"".sed_url("admin", "m=rightsbyitem&ic=".$row['ct_code']."&io=a")."\"><img src=\"system/img/admin/rights2.png\" alt=\"\" /></a>" : '&nbsp;';
 	$adminmain .= 	"</td>";
 
 	$cfgcode = "disable_".$row['ct_code'];
 	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= ($cfgentries[$row['ct_code']]>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=".$row['ct_code']."\"><img src=\"system/img/admin/config.png\" alt=\"\" /></a>" : '&nbsp;';
+	$adminmain .= ($cfgentries[$row['ct_code']]>0) ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=".$row['ct_code'])."\"><img src=\"system/img/admin/config.png\" alt=\"\" /></a>" : '&nbsp;';
 	$adminmain .= "</td></tr>";
 	}
 
+$adminmain .= "<tr>"; 
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url("admin", "m=banlist"), "<img src=\"system/img/admin/banlist.png\" alt=\"\" /> ".$L['Banlist'], sed_auth('users', 'a', 'A'))."</td>"; 
+$adminmain .= "</tr>"; 
+
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=cache", "<img src=\"system/img/admin/cache.png\" alt=\"\" /> ".$L['adm_internalcache'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url("admin", "m=cache"), "<img src=\"system/img/admin/cache.png\" alt=\"\" /> ".$L['adm_internalcache'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=smilies", "<img src=\"system/img/admin/smilies.png\" alt=\"\" /> ".$L['Smilies'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url("admin", "m=smilies"), "<img src=\"system/img/admin/smilies.png\" alt=\"\" /> ".$L['Smilies'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\"><a href=\"admin.php?m=hits\"><img src=\"system/img/admin/statistics.png\" alt=\"\" /> ".$L['Hits']."</a></td>";
+$adminmain .= "<td colspan=\"3\"><a href=\"".sed_url("admin", "m=hits")."\"><img src=\"system/img/admin/statistics.png\" alt=\"\" /> ".$L['Hits']."</a></td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=referers", "<img src=\"system/img/admin/info.png\" alt=\"\" /> ".$L['Referers'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url("admin", "m=referers"), "<img src=\"system/img/admin/info.png\" alt=\"\" /> ".$L['Referers'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "</table>";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  $adminmain .= "</td><td style=\"width:50%; padding-left:4px;\">";
-  
-  
-
-
-
-
-
-
-
-
-
-
-
+$adminmain .= "</td><td style=\"width:50%; padding-left:4px;\">";
 
 	$plugins = array();
 
@@ -202,9 +173,7 @@ $adminmain .= "</table>";
 
 		usort($plugins, "cmp");
 
-
-
-		$adminmain .= "<table class=\"cells\">";
+		$adminmain .= "<table class=\"cells striped\">";
 		$adminmain .= "<tr><td style=\"text-align:center;\" class=\"coltop\">".$L['Tools']." (".$L['Plugins'].")</td>";
 		$adminmain .= "<td style=\"text-align:center;\" class=\"coltop\">".$L['Configuration']."</td></tr>";
 
@@ -223,10 +192,10 @@ $adminmain .= "</table>";
 				}
 
 			$plugin_icon = (empty($x[1])) ? 'plugins' : $x[1];
-			$adminmain  .= "<tr><td><a href=\"admin.php?m=tools&amp;p=".$x[0]."\">";
+			$adminmain  .= "<tr><td><a href=\"".sed_url("admin", "m=tools&p=".$x[0])."\">";
       $adminmain .= sed_plugin_icon($x[0])." ".$info['Name']."</a></td>";
 			$adminmain .= "<td style=\"width:96px; text-align:center;\">";
-			$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$info['Code']."\"><img src=\"system/img/admin/config.png\" alt=\"\" /></a>" : '&nbsp;';
+			$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$info['Code'])."\"><img src=\"system/img/admin/config.png\" alt=\"\" /></a>" : '&nbsp;';
 			$adminmain  .= "</td></tr>";
 			}
 		$adminmain .= "</table>";

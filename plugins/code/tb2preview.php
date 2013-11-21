@@ -7,8 +7,8 @@ http://www.neocrome.net
 
 [BEGIN_SED]
 File=tb2preview.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Standalone
 Author=Arkkimaagi
 Description=Bbcode preview tool

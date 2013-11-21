@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Functions
@@ -88,7 +88,7 @@ function sed_build_adminsection($adminpath)
 	global $cfg, $L;
 
 	$result = array();
-	$result[] = "<a href=\"admin.php\">".$L['Adminpanel']."</a>";
+	$result[] = "<a href=\"".sed_url("admin")."\">".$L['Adminpanel']."</a>";
 	foreach($adminpath as $i => $k)
 		{ $result[] = "<a href=\"".$k[0]."\">".$k[1]."</a>"; }
 		$result = implode(" ".$cfg['separator']." ", $result);
@@ -251,6 +251,10 @@ $result = array();
 $result[] = array ('main', '01', 'maintitle', 1, 'Title of your site', '');
 $result[] = array ('main', '02', 'subtitle', 1, 'Subtitle', '');
 $result[] = array ('main', '03', 'mainurl', 1, 'http://www.yourdomain.com', '');
+$result[] = array ('main', '03', 'multihost', 3, '1', '');    // New in v175
+$result[] = array ('main', '04', 'absurls', 3, '0', '');   // New in v175
+$result[] = array ('main', '04', 'sefurls', 3, '0', '');   // New in v175
+$result[] = array ('main', '04', 'sefurls301', 3, '0', '');   // New in v175
 $result[] = array ('main', '04', 'adminemail', 1, 'admin@mysite.com', '');
 $result[] = array ('main', '05', 'clustermode', 3, '0', '');
 $result[] = array ('main', '05', 'hostip', 1, '999.999.999.999', '');
@@ -264,6 +268,9 @@ $result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
 $result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
 $result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
 $result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));
+$result[] = array ('main', '21', 'maintenance', 3, '0', ''); //Sed 175
+$result[] = array ('main', '22', 'maintenancelevel', 2, '95', array(0,1,2,3,4,5,7,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,99)); //Sed 175
+//$result[] = array ('main', '23', 'maintenancereason', 1, 'The site is in maintenance mode!', ''); //Sed 175
 $result[] = array ('time', '11', 'dateformat', 1, 'Y-m-d H:i', '');
 $result[] = array ('time', '11', 'formatmonthday', 1, 'm-d', '');
 $result[] = array ('time', '11', 'formatyearmonthday', 1, 'Y-m-d', '');
@@ -275,7 +282,7 @@ $result[] = array ('skin', '02', 'forcedefaultskin', 3, '1', '');
 $result[] = array ('skin', '04', 'doctypeid', 4, '8', '');
 $result[] = array ('skin', '06', 'charset', 4, 'UTF-8', '');
 $result[] = array ('skin', '08', 'metakeywords', 1, '', '');
-$result[] = array ('skin', '08', 'separator', 1, '&gt;', '');
+$result[] = array ('skin', '08', 'separator', 1, '&raquo;', '');
 $result[] = array ('skin', '15', 'disablesysinfos', 3, '1', '');
 $result[] = array ('skin', '15', 'keepcrbottom', 3, '1', '');
 $result[] = array ('skin', '15', 'showsqlstats', 3, '0', '');
@@ -375,6 +382,7 @@ $result[] = array ('users', '07', 'regrequireadmin', 3, '0',  '');
 $result[] = array ('users', '10', 'regnoactivation', 3, '0', '');
 $result[] = array ('users', '10', 'useremailchange', 3, '0', '');
 $result[] = array ('users', '10', 'usertextimg', 3, '0', '');
+$result[] = array ('users', '10', 'color_group', 3, '0', '');   //new in v175
 $result[] = array ('users', '12', 'av_maxsize', 2, '64000', '');
 $result[] = array ('users', '12', 'av_maxx', 2, '128', '');
 $result[] = array ('users', '12', 'av_maxy', 2, '128', '');
@@ -612,7 +620,7 @@ function sed_plugin_install($pl)
 
 	sed_auth_reorder();
 	sed_cache_clearall();
-  $res .= ($j>0) ? "<strong><a href=\"admin.php?m=config&n=edit&o=plug&p=".$pl."\">There was configuration entries, click here to open the configuration panel</a></strong><br />" : '';
+  $res .= ($j>0) ? "<strong><a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$pl)."\">There was configuration entries, click here to open the configuration panel</a></strong><br />" : '';
   return ($res);
   }
   
@@ -681,6 +689,8 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 
 	if (!empty($title) && !empty($code) && !empty($path) && $code!='all')
 		{
+    $code = sed_replacespace($code);  //New in175
+    
 		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
 		if (sed_sql_numrows($sql)==0)
 			{

@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.auth.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=User authentication
@@ -56,7 +56,7 @@ if ($a=='check')
 		if ($row['user_maingrp']==2)
 			{
 			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
-			sed_redirect("message.php?msg=152");
+			sed_redirect(sed_url("message", "msg=152", "", true));
 			exit;
 			}
 	 	elseif ($row['user_maingrp']==3)
@@ -68,7 +68,7 @@ if ($a=='check')
 		    else
 		       	{
 				sed_log("Log in attempt, user banned : ".$rusername, 'usr');
-				sed_redirect("message.php?msg=153&num=".$row['user_banexpire']);
+				sed_redirect(sed_url("message", "msg=153&num=".$row['user_banexpire'], "", true));
 				exit;
 				}
 			}
@@ -101,15 +101,15 @@ if ($a=='check')
 			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
-		sed_redirect("message.php?msg=104&redirect=".$redirect);
+		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");  
+    sed_redirect(sed_url("message", "msg=104&redirect=".$redirect, "", true));
 		exit;
 		}
 	else
 		{
 		sed_shield_update(7, "Log in");
 		sed_log("Log in failed, user : ".$rusername,'usr');
-		sed_redirect("message.php?msg=151");
+		sed_redirect(sed_url("message", "msg=151", "", true));
 		exit;
 		}
 	}
@@ -128,10 +128,11 @@ $t = new XTemplate("skins/".$skin."/users.auth.tpl");
 
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
-	"USERS_AUTH_SEND" => "users.php?m=auth&amp;a=check&amp;redirect=".$redirect,
+	"USERS_AUTH_SEND" => sed_url("users", "m=auth&a=check&redirect=".$redirect),
 	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
 	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />".$redir,
-	"USERS_AUTH_REGISTER" => "users.php?m=register"
+	"USERS_AUTH_REGISTER" => sed_url("users", "m=register"),
+  "USERS_AUTH_LOSTPASSWORD" => sed_url("plug", "e=passrecover")
 		));
 
 /* === Hook === */

@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/header.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Global header
@@ -21,16 +21,20 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $extp = sed_getextplugins('header.first');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
+/* ===== */   
 
 $out['logstatus'] = ($usr['id']>0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
-$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"users.php\">".$L['Users']."</a>" : '';
+$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url("users")."\">".$L['hea_users']."</a>" : '';
 $out['metas'] = sed_htmlmetas().$moremetas;
 $out['compopup'] = sed_javascript($morejavascript);
 $out['fulltitle'] = $cfg['maintitle'];
 $out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
 $out['fulltitle'] .= (empty($out['subtitle'])) ? '' : ' - '.$out['subtitle'];
 $out['currenturl'] .= sed_getcurrenturl();
+$out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $sys['abs_url'].$out['canonical_url'];  // New in 175
+$out['register_link'] = sed_url("users", "m=register");  // New in 175
+$out['auth_link'] = sed_url("users", "m=auth");  // New in 175
+$out['whosonline_link'] = sed_url("plug", "e=whosonline");  // New in 175
 
 if (sed_auth('page', 'any', 'A'))
 	{
@@ -42,9 +46,9 @@ if (sed_auth('page', 'any', 'A'))
 		$out['notices'] .= $L['hea_valqueues'];
 
 		if ($sys['pagesqueued']==1)
-			{ $out['notices'] .= "<a href=\"admin.php?m=page\">"."1 ".$L['Page']."</a> "; }
+			{ $out['notices'] .= "<a href=\"".sed_url("admin","m=page")."\">"."1 ".$L['Page']."</a> "; }
 		elseif ($sys['pagesqueued']>1)
-			{ $out['notices'] .= "<a href=\"admin.php?m=page\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
+			{ $out['notices'] .= "<a href=\"".sed_url("admin","m=page")."\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
 		}
 	}
 
@@ -65,10 +69,11 @@ $t = new XTemplate($mskin);
 $t->assign(array (
 	"HEADER_TITLE" => $out['fulltitle'],
 	"HEADER_MAINTITLE" => $cfg['maintitle'],
-	"HEADER_SUBTITLE" => $cfg['subtitle'],
+	"HEADER_SUBTITLE" => $out['subtitle'],
 	"HEADER_METAS" => $out['metas'],
 	"HEADER_DOCTYPE" => $cfg['doctype'],
 	"HEADER_CSS" => $cfg['css'],
+  "HEADER_CANONICAL_URL" => $out['canonical_url'], // New in 175
 	"HEADER_COMPOPUP" => $out['compopup'],
 	"HEADER_LOGSTATUS" => $out['logstatus'],
 	"HEADER_WHOSONLINE" => $out['whosonline'],
@@ -81,12 +86,12 @@ $t->assign(array (
 
 if ($usr['id']>0)
 	{
-	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"admin.php\">".$L['Administration']."</a>" : '';
-	$out['loginout_url'] = "users.php?m=logout&amp;".sed_xg();
-	$out['loginout'] = "<a href=\"".$out['loginout_url']."\">".$L['Logout']."</a>";
-	$out['profile'] = "<a href=\"users.php?m=profile\">".$L['Profile']."</a>";
-	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"pm.php\">".$L['Private_Messages']."</a>";
-	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal']==0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile']==0) ? '' : "<a href=\"pfs.php\">".$L['Mypfs']."</a>";
+	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"".sed_url("admin")."\">".$L['hea_administration']."</a>" : '';
+	$out['loginout_url'] = sed_url("users", "m=logout&".sed_xg());
+	$out['loginout'] = "<a href=\"".$out['loginout_url']."\">".$L['hea_logout']."</a>";
+	$out['profile'] = "<a href=\"".sed_url("users", "m=profile")."\">".$L['hea_profile']."</a>";
+	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"".sed_url("pm")."\">".$L['hea_private_messages']."</a>";
+	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal']==0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile']==0) ? '' : "<a href=\"".sed_url("pfs")."\">".$L['hea_mypfs']."</a>";
 
 	if (!$cfg['disable_pm'])
 		{
@@ -95,7 +100,7 @@ if ($usr['id']>0)
 			$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=0");
 			$usr['messages'] = sed_sql_result($sqlpm,0,'COUNT(*)');
 			}
-		$out['pmreminder'] = "<a href=\"pm.php\">";
+		$out['pmreminder'] = "<a href=\"".sed_url("pm")."\">";
 		$out['pmreminder'] .= ($usr['messages']>0) ? $usr['messages'].' '.$L['hea_privatemessages'] : $L['hea_noprivatemessages'];
 		$out['pmreminder'] .= "</a>";
 		}
@@ -117,7 +122,7 @@ else
 	{
 	$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"32\" />";
 	$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
-	$out['guest_register'] = "<a href=\"users.php?m=register\">".$L["Register"]."</a>";
+	$out['guest_register'] = "<a href=\"".sed_url("users", "m=register")."\">".$L["Register"]."</a>";
 	$out['guest_cookiettl'] = "<select name=\"rcookiettl\" size=\"1\">";
 	$out['guest_cookiettl'] .= "<option value=\"0\" selected=\"selected\">".$L['No']."</option>";
 

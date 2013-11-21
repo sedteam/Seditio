@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=pfs.editfolder.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -39,8 +39,7 @@ if (!$usr['isadmin'] || $userid=='')
 	}
 else
 	{
-	$more1 = "?userid=".$userid;
-	$more = "&userid=".$userid;
+	$more = "userid=".$userid;
 	}
 
 if ($userid!=$usr['id'])
@@ -59,15 +58,14 @@ foreach ($sed_extensions as $k => $line)
 
 if (!empty($c1) || !empty($c2))
 	{
-	$more .= "&c1=".$c1."&c2=".$c2;
-	$more1 .= ($more1=='') ? "?c1=".$c1."&c2=".$c2 : "&c1=".$c1."&c2=".$c2;
+	$more = "c1=".$c1."&c2=".$c2."&".$more;
 	$standalone = TRUE;
 	}
 
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"pfs.php".$more1."\">".$L['pfs_title']."</a>";
+$title = "<a href=\"".sed_url("pfs", $more)."\">".$L['pfs_title']."</a>";
 
 if ($userid!=$usr['id'])
 	{
@@ -96,7 +94,7 @@ else
 if ($a=='update' && !empty($f))
 	{
 	$rtitle = sed_import('rtitle','P','TXT');
-	$rdesc = sed_import('rdesc','P','TXT');
+	$rdesc = sed_import('rdesc','P','HTM');
 	$folderid = sed_import('folderid','P','INT');
 	$rtype = sed_import('rtype','P','INT');
 	$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
@@ -107,24 +105,23 @@ if ($a=='update' && !empty($f))
 		pff_title='".sed_sql_prep($rtitle)."',
 		pff_updated='".$sys['now']."',
 		pff_desc='".sed_sql_prep($rdesc)."',
+    pff_desc_ishtml='".$ishtml."',
 		pff_type='$rtype'
 		WHERE pff_userid='$userid' AND pff_id='$f' " );
 
-	header("Location: pfs.php".$more1);
+	sed_redirect(sed_url("pfs", $more, "", true));
 	exit;
 	}
 
 $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
 
-$body .= "<table class=\"cells\">";
-$body .= "<form id=\"editfolder\" action=\"pfs.php?m=editfolder&amp;a=update&amp;f=".$pff_id.$more."\" method=\"post\">";
+$body .= "<table class=\"cells striped\">";
+$body .= "<form id=\"editfolder\" action=\"".sed_url("pfs" ,"m=editfolder&a=update&f=".$pff_id."&".$more)."\" method=\"post\">";
 $body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$row['pff_date']."</td></tr>";
 $body .= "<tr><td>".$L['Updated']." : </td><td>".$row['pff_updated']."</td></tr>";
 $body .= "<tr><td>".$L['Type']." : </td><td>";
-
 $checked0 = ($row['pff_type']==0) ? "checked=\"checked\"" : '';
 $checked1 = ($row['pff_type']==1) ? "checked=\"checked\"" : '';
 $checked2 = ($row['pff_type']==2 && $usr['auth_write_gal']) ? "checked=\"checked\"" : '';
@@ -132,7 +129,8 @@ $body .= "<input type=\"radio\" class=\"radio\" name=\"rtype\" value=\"0\" $chec
 $body .= " &nbsp; <input type=\"radio\" class=\"radio\" name=\"rtype\" value=\"1\" $checked1 />".$L_pff_type[1];
 $body .= ($usr['auth_write_gal']) ? " &nbsp; <input type=\"radio\" class=\"radio\" name=\"rtype\" value=\"2\" $checked2 />".$L_pff_type[2] : '';
 $body .= "</td></tr>";
-$body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
+$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br /><textarea name=\"rdesc\" rows=\"8\" cols=\"56\">".sed_cc($pff_desc, ENT_QUOTES)."</textarea></td></tr>";
+$body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 $body .= "</form></table>";
 
 /* ============= */
@@ -163,6 +161,12 @@ function ratings(rcode)
 
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
+	
+	/* === New Hook Sed 175 === */
+	$extp = sed_getextplugins('pfs.stndl');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ================================ */	
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 
@@ -199,7 +203,4 @@ else
 
 	require("system/footer.php");
 	}
-
-
-
 ?>

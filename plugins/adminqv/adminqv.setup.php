@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/adminqv/adminqv.setup.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -19,7 +19,7 @@ Description=
 Code=adminqv
 Name=Admin QuickView
 Description=Various statistics and informations for the home page of the administration panel
-Version=173
+Version=175
 Date=2010-feb-05
 Author=Neocrome
 Copyright=

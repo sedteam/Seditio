@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.setup.php
-Version=173
+Version=175
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro
@@ -18,8 +18,8 @@ Description=
 Code=ckeditor
 Name=Ckeditor
 Description=Ckeditor for Seditio (Universal textarea JS connector) 
-Version=3.6.5
-Date=2012-oct-27
+Version=4.2.1
+Date=2013-oct-09
 Author=Amro
 Copyright=Amro
 Notes=
@@ -31,9 +31,9 @@ Lock_members=W12345A
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
-ckeditor_skin=01:select:kama,office2003,v2:kama:Ckeditor skin
+ckeditor_skin=01:select:moono,moonocolor,kama:moono:Ckeditor skin
 ckeditor_detectlang=01:select:Yes,No:Yes:Detect language interface from user profile
-ckeditor_lang=02:select:en,ru,af,ar,eu,bn,bs,bg,ca,zh-cn,zh,hr,cs,da,nl,en-au,en-ca,en-gb,eo,et,fo,fi,fr,fr-ca,gl,ka,de,el,gu,he,hi,hu,is,it,ja,km,ko,lv,lt,ms,mn,no,nb,fa,pl,pt-br,pt,ro,sr,sr-latn,sk,sl,es,sv,th,tr,uk,vi,cy:en:Ckeditor default language
+ckeditor_lang=02:select:en,ru,zh,hr,cs,da,nl,et,fi,fr,ka,de,el,hu,it,ja,ko,no,pl,sv,tr,uk:en:Ckeditor default language
 ckeditor_color_toolbar=03:select:#FFC4C4,#FFAD69,#FFCD69,#FFE569,#FFFF69,#BFEE62,#99F299,#91E6E6,#C2CEEA,#B19FEB,#CD98EA,#F299CC:#C2CEEA:Color Toolbar
 ckeditor_other_textarea=04:select:Yes,No:No:Use Ckeditor for Other textarea
 ckeditor_other_toolbar=05:select:Micro,Basic,Extended:Basic:Default toolbar for Other textarea

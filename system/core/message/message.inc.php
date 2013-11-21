@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=message.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Messages
@@ -39,8 +39,8 @@ case '100':
 $message = $L['msg100_0'];
 $body = $L['msg100_1'];
 $rd = 4;
-$ru = "users.php?m=auth";
-$ru .= (!empty($redirect)) ? "&amp;redirect=".$redirect : '';
+$ru = (!empty($redirect)) ? "&redirect=".$redirect : '';
+$ru = sed_url("users", "m=auth".$ru, "", true, true);
 
 break;
 
@@ -54,14 +54,14 @@ $message = $L['msg102_0'];
 $body = $L['msg102_1'];
 $r = 1;
 $rd = 4;
-$ru = "index.php";
+$ru = sed_url("index", "", "", true, true);
 break;
 
 case '104':
 $message = $L['msg104_0'];
 $body = $L["msg104_1"];
 $rd = 4;
-$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 break;
 
 case '105':
@@ -88,7 +88,7 @@ case '113':
 $message = $L['msg113_0'];
 $body = $L['msg113_1'];
 $rd = 2;
-$ru = "users.php?m=profile";
+$ru = sed_url("users", "m=profile", "", true, true);
 break;
 
 case '117':
@@ -136,44 +136,44 @@ case '400':
 $message = $L['msg400_0'];
 $body = $L["msg400_1"];
 $rd = 5;
-$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 break;
 
 case '401':
 $message = $L['msg401_0'];
 $body = $L["msg401_1"];
 $rd = 5;
-$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 break;
 
 case '403':
 $message = $L['msg403_0'];
 $body = $L["msg403_1"];
 $rd = 5;
-$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 break;
 
 case '404':
 $message = $L['msg404_0'];
 $body = $L["msg404_1"];
 $rd = 5;
-$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 break;
 
 case '500':
 $message = $L['msg500_0'];
 $body = $L["msg500_1"];
 $rd = 5;
-$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 break;
 
 /* ======== Private messages ======== */
 
 case '502':
 $message = $L['msg502_0'];
-$body = $L['msg502_1']."<a href=\"pm.php\">".$L['msg502_2']."</a>".$L['msg502_3'];
+$body = $L['msg502_1']."<a href=\"".sed_url("pm", "", "", true, true)."\">".$L['msg502_2']."</a>".$L['msg502_3'];
 $rd = 4;
-$ru = "pm.php";
+$ru = sed_url("pm");
 break;
 
 /* ======== Private messages ======== */
@@ -219,7 +219,7 @@ case '916':
 $message = $L['msg916_0'];
 $body = $L["msg916_1"];
 $rd = 2;
-$ru = "admin.php";
+$ru = sed_url("admin");
 break;
 
 case '930':
@@ -228,8 +228,8 @@ $body = $L['msg930_1'];
 if ($usr['id']==0)
 	{
 	$rd = 4;
-	$ru = "users.php?m=auth";
-	$ru .= (!empty($redirect)) ? "&amp;redirect=".$redirect : '';
+	$redir = (!empty($redirect)) ? "&redirect=".$redirect : '';
+  $ru = sed_url("users", "m=auth".$redir, "", true, true);
 	}
 break;
 
@@ -255,11 +255,11 @@ break;
 
 if($rc!='')
 	{
-	$r['100'] = "admin.php?m=plug";
-	$r['101'] = "admin.php?m=hitsperday";
-	$r['102'] = "admin.php?m=polls";
-	$r['103'] = "admin.php?m=forums";
-	$r['200'] = "users.php";
+	$r['100'] = sed_url("admin", "m=plug", "", true, true);
+	$r['101'] = sed_url("admin", "m=hitsperday", "", true, true);
+	$r['102'] = sed_url("admin", "m=polls", "", true, true);
+	$r['103'] = sed_url("admin", "m=forums", "", true, true);
+	$r['200'] = sed_url("users", "", "", true, true);
 
 	$moremetas .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];

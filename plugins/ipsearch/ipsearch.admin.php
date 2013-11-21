@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/ipsearch/ipsearch.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -31,9 +31,9 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $plugin_title = "IP search";
 
 $plugin_body .= "<h4>".$L['adm_searchthisuser']." :</h4>";
-$plugin_body .= "<form id=\"search\" action=\"admin.php?m=tools&amp;p=ipsearch&amp;a=search&amp;".sed_xg()."\" method=\"post\">";
+$plugin_body .= "<form id=\"search\" action=\"".sed_url("admin", "m=tools&p=ipsearch&a=search&".sed_xg())."\" method=\"post\">";
 $plugin_body .= "<input type=\"text\" class=\"text\" name=\"id\" value=\"".$id."\" size=\"16\" maxlength=\"16\" /> ";
-$plugin_body .= "<input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
+$plugin_body .= "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Search']."\" /></form>";
 
 if ($a=='search')
 	{
@@ -59,7 +59,7 @@ if ($a=='search')
 
 	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
 	$totalmatches = sed_sql_numrows($sql);
-	$plugin_body .= "<p>Found ".$totalmatches." matche(s) for ".$ipmask1." : <ul>";
+	$plugin_body .= "<p>Found ".$totalmatches." matche(s) for ".$ipmask1." : <ul class=\"arrow_list\">";
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
@@ -68,7 +68,7 @@ if ($a=='search')
 
 	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
 	$totalmatches = sed_sql_numrows($sql);
-	$plugin_body .= "</ul>Found ".$totalmatches." matche(s) for ".$ipmask2.".* : <ul>";
+	$plugin_body .= "</ul>Found ".$totalmatches." matche(s) for ".$ipmask2.".* : <ul class=\"arrow_list\">";
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
@@ -77,7 +77,7 @@ if ($a=='search')
 
    	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
 	$totalmatches = sed_sql_numrows($sql);
-	$plugin_body .= "</ul>Found ".$totalmatches." matche(s) for ".$ipmask3.".*.* : <ul>";
+	$plugin_body .= "</ul>Found ".$totalmatches." matche(s) for ".$ipmask3.".*.* : <ul class=\"arrow_list\">";
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{

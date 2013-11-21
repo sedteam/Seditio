@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/footer.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Global footer
@@ -108,7 +108,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
   
   if (is_array($sys['devmode']['hooks'])) 
     {  
-    $out['devmode'] .= "<table class=\"cells\"><tr>";
+    $out['devmode'] .= "<table class=\"cells hovered\"><tr>";
     $out['devmode'] .= "<td class=\"coltop\">#</td><td class=\"coltop\">Hook</td>";
     $out['devmode'] .= "<td class=\"coltop\">Code</td><td class=\"coltop\">Part</td>";
     $out['devmode'] .= "<td class=\"coltop\">Plugin</td><td class=\"coltop\">File</td>";
@@ -133,7 +133,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
     
   $out['devmode'] .= "<h4>SQL queries :</h4>";
   
-  $out['devmode'] .= "<table class=\"cells\"><tr>";
+  $out['devmode'] .= "<table class=\"cells hovered\"><tr>";
   $out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">SQL query</td><td class=\"coltop\" style=\"width:10%;\">SQL Duration</td>";
   $out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">Timeline</td><td class=\"coltop\">Query</td></tr>";
 	$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";

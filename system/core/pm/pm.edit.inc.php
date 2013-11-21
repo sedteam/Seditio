@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=pm.edit.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Private messages
@@ -57,20 +57,20 @@ $pm_text = $row['pm_text'];
 
 if ($a=='archive')
 	{
-	if ($pm_touserid!=$usr['id'] || $pm_state>1)
+	if ($pm_touserid != $usr['id'] || $pm_state > 1)
 		{
-		header("Location: message.php?msg=550");
+		sed_redirect(sed_url("message", "msg=550", "", true));
 		exit;
 		}
 	$sql = sed_sql_query("UPDATE $db_pm SET pm_state=2 WHERE pm_id='$id'");
-	header("Location: pm.php");
+	sed_redirect(sed_url("pm", "", "", true));
 	exit;
 	}
 elseif ($a=='delete')
 	{
 	if (($pm_state>0 && $pm_touserid!=$usr['id']) || ($pm_state==0 && $pm_fromuserid!=$usr['id']))
 		{
-		header("Location: message.php?msg=950");
+		sed_redirect(sed_url("message", "msg=950", "", true));
 		exit;
 		}
 
@@ -83,14 +83,14 @@ elseif ($a=='delete')
 		$sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='$id'");
 		}
 
-	header("Location: pm.php?f=$f");
+	sed_redirect(sed_url("pm", "f=".$f, "", true));
 	exit;
 	}
 elseif ($a=='update')
 	{
-	if (($pm_state>0 && $pm_touserid!=$usr['id']) || ($pm_state==0 && $pm_fromuserid!=$usr['id']))
+	if (($pm_state > 0 && $pm_touserid != $usr['id']) || ($pm_state == 0 && $pm_fromuserid != $usr['id']))
 		{
-		header("Location: message.php?msg=950");
+		sed_redirect(sed_url("message", "msg=950", "", true));
 		exit;
 		}
 
@@ -98,12 +98,12 @@ elseif ($a=='update')
 
 	if (empty($newpmtext))
 		{
-		header("Location: pm.php?m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f);
+		sed_redirect(sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f, "", true));
 		exit;
 		}
 
 	$sql = sed_sql_query("UPDATE $db_pm SET pm_text='".sed_sql_prep($newpmtext)."', pm_date='".$sys['now_offset']."' WHERE pm_id='$id'");
-	header("Location: pm.php?id=".$id);
+	sed_redirect(sed_url("pm", "id=".$id, "", true));
 	exit;
 	}
 

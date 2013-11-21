@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.config.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Configuration
@@ -20,7 +20,7 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ('admin.php?m=config', $L['Configuration']);
+$adminpath[] = array (sed_url("admin", "m=config"), $L['Configuration']);
 $adminmain = "<h2><img src=\"system/img/admin/config.png\" alt=\"\" /> ".$L['Configuration']."</h2>";
 
 $sed_select_charset = sed_loadcharsets();
@@ -44,38 +44,48 @@ if ($o == 'plug' && !empty($p))  //New in v173
   } 
 	
 $adminmain .= "<table class=\"flat\"><tr>";
-$adminmain .= "<td style=\"width:20%; vertical-align:top;\">";
+$adminmain .= "<td style=\"width:25%; vertical-align:top;\">";
 
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<table class=\"cells striped\">";
 $adminmain .= "<tr><td>";
 	
-$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core' ORDER BY config_cat ASC");
+$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'");
 	
+$adminmain .= "<div class=\"nav-v\">";
+$adminmain .= "<ul>";
 while ($row = sed_sql_fetchassoc($sql))
 	{
-	$code = "core_".$row['config_cat'];
+	$adminmain .= "<li>";
+  $code = "core_".$row['config_cat'];
 	$adminmain .= ($o=='core' && $row['config_cat']==$p) ? "<strong>" : '';
-	$adminmain .= "<a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=".$row['config_cat']."\">";
+	$adminmain .= "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=".$row['config_cat'])."\">";
 	$adminmain .= "<img src=\"system/img/admin/".$row['config_cat'].".png\" alt=\"\" /> ".$L[$code]."</a>";
 	$adminmain .= ($o=='core' && $row['config_cat']==$p) ? "</strong>" : '';
-	$adminmain .= "<br />";
+	$adminmain .= "</li>";
 	}
+$adminmain .= "</ul>";
+$adminmain .= "</div>";
 
 $adminmain .= "</td></tr></table>";
-$adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">".$L['Plugins']."</td></tr>";
+$adminmain .= "<table class=\"cells striped\"><tr><td class=\"coltop\">".$L['Plugins']."</td></tr>";
 $adminmain .= "<tr><td>";
 
 $sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='plug' ORDER BY config_cat ASC");
 
+$adminmain .= "<div class=\"nav-v\">";
+$adminmain .= "<ul>";
 while ($row = sed_sql_fetchassoc($sql))
 	{
-	$adminmain .= ($o=='plug' && $row['config_cat']==$p) ? "<strong>" : '';	
-	$adminmain .= "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$row['config_cat']."\">";
+	$adminmain .= "<li>";
+  $adminmain .= ($o=='plug' && $row['config_cat']==$p) ? "<strong>" : '';	
+	$adminmain .= "<a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$row['config_cat'])."\">";
 	$adminmain .= sed_plugin_icon($row['config_cat']);
 	$adminmain .= " ".$sed_plugins[$row['config_cat']]['pl_title']."</a>";
 	$adminmain .= ($o=='plug' && $row['config_cat']==$p) ? "</strong>" : '';
-	$adminmain .= "<br />";
+	$adminmain .= "</li>";
 	}	
+$adminmain .= "</ul>";
+$adminmain .= "</div>";
 	
 $adminmain .= "</td></tr></table>";	
 	
@@ -95,7 +105,7 @@ switch ($n)
 			reset($cfgmap);
 			foreach ($cfgmap as $k => $line)
 			 	{
-				if ($line[0]==$p)
+				if ($line[0] == $p && $line[3] != 7)
 		 			{
 		 			$cfg_name = $line[2];
 					$cfg_value = trim(sed_import($cfg_name, 'P', 'NOC'));
@@ -112,7 +122,7 @@ switch ($n)
 				$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
 				}
 			}
-		header("Location: admin.php?m=config&n=edit&o=".$o."&p=".$p);
+		sed_redirect(sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p, "", true));
 		exit;
 		}
 
@@ -157,19 +167,23 @@ switch ($n)
 
 	if ($o=='core')
 		{ 
-			$adminpath[] = array ('admin.php?m=config&amp;n=edit&amp;o='.$o.'&amp;p='.$p, $L["core_".$p]); 
+			$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L["core_".$p]); 
 			$adminhelpconfig = $L["adm_help_config_$p"]; 
-		}
+		  $adminlegend = $L["core_".$p];
+    }
 	else
 		{
 		$extplugin_info = "plugins/".$p."/".$p.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-		$adminpath[] = array ('admin.php?m=config&amp;n=edit&amp;o='.$o.'&amp;p='.$p, $L['Plugin'].' : '.$info['Name'].' ('.$p.')');
+		$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L['Plugin'].' : '.$info['Name'].' ('.$p.')');
+    $adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';
 		}
 
-	$adminmain .= "<form id=\"saveconfig\" action=\"admin.php?m=config&amp;n=edit&amp;o=".$o."&amp;p=".$p."&amp;a=update&amp;".sed_xg()."\" method=\"post\">";
-	$adminmain .= "<table class=\"cells\">";
-	$adminmain .= "<tr><td  class=\"coltop\" colspan=\"2\">".$L['Configuration']."</td><td class=\"coltop\">".$L['Reset']."</td></tr>";
+	$adminmain .= "<form id=\"saveconfig\" action=\"".sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=update&".sed_xg())."\" method=\"post\">";	
+
+	$adminmain .= "<table class=\"cells striped\">";
+  
+  $adminmain .= "<tr><td  class=\"coltop\" colspan=\"2\">".$L['Configuration']."</td><td class=\"coltop\">".$L['Reset']."</td></tr>";
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
@@ -185,7 +199,7 @@ switch ($n)
 		$config_title = (empty($config_title)) ? $row['config_name'] : $config_title;	
 		$config_text = sed_cc($row['config_text']);
 		$config_more = $L['cfg_'.$row['config_name']][1];	
-		$config_more = (!empty($config_more)) ? '&nbsp; &nbsp;('.$config_more.')' : $config_more;	
+		$config_more = (!empty($config_more)) ? '('.$config_more.')' : $config_more;	
 		$config_title = (!empty($config_text) && $check_config_title) ? $config_text : $config_title; //fix Sed v173 
 
 		if ($config_type == 7) { continue; } //Hidden config New v173
@@ -246,16 +260,16 @@ switch ($n)
 			{
 			$adminmain .= "<textarea name=\"$config_name\" rows=\"5\" cols=\"56\" class=\"noeditor\">".$config_value."</textarea>";
 			}
-		$adminmain .= " ".$config_more."</td>";
+		$adminmain .= "<br /><div class=\"descr\">".$config_more."</div></td>";
 		$adminmain .= "<td style=\"text-align:center; width:7%;\">";
-		$adminmain .= ($o=='core') ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=".$o."&amp;p=".$p."&amp;a=reset&amp;v=".$config_name."&amp;".sed_xg()."\"><img src=\"system/img/admin/reset.png\" alt=\"\" /></a>" : '';
-		$adminmain .= ($o=='plug') ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=".$o."&amp;p=".$p."&amp;a=reset&amp;v=".$config_name."&amp;".sed_xg()."\"><img src=\"system/img/admin/reset.png\" alt=\"\" /></a>" : '&nbsp;';    
+		$adminmain .= ($o=='core') ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg())."\"><img src=\"system/img/admin/reset.png\" alt=\"\" /></a>" : '';
+		$adminmain .= ($o=='plug') ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg())."\"><img src=\"system/img/admin/reset.png\" alt=\"\" /></a>" : '&nbsp;';    
 		$adminmain .= "</td>";
 		$adminmain .= "</tr>";
 		}
-	$adminmain .= "<tr><td colspan=\"3\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
+	$adminmain .= "<tr><td colspan=\"3\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= (empty($adminhelpconfig)) ? '' : "<tr><td colspan=\"3\"><h4>".$L['Help']." :</h4>".$adminhelpconfig."</td></tr>";
-	$adminmain .= "</table>";
+	$adminmain .= "</table>";	
 	$adminmain .= "</form>";
   
   $sys['inc_cfg_options'] = 'system/core/admin/admin.config.'.$p.'.inc.php';
@@ -273,6 +287,5 @@ switch ($n)
 	
 
 $adminmain .= "</td></tr></table>";
-
 
 ?>

@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.ratings.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -20,8 +20,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('ratings', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=tools", $L['adm_manage']);
-$adminpath[] = array ("admin.php?m=ratings", $L['Ratings']);
+$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
+$adminpath[] = array (sed_url("admin", "m=ratings"), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 $adminmain = "<h2><img src=\"system/img/admin/ratings.png\" alt=\"\" /> ".$L['Ratings']."</h2>";
 
@@ -29,36 +29,37 @@ $id = sed_import('id','G','TXT');
 $ii=0;
 $jj=0;
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=ratings\">".$L['Configuration']."</a></li></ul>";
+$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=ratings")."\">".$L['Configuration']."</a></li></ul>";
 
 if ($a=='delete')
 	{
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id' ");
 	$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id' ");
-	header("Location: admin.php?m=ratings");
+	sed_redirect(sed_url("admin", "m=ratings", "", true));
 	exit;
 	}
 
 // [Limit patch]
 $d = sed_import('d', 'G', 'INT');
 if(empty($d)) $d = 0;
+
 $totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_ratings"), 0, 0);
-$totalpages = ceil($totallines / $cfg['maxrowsperpage']);
-$currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
-$pagination = '';
-for($i = 1; $i <= $totalpages; $i++)
-{
-	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="admin.php?m=ratings&d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
-	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
-	if($i != $totalpages) $pagination .= '|';
-}
-$adminmain .= '<div class="paging">'.$pagination.'</div>';
+$pagination = sed_pagination(sed_url("admin", "m=ratings"), $d, $totallines, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=ratings"), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+
+$adminmain .= "<div class=\"paging\">";
+$adminmain .= "<ul class=\"pagination\">";
+$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
+$adminmain .= $pagination;
+$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
+$adminmain .= "</ul>";
+$adminmain .= "</div>";
+
 $sql = sed_sql_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 // [/Limit patch]
 
-$adminmain .= "<table class=\"cells\"><tr>";
+$adminmain .= "<table class=\"cells striped\"><tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Date']." (GMT)</td>";
@@ -78,7 +79,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	switch($rat_type)
 		{
 		case 'p':
-			$rat_url = "page.php?id=".$rat_value."&amp;ratings=1";
+			$rat_url = sed_url("page", "id=".$rat_value."&ratings=1");
 		break;
 
 		default:
@@ -86,7 +87,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		break;
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"admin.php?m=ratings&amp;a=delete&amp;id=".$row['rating_code']."&amp;".sed_xg()."\">".$out['img_delete']."</a></td>";
+	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=ratings&a=delete&id=".$row['rating_code']."&".sed_xg())."\">".$out['img_delete']."</a></td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_code']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$votes."</td>";
@@ -98,5 +99,13 @@ while ($row = sed_sql_fetchassoc($sql))
 
 $adminmain .= "<tr><td colspan=\"8\">".$L['adm_ratings_totalitems']." : ".$ii."<br />";
 $adminmain .= $L['adm_ratings_totalvotes']." : ".$jj."</td></tr></table>";
+
+$adminmain .= "<div class=\"paging\">";
+$adminmain .= "<ul class=\"pagination\">";
+$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
+$adminmain .= $pagination;
+$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
+$adminmain .= "</ul>";
+$adminmain .= "</div>";
 
 ?>

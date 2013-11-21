@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=page.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Pages loader
@@ -35,6 +35,10 @@ switch($m)
 
 	case 'edit':
 	require('system/core/page/page.edit.inc.php');
+	break;
+  
+	case 'print':
+	require('system/core/page/page.print.inc.php');
 	break;
 
 	default:

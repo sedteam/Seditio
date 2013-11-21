@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.trashcan.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Trash can
@@ -20,7 +20,7 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=trashcan", $L['Trashcan']);
+$adminpath[] = array (sed_url("admin", "m=trashcan"), $L['Trashcan']);
 $adminhelp = $L['adm_help_trashcan'];
 $adminmain = "<h2><img src=\"system/img/admin/trash.png\" alt=\"\" /> ".$L['Trashcan']."</h2>";
 
@@ -47,14 +47,14 @@ $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE 1 ORDER by tr_id DESC");
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash\">".$L['Configuration']."</a></li><li>";
-$adminmain .= $L['Wipeall'].": [<a href=\"admin.php?m=trashcan&amp;a=wipeall&amp;".sed_xg()."\">x</a>]</li></ul>";
-$adminmain .= "<table class=\"cells\"><tr>";
+$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=trash")."\">".$L['Configuration']."</a></li><li>";
+$adminmain .= $L['Wipeall'].": [<a href=\"".sed_url("admin", "m=trashcan&a=wipeall&".sed_xg())."\">x</a>]</li></ul>";
+$adminmain .= "<table class=\"cells striped\"><tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Date']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Type']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Title']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:96px;\">".$L['adm_setby']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:56px;\">".$L['Wipe']."</td>";
+$adminmain .= "<td class=\"coltop\" style=\"width:156px;\">".$L['Wipe']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:56px;\">".$L['Restore']."</td></tr>";
 
 $ii = 0;
@@ -106,9 +106,9 @@ while ($row = sed_sql_fetchassoc($sql))
 	$adminmain .= "<td style=\"text-align:center;\">";
 	$adminmain .= ($row['tr_trashedby']==0) ? $L['System'] : sed_build_user($row['tr_trashedby'], sed_cc($row['user_name']));
 	$adminmain .= "</td><td style=\"text-align:center;\">";
-	$adminmain .= "[<a href=\"admin.php?m=trashcan&amp;a=wipe&amp;id=".$row['tr_id']."&amp;".sed_xg()."\">-</a>]</td>";
+	$adminmain .= "[<a href=\"".sed_url("admin", "m=trashcan&a=wipe&id=".$row['tr_id']."&".sed_xg())."\">-</a>]</td>";
 	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= "[<a href=\"admin.php?m=trashcan&amp;a=restore&amp;id=".$row['tr_id']."&amp;".sed_xg()."\">+</a>]</td></tr>";
+	$adminmain .= "[<a href=\"".sed_url("admin", "m=trashcan&a=restore&id=".$row['tr_id']."&".sed_xg())."\">+</a>]</td></tr>";
 	$ii++;
 	}
 $adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$ii."</td></tr></table>";

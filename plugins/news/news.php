@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/news/news.php
-Version=173
+Version=175
 Updated=2012-may-23
 Type=Plugin
 Author=Neocrome
@@ -73,12 +73,12 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	$totalpages = ceil($totallines / $cfg['plugin']['news']['maxpages']);
 	$currentpage= ceil($d / $cfg['plugin']['news']['maxpages'])+1;
   
-  $pagination = sed_pagination("index.php?c=".$c, $d, $totallines, $cfg['plugin']['news']['maxpages']);
-  list($pageprev, $pagenext) = sed_pagination_pn("index.php?c=".$c, $d, $totallines, $cfg['plugin']['news']['maxpages'], TRUE);
+  $pagination = sed_pagination(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages']);
+  list($pageprev, $pagenext) = sed_pagination_pn(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages'], TRUE);
   
   /* ===================================== */
 
-	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
+	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar, u.user_maingrp FROM $db_pages AS p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE page_state=0 AND page_cat NOT LIKE 'system'
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."' 
@@ -89,15 +89,25 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	while ($pag = sed_sql_fetchassoc($sql))
 		{		
 		$jj++;
-		$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"list.php?c=%1\$s\">%2\$s</a>");
-		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? "page.php?id=".$pag['page_id'] : "page.php?al=".$pag['page_alias'];
+		
+    $sys['catcode'] = $pag['page_cat']; //new in v175
+    
+    $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
+		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']) : sed_url("page", "al=".$pag['page_alias']);
 		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
 
 		//$item_code = 'p'.$pag['page_id'];
 		//list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments($item_code, $pag['page_pageurl'], FALSE);
 
 		$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
-		$pag['page_comments'] = "<a href=\"".$pag['page_pageurl']."&amp;comments=1\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
+    
+    $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+    
+    $pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
+    $pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
+    
+		$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
+    $pag['page_comments_url'] = "<a href=\"".$pag['page_pageurlcom']."\">(".$pag['page_comcount'].")</a>";
 		
 		$news-> assign(array(
 			"PAGE_ROW_URL" => $pag['page_pageurl'],
@@ -117,7 +127,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_EXTRA5" => sed_cc($pag['page_extra5']),
 			"PAGE_ROW_DESC" => sed_cc($pag['page_desc']),
 			"PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
-			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
 			"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar']),
 			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
 			"PAGE_ROW_FILEURL" => $pag['page_url'],
@@ -125,7 +135,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_COUNT" => $pag['page_count'],
 			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
 			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
-			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurl']."&amp;ratings=1\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
+      "PAGE_ROW_COMMENTS_URL" => $pag['page_comments_url'],
+			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 				));
 				

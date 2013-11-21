@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.config.lang.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -29,7 +29,7 @@ while ($f = readdir($handle))
 closedir($handle);
 sort($langlist);
 
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<table class=\"cells striped\">";
 $adminmain .= "<tr><td class=\"coltop\">".$L['core_lang']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
 $adminmain .= "<td class=\"coltop\">&nbsp;</td>";

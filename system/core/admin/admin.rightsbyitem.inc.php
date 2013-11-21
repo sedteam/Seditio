@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.rightsbyitem.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Rights
@@ -18,7 +18,7 @@ Description=Rights
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
 $ic = sed_import('ic','G','ALP');
-$io = sed_import('io','G','ALP');
+$io = sed_import('io','G','TXT');
 $advanced = sed_import('advanced','G','BOL');
 
 $adminmain = "<h2><img src=\"system/img/admin/rights2.png\" alt=\"\" /> ".$L['Rights']."</h2>";
@@ -59,7 +59,7 @@ if ($a=='update')
 
 	sed_auth_reorder();
 	sed_auth_clear('all');
-	header("Location: admin.php?m=rightsbyitem&ic=$ic&io=$io");
+	sed_redirect(sed_url("admin", "m=rightsbyitem&ic=".$ic."&io=".$io, "", true));
 	exit;
 	}
 
@@ -99,7 +99,7 @@ if (is_array($extp))
    { foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$adminpath[] = array("admin.php?m=rightsbyitem&amp;ic=$ic&amp;io=$io", $L['Rights']." / ".$L['adm_code'][$ic].$title);
+$adminpath[] = array(sed_url("admin", "m=rightsbyitem&ic=".$ic."&io=".$io), $L['Rights']." / ".$L['adm_code'][$ic].$title);
 
 $adv_columns = ($advanced) ? 5 : 0;
 
@@ -129,8 +129,8 @@ $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_a.gif\" alt=\"\" /></td>\n";
 $headcol .= "</tr>\n";
 
-$adminmain .= "<form id=\"saverightsbyitem\" action=\"admin.php?m=rightsbyitem&amp;a=update&amp;ic=$ic&amp;io=$io\" method=\"post\">";
-$adminmain .= "<table class=\"cells\">";
+$adminmain .= "<form id=\"saverightsbyitem\" action=\"".sed_url("admin", "m=rightsbyitem&a=update&ic=".$ic."&io=".$io)."\" method=\"post\">";
+$adminmain .= "<table class=\"cells striped\">";
 
 function sed_rights_parseline($row, $title, $link)
 	{
@@ -178,7 +178,7 @@ function sed_rights_parseline($row, $title, $link)
 	$res .= "<a href=\"$link\">".$title."</a></td>\n";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".implode("</td><td style=\"text-align:center; padding:2px;\">", $box)."</td>\n";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name']))."</td>\n";
-	$res .= "<td style=\"text-align:center;\"><a href=\"users.php?g=".$row['auth_groupid']."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td>";
+	$res .= "<td style=\"text-align:center;\"><a href=\"".sed_url("users", "g=".$row['auth_groupid'])."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td>";
 	$res .= "</tr>\n";
 
 	return($res);
@@ -188,13 +188,13 @@ $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql))
 	{
-	$link = "admin.php?m=rights&amp;g=".$row['auth_groupid'];
+	$link = sed_url("admin", "m=rights&g=".$row['auth_groupid']);
 //	$title = $sed_groups[$row['auth_groupid']]['title'];
 	$title = sed_cc($row['grp_title']);
 	$adminmain .= sed_rights_parseline($row, $title, $link);
 	}
 
-$adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
+$adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 $adminmain .= "</table></form>";
 
 $adminhelp = $legend;

@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/inc/textboxer2.en.lang.php
-Version=173
+Version=175
 Updated=2012-oct-19
 Type=Core
 Author=Arkkimaagi
@@ -44,5 +44,12 @@ $tbL['tb2_user'] = "Enter the user ID";
 
 $tbL['tb2_preview404'] = "Preview encountered errors, text maybe too long? code:";
 $tbL['tb2_previewError'] = "Preview encountered errors. Unknown error code:";
+
+$tbL['tb2_vk'] = "Enter part *** URL http://vkontakte.ru/video_ext.php?oid=(***)";
+$tbL['tb2_rutube'] = "Enter part *** URL http://video.rutube.ru/(***)";
+$tbL['tb2_youtube'] = "Enter part *** URL http://www.youtube.com/v/(***)";
+$tbL['tb2_metacafe'] = "Enter part *** URL http://www.metacafe.com/fplayer/(***)";
+$tbL['tb2_googlevideo'] = "Enter part *** URL http://video.google.com/googleplayer.swf?docId=(***)&hl=en-GB";
+$tbL['tb2_vimeo'] = "Enter part *** URL http://player.vimeo.com/video/(***)";
 
 ?>

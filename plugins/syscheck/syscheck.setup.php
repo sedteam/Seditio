@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.setup.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=syscheck
 Name=System check
 Description=Will check the versions of the PHP system files and TPL skin files
-Version=173
+Version=175
 Date=2010-feb-05
 Author=Neocrome
 Copyright=

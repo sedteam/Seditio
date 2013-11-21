@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=install.php
-Version=173
+Version=175
 Updated=2012-may-17
 Type=Core
 Author=Neocrome
@@ -165,7 +165,7 @@ switch($m)
 		$mdpass_secret = md5(sed_unique(16)); // New sed171
 		
 		$ruserbirthdate = 0;
-		$rtimezone = $cfg['defaulttimezone'];
+		$rtimezone = 0;
 		$validationkey = md5(microtime());
 
 		$sql = sed_sql_query("INSERT INTO ".$sqldbprefix."users
@@ -256,7 +256,7 @@ switch($m)
   $res .= "<h3>".$L['install_plugins']." :<h3>";
   $res .= $L['install_optional_plugins'];
   $res .= "<form name=\"install\" action=\"install.php?m=plinst\" method=\"post\">";
-  $res .= "<table class=\"cells\">";
+  $res .= "<table class=\"cells striped\">";
   $res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">".$L['install_plugins']."</td>";
   $res .= "<td style=\"width:10%;\" class=\"coltop\">".$L['install_install']."</td>";
   $res .= "</tr>";  

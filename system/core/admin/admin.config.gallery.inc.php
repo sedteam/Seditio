@@ -6,9 +6,9 @@ Copyright Neocrome & Seditio Team
 http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
-File=admin.pfs.inc.php
-Version=173
-Updated=2012-sep-23
+File=admin.config.gallery.inc.php
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -26,7 +26,7 @@ if (!function_exists('gd_info'))
 	}
    else
 	{
-  $adminmain .= "<table class=\"cells\">";
+  $adminmain .= "<table class=\"cells striped\">";
 	$gd_datas = gd_info();
 	foreach ($gd_datas as $k => $i)
 		{

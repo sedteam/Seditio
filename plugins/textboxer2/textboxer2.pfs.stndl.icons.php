@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/textboxer2.pfs.stndl.icons.php
-Version=173
+Version=175
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro
@@ -35,7 +35,7 @@ $add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1
 if ($standalone)
 {		
   $icon_addimg_path = ($cfg['pfsuserfolder']) ? $userid."/".$pfs_file :  $pfs_file;
-  $add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$icon_addimg_path."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" alt=\"\" /></a>";
+  $add_thumbnail = "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$icon_addimg_path."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" alt=\"\" /></a>";
   $add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" alt=\"\" /></a>";		
 }
 

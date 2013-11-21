@@ -12,7 +12,7 @@ Localization done by : Antar, Antony, Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
-Version=173
+Version=175
 Updated=2012-may-20
 Type=Lang
 Author=Neocrome
@@ -32,7 +32,7 @@ $L['core_menus'] = "Слоты меню";
 $L['core_comments'] = "Комментарии";
 $L['core_forums'] = "Форум";
 $L['core_page'] = "Страницы";
-$L['core_pfs'] = "Персональные файловые архивы";
+$L['core_pfs'] = "Файловые архивы";
 $L['core_gallery'] = "Галерея";
 $L['core_plug'] = "Плагины";
 $L['core_pm'] = "Личные сообщения";
@@ -116,6 +116,13 @@ $L['cfg_showsqlstats'] = array("Показывать статистику SQL з
 $L['cfg_shieldenabled'] = array("Включить Щит", "Анти-спамминг и анти-хаммеринг");
 $L['cfg_shieldtadjust'] = array("Настроить таймеры Щита (в %)", "Чем больше значение, тем жестче ограничение на спам");
 $L['cfg_shieldzhammer'] = array("Анти-хаммеринг после * быстрых кликов", "Чем меньше значение, тем быстрее включится 3-х минутная автоблокировка");
+$L['cfg_maintenance'] = array("Режим техобслуживания", "Включить при проведении технических работ на сайте");  // New in v175
+$L['cfg_maintenancelevel'] = array("Уровень доступа пользователей", "Выберите уровень доступа пользователей");   // New in v175
+$L['cfg_maintenancereason'] = array("Причина техобслуживания", "Опишите причину техобслуживания");  // New in v175
+$L['cfg_multihost'] = array("Мультихост", "Включить поддержку нескольких хостов");  // New in v175
+$L['cfg_absurls'] = array("Абсолютные URL", "Включает использование абсолютных URL");  // New in v175
+$L['cfg_sefurls'] = array("SEF URLs", "Включает использование SEF URLs на сайте");  // New in v175
+$L['cfg_sefurls301'] = array("301 редирект на SEF URLs", "Включает 301 редирект со старых URL на SEF URLs");  // New in v175
 $L['cfg_dateformat'] = array("Основная маска даты", "По умолчанию: Y-m-d H:i");
 $L['cfg_formatmonthday'] = array("Краткая маска даты", "По умолчанию: m-d");
 $L['cfg_formatyearmonthday'] = array("Средняя маска даты", "По умолчанию: Y-m-d");
@@ -246,7 +253,7 @@ $L['cfg_trash_pm'] = array("Разрешить использование кор
 $L['cfg_trash_user'] = array("Разрешить использование корзины для пользователей", "");		// New in v110
 
 $L['cfg_parser_vid'] = array("Разрешить BB-коды для видео-файлов", "");                // New in v120
-$L['cfg_parser_vid_autolink'] = array("Автоматическя обработка ссылок на известные видео-сайты", "");                                                // New in v120
+$L['cfg_parser_vid_autolink'] = array("Автоматическя обработка ссылок на известные видео-сайты", "");     // New in v120
 $L['cfg_parsebbcodecom'] = array("Парсить BB-коды в комментриях и личных сообщениях", "");
 $L['cfg_parsebbcodepages'] = array("Парсить BB-коды в страницах", "");
 $L['cfg_parsebbcodeusertext'] = array("Парсить BB-коды в подписях пользователей", "");
@@ -255,6 +262,8 @@ $L['cfg_parsesmiliescom'] = array("Парсить смайлики в комме
 $L['cfg_parsesmiliespages'] = array("Парсить смайлики в страницах", "");
 $L['cfg_parsesmiliesusertext'] = array("Парсить смайлики в подписях пользователей", "");
 $L['cfg_parsesmiliesforums'] = array("Парсить смайлики в форумах", "");
+
+$L['cfg_color_group'] = array("Раскрашивать пользователей по группам", "По-умолчанию: Нет, для лучшей производительности");    // New in v175
 
 /* ====== Rss ====== */
 
@@ -389,6 +398,7 @@ $L['adm_rights_allow10'] = "Разрешено";
 $L['adm_rights_allow00'] = "Запрещено";
 $L['adm_rights_allow11'] = "Разрешено и закрыто в целях безопасности";
 $L['adm_rights_allow01'] = "Запрещено и закрыто в целях безопасности";
+$L['adm_color'] = "Цвет группы";   // New in v175
 
 /* ====== Plugins ====== */
 

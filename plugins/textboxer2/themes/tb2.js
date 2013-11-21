@@ -134,6 +134,7 @@ function TextBoxer2(myName,previewURL,textareaName,previewSetup,maxSmilieHeight,
 						break;
 	*/
 					case "ac":
+
 					case "user":
 						promptIt(L[n+"p"],L[n],0,n);
 						break;
@@ -147,6 +148,22 @@ function TextBoxer2(myName,previewURL,textareaName,previewSetup,maxSmilieHeight,
 						if(quo!=null&&quo!=""){lft="["+n+"="+quo+"]";}
 						wrap(lft,"",rgt,1);
 						break;//*/
+
+/* ----------------------- */
+
+          case "vk":
+          case "youtube":
+          case "rutube":
+          case "metacafe":
+          case "googlevideo":
+          case "vimeo":  
+						quo=window.prompt(L[n], "");
+						if(quo!=null&&quo!=""){lft="["+n+"="+quo+"]";}
+						wrap(lft,"",rgt,1);
+						break;//*/          
+
+/* ----------------------- */
+                    
 					default:
 						wrap(lft,"",rgt,1);
 						break;

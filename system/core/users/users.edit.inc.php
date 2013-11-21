@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Users
@@ -45,7 +45,7 @@ $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
 
 if ($sys['protecttopadmin'])
 	{
-	header("Location: message.php?msg=930");
+	sed_redirect(sed_url("message", "msg=930", "", true));
 	exit;
 	}
 
@@ -65,7 +65,7 @@ if ($a=='update')
 	$rusercountry = sed_import('rusercountry','P','ALP');
 	$ruseravatar = sed_import('ruseravatar','P','TXT');
 	$ruserphoto = sed_import('ruserphoto','P','TXT');
-   	$rusersignature = sed_import('rusersignature','P','TXT');
+  $rusersignature = sed_import('rusersignature','P','TXT');
 	$rusertext = sed_import('rusertext','P','HTM');
 	$ruseremail = sed_import('ruseremail','P','TXT');
 	$ruserhideemail = sed_import('ruserhideemail','P','INT');
@@ -125,13 +125,13 @@ if ($a=='update')
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id'");
 				if ($ruserdelpfs) { sed_pfs_deleteall($id); }
 				sed_log("Deleted user #".$id,'adm');
-				header("Location: message.php?msg=109&rc=200&id=$id");
+				sed_redirect(sed_url("message", "msg=109&rc=200&id=".$id, "", true));
 				exit;
 			   }
 			}
 		else
 			{
-			header("Location: message.php?msg=930");
+			sed_redirect(sed_url("message", "msg=930", "", true));
 			exit;
 			}
 		}
@@ -265,7 +265,7 @@ if ($a=='update')
 
 		sed_auth_clear($id);
 		sed_log("Edited user #".$id,'adm');
-		header("Location: users.php?m=edit&id=".$id);
+		sed_redirect(sed_url("users", "m=edit&id=".$id, "", true));
 		exit;
 		}
 	}
@@ -322,9 +322,9 @@ if (!empty($error_string))
 	}
 
 $t->assign(array(
-	"USERS_EDIT_TITLE" => "<a href=\"users.php\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"users.php?m=edit&amp;id=".$urr['user_id']."\">".$L['Edit']."</a>",
+	"USERS_EDIT_TITLE" => "<a href=\"".sed_url("users")."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"".sed_url("users", "m=edit&id=".$urr['user_id'])."\">".$L['Edit']."</a>",
 	"USERS_EDIT_SUBTITLE" => $L['useed_subtitle'],
-	"USERS_EDIT_SEND" => "users.php?m=edit&amp;a=update&amp;".sed_xg()."&amp;id=".$urr['user_id'],
+	"USERS_EDIT_SEND" => sed_url("users", "m=edit&a=update&".sed_xg()."&id=".$urr['user_id']),
 	"USERS_EDIT_ID" => $urr['user_id'],
 	"USERS_EDIT_NAME" => $user_form_username,
 	"USERS_EDIT_ACTIVE" => $user_form_active,

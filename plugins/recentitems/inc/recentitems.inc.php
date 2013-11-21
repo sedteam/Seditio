@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/recentitems/inc/recentitems.inc.php
-Version=173
+Version=175
 Updated=2012-oct-18
 Type=Plugin
 Author=Neocrome
@@ -24,7 +24,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 function sed_get_latestpages($limit, $mask)
 	{
-	global $L, $db_pages, $usr, $cfg, $sed_cat, $plu_empty;
+	global $L, $db_pages, $sys, $usr, $cfg, $sed_cat, $plu_empty;
 
 	$sql = sed_sql_query("SELECT page_id, page_alias, page_cat, page_title, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER by page_date DESC LIMIT $limit");
 
@@ -32,9 +32,12 @@ function sed_get_latestpages($limit, $mask)
 		{
 		if (sed_auth('page', $row['page_cat'], 'R'))
 			{
-			$row['page_pageurl'] = (empty($row['page_alias'])) ? "page.php?id=".$row['page_id'] : "page.php?al=".$row['page_alias'];
+			
+      $sys['catcode'] = $row['page_cat']; //new in v175
+      
+      $row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
 		$res .= sprintf($mask,
-			"<a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['title']."</a>",
+			"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
 			"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
 			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
 				);
@@ -70,7 +73,7 @@ function sed_get_latesttopics($limit, $mask)
 		{
 		if (sed_auth('forums', $row['fs_id'], 'R'))
 			{
-			$img = ($usr['id']>0 && $row['ft_updated']>$usr['lastvisit']) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=unread#unread\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ";
+			$img = ($usr['id']>0 && $row['ft_updated']>$usr['lastvisit']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ";
 
 			if ($row['fs_parentcat'] > 0) 
 			{
@@ -82,7 +85,7 @@ function sed_get_latesttopics($limit, $mask)
 				$img,
 				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
 				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), TRUE, $parentcat),
-				"<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+				"<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
 				$row['ft_postcount']-1
 					);
 			}
@@ -99,14 +102,13 @@ function sed_get_latestpolls($limit, $mask)
 	{
 	global $L, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
 
-
-
 	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
 
 	while ($row_p = sed_sql_fetchassoc($sql_p))
 		{
 		unset($res);
-		$poll_id = $row_p['poll_id'];
+		
+    $poll_id = $row_p['poll_id'];
 
 		if ($usr['id']>0)
 	 		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$poll_id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
@@ -115,14 +117,18 @@ function sed_get_latestpolls($limit, $mask)
 
 		if (sed_sql_numrows($sql2)>0)
 			{
-			$alreadyvoted =1;
+			$alreadyvoted = 1;
 			$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$poll_id'");
 			$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 			}
 		else
-			{ $alreadyvoted =0; }
-
+			{ 
+        $alreadyvoted = 0; 
+        $res .= "<form name=\"pollvote\" action=\"javascript:pollvote(document.pollvote.id.value, document.pollvote.cvote.value); window.location.reload();\" method=\"post\">"; // sed175      
+      }
+    
 		$res .= "<h5>".$row_p['poll_text']."</h5>";
+    $res .= "<div style=\"padding:10px 0;\">";
 
 		$sql = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$poll_id' ORDER by po_id ASC");
 
@@ -135,19 +141,87 @@ function sed_get_latestpolls($limit, $mask)
 				}
 			else
 				{
-				$res .= "<a href=\"javascript:pollvote('".$poll_id."','".$row['po_id']."')\">";
-				$res .= $row['po_text']."</a><br />";
+				$res .= "<input type=\"radio\" value=\"".$row['po_id']."\" name=\"vote\" onClick=\"document.getElementById('cvote').value=".$row['po_id']."\" class=\"radio\" /> ".stripslashes($row['po_text'])."<br />";
 				}
 			}
-		$res .= "<p style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a> &nbsp; ";
-		$res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>";
-		$res_all .= sprintf($mask, $res);
+    $res .= "</div>";
+ 
+		if ($alreadyvoted)
+			{         
+        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a> &nbsp; ";
+        $res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></div>";
+      }
+    else
+      {
+        $res .= "<input type=\"hidden\" name=\"id\" value=".$poll_id.">";
+        $res .= "<input type=\"hidden\" id=\"cvote\" name=\"cvote\" value=\"\">";
+        $res .= "<input type=\"hidden\" name=\"a\" value=\"send\">";
+    		$res .= "<div style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"><br /><br /></div></form>";      
+      }  
+ 
+    $res_all .= sprintf($mask, $res);
 		}
 
-//		{ $res = $plu_empty; }
+  $res_all = (empty($res_all)) ? $plu_empty : $res_all;
 
 	return($res_all);
 	}
+
+function sed_get_latestcomments($limit, $mask)
+  {
+  global $L, $db_com, $sys, $db_pages, $db_users, $usr, $cfg, $sed_cat, $plu_empty, $ishtml;
+
+  $sql = sed_sql_query("SELECT MAX(com_id) AS max_com_id, MAX(com_date) AS max_com_date FROM $db_com WHERE com_isspecial = 0 GROUP BY com_code ORDER BY max_com_date DESC LIMIT $limit");
+
+  $com_latest = array();
+  
+  while($row = sed_sql_fetchassoc($sql)) $com_latest[] = $row['max_com_id'];
+  
+  $sql = sed_sql_query("SELECT c.com_id, c.com_code, c.com_text_ishtml, c.com_date, c.com_text, c.com_author, c.com_authorid, u.user_id, u.user_avatar, u.user_maingrp  
+  					  FROM $db_com AS c
+              LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid 
+              WHERE c.com_id IN('".implode("','",$com_latest)."') 
+              ORDER BY c.com_date DESC");
+
+  while ($row = sed_sql_fetchassoc($sql))
+    {
+    
+    $com_code = $row['com_code'];
+    
+    $row['com_text'] = strip_tags(sed_parse($row['com_text'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $row['com_text_ishtml'])); 
+    $com_text = sed_cutstring($row['com_text'], 100);
+    
+    $z = $row['page_title'];
+    $j = substr($com_code, 0, 1);
+    $k = substr($com_code, 1);
+    
+    switch($j)
+      {
+        case 'p':
+          $sql2 = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias FROM sed_pages WHERE page_id = $k LIMIT 1");
+          $row2 = sed_sql_fetchassoc($sql2);
+		      
+          $sys['catcode'] = $row2['page_cat']; //new in v175
+          
+          $row2['page_pageurl'] = (empty($row2['page_alias'])) ? sed_url("page", "id=".$row2['page_id']."&comments=1", "#c".$row['com_id']) : sed_url("page", "al=".$row2['page_alias']."&comments=1", "#c".$row['com_id']);		  
+          $lnk = "<a href=\"".$row2['page_pageurl']."\">"."".sed_cc(sed_cutstring(stripslashes($row2['page_title']),60))."</a>";
+        break;
+    
+        case 'v':
+          $lnk = "<a href=\"javascript:polls('".$k."&comments=1#c".$row['com_id']."')\">".$L['Poll']." #".$k."</a>";
+        break;
+		
+        case 'g':
+          $lnk = "<a href=\"".sed_url("gallery", "id=".$k."&comments=1", "#c".$row['com_id'])."\">".$L['Gallery']." #".$k."</a>";
+        break;		
+      }
+    
+    $res .= sprintf($mask, $lnk, sed_build_user($row['com_authorid'], $row['com_author'], $row['user_maingrp']), date($cfg['formatyearmonthday'], $row['com_date'] + $usr['timezone'] * 3600), sed_build_userimage($row['user_avatar']), $com_text);
+    }
+
+  $res = (empty($res)) ? $plu_empty : $res;
+  return($res);
+  }
 
 
 ?>

@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/tb2.comments.edit.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Arkkimaagi
 Description=
@@ -30,7 +30,9 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 require_once("plugins/textboxer2/lang/textboxer2.".$usr['lang'].".lang.php");
 require_once("plugins/textboxer2/inc/textboxer2.inc.php");
 
-$tb2DropdownIcons = array(-1,49,1,7,10,15,19,23,35);
+$GLOBALS['tbL'] = $tbL; //Fix in v175
+
+$tb2DropdownIcons = array(-1,49,1,7,10,15,19,23,35,50);
 $tb2MaxSmilieDropdownHeight = 300; 	// Height in px for smilie dropdown
 $tb2InitialSmilieLimit = 20;		// Smilies loaded by default to dropdown
 $tb2TextareaRows = 12;				// Rows of the textarea

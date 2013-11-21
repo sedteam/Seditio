@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.pfs.stndl.icons.php
-Version=173
+Version=175
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro
@@ -51,6 +51,6 @@ else {
     $stndl_icons_list = "<td>".$add_file."</td>";
 }  
 
-$stndl_icons_disp = "<td class=\"coltop\"></td>";
+$stndl_icons_disp = "<td class=\"coltop\">&nbsp;!!!&nbsp;</td>";
 
 ?>

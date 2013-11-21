@@ -7,9 +7,9 @@ http://www.neocrome.net
 http://www.seditio.org
 
 [BEGIN_SED]
-File=plugins/massmovetopics/massmovetopics.php
-Version=173
-Updated=2012-sep-23
+File=plugins/massmovetopics/massmovetopics.admin.php
+Version=175
+Updated=2012-dec-31
 Type=Plugin
 Author=Neocrome
 Description=
@@ -61,11 +61,11 @@ else
 	$select_source .= "</select>";
 	$select_target .= "</select>";
 
-	$plugin_body .= "<form id=\"massmovetopics\" action=\"admin.php?m=tools&amp;p=massmovetopics&amp;a=move\" method=\"post\">";
-	$plugin_body .= "<table class=\"cells\"><tr><td style=\"width:33%;\">";
+	$plugin_body .= "<form id=\"massmovetopics\" action=\"".sed_url("admin", "m=tools&p=massmovetopics&a=move")."\" method=\"post\">";
+	$plugin_body .= "<table class=\"cells striped\"><tr><td style=\"width:33%;\">";
   $plugin_body .= "Move all the topics and posts from the section :</td><td>".$select_source."</td></tr><tr><td>";
 	$plugin_body .= "... to the section :</td><td>".$select_target."</td></tr></table>";
-	$plugin_body .= "<input type=\"submit\" class=\"submit\" value=\"".$L['Move']."\" />";
+	$plugin_body .= "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Move']."\" />";
 	$plugin_body .= "</form>";
 	}
 

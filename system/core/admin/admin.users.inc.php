@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.users.inc.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core.admin
 Author=Neocrome
 Description=Users
@@ -22,12 +22,12 @@ $g = sed_import('g','G','INT');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=users", $L['Users']);
-$adminmain = "<h2><img src=\"system/img/admin/users.png\" alt=\"\" />".$L['Users']."</h2>";
+$adminpath[] = array(sed_url("admin", "m=users"), $L['Users']);
+$adminmain = "<h2><img src=\"system/img/admin/users.png\" alt=\"\" /> ".$L['Users']."</h2>";
 
-$adminmain .= "<ul>";
-$adminmain .= "<li>".sed_linkif("admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users", $L['Configuration'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif("admin.php?m=banlist", $L['Banlist'], sed_auth('users', 'a', 'A'))."</li>";
+$adminmain .= "<ul class=\"arrow_list\">";
+$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=config&n=edit&o=core&p=users"), $L['Configuration'], sed_auth('admin', 'a', 'A'))."</li>";
+$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=banlist"), $L['Banlist'], sed_auth('users', 'a', 'A'))."</li>";
 $adminmain .= "</ul>";
 
 switch($n)
@@ -36,6 +36,7 @@ switch($n)
 
 	$ntitle = sed_import('ntitle','P','TXT');
 	$ndesc = sed_import('ndesc','P','TXT');
+  $ncolor = sed_import('ncolor','P','TXT');
 	$nicon = sed_import('nicon','P','TXT');
 	$nalias = sed_import('nalias','P','TXT');
 	$nlevel = sed_import('nlevel','P','LVL');
@@ -46,7 +47,7 @@ switch($n)
 	$nhidden = sed_import('nhidden','P','BOL');
 	$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 
-	$sql = sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")");
+	$sql = sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden, grp_title, grp_desc, grp_icon, grp_color, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', '".sed_sql_prep($ncolor)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")");
 
 	$grp_id = sed_sql_insertid();
 
@@ -59,7 +60,7 @@ switch($n)
 
 	sed_auth_reorder();
 	sed_cache_clear('sed_groups');
-	header("Location: admin.php?m=users");
+	sed_redirect(sed_url("admin", "m=users", "", true));
 	exit;
 	break;
 
@@ -70,6 +71,7 @@ switch($n)
 		$rtitle = sed_import('rtitle','P','TXT');
 		$rdesc = sed_import('rdesc','P','TXT');
 		$ricon = sed_import('ricon','P','TXT');
+    $rcolor = sed_import('rcolor','P','TXT');
 		$ralias = sed_import('ralias','P','TXT');
 		$rlevel = sed_import('rlevel','P','LVL');
 		$rmaxfile = sed_import('rmaxfile','P','INT');
@@ -77,14 +79,14 @@ switch($n)
 		$rdisabled = ($g<6) ? 0 : sed_import('rdisabled','P','BOL');
 		$rhidden = ($g==4) ? 0 : sed_import('rhidden','P','BOL');
 		$rtitle = sed_sql_prep($rtitle);
-	   	$rdesc = sed_sql_prep($rdesc);
-	   	$ricon = sed_sql_prep($ricon);
-	   	$ralias = sed_sql_prep($ralias);
+	  $rdesc = sed_sql_prep($rdesc);
+	  $ricon = sed_sql_prep($ricon);
+	  $ralias = sed_sql_prep($ralias);
 
-		$sql = sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'");
+		$sql = sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_color='$rcolor', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'");
 
 		sed_cache_clear('sed_groups');
-		header("Location: admin.php?m=users");
+		sed_redirect(sed_url("admin", "m=users", "", true));
 		exit;
 		}
 	elseif ($a=='delete' && $g>5)
@@ -94,7 +96,7 @@ switch($n)
 		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 		sed_auth_clear('all');
 		sed_cache_clear('sed_groups');
-		header("Location: admin.php?m=users");
+		sed_redirect(sed_url("admin", "m=users", "", true));
 		exit;
 		}
 
@@ -110,10 +112,10 @@ switch($n)
 	$row['grp_icon'] = sed_cc($row['grp_icon']);
 	$row['grp_alias'] = sed_cc($row['grp_alias']);
 
-	$adminpath[] = array ("admin.php?m=users&amp;n=edit&amp;g=$g", $row['grp_title']);
+	$adminpath[] = array(sed_url("admin", "m=users&n=edit&g=".$g), $row['grp_title']);
 
-	$adminmain .= "<form id=\"editlevel\" action=\"admin.php?m=users&amp;n=edit&amp;a=update&amp;g=$g\" method=\"post\">";
-	$adminmain .= "<table class=\"cells\">";
+	$adminmain .= "<form id=\"editlevel\" action=\"".sed_url("admin", "m=users&n=edit&a=update&g=".$g)."\" method=\"post\">";
+	$adminmain .= "<table class=\"cells striped\">";
 	$adminmain .= "<tr><td>".$L['Group']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$row['grp_title']."\" size=\"40\" maxlength=\"64\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td>";
@@ -122,6 +124,17 @@ switch($n)
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$row['grp_icon']."\" size=\"40\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Alias']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ralias\" value=\"".$row['grp_alias']."\" size=\"16\" maxlength=\"24\" /></td></tr>";
+
+	$adminmain .= "<tr><td>".$L['adm_color']." :</td>";
+
+	$adminmain .= "<td><select name=\"rcolor\" size=\"1\" style=\"color:#202020; background-color:".$row['grp_color'].";\">";
+  foreach ($cfg['group_colors'] as $color)
+  {
+			$selected = ($color == $row['grp_color']) ? "selected=\"selected\"" : '';
+			$adminmain .= "<option value=\"".$color."\" ".$selected." style=\"color:#202020; background-color:".$color.";\">".$color."</option>";    
+  }
+  $adminmain .= "</select></td></tr>";
+
 	$adminmain .= "<tr><td>".$L['adm_maxsizesingle']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rmaxfile\" value=\"".$row['grp_pfs_maxfile']."\" size=\"16\" maxlength=\"16\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_maxsizeallpfs']." :</td>";
@@ -159,10 +172,10 @@ switch($n)
 		$adminmain .= "</select></td></tr>";
 
 	$adminmain .= "<tr><td>".$L['Rights']." :</td>";
-	$adminmain .= "<td><a href=\"admin.php?m=rights&amp;g=$g\"><img src=\"system/img/admin/rights1.png\" alt=\"\" /></a></tr>";
+	$adminmain .= "<td><a href=\"".sed_url("admin", "m=rights&g=".$g)."\"><img src=\"system/img/admin/rights1.png\" alt=\"\" /></a></tr>";
 
-	$adminmain .= ($g>5 && $row['grp_memberscount']==0) ? "<tr><td>".$L['Delete']." :</td><td><a href=\"admin.php?m=users&amp;n=edit&amp;a=delete&amp;g=".$g."&amp;".sed_xg()."\">".$out['img_delete']."</a></td></tr>" : '';
-	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr></table></form>";
+	$adminmain .= ($g>5 && $row['grp_memberscount']==0) ? "<tr><td>".$L['Delete']." :</td><td><a href=\"".sed_url("admin", "m=users&n=edit&a=delete&g=".$g."&".sed_xg())."\">".$out['img_delete']."</a></td></tr>" : '';
+	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr></table></form>";
 
 	break;
 
@@ -178,10 +191,10 @@ switch($n)
 
 	$sql = sed_sql_query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
 
-	$adminmain .= "<table class=\"cells\">";
+	$adminmain .= "<table class=\"cells striped\">";
 	$adminmain .= "<tr>";
 	$adminmain .= "<td  class=\"coltop\">#ID</td>";
-	$adminmain .= "<td  class=\"coltop\">".$L['Groups']." ".$L['adm_clicktoedit']."</td>";
+	$adminmain .= "<td  class=\"coltop\">".$L['Groups']."</td>";
 	$adminmain .= "<td class=\"coltop\" style=\"width:15%;\">".$L['Members']."</td>";
 	$adminmain .= "<td class=\"coltop\" style=\"width:15%;\">".$L['Main']."</td>";  
 	$adminmain .= "<td class=\"coltop\" style=\"width:12%;\">".$L['Enabled']."</td>";
@@ -198,20 +211,20 @@ switch($n)
 			$adminmain .= "<tr>";
 			$adminmain .= "<td style=\"text-align:center;\">".$row['grp_id']."</td>";
 			$adminmain .= "<td><img src=\"system/img/admin/groups.png\" alt=\"\" /> ";
-			$adminmain .= "<a href=\"admin.php?m=users&amp;n=edit&amp;g=".$row['grp_id']."\">".sed_cc($row['grp_title'])."</a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"users.php?gm=".$row['grp_id']."\">".$members[$row['grp_id']]."</a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"users.php?g=".$row['grp_id']."\">".$members_main[$row['grp_id']]."</a></td>";
+			$adminmain .= "<a href=\"".sed_url("admin", "m=users&n=edit&g=".$row['grp_id'])."\">".sed_cc($row['grp_title'])."</a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("users", "gm=".$row['grp_id'])."\">".$members[$row['grp_id']]."</a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("users", "g=".$row['grp_id'])."\">".$members_main[$row['grp_id']]."</a></td>";
 			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[!$row['grp_disabled']]."</td>";
 			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['grp_hidden']]."</td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rights&amp;g=".$row['grp_id']."\"><img src=\"system/img/admin/rights1.png\" alt=\"\" /></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=rights&g=".$row['grp_id'])."\"><img src=\"system/img/admin/rights1.png\" alt=\"\" /></a></td>";
 			$adminmain .= "</tr>";
 			}
 		}
 	$adminmain .= "</table>";
 
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$adminmain .= "<form id=\"addlevel\" action=\"admin.php?m=users&amp;n=add\" method=\"post\">";
-	$adminmain .= "<table class=\"cells\">";
+	$adminmain .= "<form id=\"addlevel\" action=\"".sed_url("admin", "m=users&n=add")."\" method=\"post\">";
+	$adminmain .= "<table class=\"cells striped\">";
 	$adminmain .= "<tr><td>".$L['Group']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"40\" maxlength=\"64\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td>";
@@ -220,6 +233,16 @@ switch($n)
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"40\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Alias']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nalias\" value=\"\" size=\"16\" maxlength=\"24\" /></td></tr>";
+
+	$adminmain .= "<tr><td>".$L['adm_color']." :</td>";
+
+	$adminmain .= "<td><select name=\"ncolor\" size=\"1\">";
+  foreach ($cfg['group_colors'] as $color)
+  {
+			$adminmain .= "<option value=\"".$color."\" style=\"color:#202020; background-color:".$color.";\">".$color."</option>";    
+  }
+  $adminmain .= "</select></td></tr>";
+
 	$adminmain .= "<tr><td>".$L['adm_maxsizesingle']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nmaxsingle\" value=\"0\" size=\"16\" maxlength=\"16\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_maxsizeallpfs']." :</td>";
@@ -244,7 +267,7 @@ switch($n)
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"0\" checked=\"checked\" /> ".$L['No'];
 	$adminmain .= "</td></tr>";
 
-	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";
+	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr></table></form>";
 	break;
 	}
 

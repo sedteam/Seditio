@@ -1,57 +1,10 @@
-CKEDITOR.editorConfig = function( config )
-{
-  config.toolbar = 'Basic';
+/**
+ * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.html or http://ckeditor.com/license
+ */
 
-   config.extraPlugins = 'syntaxhighlight,youtube,vimeo,more';
-  
-  config.htmlEncodeOutput = false;
-  config.entities = false;
-  
-  // Full Ckeditor Tollbar (All buttons)
-  config.toolbar_Full =
-  [
-    ['Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates'],
-    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo'],
-    ['Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt'],
-    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-    '/',
-    ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat'],
-    ['NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl'],
-    ['Link','Unlink','Anchor'],
-    ['Image','Flash','Vimeo','Youtube','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe'],
-    '/',
-    ['Styles','Format','Font','FontSize','More'],
-    ['TextColor','BGColor'],
-    ['Maximize', 'ShowBlocks']
-  ];
-  
-  config.toolbar_Extended =
-  [
-  	['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
-  	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-  	['Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe'],
-  	'/',
-  	['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-  	['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
-  	['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-  	['Link','Unlink','Anchor'], ['Image','Flash','Vimeo','Youtube'],
-  	'/',  	
-  	['Styles','Format','More'], ['TextColor','BGColor'],['Code'], ['Maximize', 'ShowBlocks'], ['Templates','-','Source']
-  ];
-  
-  config.toolbar_Basic =
-  [
-  	['Bold','Italic','Underline','Strike'],
-  	['NumberedList','BulletedList','-','Blockquote'],
-  	['Image','Link','Unlink','Anchor','Smiley'],
-  	['TextColor','BGColor'],
-  	['Cut','Copy','Paste','PasteText','Scayt'],
-  	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['Code']
-  ];
-  
-  config.toolbar_Micro =
-  [
-  	['Bold','Italic','Underline','Strike', 'Link', 'Unlink']
-  ];
-
+CKEDITOR.editorConfig = function( config ) {
+	// Define changes to default configuration here. For example:
+	// config.language = 'fr';
+	// config.uiColor = '#AADC6E';
 };

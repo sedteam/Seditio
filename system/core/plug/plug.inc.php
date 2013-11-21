@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plug.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Plugin loader
@@ -31,7 +31,32 @@ unset ($plugin_title, $plugin_body);
 if (!empty($p))
 	{
 
-	die('Seditio do NOT supports the LDU standard plugins.');
+	$path_lang_def	= "plugins/$p/lang/$p.en.lang.php";
+	$path_lang_alt	= "plugins/$p/lang/$p.$lang.lang.php";
+  
+  if (file_exists($path_lang_alt))
+		{ require($path_lang_alt); }
+	elseif (file_exists($path_lang_def))
+		{ require($path_lang_def); }
+  
+  $extp = array();
+	if (is_array($sed_plugins))
+		{
+		foreach($sed_plugins as $i => $k)
+			{
+			if ($k['pl_hook']=='module' && $k['pl_code']==$p)
+				{ $extp[$i] = $k; }
+			}
+		}
+
+	if (count($extp)==0)
+		{
+		sed_redirect(sed_url("message", "msg=907", "", true));
+		exit;
+		}
+
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 	}
 elseif (!empty($e))
@@ -64,7 +89,7 @@ elseif (!empty($e))
 		}
 	else
 		{
-		header("Location: message.php?msg=907");
+		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
 		}
 
@@ -102,7 +127,7 @@ elseif (!empty($e))
 
 	if (count($extp)==0)
 		{
-		header("Location: message.php?msg=907");
+		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
 		}
 
@@ -114,7 +139,7 @@ elseif (!empty($e))
 		$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
 
 		$t-> assign(array(
-			"PLUGIN_TITLE" => "<a href=\"plug.php?e=$e\">".$plugin_title."</a>",
+			"PLUGIN_TITLE" => "<a href=\"".sed_url("plug", "e=".$e)."\">".$plugin_title."</a>",
 			"PLUGIN_SUBTITLE" => $plugin_subtitle,
 			"PLUGIN_BODY" => $plugin_body
 			));
@@ -141,7 +166,7 @@ elseif (!empty($o))
 
 	if (count($extp)==0)
 		{
-		header("Location: message.php?msg=907");
+		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
 		}
 

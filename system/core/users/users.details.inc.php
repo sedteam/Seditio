@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.php
-Version=173
-Updated=2012-sep-23
+Version=175
+Updated=2012-dec-31
 Type=Core
 Author=Neocrome
 Description=Users
@@ -70,7 +70,7 @@ $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
 $t->assign(array(
-	"USERS_DETAILS_TITLE" => "<a href=\"users.php\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
+	"USERS_DETAILS_TITLE" => "<a href=\"".sed_url("users")."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_DETAILS_ID" => $urr['user_id'],
 	"USERS_DETAILS_PM" => sed_build_pm($urr['user_id']),
@@ -135,7 +135,7 @@ if (is_array($extp))
 if ($usr['isadmin'])
 		{
 		$t-> assign(array(
-			"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"users.php?m=edit&amp;id=".$urr['user_id']."\">".$L['Edit']."</a>"
+			"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"".sed_url("users", "m=edit&id=".$urr['user_id'])."\">".$L['Edit']."</a>"
 			));
 
 		$t->parse("MAIN.USERS_DETAILS_ADMIN");
