@@ -1,0 +1,175 @@
+<?PHP
+
+/* ====================
+Seditio - Website engine
+Copyright Neocrome & Seditio Team
+http://www.neocrome.net
+http://www.seditio.org
+[BEGIN_SED]
+File=gallery.browse.inc
+Version=173
+Updated=2012-sep-23
+Type=Core
+Author=Neocrome
+Description=PFS
+[END_SED]
+==================== */
+
+if (!defined('SED_CODE') || !defined('SED_GALLERY')) { die('Wrong URL.'); }
+
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('gallery', 'a');
+sed_block($usr['auth_read']);
+
+/* === Hook === */
+$extp = sed_getextplugins('gallery.browse.first');
+if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+
+$sql_pff = sed_sql_query("SELECT f.*, u.user_name FROM $db_pfs_folders f
+LEFT JOIN $db_users AS u ON f.pff_userid=u.user_id
+WHERE pff_id='$f' AND pff_type=2");
+sed_die(sed_sql_numrows($sql_pff)==0);
+$pff = sed_sql_fetchassoc($sql_pff);
+
+$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_folderid='$f' ORDER BY pfs_id ASC");
+$nbitems = sed_sql_numrows($sql_pff);
+$pff['pff_title'] = sed_cc($pff['pff_title']);
+$userid = $pff['pff_userid'];
+
+$sql2 = sed_sql_query("UPDATE $db_pfs_folders SET pff_count=pff_count+1 WHERE pff_id='".$f."' LIMIT 1");
+
+$title = "<a href=\"gallery.php\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"gallery.php?f=".$pff['pff_id']."\">".$pff['pff_title']."</a>";
+$subtitle = '';
+$out['subtitle'] = '';
+
+/* === Hook === */
+$extp = sed_getextplugins('gallery.browse.main');
+if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+
+require("system/header.php");
+$t = new XTemplate("skins/".$skin."/gallery.browse.tpl");
+
+$t-> assign(array(
+	"GALLERY_BROWSE_TITLE" => $title,
+	"GALLERY_BROWSE_SUBTITLE" => $subtitle
+		));
+
+
+
+$t->assign(array(
+	"GALLERY_BROWSE_ID" => $pff['pff_id'],
+	"GALLERY_BROWSE_DESC" => sed_cc($pff['pff_desc']),
+	"GALLERY_BROWSE_COUNT" => $pff['pff_count']
+		));
+
+$jj = 0;
+
+while ($pfs = sed_sql_fetchassoc($sql))
+	{
+	$jj++;
+	$pfs['pfs_fullfile'] = $cfg['pfs_dir'].$pfs['pfs_file'];
+	$pfs['pfs_filesize'] = floor($pfs['pfs_size']/1024);
+
+	if (($pfs['extension']=='jpg' || $pfs['extension']=='jpeg' || $pfs['extension']=='png') && $cfg['th_amode']!='Disabled')
+		{
+		if (!file_exists($cfg['th_dir'].$pfs['pfs_file']) && file_exists($cfg['pfs_dir'].$pfs['pfs_file']))
+			{
+			$pfs['th_colortext'] = array(
+				hexdec(mb_substr($cfg['th_colortext'], 0, 2)),
+				hexdec(mb_substr($cfg['th_colortext'], 2 ,2)),
+				hexdec(mb_substr($cfg['th_colortext'], 4 ,2))
+					);
+
+			$pfs['th_colorbg'] = array(
+				hexdec(mb_substr($cfg['th_colorbg'], 0, 2)),
+				hexdec(mb_substr($cfg['th_colorbg'], 2, 2)),
+				hexdec(mb_substr($cfg['th_colorbg'], 4, 2))
+					);
+
+			sed_createthumb(
+				$cfg['pfs_dir'].$pfs['pfs_file'],
+				$cfg['th_dir'].$pfs['pfs_file'],
+				$cfg['th_x'],
+				$cfg['th_y'],
+				$cfg['th_keepratio'],
+				$pfs['pfs_extension'],
+				$pfs['pfs_file'],
+				$pfs['pfs_filesize'],
+				$pfs['th_colortext'],
+				$cfg['th_textsize'],
+				$pfs['th_colorbg'],
+				$cfg['th_border'],
+				$cfg['th_jpeg_quality']
+					);
+			}
+ 		}
+
+	if ($cfg['gallery_bcol']==1)
+		{
+		$pfs['cond1'] = '<tr>';
+		$pfs['cond2'] = '</tr>';
+		}
+	elseif ($jj==1)
+		{
+		$pfs['cond1'] = '<tr>';
+		$pfs['cond2'] = '';
+		}
+	elseif ($jj==$cfg['gallery_bcol'])
+		{
+		$jj=0;
+		$pfs['cond1'] = '';
+		$pfs['cond2'] = '</tr>';
+		}
+	else
+		{
+		$pfs['cond1'] = '';
+		$pfs['cond2'] = '';
+		}
+
+	$pfs['popup'] = "<a href=\"javascript:picture('pfs.php?m=view&amp;v=".$pfs['pfs_file']."',200,200)\">";
+
+	if ($usr['isadmin'])
+		{
+		$pfs['admin'] = "<a href=\"pfs.php?m=edit&amp;id=".$pfs['pfs_id']."&amp;userid=".$userid."\">".$out['img_edit']."</a>";
+		}
+
+	$t-> assign(array(
+		"GALLERY_BROWSE_ROW_ID" => $pfs['pfs_id'],
+		"GALLERY_BROWSE_ROW_VIEWURL" => "gallery.php?id=".$pfs['pfs_id'],
+		"GALLERY_BROWSE_ROW_VIEWPOPUP" => $pfs['popup'],
+		"GALLERY_BROWSE_ROW_FILE" => $pfs['pfs_file'],
+		"GALLERY_BROWSE_ROW_FULLFILE" => $pfs['pfs_fullfile'],
+		"GALLERY_BROWSE_ROW_THUMB" => "<img src=\"".$cfg['th_dir'].$pfs['pfs_file']."\" alt=\"\" />",
+		"GALLERY_BROWSE_ROW_ICON" => $icon[$pfs['pfs_extension']],
+		"GALLERY_BROWSE_ROW_DESC" => sed_parse($pfs['pfs_desc'],1,1,1),
+		"GALLERY_BROWSE_ROW_SHORTDESC" => sed_cutstring(sed_cc($pfs['pfs_desc']), 48),
+		"GALLERY_BROWSE_ROW_DATE" => date($cfg['dateformat'], $pfs['pfs_date'] + $usr['timezone'] * 3600),
+		"GALLERY_BROWSE_ROW_SIZE" => $pfs['pfs_filesize'].$L['kb'],
+		"GALLERY_BROWSE_ROW_COUNT" => $pfs['pfs_count'],
+		"GALLERY_BROWSE_ROW_ADMIN" => $pfs['admin'],
+		"GALLERY_BROWSE_ROW_COND1" => $pfs['cond1'],
+		"GALLERY_BROWSE_ROW_COND2" => $pfs['cond2']
+			));
+	$t->parse("MAIN.ROW");
+	}
+
+
+
+/* === Hook === */
+$extp = sed_getextplugins('gallery.browse.tags');
+if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+$t->parse("MAIN");
+$t->out("MAIN");
+
+require("system/footer.php");
+
+
+?>
