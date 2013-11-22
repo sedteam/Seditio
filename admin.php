@@ -8,7 +8,7 @@ http://www.seditio.org
 [BEGIN_SED]
 File=admin.php
 Version=175
-Updated=2012-dec-31
+Updated=2013-nov-22
 Type=Core
 Author=Neocrome
 Description=Administration panel loader

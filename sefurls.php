@@ -7,7 +7,7 @@ http://www.seditio.org
 [BEGIN_SED]
 File=sefurls.php
 Version=175
-Updated=2013-sep-26
+Updated=2013-nov-22
 Type=Core
 Author=Seditio Team
 Description=SEF Url's loader
