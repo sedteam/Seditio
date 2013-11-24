@@ -99,9 +99,9 @@ $url_gallery = array('part' => 'gallery', 'params' => "id=".$pfs['pfs_id']);
 list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $url_gallery, $comments);
 $sql2 = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_id='".$id."' LIMIT 1");
 
-$title = "<a href=\"".sed_url("gallery")."\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "f=".$pff['pff_id'])."\">".$pff['pff_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "id=".$id)."\">".$L['gallery_details_title']." #".$id."</a>";
+$title = "<a href=\"".sed_url("gallery")."\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "f=".$pff['pff_id'])."\">".$pff['pff_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "id=".$id)."\">".$pfs['pfs_title']."</a>";
 $subtitle = '';
-$out['subtitle'] = '';
+$out['subtitle'] = $pfs['pfs_title'];
 
 
 /* === Hook === */
@@ -135,7 +135,8 @@ $t-> assign(array(
       "GALLERY_DETAILS_THUMB" => "<img src=\"".$cfg['th_dir'].$pfs['pfs_file']."\" alt=\"\" />",
       "GALLERY_DETAILS_IMG" => $pfs['pfs_img'],
       "GALLERY_DETAILS_ICON" => $icon[$pfs['pfs_extension']],
-      "GALLERY_DETAILS_TITLE" => sed_cc($pfs['pfs_title']),
+      "GALLERY_DETAILS_TITLE" => $title,
+      "GALLERY_DETAILS_SHORTTITLE" => sed_cc($pfs['pfs_title']),
       "GALLERY_DETAILS_DESC" => $pfs['pfs_desc'],
       "GALLERY_DETAILS_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
       "GALLERY_DETAILS_DATE" => date($cfg['dateformat'], $pfs['pfs_date'] + $usr['timezone'] * 3600),

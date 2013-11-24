@@ -47,7 +47,7 @@ $sql2 = sed_sql_query("UPDATE $db_pfs_folders SET pff_count=pff_count+1 WHERE pf
 
 $title = "<a href=\"".sed_url("gallery")."\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "f=".$pff['pff_id'])."\">".$pff['pff_title']."</a>";
 $subtitle = '';
-$out['subtitle'] = '';
+$out['subtitle'] = $pff['pff_title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.browse.main');

@@ -71,7 +71,7 @@ $sql_au = sed_sql_query("SELECT DISTINCT u.user_id, u.user_name, COUNT(*)
 
 $title = $L['gallery_home_title'];
 $subtitle = '';
-$out['subtitle'] = '';
+$out['subtitle'] = $L['gallery_home_title'];
 
 
 /* === Hook === */
