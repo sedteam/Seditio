@@ -65,16 +65,30 @@ if ($pag['page_state']==1 && !$usr['isadmin'])
 	exit;
 	}
 
-if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
+if (preg_match("#{redir:(.*?)}#", $pag['page_text'], $find_out))
 	{
-	$redir = str_replace('redir:', '', trim($pag['page_text']));
+	$redir = $find_out[1];
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
 	sed_redirect($redir);
 	exit;
 	}
-elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
+elseif (preg_match("#{include:([a-zA-Z0-9_.\-\+]+)}#", $pag['page_text'], $find_out))
 	{
-	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
+	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($find_out[1], 0, 255)));
+	}
+elseif (preg_match("#{plugin:([a-z0-9]+)}#", $pag['page_text'], $find_out))  /* !test! */
+	{
+	define('SED_PLUG', TRUE);
+	$plug = $find_out[1];
+	$path_plug = 'plugins/'.$plug.'/'.$plug.'.php';
+	$path_lang_def = "plugins/$plug/lang/$plug.en.lang.php";
+	$path_lang_alt = "plugins/$plug/lang/$plug.$lang.lang.php";
+	if (file_exists($path_lang_alt)) 
+		{ require($path_lang_alt); }
+	elseif (file_exists($path_lang_def)) 
+		{ require($path_lang_def); }
+	if (file_exists($path_plug)) { include($path_plug); }
+	$pag['page_text'] = str_replace($find_out[0], $plugin_body, $pag['page_text']);
 	}
 
 if($pag['page_file'] && $a=='dl')
