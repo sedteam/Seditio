@@ -119,14 +119,15 @@ else
 	
 if ($c != 'all')
 	{
-	$sql2 = sed_sql_query("SELECT structure_text, structure_text_ishtml FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
+	$sql2 = sed_sql_query("SELECT structure_text, structure_code, structure_text_ishtml FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
 	$row2 = sed_sql_fetchassoc($sql2);
+  
 			
 	$list_text = sed_parse($row2['structure_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $row2['structure_text_ishtml']);
 
 	if (!$row2['structure_text_ishtml'] && $cfg['textmode']=='html')
 		{
-		 $sql2 = sed_sql_query("UPDATE $db_structure SET structure_text_ishtml = 1, structure_text = '".sed_sql_prep($list_text)."' WHERE structure_code = ".$row2['structure_code']);
+		 $sql2 = sed_sql_query("UPDATE $db_structure SET structure_text_ishtml = 1, structure_text = '".sed_sql_prep($list_text)."' WHERE structure_code = '".$row2['structure_code']."'");
 		}	
 	}	
 	
