@@ -24,3 +24,6 @@ Seditio 173
 См.: http://seditio.org/page.php?id=50
 
 По всем вопросам обращайтесь на сайт Seditio Team http://seditio.org
+
+
+/* тест на добавление комента */
