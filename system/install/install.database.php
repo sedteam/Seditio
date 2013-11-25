@@ -408,7 +408,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."structure (
   structure_title varchar(100) NOT NULL default '',
   structure_desc varchar(255) NOT NULL default '',
   structure_text text,
-  structure_text_ishtml tinyint(1) DEFAULT '1',
+  structure_text_ishtml tinyint(1) NOT NULL default '1',
   structure_icon varchar(128) NOT NULL default '',
   structure_group tinyint(1) NOT NULL default '0',
   structure_order varchar(16) NOT NULL default 'title.asc',
@@ -481,14 +481,14 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
 
 if ($textmode == "html") 
 {
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', 1, '', '', 1 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', 1, '', 1 ,'title.asc', 1, 1);");
 	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', 1, '',  0 ,'title.asc', 1, 1);");
 	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', 1, '',  0 ,'title.asc', 1, 1);");
 	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 1,  '', 0 ,'date.desc', 1, 1);");
 }
 else 
 {
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', 0, '', '', 1 ,'title.asc', 1, 1);");
+	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', 0, '', 1 ,'title.asc', 1, 1);");
 	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', 0, '',  0 ,'title.asc', 1, 1);");
 	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', 0, '',  0 ,'title.asc', 1, 1);");
 	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 0,  '', 0 ,'date.desc', 1, 1);");
