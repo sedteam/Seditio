@@ -5,6 +5,7 @@
 {HEADER_COMPOPUP}
 <title>{HEADER_TITLE}</title>
 <link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" media="print" title="print" />
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 
 </head>
@@ -14,7 +15,7 @@
 <div id="user">
   <!-- BEGIN: USER -->
   <div class="notices">{HEADER_NOTICES}</div>
-  <div class="nav-pills user-menu">
+  <div class="user-menu">
   <ul>
     <li style="padding-top:6px;">{HEADER_LOGSTATUS}</li>
     <li>{HEADER_USER_ADMINPANEL}</li>
@@ -28,7 +29,7 @@
   <!-- END: USER -->
   
   <!-- BEGIN: GUEST -->
-  <div class="nav-pills user-menu">
+  <div class="user-menu">
   <ul>
       <li><a href="{PHP.out.auth_link}">{PHP.skinlang.header.Login}</a></li>
       <li><a href="{PHP.out.register_link}">{PHP.skinlang.header.Register}</a></li>
@@ -39,9 +40,9 @@
 
 <div id="wrapper">
 	<div id="header">
-      <div class="row split">
+      <div class="units-row">
       <!-- Logo -->
-  		<div class="half">
+  		<div class="unit-50">
   			<div id="logo">
   				<a href="/" class="logos"></a>
   				<div id="slogan">It's time will come soon!</div>
@@ -49,7 +50,7 @@
   			</div>
   		</div>
   		<!-- Social / Contact -->
-  		<div class="half">  			
+  		<div class="unit-50">  			
   			<!-- Social Icons -->
   			<ul class="social-icons">
   				<li class="facebook"><a href="#">Facebook</a></li>

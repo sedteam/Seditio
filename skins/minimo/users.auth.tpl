@@ -3,10 +3,10 @@
 <div id="title"><h2>{USERS_AUTH_TITLE}</h2></div>
 <div id="bolded-line"></div>
 
-<div class="row">
-  <div class="fourfifth centered">
+<div class="units-row">
+  <div class="unit-50 centered">
     
-    <div class="half">
+    <div class="unit-50">
       <form name="login" action="{USERS_AUTH_SEND}" method="post">
         <table class="cells striped">
           <tr><td>{PHP.skinlang.usersauth.Username}</td><td>{USERS_AUTH_USER}</td></tr>
@@ -17,7 +17,7 @@
       </form>
     </div>
     
-    <div class="half">
+    <div class="unit-50">
       <ul class="arrow_list">
         <li><a href="{USERS_AUTH_REGISTER}">{PHP.skinlang.usersauth.Register}</a></li>
     		<li><a href="{USERS_AUTH_LOSTPASSWORD}">{PHP.skinlang.usersauth.Lostpassword}</a></li>

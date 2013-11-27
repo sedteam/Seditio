@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 
-<div class="container row">
+<div class="units-row">
     
-    <div class="threefifth">
+    <div class="unit-60">
         {INDEX_NEWS}
     </div>
     
-    <div class="twofifth">
+    <div class="unit-40">
       
       <div class="headline"><h3>{PHP.skinlang.index.Newinforums}</h3></div>
 			<div class="box">				

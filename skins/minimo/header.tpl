@@ -4,7 +4,8 @@
 {HEADER_METAS}
 {HEADER_COMPOPUP}
 <title>{HEADER_TITLE}</title>
-<link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" media="screen" title="screen" />
+<link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" media="print" title="print" />
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 </head>
 
@@ -46,9 +47,9 @@
 <div id="conteiner">
  
 <div id="header">
-    <div class="container row">
+    <div class="units-row">
     <!-- Logo -->
-		<div class="split half">
+		<div class="unit-50">
 			<div id="logo">
 				<a href="/" class="logos"></a>
 				<div id="slogan">It's time will come soon!</div>
@@ -56,7 +57,7 @@
 			</div>
 		</div>
 		<!-- Social / Contact -->
-		<div class="split half">  			
+		<div class="unit-50">  			
 			<!-- Social Icons -->
 
 			<!-- Search -->
