@@ -4,8 +4,11 @@
 {HEADER_METAS}
 {HEADER_COMPOPUP}
 <title>{HEADER_TITLE}</title>
-<link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" media="screen" title="screen" />
+<link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" media="print" title="print" />
+<link href="skins/{PHP.skin}/{PHP.skin}.green.css" rel="alternate stylesheet" type="text/css" title="green" />
+<link href="skins/{PHP.skin}/{PHP.skin}.fuchsia.css" rel="alternate stylesheet" type="text/css" title="fuchsia" />
+
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 </head>
 
@@ -14,6 +17,12 @@
 <div id="wrapper">
 
 <div id="top-line"></div>
+
+<div id="css">
+    <a href="#" class="blue" onclick="setActiveStyleSheet('style'); return false;"></a>   
+    <a href="#" class="green" onclick="setActiveStyleSheet('green'); return false;"></a>  
+    <a href="#" class="fuchsia" onclick="setActiveStyleSheet('fuchsia'); return false;"></a>
+</div>
 
   <!-- BEGIN: USER -->    
   <div class="user">       
