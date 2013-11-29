@@ -612,8 +612,8 @@ $out['subtitle'] = $L['Mypfs'];
 
 if ($standalone)
 	{
-	$pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas();
+	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."
+<title>".$cfg['maintitle']."</title>";
 
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";

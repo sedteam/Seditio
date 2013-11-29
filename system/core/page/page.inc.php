@@ -8,7 +8,7 @@ http://www.seditio.org
 [BEGIN_SED]
 File=page.inc.php
 Version=175
-Updated=2012-dec-31
+Updated=2013-nov-24
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -72,11 +72,11 @@ if (preg_match("#{redir:(.*?)}#", $pag['page_text'], $find_out))
 	sed_redirect($redir);
 	exit;
 	}
-elseif (preg_match("#{include:([a-zA-Z0-9_.\-\+]+)}#", $pag['page_text'], $find_out))
+elseif (preg_match("#{include:([a-zA-Z0-9_.\-]+)}#", $pag['page_text'], $find_out))
 	{
 	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($find_out[1], 0, 255)));
 	}
-elseif (preg_match("#{plugin:([a-z0-9]+)}#", $pag['page_text'], $find_out))  /* !test! */
+elseif (preg_match("#{plugin:([a-z0-9]+)}#", $pag['page_text'], $find_out))
 	{
 	define('SED_PLUG', TRUE);
 	$plug = $find_out[1];

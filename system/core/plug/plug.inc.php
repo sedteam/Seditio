@@ -33,13 +33,13 @@ if (!empty($p))
 
 	$path_lang_def	= "plugins/$p/lang/$p.en.lang.php";
 	$path_lang_alt	= "plugins/$p/lang/$p.$lang.lang.php";
-  
-  if (file_exists($path_lang_alt))
+
+	if (file_exists($path_lang_alt))
 		{ require($path_lang_alt); }
 	elseif (file_exists($path_lang_def))
 		{ require($path_lang_def); }
-  
-  $extp = array();
+
+	$extp = array();
 	if (is_array($sed_plugins))
 		{
 		foreach($sed_plugins as $i => $k)
