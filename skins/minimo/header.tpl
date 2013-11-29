@@ -8,7 +8,6 @@
 <link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" media="print" title="print" />
 <link href="skins/{PHP.skin}/{PHP.skin}.green.css" rel="alternate stylesheet" type="text/css" title="green" />
 <link href="skins/{PHP.skin}/{PHP.skin}.fuchsia.css" rel="alternate stylesheet" type="text/css" title="fuchsia" />
-
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 </head>
 

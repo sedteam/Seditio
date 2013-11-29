@@ -1,0 +1,55 @@
+/* ============= Fuchsia color theme ================ */
+
+a, a:visited {
+		color: #169fe6;
+}
+a:hover, a:focus { color: #888; }
+
+#top-line {
+	background: #169fe6;
+}
+
+#nav ul li a:hover {
+	color: #fff !important;
+	background: #50c0fa; 
+	background: -moz-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #50c0fa), color-stop(100%, #108dcd));
+	background: -webkit-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
+	background: -o-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
+	background: -ms-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
+	background: linear-gradient(to bottom, #50c0fa 0%, #108dcd 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#50c0fa', endColorstr='#108dcd', GradientType=0);
+}
+
+#scroll-top-top a {
+	background-color: #169fe6;
+}
+
+#bolded-line {
+	background: #169fe6;
+}
+
+.rec-date {
+	background-color: #169fe6!important;
+}
+
+.bar_front {
+	background-color: #169fe6;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #169fe6;
+  box-shadow: 0 0 0 2px rgba(124, 176, 32, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+}
+
+.check_list li { background: url("img/list/list_check.png") no-repeat 0 50%; padding: 0 0 0 18px }
+.plus_list li { background: url("img/list/list_plus.png") no-repeat 0 50%; padding: 0 0 0 18px }
+.minus_list li { background: url("img/list/list_minus.png") no-repeat 0 50%; padding: 0 0 0 18px }
+.star_list li { background: url("img/list/list_star.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.arrow_list li { background: url("img/list/list_arrow.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.square_list li { background: url("img/list/list_square.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.circle_list li { background: url("img/list/list_circle.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.cross_list li { background: url("img/list/list_cross.png") no-repeat 0 50%; padding: 0 0 0 16px }

@@ -6,15 +6,15 @@
 <title>{HEADER_TITLE}</title>
 <link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" media="print" title="print" />
+<link href="skins/{PHP.skin}/{PHP.skin}.blue.css" rel="alternate stylesheet" type="text/css" title="blue" />
+<link href="skins/{PHP.skin}/{PHP.skin}.fuchsia.css" rel="alternate stylesheet" type="text/css" title="fuchsia" />
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
-
 </head>
-
 <body>
 
 <div id="user">
   <!-- BEGIN: USER -->
-  <div class="notices">{HEADER_NOTICES}</div>
+  <div class="notices">{HEADER_NOTICES} </div>
   <div class="user-menu">
   <ul>
     <li style="padding-top:6px;">{HEADER_LOGSTATUS}</li>
@@ -39,6 +39,13 @@
 </div> 
 
 <div id="wrapper">
+
+<div id="css">
+    <a href="#" class="green" onclick="setActiveStyleSheet('style'); return false;"></a> 
+    <a href="#" class="blue" onclick="setActiveStyleSheet('blue'); return false;"></a>    
+    <a href="#" class="fuchsia" onclick="setActiveStyleSheet('fuchsia'); return false;"></a>
+</div>
+
 	<div id="header">
       <div class="units-row">
       <!-- Logo -->
@@ -73,7 +80,6 @@
           </div>              
       </div>  	     
   </div>
-
 
 <div id="main">
 

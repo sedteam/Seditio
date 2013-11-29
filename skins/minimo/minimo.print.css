@@ -68,24 +68,6 @@ body {
 
 /* ============== Various ============== */
 
-.submit, .btn {
-  background-color:#50c0fa;
-  color:#ffffff;
-  background: -moz-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #50c0fa), color-stop(100%, #108dcd));
-  background: -webkit-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
-  background: -o-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
-  background: -ms-linear-gradient(top, #50c0fa 0%, #108dcd 100%);
-  background: linear-gradient(to bottom, #50c0fa 0%, #108dcd 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#50c0fa', endColorstr='#108dcd', GradientType=0); 
-  border: 0px;
-}
-
-.submit:hover, .btn:hover {
-  background: #108dcd;
-  border: 0px;
-}
-
 .disp {
 	padding: 12px;
 	margin: 0;

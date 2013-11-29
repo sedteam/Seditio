@@ -1,15 +1,10 @@
 @import url("illusion.kube.css");
 
-/* ============ Skin CSS =============================*/
+/* ============ Skin CSS ================= */
 
 body {
 	background: url("img/vichy.png");
 }
-
-/* #Links
-================================================== */
-	a, a:visited {color: #5ca20d; text-decoration: none; outline: 0; -webkit-transition: color 0.1s ease-in-out; -moz-transition: color 0.1s ease-in-out; -o-transition: color 0.1s ease-in-out; -transition: color 0.1s ease-in-out;}
-	a:hover, a:focus { color: #888; }
 
 #wrapper {
 	background: #fff;
@@ -20,6 +15,57 @@ body {
 	margin: 0px auto 0 auto;
 	clear: both;
 }
+
+/* =========== Links =================== */
+
+a, a:visited {
+  color: #5ca20d; 
+  text-decoration: none; 
+  outline: 0; 
+  -webkit-transition: color 0.1s ease-in-out; 
+  -moz-transition: color 0.1s ease-in-out; 
+  -o-transition: color 0.1s ease-in-out; 
+  -transition: color 0.1s ease-in-out;
+}
+
+a:hover, a:focus { color: #888; }
+
+/* =========== CSS Selector ========== */
+
+#css {
+	position:absolute;
+	margin-top:-62px;
+	margin-left:0px;
+}
+
+#css a.blue {
+	display:block;
+	width:10px;
+	height:10px;
+	float:left;
+	margin-right:5px;
+	background-color:#169fe6;
+}
+
+#css a.green {
+	display:block;
+	width:10px;
+	height:10px;
+	float:left;
+	margin-right:5px;
+	background-color:#7faa33;
+}
+
+#css a.fuchsia {
+	display:block;
+	width:10px;
+	height:10px;
+	float:left;
+	margin-right:5px;
+	background-color:#ce2daa;
+}
+
+/* =========== User Menu ========== */
 
 #user {
   width: 975px;
@@ -64,7 +110,6 @@ body {
 	border-bottom:1px solid #f0f0f0;
 }
 
-
 .user-menu ul li a:hover {
 	color: #010101;
 	text-decoration: none;
@@ -78,6 +123,8 @@ body {
   width:990px;
 }
 
+/* =========== Footer================= */
+
 #footer {
   position:relative;
 	background: #303030;
@@ -85,12 +132,6 @@ body {
 	padding: 15px 35px 15px 35px;
   color:#ffffff;
 	margin: 0 auto 50px auto;
-/*  -moz-border-radius-bottomright: 10px;
-  -webkit-border-bottom-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  -moz-border-radius-bottomleft: 10px;
-  -webkit-border-bottom-left-radius: 10px;
-  border-bottom-left-radius: 10px;  */
   -webkit-box-shadow: 0px 5px 5px rgba(50, 50, 50, 0.2);
   -moz-box-shadow:    0px 5px 5px rgba(50, 50, 50, 0.2);
   box-shadow:         0px 5px 5px rgba(50, 50, 50, 0.2);    
@@ -98,6 +139,42 @@ body {
 
 .copyright {
   font-size:13px;
+}
+
+.footer-headline h3, .footer-headline h4 {
+  background-color: #303030;
+  display: inline;
+  padding: 0 10px 0 0;
+  font-size: 16px;
+  line-height: 34px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-weight: bold;    
+}
+
+#scroll-top-top {
+  position:absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
+#scroll-top-top a {
+  width: 35px;
+  height: 35px;
+  display: block;
+  background-color: #72b626;
+  background-image: url("img/scroll-top-top.png");
+  background-repeat: no-repeat;
+  background-position: 50%;
+  -webkit-transition: all .1s ease-in-out;
+  -moz-transition: all .1s ease-in-out;
+  -o-transition: all .1s ease-in-out;
+  -ms-transition: all .1s ease-in-out;
+  transition: all .1s ease-in-out;
+}
+
+#scroll-top-top a:hover {
+  background-color: #aaa;
 }
 
 /* =========== Logo & Slogan ========== */
@@ -161,7 +238,7 @@ body {
 	cursor: text
 }
 
-/* ============= Navigation =========== */
+/* =========== Horizontal Navigation ========== */
 
 #nav {
 	clear: both;
@@ -212,13 +289,15 @@ body {
 	text-shadow: none;
 	background: #f8f8f8;
 }
+
 /* ============== Overall ============== */
+
 #main img {
   vertical-align:baseline;
 }
 
-.btn-fix, select {
-	height: 27px;
+.btn {
+	line-height: normal;
 }
 .box {
 	display: block;
@@ -311,17 +390,6 @@ select[multiple] {
   font-weight: bold;    
 }
 
-.footer-headline h3, .footer-headline h4 {
-  background-color: #303030;
-  display: inline;
-  padding: 0 10px 0 0;
-  font-size: 16px;
-  line-height: 34px;
-  color: #fff;
-  font-family: Arial, sans-serif;
-  font-weight: bold;    
-}
-
 .headline img {
   vertical-align:baseline;
 }
@@ -368,7 +436,29 @@ select[multiple] {
   color:#717171;
 }
 
+/* ========= Comments ================ */
+
+.comment-by  {}
+.comment-edit { text-align: right; }
+.comment-date { text-align: right; }
+
+.comments {
+  border:1px solid #cccccc;
+  padding:10px;
+  margin-bottom:10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
 /* ============== Various ============== */
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #72b626;
+  box-shadow: 0 0 0 2px rgba(127,240,0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2) inset;  
+}
 
 .descr {
   color: #999999;
@@ -612,60 +702,17 @@ table.hovered thead tr:hover th {
 .yahoo { background:url("img/social/yahoo.png") no-repeat; }
 .youtube { background:url("img/social/youtube.png") no-repeat; }
 
+/* ======= Icon List ======= */
+
 .check_list li, .plus_list li, .minus_list li, .star_list li, .arrow_list li, .square_list li, .circle_list li, .cross_list li {
 	list-style: none;
 	margin: 5px 0
 }
-.check_list li { background: url("img/list/list_check.png") no-repeat 0 50%; padding: 0 0 0 18px }
-.plus_list li { background: url("img/list/list_plus.png") no-repeat 0 50%; padding: 0 0 0 18px }
-.minus_list li { background: url("img/list/list_minus.png") no-repeat 0 50%; padding: 0 0 0 18px }
-.star_list li { background: url("img/list/list_star.png") no-repeat 0 50%; padding: 0 0 0 16px }
-.arrow_list li { background: url("img/list/list_arrow.png") no-repeat 0 50%; padding: 0 0 0 16px }
-.square_list li { background: url("img/list/list_square.png") no-repeat 0 50%; padding: 0 0 0 16px }
-.circle_list li { background: url("img/list/list_circle.png") no-repeat 0 50%; padding: 0 0 0 16px }
-.cross_list li { background: url("img/list/list_cross.png") no-repeat 0 50%; padding: 0 0 0 16px }
-
-.comment-by  {}
-.comment-edit { text-align: right; }
-.comment-date { text-align: right; }
-
-.comments {
-  border:1px solid #cccccc;
-  padding:10px;
-  margin-bottom:10px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-
-#scroll-top-top {
-  position:absolute;
-  right: 0px;
-  bottom: 0px;
-}
-
-#scroll-top-top a {
-  width: 35px;
-  height: 35px;
-  display: block;
-  background-color: #72b626;
-  background-image: url("img/scroll-top-top.png");
-  background-repeat: no-repeat;
-  background-position: 50%;
-  -webkit-transition: all .1s ease-in-out;
-  -moz-transition: all .1s ease-in-out;
-  -o-transition: all .1s ease-in-out;
-  -ms-transition: all .1s ease-in-out;
-  transition: all .1s ease-in-out;
-}
-
-#scroll-top-top a:hover {
-  background-color: #aaa;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #72b626;
-  box-shadow: 0 0 0 2px rgba(127,240,0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2) inset;  
-}
+.check_list li { background: url("img/list/g_list_check.png") no-repeat 0 50%; padding: 0 0 0 18px }
+.plus_list li { background: url("img/list/g_list_plus.png") no-repeat 0 50%; padding: 0 0 0 18px }
+.minus_list li { background: url("img/list/g_list_minus.png") no-repeat 0 50%; padding: 0 0 0 18px }
+.star_list li { background: url("img/list/g_list_star.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.arrow_list li { background: url("img/list/g_list_arrow.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.square_list li { background: url("img/list/g_list_square.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.circle_list li { background: url("img/list/g_list_circle.png") no-repeat 0 50%; padding: 0 0 0 16px }
+.cross_list li { background: url("img/list/g_list_cross.png") no-repeat 0 50%; padding: 0 0 0 16px }
