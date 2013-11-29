@@ -171,8 +171,6 @@ while ($fsn = sed_sql_fetchassoc($sql))
 	 	if (!$fsn['fs_lt_id'])
 	 		{ sed_forum_sectionsetlast($fsn['fs_id']); }
 
-		$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
-
 		if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
 			{
 			$fsn['fs_title'] = "+ ".$fsn['fs_title'];
@@ -181,11 +179,13 @@ while ($fsn = sed_sql_fetchassoc($sql))
 
 		if ($fsn['fs_lt_id']>0)
 			{
+			$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
 			$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url("forums","m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">" : "<a href=\"".sed_url("forums","m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom")."\">";
 			$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
 			}
 		else
 			{
+			$fsn['fs_timago'] = '&nbsp;'; 
 			$fsn['lastpost'] = '&nbsp;';
 			$fsn['fs_lt_date'] = '&nbsp;';
 			$fsn['fs_lt_postername'] = '';
