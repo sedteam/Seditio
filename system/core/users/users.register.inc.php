@@ -64,7 +64,7 @@ if ($a=='add')
 	$rday = sed_import('rday','P','INT');
 	$rusericq = sed_import('rusericq','P','TXT');
 	$ruserirc = sed_import('ruserirc','P','TXT');
-	$rusermsn = sed_import('rusermsn','P','TXT');
+	$ruserskype = sed_import('ruserskype','P','TXT');
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
 	$ruserextra1 = sed_import('ruserextra1','P','TXT');
 	$ruserextra2 = sed_import('ruserextra2','P','TXT');
@@ -160,7 +160,7 @@ if ($a=='add')
 			user_birthdate,
 			user_icq,
 			user_irc,
-			user_msn,
+			user_skype,
 			user_website,
 			user_extra1,
 			user_extra2,
@@ -197,7 +197,7 @@ if ($a=='add')
 			".(int)$ruserbirthdate.",
 			'".sed_sql_prep($rusericq)."',
 			'".sed_sql_prep($ruserirc)."',
-			'".sed_sql_prep($rusermsn)."',
+			'".sed_sql_prep($ruserskype)."',
 			'".sed_sql_prep($ruserwebsite)."',
 			'".sed_sql_prep($ruserextra1)."',
 			'".sed_sql_prep($ruserextra2)."',
@@ -331,7 +331,7 @@ $t->assign(array(
 	"USERS_REGISTER_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".sed_cc($ruserwebsite)."\" size=\"56\" maxlength=\"128\" />",
 	"USERS_REGISTER_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($rusericq)."\" size=\"32\" maxlength=\"16\" />",
 	"USERS_REGISTER_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($ruserirc)."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_REGISTER_SKYPE" => "<input type=\"text\" class=\"text\" name=\"ruserskype\" value=\"".sed_cc($ruserskype)."\" size=\"32\" maxlength=\"64\" />",
 	"USERS_REGISTER_EXTRA1" => $form_extra1,
 	"USERS_REGISTER_EXTRA2" => $form_extra2,
 	"USERS_REGISTER_EXTRA3" => $form_extra3,

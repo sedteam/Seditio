@@ -260,6 +260,7 @@ $L['SFS'] = "Site File Space";
 $L['Size'] = "Size";
 $L['Skin'] = "Skin";
 $L['Skins'] = "Skins";
+$L['Skype'] = "Skype Number";  // New in v175
 $L['Smilies'] = "Smilies";
 $L['Started'] = "Started";
 $L['Status'] = "Status";

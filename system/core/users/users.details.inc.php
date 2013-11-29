@@ -111,7 +111,7 @@ $t->assign(array(
 	"USERS_DETAILS_WEBSITE" => $urr['user_website'],
 	"USERS_DETAILS_JOURNAL" => $urr['user_journal'],
 	"USERS_DETAILS_ICQ" => sed_build_icq($urr['user_icq']),
-	"USERS_DETAILS_MSN" => sed_build_msn($urr['user_msn']),
+	"USERS_DETAILS_SKYPE" => sed_build_skype($urr['user_skype']),
 	"USERS_DETAILS_IRC" => sed_cc($urr['user_irc']),
 	"USERS_DETAILS_GENDER" => $urr['user_gender'],
 	"USERS_DETAILS_BIRTHDATE" => $urr['user_birthdate'],

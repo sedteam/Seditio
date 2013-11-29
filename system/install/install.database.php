@@ -458,7 +458,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   user_birthdate int(11) NOT NULL default '0',
   user_gender char(1) NOT NULL default 'U',
   user_irc varchar(128) NOT NULL default '',
-  user_msn varchar(64) NOT NULL default '',
+  user_skype varchar(64) NOT NULL default '',
   user_icq varchar(16) NOT NULL default '',
   user_website varchar(128) NOT NULL default '',
   user_email varchar(64) NOT NULL default '',

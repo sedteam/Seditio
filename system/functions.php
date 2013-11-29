@@ -1071,6 +1071,18 @@ function sed_build_ipsearch($ip)
 
 	return($result);
 	}
+	
+/* ------------------ */
+
+function sed_build_skype($skype)
+	{
+	if (!empty($skype))
+		{
+		$skype = sed_cc($skype);
+		$result = "<a href=\"skype:".$skype."?call\">".$skype."</a>";
+		}
+	return($result);
+ }	
 
 /* ------------------ */
 

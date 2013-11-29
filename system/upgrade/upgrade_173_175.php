@@ -166,6 +166,17 @@ $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_ishtml tiny
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);
 
+// Users upgrade
+
+$adminmain .= "Delete 'user_msn' and 'user_skype' column to table users<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."users ADD user_skype varchar(64) AFTER user_msn";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."users DROP user_msn";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "Changing the SQL version number to 175...<br />";
 $sql = sed_sql_query("UPDATE ".$cfg['sqldbprefix']."stats SET stat_value=175 WHERE stat_name='version'"); 
 

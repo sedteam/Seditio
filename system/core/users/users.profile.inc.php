@@ -254,7 +254,7 @@ switch ($a)
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
 	$rusericq = sed_import('rusericq','P','TXT');
 	$ruserirc = sed_import('ruserirc','P','TXT');
-	$rusermsn = sed_import('rusermsn','P','TXT');
+	$ruserskype = sed_import('ruserskype','P','TXT');
 	$rusergender = sed_import('rusergender','P','ALP');
 	$ryear = sed_import('ryear','P','INT');
 	$rmonth = sed_import('rmonth','P','INT');
@@ -349,7 +349,7 @@ switch ($a)
 			user_lang='".sed_sql_prep($ruserlang)."',
 			user_website='".sed_sql_prep($ruserwebsite)."',
 			user_icq='".sed_sql_prep($rusericq)."',
-			user_msn='".sed_sql_prep($rusermsn)."',
+			user_skype='".sed_sql_prep($ruserskype)."',
 			user_irc='".sed_sql_prep($ruserirc)."',
 			user_gender='".sed_sql_prep($rusergender)."',
 			user_birthdate='".sed_sql_prep($ruserbirthdate)."',
@@ -516,7 +516,7 @@ $t->assign(array(
 	"USERS_PROFILE_SKIN" => $profile_form_skins,
 	"USERS_PROFILE_LANG" => $profile_form_langs,
 	"USERS_PROFILE_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_PROFILE_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($urr['user_msn'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_PROFILE_SKYPE" => "<input type=\"text\" class=\"text\" name=\"ruserskype\" value=\"".sed_cc($urr['user_skype'])."\" size=\"32\" maxlength=\"64\" />",
 	"USERS_PROFILE_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($urr['user_irc'])."\" size=\"56\" maxlength=\"128\" />",
 	"USERS_PROFILE_GENDER" => $profile_form_gender,
 	"USERS_PROFILE_BIRTHDATE" => $profile_form_birthdate,
