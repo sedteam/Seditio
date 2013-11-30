@@ -437,7 +437,7 @@ $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_parentcat
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
     ORDER by fn_path ASC, fs_order ASC");
 	
-$movebox = "<input type=\"submit\" class=\"submit btn-fix\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
+$movebox = "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
 $jumpbox .= "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
 $jumpbox .= "<option value=\"".sed_url("forums")."\">".$L['Forums']."</option>";
 

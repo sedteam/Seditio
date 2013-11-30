@@ -100,16 +100,13 @@ require_once("plugins/textboxer2/inc/textboxer2.inc.php");
 			'post',
 			'pm',
 		'}',
-    //********************************
 		9,
 			'youtube',
-			'googlevideo',
 			'metacafe',
 			'rutube',
       'vimeo',
 			'vk',
 		'}',
-    //*******************************
 		1,
 			'smilies',
 		'}',

@@ -112,16 +112,13 @@ By stating '}' the dropdown list is closed. Each dropdown should be closed with 
 			'post',
 			'pm',
 		'}',
-    //********************************
 		9,
 			'youtube',
-			'googlevideo',
 			'metacafe',
 			'rutube',
       'vimeo',
 			'vk',      
 		'}',
-    //*******************************
 		1,
 			'smilies',
 		'}',
@@ -192,7 +189,6 @@ function tb2_getSettings(){
   //************
 	$res['vk'] = array('[vk=URL]', '', 56);
 	$res['youtube'] = array('[youtube=URL]', '', 50);
-	$res['googlevideo'] = array('[googlevideo=URL]', '', 51);
 	$res['metacafe'] = array('[metacafe=URL]', '', 52);
 	$res['rutube'] = array('[rutube=URL]', '', 55); 
 	$res['vimeo'] = array('[vimeo=URL]', '', 53); 
@@ -319,7 +315,6 @@ var tbL={'.
 
 '",vk:"'.$tbL['tb2_vk'].
 '",youtube:"'.$tbL['tb2_youtube'].
-'",googlevideo:"'.$tbL['tb2_googlevideo'].
 '",metacafe:"'.$tbL['tb2_metacafe'].
 '",rutube:"'.$tbL['tb2_rutube'].
 '",vimeo:"'.$tbL['tb2_vimeo'].
