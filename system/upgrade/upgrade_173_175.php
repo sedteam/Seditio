@@ -24,6 +24,7 @@ $adminmain .= "Clearing the internal SQL cache...<br />";
 $sql = sed_sql_query("TRUNCATE TABLE ".$cfg['sqldbprefix']."cache");
 
 //Reinstall plugin CKeditor
+
 if ($cfg['textmode'] == "html")
     {      
       $adminmain .= "Rinstall the plugin Ckeditor<br />";
@@ -31,6 +32,8 @@ if ($cfg['textmode'] == "html")
       $adminmain .= sed_plugin_install('ckeditor');
     }
 
+// User group color
+	
 $adminmain .= "Adding the 'grp_color' column to table users groups...<br />";
 $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."groups ADD grp_color varchar(24) NOT NULL DEFAULT 'inherit' AFTER grp_icon";
 $adminmain .= sed_cc($sqlqr)."<br />";
@@ -42,6 +45,8 @@ VALUES ('core', 'users', '10', 'color_group', 3, '0', '')";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);
 
+// Maintenance Mode
+
 $adminmain .= "Adding the 'maintenance' new config into the core<br />";
 $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
 VALUES ('core', 'main', '21', 'maintenance', 3, '0', '')";
@@ -52,7 +57,15 @@ $adminmain .= "Adding the 'maintenancelevel' new config into the core<br />";
 $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
 VALUES ('core', 'main', '22', 'maintenancelevel', 2, '95', '')";
 $adminmain .= sed_cc($sqlqr)."<br />";
-$sql = sed_sql_query($sqlqr);    
+$sql = sed_sql_query($sqlqr);
+
+$adminmain .= "Adding the 'maintenancereason' new config into the core<br />";
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'main', '23', 'maintenancereason', 1, 'The site is in maintenance mode!', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);     
+
+// Reinstall BB parser table
 
 $adminmain .= "Reinstall table ".$cfg['sqldbprefix']."parser<br />";
 $sqlqr = "TRUNCATE TABLE ".$cfg['sqldbprefix']."parser";

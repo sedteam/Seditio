@@ -602,7 +602,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel'] && !defined('SED_USERS'))
   {
-  sed_redirect(sed_url("users", "m=auth", "", true));
+  sed_diemaintenance();
   }
 
 /* ======== Global hook ======== */

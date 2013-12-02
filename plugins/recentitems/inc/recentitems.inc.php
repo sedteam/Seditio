@@ -216,7 +216,10 @@ function sed_get_latestcomments($limit, $mask)
         break;		
       }
     
-    $res .= sprintf($mask, $lnk, sed_build_user($row['com_authorid'], $row['com_author'], $row['user_maingrp']), date($cfg['formatyearmonthday'], $row['com_date'] + $usr['timezone'] * 3600), sed_build_userimage($row['user_avatar']), $com_text);
+    $com_author = sed_cc($row['com_author']);
+	$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author ;
+	
+	$res .= sprintf($mask, $lnk, $com_authorlink, date($cfg['formatyearmonthday'], $row['com_date'] + $usr['timezone'] * 3600), sed_build_userimage($row['user_avatar']), $com_text);
     }
 
   $res = (empty($res)) ? $plu_empty : $res;

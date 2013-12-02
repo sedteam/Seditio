@@ -684,7 +684,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		
 		/* ===== */
 		
-		$sql = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
+		$sql = sed_sql_query("SELECT c.*, u.user_id, u.user_avatar, u.user_maingrp FROM $db_com AS c
 				LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
 				WHERE com_code='$code' ORDER BY com_id ".$cfg['commentsorder']." LIMIT $d, ".$cfg['maxcommentsperpage']);  
 
@@ -715,7 +715,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		
 				$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;"."[<a href=\"".sed_url($url_part, $url_params.$lurl."&a=edit&b=".$row['com_id']."&".sed_xg(), "#c".$row['com_id'])."\">".$L['Edit']."</a>] &nbsp;".$L['Delete'].":[<a href=\"".sed_url($url_part, $url_params.$lurl."&n=delete&b=".$row['com_id']."&".sed_xg())."\">x</a>] ".$allowed_time : '' ;
 				
-				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"".sed_url("users", "m=details&id=".$row['com_authorid'])."\">".$com_author."</a>" : $com_author ;
+				$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author ;				
 				
 				$t-> assign(array(
 					"COMMENTS_ROW_ID" => $row['com_id'],
@@ -1773,6 +1773,43 @@ function sed_dieifdisabled($disabled)
 		}
 	return;
 	}
+
+/* ------------------ */
+
+function sed_diemaintenance() 
+{ 
+global $L, $cfg; 
+
+$mskin = "skins/".$cfg['defaultskin']."/maintenance.tpl";
+
+if (file_exists($mskin)) 
+  { 
+	$maintenans_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas();
+	$maintenans_header2 = "</head><body>";
+  $maintenans_footer = "</body></html>";
+
+  $t = new XTemplate($mskin); 
+  $t-> assign(array( 
+      "MAINTENANCE_HEADER1" => $maintenans_header1,
+      "MAINTENANCE_HEADER2" => $maintenans_header2,
+      "MAINTENANCE_FOOTER" => $maintenans_footer, 
+      "MAINTENANCE_MAINTITLE" => sed_cc($cfg['maintitle']), 
+      "MAINTENANCE_SUBTITLE" => sed_cc($cfg['subtitle']),
+      "MAINTENANCE_REASON" => $cfg['maintenancereason'], 
+      "MAINTENANCE_FORM_SEND" => sed_url("users", "m=auth&a=check&redirect=".$redirect),
+      "MAINTENANCE_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />", 
+      "MAINTENANCE_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />"
+  ));   
+  $t->parse("MAINTENANCE"); 
+  $t->out("MAINTENANCE");   
+  exit; 
+  } 
+else 
+  { 
+  sed_redirect(sed_url("users", "m=auth", "", true));
+  exit;
+  } 
+} 
 
 /* ------------------ */
 

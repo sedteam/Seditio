@@ -316,4 +316,8 @@ $skinlang['users']['Page'] = "Page";
 $skinlang['users']['usersperpage'] = "users per page";
 $skinlang['users']['usersinthissection'] = "users in this section";
 
+//maintenance.tpl
+$skinlang['maintenance']['Username'] = "User name:";
+$skinlang['maintenance']['Password'] = "Password:";
+$skinlang['maintenance']['Login'] = "Login";
 ?>

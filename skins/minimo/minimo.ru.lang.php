@@ -317,4 +317,9 @@ $skinlang['users']['Page'] = "Страница";
 $skinlang['users']['usersperpage'] = "пользователей на страницу";
 $skinlang['users']['usersinthissection'] = "пользователей в этом разделе";
 
+//maintenance.tpl
+$skinlang['maintenance']['Username'] = "Имя:";
+$skinlang['maintenance']['Password'] = "Пароль:";
+$skinlang['maintenance']['Login'] = "Вход";
+
 ?>

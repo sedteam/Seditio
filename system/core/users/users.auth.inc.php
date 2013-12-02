@@ -132,7 +132,7 @@ $t->assign(array(
 	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
 	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />".$redir,
 	"USERS_AUTH_REGISTER" => sed_url("users", "m=register"),
-  "USERS_AUTH_LOSTPASSWORD" => sed_url("plug", "e=passrecover")
+	"USERS_AUTH_LOSTPASSWORD" => sed_url("plug", "e=passrecover")
 		));
 
 /* === Hook === */

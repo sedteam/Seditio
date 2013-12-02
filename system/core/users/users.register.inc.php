@@ -21,7 +21,7 @@ $v = sed_import('v','G','ALP');
 
 if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel']) 
   { 
-  sed_redirect(sed_url("users", "m=auth", "", true)); 
+  sed_diemaintenance();
   exit; 
   } 
 
