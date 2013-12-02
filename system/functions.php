@@ -1778,7 +1778,7 @@ function sed_dieifdisabled($disabled)
 
 function sed_diemaintenance() 
 { 
-global $L, $cfg; 
+global $L, $cfg, $sys; 
 
 $mskin = "skins/".$cfg['defaultskin']."/maintenance.tpl";
 
@@ -1786,7 +1786,7 @@ if (file_exists($mskin))
   { 
 	$maintenans_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas();
 	$maintenans_header2 = "</head><body>";
-  $maintenans_footer = "</body></html>";
+	$maintenans_footer = "</body></html>";
 
   $t = new XTemplate($mskin); 
   $t-> assign(array( 
@@ -1796,7 +1796,7 @@ if (file_exists($mskin))
       "MAINTENANCE_MAINTITLE" => sed_cc($cfg['maintitle']), 
       "MAINTENANCE_SUBTITLE" => sed_cc($cfg['subtitle']),
       "MAINTENANCE_REASON" => $cfg['maintenancereason'], 
-      "MAINTENANCE_FORM_SEND" => sed_url("users", "m=auth&a=check&redirect=".$redirect),
+      "MAINTENANCE_FORM_SEND" => sed_url("users", "m=auth&a=check&".$sys['url_redirect']),
       "MAINTENANCE_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />", 
       "MAINTENANCE_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />"
   ));   
