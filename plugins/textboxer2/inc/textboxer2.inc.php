@@ -114,9 +114,10 @@ By stating '}' the dropdown list is closed. Each dropdown should be closed with 
 		'}',
 		9,
 			'youtube',
+			'dailymotion',
 			'metacafe',
 			'rutube',
-      'vimeo',
+			'vimeo',
 			'vk',      
 		'}',
 		1,
@@ -189,6 +190,7 @@ function tb2_getSettings(){
   //************
 	$res['vk'] = array('[vk=URL]', '', 56);
 	$res['youtube'] = array('[youtube=URL]', '', 50);
+	$res['dailymotion'] = array('[dailymotion=URL]', '', 51);	
 	$res['metacafe'] = array('[metacafe=URL]', '', 52);
 	$res['rutube'] = array('[rutube=URL]', '', 55); 
 	$res['vimeo'] = array('[vimeo=URL]', '', 53); 
@@ -315,6 +317,7 @@ var tbL={'.
 
 '",vk:"'.$tbL['tb2_vk'].
 '",youtube:"'.$tbL['tb2_youtube'].
+'",dailymotion:"'.$tbL['tb2_dailymotion'].
 '",metacafe:"'.$tbL['tb2_metacafe'].
 '",rutube:"'.$tbL['tb2_rutube'].
 '",vimeo:"'.$tbL['tb2_vimeo'].

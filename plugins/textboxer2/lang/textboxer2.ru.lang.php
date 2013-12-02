@@ -49,7 +49,7 @@ $tbL['tb2_vk'] = "Введите часть *** URL http://vkontakte.ru/video_ex
 $tbL['tb2_rutube'] = "Введите часть *** URL http://video.rutube.ru/(***)";
 $tbL['tb2_youtube'] = "Введите часть *** URL http://www.youtube.com/v/(***)";
 $tbL['tb2_metacafe'] = "Введите часть *** URL http://www.metacafe.com/fplayer/(***)";
-$tbL['tb2_googlevideo'] = "Введите часть *** URL http://video.google.com/googleplayer.swf?docId=(***)&hl=en-GB";
+$tbL['tb2_dailymotion'] = "Введите часть *** URL http://www.dailymotion.com/embed/video/(***)";
 $tbL['tb2_vimeo'] = "Введите часть *** URL http://player.vimeo.com/video/(***)";
 
 ?>

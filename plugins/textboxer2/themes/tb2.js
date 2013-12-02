@@ -155,7 +155,7 @@ function TextBoxer2(myName,previewURL,textareaName,previewSetup,maxSmilieHeight,
           case "youtube":
           case "rutube":
           case "metacafe":
-          case "googlevideo":
+          case "dailymotion":
           case "vimeo":  
 						quo=window.prompt(L[n], "");
 						if(quo!=null&&quo!=""){lft="["+n+"="+quo+"]";}
