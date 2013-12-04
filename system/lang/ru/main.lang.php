@@ -460,14 +460,14 @@ $L['bbcodes_ex_vk'] = "Vkontakte, вставить видео";   // New in v175
 $L['bbcodes_ex_youtube'] = "YouTube, вставить видео";  // New in v175
 $L['bbcodes_ex_vimeo'] = "Vimeo, вставить видео"; // New in v175
 $L['bbcodes_ex_metacafe'] = "Metacafe, вставить видео"; // New in v175
-$L['bbcodes_ex_googlevideo'] = "GoogleVideo, вставить видео";  // New in v175
+$L['bbcodes_ex_dailymotion'] = "Dailymotion, вставить видео";  // New in v175
 $L['bbcodes_ex_rutube'] = "RuTube, вставить видео"; // New in v175
 
 $L['bbcodes_vk'] = "Vkontakte";   // New in v175
 $L['bbcodes_youtube'] = "YouTube";  // New in v175
 $L['bbcodes_vimeo'] = "Vimeo"; // New in v175
 $L['bbcodes_metacafe'] = "Metacafe"; // New in v175
-$L['bbcodes_googlevideo'] = "GoogleVideo";  // New in v175
+$L['bbcodes_dailymotion'] = "Dailymotion";  // New in v175
 $L['bbcodes_rutube'] = "RuTube"; // New in v175
 
 /* ====== Common ====== */

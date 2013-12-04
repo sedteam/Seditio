@@ -117,17 +117,10 @@ if ($sys['http_host'] == $url_default['host']
 else { $sys['host'] = $url_default['host']; }
   
 $sys['port'] = empty($url_default['port']) ? '' : ':'.$url_default['port'];
-
-$sys['subdir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : "";
- 
+$sys['subdir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : ""; 
 $sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'].$sys['subdir_uri'];
-
 $sys['canonical_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'].$sys['request_uri']; 
-
 if ($sys['abs_url'][mb_strlen($sys['abs_url']) - 1] != '/') { $sys['abs_url'] .= '/'; }     
-
-//echo $sys['abs_url'];
-//exit;
 
 // -----------------------------
 
