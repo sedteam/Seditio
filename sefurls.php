@@ -16,7 +16,10 @@ Description=SEF Url's loader
 
 require('system/config.urlrewrite.php');
 
-$request_uri = $_SERVER['REQUEST_URI']; 
+$request_uri = $_SERVER['REQUEST_URI'];
+
+$subdir_uri = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : "";
+$request_uri = str_replace($subdir_uri, "", $request_uri);
 
 $vars_req = array();
 $params_req = "";
@@ -60,7 +63,7 @@ foreach($sed_urlrewrite as $val)
 }
 
 header("HTTP/1.1 404 Not Found");
-header("Location: /message/404");
+header("Location: ".$subdir_uri."/message/404");
 exit;
    
 ?>

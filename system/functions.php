@@ -3686,7 +3686,12 @@ function sed_sefurlredirect()
     {
       $params = $_SERVER['QUERY_STRING'];    
       $params_arr = sed_parse_str($params);
-      $section = mb_substr($sys['request_uri'], 1, $findphp-1);
+	  
+	  $section = mb_substr($sys['request_uri'], 1, $findphp-1);
+	  $pos_sl = mb_strrpos($section, "/");
+	  
+	  if ( $pos_sl > 1) { $section = mb_substr($section, $pos_sl+1); }
+	  
       if ($section == 'list' && isset($params_arr['c'])) { $sys['catcode'] = $params_arr['c']; }
       if ($section == 'page') {        
         if (isset($params_arr['al']) && !empty($params_arr['al']))
@@ -3705,8 +3710,9 @@ function sed_sefurlredirect()
          }
       }
       if ($params_arr['r'] != 'tb2preview') {   //fix textboxer preview   
-          $redirect301 = sed_url($section, $params, "", true);   
-          header("HTTP/1.1 301 Moved Permanently");
+          $redirect301 = sed_url($section, $params, "", true);  
+		   
+		  header("HTTP/1.1 301 Moved Permanently");
           header("Location: ".$redirect301);
           exit;
       }   

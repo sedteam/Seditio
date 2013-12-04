@@ -31,7 +31,7 @@ $out['fulltitle'] = $cfg['maintitle'];
 $out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
 $out['fulltitle'] .= (empty($out['subtitle'])) ? '' : ' - '.$out['subtitle'];
 $out['currenturl'] .= sed_getcurrenturl();
-$out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $sys['abs_url'].$out['canonical_url'];  // New in 175
+$out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_url'];  // New in 175
 $out['register_link'] = sed_url("users", "m=register");  // New in 175
 $out['auth_link'] = sed_url("users", "m=auth");  // New in 175
 $out['whosonline_link'] = sed_url("plug", "e=whosonline");  // New in 175
@@ -73,7 +73,7 @@ $t->assign(array (
 	"HEADER_METAS" => $out['metas'],
 	"HEADER_DOCTYPE" => $cfg['doctype'],
 	"HEADER_CSS" => $cfg['css'],
-  "HEADER_CANONICAL_URL" => $out['canonical_url'], // New in 175
+	"HEADER_CANONICAL_URL" => $out['canonical_url'], // New in 175
 	"HEADER_COMPOPUP" => $out['compopup'],
 	"HEADER_LOGSTATUS" => $out['logstatus'],
 	"HEADER_WHOSONLINE" => $out['whosonline'],

@@ -1,7 +1,7 @@
 Options -Indexes
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /
+#RewriteBase /
 #RewriteCond %{REQUEST_FILENAME} -d [OR] 
 RewriteCond %{REQUEST_FILENAME} -f [OR] 
 RewriteCond %{REQUEST_FILENAME} -l 
