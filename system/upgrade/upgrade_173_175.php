@@ -175,7 +175,7 @@ $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);
 
 $adminmain .= "Adding the 'structure_text_ishtml' column to table structure...<br />";
-$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_ishtml tinyint(1) DEFAULT '1' AFTER structure_text";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_text_ishtml tinyint(1) DEFAULT '1' AFTER structure_text";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);
 
