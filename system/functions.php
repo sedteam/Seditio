@@ -3304,6 +3304,60 @@ function sed_sendheaders()
 
 /* ------------------ */
 
+function sed_setcookie($name, $value, $expire = '', $path = '/', $domain = '', $secure = false, $httponly = true)
+{
+	// local domains cookie support
+	if (mb_strpos($domain, '.') === FALSE) { $domain = ''; }
+
+	if (!empty($domain)) 
+	{ 
+		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.') 
+		{
+		  $domain = mb_substr($domain, 4); 
+		}
+		// Add the dot prefix for subdomain support on some browsers
+		if ( mb_substr($domain, 0, 1) != '.' ) $domain = '.'.$domain; 
+	} 
+
+	if(PHP_VERSION < '5.2.0')
+	{
+		return setcookie($name, $value, $expire, $path, $domain, $secure);
+	}
+	else 
+	{
+		return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);	
+	} 
+}
+
+/* ------------------ */
+
+function sed_setcookie_params($expire = 0, $path = '/', $domain = '', $secure = false, $httponly = true)
+{
+	// local domains cookie support
+	if (mb_strpos($domain, '.') === FALSE) { $domain = ''; }
+
+	if (!empty($domain)) 
+	{ 
+		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.') 
+		{
+		  $domain = mb_substr($domain, 4); 
+		}
+		// Add the dot prefix for subdomain support on some browsers
+		if ( mb_substr($domain, 0, 1) != '.' ) $domain = '.'.$domain; 
+	} 
+
+	if(PHP_VERSION < '5.2.0')
+	{
+		return session_set_cookie_params($expire, $path, $domain, $secure);
+	}
+	else 
+	{
+		return session_set_cookie_params($expire, $path, $domain, $secure, $httponly);	
+	} 	
+}	
+
+/* ------------------ */
+
 function sed_setdoctype($type)
 	{
 	switch($type)

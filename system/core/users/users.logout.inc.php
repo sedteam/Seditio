@@ -1,5 +1,4 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
@@ -27,7 +26,7 @@ if (is_array($extp))
 
 if ($cfg['authmode']==1 || $cfg['authmode']==3)
 	{
-	setcookie("SEDITIO", "", time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain']);
+	sed_setcookie($sys['site_id'], "", time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 	}
 
 if ($cfg['authmode']==2 || $cfg['authmode']==3)
@@ -39,15 +38,14 @@ if ($cfg['authmode']==2 || $cfg['authmode']==3)
 if ($usr['id']>0)
 	{
 	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='".$usr['ip']."'");	
-  $rmdpass_secret = md5(sed_unique(16)); // New sed175
+	$rmdpass_secret = md5(sed_unique(16)); // New sed175
 	$sql = sed_sql_query("UPDATE $db_users SET user_secret = '".$rmdpass_secret."', user_lastip='".$usr['ip']."' WHERE user_id='".$usr['id']."' LIMIT 1");
-  sed_redirect(sed_url("message", "msg=102", "", true));
+	sed_redirect(sed_url("message", "msg=102", "", true));
 	exit;
 	}
 else
 	{
 	sed_redirect(sed_url("message", "msg=101", "", true));
 	exit;
-	}
-
+	}	
 ?>

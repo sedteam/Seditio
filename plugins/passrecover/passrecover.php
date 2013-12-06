@@ -132,14 +132,14 @@ elseif (($a=='auth' || $a=='newpassword') && mb_strlen($v)==32)
 				if ($cfg['authmode']==1 || $cfg['authmode']==3)
 					{
 					$u = base64_encode("$ruserid:_:$rmdpass_secret:_:".$cfg['defaultskin']);
-					setcookie("SEDITIO", "$u", time() + 86400, $cfg['cookiepath'], $cfg['cookiedomain']);
+					sed_setcookie($sys['site_id'], $u, time() + 86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 					}
 
 				if ($cfg['authmode']==2 || $cfg['authmode']==3)
 					{
-					$_SESSION['rsedition'] = $ruserid;
-					$_SESSION['rseditiop'] = $rmdpass_secret;
-					$_SESSION['rseditios'] = $rdefskin;
+					$_SESSION[$sys['site_id'].'_n'] = $ruserid;
+					$_SESSION[$sys['site_id'].'_p'] = $rmdpass_secret;
+					$_SESSION[$sys['site_id'].'_s'] = $rdefskin;
 					}
 
 				$plugin_body .= $L['plu_loggedin1'].$rusername." ".$L['plu_loggedin2']."<br />";

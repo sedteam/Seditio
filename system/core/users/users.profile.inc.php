@@ -314,12 +314,12 @@ switch ($a)
 			if ($cfg['authmode']==1 || $cfg['authmode']==3)
 				{
 				$u = base64_encode($usr['id'].":_:$rnewpass_secret:_:".$ruserskin);
-				setcookie("SEDITIO", "$u", time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain']);
+				sed_setcookie($sys['site_id'], $u, time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
 
 			if ($cfg['authmode']==2 || $cfg['authmode']==3)
 				{
-				$_SESSION['rseditiop'] = $rnewpass_secret;
+				$_SESSION[$sys['site_id'].'_p'] = $rnewpass_secret;
 				}
 			}
 		}

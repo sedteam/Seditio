@@ -85,14 +85,14 @@ if ($a=='check')
 			$rcookiettl = ($rcookiettl==0) ? 604800 : $rcookiettl;
 			$rcookiettl = ($rcookiettl > $cfg['cookielifetime']) ? $cfg['cookielifetime'] : $rcookiettl;
 			$u = base64_encode("$ruserid:_:$rmdpass_secret:_:$rdefskin");
-			setcookie("SEDITIO", "$u", time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain']);
+			sed_setcookie($sys['site_id'], $u, time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 			}
 
 		if ($cfg['authmode']==2 || $cfg['authmode']==3)
 			{
-			$_SESSION['rsedition'] = $ruserid;
-			$_SESSION['rseditiop'] = $rmdpass_secret;
-			$_SESSION['rseditios'] = $rdefskin;
+			$_SESSION[$sys['site_id'].'_n'] = $ruserid;
+			$_SESSION[$sys['site_id'].'_p'] = $rmdpass_secret;
+			$_SESSION[$sys['site_id'].'_s'] = $rdefskin;
 			}
 
 		/* === Hook === */

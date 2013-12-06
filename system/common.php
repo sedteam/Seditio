@@ -68,6 +68,7 @@ while ($row = sed_sql_fetchassoc($sql_config))
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
+$sys['site_id'] = 'sed'.substr(md5(empty($cfg['site_secret']) ? $cfg['mainurl'] : $cfg['site_secret']), 0, 16);
 $online_timedout = $sys['now'] - $cfg['timedout'];
 $cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 $cfg['css'] = $cfg['defaultskin'];
@@ -91,7 +92,7 @@ if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip']))  //Fix 17
 $cfg['mobile_client'] = sed_mobile_detect();
 $sys['unique'] = sed_unique(16); 
 
-// ------------------ New in 175
+/* ================================== */
 
 $sys['request_uri'] = $_SERVER['REQUEST_URI'];  
 
@@ -104,25 +105,37 @@ $sys['secure'] = sed_is_ssl();
 $sys['scheme'] = $sys['secure'] ? 'https' : 'http';
 $sys['domain'] = preg_replace('#^www\.#', '', $url_default['host']);
 
-$sys['http_host'] = sed_set_host($sys['domain']);
+$sys['host'] = sed_set_host($sys['domain']);
 
-if ($sys['http_host'] == $url_default['host']
+if ($sys['host'] == $url_default['host']
   || $cfg['multihost']	
-  || $sys['http_host'] != 'www.'.$sys['domain'] 
-      && preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $sys['http_host'])) 
+  || $sys['host'] != 'www.'.$sys['domain'] 
+      && preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $sys['host'])) 
   {          
-    $sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $sys['http_host']) ? $sys['http_host'] : $url_default['host']; 
+    $sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $sys['host']) ? $sys['host'] : $url_default['host']; 
     $sys['domain'] = preg_replace('#^www\.#', '', $sys['host']); 
   }
 else { $sys['host'] = $url_default['host']; }
   
 $sys['port'] = empty($url_default['port']) ? '' : ':'.$url_default['port'];
-$sys['subdir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : ""; 
-$sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'].$sys['subdir_uri'];
-$sys['canonical_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'].$sys['request_uri']; 
-if ($sys['abs_url'][mb_strlen($sys['abs_url']) - 1] != '/') { $sys['abs_url'] .= '/'; }     
 
-// -----------------------------
+$sys['dir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : "/"; 
+if ($sys['dir_uri'][mb_strlen($sys['dir_uri']) - 1] != '/') { $sys['dir_uri'] .= '/'; }   
+
+$sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'].$sys['dir_uri'];
+
+$sys['canonical_url'] = $sys['scheme'].'://'.$sys['host'].$sys['port'].$sys['request_uri']; 
+
+if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
+if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['dir_uri'];
+
+sed_setcookie_params(0, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+
+if ($cfg['multihost'])
+{
+		$cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);		
+}   
+/* ================================== */
 
 $ishtml = ($cfg['textmode'] == 'html') ? 1 : 0; //New v172
 $usr['user_agent'] = $_SERVER['HTTP_USER_AGENT']; //New v173
@@ -183,7 +196,7 @@ if (!$sed_groups )
 				'title' => sed_cc($row['grp_title']),
 				'desc' => sed_cc($row['grp_desc']),
 				'icon' => $row['grp_icon'],
-        'color' => $row['grp_color'],
+				'color' => $row['grp_color'],
 				'pfs_maxfile' => $row['grp_pfs_maxfile'],
 				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
 				'ownerid' => $row['grp_ownerid']
@@ -211,15 +224,15 @@ $usr['messages'] = 0;
 if ($cfg['authmode']==2 || $cfg['authmode']==3)
 	{ session_start(); }
 
-if (isset($_SESSION['rsedition']) && ($cfg['authmode']==2 || $cfg['authmode']==3))
+if (isset($_SESSION[$sys['site_id'].'_n']) && ($cfg['authmode']==2 || $cfg['authmode']==3))
 	{
-	$rsedition = $_SESSION['rsedition'];
-	$rseditiop = $_SESSION['rseditiop'];
-	$rseditios = $_SESSION['rseditios'];
+	$rsedition = $_SESSION[$sys['site_id'].'_n'];
+	$rseditiop = $_SESSION[$sys['site_id'].'_p'];
+	$rseditios = $_SESSION[$sys['site_id'].'_s'];
 	}
-elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==3))
+elseif (isset($_COOKIE[$sys['site_id']]) && ($cfg['authmode']==1 || $cfg['authmode']==3))
 	{
-	$u = base64_decode($_COOKIE['SEDITIO']);
+	$u = base64_decode($_COOKIE[$sys['site_id']]);
 	$u = explode(':_:',$u);
 	$rsedition = sed_import($u[0],'D','INT');
 	$rseditiop = sed_import($u[1],'D','H32');
@@ -276,7 +289,7 @@ else
 	if (empty($rseditios) && ($cfg['authmode']==1 || $cfg['authmode']==3))
 		{
 		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin']);
-		setcookie('SEDITIO',$u,time()+$cfg['cookielifetime'],$cfg['cookiepath'],$cfg['cookiedomain']);
+		sed_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 		}
 	else
 	  	{
@@ -620,6 +633,5 @@ if ($cfg['sefurls'] && $cfg['sefurls301'])
 {      
    sed_sefurlredirect();
 }
-
 
 ?>
