@@ -27,7 +27,7 @@ if ($a=='update')
 	{
 	sed_check_xg();
 		
-	$sql1 = sed_sql_query("SELECT page_cat, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	$sql1 = sed_sql_query("SELECT page_cat, page_state, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
 	sed_die(sed_sql_numrows($sql1)==0);
 	$row1 = sed_sql_fetchassoc($sql1);
 
@@ -122,6 +122,13 @@ if ($a=='update')
 
 			$rpagetype = ($usr['maingrp']!=5 && $rpagetype >1) ? 0 : $rpagetype;
 			$rpagetype = ($cfg['textmode']=='html') ? 1 : $rpagetype;
+			
+			//Autovalidation New v175
+			$rpagestate = $row1['page_state'];
+			
+			$rpagepublish = sed_import('rpagepublish', 'P', 'ALP');
+			$rpagestate = (($rpagepublish == "OK") && $usr['isadmin']) ? 0 : $rpagestate; //Unvalidation
+			$rpagestate = (($rpagepublish == "NO") && $usr['isadmin']) ? 1 : $rpagestate; //Validation
 
 			if (!empty($rpagealias))
 				{
@@ -130,6 +137,7 @@ if ($a=='update')
 				}
 	
 			$sql = sed_sql_query("UPDATE $db_pages SET
+				page_state = '$rpagestate',
 				page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
 				page_key = '".sed_sql_prep($rpagekey)."',
@@ -255,6 +263,17 @@ if ($cfg['textmode']=='bbcode')
 	$t->assign("PAGEEDIT_FORM_TYPE", $page_form_type);
 	$t->parse("MAIN.PAGEEDIT_PARSING");
   }
+
+if ($usr['isadmin'])  
+	{ 
+	$publish_title = ($pag['page_state'] == 0) ? $L['Putinvalidationqueue'] : $L['Validate'];
+	$publish_state = ($pag['page_state'] == 0) ? "NO" : "OK";
+	$t->assign(array(
+		"PAGEEDIT_FORM_PUBLISH_STATE" => $publish_state,
+		"PAGEEDIT_FORM_PUBLISH_TITLE" => $publish_title
+	));
+	$t->parse("MAIN.PAGEEDIT_PUBLISH"); 
+	}
 
 $t->assign(array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],

@@ -140,6 +140,9 @@
 	<tr>
 		<td colspan="2" class="valid">
 		<input type="submit" class="submit btn btn-big" value="{PHP.skinlang.pageedit.Update}">
+		<!-- BEGIN: PAGEEDIT_PUBLISH -->
+		<input type="submit" class="submit btn btn-big" name="rpagepublish" value="{PAGEEDIT_FORM_PUBLISH_TITLE}" onclick="this.value='{PAGEEDIT_FORM_PUBLISH_STATE}'; return true" />
+		<!-- END: PAGEEDIT_PUBLISH -->
 		</td>
 	</tr>
 
