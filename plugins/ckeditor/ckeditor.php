@@ -1,5 +1,4 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
@@ -24,9 +23,6 @@ Tags=
 Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
-
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
 ==================== */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
@@ -34,6 +30,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 global $usr, $db_smilies;
 
 if ($usr['maingrp'] > 3) {
+
   /* ===== Load configuration Ckeditor ===== */
   $ckeditor_detect_lang = $cfg['plugin']['ckeditor']['ckeditor_detectlang'];
   
