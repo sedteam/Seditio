@@ -8,7 +8,7 @@ http://www.seditio.org
 [BEGIN_SED]
 File=forums.php
 Version=175
-Updated=2012-dec-31
+Updated=2013-dec-08
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -485,7 +485,7 @@ if ($usr['isadmin'])
 	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=announcement&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Announcement'];
 	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=private&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Private']." (#)";
 	$adminoptions .= "</a> &nbsp; <a href=\"".sed_url("forums", "m=topics&a=clear&".sed_xg()."&q=".$q."&s=".$s)."\">".$L['Default'];
-  $adminoptions .= "</a> &nbsp; ".$L['Delete'].":[<a href=\"".sed_url("forums", "m=topics&a=delete&".sed_xg()."&s=".$s."&q=".$q)."\">x</a>]&nbsp;<br />".$movebox."</form></div>";
+	$adminoptions .= "</a> &nbsp; ".$L['Delete'].":[<a href=\"".sed_url("forums", "m=topics&a=delete&".sed_xg()."&s=".$s."&q=".$q)."\">x</a>]&nbsp;<br />".$movebox."</form></div>";
 	}
 else
 	{ $adminoptions = ""; }
@@ -545,9 +545,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		}
 
 	$row['fp_posterip'] = ($usr['isadmin']) ? sed_build_ipsearch($row['fp_posterip']) : '';
-		
-	
-	
+			
 	if ($cfg['textmode']=='bbcode') {
 		$row['user_text'] = sed_build_usertext($row['user_text']); 
 	}
@@ -633,9 +631,11 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	if ($quote>0)
 		{
 		$sql4 = sed_sql_query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_sectionid='$s' AND fp_id='$quote' LIMIT 1");
-
 		if ($row4 = sed_sql_fetchassoc($sql4))
-			{ $newmsg = "<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; }
+			{ 
+			$newmsg = ($cfg['textmode'] == 'bbcode') ? "[quote][url=".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."]#".$row4['fp_id']."[/url] [b]".$row4['fp_postername']." :[/b]\n".$row4['fp_text']."\n[/quote]" :
+			"<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; 
+			}
 		}
 
 	$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
@@ -643,16 +643,14 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 	$post_main = "<div id=\"np\"><textarea name=\"newmsg\" rows=\"12\" cols=\"80\">".sed_cc($newmsg)."</textarea></div>";
 
-// ---------
-if ($cfg['textmode']=='bbcode')
-    {
-    $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies("newpost", "newmsg", $L['Smilies'])." &nbsp; " : '';
-    $smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
-    $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes("newpost", "newmsg", $L['BBcodes']): '';
-    $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : ''; 
-    }
-else { $bbcodes = ''; $bbcodes_local =''; $smilies = ''; $smilies_local = ''; } 
-// ---------
+	if ($cfg['textmode']=='bbcode')
+		{
+		$smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies("newpost", "newmsg", $L['Smilies'])." &nbsp; " : '';
+		$smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
+		$bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes("newpost", "newmsg", $L['BBcodes']): '';
+		$bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : ''; 
+		}
+	else { $bbcodes = ''; $bbcodes_local =''; $smilies = ''; $smilies_local = ''; } 
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=".$s."&q=".$q),
