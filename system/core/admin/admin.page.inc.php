@@ -186,7 +186,7 @@ switch($mn)
     	$adminmain .= "</td></tr>";
     	$adminmain .= "<tr><td>".$L['adm_enablecomments']." :</td><td>".$form_allowcomments."</td></tr>";
     	$adminmain .= "<tr><td>".$L['adm_enableratings']." :</td><td>".$form_allowratings."</td></tr>";
-    	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
+    	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn btn-green btn-adm\" value=\"".$L['Update']."\" /></td></tr>";
     	$adminmain .= "</table>";
     	$adminmain .= "</form>";
     	}
@@ -493,7 +493,7 @@ switch($mn)
     	$adminmain .= "<td>".sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>")."</td>";
     	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)."</td>";
     	$adminmain .= "<td style=\"text-align:center;\">".sed_build_user($row['page_ownerid'], sed_cc($row['user_name']))."</td>";  	
-    	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=page&mn=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\" class=\"btn\">".$L['Validate']."</a></td>";
+    	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=page&mn=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Validate']."</a></td>";
     	$adminmain .= "</tr>";
       }
     $adminmain .= "</table>";

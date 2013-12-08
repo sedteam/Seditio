@@ -296,9 +296,12 @@ a:hover, a:focus { color: #888; }
   vertical-align:baseline;
 }
 
-.btn {
-	line-height: normal;
+.btn-adm {
+	font-size: .9em;
+	line-height: 1;
+  padding: .4em 1.1em .3em 1.1em;
 }
+
 .box {
 	display: block;
 	text-decoration: none;

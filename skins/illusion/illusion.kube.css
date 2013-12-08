@@ -997,7 +997,7 @@ a.label-yellow:hover {
   line-height: 1;
   padding: .7em 1.1em .6em 1.1em;
   font-weight: 500;
-  font-size: .85em;
+  font-size: 1em;
   background-color: #f1f1f1;
   background-image: -moz-linear-gradient(top, #fcfcfc, #e0e0e0);
   background-image: -ms-linear-gradient(top, #fcfcfc, #e0e0e0);
@@ -1129,7 +1129,7 @@ a.label-yellow:hover {
   background: #cfa30c;
 }
 .btn-small {
-  font-size: .7em;
+  font-size: .8em;
 }
 .btn-big {
   font-size: 1.2em;

@@ -92,13 +92,13 @@ switch ($a)
 
 		$adminmain .= "<h4>".$L['Options']." :</h4>";
 		$adminmain .= "<table class=\"cells striped\">";
-		$adminmain .= "<tr><td style=\"width:33%;\"><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=install&".sed_xg())."\" class=\"btn\" title=\"".$L['adm_opt_installall']."\"><img src=\"system/img/admin/play.png\" alt=\"\" /> ".$L['adm_opt_installall']."</a></td>";
+		$adminmain .= "<tr><td style=\"width:33%;\"><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=install&".sed_xg())."\" title=\"".$L['adm_opt_installall']."\"><img src=\"system/img/admin/play.png\" alt=\"\" /> ".$L['adm_opt_installall']."</a></td>";
 		$adminmain .= "<td>".$L['adm_opt_installall_explain']."</td></tr>";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&".sed_xg())."\" class=\"btn\" title=\"".$L['adm_opt_uninstallall']."\"><img src=\"system/img/admin/stop.png\" alt=\"\" /> ".$L['adm_opt_uninstallall']."</a></td>";
+		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&".sed_xg())."\" title=\"".$L['adm_opt_uninstallall']."\"><img src=\"system/img/admin/stop.png\" alt=\"\" /> ".$L['adm_opt_uninstallall']."</a></td>";
 		$adminmain .= "<td>".$L['adm_opt_uninstallall_explain']."</td></tr>";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=pause&".sed_xg())."\" class=\"btn\" title=\"".$L['adm_opt_pauseall']."\"><img src=\"system/img/admin/pause.png\" alt=\"\" /> ".$L['adm_opt_pauseall']."</a></td>";
+		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=pause&".sed_xg())."\" title=\"".$L['adm_opt_pauseall']."\"><img src=\"system/img/admin/pause.png\" alt=\"\" /> ".$L['adm_opt_pauseall']."</a></td>";
 		$adminmain .= "<td>".$L['adm_opt_pauseall_explain']."</td></tr>";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=unpause&".sed_xg())."\" class=\"btn\" title=\"".$L['adm_opt_unpauseall']."\"><img src=\"system/img/admin/forward.png\" alt=\"\" /> ".$L['adm_opt_unpauseall']."</a></td>";
+		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=unpause&".sed_xg())."\" title=\"".$L['adm_opt_unpauseall']."\"><img src=\"system/img/admin/forward.png\" alt=\"\" /> ".$L['adm_opt_unpauseall']."</a></td>";
 		$adminmain .= "<td>".$L['adm_opt_unpauseall_explain']."</td></tr>";
 		$adminmain .= "</table>";
 
@@ -166,9 +166,9 @@ switch ($a)
 				if ($info_file['Status']==3)
 					{ $adminmain .= "-"; }
 				elseif ($row['pl_active']==1)
-					{ $adminmain .= "<a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn\">Pause</a>"; }
+					{ $adminmain .= "<a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Pause</a>"; }
 				elseif ($row['pl_active']==0)
-					{ $adminmain .= "<a href=\"".sed_url("admin" ,"m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn\">Un-pause</a>"; }
+					{ $adminmain .= "<a href=\"".sed_url("admin" ,"m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Un-pause</a>"; }
 
 				$adminmain .= "</td></tr>";
 				$listtags .= "<tr><td style=\"width:32px;\">#".($i+1)."</td><td>".$info_file['Part']."</td><td>";
