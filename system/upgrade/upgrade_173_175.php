@@ -17,9 +17,6 @@ Description=Database upgrade
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
-
-// ========================================
-
 $adminmain .= "Clearing the internal SQL cache...<br />";
 $sql = sed_sql_query("TRUNCATE TABLE ".$cfg['sqldbprefix']."cache");
 
@@ -189,6 +186,14 @@ $sql = sed_sql_query($sqlqr);
 $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."users DROP user_msn";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);
+
+// Comments upgrade
+
+$adminmain .= "Adding the 'maxcommentlenght' new config into the core<br />";
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'comments', '07', 'maxcommentlenght', 1, '2000', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
 
 $adminmain .= "Changing the SQL version number to 175...<br />";
 $sql = sed_sql_query("UPDATE ".$cfg['sqldbprefix']."stats SET stat_value=175 WHERE stat_name='version'"); 

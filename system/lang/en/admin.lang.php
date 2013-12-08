@@ -151,6 +151,7 @@ $L['cfg_maxcommentsperpage'] = array("Maximum comments per page", "");  //New Se
 $L['cfg_commentsorder'] = array("Sorting order for comments", "ASC - new bottom, DESC - newest on top");  //New Sed173
 $L['cfg_maxtimeallowcomedit'] = array("The time allowed to edit comments", "In minutes, if 0 - editing is prohibited");  //New Sed173
 $L['cfg_showcommentsonpage'] = array("Show comments on pages", "By default displays comment on the page");   //New Sed171
+$L['cfg_maxcommentlenght'] = array("The maximum length of a comment", "Default: 2000 characters");  //New Sed175
 $L['cfg_countcomments'] = array("Count comments", "Display the count of comments near the icon");
 $L['cfg_hideprivateforums'] = array("Hide private forums", "");
 $L['cfg_hottopictrigger'] = array("Posts for a topic to be 'hot'", "");

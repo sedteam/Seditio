@@ -23,12 +23,12 @@
 
 				<div class="comments {COMMENTS_ROW_ODDEVEN}">
             <div class="units-row">
-    					<div class="comment-by unit-50">              
+    					<div class="comment-by unit-40">              
                   <a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}"><img src="skins/{PHP.skin}/img/system/icon-comment.gif" alt="">{COMMENTS_ROW_ORDER}.</a>
     		          {PHP.skinlang.comments.Postedby} <strong>{COMMENTS_ROW_AUTHOR}            
                </strong>
                </div>
-              <div class="comment-date unit-50">{COMMENTS_ROW_ADMIN} {COMMENTS_ROW_DATE} </div>
+              <div class="comment-date unit-60">{COMMENTS_ROW_ADMIN} {COMMENTS_ROW_DATE} </div>
             </div>
             <div class="comment-text">
 						  	{COMMENTS_ROW_TEXT}

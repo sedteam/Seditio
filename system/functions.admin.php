@@ -313,6 +313,7 @@ $result[] = array ('comments', '01', 'disable_comments', 3, '0', '');
 $result[] = array ('comments', '04', 'showcommentsonpage', 3, '0', ''); //New v172
 $result[] = array ('comments', '05', 'maxcommentsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90)); //New v173
 $result[] = array ('comments', '06', 'maxtimeallowcomedit', 2, '15', array(0,5,10,15,20,25,30,35,40,45,50,60,70,80,90)); //New v173
+$result[] = array ('comments', '07', 'maxcommentlenght', 1, '2000', '');
 $result[] = array ('comments', '10', 'countcomments', 3, '1', '');
 $result[] = array ('comments', '11', 'commentsorder', 2, 'ASC', array('ASC','DESC')); //New v173
 $result[] = array ('forums', '01', 'disable_forums', 3, '0', '');

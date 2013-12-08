@@ -633,8 +633,8 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		$sql4 = sed_sql_query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_sectionid='$s' AND fp_id='$quote' LIMIT 1");
 		if ($row4 = sed_sql_fetchassoc($sql4))
 			{ 
-			$newmsg = ($cfg['textmode'] == 'bbcode') ? "[quote][url=".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."]#".$row4['fp_id']."[/url] [b]".$row4['fp_postername']." :[/b]\n".$row4['fp_text']."\n[/quote]" :
-			"<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; 
+			$newmsg = ($cfg['textmode'] == 'bbcode') ? "[quote][url=".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."]#".$row4['fp_id']."[/url] [b]".$row4['fp_postername']." :[/b]\n".sed_cc($row4['fp_text'], ENT_QUOTES)."\n[/quote]" :
+			"<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".sed_cc($row4['fp_text'], ENT_QUOTES)."</blockquote><br />"; 
 			}
 		}
 

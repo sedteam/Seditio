@@ -10,9 +10,9 @@
 	{FORUMS_TOPICS_SUBTITLE}
 </div>
 
-<div class="row">
-  <div class="fifth"><a href="{FORUMS_TOPICS_NEWTOPICURL}"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /> <span style="font-size:120%;">{PHP.L.for_newtopic}</span></a></div>  
-  <div class="fourfifth" style="text-align:right;">{FORUMS_TOPICS_VIEWERS} {PHP.skinlang.forumstopics.Viewers} &nbsp; 	{FORUMS_TOPICS_JUMPBOX}	</div>
+<div class="units-row-end">
+  <div class="unit-20"><a href="{FORUMS_TOPICS_NEWTOPICURL}" class="btn btn-big"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /> <span style="font-size:120%;">{PHP.L.for_newtopic}</span></a></div>  
+  <div class="unit-80" style="text-align:right;">{FORUMS_TOPICS_VIEWERS} {PHP.skinlang.forumstopics.Viewers} &nbsp; 	{FORUMS_TOPICS_JUMPBOX}	</div>
 </div> 
 
 <div id="page">
