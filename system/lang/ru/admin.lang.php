@@ -412,7 +412,7 @@ $L['adm_notinstalled'] = "Не установлен";
 
 $L['adm_opt_installall'] = "Установить";
 $L['adm_opt_installall_explain'] = "Эта опция установит или перезапустит все модули плагина.";
-$L['adm_opt_uninstallall'] = "Отключить</a></td>";
+$L['adm_opt_uninstallall'] = "Отключить";
 $L['adm_opt_uninstallall_explain'] = "Эта опция отключит все модули плагина (файлы плагина при этом физически не удаляются).";
 $L['adm_opt_pauseall'] = "Приостановить";
 $L['adm_opt_pauseall_explain'] = "Эта опция приостановит работу всех модулей плагина.";

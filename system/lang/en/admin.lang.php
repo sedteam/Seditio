@@ -411,7 +411,7 @@ $L['adm_notinstalled'] = "Not installed";
 
 $L['adm_opt_installall'] = "Install all";
 $L['adm_opt_installall_explain'] = "This will install or reset all the parts of the plugin.";
-$L['adm_opt_uninstallall'] = "Un-install all</a></td>";
+$L['adm_opt_uninstallall'] = "Un-install all";
 $L['adm_opt_uninstallall_explain'] = "This will disable all the parts of the plugin, but won't physically remove the files.";
 $L['adm_opt_pauseall'] = "Pause all";
 $L['adm_opt_pauseall_explain'] = "This will pause (disable) all the parts of the plugin.";
