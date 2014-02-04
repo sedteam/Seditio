@@ -192,7 +192,7 @@ switch($m)
 			user_birthdate,
 			user_icq,
 			user_irc,
-			user_msn,
+			user_skype,
 			user_website,
 			user_extra1,
 			user_extra2,
