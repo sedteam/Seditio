@@ -11,7 +11,7 @@ function jevix($text, $xhtml = false, $use_admin = true) {
 	// For User profile text
 	if ($location == "Users") 
 	{
-		$jevix->cfgAllowTags(array('a','i','b','u','s','em','strong','br','strike'));
+		$jevix->cfgAllowTags(array('p','a','i','b','u','s','em','strong','br','strike'));
 		$jevix->cfgSetTagShort(array('br'));
 		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
 		$jevix->cfgSetTagParamsRequired('a', 'href');    	
@@ -869,7 +869,8 @@ class Jevix{
 					$bOK=false;
 					foreach ($paramAllowedValues['#domain'] as $sDomain) {
 						$sDomain=preg_quote($sDomain);						
-						if (preg_match("@^(http|https|ftp)://([\w\d]+\.)?{$sDomain}/@ui",$value)) {
+						if 
+(preg_match("@^(http://|https://|ftp://|//)([\w\d]+\.)?{$sDomain}/@ui",$value)) {
 							$value = preg_replace('/&(amp;)+/ui', '&amp;', $value);
 							$bOK=true;
 							break;
