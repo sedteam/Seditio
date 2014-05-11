@@ -96,7 +96,9 @@ if ($a=='add')
 		{
 		if (!empty($newpagealias))
 			{
-			$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
+			$newpagealias = preg_replace("/[^\w\s]/u","_",$newpagealias);
+      
+      $sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
 			}
 

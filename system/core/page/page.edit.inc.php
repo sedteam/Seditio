@@ -132,7 +132,9 @@ if ($a=='update')
 
 			if (!empty($rpagealias))
 				{
-				$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($rpagealias)."' AND page_id!='".$id."'");
+				$rpagealias = preg_replace("/[^\w\s]/u","_",$rpagealias);
+        
+        $sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($rpagealias)."' AND page_id!='".$id."'");
 				$rpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $rpagealias;
 				}
 	
