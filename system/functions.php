@@ -2469,7 +2469,10 @@ function sed_load_structure()
 	while ($row = sed_sql_fetchassoc($sql))
 		{
 		if (!empty($row['structure_icon']))
-			{ $row['structure_icon'] = "<img src=\"".$row['structure_icon']."\" alt=\"\" />"; }
+			{ 
+			$iconsrc = $row['structure_icon'];
+			$row['structure_icon'] = "<img src=\"".$row['structure_icon']."\" alt=\"\" />"; 	
+			}
 
 		$path2 = mb_strrpos($row['structure_path'], '.');
 
@@ -2479,7 +2482,7 @@ function sed_load_structure()
 			{
 			$path1 = mb_substr($row['structure_path'],0,($path2));
 			$spath = $path[$path1]; //new sed175
-      $path[$row['structure_path']] = $path[$path1].'.'.$row['structure_code'];
+			$path[$row['structure_path']] = $path[$path1].'.'.$row['structure_code'];
 			$tpath[$row['structure_path']] = $tpath[$path1].' '.$cfg['separator'].' '.$row['structure_title'];
 			$row['structure_tpl'] = ($row['structure_tpl']=='same_as_parent') ? $parent_tpl : $row['structure_tpl'];
 			}
@@ -2487,7 +2490,7 @@ function sed_load_structure()
 			{
 			$path[$row['structure_path']] = $row['structure_code'];
 			$tpath[$row['structure_path']] = $row['structure_title'];
-      $spath = ""; //new sed175
+			$spath = ""; //new sed175
 			}
 
 		$order = explode('.',$row['structure_order']);
@@ -2496,12 +2499,13 @@ function sed_load_structure()
 		$res[$row['structure_code']] = array (
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
-      'spath' => $spath, //new sed175
+			'spath' => $spath, //new sed175
 			'rpath' => $row['structure_path'],
 			'tpl' => $row['structure_tpl'],
 			'title' => $row['structure_title'],
 			'desc' => $row['structure_desc'],
 			'icon' => $row['structure_icon'],
+			'iconsrc' => $iconsrc,
 			'group' => $row['structure_group'],
 			'allowcomments' => $row['structure_allowcomments'],
 			'allowratings' => $row['structure_allowratings'],
