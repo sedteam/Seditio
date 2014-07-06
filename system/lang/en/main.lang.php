@@ -58,6 +58,7 @@ $L['Category'] = "Category";
 $L['Categories'] = "Categories";
 $L['Clearstatus'] = "Clear status";
 $L['Close'] = "Close";
+$L['Clone'] = "Clone"; // New in v175
 $L['Code'] = "Code";
 $L['Configuration'] = "Configuration";
 $L['Comment'] = "Comment";

@@ -58,6 +58,7 @@ $L['Category'] = "Категория";
 $L['Categories'] = "Категории";
 $L['Clearstatus'] = "Очистить статус";
 $L['Close'] = "Закрыть";
+$L['Clone'] = "Клонировать"; // New in v175
 $L['Code'] = "Код";
 $L['Configuration'] = "Настройки";
 $L['Comment'] = "Комментарий";

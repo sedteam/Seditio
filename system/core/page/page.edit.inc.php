@@ -65,8 +65,8 @@ if ($a=='update')
 	$rpageallowcomments = sed_import('rpageallowcomments','P','BOL');
 	$rpageallowratings = sed_import('rpageallowratings','P','BOL');
   
-  $rpageallowcomment = (empty($rpageallowcomments)) ? 1 : $rpageallowcomment;
-  $rpageallowratings = (empty($rpageallowratings)) ? 1 : $rpageallowratings;
+  $rpageallowcomments = (empty($rpageallowcomments) && $rpageallowcomments != 0) ? 1 : $rpageallowcomments;
+  $rpageallowratings = (empty($rpageallowratings) && $rpageallowratings != 0) ? 1 : $rpageallowratings;
 
 	$ryear = sed_import('ryear','P','INT');
 	$rmonth = sed_import('rmonth','P','INT');

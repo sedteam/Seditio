@@ -9,7 +9,7 @@
 
 	<!-- BEGIN: PAGE_ADMIN -->
 
-	{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; ({PAGE_ADMIN_COUNT})<br />
+	{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; {PAGE_ADMIN_CLONE} &nbsp; ({PAGE_ADMIN_COUNT})<br />
 
 	<!-- END: PAGE_ADMIN -->
 </div>

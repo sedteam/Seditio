@@ -9,7 +9,7 @@
 
 	<!-- BEGIN: PAGE_ADMIN -->
 
-	<i class="icons grey eye-close"></i> {PAGE_ADMIN_UNVALIDATE} <i class="icons grey edit"></i> {PAGE_ADMIN_EDIT} <i class="icons grey eye-open"></i> ({PAGE_ADMIN_COUNT})<br />
+	<i class="icons grey eye-close"></i> {PAGE_ADMIN_UNVALIDATE} <i class="icons grey edit"></i> {PAGE_ADMIN_EDIT} <i class="icons grey share"></i> {PAGE_ADMIN_CLONE} <i class="icons grey eye-open"></i> ({PAGE_ADMIN_COUNT})<br />
 
 	<!-- END: PAGE_ADMIN -->
 </div>

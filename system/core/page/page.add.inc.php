@@ -70,8 +70,8 @@ if ($a=='add')
 	$newpageallowcomments = sed_import('newpageallowcomments','P','BOL');
 	$newpageallowratings = sed_import('newpageallowratings','P','BOL');
   
-  $newpageallowcomments  = (empty($newpageallowcomments )) ? 1 : $newpageallowcomments ;  //Fix 175
-  $newpageallowratings = (empty($newpageallowratings)) ? 1 : $newpageallowratings; //Fix 175
+  $newpageallowcomments  = (empty($newpageallowcomments) && $newpageallowcomments != 0) ? 1 : $newpageallowcomments ;  //Fix 175
+  $newpageallowratings = (empty($newpageallowratings) && $newpageallowratings != 0) ? 1 : $newpageallowratings; //Fix 175
 		
 	$newpagebegin = sed_mktime($newpagehour_beg, $newpageminute_beg, 0, $newpagemonth_beg, $newpageday_beg, $newpageyear_beg) - $usr['timezone'] * 3600;
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
@@ -166,6 +166,41 @@ if ($a=='add')
 		exit;
 		}
 	}
+
+if (($a=='clone') && ($id > 0))
+	{		
+	$sql1 = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	sed_die(sed_sql_numrows($sql1)==0);
+	$row1 = sed_sql_fetchassoc($sql1);
+
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row1['page_cat']);
+	sed_block($usr['isadmin']);
+
+	/* === Hook === */
+	$extp = sed_getextplugins('page.add.clone');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+	
+	$newpagecat = $row1['page_cat'];
+	$newpagekey = $row1['page_key'];
+	$newpagealias = $row1['page_alias'];
+	$newpageextra1 = $row1['page_extra1'];
+ 	$newpageextra2 = $row1['page_extra2'];
+	$newpageextra3 = $row1['page_extra3'];
+ 	$newpageextra4 = $row1['page_extra4'];
+	$newpageextra5 = $row1['page_extra5'];
+	$newpagetitle = $row1['page_title'];
+	$newpagedesc = $row1['page_desc'];
+	$newpagetext = $row1['page_text'];
+	$newpagetext2 = $row1['page_text2'];
+	$newpageauthor = $row1['page_author'];
+	$newpagefile = $row1['page_file'];
+	$newpageurl = $row1['page_url'];
+	$newpagesize = $row1['page_size'];
+	$newpageallowcomments = $row1['page_allowcomments'];
+	$newpageallowratings = $row1['page_allowratings'];
+	}		
 
 if (empty($newpagecat) && !empty($c))
 {

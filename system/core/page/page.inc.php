@@ -254,7 +254,8 @@ $t->assign(array(
 		$t-> assign(array(
 			"PAGE_ADMIN_COUNT" => $pag['page_count'],
 			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"".sed_url("admin", "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a>",
-			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>"
+			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>",
+			"PAGE_ADMIN_CLONE" => "<a href=\"".sed_url("page", "m=add&id=".$pag['page_id']."&r=list&a=clone")."\">".$L['Clone']."</a>"
 			));
 
 		$t->parse("MAIN.PAGE_ADMIN");
