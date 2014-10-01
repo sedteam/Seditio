@@ -50,6 +50,7 @@ rusertext_height=15:string::150:Height for User Text textarea
 rtext_height=16:string::150:Height for Comments textarea
 newmsg_height=17:string::200:Height for Forums textarea
 ckeditor_other_height=18:string::200:Height for Other textarea
+auto_popup_close=19:select:Yes,No:No:Close window after paste image/file
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */

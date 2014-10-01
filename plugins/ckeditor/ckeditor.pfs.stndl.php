@@ -26,7 +26,10 @@ Order=11
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-$auto_popup_close = $cfg['plugin']['ckeditor']['auto_popup_close'];
+if ( $cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes" )
+	{
+	$auto_popup_close = "window.close();";
+	}
 
 $pfs_header1 = $cfg['doctype']."<html>
 <head>
@@ -36,29 +39,29 @@ $pfs_header1 = $cfg['doctype']."<html>
 
 function addthumb(thmb, image)
 	{ 
-  var html = '<a href=\"'+image+'\"><img src=\"'+thmb+'\" alt=\"\" /></a>'; 
-  window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);  
-	window.close();   
-  }
+	var html = '<a href=\"'+image+'\"><img src=\"'+thmb+'\" alt=\"\" /></a>'; 
+	window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);  
+	".$auto_popup_close."
+	}
 
 function addpix(gfile)
 	{ 
-  var html = '<img src=\"'+gfile+'\" alt=\"\" />';
-  window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);
-	window.close();
-  }
+	var html = '<img src=\"'+gfile+'\" alt=\"\" />';
+	window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);
+	".$auto_popup_close."
+	}
 
 function addfile(gfile, gpath)
 	{ 
-  var html = '<a href=\"'+gpath+'\" title=\"\">'+gfile+'</a>';
-  window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);
-	window.close(); 
-  }
+	var html = '<a href=\"'+gpath+'\" title=\"\">'+gfile+'</a>';
+	window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);
+	".$auto_popup_close."
+	}
 
 function addfile_pageurl(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += gfile; 
-  	window.close(); 
-  }
+	".$auto_popup_close." 
+	}
 
 //-->
 </script>
