@@ -89,6 +89,13 @@ if ($row = sed_sql_fetchassoc($sql))
 
 $title .= " ".$cfg['separator']." ".sed_cc($pfs_file);
 
+
+$out['subtitle'] = $L['Mypfs']." - ".$L['Edit'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
+
 if ($a=='update' && !empty($id))
 	{
 	$rdesc = sed_import('rdesc','P','HTM');

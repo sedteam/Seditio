@@ -75,6 +75,12 @@ if ($userid!=$usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
+$out['subtitle'] = $L['Mypfs']." - ".$L['Edit'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
+
 $sql = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
 
 if ($row = sed_sql_fetchassoc($sql))

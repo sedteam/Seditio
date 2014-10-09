@@ -101,15 +101,18 @@ $sql2 = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_id='".
 
 $title = "<a href=\"".sed_url("gallery")."\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "f=".$pff['pff_id'])."\">".$pff['pff_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "id=".$id)."\">".$pfs['pfs_title']."</a>";
 $subtitle = '';
-$out['subtitle'] = $pfs['pfs_title'];
 
+$out['subtitle'] = $pfs['pfs_title'];
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('gallerytitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.details.main');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
-
 
 require("system/header.php");
 $t = new XTemplate("skins/".$skin."/gallery.details.tpl");

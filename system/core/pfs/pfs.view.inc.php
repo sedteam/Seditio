@@ -42,7 +42,6 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $cfg['gd_suppo
 	<meta name=\"description\" content=\"".$cfg['maintitle']."\" />
 	<meta name=\"generator\" content=\"Seditio Copyright Neocrome & Seditio Team http://www.seditio.org\" />
 	<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
-	<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
 	<meta http-equiv=\"pragma\" content\"=no-cache\" />
 	<meta http-equiv=\"cache-control\" content=\"no-cache\" />
   <script language='javascript'>
@@ -54,7 +53,6 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $cfg['gd_suppo
   iHeight = document.body.clientHeight;
   iWidth = document.images[0].width - iWidth;
   iHeight = document.images[0].height - iHeight;
-
 
   window.resizeBy(iWidth, iHeight);
   var ptop=(window.screen.height-document.images[0].height)/2;

@@ -25,11 +25,16 @@ if (is_array($extp))
 
 $out['logstatus'] = ($usr['id']>0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
 $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url("users")."\">".$L['hea_users']."</a>" : '';
-$out['metas'] = sed_htmlmetas().$moremetas;
+$out['metas'] = sed_htmlmetas($out['subdesc'], $out['subkeywords']).$moremetas;
 $out['compopup'] = sed_javascript($morejavascript);
-$out['fulltitle'] = $cfg['maintitle'];
-$out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
-$out['fulltitle'] .= (empty($out['subtitle'])) ? '' : ' - '.$out['subtitle'];
+
+/**/
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle']);
+$out['subtitle'] = (empty($out['subtitle'])) ? sed_title('defaulttitle', $title_tags, $title_data) : $out['subtitle'];
+/**/
+
 $out['currenturl'] .= sed_getcurrenturl();
 $out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_url'];  // New in 175
 $out['register_link'] = sed_url("users", "m=register");  // New in 175
@@ -67,9 +72,7 @@ else
 $t = new XTemplate($mskin);
 
 $t->assign(array (
-	"HEADER_TITLE" => $out['fulltitle'],
-	"HEADER_MAINTITLE" => $cfg['maintitle'],
-	"HEADER_SUBTITLE" => $out['subtitle'],
+	"HEADER_TITLE" => $out['subtitle'],
 	"HEADER_METAS" => $out['metas'],
 	"HEADER_DOCTYPE" => $cfg['doctype'],
 	"HEADER_CSS" => $cfg['css'],

@@ -62,6 +62,10 @@ if ($a=='update')
 	$rpagecat = sed_import('rpagecat','P','TXT');
 	$rpagedatenow = sed_import('rpagedatenow','P','BOL');
 	
+	$rpageseotitle = sed_import('rpageseotitle','P','TXT');
+	$rpageseodesc = sed_import('rpageseodesc','P','TXT');
+	$rpageseokeywords = sed_import('rpageseokeywords','P','TXT');
+	
 	$rpageallowcomments = sed_import('rpageallowcomments','P','BOL');
 	$rpageallowratings = sed_import('rpageallowratings','P','BOL');
   
@@ -165,7 +169,10 @@ if ($a=='update')
 				page_allowcomments = '$rpageallowcomments',
 				page_allowratings = '$rpageallowratings',
 				page_filecount = '$rpagefilecount',
-				page_alias = '".sed_sql_prep($rpagealias)."'
+				page_alias = '".sed_sql_prep($rpagealias)."',
+				page_seo_title = '".sed_sql_prep($rpageseotitle)."',
+				page_seo_desc = '".sed_sql_prep($rpageseodesc)."',				
+				page_seo_keywords = '".sed_sql_prep($rpageseokeywords)."'				
 				WHERE page_id='$id'");
 
 			/* === Hook === */
@@ -242,6 +249,12 @@ $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'upd
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 
+$out['subtitle'] = $L['paged_title'];
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
+
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.main');
 if (is_array($extp))
@@ -293,6 +306,9 @@ $t->assign(array(
 	"PAGEEDIT_FORM_EXTRA5" => "<input type=\"text\" class=\"text\" name=\"rpageextra5\" value=\"".sed_cc($pag['page_extra5'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"rpagetitle\" value=\"".sed_cc($pag['page_title'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"rpagedesc\" value=\"".sed_cc($pag['page_desc'])."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEEDIT_FORM_SEOTITLE" => "<input type=\"text\" class=\"text\" name=\"rpageseotitle\" value=\"".sed_cc($pag['page_seo_title'])."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEEDIT_FORM_SEODESC" => "<input type=\"text\" class=\"text\" name=\"rpageseodesc\" value=\"".sed_cc($pag['page_seo_desc'])."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEEDIT_FORM_SEOKEYWORDS" => "<input type=\"text\" class=\"text\" name=\"rpageseokeywords\" value=\"".sed_cc($pag['page_seo_keywords'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"rpageauthor\" value=\"".sed_cc($pag['page_author'])."\" size=\"32\" maxlength=\"24\" />",
 	"PAGEEDIT_FORM_OWNERID" => "<input type=\"text\" class=\"text\" name=\"rpageownerid\" value=\"".sed_cc($pag['page_ownerid'])."\" size=\"32\" maxlength=\"24\" />",
 	"PAGEEDIT_FORM_DATE" => $pag['page_date']." ".$usr['timetext'],

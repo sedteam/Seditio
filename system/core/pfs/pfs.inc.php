@@ -607,6 +607,10 @@ $body .= ($usr['auth_write']) ? "<p>".$disp_newfolder."</p>" : '';
 $body .= ($usr['auth_write']) ? "<p>".$disp_allowed."</p>" : '';
 
 $out['subtitle'] = $L['Mypfs'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
 
 /* ============= */
 

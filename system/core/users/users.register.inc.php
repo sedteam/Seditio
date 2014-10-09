@@ -298,6 +298,12 @@ while( list($i,$x) = each($timezonelist) )
 	}
 $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
+$out['subtitle'] = $L['aut_registertitle'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
+
 /* === Hook === */
 $extp = sed_getextplugins('users.register.main');
 if (is_array($extp))

@@ -688,6 +688,12 @@ $L['rss_lasttopics'] = "Последние сообщения в теме: ";	//
 $L['rss_commentauthor'] = 'Комментарий пользователя';	// New in v173
 $L['rss_lastcomments'] = 'Последние комментарии';	// New in v173
 
+/* ====== Metadata information ====== */
+
+$L['mt_title'] = "Meta-тег title"; // New in v175
+$L['mt_description'] = "Meta-тег description"; // New in v175
+$L['mt_keywords'] = "Meta-тег keywords"; // New in v175
+
 /* ====== Fix ====== */
 
 $sed_languages['ru']= 'Русский';

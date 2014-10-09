@@ -86,6 +86,17 @@ require($sys['inc']);
 
 $adminmain .= (empty($adminhelp)) ? '' : "<h4>".$L['Help']." :</h4>".$adminhelp;
 
+
+$out['subtitle'] = $L['Administration'];
+
+/**/
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('admintitle', $title_tags, $title_data);
+/**/
+
+
 require("system/header.php");
 
 $t = new XTemplate("skins/".$skin."/admin.tpl");

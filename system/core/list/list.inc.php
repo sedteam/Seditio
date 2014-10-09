@@ -160,6 +160,16 @@ list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, $url_
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = $sed_cat[$c]['title'];
+$out['subdesc'] = $sed_cat[$c]['desc'];
+
+
+/**/
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('listtitle', $title_tags, $title_data);
+/**/
+
 
 /* === Hook === */
 $extp = sed_getextplugins('list.main');

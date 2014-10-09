@@ -189,7 +189,19 @@ if ($allowcommentscat) { list($comments_link, $comments_display, $comments_count
 if ($allowratingscat) { list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $url_page, $ratings, $allowratingspage); }
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
-$out['subtitle'] = $pag['page_title'];
+
+$out['subtitle'] = (empty($pag['page_seo_title'])) ? $pag['page_title'] : $pag['page_seo_title'];
+$out['subdesc'] = (empty($pag['page_seo_desc'])) ? $pag['page_desc'] : $pag['page_seo_desc'];
+
+/**/
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}', '{CATEGORY}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s', '%4$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle'], $sed_cat[$pag['page_cat']]['title']);
+$out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
+/**/
+
+$out['subkeywords'] = $pag['page_seo_keywords'];
+
 $out['canonical_url'] = $pag['page_pageurl'];
 
 /* === Hook === */

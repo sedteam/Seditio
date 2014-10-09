@@ -178,7 +178,7 @@ $sql = sed_sql_query($sqlqr);
 
 // Users upgrade
 
-$adminmain .= "Delete 'user_msn' and 'user_skype' column to table users<br />";
+$adminmain .= "Delete 'user_msn' and add 'user_skype' column to table users<br />";
 $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."users ADD user_skype varchar(64) AFTER user_msn";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);
@@ -195,8 +195,70 @@ VALUES ('core', 'comments', '07', 'maxcommentlenght', 1, '2000', '')";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr); 
 
+// Pages SEO upgrade
+
+$adminmain .= "Add 'page_seo_title', 'page_seo_desc' and 'page_seo_keywords' columns to table pages<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."pages ADD page_seo_title varchar(255) AFTER page_alias";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."pages ADD page_seo_desc varchar(255) AFTER page_seo_title";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."pages ADD page_seo_keywords varchar(255) AFTER page_seo_desc";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+// Meta title, new configs
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '01', 'defaulttitle', 1, '{MAINTITLE} - {SUBTITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '02', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '03', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '04', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '05', 'userstitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '06', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '07', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '08', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'meta', '09', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);    
+
 $adminmain .= "Changing the SQL version number to 175...<br />";
-$sql = sed_sql_query("UPDATE ".$cfg['sqldbprefix']."stats SET stat_value=175 WHERE stat_name='version'"); 
+$sql = sed_sql_query("UPDATE ".$cfg['sqldbprefix']."stats SET stat_value=175 WHERE stat_name='version'");
 
 $upg_status = TRUE;
 

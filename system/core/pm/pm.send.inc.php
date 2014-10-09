@@ -208,6 +208,10 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newlink', 'ne
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url("pm", "m=send")."\">".$L['pm_sendnew']."</a>" : '';
 
 $out['subtitle'] = $L['Private_Messages'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('pmtitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');

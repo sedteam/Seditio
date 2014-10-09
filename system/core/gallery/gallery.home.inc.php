@@ -71,8 +71,12 @@ $sql_au = sed_sql_query("SELECT DISTINCT u.user_id, u.user_name, COUNT(*)
 
 $title = $L['gallery_home_title'];
 $subtitle = '';
-$out['subtitle'] = $L['gallery_home_title'];
 
+$out['subtitle'] = $L['gallery_home_title'];
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('gallerytitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.home.main');

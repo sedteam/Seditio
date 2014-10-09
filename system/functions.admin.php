@@ -271,6 +271,7 @@ $result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,3
 $result[] = array ('main', '21', 'maintenance', 3, '0', ''); //Sed 175
 $result[] = array ('main', '22', 'maintenancelevel', 2, '95', array(0,1,2,3,4,5,7,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,99)); //Sed 175
 $result[] = array ('main', '23', 'maintenancereason', 1, 'The site is in maintenance mode!', ''); //Sed 175
+
 $result[] = array ('time', '11', 'dateformat', 1, 'Y-m-d H:i', '');
 $result[] = array ('time', '11', 'formatmonthday', 1, 'm-d', '');
 $result[] = array ('time', '11', 'formatyearmonthday', 1, 'Y-m-d', '');
@@ -278,6 +279,17 @@ $result[] = array ('time', '11', 'formatmonthdayhourmin', 1, 'm-d H:i', '');
 $result[] = array ('time', '11', 'servertimezone', 1, '0', '');
 $result[] = array ('time', '12', 'defaulttimezone', 1, '0', '');
 $result[] = array ('time', '14', 'timedout', 2, '1200', array(30,60,120,300,600,900,1200,1800,2400,3600));
+
+$result[] = array ('meta', '01', 'defaulttitle', 1, '{MAINTITLE} - {SUBTITLE}', '');  //Sed 175
+$result[] = array ('meta', '02', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+$result[] = array ('meta', '03', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+$result[] = array ('meta', '04', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+$result[] = array ('meta', '05', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+$result[] = array ('meta', '06', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+$result[] = array ('meta', '07', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+$result[] = array ('meta', '08', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+$result[] = array ('meta', '09', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+
 $result[] = array ('skin', '02', 'forcedefaultskin', 3, '1', '');
 $result[] = array ('skin', '04', 'doctypeid', 4, '8', '');
 $result[] = array ('skin', '06', 'charset', 4, 'UTF-8', '');

@@ -107,6 +107,10 @@ elseif (!empty($e))
 
 	$out['subtitle'] = (empty($L['plu_title'])) ? $out['subtitle'] : $L['plu_title'];
 	$sys['sublocation'] = $out['subtitle'];
+	$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+	$title_tags[] = array('%1$s', '%2$s', '%3$s');
+	$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+	$out['subtitle'] = sed_title('plugtitle', $title_tags, $title_data);
 
 	/* ============= */
 

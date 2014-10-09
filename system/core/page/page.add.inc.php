@@ -67,6 +67,10 @@ if ($a=='add')
 	$newpagehour_exp = sed_import('rhour_exp','P','INT');
 	$newpageminute_exp = sed_import('rminute_exp','P','INT');
 	
+	$newpageseotitle = sed_import('newpageseotitle','P','TXT');
+	$newpageseodesc = sed_import('newpageseodesc','P','TXT');
+	$newpageseokeywords = sed_import('newpageseokeywords','P','TXT');
+		
 	$newpageallowcomments = sed_import('newpageallowcomments','P','BOL');
 	$newpageallowratings = sed_import('newpageallowratings','P','BOL');
   
@@ -127,7 +131,11 @@ if ($a=='add')
 			page_size,
 			page_alias,
       page_allowcomments,
-      page_allowratings)
+      page_allowratings,
+			page_seo_title,
+			page_seo_desc,
+			page_seo_keywords
+			)
 			VALUES
 			(".(int)$newpagestate.",
 			".(int)$newpagetype.",
@@ -153,7 +161,10 @@ if ($a=='add')
 			'".sed_sql_prep($newpagesize)."',
 			'".sed_sql_prep($newpagealias)."',
 			".(int)$newpageallowcomments.",      
-			".(int)$newpageallowratings.")");
+			".(int)$newpageallowratings.",
+			'".sed_sql_prep($newpageseotitle)."',
+			'".sed_sql_prep($newpageseodesc)."',			
+			'".sed_sql_prep($newpageseokeywords)."')");
 
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
@@ -199,7 +210,10 @@ if (($a=='clone') && ($id > 0))
 	$newpageurl = $row1['page_url'];
 	$newpagesize = $row1['page_size'];
 	$newpageallowcomments = $row1['page_allowcomments'];
-	$newpageallowratings = $row1['page_allowratings'];
+	$newpageallowratings = $row1['page_allowratings'];	
+	$newpageseotitle = $row1['page_seo_title'];
+	$newpageseodesc = $row1['page_seo_desc'];
+	$newpageseokeywords = $row1['page_seo_keywords'];
 	}		
 
 if (empty($newpagecat) && !empty($c))
@@ -252,6 +266,12 @@ $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'new
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 
+$out['subtitle'] = $L['pagadd_title'];
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
+
 /* === Hook === */
 $extp = sed_getextplugins('page.add.main');
 if (is_array($extp))
@@ -292,6 +312,9 @@ $t->assign(array(
 	"PAGEADD_FORM_EXTRA5" => "<input type=\"text\" class=\"text\" name=\"newpageextra4\" value=\"".sed_cc($newpageextra4)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpagetitle\" value=\"".sed_cc($newpagetitle)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"newpagedesc\" value=\"".sed_cc($newpagedesc)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_SEOTITLE" => "<input type=\"text\" class=\"text\" name=\"newpageseotitle\" value=\"".sed_cc($newpageseotitle)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_SEODESC" => "<input type=\"text\" class=\"text\" name=\"newpageseodesc\" value=\"".sed_cc($newpageseodesc)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_SEOKEYWORDS" => "<input type=\"text\" class=\"text\" name=\"newpageseokeywords\" value=\"".sed_cc($newpageseokeywords)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"newpageauthor\" value=\"".sed_cc($newpageauthor)."\" size=\"16\" maxlength=\"24\" />",
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),
 	"PAGEADD_FORM_OWNERID" => $usr['id'],

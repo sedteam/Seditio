@@ -40,6 +40,7 @@ $L['core_polls'] = "Polls";
 $L['core_ratings'] = "Ratings";
 $L['core_trash'] = "Trash can";
 $L['core_users'] = "Users";
+$L['core_meta'] = "HTML Meta";
 
 /* ====== Upgrade ====== */
 
@@ -264,6 +265,18 @@ $L['cfg_parsesmiliesusertext'] = array("Parse smilies in user signature", "");
 $L['cfg_parsesmiliesforums'] = array("Parse smilies in forums", "");
 
 $L['cfg_color_group'] = array("Colorize group of users", "Default: No, for better performance");  // New in v175
+
+/* ====== HTML Meta ====== */
+
+$L['cfg_defaulttitle'] = array("Default Title", "Available options: {MAINTITLE}, {SUBTITLE}");		//Sed 175
+$L['cfg_listtitle'] = array("Title for lists of pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
+$L['cfg_pagetitle'] = array("Title for pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");		//Sed 175
+$L['cfg_forumstitle'] = array("Title for forums", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
+$L['cfg_userstitle'] = array("Title for users", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
+$L['cfg_pmtitle'] = array("Title for PM", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
+$L['cfg_gallerytitle'] = array("Title for gallery", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
+$L['cfg_pfstitle'] = array("Title for PFS", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		///Sed 175
+$L['cfg_plugtitle'] = array("Title for plugins", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		///Sed 175
 
 /* ====== Rss ====== */
 

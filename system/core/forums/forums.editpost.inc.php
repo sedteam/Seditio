@@ -170,6 +170,13 @@ $toptitle .= ($usr['isadmin']) ? " *" : '';
 $sys['sublocation'] = $fs_title;
 $out['subtitle'] = $L['Forums'];
 
+/**/
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
+/**/
+
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.main');
 if (is_array($extp))

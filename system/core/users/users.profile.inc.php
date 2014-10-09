@@ -452,13 +452,17 @@ $profile_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=
 
 $profile_form_hideemail = ($urr['user_hideemail']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" checked=\"checked\" />".$L['No'];
 
-$out['subtitle'] = $L['Profile'];
-
 if (!$urr['user_text_ishtml'] && $cfg['textmode']=='html')
   {
 	$urr['user_text'] = sed_parse(sed_cc($urr['user_text']), 1, 1, 1);
   $sql3 = sed_sql_query("UPDATE $db_users SET user_text_ishtml=1, user_text='".sed_sql_prep($urr['user_text'])."' WHERE user_id=".$urr['user_id']); 
 	}
+
+$out['subtitle'] = $L['Profile'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.main');

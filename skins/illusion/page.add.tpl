@@ -40,6 +40,21 @@
 		<td>{PHP.skinlang.pageadd.Description}</td>
 		<td>{PAGEADD_FORM_DESC}</td>
 	</tr>
+	
+	<tr>
+		<td>{PHP.L.mt_title}</td>
+		<td>{PAGEADD_FORM_SEOTITLE}</td>
+	</tr>
+	
+	<tr>
+		<td>{PHP.L.mt_description}</td>
+		<td>{PAGEADD_FORM_SEODESC}</td>
+	</tr>
+	
+	<tr>
+		<td>{PHP.L.mt_keywords}</td>
+		<td>{PAGEADD_FORM_SEOKEYWORDS}</td>
+	</tr>		
 
 	<tr>
 		<td>{PHP.skinlang.pageadd.Author}</td>

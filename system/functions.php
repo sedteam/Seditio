@@ -1977,16 +1977,19 @@ function sed_hash($data, $type = 1, $salt = '')
 
 /* ------------------ */
 
-function sed_htmlmetas()
+function sed_htmlmetas($description = '', $keywords = '')
 	{
 	global $cfg, $sys;
 	$contenttype = "text/html";
+	
+	$description = (empty($description)) ? $cfg['maintitle']." - ".$cfg['subtitle'] : $description;
+	$keywords = (empty($keywords)) ? $cfg['metakeywords'] : $keywords;
+	
 	$result = "<base href=\"".$sys['abs_url']."\" />
 <meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
-<meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
-<meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
+<meta name=\"description\" content=\"".$description."\" />
+<meta name=\"keywords\" content=\"".$keywords."\" />
 <meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team http://www.seditio.org\" />
-<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
 <meta http-equiv=\"pragma\" content=\"no-cache\" />
 <meta http-equiv=\"cache-control\" content=\"no-cache\" />
 <meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
@@ -2386,8 +2389,13 @@ function sed_inputbox($type, $name, $value, $check = FALSE)
 /* ------------------ */
 
 function sed_is_ssl()   // New in 175
-  { 
-    if (isset($_SERVER['HTTPS'])) 
+  {     
+		if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+		{
+    		$_SERVER['HTTPS'] = 'on'; 
+		}
+		
+		if (isset($_SERVER['HTTPS'])) 
     { 
         if (mb_strtolower($_SERVER['HTTPS']) == 'on') return true; 
         if ($_SERVER['HTTPS'] == '1') return true; 
@@ -3617,6 +3625,32 @@ function sed_stringinfile($file, $str, $maxsize=32768)
 	@fclose($fp);
 	return ($result);
 	}
+
+/* ------------------ */
+
+function sed_title($mask, $tags, $data)
+{
+	global $cfg;
+	
+	$mask = (empty($cfg[$mask])) ? '{MAINTITLE} - {TITLE}' : $cfg[$mask];
+
+	$mask = str_replace($tags[0], $tags[1], $mask); 
+	
+	$cnt = count($data);
+	for ($i = 0; $i < $cnt; $i++)
+	{
+		if (version_compare(PHP_VERSION, '5.2.2', '<='))
+		{
+			$data[$i] = htmlspecialchars($data[$i], ENT_COMPAT, 'UTF-8');
+		}
+		else
+		{
+			$data[$i] = htmlspecialchars($data[$i], ENT_COMPAT, 'UTF-8', false);
+		}
+	}
+	$title = vsprintf($mask, $data);
+	return $title;
+}
 
 /* ------------------ */ 
 

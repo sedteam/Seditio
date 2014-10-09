@@ -1,9 +1,9 @@
 <!-- BEGIN: HEADER -->{HEADER_DOCTYPE}
 <html>
 <head>
+<title>{HEADER_TITLE}</title>
 {HEADER_METAS}
 {HEADER_COMPOPUP}
-<title>{HEADER_TITLE}</title>
 <link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" media="print" title="print" />
 <link href="skins/{PHP.skin}/{PHP.skin}.green.css" rel="alternate stylesheet" type="text/css" title="green" />

@@ -171,6 +171,10 @@ for ($i = 1; $i <= 26; $i++)
 $allfilters .= " <a href=\"".sed_url("users", "f=_")."\">%</a>";
 
 $out['subtitle'] = $L['Users'];
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.main');

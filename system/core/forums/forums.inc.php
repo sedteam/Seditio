@@ -94,6 +94,10 @@ $secact_max = max($sed_sections_act);
 $out['markall'] = ($usr['id']>0) ? "<a href=\"".sed_url("forums","n=markall")."\">".$L['for_markallasread']."</a>" : '';
 
 $out['subtitle'] = $L['Forums'];
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.main');

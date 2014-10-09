@@ -347,6 +347,13 @@ $sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.
 $sys['sublocation'] = $fs_title;
 $out['subtitle'] = $L['Forums']." - ".sed_cc($ft_title);
 
+/**/
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
+/**/
+
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.main');
 if (is_array($extp))

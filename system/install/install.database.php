@@ -238,7 +238,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_desc varchar(255) default NULL,
   page_text text,
   page_text_ishtml tinyint(1) DEFAULT '1',
-  page_text2 text,
+  page_text2 text,	  
   page_author varchar(24) default NULL,
   page_ownerid int(11) NOT NULL default '0',
   page_date int(11) NOT NULL default '0',
@@ -254,6 +254,9 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_comcount mediumint(8) unsigned default '0',
   page_filecount mediumint(8) unsigned default '0',
   page_alias varchar(255) NOT NULL default '',
+  page_seo_title varchar(255) default NULL,
+  page_seo_desc varchar(255) default NULL,
+  page_seo_keywords varchar(255) default NULL, 
   PRIMARY KEY  (page_id),
   KEY page_cat (page_cat)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
@@ -660,12 +663,12 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (95, 6, 'page',
 if ($textmode == "html") 
   {
     $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-    (1, 0, 1, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"http://www.seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"http://www.seditio.org/forums.php\">discussion forums</a>.', 1, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '');");
+    (1, 0, 1, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"http://www.seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"http://www.seditio.org/forums.php\">discussion forums</a>.', 1, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '');");
   }
 else
   {
     $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-    (1, 0, 0, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nThe next step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.\r\nYou''ll find more instructions and tutorials in the [url=http://www.seditio.org/list.php?c=docs]Documentation page for Seditio at Seditio.org[/url], and technical support in our [url=http://www.seditio.org/forums.php]discussion forums[/url].', 0, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 27, 1, 1, 0.00, 0, 0, '');");
+    (1, 0, 0, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nThe next step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.\r\nYou''ll find more instructions and tutorials in the [url=http://www.seditio.org/list.php?c=docs]Documentation page for Seditio at Seditio.org[/url], and technical support in our [url=http://www.seditio.org/forums.php]discussion forums[/url].', 0, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 27, 1, 1, 0.00, 0, 0, '', '', '', '');");
   }
 
 $lines = file("system/install/install.parser.sql");
