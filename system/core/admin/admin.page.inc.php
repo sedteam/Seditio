@@ -76,7 +76,7 @@ switch($mn)
         elseif ($rtplmode==3)
           { $rtpl = 'same_as_parent'; }
         else
-          { $rtpl = sed_import('rtplforced','P','ALP'); }
+          { $rtpl = sed_import('rtplforced','P','ALS'); }
     
     		$sql = sed_sql_query("UPDATE $db_structure SET
     			structure_path='".sed_sql_prep($rpath)."',

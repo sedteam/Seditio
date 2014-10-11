@@ -2244,6 +2244,12 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
        else
 			{ $defret = $f; }
 		break;
+		
+		case 'ALS':
+		$v = trim($v);
+		$v = preg_replace('/[^\w\s-]/u', '_', $v);
+ 		$pass = TRUE;
+		break;	
 
 		case 'PSW':
 		$v = trim($v);

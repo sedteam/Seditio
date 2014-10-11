@@ -42,7 +42,7 @@ if ($a=='add')
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
 	$newpagekey = sed_import('newpagekey','P','TXT');
-	$newpagealias = sed_replacespace(sed_import('newpagealias','P','TXT'));  //New in175
+	$newpagealias = sed_replacespace(sed_import('newpagealias','P','ALS'));  //New in175
 	$newpageextra1 = sed_import('newpageextra1','P','TXT');
  	$newpageextra2 = sed_import('newpageextra2','P','TXT');
 	$newpageextra3 = sed_import('newpageextra3','P','TXT');
@@ -99,9 +99,7 @@ if ($a=='add')
 	if (empty($error_string))
 		{
 		if (!empty($newpagealias))
-			{
-			$newpagealias = preg_replace("/[^\w\s]/u","_",$newpagealias);
-      
+			{     
       $sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
 			}

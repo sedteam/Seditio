@@ -41,7 +41,7 @@ if ($a=='update')
 	/* ===== */
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
-	$rpagealias = sed_replacespace(sed_import('rpagealias','P','TXT')); //New in175
+	$rpagealias = sed_replacespace(sed_import('rpagealias','P','ALS')); //New in175
 	$rpageextra1 = sed_import('rpageextra1','P','TXT');
 	$rpageextra2 = sed_import('rpageextra2','P','TXT');
 	$rpageextra3 = sed_import('rpageextra3','P','TXT');
@@ -135,9 +135,7 @@ if ($a=='update')
 			$rpagestate = (($rpagepublish == "NO") && $usr['isadmin']) ? 1 : $rpagestate; //Validation
 
 			if (!empty($rpagealias))
-				{
-				$rpagealias = preg_replace("/[^\w\s]/u","_",$rpagealias);
-        
+				{       
         $sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($rpagealias)."' AND page_id!='".$id."'");
 				$rpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $rpagealias;
 				}
