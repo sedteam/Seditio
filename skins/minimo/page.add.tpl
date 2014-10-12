@@ -43,7 +43,7 @@
 			<table class="cells striped" class="simple tableforms">
 
 			<tr>
-				<td style="width:176px;">{PHP.skinlang.pageadd.Category}</td>
+				<td style="width:200px;">{PHP.skinlang.pageadd.Category}</td>
 				<td>{PAGEADD_FORM_CAT}</td>
 			</tr>
 		
@@ -88,7 +88,7 @@
 			<table class="cells striped" class="simple tableforms">
 			
 			<tr>
-				<td>{PHP.L.mt_title}</td>
+				<td style="width:200px;">{PHP.L.mt_title}</td>
 				<td>{PAGEADD_FORM_SEOTITLE}</td>
 			</tr>
 			
@@ -111,7 +111,7 @@
 			<table class="cells striped" class="simple tableforms">
 		
 			<tr>
-				<td>{PHP.skinlang.pageadd.Begin}</td>
+				<td style="width:200px;">{PHP.skinlang.pageadd.Begin}</td>
 				<td>{PAGEADD_FORM_BEGIN}</td>
 			</tr>
 		

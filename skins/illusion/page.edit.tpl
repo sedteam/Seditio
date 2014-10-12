@@ -43,7 +43,7 @@
 			<table class="cells striped" class="simple tableforms">
 			
 				<tr>
-					<td style="width:176px;">{PHP.skinlang.pageedit.Category}</td>
+					<td style="width:200px;">{PHP.skinlang.pageedit.Category}</td>
 					<td>{PAGEEDIT_FORM_CAT}</td>
 				</tr>
 			
@@ -99,7 +99,7 @@
 			<table class="cells striped" class="simple tableforms">
 
 				<tr>
-					<td>{PHP.L.mt_title}</td>
+					<td style="width:200px;">{PHP.L.mt_title}</td>
 					<td>{PAGEEDIT_FORM_SEOTITLE}</td>
 				</tr>
 				
@@ -122,7 +122,7 @@
 			<table class="cells striped" class="simple tableforms">
 
 				<tr>
-					<td>{PHP.skinlang.pageedit.Date}</td>
+					<td style="width:200px;">{PHP.skinlang.pageedit.Date}</td>
 					<td>{PAGEEDIT_FORM_DATE}</td>
 				</tr>
 			
