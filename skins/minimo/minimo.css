@@ -639,6 +639,15 @@ div.descr {
 	color: #000000;
 }
 
+.centered {
+	text-align:center;
+}
+
+.help {
+	font-style:italic;
+	margin:10px;
+}
+
 .fhead {
 	font-size: 140%;
 	margin: 0;
@@ -964,3 +973,42 @@ table.hovered thead tr:hover th {
 .icons.expand {background-position:-408px -168px;}
 .icons.collapse {background-position:-432px -168px;}
 .icons.collapse-top {background-position:-456px -168px;}
+
+/*=============== Sed Tabs ==================*/
+
+.sedtabs div.tabs { 
+	display:none; 	
+}
+
+.tab-box {
+	background:#ffffff; 
+	border:1px solid #ccc;
+	min-height:100px;
+	clear:both;
+	padding:25px 15px 15px 15px;
+}
+ul.tabs {
+    margin:0px; padding:0px;
+}
+ul.tabs li {
+    list-style:none;
+    display:inline;
+}
+ul.tabs li a {
+    float:left;
+    padding:8px 25px 8px 25px;
+    text-decoration:none;
+    margin-right:3px;
+    margin-bottom:-1px; 
+}
+ul.tabs li a:hover {
+    color:#212121;
+}
+ul.tabs li a.selected {
+    background-color:#ffffff;
+    color:#282e32;
+    border:1px solid #ccc; 
+    border-bottom: 1px solid #ffffff;    
+}
+
+/*======================================*/

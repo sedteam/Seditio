@@ -163,6 +163,7 @@ $L['Member'] = "Member";
 $L['Members'] = "Members";
 $L['Message'] = "Message";
 $L['Messages'] = "Messages";
+$L['Meta'] = "Metadata";   //New in v175
 $L['Minlevel'] = "Min.level";
 $L['Minute'] = "minute";
 $L['Minutes'] = "minutes";
