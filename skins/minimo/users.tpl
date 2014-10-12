@@ -9,15 +9,17 @@
 
 <div id="page">
 
-  <div class="paging">
+	<!-- BEGIN: USERS_PAGINATION_TP -->
+	<div class="paging">
   <ul class="pagination">
     <li class="prev">{USERS_TOP_PAGEPREV}</li>
     {USERS_TOP_PAGINATION}
     <li class="next">{USERS_TOP_PAGENEXT}</li>
   </ul>
-  {PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}
   </div>
+  <!-- END: USERS_PAGINATION_TP -->
 
+  <div class="text-centered">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
 
 <table class="cells striped">
 
@@ -43,15 +45,17 @@
 	<!-- END: USERS_ROW -->
 
 </table>
-
-  <div class="paging">
+  
+	<div class="text-centered">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
+  <!-- BEGIN: USERS_PAGINATION_BM -->
+	<div class="paging">
   <ul class="pagination">
     <li class="prev">{USERS_TOP_PAGEPREV}</li>
     {USERS_TOP_PAGINATION}
     <li class="next">{USERS_TOP_PAGENEXT}</li>
   </ul>
-  {PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}
   </div>
+  <!-- END: USERS_PAGINATION_BM -->
        
 </div>
 

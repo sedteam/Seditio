@@ -10,8 +10,8 @@
 	{FORUMS_TOPICS_SUBTITLE}
 </div>
 
-<div class="units-row-end">
-  <div class="unit-20"><a href="{FORUMS_TOPICS_NEWTOPICURL}" class="btn btn-big"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /> <span style="font-size:120%;">{PHP.L.for_newtopic}</span></a></div>  
+<div class="units-row">
+  <div class="unit-20"><a href="{FORUMS_TOPICS_NEWTOPICURL}" class="btn"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /> <span style="font-size:120%;">{PHP.L.for_newtopic}</span></a></div>  
   <div class="unit-80" style="text-align:right;">{FORUMS_TOPICS_VIEWERS} {PHP.skinlang.forumstopics.Viewers} &nbsp; 	{FORUMS_TOPICS_JUMPBOX}	</div>
 </div> 
 
@@ -70,6 +70,7 @@
 
 <!-- END: FORUMS_SECTIONS -->
 
+<!-- BEGIN: FORUMS_TOPICS_PAGINATION_TP -->
 <div class="paging">
 <ul class="pagination">
   <li class="prev">{FORUMS_TOPICS_PAGEPREV}</li>
@@ -77,6 +78,7 @@
   <li class="next">{FORUMS_TOPICS_PAGENEXT}</li>
 </ul>
 </div>
+<!-- END: FORUMS_TOPICS_PAGINATION_TP -->
 
 <table class="cells striped">
   
@@ -127,6 +129,7 @@
   
 </table>
 
+<!-- BEGIN: FORUMS_TOPICS_PAGINATION_BM -->
 <div class="paging">
 <ul class="pagination">
   <li class="prev">{FORUMS_TOPICS_PAGEPREV}</li>
@@ -134,6 +137,7 @@
   <li class="next">{FORUMS_TOPICS_PAGENEXT}</li>
 </ul>
 </div>
+<!-- END: FORUMS_TOPICS_PAGINATION_BM -->
 
 <table class="main">
 

@@ -186,6 +186,17 @@ else
 
 $t = new XTemplate($mskin);
 
+if (!empty($pagination))
+	{
+	$t->assign(array(
+		"LIST_TOP_PAGINATION" => $pagination,
+		"LIST_TOP_PAGEPREV" => $pageprev,
+		"LIST_TOP_PAGENEXT" => $pagenext
+		));	
+	$t->parse("MAIN.LIST_PAGINATION_TP");
+	$t->parse("MAIN.LIST_PAGINATION_BM");		
+	}
+
 $t->assign(array(
 	"LIST_PAGETITLE" => $catpath,
 	"LIST_CATEGORY" => "<a href=\"".sed_url("list", "c=".$c)."\">".$sed_cat[$c]['title']."</a>",
@@ -200,10 +211,7 @@ $t->assign(array(
 	"LIST_RATINGS" => $list_ratings,
 	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
 	"LIST_EXTRATEXT" => $extratext,
-	"LIST_SUBMITNEWPAGE" => $submitnewpage,
-	"LIST_TOP_PAGINATION" => $pagination,
-	"LIST_TOP_PAGEPREV" => $pageprev,
-	"LIST_TOP_PAGENEXT" => $pagenext
+	"LIST_SUBMITNEWPAGE" => $submitnewpage
 	));
 
 if (!$sed_cat[$c]['group'])

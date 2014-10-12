@@ -327,14 +327,22 @@ list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=topics&s
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, TRUE, $parentcat);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
+if (!empty($pages))
+	{
+	$t->assign(array(
+		"FORUMS_TOPICS_PAGES" => $pages,
+		"FORUMS_TOPICS_PAGEPREV" => $pages_prev,
+		"FORUMS_TOPICS_PAGENEXT" => $pages_next
+			));
+	$t->parse("MAIN.FORUMS_TOPICS_PAGINATION_TP");
+	$t->parse("MAIN.FORUMS_TOPICS_PAGINATION_BM");
+	}		
+
 $t->assign(array(
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
-	"FORUMS_TOPICS_NEWTOPICURL" => sed_url("forums", "m=newtopic&s=".$s),
-	"FORUMS_TOPICS_PAGES" => $pages,
-	"FORUMS_TOPICS_PAGEPREV" => $pages_prev,
-	"FORUMS_TOPICS_PAGENEXT" => $pages_next,	
+	"FORUMS_TOPICS_NEWTOPICURL" => sed_url("forums", "m=newtopic&s=".$s),	
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
 	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
 	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"".sed_url("forums", "m=topics&s=".$s."&o=title&w=".rev($w))."\">".$L['Topics']." ".cursort($o=='title', $w)."</a>",

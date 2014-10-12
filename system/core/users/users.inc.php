@@ -186,7 +186,21 @@ require("system/header.php");
 
 $t = new XTemplate($localskin);
 
-	$t-> assign(array(
+$pagination = sed_pagination(sed_url("users", "f=".$f."&g=".$g."&gm=".$gm."&s=".$s."&w=".$w."&sq=".$sq), $d, $totalusers, $cfg['maxusersperpage']);
+list($pageprev, $pagenext) = sed_pagination_pn(sed_url("users", "f=".$f."&g=".$g."&gm=".$gm."&s=".$s."&w=".$w."&sq=".$sq), $d, $totalusers, $cfg['maxusersperpage'], TRUE);
+
+if (!empty($pagination))
+	{
+	$t->assign(array(
+	    "USERS_TOP_PAGEPREV" => $pageprev,
+	    "USERS_TOP_PAGENEXT" => $pagenext,
+	    "USERS_TOP_PAGINATION" => $pagination,
+	));
+	$t->parse("MAIN.USERS_PAGINATION_TP");
+	$t->parse("MAIN.USERS_PAGINATION_BM");
+	}
+	
+$t-> assign(array(
 	"USERS_TITLE" => $title,
 	"USERS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_CURRENTFILTER" => $f,
@@ -223,15 +237,6 @@ $t->assign(array(
 	"USERS_TOP_GENDER" => "<a href=\"".sed_url("users", "f=".$f."&s=gender&w=asc&g=".$g."&gm=".$gm."&sq=".$sq)."\">$sed_img_down</a> <a href=\"".sed_url("users", "f=".$f."&s=gender&w=desc&g=".$g."&gm=".$gm."&sq=".$sq)."\">$sed_img_up</a> ".$L['Gender'],
 	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url("users", "f=".$f."&s=timezone&w=asc&g=".$g."&gm=".$gm."&sq=".$sq)."\">$sed_img_down</a> <a href=\"".sed_url("users", "f=".$f."&s=timezone&w=desc&g=".$g."&gm=".$gm."&sq=".$sq)."\">$sed_img_up</a> ".$L['Timezone']
 		));
-
-$pagination = sed_pagination(sed_url("users", "f=".$f."&g=".$g."&gm=".$gm."&s=".$s."&w=".$w."&sq=".$sq), $d, $totalusers, $cfg['maxusersperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn(sed_url("users", "f=".$f."&g=".$g."&gm=".$gm."&s=".$s."&w=".$w."&sq=".$sq), $d, $totalusers, $cfg['maxusersperpage'], TRUE);
-
-$t->assign(array(
-    "USERS_TOP_PAGEPREV" => $pageprev,
-    "USERS_TOP_PAGENEXT" => $pagenext,
-    "USERS_TOP_PAGINATION" => $pagination,
-));
 
 $jj=0;
 

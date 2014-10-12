@@ -665,7 +665,7 @@ class XTemplate {
 
 		$blocks = array();
 
-		$con2 = explode($this->block_start_delim, $con);
+		$con2 = explode($this->block_start_delim, $con);  
 
 		if (!empty($parentblock)) {
 
@@ -720,8 +720,8 @@ class XTemplate {
 				$blocks[$tmp] = isset($blocks[$tmp]) ? $blocks[$tmp] . $v : $v;
 			}
 		}
-
-		return $blocks;
+     
+		return $blocks; 
 	}
 
 	private function _assign_file_sub ($name, $val) {

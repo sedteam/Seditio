@@ -40,13 +40,17 @@
 
 	</ul>
   
-  <div class="paging">
+  <!-- BEGIN: LIST_PAGINATION_BM -->
+  
+	<div class="paging">
     <ul class="pagination">
       <li class="prev">{LIST_TOP_PAGEPREV}</li>
       {LIST_TOP_PAGINATION}
       <li class="next">{LIST_TOP_PAGENEXT}</li>
     </ul>
   </div>
+  
+  <!-- END: LIST_PAGINATION_BM -->
 
 </div>
 

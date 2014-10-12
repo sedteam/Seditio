@@ -13,14 +13,6 @@
 
 <div id="page">
 
-<div class="paging">
-<ul class="pagination">
-  <li class="prev">{FORUMS_POSTS_PAGEPREV}</li>
-  {FORUMS_POSTS_PAGES}
-  <li class="next">{FORUMS_POSTS_PAGENEXT}</li>
-</ul>
-</div>
-
 <!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 
 <div class="error">
@@ -30,6 +22,16 @@
 </div>
 
 <!-- END: FORUMS_POSTS_TOPICPRIVATE -->
+
+<!-- BEGIN: FORUMS_POSTS_PAGINATION_TP -->
+<div class="paging">
+<ul class="pagination">
+  <li class="prev">{FORUMS_POSTS_PAGEPREV}</li>
+  {FORUMS_POSTS_PAGES}
+  <li class="next">{FORUMS_POSTS_PAGENEXT}</li>
+</ul>
+</div>
+<!-- END: FORUMS_POSTS_PAGINATION_TP -->
 
 <table class="cells">
 
@@ -84,6 +86,7 @@
 
 </table>
 
+<!-- BEGIN: FORUMS_POSTS_PAGINATION_BM -->
 <div class="paging">
 <ul class="pagination">
   <li class="prev">{FORUMS_POSTS_PAGEPREV}</li>
@@ -91,6 +94,7 @@
   <li class="next">{FORUMS_POSTS_PAGENEXT}</li>
 </ul>
 </div>
+<!-- END: FORUMS_POSTS_PAGINATION_BM -->
 
 <!-- BEGIN: FORUMS_POSTS_TOPICLOCKED -->
 

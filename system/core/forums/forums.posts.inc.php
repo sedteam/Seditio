@@ -506,13 +506,21 @@ $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['sepa
 $toptitle .= " ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&q=".$q)."\">".$ft_title."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
+if (!empty($pages))
+	{
+	$t->assign(array(
+		"FORUMS_POSTS_PAGES" => $pages,
+		"FORUMS_POSTS_PAGEPREV" => $pages_prev,
+		"FORUMS_POSTS_PAGENEXT" => $pages_next
+			));
+	$t->parse("MAIN.FORUMS_POSTS_PAGINATION_TP");
+	$t->parse("MAIN.FORUMS_POSTS_PAGINATION_BM");
+	}
+
 $t->assign(array(
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
-	"FORUMS_POSTS_PAGES" => $pages,
-	"FORUMS_POSTS_PAGEPREV" => $pages_prev,
-	"FORUMS_POSTS_PAGENEXT" => $pages_next,
 	"FORUMS_POSTS_POLL" => $poll_result,
 	"FORUMS_POSTS_JUMPBOX" => $jumpbox,
 		));

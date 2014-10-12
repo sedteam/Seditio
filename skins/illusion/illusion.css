@@ -539,6 +539,10 @@ div.descr {
 	width: 100%;
 }
 
+.pagination {
+	margin-bottom:0;
+}
+
 .coltop {
 	font-weight: normal;
 	color: #f6f6f6;
