@@ -75,16 +75,16 @@ function sed_ajax_pass(url, callbackFunction, params)
 		{
 		xmlhttp.onreadystatechange =
 		function ()
-           	{
-           	if (xmlhttp && xmlhttp.readyState==4)
-           		{
-				if (xmlhttp.status==200)
-					{
-               		var response = xmlhttp.responseText;
-               		var functionToCall = callbackFunction + '(response,'+params+')';
-					eval(functionToCall);
+      {
+      	if (xmlhttp && xmlhttp.readyState==4)
+        	{
+					if (xmlhttp.status==200)
+						{
+	         		var response = xmlhttp.responseText;
+	         		var functionToCall = callbackFunction + '(response,'+params+')';
+							eval(functionToCall);
+						}
 					}
-				}
 			}
     	xmlhttp.open("GET",url,true);
     	xmlhttp.send(null);
@@ -97,7 +97,7 @@ function sed_ajax_set(url, obj_id)
 
 	if (xmlhttp)
 		{
-    	xmlhttp.onreadystatechange =
+    xmlhttp.onreadystatechange =
 		function ()
 			{
 			if (xmlhttp && xmlhttp.readyState==4)
@@ -109,10 +109,10 @@ function sed_ajax_set(url, obj_id)
                   	else
                   		{ document.getElementById(obj_id).innerHTML = xmlhttp.responseText; }
                 	}
-                }
-            }
+        }
+      }
     	xmlhttp.open("GET",url,true);
-		xmlhttp.send(null);
+			xmlhttp.send(null);
 		}
 	}
 
@@ -157,7 +157,8 @@ function createCookie(name,value,days)
     var expires = "; expires="+date.toGMTString();  
     }  
     else expires = "";  
-    document.cookie = name+"="+value+expires+"; path=/";}
+    document.cookie = name+"="+value+expires+"; path=/";
+}
 
 function readCookie(name) 
 {  
