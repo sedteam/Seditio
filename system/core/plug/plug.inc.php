@@ -25,6 +25,7 @@ $r = sed_import('r','G','ALP');
 $h = sed_import('h','G','ALP');
 $c1= sed_import('c1','G','ALP');
 $c2 = sed_import('c2','G','ALP');
+$ajx = sed_import('ajx','G','ALP');
 
 unset ($plugin_title, $plugin_body);
 
@@ -283,21 +284,40 @@ elseif (!empty($h))
 elseif (!empty($r))
 	{
 	
-
 	if (mb_strpos($r, "\.") !== FALSE || mb_strpos($r, "/") !== FALSE)
 		{ sed_die(); }
 
 	$incl = 'plugins/code/'.$r.'.php';
-	
-	
 
 	if (@file_exists($incl))
 		{ require($incl); }
 	else
 		{ sed_die(); }
-	
-	
+		
 	}
+	
+elseif (!empty($ajx))	
+{ 
+    $extp = array(); 
+    if (is_array($sed_plugins)) 
+    { 
+        foreach($sed_plugins as $i => $k) 
+        { 
+            if ($k['pl_hook']=='ajax' && $k['pl_code']==$ajx) 
+            { $extp[$i] = $k; } 
+        } 
+    } 
+
+    if (count($extp)==0) 
+    { 
+        sed_redirect(sed_url("message", "msg=907", "", true)); 
+        exit; 
+    } 
+
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+} 
+	
 else
 
 	{ sed_die(); }

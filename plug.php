@@ -20,6 +20,7 @@ define('SED_PLUG', TRUE);
 $location = 'Plugins';
 $z = 'plug';
 
+if(!empty($_GET['ajx'])) { define('SED_DISABLE_XFORM', true); } 
 
 require('system/functions.php');
 require('datas/config.php');
