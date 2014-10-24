@@ -44,77 +44,199 @@ function toggleblock(id)
 	else
 		{ bl.style.display = 'none'; }
 	}
+	
+/* =============== AJAX functions ===================== */
 
-window.name='main';
+sed_ajx = {
+	//Create a xmlHttpRequest object - this is the constructor. 
+	getHTTPObject : function() {
+		var http = false;
+		//Use IE's ActiveX items to load the file.
+		if(typeof ActiveXObject != 'undefined') {
+			try {http = new ActiveXObject("Msxml2.XMLHTTP");}
+			catch (e) {
+				try {http = new ActiveXObject("Microsoft.XMLHTTP");}
+				catch (E) {http = false;}
+			}
+		//If ActiveX is not available, use the XMLHttpRequest of Firefox/Mozilla etc. to load the document.
+		} else if (window.XMLHttpRequest) {
+			try {http = new XMLHttpRequest();}
+			catch (e) {http = false;}
+		}
+		return http;
+	},
+	
+	// This function is called from the user's script. 
+	//Arguments - 
+	//	url	- The url of the serverside script that is to be called. 
+	//	callback - Function that must be called once the data is ready.
+	//	format - 'xml','json' or 'text'. Default:'text'
+	//	method - GET or POST. Default 'GET'
+	
+	load : function (url,callback,format,method,opt) {
+		var http = this.init(); //The XMLHttpRequest object is recreated at every call - to defeat Cache problem in IE
+		if(!http||!url) return;
+		//XML Format need this for some Mozilla Browsers
+		if (http.overrideMimeType) http.overrideMimeType('text/xml');
 
-function sed_ajax_getxmlhttp()
-	{
-  	var xmlhttp = false;
-  	if (window.XMLHttpRequest)
-  		{ xmlhttp = new XMLHttpRequest() }
-	else if (window.ActiveXObject)
-		{
-		try
-    		{ xmlhttp = new ActiveXObject("Msxml2.XMLHTTP") }
-		catch (e)
-			{
-			try
-				{ xmlhttp = new ActiveXObject("Microsoft.XMLHTTP") }
-			catch (E)
-				{ xmlhttp=false }
+		if(!method) method = "GET";//Default method is GET
+		if(!format) format = "text";//Default return type is 'text'
+		if(!opt) opt = {};
+		format = format.toLowerCase();
+		method = method.toUpperCase();
+		
+		//Kill the Cache problem in IE.
+		var now = "uid=" + new Date().getTime();
+		url += (url.indexOf("?")+1) ? "&" : "?";
+		url += now;
+
+		var parameters = null;
+
+		if(method=="POST") {				
+			var postparams = '';			
+			if(opt.formid) postparams = '&' + this.serialize(opt.formid);			
+			var parts = url.split("\?");
+			url = parts[0];
+			parameters = parts[1] + postparams; 
+		}
+		
+		http.open(method, url, true);
+
+		if(method=="POST") { http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  }
+
+		var ths = this;// Closure
+		if(opt.handler) { //If a custom handler is defined, use it
+			http.onreadystatechange = function() { opt.handler(http); };
+		} else {
+			http.onreadystatechange = function () {//Call a function when the state changes.
+				if (http.readyState == 4) {//Ready State will be 4 when the document is loaded.
+					if(http.status == 200) {
+						var result = "";
+						if(http.responseText) result = http.responseText;
+						//If the return is in JSON format, eval the result before returning it.
+						if(format.charAt(0) == "j") {
+							//\n's in JSON string, when evaluated will create errors in IE
+							result = result.replace(/[\n\r]/g,"");
+							result = eval('('+result+')');
+
+						} else if(format.charAt(0) == "x") { //XML Return
+							result = http.responseXML;
+						}
+
+						//Give the data to the callback function.
+						if(callback) callback(result);
+					} else {						
+						if(opt.loading) document.getElementById(opt.loadingid).removeChild(opt.loading); //Remove the loading indicator					
+						if(opt.onError) opt.onError(http.status);
+					}
+				}
 			}
 		}
-	return xmlhttp;
-	}
+		http.send(parameters);
+	},
+	bind : function(user_options) {
+		var opt = {
+			'url':'', 			//URL to be loaded
+			'onSuccess':false,	//Function that should be called at success
+			'onError':false,	//Function that should be called at error
+			'format':"text",	//Return type - could be 'xml','json' or 'text'
+			'method':"GET",		//GET or POST
+			'update':"",		//The id of the element where the resulting data should be shown.
+			'loading':"", //ID element that would be inserted into the document once the url starts loading and removed when the data has finished loading. This will be inserted into a div with class name 'loading-indicator' and will be placed at 'top:0px;left:0px;'
+			'formid':"" //ID form, serialize data from form for POST send
+		}
+		for(var key in opt) {
+			if(user_options[key]) {//If the user given options contain any valid option, ...
+				opt[key] = user_options[key];// ..that option will be put in the opt array.
+			}
+		}
+		
+		if(!opt.url) return; //Return if a url is not provided
 
-function sed_ajax_pass(url, callbackFunction, params)
+		var div = false;
+		if(opt.loading) { //Show a loading indicator from the given HTML
+			div = document.createElement("div");
+			opt.loadingid = opt.loading;						
+			var intElemOffsetHeight = Math.floor(document.getElementById(opt.loading).offsetHeight/2) + 16;
+			var intElemOffsetWidth = Math.floor(document.getElementById(opt.loading).offsetWidth/2) - 16;						
+			div.setAttribute("style","position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
+			div.setAttribute("class","loading-indicator");
+			document.getElementById(opt.loading).appendChild(div);
+			opt.loading=div;
+		}
+		
+		this.load(opt.url,function(data){
+			if(opt.onSuccess) opt.onSuccess(data);
+			if(div) document.getElementById(opt.loadingid).removeChild(div); //Remove the loading indicator			
+			if(opt.update && data != "") document.getElementById(opt.update).innerHTML = data;
+		},opt.format,opt.method, opt);
+	},
+	serialize : function(formid)
 	{
-	var xmlhttp = new sed_ajax_getxmlhttp();
-
-	if (xmlhttp)
-		{
-		xmlhttp.onreadystatechange =
-		function ()
-      {
-      	if (xmlhttp && xmlhttp.readyState==4)
-        	{
-					if (xmlhttp.status==200)
-						{
-	         		var response = xmlhttp.responseText;
-	         		var functionToCall = callbackFunction + '(response,'+params+')';
-							eval(functionToCall);
+		var form = document.getElementById(formid);  
+	  if (!form || form.nodeName !== "FORM") {
+			return;
+		}
+		var i, j, q = [];
+		for (i = form.elements.length - 1; i >= 0; i = i - 1) {
+			if (form.elements[i].name === "") {
+				continue;
+			}
+			switch (form.elements[i].nodeName) {
+			case 'INPUT':
+				switch (form.elements[i].type) {
+				case 'text':
+				case 'hidden':
+				case 'password':
+				case 'button':
+				case 'reset':
+				case 'submit':
+					q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+					break;
+				case 'checkbox':
+				case 'radio':
+					if (form.elements[i].checked) {
+						q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+					}						
+					break;
+				case 'file':
+					break;
+				}
+				break;			 
+			case 'TEXTAREA':
+				q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+				break;
+			case 'SELECT':
+				switch (form.elements[i].type) {
+				case 'select-one':
+					q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+					break;
+				case 'select-multiple':
+					for (j = form.elements[i].options.length - 1; j >= 0; j = j - 1) {
+						if (form.elements[i].options[j].selected) {
+							q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].options[j].value));
 						}
 					}
+					break;
+				}
+				break;
+			case 'BUTTON':
+				switch (form.elements[i].type) {
+				case 'reset':
+				case 'submit':
+				case 'button':
+					q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+					break;
+				}
+				break;
 			}
-    	xmlhttp.open("GET",url,true);
-    	xmlhttp.send(null);
 		}
-	}
+		return q.join("&");	
+	},
+	init : function() {return this.getHTTPObject();}
+}
 
-function sed_ajax_set(url, obj_id)
-	{
-	var xmlhttp = new sed_ajax_getxmlhttp();
-
-	if (xmlhttp)
-		{
-    xmlhttp.onreadystatechange =
-		function ()
-			{
-			if (xmlhttp && xmlhttp.readyState==4)
-				{
-                if (xmlhttp.status==200)
-	                {
-                  	if(typeof obj_id == 'object')
-                  		{ obj_id.innerHTML = xmlhttp.responseText; }
-                  	else
-                  		{ document.getElementById(obj_id).innerHTML = xmlhttp.responseText; }
-                	}
-        }
-      }
-    	xmlhttp.open("GET",url,true);
-			xmlhttp.send(null);
-		}
-	}
+ /* ============================== */
 
 function setActiveStyleSheet(title) {  
     var i, a, main;  
@@ -185,7 +307,9 @@ window.onload =  function(e){
 	var title = cookie ? cookie : getPreferredStyleSheet();  
 	setActiveStyleSheet(title);
 
-  var gc = function(s){ return document.getElementsByClassName(s); };
+  /* ============== Sed Tabs ================ */
+  
+	var gc = function(s){ return document.getElementsByClassName(s); };
   if(!document.getElementsByClassName) {
     var all = document.getElementsByTagName('*');
     gc = function(c){
@@ -212,9 +336,9 @@ window.onload =  function(e){
     map(show,w(id));
   }
 
-  nanotabs = function(s){
+  sedtabs = function(s) {
     var i, s=s||{}, o="cesdf".split(''); 
-    for(i in o) s[o[i]]=s[o[i]]||nanotabs.settings[o[i]];
+    for(i in o) s[o[i]]=s[o[i]]||sedtabs.settings[o[i]];
     var c=w(s.c), f=function(){
       var t=this,o=t[0],a=[t[1],t[2],t[3],t[4]];
       if( !s.f || s.f.apply(o,a)!==false ) tab.apply(o,a);
@@ -237,10 +361,15 @@ window.onload =  function(e){
     }
   }
 
-  nanotabs.settings = { c:"sedtabs", e:"click", s:"selected", d:0, f:false };
-  nanotabs();
+  sedtabs.settings = { c:"sedtabs", e:"click", s:"selected", d:0, f:false };
+  sedtabs();
+  
+ /* ============================== */
+
 }
 
 var cookie = readCookie("style"); 
 var title = cookie ? cookie : getPreferredStyleSheet();
 setActiveStyleSheet(title);
+
+window.name='main';

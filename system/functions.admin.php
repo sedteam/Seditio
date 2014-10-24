@@ -265,6 +265,9 @@ $result[] = array ('main', '10', 'cookiedomain', 1, '', '');
 $result[] = array ('main', '10', 'cookiepath', 1, '', '');
 $result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));
 $result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
+
+$result[] = array ('main', '13', 'ajax', 3, '0', ''); //Sed 175
+
 $result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
 $result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
 $result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));

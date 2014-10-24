@@ -60,7 +60,7 @@
 		<div class="unit-50">
 			<div id="logo">
 				<a href="/" class="logos"></a>
-				<div id="slogan">It's time will come soon!</div>
+				<div id="slogan">It&#39;s time will come soon!</div>
 				<div class="clear"></div>
 			</div>
 		</div>

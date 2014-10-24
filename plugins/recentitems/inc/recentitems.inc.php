@@ -19,7 +19,6 @@ Description=
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-
 /* ================== FUNCTIONS ================== */
 
 function sed_get_latestpages($limit, $mask)
@@ -100,7 +99,7 @@ function sed_get_latesttopics($limit, $mask)
 
 function sed_get_latestpolls($limit, $mask)
 	{
-	global $L, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
+	global $L, $cfg, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
 
 	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
 
@@ -124,11 +123,11 @@ function sed_get_latestpolls($limit, $mask)
 		else
 			{ 
         $alreadyvoted = 0; 
-        $res .= "<form name=\"pollvote\" action=\"javascript:pollvote(document.pollvote.id.value, document.pollvote.cvote.value); window.location.reload();\" method=\"post\">"; // sed175      
+        $res .= "<form name=\"pollvote_".$poll_id."\" action=\"javascript:pollvote(document.pollvote_".$poll_id.".id.value, document.pollvote_".$poll_id.".cvote_".$poll_id.".value); window.location.reload();\" method=\"post\">"; // sed175      
       }
     
-		$res .= "<h5>".$row_p['poll_text']."</h5>";
-    $res .= "<div style=\"padding:10px 0;\">";
+		$res .= "<h5>".$row_p['poll_text']."</h5>\n";
+    $res .= "<div style=\"padding:10px 0;\" id=\"pollajx_".$poll_id."\">\n";
 
 		$sql = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$poll_id' ORDER by po_id ASC");
 
@@ -137,27 +136,37 @@ function sed_get_latestpolls($limit, $mask)
 			if ($alreadyvoted)
 				{
 				$percentbar = floor(($row['po_count'] / $totalvotes) * 100);
-				$res .= $row['po_text']." : $percentbar%<div style=\"width:95%;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div>";
+				$res .= $row['po_text']." : $percentbar%<div style=\"width:95%;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div>\n";
 				}
 			else
 				{
-				$res .= "<input type=\"radio\" value=\"".$row['po_id']."\" name=\"vote\" onClick=\"document.getElementById('cvote').value=".$row['po_id']."\" class=\"radio\" /> ".stripslashes($row['po_text'])."<br />";
+				$res .= "<input type=\"radio\" value=\"".$row['po_id']."\" name=\"vote\" onClick=\"document.getElementById('cvote_".$poll_id."').value=".$row['po_id']."\" class=\"radio\" /> ".stripslashes($row['po_text'])."<br />";
 				}
 			}
-    $res .= "</div>";
  
 		if ($alreadyvoted)
 			{         
-        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a> &nbsp; ";
-        $res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></div>";
+        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a> &nbsp; \n";
+        $res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></div>\n";
       }
     else
       {
-        $res .= "<input type=\"hidden\" name=\"id\" value=".$poll_id.">";
-        $res .= "<input type=\"hidden\" id=\"cvote\" name=\"cvote\" value=\"\">";
-        $res .= "<input type=\"hidden\" name=\"a\" value=\"send\">";
-    		$res .= "<div style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"><br /><br /></div></form>";      
-      }  
+        $res .= "<input type=\"hidden\" name=\"id\" value=".$poll_id.">\n";
+        $res .= "<input type=\"hidden\" id=\"cvote_".$poll_id."\" name=\"cvote_".$poll_id."\" value=\"\">\n";
+        $res .= "<input type=\"hidden\" name=\"a\" value=\"send\">\n";
+        if ($cfg['ajax']) 
+        	{					
+					$onclick = "javascript:sed_ajx.bind({'url': 'plug.php?ajx=recentitems&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx_".$poll_id."', 'loading': 'pollajx_".$poll_id."', 'formid':  'pollajx_".$poll_id."'});";					
+					$res .= "<div style=\"text-align:center;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
+      		}
+      	else 
+					{
+				  $res .= "<div style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
+					}
+				$res .= "</form>\n";
+			}
+			
+		$res .= "</div>";	  
  
     $res_all .= sprintf($mask, $res);
 		}

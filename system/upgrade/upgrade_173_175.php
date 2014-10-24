@@ -255,7 +255,15 @@ $sql = sed_sql_query($sqlqr);
 $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
 VALUES ('core', 'meta', '09', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', '')";
 $adminmain .= sed_cc($sqlqr)."<br />";
-$sql = sed_sql_query($sqlqr);    
+$sql = sed_sql_query($sqlqr); 
+
+// AJAX config
+
+$adminmain .= "Adding the 'ajax' new config into the core<br />";
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'main', '13', 'ajax', 3, '0', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);   
 
 $adminmain .= "Changing the SQL version number to 175...<br />";
 $sql = sed_sql_query("UPDATE ".$cfg['sqldbprefix']."stats SET stat_value=175 WHERE stat_name='version'");

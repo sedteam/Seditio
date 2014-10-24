@@ -40,7 +40,7 @@
 
 		<div class="download">
 
-			<a href="{PAGE_FILE_URL}">Download : {PAGE_SHORTTITLE} {PAGE_FILE_ICON}</a><br/>
+			<a href="{PAGE_FILE_URL}">Download : {PAGE_SHORTTITLE} {PAGE_FILE_ICON}</a><br />
 			Size: {PAGE_FILE_SIZE}KB, downloaded {PAGE_FILE_COUNT} times
 
 		</div>
