@@ -2633,11 +2633,24 @@ function sed_mail($fmail, $subject, $body, $headers='', $param='', $content='pla
         } 
     else 
         { 
-        $headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n"."Content-Type: text/".$content."; charset=".$cfg['charset']."\n" : $headers; 
-        $param = empty($param) ? "-f".$cfg['adminemail'] : $param; 
+        
+        $hdrs   = array();  // new in 175
+        $hdrs[] = "MIME-Version: 1.0";
+        $hdrs[] = "Content-type: text/".$content."; charset=".$cfg['charset'];
+        $hdrs[] = "Content-Transfer-Encoding: 8bit";
+        $hdrs[] = "Message-ID: <" . md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'];
+        $hdrs[] = "From: =?".$cfg['charset']."?B?".base64_encode($cfg['maintitle'])."?= <".$cfg['adminemail'].">";
+        $hdrs[] = "Reply-To: <".$cfg['adminemail'].">";
+        $hdrs[] = "Subject: =?".$cfg['charset']."?B?".base64_encode($subject)."?=";
+        $hdrs[] = "X-Mailer: PHP/".phpversion();        
+
+        $headers = (empty($headers)) ? implode("\r\n", $hdrs) : $headers; 
+        
+        $param = empty($param) ? "-f".$cfg['adminemail'] : $param;
+         
         $body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle']; 
                 
-        if(ini_get('safe_mode')) // fix in 175
+        if(ini_get('safe_mode'))
         { 
             mail($fmail, $subject, $body, $headers); 
         } 
