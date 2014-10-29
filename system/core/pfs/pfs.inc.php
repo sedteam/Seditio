@@ -312,9 +312,16 @@ elseif ($a=='deletefolder')
 	{
 	sed_block($usr['auth_write']);
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
-	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f' ");
-	sed_redirect(sed_url("pfs", $more, "", true));
+
+  $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
+  $files_count = sed_sql_result($sql,0,"COUNT(*)");
+  if ($files_count == 0)
+  	{
+    $sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f'");
+  	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
+  	}
+    
+  sed_redirect(sed_url("pfs", $more, "", true));
 	exit;
 	}
 
@@ -380,7 +387,9 @@ else
 		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 
-		$list_folders .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=deletefolder&".sed_xg()."&f=".$pff_id."&".$more)."\">".$out['img_delete']."</a></td>";
+		$is_folder_delete = ($pff_fcount > 0) ? "-" : "<a href=\"".sed_url("pfs", "a=deletefolder&".sed_xg()."&f=".$pff_id."&".$more)."\">".$out['img_delete']."</a>";
+    
+    $list_folders .= "<tr><td style=\"text-align:center;\">".$is_folder_delete."</td>";
 		$list_folders .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "m=editfolder&f=".$pff_id."&".$more)."\">".$out['img_edit']."</a></td>";
 
 		if ($pff_type==2)
@@ -444,13 +453,13 @@ while ($row = sed_sql_fetchassoc($sql))
 			}			
 	  }
  
-	/* === New Hook Sed 170 by Amro === */
+	/* === New Hook Sed 170 === */
 	$stndl_icons_list = "";
 	$stndl_icons_disp = "";
 	$extp = sed_getextplugins('pfs.stndl.icons');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* =============================== */
+	/* ======================== */
 
 	$list_files .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more)."\">".$out['img_delete']."</a></td>";
 	$list_files .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs" ,"m=edit&id=".$pfs_id."&".$more)."\">".$out['img_edit']."</a></td>";
