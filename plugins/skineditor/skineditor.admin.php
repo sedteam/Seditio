@@ -206,16 +206,41 @@ switch ($n)
   $adminmain .= "<td style=\"width:15%;\">".$L['File']." :</td>";
   $adminmain .= "<td><strong>".$editfile."</strong></td><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk)."\">".$L['Cancel']."</td></tr>";
   $adminmain .= "<tr><td colspan=\"3\">";
-  $adminmain .= "<textarea cols=\"96\" rows=\"16\" name=\"content\" class=\"noeditor\">".$filecont."</textarea>";    
+  $adminmain .= "<textarea cols=\"96\" rows=\"16\" name=\"content\" id=\"content\" class=\"noeditor\">".$filecont."</textarea>";    
   $adminmain .= "</td></tr>";
   $adminmain .= "<tr><td style=\"text-align:center;\" colspan=\"3\">";
   $adminmain .= "<input type=\"submit\" class=\"submit btn\" name=\"b1\" value=\"".$L['Update']."\">";
   $adminmain .= " <input type=\"submit\" class=\"submit btn\" name=\"b2\" value=\"".$L['plu_reopen']."\">";  
   $adminmain .= "</td></tr>";
   $adminmain .= "</table></form>";
+  
+	switch (pathinfo($editfile,PATHINFO_EXTENSION)) {
+		case 'css':
+			$hmode = 'text/css';
+			break;
+		case 'js':
+			$hmode = 'text/javascript';
+			break;
+		case 'php':
+			$hmode = 'application/x-httpd-php';
+			break;
+		default:
+			$hmode = 'text/html';
+	}
+  
+  $adminmain .= "<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById(\"content\"), {
+       lineNumbers: true,
+        matchBrackets: true,
+        indentUnit: 4,
+        indentWithTabs: true,
+        mode: \"".$hmode."\",
+        tabMode: \"shift\",
+        theme:'default'
+      	});
+	</script>";
         
   break;
-  
   
   // ================================
   
