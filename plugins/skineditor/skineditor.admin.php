@@ -168,7 +168,7 @@ switch ($n)
     
   if ($a=='update')
     {
-    $content = sed_import('content','P','HTM');
+    $content = sed_import('content','P','HTR');
     $file_isup = TRUE;
 
     if (!($fp = @fopen($editfile, 'w'))) { $file_isup = FALSE; }
