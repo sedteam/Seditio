@@ -113,9 +113,8 @@ if ($usr['maingrp'] > 3) {
         height: CkTextareasHeight[textareas[i].getAttribute('name')]}); 
       } ".$ck_other."
       }}
-  if (typeof jQuery == 'undefined') { if (window.addEventListener) { window.addEventListener('load', ckeditorReplace, false);
-  	} else if (window.attachEvent) { window.attachEvent('onload', ckeditorReplace); } else { window.onload = ckeditorReplace; }
-  } else { $(document).ready(ckeditorReplace); ajaxSuccessHandlers.push(ckeditorReplace); }
+  if (window.addEventListener) { window.addEventListener('load', ckeditorReplace, false);
+  	} else if (window.attachEvent) { window.attachEvent('onload', ckeditorReplace); } else { window.onload = ckeditorReplace; }  
   </script>";
   $moremetas .= "<script src=\"plugins/ckeditor/lib/ckeditor.js\" type=\"text/javascript\"></script>".$init_ck;
 }
