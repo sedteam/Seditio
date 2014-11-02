@@ -51,31 +51,39 @@ $allow_img['0']['1'] = "<img src=\"system/img/admin/deny_locked.gif\" alt=\"\" /
 $allow_img['1']['1'] = "<img src=\"system/img/admin/allow_locked.gif\" alt=\"\" />";
 
 $adminmenu = "<table style=\"width:100%;\"><tr>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"".sed_url("admin")."\">";
-$adminmenu .= "<img src=\"system/img/admin/admin.png\" alt=\"\" /><br />".$L['Home']."</a></td>";
+$adminmenu .= "<img src=\"system/img/admin/admin.png\" alt=\"\" /><br />".$L['Home']."</a>";
+$adminmenu .= "</td>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=config"), "<img src=\"system/img/admin/config.png\" alt=\"\" /><br />".$L['Configuration'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=page"), "<img src=\"system/img/admin/page.png\" alt=\"\" /><br />".$L['Pages'], sed_auth('page', 'any', 'A'));
 $adminmenu .= "</td>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=forums"), "<img src=\"system/img/admin/forums.png\" alt=\"\" /><br />".$L['Forums'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=users"), "<img src=\"system/img/admin/users.png\" alt=\"\" /><br />".$L['Users'], sed_auth('users', 'a', 'A'));
 $adminmenu .= "</td>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"".sed_url("admin", "m=tools")."\">";
-$adminmenu .= "<img src=\"system/img/admin/manage.png\" alt=\"\" /><br />".$L['adm_manage']."</a></td>";
+$adminmenu .= "<img src=\"system/img/admin/manage.png\" alt=\"\" /><br />".$L['adm_manage']."</a>";
+$adminmenu .= "</td>";
 
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=plug"), "<img src=\"system/img/admin/plugins.png\" alt=\"\" /><br />".$L['Plugins'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
+
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=trashcan"), "<img src=\"system/img/admin/trash.png\" alt=\"\" /><br />".$L['Trashcan'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
 
-$adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
 $adminmenu .= sed_linkif(sed_url("admin", "m=log"), "<img src=\"system/img/admin/log.png\" alt=\"\" /><br />".$L['adm_log'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
