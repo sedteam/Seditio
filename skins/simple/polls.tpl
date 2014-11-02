@@ -11,9 +11,7 @@
 <!-- BEGIN: POLLS_VIEW -->
 
 <div id="title">
-
   <h2>{POLLS_TITLE}</h2>
-
 </div>
 
 <div id="page">
