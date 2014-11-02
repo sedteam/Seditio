@@ -61,7 +61,7 @@ $disp_header .= '<style type="text/css">';
 $disp_header .= '<!-- ';
 $disp_header .= 'body 		{ background-color: #FFFFFF; padding:24px; text-align:center; margin:0; ';
 $disp_header .= 'font-family: Segoe UI, Verdana, Arial, Helvetica; color: #101010; font-size: 13px; }';
-$disp_header .= '#container	{ width:800px; margin:0 auto 0 auto; padding:8px 20px 12px 20px; text-align:left; background-color: #F0F0F0; } ';
+$disp_header .= '#conte	{ width:800px; margin:20px auto 0 auto; padding:8px 20px 12px 20px; text-align:left; background-color: #F0F0F0; border-radius:20px;} ';
 $disp_header .= 'a 			{ text-decoration: none; color: #306797; }';
 $disp_header .= 'a:hover 	{ text-decoration: none; color: #000000; background-color: #AFCCE5; }';
 $disp_header .= '.no 	 	{ color: #c31d1d; }';
@@ -72,10 +72,11 @@ $disp_header .= '.coltop		{ text-align:center; font-size:95%;  background-color:
 $disp_header .= '.desc 		{ font-size:90%; padding:3px; color:#646464; }';
 $disp_header .= '-->';
 $disp_header .= '</style>';
+$disp_header .= '<link rel="stylesheet" type="text/css" href="skins/simple/simple.css" />';
 $disp_header .= '<title>'.$L['install_title'].'</title>';
 $disp_header .= '</head>';
 $disp_header .= '<body>';
-$disp_header .= '<div id="container">';
+$disp_header .= '<div id="conte">';
 $disp_footer = '</div><br /></div><br /></body><br /></html>';
 
 // -----------------------------------------------
@@ -236,7 +237,7 @@ switch($m)
 		$res .= "<span class=\"yes\">".$L['install_done']."</span>";
 
     $res .= "<form name=\"install\" action=\"install.php?m=plugins\" method=\"post\">";
-    $res .= "<input type=\"submit\" style=\"margin-top:32px;\" value=\"".$L['install_contine_toplugins']."\">";
+    $res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_toplugins']."\">";
     $res .= "</form>";
 
 		}
@@ -253,7 +254,7 @@ switch($m)
   
   $step = 4;
   
-  $res .= "<h3>".$L['install_plugins']." :<h3>";
+  $res .= "<h3>".$L['install_plugins']." :</h3>";
   $res .= $L['install_optional_plugins'];
   $res .= "<form name=\"install\" action=\"install.php?m=plinst\" method=\"post\">";
   $res .= "<table class=\"cells striped\">";
@@ -295,7 +296,7 @@ switch($m)
     }
   
 	$res .= "</table>";  
-	$res .= "<input type=\"submit\" style=\"margin-top:32px;\" value=\"".$L['install_now']."\">";
+	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_now']."\">";
 	$res .= "</form>";
 
 	break;
@@ -354,7 +355,7 @@ switch($m)
   sed_stat_create('installed', 1);
   
   $res .= "<form name=\"install\" action=\"install.php?m=home\" method=\"post\">";
-	$res .= "<input type=\"submit\" style=\"margin-top:32px;\" value=\"".$L['install_contine_homepage']."\">";
+	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_homepage']."\">";
 	$res .= "</form>";
   
 	break;
@@ -391,7 +392,7 @@ switch($m)
 
 	$res .= "<h3>".$L['install_database_setup']."</h3>";
 
-	$res .= "<table>";
+	$res .= "<table class=\"cells\">";
 	$res .= "<tr><td style=\"width:172px;\">".$L['install_database_hosturl']."</td><td colspan=\"2\">";
 	$res .= "<input type=\"text\" name=\"mysqlhost\" size=\"32\" value=\"localhost\" maxlength=\"128\" />";
 	$res .= " (".$L['install_always_localhost'].")</td></tr>";
@@ -420,7 +421,7 @@ switch($m)
 	
 	$res .= "<h3>".$L['install_input_mode']."</h3>";
 
-	$res .= "<table style=\"width:100%;\">";	
+	$res .= "<table style=\"width:100%;\" class=\"cells\">";	
 
   $res .= "<tr><td><td style=\"vertical-align:top;\"><input type=\"radio\" name=\"textmode\" value=\"html\" checked=\"checked\">";
   $res .= "</td><td style=\"width:95%;\">".$L['install_html_mode'];
@@ -434,7 +435,7 @@ switch($m)
  
 	$res .= "<h3>".$L['install_skinandlang']."</h3>";
 	
-	$res .= "<table style=\"width:100%;\">";	
+	$res .= "<table style=\"width:100%;\" class=\"cells\">";	
 
 	$res .= "<tr><td style=\"width:172px; vertical-align:top;\">".$L['install_default_skin']."</td><td  style=\"vertical-align:top;\">";
 	$res .= sed_radiobox_skin($cfg['default_skin'], 'defaultskin')."</td></tr>";
@@ -445,7 +446,7 @@ switch($m)
 
 	$res .= "<h3>".$L['install_admin_account']."</h3>";	
 
-	$res .= "<table style=\"width:100%;\">";	
+	$res .= "<table style=\"width:100%;\" class=\"cells\">";	
 	$res .= "<tr><td style=\"width:172px;\">".$L['install_account_name']."</td>";
 	$res .= "<td><input type=\"text\" name=\"admin_name\" size=\"32\" value=\"\" maxlength=\"128\" /> (".$L['install_ownaccount_name'].")</td></tr>";
 	$res .= "<tr><td style=\"width:172px;\">".$L['install_password']."</td>";
@@ -454,7 +455,7 @@ switch($m)
 	$res .= "<td><input type=\"text\" name=\"admin_email\" size=\"32\" value=\"\" maxlength=\"128\" /> (".$L['install_doublecheck'].")</td></tr>";
 	$res .= "<tr><td style=\"width:172px;\">".$L['install_country']."</td>";
 	$res .= "<td>".sed_selectbox_countries($cfg['defaultcountry'], 'admin_country')."</td></tr>";
-	$res .= "<tr><td colspan=\"2\" style=\"padding-top:32px; text-align:center;\"><input type=\"submit\" value=\"".$L['install_validate']."\"></td></tr>";
+	$res .= "<tr><td colspan=\"2\" style=\"padding-top:32px; text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['install_validate']."\"></td></tr>";
 	$res .= "</table>";
 	
 	$res .= "</form>";
@@ -474,7 +475,7 @@ switch($m)
 	$res .= "<table style=\"width:100%; margin-top:8px;\">";
 	$res .= "<tr><td style=\"width:50%px; vertical-align:top;\">";
 
-	$res .= "<table style=\"width:100%;\">";
+	$res .= "<table style=\"width:100%;\" class=\"cells\">";
 	foreach ($rwfolders as $i => $j)
 		{
 		$res .= "<tr><td style=\"width:172px;\">".$L['install_folder']." <strong>$j</strong> :</td><td style=\"padding-right:16px;\">";
@@ -488,7 +489,7 @@ switch($m)
 
 	$res .= "</td><td style=\"width:50%px; vertical-align:top;\">";
 
-	$res .= "<table style=\"width:100%;\">";
+	$res .= "<table style=\"width:100%;\" class=\"cells\">";
 	$res .= "<tr><td style=\"width:150px;\">".$L['install_file']." <strong>datas/config.php</strong> :</td><td>";
 
 	if (file_exists($cfg['config_file']))
@@ -520,7 +521,7 @@ switch($m)
 	$res .= "</table>";
 
 	$res .= "<form name=\"install\" action=\"install.php?m=param\" method=\"post\">";
-	$res .= "<input type=\"submit\" style=\"margin-top:32px;\" value=\"".$L['install_nextstep']."\">";
+	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_nextstep']."\">";
 	$res .= "</form>";
 
 	break;
@@ -532,7 +533,7 @@ switch($m)
   $res .= "<h3>".$L['install_language installation']."</h3>";
 	
 	$res .= "<form name=\"install\" action=\"install.php?m=onestep\" method=\"post\">";
-  $res .= "<table style=\"width:100%;\">";	
+  $res .= "<table style=\"width:100%;\" class=\"cells\">";	
 
 	$res .= "<tr><td style=\"width:196px;\">".$L['install_select_language installation']."</td><td>";
 	$res .= sed_selectbox_lang_install('', 'langinstall')."</td></tr>";
@@ -540,7 +541,7 @@ switch($m)
 	$res .= "</table>";
 	
 	
-	$res .= "<input type=\"submit\" style=\"margin-top:32px;\" value=\"".$L['install_nextstep']."\">";
+	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_nextstep']."\">";
 	$res .= "</form>";
   
   break;
@@ -548,7 +549,7 @@ switch($m)
   }
 
 $disp_shared = "<table style=\"width:100%; border-bottom:#CCCCCC dashed 1px;\">";
-$disp_shared .= "<tr><td style=\"width:50%;\"><img src=\"system/install/seditio.png\" alt=\"\" /></td>";
+$disp_shared .= "<tr><td style=\"width:50%; vertical-align:middle;\"><img src=\"system/install/seditio.png\" alt=\"\" /></td>";
 $disp_shared .= "<td style=\"width:50%; vertical-align:middle;\">";
 foreach ($steps as $i => $j)
 	{
