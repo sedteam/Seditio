@@ -249,6 +249,15 @@ else
     $db_forum_structure AS n ON n.fn_code=s.fs_category
     ORDER by fn_path ASC, fs_order ASC, fs_title ASC");
     
+	$adminmain .= "<div class=\"sedtabs\">	
+		<ul class=\"tabs\">
+      <li><a href=\"".$sys['request_uri']."#tab1\">".$L['editdeleteentries']."</a></li>
+      <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
+    </ul>    
+    <div class=\"tab-box\">";
+
+	$adminmain .= "<div id=\"tab1\" class=\"tabs\">";
+
   $adminmain .= "<h4>".$L['editdeleteentries']."</h4>";    
 
 	$adminmain .= "<form id=\"updateorder\" action=\"".sed_url("admin", "m=forums&a=update")."\" method=\"post\">";
@@ -303,6 +312,10 @@ else
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table>";
 	$adminmain .= "</form>";
+	
+	$adminmain .= "</div>";
+	
+	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";	
   
   $adminmain .= "<h4>".$L['addnewentry']."</h4>";  
 	$adminmain .= "<form id=\"addsection\" action=\"".sed_url("admin", "m=forums&a=add")."\" method=\"post\">";
@@ -312,7 +325,9 @@ else
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"64\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr>";
 	$adminmain .= "</table>";
-	$adminmain .= "</form>";  
+	$adminmain .= "</form>"; 
+	
+	$adminmain .= "</div></div></div>"; 
 	}
 
 ?>

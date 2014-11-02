@@ -191,6 +191,15 @@ switch($n)
 
 	$sql = sed_sql_query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
 
+	$adminmain .= "<div class=\"sedtabs\">	
+		<ul class=\"tabs\">
+      <li><a href=\"".$sys['request_uri']."#tab1\">".$L['Users']."</a></li>
+      <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
+    </ul>    
+    <div class=\"tab-box\">";
+
+	$adminmain .= "<div id=\"tab1\" class=\"tabs\">";
+
 	$adminmain .= "<table class=\"cells striped\">";
 	$adminmain .= "<tr>";
 	$adminmain .= "<td  class=\"coltop\">#ID</td>";
@@ -221,6 +230,9 @@ switch($n)
 			}
 		}
 	$adminmain .= "</table>";
+	
+	$adminmain .= "</div>";
+	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
 
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$adminmain .= "<form id=\"addlevel\" action=\"".sed_url("admin", "m=users&n=add")."\" method=\"post\">";
@@ -268,6 +280,7 @@ switch($n)
 	$adminmain .= "</td></tr>";
 
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr></table></form>";
+	$adminmain .= "</div></div></div>";
 	break;
 	}
 
