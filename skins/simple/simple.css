@@ -23,8 +23,7 @@ body {
 	line-height: 1;
 }
 ol, ul {
-	list-style: none;
-	margin:20px 20px;
+	margin:20px 0px 20px 40px;
 }
 blockquote, q {
 	quotes: none;
@@ -142,6 +141,19 @@ h6 { font-size: 14px; }
 
 p {
 	margin: 0 0 10px;
+}
+
+blockquote {
+  margin-bottom: 1.65em;
+  position: relative;
+  color: #777777;
+  padding-left: 1.65em;
+  margin-left: 1.65em;
+  border-left: 1px solid #ddd;
+}
+
+blockquote p {
+  margin-bottom: .5em;
 }
 
 /* = User Menu
@@ -627,46 +639,6 @@ div.descr {
 	margin-left: 8px;
 }
 
-.col-row:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-.col-row {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  margin-bottom: 1.5em;
-}
-
-.end {
-  margin-bottom: 0;
-}
-
-.margin-auto { margin:0 auto; }
-
-.width-10 { width:10%; }
-.width-20 { width:20%; }
-.width-30 { width:30%; }
-.width-40 { width:40%; }
-.width-50 { width:50%; }
-.width-60 { width:60%; }
-.width-70 { width:70%; }
-.width-80 { width:80%; }
-.width-90 { width:90%; }
-.width-100 { width:100%; }
-
-.colleft {
-	float: left;
-}
-
-.colright {
-	float: right;
-}
-
 .bar_front {
 	background-color: #72b626;
 	border-right: 0px solid #333333;
@@ -728,7 +700,50 @@ div.descr {
 	background-color: #FF0000;
 }
 
-/* =Tables
+/* = Columns
+-----------------------------------------------------------------------------*/
+
+.col-row:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.col-row {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom: 1.5em;
+}
+
+.end {
+  margin-bottom: 0;
+}
+
+.margin-auto { margin:0 auto; }
+
+.width-10 { width:10%; }
+.width-20 { width:20%; }
+.width-30 { width:30%; }
+.width-40 { width:40%; }
+.width-50 { width:50%; }
+.width-60 { width:60%; }
+.width-70 { width:70%; }
+.width-80 { width:80%; }
+.width-90 { width:90%; }
+.width-100 { width:100%; }
+
+.colleft {
+	float: left;
+}
+
+.colright {
+	float: right;
+}
+
+/* = Tables
 -----------------------------------------------------------------------------*/
 
 table {
@@ -755,6 +770,10 @@ table.flat {
 	width: 100%;
 }
 
+table.flat th, table.flat td {
+	border:0;
+}
+
 table.main {
 	width: 100%;
 }
@@ -770,7 +789,6 @@ vertical-align: middle;
 table.list {
 	width: 100%;
 }
-
 
 /* = Icons List
 -----------------------------------------------------------------------------*/
@@ -856,8 +874,7 @@ ul.tabs li a.selected {
 .pagination {
   position: relative;
   left: -9px;
-  margin-left: 0;
-  margin-bottom:0;
+  margin: 0;
   list-style: none;  
 }
 .pagination:after {
@@ -892,7 +909,9 @@ ul.tabs li a.selected {
   color: #ffffff;
 }
 
-/* Pills */
+/* = Horizontal Pils (use in forums)
+-----------------------------------------------------------------------------*/
+
 .nav-pills {
   margin-bottom: 1.15em;
 }
@@ -932,5 +951,40 @@ ul.tabs li a.selected {
 }
 .nav-pills ul li a:hover {
   color: #555555;
+  text-decoration: underline;
+}
+
+/* = Vertical Menu (use in admin area)
+-----------------------------------------------------------------------------*/
+
+.nav-v {
+  margin-bottom: 1.65em;
+}
+.nav-v ul {
+  list-style: none;
+  margin: 0;
+}
+.nav-v ul li {
+  border-bottom: 1px solid #eee;
+}
+.nav-v ul li ul {
+  margin-left: 2em;
+  font-size: .95em;
+}
+.nav-v ul li ul li:last-child {
+  border-bottom: none;
+}
+.nav-v ul li ul li a {
+  padding: 4px 0;
+}
+.nav-v ul li a {
+  display: block;
+  padding: 5px 0;
+}
+.nav-v ul li a {
+  text-decoration: none;
+}
+.nav-v ul li a:hover {
+  color: #ef6465;
   text-decoration: underline;
 }
