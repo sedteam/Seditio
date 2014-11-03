@@ -27,6 +27,10 @@ $adminpath[] = array (sed_url("admin", "m=forums&s=structure"), $L['adm_forum_st
 $adminhelp = $L['adm_help_forum_structure'];
 $adminmain = "<h2><img src=\"system/img/admin/forums.png\" alt=\"\" /> ".$L['adm_forum_structure']."</h2>"; 
 
+$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=forums")."\">".$L['Configuration']."</a></li><li>";
+$adminmain .= sed_linkif(sed_url("admin", "m=forums"), $L['Forums'], sed_auth('admin', 'a', 'A'));
+$adminmain .= "</li></ul>";
+
 if ($n=='options')
 	{
 	if ($a=='update')
@@ -98,7 +102,7 @@ if ($n=='options')
 
 	$adminpath[] = array (sed_url("admin", "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
 
-  $adminmain .= "<h4>".$L['editdeleteentries']." : ".sed_cc($fn_title)."</h4>";
+	$adminmain .= "<h4>".$L['editdeleteentries']." : ".sed_cc($fn_title)."</h4>";
 
 	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=forums&s=structure&n=options&a=update&id=".$fn_id)."\" method=\"post\">";  
   
@@ -182,7 +186,16 @@ else
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC");
   
-  $adminmain .= "<h4>".$L['editdeleteentries']."</h4>";  
+	$adminmain .= "<div class=\"sedtabs\">	
+	<ul class=\"tabs\">
+      <li><a href=\"".$sys['request_uri']."#tab1\">".$L['editdeleteentries']."</a></li>
+      <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
+    </ul>    
+    <div class=\"tab-box\">";
+
+	$adminmain .= "<div id=\"tab1\" class=\"tabs\">";	
+	
+	$adminmain .= "<h4>".$L['editdeleteentries']."</h4>";  
 
 	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=forums&s=structure&a=update")."\" method=\"post\">";
   
@@ -243,13 +256,16 @@ else
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table>";
-  $adminmain .= "</form>";
+	$adminmain .= "</form>";
+	
+	$adminmain .= "</div>";
+	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
   
-  $adminmain .= "<h4>".$L['addnewentry']."</h4>"; 
+	$adminmain .= "<h4>".$L['addnewentry']."</h4>"; 
 	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url("admin", "m=forums&s=structure&a=add")."\" method=\"post\">";
 
 	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td style=\"width:160px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
+	$adminmain .= "<tr><td style=\"width:180px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_defstate']." :</td><td><input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"1\" checked=\"checked\" />".$L['adm_defstate_1']." <input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"0\" />".$L['adm_defstate_0']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"32\" /> ".$L['adm_required']."</td></tr>";
@@ -257,7 +273,9 @@ else
 	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr>";
 	$adminmain .= "</table>";
-  $adminmain .= "</form>";  
+	$adminmain .= "</form>";  
+	
+	$adminmain .= "</div></div></div>";
 	}
 
 ?>

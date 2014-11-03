@@ -30,6 +30,14 @@ a, a:visited {
 
 a:hover, a:focus { color: #888; }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #303030;
+  font-family: 'PT Sans', Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-weight: bold;
+  margin-top: 20px;
+	margin-bottom: 10px;
+}
+
 /* =========== CSS Selector ========== */
 
 #css {

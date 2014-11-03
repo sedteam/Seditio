@@ -32,12 +32,25 @@ if (!function_exists('gd_info') && $cfg['th_amode']!='Disabled')
 if (!empty($adminwarnings))
 	{ $adminmain .= "<div class=\"error\">".$L['adm_warnings']." :".$adminwarnings."</div>"; }
 
+
+$adminmain .= "<div class=\"sedtabs\">	
+<ul class=\"tabs\">
+  <li><a href=\"".$sys['request_uri']."#tab1\">".$L['Pages']."</a></li>
+  <li><a href=\"".$sys['request_uri']."#tab2\">".$L['upg_upgrade']."</a></li>
+  <li><a href=\"".$sys['request_uri']."#tab3\">".$L['adm_infos']."</a></li>
+</ul>    
+<div class=\"tab-box\">";
+
+$adminmain .= "<div id=\"tab1\" class=\"tabs\">";	
+	
 $adminmain .= "<h4>".$L['adm_valqueue']." :</h4><ul class=\"arrow_list\">";
 $adminmain .= "<li><a href=\"".sed_url("admin", "m=page")."\">".$L['Pages']." : ".$pagesqueued."</a></li>";
+$adminmain .= "<li>".sed_linkif(sed_url("page", "m=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
 $adminmain .= "</ul>";
 
-// --------------------------
+$adminmain .= "</div>";
 
+// --------------------------
 
 if ($sys['user_istopadmin'])
 	{
@@ -55,6 +68,8 @@ if ($sys['user_istopadmin'])
     sed_stat_create('version', $cfg['version']);
     $cfg['sqlversion'] = $cfg['version'];
     }
+
+	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
 
 	$adminmain .= "<h4>".$L['upg_upgrade']." :</h4>";
 
@@ -90,9 +105,9 @@ if ($sys['user_istopadmin'])
 	 	$adminmain .= $L['upg_codeisolder'];
 		}
 
-  $adminmain .= "</td><td style=\"text-align:center; width:10%; vertical-align:middle;\" rowspan=\"2\">";
-  $adminmain .= ($status_ok) ? $out['img_checked'] : "<img src=\"system/img/admin/warning.png\" alt=\"\" />"; 
-  $adminmain .= "</td></tr>";
+	$adminmain .= "</td><td style=\"text-align:center; width:10%; vertical-align:middle;\" rowspan=\"2\">";
+	$adminmain .= ($status_ok) ? $out['img_checked'] : "<img src=\"system/img/admin/warning.png\" alt=\"\" />"; 
+	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td>".$L['upg_force'];
 	$adminmain .= "<select name=\"forcesql\" size=\"1\">";
 
@@ -106,11 +121,13 @@ if ($sys['user_istopadmin'])
 	$adminmain .= " <input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" />";
 	$adminmain .= "</td></tr></table></form>";
 
+	$adminmain .= "</div>";
 	}
 
-$adminmain .= "<h4>".$L['adm_infos'];
-$adminmain .= " (<a onclick=\"return toggleblock('infos')\" href=\"".sed_url('admin', '', '#')."\">".$L['Show']."</a>) :</h4>";
-$adminmain .= "<div name=\"log\" id=\"infos\" style=\"display:none;\" >";
+$adminmain .= "<div id=\"tab3\" class=\"tabs\">";
+
+$adminmain .= "<h4>".$L['adm_infos']." :</h4>";
+$adminmain .= "<div name=\"log\" id=\"infos\">";
 $adminmain .= "<table class=\"cells striped\" >";	
 $adminmain .= (function_exists('phpversion')) ? "<tr><td>".$L['adm_phpver']." :</td><td style=\"text-align:center;\">".@phpversion()."</td></tr>" : '' ;
 $adminmain .= (function_exists('zend_version')) ? "<tr><td>".$L['adm_zendver']." :</td><td style=\"text-align:center;\">".@zend_version()."</td></tr>" : '';
@@ -120,6 +137,8 @@ $mysql_ver = sed_sql_query("SELECT VERSION() as mysql_version");
 $adminmain .= "<tr><td>SQL :</td><td style=\"text-align:center;\">".sed_sql_result($mysql_ver, 0, "mysql_version")."</td></tr>";
 $adminmain .= "</table>";
 $adminmain .= "</div>";
+
+$adminmain .= "</div></div></div>";
 
 // --------------------------
 

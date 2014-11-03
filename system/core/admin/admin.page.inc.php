@@ -53,7 +53,7 @@ switch($mn)
     sed_block($usr['isadmin']);
     
     $adminpath[] = array (sed_url("admin", "m=page&mn=structure"), $L['Structure']);
-    
+
     $adminmain .= "<h4>".$L['Structure']."</h4>";
     
     if ($n=='options')
@@ -64,7 +64,7 @@ switch($mn)
     		$rtitle = sed_import('rtitle','P','TXT');
     		$rtplmode = sed_import('rtplmode','P','INT');
     		$rdesc = sed_import('rdesc','P','TXT');
-    	$rstext = sed_import('rstext','P','HTM'); //New v175
+			$rstext = sed_import('rstext','P','HTM'); //New v175
     		$ricon = sed_import('ricon','P','TXT');
     		$rgroup = sed_import('rgroup','P','BOL');
     		
@@ -186,7 +186,7 @@ switch($mn)
     	$adminmain .= "</td></tr>";
     	$adminmain .= "<tr><td>".$L['adm_enablecomments']." :</td><td>".$form_allowcomments."</td></tr>";
     	$adminmain .= "<tr><td>".$L['adm_enableratings']." :</td><td>".$form_allowratings."</td></tr>";
-    	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn btn-green btn-adm\" value=\"".$L['Update']."\" /></td></tr>";
+    	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
     	$adminmain .= "</table>";
     	$adminmain .= "</form>";
     	}
@@ -234,7 +234,16 @@ switch($mn)
     
     	$skinpath = "skins/".$skin."/";
     
-    	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=page&mn=structure&a=update")."\" method=\"post\">";  
+		$adminmain .= "<div class=\"sedtabs\">	
+			<ul class=\"tabs\">
+		  <li><a href=\"".$sys['request_uri']."#tab1\">".$L['Structure']."</a></li>
+		  <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
+		</ul>    
+		<div class=\"tab-box\">";
+
+		$adminmain .= "<div id=\"tab1\" class=\"tabs\">";
+
+		$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=page&mn=structure&a=update")."\" method=\"post\">";  
       
     	$adminmain .= "<table class=\"cells striped\">";
     	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
@@ -308,6 +317,10 @@ switch($mn)
     	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
     	$adminmain .= "</table>";
     	$adminmain .= "</form>";
+		
+		$adminmain .= "</div>";
+		
+		$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
 
     	$adminmain .= "<h4>".$L['addnewentry']."</h4>"; 
     	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url("admin", "m=page&mn=structure&a=add")."\" method=\"post\">";
@@ -321,7 +334,10 @@ switch($mn)
     	$adminmain .= "<tr><td>".$L['Group']." :</td><td><input type=\"checkbox\" class=\"checkbox\" name=\"ngroup\" /></td></tr>";
     	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr>";
     	$adminmain .= "</table>";
-    	$adminmain .= "</form>";  
+    	$adminmain .= "</form>"; 
+
+		$adminmain .= "</div></div></div>"; 
+		
     	}
 
   break;

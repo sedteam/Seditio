@@ -122,7 +122,7 @@ if ($n=='edit')
 
 	$adminpath[] = array(sed_url("admin", "m=forums&n=edit&id=".$id), sed_cc($fs_title));
 
-  $adminmain .= "<h4>".$L['editdeleteentries']." : ".sed_cc($fs_title)."</h4>";
+	$adminmain .= "<h4>".$L['editdeleteentries']." : ".sed_cc($fs_title)."</h4>";
 
 	$adminmain .= "<form id=\"updatesection\" action=\"".sed_url("admin", "m=forums&n=edit&a=update&id=".$fs_id."&".sed_xg())."\" method=\"post\">";
   
@@ -132,7 +132,7 @@ if ($n=='edit')
   /* ======== New Sed 171 Subforums ========== */
 	
 	$adminmain .= "<tr><td>".$L['adm_parentcat']." :</td><td><select name=\"rparentcat\"><option value=\"0\">--</option>";	
-  $sql = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections 
+	$sql = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections 
                         AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code = s.fs_category 
                         WHERE fs_id <> '$id' AND fs_parentcat < 1 AND fs_category = '".$fs_category."' 
                         ORDER by fn_path ASC, fs_order ASC");
@@ -151,9 +151,9 @@ if ($n=='edit')
 	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($fs_title)."\" size=\"56\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($fs_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Icon']." :</td><td> <input type=\"text\" class=\"text\" name=\"ricon\" value=\"".sed_cc($fs_icon)."\" size=\"40\" maxlength=\"255\" />";
-  if (file_exists($fs_icon))
+	if (file_exists($fs_icon))
     { $adminmain .= " <img src=\"".$fs_icon."\" alt=\"\" />"; }
-  $adminmain .= "</td></tr>";
+	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_diplaysignatures']." :</td><td>".$form_allowusertext."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_enablebbcodes']." :</td><td>".$form_allowbbcodes."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_enablesmilies']." :</td><td>".$form_allowsmilies."</td></tr>";
@@ -165,7 +165,7 @@ if ($n=='edit')
 	$adminmain .= ($usr['isadmin']) ? "<tr><td>".$L['Delete']." :</td><td><a href=\"".sed_url("admin", "m=forums&n=edit&a=delete&id=".$fs_id."&".sed_xg())."\">".$out['img_delete']."</a></td></tr>" : '';
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table>";
-  $adminmain .= "</form>";
+	$adminmain .= "</form>";
 	}
 
 else
@@ -258,7 +258,7 @@ else
 
 	$adminmain .= "<div id=\"tab1\" class=\"tabs\">";
 
-  $adminmain .= "<h4>".$L['editdeleteentries']."</h4>";    
+	$adminmain .= "<h4>".$L['editdeleteentries']."</h4>";    
 
 	$adminmain .= "<form id=\"updateorder\" action=\"".sed_url("admin", "m=forums&a=update")."\" method=\"post\">";
 
@@ -317,7 +317,7 @@ else
 	
 	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";	
   
-  $adminmain .= "<h4>".$L['addnewentry']."</h4>";  
+	$adminmain .= "<h4>".$L['addnewentry']."</h4>";  
 	$adminmain .= "<form id=\"addsection\" action=\"".sed_url("admin", "m=forums&a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells striped\">";
 	$adminmain .= "<tr><td>".$L['Category']." :</td><td>".sed_selectbox_forumcat('', 'ncat')."</td></tr>";

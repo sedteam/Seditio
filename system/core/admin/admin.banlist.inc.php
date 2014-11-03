@@ -25,6 +25,11 @@ $adminpath[] = array (sed_url("admin", "m=banlist"), $L['Banlist']);
 $adminhelp = $L['adm_help_banlist'];
 $adminmain = "<h2><img src=\"system/img/admin/banlist.png\" alt=\"\" /> ".$L['Banlist']."</h2>";
 
+$adminmain .= "<ul class=\"arrow_list\">";
+$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=config&n=edit&o=core&p=users"), $L['Configuration'], sed_auth('admin', 'a', 'A'))."</li>";
+$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=users"), $L['Users'], sed_auth('users', 'a', 'A'))."</li>";
+$adminmain .= "</ul>";
+
 if ($a=='update')
 	{
 	sed_check_xg();
