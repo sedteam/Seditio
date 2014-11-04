@@ -33,6 +33,8 @@ $id = sed_import('id','G','ALP',8);
 $vote = sed_import('vote','G','INT');
 $a = sed_import('a','G','ALP');
 
+$modal = ($cfg['enablemodal']) ? ',1' : '';
+
 /* =================================== */
 
 if ($a=='send' && $id > 0 && $vote > 0)
@@ -65,8 +67,8 @@ if ($a=='send' && $id > 0 && $vote > 0)
 				$res .= $row['po_text']." : $percentbar%<div style=\"width:95%;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div>";
 			}
 		
-		$res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$id."')\">".$L['polls_viewresults']."</a> &nbsp; ";
-		$res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></div>";
+		$res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$id."'".$modal.")\">".$L['polls_viewresults']."</a> &nbsp; ";
+		$res .= "<a href=\"javascript:polls('viewall'".$modal.")\">".$L['polls_viewarchives']."</a></div>";
 		
 		sed_sendheaders();		
 		echo $res;
