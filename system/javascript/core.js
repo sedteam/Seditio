@@ -1,17 +1,32 @@
-function popup(code,w,h)
-	{ window.open(get_basehref()+'plug.php?o='+code,'','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width='+w+',height='+h+',left=32,top=16'); }
+function popup(code,w,h,modal)
+	{ 
+		if (!modal) { window.open(get_basehref()+'plug.php?o='+code,'','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width='+w+',height='+h+',left=32,top=16'); }
+		else { sed_modal.show({iframe:get_basehref()+'plug.php?o='+code, boxid:'frameless',animate:false,width:w,height:h,fixed:false,maskid:'bluemask',maskopacity:40}); } 
+	}
 
-function pfs(id,c1,c2)
-	{ window.open(get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'); }
+function pfs(id,c1,c2,modal)
+	{	
+		if (!modal) { window.open(get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'); }
+		else { sed_modal.show({iframe:get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2, boxid:'frameless',animate:false,width:754,height:512,fixed:false,maskid:'bluemask',maskopacity:40}); }
+	}
 
-function help(rcode,c1,c2)
-	{ window.open(get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16'); }
+function help(rcode,c1,c2,modal)
+	{
+		if (!modal) { window.open(get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16'); }
+		else { sed_modal.show({iframe:get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2, boxid:'frameless',animate:false,width:500,height:512,fixed:false,maskid:'bluemask',maskopacity:40}); } 
+	}
 
-function polls(rcode)
-	{ window.open(get_basehref()+'polls.php?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
+function polls(rcode,modal)
+	{  
+		if (!modal) { window.open(get_basehref()+'polls.php?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
+		else { sed_modal.show({iframe:get_basehref()+'polls.php?id='+rcode, boxid:'frameless',animate:false,width:608,height:448,fixed:false,maskid:'bluemask',maskopacity:40}); }
+	}
 
-function pollvote(rcode,rvote)
-	{ window.open(get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
+function pollvote(rcode,rvote,modal)
+	{ 
+		if (!modal) { window.open(get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
+		else { sed_modal.show({iframe:get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote, boxid:'frameless',animate:false,width:608,height:448,fixed:false,maskid:'bluemask',maskopacity:40}); }
+	}
 
 function picture(url,sx,sy)
 	{
@@ -235,6 +250,268 @@ sed_ajx = {
 	},
 	init : function() {return this.getHTTPObject();}
 }
+
+ /* ========= Modal Windows ====== */
+ 
+ // TinyBox2 + Dragable JavaScript Modal Windows
+sed_modal = function(){
+	var j,m,b,g,v,p=0;
+	
+	var Drag = {
+		obj : null,
+		init : function(o, oRoot, minX, maxX, minY, maxY, bSwapHorzRef, bSwapVertRef, fXMapper, fYMapper) {
+			o.onmousedown = Drag.start;
+			o.hmode = bSwapHorzRef ? false : true;
+			o.vmode = bSwapVertRef ? false : true;
+			o.root = oRoot && oRoot != null ? oRoot : o;
+	
+			if (o.hmode  && isNaN(parseInt(o.root.style.left  ))) o.root.style.left = "0px";
+			if (o.vmode  && isNaN(parseInt(o.root.style.top   ))) o.root.style.top = "0px";
+			if (!o.hmode && isNaN(parseInt(o.root.style.right ))) o.root.style.right = "0px";
+			if (!o.vmode && isNaN(parseInt(o.root.style.bottom))) o.root.style.bottom = "0px";
+	
+			o.minX = typeof minX != 'undefined' ? minX : null;
+			o.minY = typeof minY != 'undefined' ? minY : null;
+			o.maxX = typeof maxX != 'undefined' ? maxX : null;
+			o.maxY = typeof maxY != 'undefined' ? maxY : null;
+	
+			o.xMapper = fXMapper ? fXMapper : null;
+			o.yMapper = fYMapper ? fYMapper : null;
+	
+			o.root.onDragStart = new Function();
+			o.root.onDragEnd = new Function();
+			o.root.onDrag = new Function();
+			},
+		start : function(e) {
+			var o = Drag.obj = this;
+			e = Drag.fixE(e);
+			var y = parseInt(o.vmode ? o.root.style.top  : o.root.style.bottom);
+			var x = parseInt(o.hmode ? o.root.style.left : o.root.style.right );
+			o.root.onDragStart(x, y);
+	
+			o.lastMouseX = e.clientX;
+			o.lastMouseY = e.clientY;
+	
+			if (o.hmode) {
+				if (o.minX != null)	o.minMouseX	= e.clientX - x + o.minX;
+				if (o.maxX != null)	o.maxMouseX	= o.minMouseX + o.maxX - o.minX;
+			} else {
+				if (o.minX != null) o.maxMouseX = -o.minX + e.clientX + x;
+				if (o.maxX != null) o.minMouseX = -o.maxX + e.clientX + x;
+			}
+	
+			if (o.vmode) {
+				if (o.minY != null)	o.minMouseY	= e.clientY - y + o.minY;
+				if (o.maxY != null)	o.maxMouseY	= o.minMouseY + o.maxY - o.minY;
+			} else {
+				if (o.minY != null) o.maxMouseY = -o.minY + e.clientY + y;
+				if (o.maxY != null) o.minMouseY = -o.maxY + e.clientY + y;
+			}
+	
+			document.onmousemove = Drag.drag;
+			document.onmouseup = Drag.end;
+			return false;
+			},
+		drag : function(e) {
+			e = Drag.fixE(e);
+			var o = Drag.obj;
+	
+			var ey = e.clientY;
+			var ex = e.clientX;
+			var y = parseInt(o.vmode ? o.root.style.top  : o.root.style.bottom);
+			var x = parseInt(o.hmode ? o.root.style.left : o.root.style.right );
+			var nx, ny;
+	
+			if (o.minX != null) ex = o.hmode ? Math.max(ex, o.minMouseX) : Math.min(ex, o.maxMouseX);
+			if (o.maxX != null) ex = o.hmode ? Math.min(ex, o.maxMouseX) : Math.max(ex, o.minMouseX);
+			if (o.minY != null) ey = o.vmode ? Math.max(ey, o.minMouseY) : Math.min(ey, o.maxMouseY);
+			if (o.maxY != null) ey = o.vmode ? Math.min(ey, o.maxMouseY) : Math.max(ey, o.minMouseY);
+	
+			nx = x + ((ex - o.lastMouseX) * (o.hmode ? 1 : -1));
+			ny = y + ((ey - o.lastMouseY) * (o.vmode ? 1 : -1));
+	
+			if (o.xMapper) nx = o.xMapper(y);
+			else if (o.yMapper)	ny = o.yMapper(x);
+	
+			Drag.obj.root.style[o.hmode ? "left" : "right"] = nx + "px";
+			Drag.obj.root.style[o.vmode ? "top" : "bottom"] = ny + "px";
+			Drag.obj.lastMouseX	= ex;
+			Drag.obj.lastMouseY	= ey;
+			Drag.obj.root.onDrag(nx, ny);
+			return false;
+			},
+		end : function() {
+			document.onmousemove = null;
+			document.onmouseup   = null;
+			Drag.obj.root.onDragEnd(parseInt(Drag.obj.root.style[Drag.obj.hmode ? "left" : "right"]), 
+									parseInt(Drag.obj.root.style[Drag.obj.vmode ? "top" : "bottom"]));
+			Drag.obj = null;
+			},
+		fixE : function(e) {
+			if (typeof e == 'undefined') e = window.event;
+			if (typeof e.layerX == 'undefined') e.layerX = e.offsetX;
+			if (typeof e.layerY == 'undefined') e.layerY = e.offsetY;
+			return e;
+			}
+		};	
+	
+	return { 		
+		show:function(o){
+			/* Parameters
+			html - HTML content for window (string) - false
+			iframe - URL for embedded iframe (string) - false
+			url - path for AJAX call (string) - false
+			post - post variable string, used in conjunction with url (string) - false
+			image - image path (string) - false
+			width - preset width (int) - false
+			height - preset height (int) - false
+			animate - toggle animation (bool) - true
+			close - toggle close button (bool) - true
+			openjs - generic function executed on open (string) - null
+			closejs - generic function executed on close (string) - null
+			autohide - number of seconds to wait until auto-hiding (int) - false
+			boxid - ID of box div for style overriding purposes (string) - ''
+			maskid - ID of mask div for style overriding purposes (string) - ''
+			fixed - toggle fixed position vs static (bool) - true
+			opacity - set the opacity of the mask from 0-100 (int) - 70
+			mask - toggle mask display (bool) - true
+			top - absolute pixels from top (int) - null
+			left - absolute pixels from left (int) - null
+			topsplit - 1/x where x is the denominator in the split from the top (int) - 2
+			*/
+		
+			v={opacity:70,close:1,animate:1,fixed:1,mask:1,maskid:'',boxid:'',topsplit:2,url:0,post:0,height:0,width:0,html:0,iframe:0};
+			for(s in o){v[s]=o[s]}
+			if(!p){
+				j=document.createElement('div'); j.className='tbox';
+				p=document.createElement('div'); p.className='tinner';
+				b=document.createElement('div'); b.className='tcontent';
+				m=document.createElement('div'); m.className='tmask';
+				g=document.createElement('div'); g.className='tclose'; g.v=0;
+				
+	      Drag.init(j, j, 0, null, 0);
+	      j.style.cursor = "move";				
+				
+				document.body.appendChild(m); document.body.appendChild(j); j.appendChild(p); p.appendChild(b);
+				m.onclick=g.onclick=sed_modal.hide; window.onresize=sed_modal.resize
+			}else{
+				j.style.display='none'; clearTimeout(p.ah); if(g.v){p.removeChild(g); g.v=0}
+			}
+			p.id=v.boxid; m.id=v.maskid; j.style.position=v.fixed?'fixed':'absolute';
+			if(v.html&&!v.animate){
+				p.style.backgroundImage='none'; b.innerHTML=v.html; b.style.display='';
+				p.style.width=v.width?v.width+'px':'auto'; p.style.height=v.height?v.height+'px':'auto'
+			}else{
+				b.style.display='none'; 
+				if(!v.animate&&v.width&&v.height){
+					p.style.width=v.width+'px'; p.style.height=v.height+'px'
+				}else{
+					p.style.width=p.style.height='100px'
+				}
+			}
+			if(v.mask){this.mask(); this.alpha(m,1,v.opacity)}else{this.alpha(j,1,100)}
+			if(v.autohide){p.ah=setTimeout(sed_modal.hide,1000*v.autohide)}else{document.onkeyup=sed_modal.esc}
+		},
+		fill:function(c,u,k,a,w,h){
+			if(u){
+				if(v.image){
+					var i=new Image(); i.onload=function(){w=w||i.width; h=h||i.height; sed_modal.psh(i,a,w,h)}; i.src=v.image
+				}else if(v.iframe){
+					this.psh('<iframe src="'+v.iframe+'" width="'+v.width+'" frameborder="0" height="'+v.height+'"></iframe>',a,w,h)
+				}else{
+					var x=window.XMLHttpRequest?new XMLHttpRequest():new ActiveXObject('Microsoft.XMLHTTP');
+					x.onreadystatechange=function(){
+						if(x.readyState==4&&x.status==200){p.style.backgroundImage=''; sed_modal.psh(x.responseText,a,w,h)}
+					};
+					if(k){
+    	            	x.open('POST',c,true); x.setRequestHeader('Content-type','application/x-www-form-urlencoded'); x.send(k)
+					}else{
+       	         		x.open('GET',c,true); x.send(null)
+					}
+				}
+			}else{
+				this.psh(c,a,w,h)
+			}
+		},
+		psh:function(c,a,w,h){
+			if(typeof c=='object'){b.appendChild(c)}else{b.innerHTML=c}
+			var x=p.style.width, y=p.style.height;
+			if(!w||!h){
+				p.style.width=w?w+'px':''; p.style.height=h?h+'px':''; b.style.display='';
+				if(!h){h=parseInt(b.offsetHeight)}
+				if(!w){w=parseInt(b.offsetWidth)}
+				b.style.display='none'
+			}
+			p.style.width=x; p.style.height=y;
+			this.size(w,h,a)
+		},
+		esc:function(e){e=e||window.event; if(e.keyCode==27){sed_modal.hide()}},
+		hide:function(){sed_modal.alpha(j,-1,0,3); document.onkeypress=null; if(v.closejs){v.closejs()}},
+		resize:function(){sed_modal.pos(); sed_modal.mask()},
+		mask:function(){m.style.height=this.total(1)+'px'; m.style.width=this.total(0)+'px'},
+		pos:function(){
+			var t;
+			if(typeof v.top!='undefined'){t=v.top}else{t=(this.height()/v.topsplit)-(j.offsetHeight/2); t=t<20?20:t}
+			if(!v.fixed&&!v.top){t+=this.top()}
+			j.style.top=t+'px'; 
+			j.style.left=typeof v.left!='undefined'?v.left+'px':(this.width()/2)-(j.offsetWidth/2)+'px'
+		},
+		alpha:function(e,d,a){
+			clearInterval(e.ai);
+			if(d){e.style.opacity=0; e.style.filter='alpha(opacity=0)'; e.style.display='block'; sed_modal.pos()}
+			e.ai=setInterval(function(){sed_modal.ta(e,a,d)},20)
+		},
+		ta:function(e,a,d){
+			var o=Math.round(e.style.opacity*100);
+			if(o==a){
+				clearInterval(e.ai);
+				if(d==-1){
+					e.style.display='none';
+					e==j?sed_modal.alpha(m,-1,0,2):b.innerHTML=p.style.backgroundImage=''
+				}else{
+					if(e==m){
+						this.alpha(j,1,100)
+					}else{
+						j.style.filter='';
+						sed_modal.fill(v.html||v.url,v.url||v.iframe||v.image,v.post,v.animate,v.width,v.height)
+					}
+				}
+			}else{
+				var n=a-Math.floor(Math.abs(a-o)*.5)*d;
+				e.style.opacity=n/100; e.style.filter='alpha(opacity='+n+')'
+			}
+		},
+		size:function(w,h,a){
+			if(a){
+				clearInterval(p.si); var wd=parseInt(p.style.width)>w?-1:1, hd=parseInt(p.style.height)>h?-1:1;
+				p.si=setInterval(function(){sed_modal.ts(w,wd,h,hd)},20)
+			}else{
+				p.style.backgroundImage='none'; if(v.close){p.appendChild(g); g.v=1}
+				p.style.width=w+'px'; p.style.height=h+'px'; b.style.display=''; this.pos();
+				if(v.openjs){v.openjs()}
+			}
+		},
+		ts:function(w,wd,h,hd){
+			var cw=parseInt(p.style.width), ch=parseInt(p.style.height);
+			if(cw==w&&ch==h){
+				clearInterval(p.si); p.style.backgroundImage='none'; b.style.display='block'; if(v.close){p.appendChild(g); g.v=1}
+				if(v.openjs){v.openjs()}
+			}else{
+				if(cw!=w){p.style.width=(w-Math.floor(Math.abs(w-cw)*.6)*wd)+'px'}
+				if(ch!=h){p.style.height=(h-Math.floor(Math.abs(h-ch)*.6)*hd)+'px'}
+				this.pos()
+			}
+		},
+		top:function(){return document.documentElement.scrollTop||document.body.scrollTop},
+		width:function(){return self.innerWidth||document.documentElement.clientWidth||document.body.clientWidth},
+		height:function(){return self.innerHeight||document.documentElement.clientHeight||document.body.clientHeight},
+		total:function(d){
+			var b=document.body, e=document.documentElement;
+			return d?Math.max(Math.max(b.scrollHeight,e.scrollHeight),Math.max(b.clientHeight,e.clientHeight)):
+			Math.max(Math.max(b.scrollWidth,e.scrollWidth),Math.max(b.clientWidth,e.clientWidth))
+		}
+	}
+}();
 
  /* ============================== */
 

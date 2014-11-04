@@ -30,6 +30,8 @@ if ( $cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes" )
 	{
 	$auto_popup_close = "window.close();";
 	}
+	
+$openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';	
 
 $pfs_header1 = $cfg['doctype']."<html>
 <head>
@@ -40,26 +42,26 @@ $pfs_header1 = $cfg['doctype']."<html>
 function addthumb(thmb, image)
 	{ 
 	var html = '<a href=\"'+image+'\"><img src=\"'+thmb+'\" alt=\"\" /></a>'; 
-	window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);  
+	window.".$openerparent.".CKEDITOR.instances['".$c2."'].insertHtml(html);  
 	".$auto_popup_close."
 	}
 
 function addpix(gfile)
 	{ 
 	var html = '<img src=\"'+gfile+'\" alt=\"\" />';
-	window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);
+	window.".$openerparent.".CKEDITOR.instances['".$c2."'].insertHtml(html);
 	".$auto_popup_close."
 	}
 
 function addfile(gfile, gpath)
 	{ 
 	var html = '<a href=\"'+gpath+'\" title=\"\">'+gfile+'</a>';
-	window.opener.CKEDITOR.instances['".$c2."'].insertHtml(html);
+	window.".$openerparent.".CKEDITOR.instances['".$c2."'].insertHtml(html);
 	".$auto_popup_close."
 	}
 
 function addfile_pageurl(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += gfile; 
+	{ ".$openerparent.".document.".$c1.".".$c2.".value += gfile; 
 	".$auto_popup_close." 
 	}
 

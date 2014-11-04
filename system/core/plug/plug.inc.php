@@ -175,7 +175,9 @@ elseif (!empty($o))
 		exit;
 		}
 
-	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\nopener.document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
+	$openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';
+	
+	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\n".$openerparent.".document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
 	$popup_header2 = "</head><body>";
 	$popup_footer = "</body></html>";
 
@@ -260,7 +262,9 @@ elseif (!empty($h))
 		fclose($fd);
 		}
 
-	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\nopener.document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
+	$openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';
+	
+	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\n".$openerparent.".document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
 	$popup_header2 = "</head><body>";
 	$popup_footer = "</body></html>";
 

@@ -103,6 +103,8 @@ function sed_get_latestpolls($limit, $mask)
 
 	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
 
+	$modal = ($cfg['enablemodal']) ? ',1' : ''; 
+	
 	while ($row_p = sed_sql_fetchassoc($sql_p))
 		{
 		unset($res);
@@ -146,8 +148,8 @@ function sed_get_latestpolls($limit, $mask)
  
 		if ($alreadyvoted)
 			{         
-        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a> &nbsp; \n";
-        $res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></div>\n";
+        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."'".$modal.")\">".$L['polls_viewresults']."</a> &nbsp; \n";
+        $res .= "<a href=\"javascript:polls('viewall'".$modal.")\">".$L['polls_viewarchives']."</a></div>\n";
       }
     else
       {

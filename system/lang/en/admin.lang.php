@@ -267,6 +267,7 @@ $L['cfg_parsesmiliesforums'] = array("Parse smilies in forums", "");
 $L['cfg_color_group'] = array("Colorize group of users", "Default: No, for better performance");  // New in v175
 
 $L['cfg_ajax'] = array("Enable AJAX", "");  // New in v175
+$L['cfg_enablemodal'] = array("Enable modal windows", "");  // New in v175
 
 /* ====== HTML Meta ====== */
 

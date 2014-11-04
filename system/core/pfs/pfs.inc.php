@@ -459,6 +459,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$extp = sed_getextplugins('pfs.stndl.icons');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		
 	/* ======================== */
 
 	$list_files .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more)."\">".$out['img_delete']."</a></td>";
@@ -473,6 +474,7 @@ while ($row = sed_sql_fetchassoc($sql))
   
   /*=== for hook stndl.icons ===*/
 	$list_files .= $stndl_icons_list;
+	
 	/*======*/  
   
   $list_files .= "</tr>";

@@ -804,7 +804,9 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 
 function sed_build_bbcodes($c1, $c2, $title)
 	{
-	$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."')\">".$title."</a>";
+	global $cfg;
+	$modal = ($cfg['enablemodal']) ? ',1' : '';
+	$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
 	return($result);
 	}
 
@@ -832,7 +834,9 @@ function sed_build_bbcodes_local($limit)
 
 function sed_build_smilies($c1, $c2, $title)
 	{
-	$result = "<a href=\"javascript:help('smilies','".$c1."','".$c2."')\">".$title."</a>";
+	global $cfg;
+	$modal = ($cfg['enablemodal']) ? ',1' : '';
+	$result = "<a href=\"javascript:help('smilies','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
 	return($result);
 	}
 
@@ -1119,17 +1123,18 @@ function sed_build_oddeven($number)
 
 function sed_build_pfs($id, $c1, $c2, $title)
 	{
-	global $L, $cfg, $usr, $sed_groups;
+	global $L, $cfg, $usr, $sed_groups;	
 	if ($cfg['disable_pfs'])
 		{ $res = ''; }
 	else
-		{
+		{ 
+		$modal = ($cfg['enablemodal']) ? ',1' : ''; 
 		if ($id==0)
-			{ $res = "<a href=\"javascript:pfs('0','".$c1."','".$c2."')\">".$title."</a>"; }
+			{ $res = "<a href=\"javascript:pfs('0','".$c1."','".$c2."'".$modal.")\">".$title."</a>"; }
 		elseif ($sed_groups[$usr['maingrp']]['pfs_maxtotal']>0 && $sed_groups[$usr['maingrp']]['pfs_maxfile']>0 && sed_auth('pfs', 'a', 'R'))
-			{ $res = "<a href=\"javascript:pfs('".$id."','".$c1."','".$c2."')\">".$title."</a>"; }
+			{ $res = "<a href=\"javascript:pfs('".$id."','".$c1."','".$c2."'".$modal.")\">".$title."</a>"; }
 		else
-			{ $res = ''; }
+			{ $res = ''; }   
 		}
 	return($res);
 	}

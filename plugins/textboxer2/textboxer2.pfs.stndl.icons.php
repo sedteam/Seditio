@@ -28,18 +28,18 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 // Create icons: add thumbnail, add image, add file 
 
+
+
 $icon_addimg_path = $cfg['pfs_dir'].$pfs_file;
 
 $add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"\" /></a>" : '';
 
 if ($standalone)
-{		
-  $icon_addimg_path = ($cfg['pfsuserfolder']) ? $userid."/".$pfs_file :  $pfs_file;
+{			
+	$icon_addimg_path = ($cfg['pfsuserfolder']) ? $userid."/".$pfs_file :  $pfs_file;
   $add_thumbnail = "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$icon_addimg_path."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" alt=\"\" /></a>";
   $add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" alt=\"\" /></a>";		
 }
-
-
 
 if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled') 
 {

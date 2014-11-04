@@ -267,6 +267,7 @@ $result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600
 $result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
 
 $result[] = array ('main', '13', 'ajax', 3, '0', ''); //Sed 175
+$result[] = array ('main', '14', 'enablemodal', 3, '0', ''); //Sed 175
 
 $result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
 $result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
