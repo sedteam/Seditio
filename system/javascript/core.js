@@ -1,31 +1,31 @@
 function popup(code,w,h,modal)
 	{ 
-		if (!modal) { window.open(get_basehref()+'plug.php?o='+code,'','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width='+w+',height='+h+',left=32,top=16'); }
-		else { sed_modal.show({iframe:get_basehref()+'plug.php?o='+code, boxid:'frameless',animate:false,width:w,height:h,fixed:false,maskid:'bluemask',maskopacity:40}); } 
+		if (!modal) { window.open(get_basehref()+'plug.php?o='+code,'','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width='+w+',height='+h+',left=32,top=16'); } 
+    else { sed_modal.open('popup', 'iframe', get_basehref()+'plug.php?o='+code, "Popup", 'width='+w+'px,height='+h+'px,resize=1,scrolling=1,center=1', 'recal');  }
 	}
 
 function pfs(id,c1,c2,modal)
 	{	
 		if (!modal) { window.open(get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'); }
-		else { sed_modal.show({iframe:get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2, boxid:'frameless',animate:false,width:754,height:512,fixed:false,maskid:'bluemask',maskopacity:40}); }
+    else { sed_modal.open("pfs", "iframe", get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2, "PFS", "width=754px,height=512px,resize=1,scrolling=1,center=1", "recal");  }
 	}
 
 function help(rcode,c1,c2,modal)
 	{
 		if (!modal) { window.open(get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16'); }
-		else { sed_modal.show({iframe:get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2, boxid:'frameless',animate:false,width:500,height:512,fixed:false,maskid:'bluemask',maskopacity:40}); } 
+		else { sed_modal.open("help", "iframe", get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2, "Help", "width=500px,height=520px,resize=1,scrolling=1,center=1", "recal");  }
 	}
 
 function polls(rcode,modal)
 	{  
-		if (!modal) { window.open(get_basehref()+'polls.php?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
-		else { sed_modal.show({iframe:get_basehref()+'polls.php?id='+rcode, boxid:'frameless',animate:false,width:608,height:448,fixed:false,maskid:'bluemask',maskopacity:40}); }
-	}
+		if (!modal) { window.open(get_basehref()+'polls.php?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }    
+    else { sed_modal.open("polls", "iframe", get_basehref()+'polls.php?id='+rcode, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "recal");  }
+}
 
 function pollvote(rcode,rvote,modal)
 	{ 
 		if (!modal) { window.open(get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
-		else { sed_modal.show({iframe:get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote, boxid:'frameless',animate:false,width:608,height:448,fixed:false,maskid:'bluemask',maskopacity:40}); }
+    else { sed_modal.open("pollvote", "iframe", get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "recal");  }
 	}
 
 function picture(url,sx,sy)
@@ -253,265 +253,379 @@ sed_ajx = {
 
  /* ========= Modal Windows ====== */
  
- // TinyBox2 + Dragable JavaScript Modal Windows
-sed_modal = function(){
-	var j,m,b,g,v,p=0;
-	
-	var Drag = {
-		obj : null,
-		init : function(o, oRoot, minX, maxX, minY, maxY, bSwapHorzRef, bSwapVertRef, fXMapper, fYMapper) {
-			o.onmousedown = Drag.start;
-			o.hmode = bSwapHorzRef ? false : true;
-			o.vmode = bSwapVertRef ? false : true;
-			o.root = oRoot && oRoot != null ? oRoot : o;
-	
-			if (o.hmode  && isNaN(parseInt(o.root.style.left  ))) o.root.style.left = "0px";
-			if (o.vmode  && isNaN(parseInt(o.root.style.top   ))) o.root.style.top = "0px";
-			if (!o.hmode && isNaN(parseInt(o.root.style.right ))) o.root.style.right = "0px";
-			if (!o.vmode && isNaN(parseInt(o.root.style.bottom))) o.root.style.bottom = "0px";
-	
-			o.minX = typeof minX != 'undefined' ? minX : null;
-			o.minY = typeof minY != 'undefined' ? minY : null;
-			o.maxX = typeof maxX != 'undefined' ? maxX : null;
-			o.maxY = typeof maxY != 'undefined' ? maxY : null;
-	
-			o.xMapper = fXMapper ? fXMapper : null;
-			o.yMapper = fYMapper ? fYMapper : null;
-	
-			o.root.onDragStart = new Function();
-			o.root.onDragEnd = new Function();
-			o.root.onDrag = new Function();
-			},
-		start : function(e) {
-			var o = Drag.obj = this;
-			e = Drag.fixE(e);
-			var y = parseInt(o.vmode ? o.root.style.top  : o.root.style.bottom);
-			var x = parseInt(o.hmode ? o.root.style.left : o.root.style.right );
-			o.root.onDragStart(x, y);
-	
-			o.lastMouseX = e.clientX;
-			o.lastMouseY = e.clientY;
-	
-			if (o.hmode) {
-				if (o.minX != null)	o.minMouseX	= e.clientX - x + o.minX;
-				if (o.maxX != null)	o.maxMouseX	= o.minMouseX + o.maxX - o.minX;
-			} else {
-				if (o.minX != null) o.maxMouseX = -o.minX + e.clientX + x;
-				if (o.maxX != null) o.minMouseX = -o.maxX + e.clientX + x;
-			}
-	
-			if (o.vmode) {
-				if (o.minY != null)	o.minMouseY	= e.clientY - y + o.minY;
-				if (o.maxY != null)	o.maxMouseY	= o.minMouseY + o.maxY - o.minY;
-			} else {
-				if (o.minY != null) o.maxMouseY = -o.minY + e.clientY + y;
-				if (o.maxY != null) o.minMouseY = -o.maxY + e.clientY + y;
-			}
-	
-			document.onmousemove = Drag.drag;
-			document.onmouseup = Drag.end;
-			return false;
-			},
-		drag : function(e) {
-			e = Drag.fixE(e);
-			var o = Drag.obj;
-	
-			var ey = e.clientY;
-			var ex = e.clientX;
-			var y = parseInt(o.vmode ? o.root.style.top  : o.root.style.bottom);
-			var x = parseInt(o.hmode ? o.root.style.left : o.root.style.right );
-			var nx, ny;
-	
-			if (o.minX != null) ex = o.hmode ? Math.max(ex, o.minMouseX) : Math.min(ex, o.maxMouseX);
-			if (o.maxX != null) ex = o.hmode ? Math.min(ex, o.maxMouseX) : Math.max(ex, o.minMouseX);
-			if (o.minY != null) ey = o.vmode ? Math.max(ey, o.minMouseY) : Math.min(ey, o.maxMouseY);
-			if (o.maxY != null) ey = o.vmode ? Math.min(ey, o.maxMouseY) : Math.max(ey, o.minMouseY);
-	
-			nx = x + ((ex - o.lastMouseX) * (o.hmode ? 1 : -1));
-			ny = y + ((ey - o.lastMouseY) * (o.vmode ? 1 : -1));
-	
-			if (o.xMapper) nx = o.xMapper(y);
-			else if (o.yMapper)	ny = o.yMapper(x);
-	
-			Drag.obj.root.style[o.hmode ? "left" : "right"] = nx + "px";
-			Drag.obj.root.style[o.vmode ? "top" : "bottom"] = ny + "px";
-			Drag.obj.lastMouseX	= ex;
-			Drag.obj.lastMouseY	= ey;
-			Drag.obj.root.onDrag(nx, ny);
-			return false;
-			},
-		end : function() {
-			document.onmousemove = null;
-			document.onmouseup   = null;
-			Drag.obj.root.onDragEnd(parseInt(Drag.obj.root.style[Drag.obj.hmode ? "left" : "right"]), 
-									parseInt(Drag.obj.root.style[Drag.obj.vmode ? "top" : "bottom"]));
-			Drag.obj = null;
-			},
-		fixE : function(e) {
-			if (typeof e == 'undefined') e = window.event;
-			if (typeof e.layerX == 'undefined') e.layerX = e.offsetX;
-			if (typeof e.layerY == 'undefined') e.layerY = e.offsetY;
-			return e;
-			}
-		};	
-	
-	return { 		
-		show:function(o){
-			/* Parameters
-			html - HTML content for window (string) - false
-			iframe - URL for embedded iframe (string) - false
-			url - path for AJAX call (string) - false
-			post - post variable string, used in conjunction with url (string) - false
-			image - image path (string) - false
-			width - preset width (int) - false
-			height - preset height (int) - false
-			animate - toggle animation (bool) - true
-			close - toggle close button (bool) - true
-			openjs - generic function executed on open (string) - null
-			closejs - generic function executed on close (string) - null
-			autohide - number of seconds to wait until auto-hiding (int) - false
-			boxid - ID of box div for style overriding purposes (string) - ''
-			maskid - ID of mask div for style overriding purposes (string) - ''
-			fixed - toggle fixed position vs static (bool) - true
-			opacity - set the opacity of the mask from 0-100 (int) - 70
-			mask - toggle mask display (bool) - true
-			top - absolute pixels from top (int) - null
-			left - absolute pixels from left (int) - null
-			topsplit - 1/x where x is the denominator in the split from the top (int) - 2
-			*/
-		
-			v={opacity:70,close:1,animate:1,fixed:1,mask:1,maskid:'',boxid:'',topsplit:2,url:0,post:0,height:0,width:0,html:0,iframe:0};
-			for(s in o){v[s]=o[s]}
-			if(!p){
-				j=document.createElement('div'); j.className='tbox';
-				p=document.createElement('div'); p.className='tinner';
-				b=document.createElement('div'); b.className='tcontent';
-				m=document.createElement('div'); m.className='tmask';
-				g=document.createElement('div'); g.className='tclose'; g.v=0;
-				
-	      Drag.init(j, j, 0, null, 0);
-	      j.style.cursor = "move";				
-				
-				document.body.appendChild(m); document.body.appendChild(j); j.appendChild(p); p.appendChild(b);
-				m.onclick=g.onclick=sed_modal.hide; window.onresize=sed_modal.resize
-			}else{
-				j.style.display='none'; clearTimeout(p.ah); if(g.v){p.removeChild(g); g.v=0}
-			}
-			p.id=v.boxid; m.id=v.maskid; j.style.position=v.fixed?'fixed':'absolute';
-			if(v.html&&!v.animate){
-				p.style.backgroundImage='none'; b.innerHTML=v.html; b.style.display='';
-				p.style.width=v.width?v.width+'px':'auto'; p.style.height=v.height?v.height+'px':'auto'
-			}else{
-				b.style.display='none'; 
-				if(!v.animate&&v.width&&v.height){
-					p.style.width=v.width+'px'; p.style.height=v.height+'px'
-				}else{
-					p.style.width=p.style.height='100px'
-				}
-			}
-			if(v.mask){this.mask(); this.alpha(m,1,v.opacity)}else{this.alpha(j,1,100)}
-			if(v.autohide){p.ah=setTimeout(sed_modal.hide,1000*v.autohide)}else{document.onkeyup=sed_modal.esc}
-		},
-		fill:function(c,u,k,a,w,h){
-			if(u){
-				if(v.image){
-					var i=new Image(); i.onload=function(){w=w||i.width; h=h||i.height; sed_modal.psh(i,a,w,h)}; i.src=v.image
-				}else if(v.iframe){
-					this.psh('<iframe src="'+v.iframe+'" width="'+v.width+'" frameborder="0" height="'+v.height+'"></iframe>',a,w,h)
-				}else{
-					var x=window.XMLHttpRequest?new XMLHttpRequest():new ActiveXObject('Microsoft.XMLHTTP');
-					x.onreadystatechange=function(){
-						if(x.readyState==4&&x.status==200){p.style.backgroundImage=''; sed_modal.psh(x.responseText,a,w,h)}
-					};
-					if(k){
-    	            	x.open('POST',c,true); x.setRequestHeader('Content-type','application/x-www-form-urlencoded'); x.send(k)
-					}else{
-       	         		x.open('GET',c,true); x.send(null)
-					}
-				}
-			}else{
-				this.psh(c,a,w,h)
-			}
-		},
-		psh:function(c,a,w,h){
-			if(typeof c=='object'){b.appendChild(c)}else{b.innerHTML=c}
-			var x=p.style.width, y=p.style.height;
-			if(!w||!h){
-				p.style.width=w?w+'px':''; p.style.height=h?h+'px':''; b.style.display='';
-				if(!h){h=parseInt(b.offsetHeight)}
-				if(!w){w=parseInt(b.offsetWidth)}
-				b.style.display='none'
-			}
-			p.style.width=x; p.style.height=y;
-			this.size(w,h,a)
-		},
-		esc:function(e){e=e||window.event; if(e.keyCode==27){sed_modal.hide()}},
-		hide:function(){sed_modal.alpha(j,-1,0,3); document.onkeypress=null; if(v.closejs){v.closejs()}},
-		resize:function(){sed_modal.pos(); sed_modal.mask()},
-		mask:function(){m.style.height=this.total(1)+'px'; m.style.width=this.total(0)+'px'},
-		pos:function(){
-			var t;
-			if(typeof v.top!='undefined'){t=v.top}else{t=(this.height()/v.topsplit)-(j.offsetHeight/2); t=t<20?20:t}
-			if(!v.fixed&&!v.top){t+=this.top()}
-			j.style.top=t+'px'; 
-			j.style.left=typeof v.left!='undefined'?v.left+'px':(this.width()/2)-(j.offsetWidth/2)+'px'
-		},
-		alpha:function(e,d,a){
-			clearInterval(e.ai);
-			if(d){e.style.opacity=0; e.style.filter='alpha(opacity=0)'; e.style.display='block'; sed_modal.pos()}
-			e.ai=setInterval(function(){sed_modal.ta(e,a,d)},20)
-		},
-		ta:function(e,a,d){
-			var o=Math.round(e.style.opacity*100);
-			if(o==a){
-				clearInterval(e.ai);
-				if(d==-1){
-					e.style.display='none';
-					e==j?sed_modal.alpha(m,-1,0,2):b.innerHTML=p.style.backgroundImage=''
-				}else{
-					if(e==m){
-						this.alpha(j,1,100)
-					}else{
-						j.style.filter='';
-						sed_modal.fill(v.html||v.url,v.url||v.iframe||v.image,v.post,v.animate,v.width,v.height)
-					}
-				}
-			}else{
-				var n=a-Math.floor(Math.abs(a-o)*.5)*d;
-				e.style.opacity=n/100; e.style.filter='alpha(opacity='+n+')'
-			}
-		},
-		size:function(w,h,a){
-			if(a){
-				clearInterval(p.si); var wd=parseInt(p.style.width)>w?-1:1, hd=parseInt(p.style.height)>h?-1:1;
-				p.si=setInterval(function(){sed_modal.ts(w,wd,h,hd)},20)
-			}else{
-				p.style.backgroundImage='none'; if(v.close){p.appendChild(g); g.v=1}
-				p.style.width=w+'px'; p.style.height=h+'px'; b.style.display=''; this.pos();
-				if(v.openjs){v.openjs()}
-			}
-		},
-		ts:function(w,wd,h,hd){
-			var cw=parseInt(p.style.width), ch=parseInt(p.style.height);
-			if(cw==w&&ch==h){
-				clearInterval(p.si); p.style.backgroundImage='none'; b.style.display='block'; if(v.close){p.appendChild(g); g.v=1}
-				if(v.openjs){v.openjs()}
-			}else{
-				if(cw!=w){p.style.width=(w-Math.floor(Math.abs(w-cw)*.6)*wd)+'px'}
-				if(ch!=h){p.style.height=(h-Math.floor(Math.abs(h-ch)*.6)*hd)+'px'}
-				this.pos()
-			}
-		},
-		top:function(){return document.documentElement.scrollTop||document.body.scrollTop},
-		width:function(){return self.innerWidth||document.documentElement.clientWidth||document.body.clientWidth},
-		height:function(){return self.innerHeight||document.documentElement.clientHeight||document.body.clientHeight},
-		total:function(d){
-			var b=document.body, e=document.documentElement;
-			return d?Math.max(Math.max(b.scrollHeight,e.scrollHeight),Math.max(b.clientHeight,e.clientHeight)):
-			Math.max(Math.max(b.scrollWidth,e.scrollWidth),Math.max(b.clientWidth,e.clientWidth))
+var sed_modal = {
+imagefiles:['/system/img/var/min.gif', '/system/img/var/close.gif', '/system/img/var/restore.gif', '/system/img/var//resize.gif'], //Path to 4 images used by script, in that order
+
+ajaxbustcache: true, //Bust caching when fetching a file via Ajax?
+ajaxloadinghtml: '<b>Loading Page. Please wait...</b>', //HTML to show while window fetches Ajax Content?
+
+minimizeorder: 0,
+zIndexvalue:100,
+tobjects: [], //object to contain references to dhtml window divs, for cleanup purposes
+lastactivet: {}, //reference to last active DHTML window
+
+init:function(t){
+	var domwindow=document.createElement("div") //create dhtml window div
+	domwindow.id=t
+	domwindow.className="sed_modal"
+	var domwindowdata=''
+	domwindowdata='<div class="modal-handle">'
+	domwindowdata+='SedModal<div class="modal-controls"><img src="'+this.imagefiles[0]+'" title="Minimize" /><img src="'+this.imagefiles[1]+'" title="Close" /></div>'
+	domwindowdata+='</div>'
+	domwindowdata+='<div class="modal-contentarea"></div>'
+	domwindowdata+='<div class="modal-statusarea"><div class="modal-resizearea" style="background: transparent url('+this.imagefiles[3]+') top right no-repeat;">&nbsp;</div></div>'
+	domwindowdata+='</div>'
+	domwindow.innerHTML=domwindowdata
+  document.body.appendChild(domwindow)
+	//this.zIndexvalue=(this.zIndexvalue)? this.zIndexvalue+1 : 100 //z-index value for DHTML window: starts at 0, increments whenever a window has focus
+	var t=document.getElementById(t)
+	var divs=t.getElementsByTagName("div")
+	for (var i=0; i<divs.length; i++){ //go through divs inside dhtml window and extract all those with class="modal-" prefix
+		if (/modal-/.test(divs[i].className))
+			t[divs[i].className.replace(/modal-/, "")]=divs[i] //take out the "modal-" prefix for shorter access by name
+	}
+	//t.style.zIndex=this.zIndexvalue //set z-index of this dhtml window
+	t.handle._parent=t //store back reference to dhtml window
+	t.resizearea._parent=t //same
+	t.controls._parent=t //same
+	t.onclose=function(){return true} //custom event handler "onclose"
+	t.onmousedown=function(){sed_modal.setfocus(this)} //Increase z-index of window when focus is on it
+	t.handle.onmousedown=sed_modal.setupdrag //set up drag behavior when mouse down on handle div
+	t.resizearea.onmousedown=sed_modal.setupdrag //set up drag behavior when mouse down on resize div
+	t.controls.onclick=sed_modal.enablecontrols
+	t.show=function(){sed_modal.show(this)} //public function for showing dhtml window
+	t.hide=function(){sed_modal.hide(this)} //public function for hiding dhtml window
+	t.close=function(){sed_modal.close(this)} //public function for closing dhtml window (also empties DHTML window content)
+	t.setSize=function(w, h){sed_modal.setSize(this, w, h)} //public function for setting window dimensions
+	t.moveTo=function(x, y){sed_modal.moveTo(this, x, y)} //public function for moving dhtml window (relative to viewpoint)
+	t.isResize=function(bol){sed_modal.isResize(this, bol)} //public function for specifying if window is resizable
+	t.isScrolling=function(bol){sed_modal.isScrolling(this, bol)} //public function for specifying if window content contains scrollbars
+	t.load=function(contenttype, contentsource, title){sed_modal.load(this, contenttype, contentsource, title)} //public function for loading content into window
+	this.tobjects[this.tobjects.length]=t
+	return t //return reference to dhtml window div
+},
+
+open:function(t, contenttype, contentsource, title, attr, recalonload){
+	var d=sed_modal //reference dhtml window object
+	function getValue(Name){
+		var config=new RegExp(Name+"=([^,]+)", "i") //get name/value config pair (ie: width=400px,)
+		return (config.test(attr))? parseInt(RegExp.$1) : 0 //return value portion (int), or 0 (false) if none found
+	}
+	if (document.getElementById(t)==null) //if window doesn't exist yet, create it
+		t=this.init(t) //return reference to dhtml window div
+	else
+		t=document.getElementById(t)
+	this.setfocus(t)
+	t.setSize(getValue(("width")), (getValue("height"))) //Set dimensions of window
+	var xpos=getValue("center")? "middle" : getValue("left") //Get x coord of window
+	var ypos=getValue("center")? "middle" : getValue("top") //Get y coord of window
+	//t.moveTo(xpos, ypos) //Position window
+	if (typeof recalonload!="undefined" && recalonload=="recal" && this.scroll_top==0){ //reposition window when page fully loads with updated window viewpoints?
+		if (window.attachEvent && !window.opera) //In IE, add another 400 milisecs on page load (viewpoint properties may return 0 b4 then)
+			this.addEvent(window, function(){setTimeout(function(){t.moveTo(xpos, ypos)}, 400)}, "load")
+		else
+			this.addEvent(window, function(){t.moveTo(xpos, ypos)}, "load")
+	}
+	t.isResize(getValue("resize")) //Set whether window is resizable
+	t.isScrolling(getValue("scrolling")) //Set whether window should contain scrollbars
+	t.style.visibility="visible"
+	t.style.display="block"
+	t.contentarea.style.display="block"
+	t.moveTo(xpos, ypos) //Position window
+	t.load(contenttype, contentsource, title)
+	if (t.state=="minimized" && t.controls.firstChild.title=="Restore"){ //If window exists and is currently minimized?
+		t.controls.firstChild.setAttribute("src", sed_modal.imagefiles[0]) //Change "restore" icon within window interface to "minimize" icon
+		t.controls.firstChild.setAttribute("title", "Minimize")
+		t.state="fullview" //indicate the state of the window as being "fullview"
+	}
+	return t
+},
+
+setSize:function(t, w, h){ //set window size (min is 150px wide by 100px tall)
+	t.style.width=Math.max(parseInt(w), 150)+"px"
+	t.contentarea.style.height=Math.max(parseInt(h), 100)+"px"
+},
+
+moveTo:function(t, x, y){ //move window. Position includes current viewpoint of document
+	this.getviewpoint() //Get current viewpoint numbers
+	t.style.left=(x=="middle")? this.scroll_left+(this.docwidth-t.offsetWidth)/2+"px" : this.scroll_left+parseInt(x)+"px"
+	t.style.top=(y=="middle")? this.scroll_top+(this.docheight-t.offsetHeight)/2+"px" : this.scroll_top+parseInt(y)+"px"
+},
+
+isResize:function(t, bol){ //show or hide resize inteface (part of the status bar)
+	t.statusarea.style.display=(bol)? "block" : "none"
+	t.resizeBool=(bol)? 1 : 0
+},
+
+isScrolling:function(t, bol){ //set whether loaded content contains scrollbars
+	t.contentarea.style.overflow=(bol)? "auto" : "hidden"
+},
+
+load:function(t, contenttype, contentsource, title){ //loads content into window plus set its title (3 content types: "inline", "iframe", or "ajax")
+	if (t.isClosed){
+		alert("DHTML Window has been closed, so no window to load contents into. Open/Create the window again.")
+		return
+	}
+	var contenttype=contenttype.toLowerCase() //convert string to lower case
+	if (typeof title!="undefined")
+		t.handle.firstChild.nodeValue=title
+	if (contenttype=="inline")
+		t.contentarea.innerHTML=contentsource
+	else if (contenttype=="div"){
+		var inlinedivref=document.getElementById(contentsource)
+		t.contentarea.innerHTML=(inlinedivref.defaultHTML || inlinedivref.innerHTML) //Populate window with contents of inline div on page
+		if (!inlinedivref.defaultHTML)
+			inlinedivref.defaultHTML=inlinedivref.innerHTML //save HTML within inline DIV
+		inlinedivref.innerHTML="" //then, remove HTML within inline DIV (to prevent duplicate IDs, NAME attributes etc in contents of DHTML window
+		inlinedivref.style.display="none" //hide that div
+	}
+	else if (contenttype=="iframe"){
+		t.contentarea.style.overflow="hidden" //disable window scrollbars, as iframe already contains scrollbars
+		if (!t.contentarea.firstChild || t.contentarea.firstChild.tagName!="IFRAME") //If iframe tag doesn't exist already, create it first
+			t.contentarea.innerHTML='<iframe src="" style="margin:0; padding:0; width:100%; height: 100%" name="_iframe-'+t.id+'"></iframe>'
+		window.frames["_iframe-"+t.id].location.replace(contentsource) //set location of iframe window to specified URL
+		}
+	else if (contenttype=="ajax"){
+		this.ajax_connect(contentsource, t) //populate window with external contents fetched via Ajax
+	}
+	t.contentarea.datatype=contenttype //store contenttype of current window for future reference
+},
+
+setupdrag:function(e){
+	var d=sed_modal //reference dhtml window object
+	var t=this._parent //reference dhtml window div
+	d.etarget=this //remember div mouse is currently held down on ("handle" or "resize" div)
+	var e=window.event || e
+	d.initmousex=e.clientX //store x position of mouse onmousedown
+	d.initmousey=e.clientY
+	d.initx=parseInt(t.offsetLeft) //store offset x of window div onmousedown
+	d.inity=parseInt(t.offsetTop)
+	d.width=parseInt(t.offsetWidth) //store width of window div
+	d.contentheight=parseInt(t.contentarea.offsetHeight) //store height of window div's content div
+	if (t.contentarea.datatype=="iframe"){ //if content of this window div is "iframe"
+		t.style.backgroundColor="#F8F8F8" //colorize and hide content div (while window is being dragged)
+		t.contentarea.style.visibility="hidden"
+	}
+	document.onmousemove=d.getdistance //get distance travelled by mouse as it moves
+	document.onmouseup=function(){
+		if (t.contentarea.datatype=="iframe"){ //restore color and visibility of content div onmouseup
+			t.contentarea.style.backgroundColor="white"
+			t.contentarea.style.visibility="visible"
+		}
+		d.stop()
+	}
+	return false
+},
+
+getdistance:function(e){
+	var d=sed_modal
+	var etarget=d.etarget
+	var e=window.event || e
+	d.distancex=e.clientX-d.initmousex //horizontal distance travelled relative to starting point
+	d.distancey=e.clientY-d.initmousey
+	if (etarget.className=="modal-handle") //if target element is "handle" div
+		d.move(etarget._parent, e)
+	else if (etarget.className=="modal-resizearea") //if target element is "resize" div
+		d.resize(etarget._parent, e)
+	return false //cancel default dragging behavior
+},
+
+getviewpoint:function(){ //get window viewpoint numbers
+	var ie=document.all && !window.opera
+	var domclientWidth=document.documentElement && parseInt(document.documentElement.clientWidth) || 100000 //Preliminary doc width in non IE browsers
+	this.standardbody=(document.compatMode=="CSS1Compat")? document.documentElement : document.body //create reference to common "body" across doctypes
+	this.scroll_top=(ie)? this.standardbody.scrollTop : window.pageYOffset
+	this.scroll_left=(ie)? this.standardbody.scrollLeft : window.pageXOffset
+	this.docwidth=(ie)? this.standardbody.clientWidth : (/Safari/i.test(navigator.userAgent))? window.innerWidth : Math.min(domclientWidth, window.innerWidth-16)
+	this.docheight=(ie)? this.standardbody.clientHeight: window.innerHeight
+},
+
+rememberattrs:function(t){ //remember certain attributes of the window when it's minimized or closed, such as dimensions, position on page
+	this.getviewpoint() //Get current window viewpoint numbers
+	t.lastx=parseInt((t.style.left || t.offsetLeft))-sed_modal.scroll_left //store last known x coord of window just before minimizing
+	t.lasty=parseInt((t.style.top || t.offsetTop))-sed_modal.scroll_top
+	t.lastwidth=parseInt(t.style.width) //store last known width of window just before minimizing/ closing
+},
+
+move:function(t, e){
+	t.style.left=sed_modal.distancex+sed_modal.initx+"px"
+	t.style.top=sed_modal.distancey+sed_modal.inity+"px"
+},
+
+resize:function(t, e){
+	t.style.width=Math.max(sed_modal.width+sed_modal.distancex, 150)+"px"
+	t.contentarea.style.height=Math.max(sed_modal.contentheight+sed_modal.distancey, 100)+"px"
+},
+
+enablecontrols:function(e){
+	var d=sed_modal
+	var sourceobj=window.event? window.event.srcElement : e.target //Get element within "handle" div mouse is currently on (the controls)
+	if (/Minimize/i.test(sourceobj.getAttribute("title"))) //if this is the "minimize" control
+		d.minimize(sourceobj, this._parent)
+	else if (/Restore/i.test(sourceobj.getAttribute("title"))) //if this is the "restore" control
+		d.restore(sourceobj, this._parent)
+	else if (/Close/i.test(sourceobj.getAttribute("title"))) //if this is the "close" control
+		d.close(this._parent)
+	return false
+},
+
+minimize:function(button, t){
+	sed_modal.rememberattrs(t)
+	button.setAttribute("src", sed_modal.imagefiles[2])
+	button.setAttribute("title", "Restore")
+	t.state="minimized" //indicate the state of the window as being "minimized"
+	t.contentarea.style.display="none"
+	t.statusarea.style.display="none"
+	if (typeof t.minimizeorder=="undefined"){ //stack order of minmized window on screen relative to any other minimized windows
+		sed_modal.minimizeorder++ //increment order
+		t.minimizeorder=sed_modal.minimizeorder
+	}
+	t.style.left="10px" //left coord of minmized window
+	t.style.width="200px"
+	var windowspacing=t.minimizeorder*10 //spacing (gap) between each minmized window(s)
+	t.style.top=sed_modal.scroll_top+sed_modal.docheight-(t.handle.offsetHeight*t.minimizeorder)-windowspacing+"px"
+},
+
+restore:function(button, t){
+	sed_modal.getviewpoint()
+	button.setAttribute("src", sed_modal.imagefiles[0])
+	button.setAttribute("title", "Minimize")
+	t.state="fullview" //indicate the state of the window as being "fullview"
+	t.style.display="block"
+	t.contentarea.style.display="block"
+	if (t.resizeBool) //if this window is resizable, enable the resize icon
+		t.statusarea.style.display="block"
+	t.style.left=parseInt(t.lastx)+sed_modal.scroll_left+"px" //position window to last known x coord just before minimizing
+	t.style.top=parseInt(t.lasty)+sed_modal.scroll_top+"px"
+	t.style.width=parseInt(t.lastwidth)+"px"
+},
+
+
+close:function(t){
+	try{
+		var closewinbol=t.onclose()
+	}
+	catch(err){ //In non IE browsers, all errors are caught, so just run the below
+		var closewinbol=true
+ }
+	finally{ //In IE, not all errors are caught, so check if variable isn't defined in IE in those cases
+		if (typeof closewinbol=="undefined"){
+			alert("An error has occured somwhere inside your \"onclose\" event handler")
+			var closewinbol=true
 		}
 	}
-}();
+	if (closewinbol){ //if custom event handler function returns true
+		if (t.state!="minimized") //if this window isn't currently minimized
+			sed_modal.rememberattrs(t) //remember window's dimensions/position on the page before closing
+		if (window.frames["_iframe-"+t.id]) //if this is an IFRAME DHTML window
+			window.frames["_iframe-"+t.id].location.replace("about:blank")
+		else
+			t.contentarea.innerHTML=""
+		t.style.display="none"
+		t.isClosed=true //tell script this window is closed (for detection in t.show())
+	}
+	return closewinbol
+},
+
+
+setopacity:function(targetobject, value){ //Sets the opacity of targetobject based on the passed in value setting (0 to 1 and in between)
+	if (!targetobject)
+		return
+	if (targetobject.filters && targetobject.filters[0]){ //IE syntax
+		if (typeof targetobject.filters[0].opacity=="number") //IE6
+			targetobject.filters[0].opacity=value*100
+		else //IE 5.5
+			targetobject.style.filter="alpha(opacity="+value*100+")"
+		}
+	else if (typeof targetobject.style.MozOpacity!="undefined") //Old Mozilla syntax
+		targetobject.style.MozOpacity=value
+	else if (typeof targetobject.style.opacity!="undefined") //Standard opacity syntax
+		targetobject.style.opacity=value
+},
+
+setfocus:function(t){ //Sets focus to the currently active window
+	this.zIndexvalue++
+	t.style.zIndex=this.zIndexvalue
+	t.isClosed=false //tell script this window isn't closed (for detection in t.show())
+	this.setopacity(this.lastactivet.handle, 0.5) //unfocus last active window
+	this.setopacity(t.handle, 1) //focus currently active window
+	this.lastactivet=t //remember last active window
+},
+
+
+show:function(t){
+	if (t.isClosed){
+		alert("DHTML Window has been closed, so nothing to show. Open/Create the window again.")
+		return
+	}
+	if (t.lastx) //If there exists previously stored information such as last x position on window attributes (meaning it's been minimized or closed)
+		sed_modal.restore(t.controls.firstChild, t) //restore the window using that info
+	else
+		t.style.display="block"
+	this.setfocus(t)
+	t.state="fullview" //indicate the state of the window as being "fullview"
+},
+
+hide:function(t){
+	t.style.display="none"
+},
+
+ajax_connect:function(url, t){
+	var page_request = false
+	var bustcacheparameter=""
+	if (window.XMLHttpRequest) // if Mozilla, IE7, Safari etc
+		page_request = new XMLHttpRequest()
+	else if (window.ActiveXObject){ // if IE6 or below
+		try {
+		page_request = new ActiveXObject("Msxml2.XMLHTTP")
+		} 
+		catch (e){
+			try{
+			page_request = new ActiveXObject("Microsoft.XMLHTTP")
+			}
+			catch (e){}
+		}
+	}
+	else
+		return false
+	t.contentarea.innerHTML=this.ajaxloadinghtml
+	page_request.onreadystatechange=function(){sed_modal.ajax_loadpage(page_request, t)}
+	if (this.ajaxbustcache) //if bust caching of external page
+		bustcacheparameter=(url.indexOf("?")!=-1)? "&"+new Date().getTime() : "?"+new Date().getTime()
+	page_request.open('GET', url+bustcacheparameter, true)
+	page_request.send(null)
+},
+
+ajax_loadpage:function(page_request, t){
+	if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1)){
+	t.contentarea.innerHTML=page_request.responseText
+	}
+},
+
+
+stop:function(){
+	sed_modal.etarget=null //clean up
+	document.onmousemove=null
+	document.onmouseup=null
+},
+
+addEvent:function(target, functionref, tasktype){ //assign a function to execute to an event handler (ie: onunload)
+	var tasktype=(window.addEventListener)? tasktype : "on"+tasktype
+	if (target.addEventListener)
+		target.addEventListener(tasktype, functionref, false)
+	else if (target.attachEvent)
+		target.attachEvent(tasktype, functionref)
+},
+
+cleanup:function(){
+	for (var i=0; i<sed_modal.tobjects.length; i++){
+		sed_modal.tobjects[i].handle._parent=sed_modal.tobjects[i].resizearea._parent=sed_modal.tobjects[i].controls._parent=null
+	}
+	window.onload=null
+}
+
+} //End sed_modal object 
+ 
 
  /* ============================== */
 
@@ -650,3 +764,5 @@ var title = cookie ? cookie : getPreferredStyleSheet();
 setActiveStyleSheet(title);
 
 window.name='main';
+
+//window.onunload=sed_modal.cleanup

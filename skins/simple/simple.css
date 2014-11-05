@@ -999,15 +999,73 @@ ul.tabs li a.selected {
 
 /* Modal Windows */  
 
-.tbox {position:absolute; display:none; padding:14px 17px; z-index:900}
-.tinner {padding:15px; -moz-border-radius:5px; border-radius:5px; background:#fff url('/system/img/var/loading.gif') no-repeat 50% 50%; border-right:1px solid #333; border-bottom:1px solid #333}
-.tmask {position:absolute; display:none; top:0px; left:0px; height:100%; width:100%; background:#000; z-index:800}
-.tclose {position:absolute; top:0px; right:0px; width:30px; height:30px; cursor:pointer; background:url('/system/img/var/close.png') no-repeat}
-.tclose:hover {background-position:0 -30px}
+.sed_modal {
+  position: absolute;
+  -moz-border-radius:5px; 
+  border-radius:5px;
+  border:1px solid #ccc;
+  visibility: hidden;
+  background-color: white;
+}
 
-#error {background:#ff6969; color:#fff; text-shadow:1px 1px #cf5454; border-right:1px solid #000; border-bottom:1px solid #000; padding:0}
-#error .tcontent {padding:10px 14px 11px; border:1px solid #ffb8b8; -moz-border-radius:5px; border-radius:5px}
-#success {background:#2ea125; color:#fff; text-shadow:1px 1px #1b6116; border-right:1px solid #000; border-bottom:1px solid #000; padding:10; -moz-border-radius:0; border-radius:0}
-#bluemask {background:#4195aa}
-#frameless {padding:0}
-#frameless .tclose {left:6px}
+.modal-handle{ /*CSS for Drag Handle*/ 
+  padding: 7px;
+  text-indent: 3px;
+  font: bold 14px Arial;
+  background-color: #303030;
+  color: white;
+  cursor: move;
+  overflow: hidden;
+  width: auto;
+  filter:progid:DXImageTransform.Microsoft.alpha(opacity=100);
+  -moz-opacity: 1;
+  opacity: 1;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.modal-handle .modal-controls{ /*CSS for controls (min, close etc) within Drag Handle*/
+  position: absolute;
+  right: 1px;
+  top: 2px;
+  cursor: hand;
+  cursor: pointer;
+  margin: 5px 5px 0 0;
+}
+
+* html .modal-handle{ /*IE6 and below CSS hack. Width must be set to 100% in order for opaque title bar to render*/
+  width: 100%;
+}
+
+.modal-contentarea{ /*CSS for Content Display Area div*/
+  background-color: white;
+  color: black;
+  height: 150px;
+  padding: 2px;
+  overflow: auto;
+}
+
+.modal-statusarea{ /*CSS for Status Bar div (includes resizearea)*/
+  background-color: #F8F8F8;
+  height: 13px; /*height of resize image*/
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.modal-resizearea{ /*CSS for Resize Area itself*/
+  float: right;
+  width: 13px; /*width of resize image*/
+  height: 13px; /*height of resize image*/
+  cursor: nw-resize;
+  font-size: 0;
+  margin-right:5px;
+  margin-bottom:5px;
+}
