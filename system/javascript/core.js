@@ -254,7 +254,7 @@ sed_ajx = {
  /* ========= Modal Windows ====== */
  
 var sed_modal = {
-imagefiles:['/system/img/var/min.gif', '/system/img/var/close.gif', '/system/img/var/restore.gif', '/system/img/var//resize.gif'], //Path to 4 images used by script, in that order
+imagefiles:['/system/img/vars/min.gif', '/system/img/vars/close.gif', '/system/img/vars/restore.gif', '/system/img/vars//resize.gif'], //Path to 4 images used by script, in that order
 
 ajaxbustcache: true, //Bust caching when fetching a file via Ajax?
 ajaxloadinghtml: '<b>Loading Page. Please wait...</b>', //HTML to show while window fetches Ajax Content?

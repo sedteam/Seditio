@@ -241,7 +241,7 @@ blockquote p {
 .loading-indicator {
 	width:32px;
 	height:32px;
-	background:url("/system/img/var/loading.gif") center center no-repeat;
+	background:url("/system/img/vars/loading.gif") center center no-repeat;
 }
 
 /* = Form Search

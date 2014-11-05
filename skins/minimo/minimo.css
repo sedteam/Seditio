@@ -172,7 +172,7 @@ h1, h2, h3, h4, h5, h6 {
 .loading-indicator {
 	width:32px;
 	height:32px;
-	background:url("/system/img/var/loading.gif") center center no-repeat;
+	background:url("/system/img/vars/loading.gif") center center no-repeat;
 }
 
 /* =========== Search Form ========== */
