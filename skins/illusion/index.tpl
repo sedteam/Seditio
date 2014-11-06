@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-<div class="units-row-end">
+<div class="units-row">
     
     <div class="unit-60">
         {INDEX_NEWS}

@@ -354,7 +354,7 @@ blockquote p {
   border-bottom-color: #b3b3b3;
   padding: 6px 10px;
   font-weight: 500;
-  font-size: 1em;
+  font-size: 1.1em;
   background-color: #f1f1f1;
   background-image: -moz-linear-gradient(top, #fcfcfc, #e0e0e0);
   background-image: -ms-linear-gradient(top, #fcfcfc, #e0e0e0);
@@ -375,7 +375,7 @@ blockquote p {
 .btn-adm {
 	font-size: .9em;
 	line-height: 1;
-	padding: .4em 1.1em .3em 1.1em;
+	padding: .2em 1em .2em 1em;
 }
 
 input[type="radio"],
@@ -396,7 +396,7 @@ select[multiple="multiple"] {
   padding: 6px 2px;
   background-color: white;
   color: #333333;
-  font-size: 1em;
+  font-size: 1.1em;
   line-height: 1;
   border-radius: 1px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
@@ -997,7 +997,8 @@ ul.tabs li a.selected {
   text-decoration: underline;
 }
 
-/* Modal Windows */  
+/* = Modal Windows
+-----------------------------------------------------------------------------*/
 
 .sed_modal {
   position: absolute;
@@ -1006,6 +1007,7 @@ ul.tabs li a.selected {
   border:1px solid #ccc;
   visibility: hidden;
   background-color: white;
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
 }
 
 .modal-handle{ /*CSS for Drag Handle*/ 

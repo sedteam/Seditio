@@ -3,9 +3,8 @@
 <div id="title"><h2>{USERS_AUTH_TITLE}</h2></div>
 <div id="bolded-line"></div>
 
-<div class="units-row">
-  <div class="unit-50 centered">
-    
+<div class="units-row width-50 margin-auto">
+   
     <div class="unit-50">
       <form name="login" action="{USERS_AUTH_SEND}" method="post">
         <table class="cells striped">
@@ -24,7 +23,6 @@
       </ul>
     </div>
       
-  </div>
 </div>
 
 <!-- END: MAIN -->

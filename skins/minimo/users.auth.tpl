@@ -3,8 +3,7 @@
 <div id="title"><h2>{USERS_AUTH_TITLE}</h2></div>
 <div id="bolded-line"></div>
 
-<div class="units-row">
-  <div class="unit-50 centered">
+<div class="units-row width-50 margin-auto">
     
     <div class="unit-50">
       <form name="login" action="{USERS_AUTH_SEND}" method="post">
@@ -23,8 +22,7 @@
     		<li><a href="{USERS_AUTH_LOSTPASSWORD}">{PHP.skinlang.usersauth.Lostpassword}</a></li>
       </ul>
     </div>
-      
-  </div>
+
 </div>
 
 <!-- END: MAIN -->
