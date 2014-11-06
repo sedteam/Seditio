@@ -548,9 +548,9 @@ while ($row = sed_sql_fetchassoc($sql))
 	$lastposterip = $row['fp_posterip'];
 	$fp_num++;
 
-	$adminoptions = ($usr['id']>0) ? "<a href=\"".sed_url("forums", "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
-	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? " &nbsp; <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
-	$adminoptions .= ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? " &nbsp; ".$L['Delete'].":[<a href=\"".sed_url("forums", "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\">x</a>]" : '';
+	$adminoptions = ($usr['id']>0) ? "<a href=\"".sed_url("forums", "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\" class=\"btn btn-adm\">".$L['Quote']."</a>" : "&nbsp;";
+	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? " <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Edit']."</a>" : '';
+	$adminoptions .= ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? " <a href=\"".sed_url("forums", "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\" class=\"btn btn-adm\">".$L['Delete']."</a>" : '';
 	$adminoptions .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
 
 	if ($usr['id']>0 && $n=='unread' && !$unread_done && $row['fp_creation']>$usr['lastvisit'])
@@ -648,15 +648,15 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		$sql4 = sed_sql_query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_sectionid='$s' AND fp_id='$quote' LIMIT 1");
 		if ($row4 = sed_sql_fetchassoc($sql4))
 			{ 
-			$newmsg = ($cfg['textmode'] == 'bbcode') ? "[quote][url=".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."]#".$row4['fp_id']."[/url] [b]".$row4['fp_postername']." :[/b]\n".sed_cc($row4['fp_text'], ENT_QUOTES)."\n[/quote]" :
-			"<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".sed_cc($row4['fp_text'], ENT_QUOTES)."</blockquote><br />"; 
+			$newmsg = ($cfg['textmode'] == 'bbcode') ? "[quote][url=".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."]#".$row4['fp_id']."[/url] [b]".$row4['fp_postername']." :[/b]\n".$row4['fp_text']."\n[/quote]" :
+			"<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; 
 			}
 		}
 
 	$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
-	$post_main = "<div id=\"np\"><textarea name=\"newmsg\" rows=\"12\" cols=\"80\">".sed_cc($newmsg)."</textarea></div>";
+	$post_main = "<div id=\"np\"><textarea name=\"newmsg\" rows=\"12\" cols=\"80\">".sed_cc($newmsg, ENT_QUOTES)."</textarea></div>";
 
 	if ($cfg['textmode']=='bbcode')
 		{
