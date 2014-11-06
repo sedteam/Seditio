@@ -182,6 +182,8 @@ function sed_get_latestcomments($limit, $mask)
   {
   global $L, $db_com, $sys, $db_pages, $db_users, $usr, $cfg, $sed_cat, $plu_empty, $ishtml;
 
+  $modal = ($cfg['enablemodal']) ? ',1' : ''; 
+  
   $sql = sed_sql_query("SELECT MAX(com_id) AS max_com_id, MAX(com_date) AS max_com_date FROM $db_com WHERE com_isspecial = 0 GROUP BY com_code ORDER BY max_com_date DESC LIMIT $limit");
 
   $com_latest = array();
@@ -219,7 +221,7 @@ function sed_get_latestcomments($limit, $mask)
         break;
     
         case 'v':
-          $lnk = "<a href=\"javascript:polls('".$k."&comments=1#c".$row['com_id']."')\">".$L['Poll']." #".$k."</a>";
+          $lnk = "<a href=\"javascript:polls('".$k."&comments=1#c".$row['com_id']."'".$modal.")\">".$L['Poll']." #".$k."</a>";
         break;
 		
         case 'g':
