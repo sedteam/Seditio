@@ -390,15 +390,20 @@ load:function(t, contenttype, contentsource, title){ //loads content into window
   else if (contenttype=="image") {
       var i = new Image();  
       i.src = contentsource;
-      i.onload = function() { 
-			if (i.height > sed_modal.maxheightimage) { 			
-		            var newSize = sed_modal.scaleSize(sed_modal.maxwidthimage, sed_modal.maxheightimage, i.width, i.height);
-		            i.width = newSize[0];
-		            i.height = newSize[1];					
-			 }			
-			t.setSize(i.width+4, i.height);      
-      t.moveTo('middle', 'middle');
+      i.onload = function() {
 			
+        var max_h = (window.innerHeight > 0) ?  window.innerHeight - 100 : sed_modal.maxheightimage;
+        var max_w = (window.innerWidth > 0) ?  window.innerWidth - 100 : sed_modal.maxwidthimage;
+        
+        if (i.height > max_h) { 			
+            var newSize = sed_modal.scaleSize(max_w, max_h, i.width, i.height);
+            i.width = newSize[0];
+            i.height = newSize[1];					
+  			 }
+         			
+  			t.setSize(i.width+4, i.height);      
+        t.moveTo('middle', 'middle');
+
 			};
       t.contentarea.appendChild(i);  
   }  
@@ -795,9 +800,13 @@ window.onload =  function(e){
   for (var i=0; i<pagelinks.length; i++) { 
     if (pagelinks[i].getAttribute("rel") && pagelinks[i].getAttribute("rel")=="sedthumb") { 
       pagelinks[i].onclick=function() {
-        var imglink = this.getAttribute("href");         
+        var imglink = this.getAttribute("href");
+        var imgtitle = "Picture";
+        if (this.getAttribute("title")) {
+          imgtitle = this.getAttribute("title");
+        }          
         var randid = Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
-        sed_modal.open('im'+randid, 'image', get_basehref() + imglink, 'PFS', 'resize=0,scrolling=0,center=1', 'recal');
+        sed_modal.open('im'+randid, 'image', get_basehref() + imglink, imgtitle, 'resize=0,scrolling=0,center=1', 'recal');
         return false;
       }
     }
