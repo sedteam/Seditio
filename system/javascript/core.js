@@ -795,8 +795,9 @@ window.onload =  function(e){
   for (var i=0; i<pagelinks.length; i++) { 
     if (pagelinks[i].getAttribute("rel") && pagelinks[i].getAttribute("rel")=="sedthumb") { 
       pagelinks[i].onclick=function() {
-        var imglink = this.getAttribute("href"); 
-        sed_modal.open(i + 'im', 'image', get_basehref() + imglink, 'PFS', 'resize=0,scrolling=0,center=1', 'recal');
+        var imglink = this.getAttribute("href");         
+        var randid = Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
+        sed_modal.open('im'+randid, 'image', get_basehref() + imglink, 'PFS', 'resize=0,scrolling=0,center=1', 'recal');
         return false;
       }
     }
