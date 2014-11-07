@@ -258,7 +258,8 @@ imagefiles:['/system/img/vars/min.gif', '/system/img/vars/close.gif', '/system/i
 
 ajaxbustcache: true, //Bust caching when fetching a file via Ajax?
 ajaxloadinghtml: '<b>Loading Page. Please wait...</b>', //HTML to show while window fetches Ajax Content?
-
+maxheightimage: 600,
+maxwidthimage:800,
 minimizeorder: 0,
 zIndexvalue:100,
 tobjects: [], //object to contain references to dhtml window divs, for cleanup purposes
@@ -298,6 +299,7 @@ init:function(t){
 	t.close=function(){sed_modal.close(this)} //public function for closing dhtml window (also empties DHTML window content)
 	t.setSize=function(w, h){sed_modal.setSize(this, w, h)} //public function for setting window dimensions
 	t.moveTo=function(x, y){sed_modal.moveTo(this, x, y)} //public function for moving dhtml window (relative to viewpoint)
+	t.isResize=function(bol){sed_modal.isResize(this, bol)} //public function for specifying if window is resizable
 	t.isResize=function(bol){sed_modal.isResize(this, bol)} //public function for specifying if window is resizable
 	t.isScrolling=function(bol){sed_modal.isScrolling(this, bol)} //public function for specifying if window content contains scrollbars
 	t.load=function(contenttype, contentsource, title){sed_modal.load(this, contenttype, contentsource, title)} //public function for loading content into window
@@ -357,6 +359,18 @@ isResize:function(t, bol){ //show or hide resize inteface (part of the status ba
 	t.resizeBool=(bol)? 1 : 0
 },
 
+scaleSize:function(maxW, maxH, currW, currH){
+    var ratio = currH / currW;
+    if(currW >= maxW && ratio <= 1){
+        currW = maxW;
+        currH = currW * ratio;
+    } else if(currH >= maxH){
+        currH = maxH;
+        currW = currH / ratio;
+    }
+    return [currW, currH];
+},
+
 isScrolling:function(t, bol){ //set whether loaded content contains scrollbars
 	t.contentarea.style.overflow=(bol)? "auto" : "hidden"
 },
@@ -371,7 +385,26 @@ load:function(t, contenttype, contentsource, title){ //loads content into window
 		t.handle.firstChild.nodeValue=title
 	if (contenttype=="inline")
 		t.contentarea.innerHTML=contentsource
-	else if (contenttype=="div"){
+  
+  // ---------- Seditio Thumb ------------------
+  else if (contenttype=="image") {
+      var i = new Image();  
+      i.src = contentsource;
+      i.onload = function() { 
+			if (i.height > sed_modal.maxheightimage) { 			
+		            var newSize = sed_modal.scaleSize(sed_modal.maxwidthimage, sed_modal.maxheightimage, i.width, i.height);
+		            i.width = newSize[0];
+		            i.height = newSize[1];					
+			 }			
+			t.setSize(i.width+4, i.height);      
+      t.moveTo('middle', 'middle');
+			
+			};
+      t.contentarea.appendChild(i);  
+  }  
+	// ----------------------------
+  
+  else if (contenttype=="div"){
 		var inlinedivref=document.getElementById(contentsource)
 		t.contentarea.innerHTML=(inlinedivref.defaultHTML || inlinedivref.innerHTML) //Populate window with contents of inline div on page
 		if (!inlinedivref.defaultHTML)
@@ -756,6 +789,18 @@ window.onload =  function(e){
   sedtabs();
   
  /* ============================== */
+
+
+  var pagelinks = document.getElementsByTagName("a");
+  for (var i=0; i<pagelinks.length; i++) { 
+    if (pagelinks[i].getAttribute("rel") && pagelinks[i].getAttribute("rel")=="sedthumb") { 
+      pagelinks[i].onclick=function() {
+        var imglink = this.getAttribute("href"); 
+        sed_modal.open(i + 'im', 'image', get_basehref() + imglink, 'PFS', 'resize=0,scrolling=0,center=1', 'recal');
+        return false;
+      }
+    }
+  }
 
 }
 
