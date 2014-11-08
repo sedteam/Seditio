@@ -147,8 +147,8 @@ var sedjs = {
 			  if (this.getAttribute("title")) {
 				imgtitle = this.getAttribute("title");
 			  }          
-			  var randid = Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
-			  sedjs.modal.open('im'+randid, 'image', sedjs.get_basehref() + imglink, imgtitle, 'resize=0,scrolling=0,center=1', 'load');
+			  var randid = imglink.replace(/[^a-z0-9]/gi,'');
+			  sedjs.modal.open('img-'+randid, 'image', sedjs.get_basehref() + imglink, imgtitle, 'resize=0,scrolling=0,center=1', 'load');
 			  return false;
 			}
 		  }
@@ -399,6 +399,7 @@ var sedjs = {
 			t.style.visibility = "visible";
 			t.style.display = "block";
 			t.contentarea.style.display = "block";
+			t.contentarea.innerHTML = ""; //?? clear content
 			t.moveTo(xpos, ypos);
 			t.load(contenttype, contentsource, title);
 			if (t.state == "minimized" && t.controls.firstChild.title == "Restore"){
@@ -626,7 +627,7 @@ var sedjs = {
 					t.contentarea.innerHTML = "";
 				t.style.display = "none";
 				t.isClosed = true;
-				document.body.removeChild(t);
+				document.body.removeChild(t); // ???
 			}
 			return closewinbol;
 		},
