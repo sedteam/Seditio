@@ -18,9 +18,9 @@
 <div id="top-line"></div>
 
 <div id="css">
-    <a href="#" class="blue" onclick="setActiveStyleSheet('style'); return false;"></a>   
-    <a href="#" class="green" onclick="setActiveStyleSheet('green'); return false;"></a>  
-    <a href="#" class="fuchsia" onclick="setActiveStyleSheet('fuchsia'); return false;"></a>
+    <a href="#" class="blue" onclick="sedjs.setActiveStyleSheet('style'); return false;"></a>   
+    <a href="#" class="green" onclick="sedjs.setActiveStyleSheet('green'); return false;"></a>  
+    <a href="#" class="fuchsia" onclick="sedjs.setActiveStyleSheet('fuchsia'); return false;"></a>
 </div>
 
   <!-- BEGIN: USER -->    

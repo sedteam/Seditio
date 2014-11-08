@@ -806,7 +806,7 @@ function sed_build_bbcodes($c1, $c2, $title)
 	{
 	global $cfg;
 	$modal = ($cfg['enablemodal']) ? ',1' : '';
-	$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
+	$result = "<a href=\"javascript:sedjs.help('bbcodes','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
 	return($result);
 	}
 
@@ -836,7 +836,7 @@ function sed_build_smilies($c1, $c2, $title)
 	{
 	global $cfg;
 	$modal = ($cfg['enablemodal']) ? ',1' : '';
-	$result = "<a href=\"javascript:help('smilies','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
+	$result = "<a href=\"javascript:sedjs.help('smilies','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
 	return($result);
 	}
 
@@ -1130,9 +1130,9 @@ function sed_build_pfs($id, $c1, $c2, $title)
 		{ 
 		$modal = ($cfg['enablemodal']) ? ',1' : ''; 
 		if ($id==0)
-			{ $res = "<a href=\"javascript:pfs('0','".$c1."','".$c2."'".$modal.")\">".$title."</a>"; }
+			{ $res = "<a href=\"javascript:sedjs.pfs('0','".$c1."','".$c2."'".$modal.")\">".$title."</a>"; }
 		elseif ($sed_groups[$usr['maingrp']]['pfs_maxtotal']>0 && $sed_groups[$usr['maingrp']]['pfs_maxfile']>0 && sed_auth('pfs', 'a', 'R'))
-			{ $res = "<a href=\"javascript:pfs('".$id."','".$c1."','".$c2."'".$modal.")\">".$title."</a>"; }
+			{ $res = "<a href=\"javascript:sedjs.pfs('".$id."','".$c1."','".$c2."'".$modal.")\">".$title."</a>"; }
 		else
 			{ $res = ''; }   
 		}

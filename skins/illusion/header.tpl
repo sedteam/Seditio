@@ -41,9 +41,9 @@
 <div id="wrapper">
 
 <div id="css">
-    <a href="#" class="green" onclick="setActiveStyleSheet('style'); return false;"></a> 
-    <a href="#" class="blue" onclick="setActiveStyleSheet('blue'); return false;"></a>    
-    <a href="#" class="fuchsia" onclick="setActiveStyleSheet('fuchsia'); return false;"></a>
+    <a href="#" class="green" onclick="sedjs.setActiveStyleSheet('style'); return false;"></a> 
+    <a href="#" class="blue" onclick="sedjs.setActiveStyleSheet('blue'); return false;"></a>    
+    <a href="#" class="fuchsia" onclick="sedjs.setActiveStyleSheet('fuchsia'); return false;"></a>
 </div>
 
 	<div id="header">

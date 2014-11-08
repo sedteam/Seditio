@@ -37,7 +37,7 @@ function sed_get_latestpages($limit, $mask)
       $row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
 		$res .= sprintf($mask,
 			"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-			"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
+			"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
 			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
 				);
 			}
@@ -83,8 +83,8 @@ function sed_get_latesttopics($limit, $mask)
 			$res .= sprintf($mask,
 				$img,
 				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
-				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), TRUE, $parentcat),
-				"<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],25), sed_cutstring($row['fs_category'],16), TRUE, $parentcat),
+				"<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),50))."</a>",
 				$row['ft_postcount']-1
 					);
 			}
@@ -125,7 +125,7 @@ function sed_get_latestpolls($limit, $mask)
 		else
 			{ 
         $alreadyvoted = 0; 
-        $res .= "<form name=\"pollvote_".$poll_id."\" action=\"javascript:pollvote(document.pollvote_".$poll_id.".id.value, document.pollvote_".$poll_id.".cvote_".$poll_id.".value); window.location.reload();\" method=\"post\">"; // sed175      
+        $res .= "<form name=\"pollvote_".$poll_id."\" action=\"javascript:sedjs.pollvote(document.pollvote_".$poll_id.".id.value, document.pollvote_".$poll_id.".cvote_".$poll_id.".value); window.location.reload();\" method=\"post\">"; // sed175      
       }
     
 		$res .= "<h5>".$row_p['poll_text']."</h5>\n";
@@ -148,8 +148,8 @@ function sed_get_latestpolls($limit, $mask)
  
 		if ($alreadyvoted)
 			{         
-        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."'".$modal.")\">".$L['polls_viewresults']."</a> &nbsp; \n";
-        $res .= "<a href=\"javascript:polls('viewall'".$modal.")\">".$L['polls_viewarchives']."</a></div>\n";
+        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:sedjs.polls('".$poll_id."'".$modal.")\">".$L['polls_viewresults']."</a> &nbsp; \n";
+        $res .= "<a href=\"javascript:sedjs.polls('viewall'".$modal.")\">".$L['polls_viewarchives']."</a></div>\n";
       }
     else
       {
@@ -158,7 +158,7 @@ function sed_get_latestpolls($limit, $mask)
         $res .= "<input type=\"hidden\" name=\"a\" value=\"send\">\n";
         if ($cfg['ajax']) 
         	{					
-					$onclick = "javascript:sed_ajx.bind({'url': 'plug.php?ajx=recentitems&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx_".$poll_id."', 'loading': 'pollajx_".$poll_id."', 'formid':  'pollajx_".$poll_id."'});";					
+					$onclick = "javascript:sedjs.ajax.bind({'url': 'plug.php?ajx=recentitems&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx_".$poll_id."', 'loading': 'pollajx_".$poll_id."', 'formid':  'pollajx_".$poll_id."'});";					
 					$res .= "<div style=\"text-align:center;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
       		}
       	else 
@@ -221,7 +221,7 @@ function sed_get_latestcomments($limit, $mask)
         break;
     
         case 'v':
-          $lnk = "<a href=\"javascript:polls('".$k."&comments=1#c".$row['com_id']."'".$modal.")\">".$L['Poll']." #".$k."</a>";
+          $lnk = "<a href=\"javascript:sedjs.polls('".$k."&comments=1#c".$row['com_id']."'".$modal.")\">".$L['Poll']." #".$k."</a>";
         break;
 		
         case 'g':
