@@ -63,7 +63,7 @@ foreach($sed_urlrewrite as $val)
 }
 
 header("HTTP/1.1 404 Not Found");
-header("Location: ".$subdir_uri."/message/404");
-exit;
+//header("Location: ".$subdir_uri."/message/404");
+exit; 
    
 ?>

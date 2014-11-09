@@ -3851,7 +3851,7 @@ function sed_sefurlredirect()
       if ($params_arr['r'] != 'tb2preview') {   //fix textboxer preview   
           $redirect301 = sed_url($section, $params, "", true);  
 		   
-		  header("HTTP/1.1 301 Moved Permanently");
+		  		header("HTTP/1.1 301 Moved Permanently");
           header("Location: ".$redirect301);
           exit;
       }   

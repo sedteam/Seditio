@@ -125,7 +125,7 @@ $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
 
 $allfilters = "<form action=\"".sed_url("users", "f=search")."\" method=\"post\">".$L['Filters'].": <a href=\"".sed_url("users")."\">".$L['All']."</a> ";
-$allfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
+$allfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 
 foreach ($sed_countries as $i => $x)
 	{
@@ -143,7 +143,7 @@ foreach ($sed_countries as $i => $x)
 	}
 
 $allfilters .= "</select>";
-$allfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Maingroup']."...";
+$allfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Maingroup']."...";
 foreach($sed_groups as $k => $i)
 	{
 	$selected = ($k==$g) ? "selected=\"selected\"" : '';
@@ -157,7 +157,7 @@ foreach($sed_groups as $k => $i)
 		}
 	}
 $allfilters .= "</select>";
-$allfilters .= " <select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Group']."...";
+$allfilters .= " <select name=\"bygroupms\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Group']."...";
 $allfilters .= $grpms."</select>";
 
 $allfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"16\" maxlength=\"32\" /> <input type=\"submit\" class=\"submit btn\" value=\"".$L['Search']."\" /></form>";

@@ -609,7 +609,8 @@ div.descr {
 }
 
 .cattop {
-	background-color: #e8e7e7!important;
+	background-color: #e8e7e7!important; 
+	border-bottom: 1px solid #d0d0d0;
 }
 
 .odd { background-color: #f8f8f8;  }

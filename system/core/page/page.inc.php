@@ -129,7 +129,7 @@ if ($pag['page_totaltabs']>1)
 		}
 	$pag['page_tab'] = ($pag['page_tab']>$pag['page_totaltabs']) ? 1 : $pag['page_tab'];
 	$pag['page_tabtitles'] = array();
-	$pag['page_tabselect'].= "<select name=\"tabjump\" size=\"1\" onchange=\"redirect(this)\">";
+	$pag['page_tabselect'].= "<select name=\"tabjump\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 
 	for ($i = 0; $i < $pag['page_totaltabs']; $i++)
 		{

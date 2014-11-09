@@ -445,7 +445,7 @@ $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_parentcat
     ORDER by fn_path ASC, fs_order ASC");
 	
 $movebox = "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
-$jumpbox .= "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
+$jumpbox .= "<select name=\"jumpbox\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 $jumpbox .= "<option value=\"".sed_url("forums")."\">".$L['Forums']."</option>";
 
 while ($row1 = sed_sql_fetchassoc($sql1))

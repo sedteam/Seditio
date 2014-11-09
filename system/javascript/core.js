@@ -212,8 +212,9 @@ var sedjs = {
 								}
 								if(callback) callback(result);
 							} else {						
-								if(opt.loading) document.getElementById(opt.loadingid).removeChild(opt.loading);					
-								if(opt.onError) opt.onError(http.status);
+								if(opt.loading) document.getElementById(opt.loadingid).removeChild(opt.loading);
+											
+								if(opt.onError) {opt.onError(http.status); }
 							}
 						}
 					}

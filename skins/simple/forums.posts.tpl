@@ -41,17 +41,17 @@
 	<!-- BEGIN: FORUMS_POSTS_ROW -->
   
 	<tr>
-		<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
+		<td class="{FORUMS_POSTS_ROW_ODDEVEN} cattop">
         <span style="font-size:120%;"><strong>{FORUMS_POSTS_ROW_POSTERNAME}</strong></span>
     </td>
-  	<td style="height:16px; max-height:30px; text-align:right;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
+  	<td style="height:16px; max-height:30px; text-align:right;" class="{FORUMS_POSTS_ROW_ODDEVEN} cattop">
       	#{FORUMS_POSTS_ROW_IDURL} &nbsp;
       	{FORUMS_POSTS_ROW_CREATION} &nbsp; 
         {FORUMS_POSTS_ROW_POSTERIP} &nbsp; 
         {FORUMS_POSTS_ROW_ADMIN} &nbsp; 
         {FORUMS_POSTS_ROW_RATE}
   	</td>
-	</tr>  
+	</tr>   
   
 	<tr>
 		<td class="{FORUMS_POSTS_ROW_ODDEVEN}" style="vertical-align:top;">

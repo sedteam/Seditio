@@ -252,7 +252,7 @@ $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_parentcat
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
     ORDER by fn_path ASC, fs_order ASC");
 
-$jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
+$jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 $jumpbox .= "<option value=\"".sed_url("forums")."\">".$L['Forums']."</option>";
 
 while ($row1 = sed_sql_fetchassoc($sql1))
