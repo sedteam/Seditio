@@ -863,6 +863,9 @@ div.descr {
 	margin: 8px;
 	background-color: #F6F6F6;
 }
+.clear {
+	clear:both;
+}
 .error {
 	padding: 48px;
 	margin: 0;

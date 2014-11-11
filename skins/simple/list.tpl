@@ -8,7 +8,8 @@
 
 <div id="subtitle">
 
-	{LIST_SUBMITNEWPAGE}<br />{LIST_CATDESC}
+	{LIST_CATDESC}
+	<div class="clear">{LIST_SUBMITNEWPAGE}</div>
 	
 </div>
 

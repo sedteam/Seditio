@@ -38,6 +38,7 @@ table {
 	border-spacing: 0;
 }
 
+
 /* = Main Style
 -----------------------------------------------------------------------------*/
 
@@ -760,6 +761,10 @@ div.descr {
 	padding: 8px;
 	margin: 8px;
 	background-color: #F6F6F6;
+}
+
+.clear {
+	clear:both;
 }
 
 .error {

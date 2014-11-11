@@ -7,7 +7,10 @@
 <div id="bolded-line"></div>
 
 <div id="subtitle">
-	{LIST_CATDESC}<br />{LIST_SUBMITNEWPAGE}
+
+	{LIST_CATDESC}
+	<div class="clear">{LIST_SUBMITNEWPAGE}</div>
+
 </div>
 
 <div id="list-text">{LIST_CATTEXT}</div>

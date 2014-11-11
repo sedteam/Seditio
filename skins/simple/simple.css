@@ -555,6 +555,10 @@ div.descr {
 	background-color: #F6F6F6;
 }
 
+.clear {
+	clear:both;
+}
+
 .error {
 	padding: 48px;
 	margin: 0;
