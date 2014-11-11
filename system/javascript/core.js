@@ -8,7 +8,7 @@ var sedjs = {
 		},
 		
 	/*= PFS
-	-------------------------------------*/					
+	-------------------------------------*/
 	pfs : function(id,c1,c2,modal)
 		{	
 		if (!modal) { window.open(sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'); }
@@ -16,7 +16,7 @@ var sedjs = {
 		},
 		
 	/*= Help
-	-------------------------------------*/					
+	-------------------------------------*/
 	help : function(rcode,c1,c2,modal)
 		{
 		if (!modal) { window.open(sedjs.get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16'); }
@@ -24,7 +24,7 @@ var sedjs = {
 		},
 		
 	/*= Polls
-	-------------------------------------*/						
+	-------------------------------------*/
 	polls : function(rcode,modal)
 		{  
 		if (!modal) { window.open(sedjs.get_basehref()+'polls.php?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }    
@@ -32,7 +32,7 @@ var sedjs = {
 		},
 		
 	/*= Poll vote
-	-------------------------------------*/						
+	-------------------------------------*/
 	pollvote : function(rcode,rvote,modal)
 		{ 
 		if (!modal) { window.open(sedjs.get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
@@ -80,7 +80,8 @@ var sedjs = {
 			{ bl.style.display = 'none'; }
 		},
 		
-	/*= Tabs
+	/*= Seditio Tabs
+	based on Nanotabs - www.sunsean.com
 	-------------------------------------*/	
 	sedtabs : function() { 			
 		var gc = function(s){ return document.getElementsByClassName(s); };
@@ -241,9 +242,9 @@ var sedjs = {
 				var div = false;
 				if(opt.loading) {
 					div = document.createElement("div");
-					opt.loadingid = opt.loading;						
+					opt.loadingid = opt.loading;
 					var intElemOffsetHeight = Math.floor(document.getElementById(opt.loading).offsetHeight/2) + 16;
-					var intElemOffsetWidth = Math.floor(document.getElementById(opt.loading).offsetWidth/2) - 16;				
+					var intElemOffsetWidth = Math.floor(document.getElementById(opt.loading).offsetWidth/2) - 16;
 					div.setAttribute("style","position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
 					div.setAttribute("class","loading-indicator");
 					document.getElementById(opt.loading).appendChild(div);
@@ -323,6 +324,7 @@ var sedjs = {
 		},
 		
 	/*= Seditio Modal Windows functions
+	based on DHTML Windows - www.dynamicdrive.com
 	-------------------------------------*/			
 	modal : {			
 		imagefiles : ['/system/img/vars/min.gif', '/system/img/vars/close.gif', '/system/img/vars/restore.gif', '/system/img/vars/resize.gif'],
@@ -385,29 +387,33 @@ var sedjs = {
 			if (document.getElementById(t) == null) {	t = this.init(t); }
 			else { t = document.getElementById(t); }
 			this.setfocus(t);
-			t.setSize(getValue(("width")), (getValue("height")));
-			var xpos = getValue("center") ? "middle" : getValue("left");
-			var ypos = getValue("center") ? "middle" : getValue("top");
-			//t.moveTo(xpos, ypos) //Position window
-			if (typeof recalonload != "undefined" && recalonload == "recal" && this.scroll_top == 0){ 
-				if (window.attachEvent && !window.opera) 
-					this.addEvent(window, function(){setTimeout(function(){t.moveTo(xpos, ypos)}, 400)}, "load");
-				else
-					this.addEvent(window, function(){t.moveTo(xpos, ypos)}, "load");
+			if (contenttype != 'image') { 
+					t.setSize(getValue(("width")), (getValue("height")));
+					var xpos = getValue("center") ? "middle" : getValue("left");
+					var ypos = getValue("center") ? "middle" : getValue("top");
+					//t.moveTo(xpos, ypos) //Position window
+					if (typeof recalonload != "undefined" && recalonload == "recal" && this.scroll_top == 0){ 
+						if (window.attachEvent && !window.opera) 
+							this.addEvent(window, function(){setTimeout(function(){t.moveTo(xpos, ypos)}, 400)}, "load");
+						else
+							this.addEvent(window, function(){t.moveTo(xpos, ypos)}, "load");
+					}
+					t.isResize(getValue("resize"));
+					t.isScrolling(getValue("scrolling"));
+					t.style.visibility = "visible";
+					t.style.display = "block";
+					t.contentarea.style.display = "block";
+					t.contentarea.innerHTML = ""; //?? clear content
+					t.moveTo(xpos, ypos);
 			}
-			t.isResize(getValue("resize"));
-			t.isScrolling(getValue("scrolling"));
-			t.style.visibility = "visible";
-			t.style.display = "block";
-			t.contentarea.style.display = "block";
-			t.contentarea.innerHTML = ""; //?? clear content
-			t.moveTo(xpos, ypos);
+			//sedjs.modal.hide(t);
 			t.load(contenttype, contentsource, title);
 			if (t.state == "minimized" && t.controls.firstChild.title == "Restore"){
 				t.controls.firstChild.setAttribute("src", sedjs.modal.imagefiles[0]);
 				t.controls.firstChild.setAttribute("title", "Minimize");
 				t.state = "fullview";
 			}
+			//sedjs.modal.show(t);
 			return t;
 		},
 		
@@ -462,19 +468,24 @@ var sedjs = {
 		  else if (contenttype == "image") {
 			  var i = new Image();  	     
 			  i.onload = function(isa) {				
-				var max_h = (window.innerHeight > 150) ?  window.innerHeight - 100 : sedjs.modal.maxheightimage;
-				var max_w = (window.innerWidth > 150) ?  window.innerWidth - 100 : sedjs.modal.maxwidthimage;					
-						if (i.height > max_h) { 			
-					var newSize = sedjs.modal.scaleSize(max_w, max_h, i.width, i.height);
-					i.width = newSize[0];
-					i.height = newSize[1];					
-					 }	         			
-					t.setSize(i.width + 4, i.height);      
-				t.moveTo('middle', 'middle');	
-					};				
-					i.src = contentsource;				
-			  t.contentarea.appendChild(i);  
-		  }  	  
+					var max_h = (window.innerHeight > 150) ?  window.innerHeight - 100 : sedjs.modal.maxheightimage;
+					var max_w = (window.innerWidth > 150) ?  window.innerWidth - 100 : sedjs.modal.maxwidthimage;					
+					if (i.height > max_h) { 			
+							var newSize = sedjs.modal.scaleSize(max_w, max_h, i.width, i.height);
+							i.width = newSize[0];
+							i.height = newSize[1];
+					}	         			
+					t.setSize(i.width + 4, i.height);
+					t.moveTo('middle', 'middle');	
+				};
+				i.src = contentsource;
+				t.contentarea.appendChild(i);
+				t.statusarea.style.display = "none";
+				t.contentarea.style.overflow = "hidden";
+				t.style.visibility = "visible";
+				t.style.display = "block";
+				t.contentarea.style.display = "block";
+		  }
 		  else if (contenttype == "div"){
 				var inlinedivref = document.getElementById(contentsource);
 				t.contentarea.innerHTML = (inlinedivref.defaultHTML || inlinedivref.innerHTML); 
@@ -487,8 +498,8 @@ var sedjs = {
 				if (!t.contentarea.firstChild || t.contentarea.firstChild.tagName != "IFRAME") {				
 					t.contentarea.innerHTML = '<iframe src="" style="margin:0; padding:0; width:100%; height: 100%" name="_iframe-'+t.id+'" id="id_iframe-'+t.id+'"></iframe>';
 				}
-				window.frames["_iframe-"+t.id].location.replace(contentsource);												 
-			}							
+				window.frames["_iframe-"+t.id].location.replace(contentsource);
+			}
 			else if (contenttype == "ajax"){
 					sedjs.ajax.bind({url : contentsource, method : 'GET', update : 'area-'+t.id, loading : t.id});
 			}
@@ -755,7 +766,7 @@ var sedjs = {
 	        return c.substring(nameEQ.length,c.length);  
 	    }  
 	    return null;
-	}			
+	}
 }
 
 window.onload = function(){ 
