@@ -130,10 +130,12 @@ var sedjs = {
 		  for(var j=0; j<a.length; j++)
 			a[j]['on'+s.e] = bind.call([a[j],h[j],a,e,s],f);
 		  if(typeof s.d=="number" && s.d>=0) tab.call(a[s.d],h[s.d],a,e,s);
-		}
+		}		
 	  }	
+	  
 	  stabs.settings = { c:"sedtabs", e:"click", s:"selected", d:0, f:false };
 	  stabs(settings);		
+		
 	},
 
 	/*= Get Attribute rel on links & start show thumb in modal window
@@ -769,7 +771,19 @@ var sedjs = {
 	}
 }
 
-window.onload = function(){ 
+function addLoadEvent(funct) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = funct;
+  } else {
+    window.onload = function() {
+      oldonload();
+      funct();
+    }
+  }
+}
+
+onloadfunct = function(){ 
 	sedjs.sedtabs();
 //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
 	sedjs.getrel("sedthumb");
@@ -777,6 +791,8 @@ window.onload = function(){
 	var title = cookie ? cookie : sedjs.getPreferredStyleSheet();  
 	sedjs.setActiveStyleSheet(title);	
 };
+
+addLoadEvent(onloadfunct);
 
 window.onunload = function() {  
 	var title = sedjs.getActiveStyleSheet();  
