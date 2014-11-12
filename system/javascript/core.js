@@ -83,7 +83,7 @@ var sedjs = {
 	/*= Seditio Tabs
 	based on Nanotabs - www.sunsean.com
 	-------------------------------------*/	
-	sedtabs : function() { 			
+	sedtabs : function(settings) { 			
 		var gc = function(s){ return document.getElementsByClassName(s); };
 	  if(!document.getElementsByClassName) {
 		var all = document.getElementsByTagName('*');
@@ -133,7 +133,7 @@ var sedjs = {
 		}
 	  }	
 	  stabs.settings = { c:"sedtabs", e:"click", s:"selected", d:0, f:false };
-	  stabs();		
+	  stabs(settings);		
 	},
 
 	/*= Get Attribute rel on links & start show thumb in modal window
@@ -771,6 +771,7 @@ var sedjs = {
 
 window.onload = function(){ 
 	sedjs.sedtabs();
+	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
 	sedjs.getrel("sedthumb");
 	var cookie = sedjs.readCookie("style");  
 	var title = cookie ? cookie : sedjs.getPreferredStyleSheet();  
