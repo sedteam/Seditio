@@ -54,7 +54,7 @@
 	</tr>   
   
 	<tr>
-		<td class="{FORUMS_POSTS_ROW_ODDEVEN}" style="vertical-align:top;">
+		<td class="{FORUMS_POSTS_ROW_ODDEVEN} gradi" style="vertical-align:top;">
 
 			{FORUMS_POSTS_ROW_AVATAR}
 

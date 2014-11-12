@@ -7,7 +7,8 @@
 </div>
 
 <div id="subtitle">
-	{PAGE_DESC}<br />
+	{PAGE_DESC}
+	<div class="clear">
 	{PHP.skinlang.page.Submittedby} {PAGE_OWNER} &nbsp; {PHP.skinlang.page.Date} {PAGE_DATE}<br />
 
 	<!-- BEGIN: PAGE_ADMIN -->
@@ -15,6 +16,7 @@
 	{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; {PAGE_ADMIN_CLONE} &nbsp; ({PAGE_ADMIN_COUNT})<br />
 
 	<!-- END: PAGE_ADMIN -->
+	</div>
 </div>
 
 <div id="page">
