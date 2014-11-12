@@ -14,12 +14,16 @@
 
 	<!-- END: PAGE_ROW -->
   
-  <div class="paging">
+  <!-- BEGIN: NEWS_PAGINATION_BM -->
+	
+	<div class="paging">
   <ul class="pagination">
     <li class="prev">{NEWS_PAGEPREV}</li>
     {NEWS_PAGINATION}
     <li class="next">{NEWS_PAGENEXT}</li>
   </ul>
   </div>
+  
+  <!-- END: NEWS_PAGINATION_BM -->
 	
 <!-- END: NEWS -->

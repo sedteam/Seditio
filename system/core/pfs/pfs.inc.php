@@ -443,7 +443,7 @@ while ($row = sed_sql_fetchassoc($sql))
   if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
 		{		
     $setassample = ($pfs_id==$pff_sample) ?  $out['img_checked'] : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\">".$out['img_set']."</a>";    
-    $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
+    $pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"sedthumb\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
 		
 		if (!file_exists($cfg['th_dir'].$pfs_file) && file_exists($cfg['pfs_dir'].$pfs_file))
 			{
@@ -611,11 +611,26 @@ if ($f==0 && $usr['auth_write'])
 // ========== Putting all together =========
 
 $subtitle = $disp_stats;
-$body = (!empty($disp_errors)) ? "<p>".$disp_errors."</p>" : '';
-$body .= "<p>".$disp_main."</p>";
-$body .= ($usr['auth_write']) ? "<p>".$disp_upload."</p>" : '';
-$body .= ($usr['auth_write']) ? "<p>".$disp_newfolder."</p>" : '';
-$body .= ($usr['auth_write']) ? "<p>".$disp_allowed."</p>" : '';
+$body = (!empty($disp_errors)) ? "<div>".$disp_errors."</div>" : '<div>&nbsp;</div>';
+
+
+$body .= "<div class=\"sedtabs\">";
+	
+$body .= "<ul class=\"tabs\">";
+$body .= "<li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Folders']." & ".$L['Files']."</a></li>";
+$body .= ($usr['auth_write']) ? "<li><a href=\"".$sys['request_uri']."#tab2\">".$L['pfs_newfile']."</a></li>" : '';
+$body .= ($f==0 && $usr['auth_write']) ? "<li><a href=\"".$sys['request_uri']."#tab3\">".$L['pfs_newfolder']."</a></li>" : '';
+$body .= "</ul>";    
+
+$body .= "<div class=\"tab-box\">";
+
+$body .= "<div id=\"tab1\" class=\"tabs\">".$disp_main."</div>";
+$body .= ($usr['auth_write']) ? "<div id=\"tab2\" class=\"tabs\">".$disp_upload."</div>" : '';
+$body .= ($usr['auth_write']) ? "<div id=\"tab3\" class=\"tabs\">".$disp_newfolder."</div>" : '';
+
+$body .= "</div></div>";
+
+$body .= ($usr['auth_write']) ? "<div>".$disp_allowed."</div>" : '';
 
 $out['subtitle'] = $L['Mypfs'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');

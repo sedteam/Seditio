@@ -75,16 +75,26 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
   
   $pagination = sed_pagination(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages']);
   list($pageprev, $pagenext) = sed_pagination_pn(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages'], TRUE);
-  
-  /* ===================================== */
+
+	$news = new XTemplate(sed_skinfile('news'));  
+
+	if (!empty($pagination))
+		{
+	  $news-> assign(array(		
+			"NEWS_PAGINATION" => $pagination,
+			"NEWS_PAGEPREV" => $pageprev,
+			"NEWS_PAGENEXT" => $pagenext
+		));
+		  
+		$news->parse("NEWS.NEWS_PAGINATION_TP");
+		$news->parse("NEWS.NEWS_PAGINATION_BM");		
+		}	
 
 	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar, u.user_maingrp FROM $db_pages AS p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE page_state=0 AND page_cat NOT LIKE 'system'
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."' 
 	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$cfg['plugin']['news']['category']]['order']." ".$sed_cat[$cfg['plugin']['news']['category']]['way']." LIMIT $d,".$cfg['plugin']['news']['maxpages']);
-
-	$news = new XTemplate(sed_skinfile('news'));
 
 	while ($pag = sed_sql_fetchassoc($sql))
 		{		
@@ -152,14 +162,6 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 		$news->assign("PAGE_ROW_TEXT", $pag['page_text']);	
 		$news->parse("NEWS.PAGE_ROW");	
 	}	
-
-  /* ====== Pagination Sed 173 ======= */
-  $news-> assign(array(		
-	"NEWS_PAGINATION" => $pagination,
-	"NEWS_PAGEPREV" => $pageprev,
-	"NEWS_PAGENEXT" => $pagenext
-	  ));
-	/* ============== */
 		    
 	$news->parse("NEWS");
 	$t->assign("INDEX_NEWS", $news->text("NEWS"));
