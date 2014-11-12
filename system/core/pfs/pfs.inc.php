@@ -558,7 +558,7 @@ for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 	$disp_upload .= "<tr><td style=\"text-align:center;\">#".($ii+1)."</td>\n";
 	$disp_upload .= "<td style=\"width:48%;\"><input type=\"text\" class=\"text\" name=\"ntitle[$ii]\" value=\"\" size=\"48\" maxlength=\"255\" /></td>\n";
 	$disp_upload .= "<td style=\"width:48%;\"><input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"32\" />\n";
-  $disp_upload .= ($ii+1==$cfg['pfsmaxuploads']) ? " &nbsp; <a href=\"javascript:toggleblock('moreuploads')\"><img src=\"skins/".$skin."/img/system/arrow-down.gif\" alt=\"\" /></a>": '';
+  $disp_upload .= ($ii+1==$cfg['pfsmaxuploads']) ? " &nbsp; <a href=\"javascript:sedjs.toggleblock('moreuploads')\"><img src=\"skins/".$skin."/img/system/arrow-down.gif\" alt=\"\" /></a>": '';
   $disp_upload .= "</td></tr>";
 	}
 
