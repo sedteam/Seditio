@@ -25,7 +25,7 @@ INSERT INTO `sed_parser` VALUES(24, 'BR', 0, 0, 21, '[br]', '', '<br />', '', 1)
 INSERT INTO `sed_parser` VALUES(25, 'More', 0, 0, 22, '[more]', '[/more]', '<!--readmore-->', '', 1);
 INSERT INTO `sed_parser` VALUES(26, 'Image 1', 0, 1, 10, '\\[img\\]([^\\\\\\''\\;\\?[]*)\\.(jpg|jpeg|gif|png)\\[\\/img\\]', '', '<img src="$1.$2" alt="" />', '', 1);
 INSERT INTO `sed_parser` VALUES(27, 'Image 2', 0, 1, 20, '\\[img=([^\\\\\\''\\;\\?[]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/img\\]', '', '<a href="$1.$2"><img src="$3.$4" alt="" /></a>', '', 1);
-INSERT INTO `sed_parser` VALUES(28, 'Thumbnail PFS', 0, 1, 30, '\\[thumb=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/thumb\\]', NULL, '<a href="javascript:picture(''pfs.php?m=view&amp;v=$3.$4'', 200,200)"><img src="$1.$2" alt="" /></a>', NULL, 1);
+INSERT INTO `sed_parser` VALUES(28, 'Thumbnail PFS', 0, 1, 30, '\\[thumb=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/thumb\\]', NULL, '<a href="javascript:sedjs.picture(''pfs.php?m=view&amp;v=$3.$4'', 200,200)"><img src="$1.$2" alt="" /></a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(29, 'Thumbnails', 0, 1, 40, '\\[t=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/t\\]', NULL, '<a href="$3.$4" rel="sedthumb"><img src="$1.$2" alt="" /></a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(30, 'Url 1', 0, 1, 50, '\\[url\\]([^\\\\([]*)\\[\\/url\\]', NULL, '<a href="$1">$1</a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(31, 'Url 2', 0, 1, 60, '\\[url=([^\\\\\\''\\;([]*)\\]([^\\\\[]*)\\[\\/url\\]', NULL, '<a href="$1">$2</a>', NULL, 1);
