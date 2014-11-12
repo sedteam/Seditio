@@ -132,7 +132,7 @@ while ($fsn = sed_sql_fetchassoc($sql))
   if ($pcat!=$fsn['fs_category'])
 		{
 		$pcat = $fsn['fs_category'];
-		$cattitle = "<a href=\"#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
+		$cattitle = "<a href=\"javascript:sedjs.toggleblock('blk_".$fsn['fs_category']."')\">";
 		$cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
 		$cattitle .= "</a>";
 
