@@ -188,7 +188,7 @@ else
   
 	$adminmain .= "<div class=\"sedtabs\">	
 	<ul class=\"tabs\">
-      <li><a href=\"".$sys['request_uri']."#tab1\">".$L['editdeleteentries']."</a></li>
+      <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['editdeleteentries']."</a></li>
       <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
     </ul>    
     <div class=\"tab-box\">";

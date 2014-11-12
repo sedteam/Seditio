@@ -832,6 +832,10 @@ table.list {
 	display:none; 	
 }
 
+.sedtabs div.tabs:first-child { 
+	display:block; 	
+}
+
 .tab-box {
 	background:#ffffff; 
 	border:1px solid #ccc;
@@ -841,6 +845,11 @@ table.list {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+}
+
+.noborder {
+  border:none;
+  border-top:1px solid #ccc;
 }
 
 ul.tabs {
@@ -864,7 +873,8 @@ ul.tabs li a:hover {
     color:#212121;
 }
 
-ul.tabs li a.selected {
+ul.tabs li a.selected  
+  {
     background-color:#ffffff;
     color:#282e32;
     border:1px solid #ccc; 

@@ -236,7 +236,7 @@ switch($mn)
     
 		$adminmain .= "<div class=\"sedtabs\">	
 			<ul class=\"tabs\">
-		  <li><a href=\"".$sys['request_uri']."#tab1\">".$L['Structure']."</a></li>
+		  <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Structure']."</a></li>
 		  <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
 		</ul>    
 		<div class=\"tab-box\">";

@@ -29,7 +29,7 @@
 <div class="sedtabs">
 	
 		<ul class="tabs">
-      <li><a href="{PHP.sys.request_uri}#tab1">{PHP.L.Page}</a></li>
+      <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Page}</a></li>
       <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.Meta}</a></li>
       <li><a href="{PHP.sys.request_uri}#tab3">{PHP.L.Options}</a></li>
     </ul>

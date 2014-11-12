@@ -193,7 +193,7 @@ switch($n)
 
 	$adminmain .= "<div class=\"sedtabs\">	
 		<ul class=\"tabs\">
-      <li><a href=\"".$sys['request_uri']."#tab1\">".$L['Users']."</a></li>
+      <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Users']."</a></li>
       <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
     </ul>    
     <div class=\"tab-box\">";

@@ -1260,6 +1260,10 @@ div.descr {
 	display:none; 	
 }
 
+.sedtabs div.tabs:first-child { 
+	display:block; 	
+}
+
 .tab-box {
 	background:#ffffff; 
 	border:1px solid #ccc;

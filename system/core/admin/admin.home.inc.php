@@ -35,7 +35,7 @@ if (!empty($adminwarnings))
 
 $adminmain .= "<div class=\"sedtabs\">	
 <ul class=\"tabs\">
-  <li><a href=\"".$sys['request_uri']."#tab1\">".$L['Pages']."</a></li>
+  <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Pages']."</a></li>
   <li><a href=\"".$sys['request_uri']."#tab2\">".$L['upg_upgrade']."</a></li>
   <li><a href=\"".$sys['request_uri']."#tab3\">".$L['adm_infos']."</a></li>
 </ul>    

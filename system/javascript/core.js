@@ -771,7 +771,7 @@ var sedjs = {
 
 window.onload = function(){ 
 	sedjs.sedtabs();
-	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
+//	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
 	sedjs.getrel("sedthumb");
 	var cookie = sedjs.readCookie("style");  
 	var title = cookie ? cookie : sedjs.getPreferredStyleSheet();  
