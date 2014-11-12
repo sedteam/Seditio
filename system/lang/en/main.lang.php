@@ -690,7 +690,7 @@ $L['rss_lastcomments'] = "Recent Comments"; // New in v173
 
 /* ====== Metadata information ====== */
 
-$L['mt_title'] = "Meta title"; // New in v175
+$L['mt_title'] = "Title"; // New in v175
 $L['mt_description'] = "Meta description"; // New in v175
 $L['mt_keywords'] = "Meta keywords"; // New in v175
 

@@ -691,13 +691,13 @@ $L['rss_lastcomments'] = 'Последние комментарии';	// New in 
 
 /* ====== Metadata information ====== */
 
-$L['mt_title'] = "Meta-тег title"; // New in v175
+$L['mt_title'] = "Тег title"; // New in v175
 $L['mt_description'] = "Meta-тег description"; // New in v175
 $L['mt_keywords'] = "Meta-тег keywords"; // New in v175
 
 /* ====== Fix ====== */
 
-$sed_languages['ru']= 'Русский';
+$sed_languages['ru'] = 'Русский';
 
 $sed_countries = array (
 'ru' => "Россия",

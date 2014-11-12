@@ -119,7 +119,7 @@ var sedjs = {
 		for(i=0; i<c.length; i++) {
 		  var x=0, e=[], a=[], h=[], t=c[i].getElementsByTagName("a");
 		  for(var j=0; j<t.length; j++)
-			if(t[j].href.match(/#/)) {
+			if(t[j].href.match(/#tab/)) {
 			  h.push(t[j].href.split('#')[1]);
 			  if(typeof s.d=="string" && h[x]==s.d) s.d=x;
 			  a.push(t[j]);
