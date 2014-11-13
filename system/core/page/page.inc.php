@@ -299,7 +299,7 @@ $t->assign(array(
 			{ $pag['page_fileicon'] = ''; }
 
 		$t->assign(array(
-			"PAGE_FILE_URL" => sed_url("page", "id=".$pag['page_id']."&a=dl"),
+			"PAGE_FILE_URL" => sed_url("page", $url_param."&a=dl"),
 			"PAGE_FILE_SIZE" => $pag['page_size'],
 			"PAGE_FILE_COUNT" => $pag['page_filecount'],
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
