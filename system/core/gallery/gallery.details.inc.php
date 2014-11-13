@@ -79,9 +79,9 @@ if ($pfs['pfs_imgsize'][0]>$cfg['gallery_imgmaxwidth'])
 
   if (file_exists($cfg['res_dir'].$pfs['pfs_file']))
     {
-    $pfs['pfs_img'] = "<a href=\"javascript:picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
+    $pfs['pfs_img'] = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
     $pfs['pfs_img'] .= "<img src=\"".$cfg['res_dir'].$pfs['pfs_file']."\" alt=\"\" /></a>";
-    $browse_zoom = "<a href=\"javascript:picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
+    $browse_zoom = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
     $browse_zoom .= "<img src=\"skins/".$skin."/img/system/gallery_zoom.png\" title=\"Zoom\" /></a>";
     }
   }

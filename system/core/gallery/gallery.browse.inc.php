@@ -138,7 +138,7 @@ while ($pfs = sed_sql_fetchassoc($sql))
 		$pfs['cond2'] = '';
 		}
 
-	$pfs['popup'] = "<a href=\"javascript:picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
+	$pfs['popup'] = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
 
 	if ($usr['isadmin'])
 		{
