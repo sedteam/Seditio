@@ -91,8 +91,8 @@ if ($usr['maingrp'] > 3) {
   $ck_config = "sed_config.js"."?".sed_unique(5);     	
   /* ===== Init Ckeditor ===== */  
   if ($ckeditor_other_textarea == "Yes") {  
-  $ck_other = "if (textareas[i].getAttribute('class') != 'noeditor') {      
-        CKEDITOR.config.customConfig = '".$ck_config."';
+  $ck_other = "if (textareas[i].getAttribute('class') != 'noeditor' && CkTextareasName[textareas[i].getAttribute('name')] == undefined) {      
+				CKEDITOR.config.customConfig = '".$ck_config."';
         CKEDITOR.config.baseHref = '".$sys['abs_url']."';
         CKEDITOR.replace(textareas[i], {toolbar: '".$ckeditor_other_toolbar."', skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
         smiley_descriptions: ".$smiley_descriptions.",         
@@ -106,7 +106,7 @@ if ($usr['maingrp'] > 3) {
     var textareas = document.getElementsByTagName('textarea');
   	for (var i = 0; i < textareas.length; i++) { 
       if (CkTextareasName[textareas[i].getAttribute('name')] != undefined) {
-        CKEDITOR.config.customConfig = '".$ck_config."';
+				CKEDITOR.config.customConfig = '".$ck_config."';
         CKEDITOR.config.baseHref = '".$sys['abs_url']."';
         CKEDITOR.replace(textareas[i], {toolbar: CkTextareasName[textareas[i].getAttribute('name')],  skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
         smiley_descriptions: ".$smiley_descriptions.",         
