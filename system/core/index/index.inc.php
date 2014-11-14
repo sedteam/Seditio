@@ -41,7 +41,7 @@ $t = new XTemplate($mskin);
 $extp = sed_getextplugins('index.tags');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
+/* ===== */    
 
 $t->parse("MAIN");
 $t->out("MAIN");

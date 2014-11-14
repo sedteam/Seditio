@@ -121,8 +121,14 @@ function sed_alphaonly($text)
 	return(preg_replace('/[^a-zA-Z0-9_]/', '', $text));
 	}
 
-/* ------------------ */
-
+/**
+ * Returns specific access permissions
+ *
+ * @param string $area Seditio area
+ * @param string $option Option to access
+ * @param string $mask Access mask
+ * @return mixed
+ */ 
 function sed_auth($area, $option, $mask='RWA')
 	{
 	global $sys, $usr;
@@ -172,8 +178,13 @@ function sed_auth($area, $option, $mask='RWA')
 		{ return($res); }
 	}
 
-/* ------------------ */
-
+/**
+ * Builds Access Control List for a specific user
+ *
+ * @param int $userid User ID
+ * @param int $maingrp User main group
+ * @return array
+ */ 
 function sed_auth_build($userid, $maingrp=0)
 	{
 	global $db_auth, $db_groups_users;
@@ -204,8 +215,12 @@ function sed_auth_build($userid, $maingrp=0)
    	return($authgrid);
 	}
 
-/* ------------------ */
-
+/**
+ * Clears user permissions cache
+ *
+ * @param mixed $id User ID or 'all'
+ * @return int
+ */ 
 function sed_auth_clear($id='all')
 	{
 	global $db_users;
@@ -3739,6 +3754,15 @@ function sed_check_params($params) {
 } 
 
 /* -------------------- */
+
+function sed_vardump($v, $mode = '') 
+	{
+		ob_start();
+		unset ($v['devmode'], $v['auth_log']);
+    if ($mode == 'print_r') print_r($v); else var_dump($v);			
+		$res = "<pre style=\"white-space:pre-wrap; word-wrap: break-word;\">".htmlspecialchars(ob_get_clean(), ENT_QUOTES)."</pre>";
+		return $res;
+	}
 
 function sed_url($section, $params = '', $anchor = '', $header = false, $enableamp = true)
 	{	

@@ -26,7 +26,7 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-global $usr;
+global $usr, $location;
 
 require_once('plugins/jevix/inc/jevix.class.php');
 

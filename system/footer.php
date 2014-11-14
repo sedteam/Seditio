@@ -103,7 +103,17 @@ $out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.round($
 
 if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	{
-	$out['devmode'] = "<h2>Dev-mode :</h2>";
+
+	$out['devmode'] .= "<h2>Dev-mode :</h2>";	
+	$out['devmode'] .= "<div class=\"sedtabs\" style=\"color:#000; margin:0 0 20px 0\">";	
+	$out['devmode'] .= "<ul class=\"tabs\">";
+	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab101\" class=\"selected\">Hooks</a></li>";
+	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab102\" class=\"selected\">SQL queries</a></li>";
+	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab103\" class=\"selected\">Auth</a></li>";	
+	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab104\" class=\"selected\">".'$sys'."</a></li>";
+	$out['devmode'] .= "</ul>"; 
+  $out['devmode'] .= "<div class=\"tab-box\">";
+	$out['devmode'] .= "<div id=\"tab101\" class=\"tabs\">"; 		
   $out['devmode'] .= "<h4>Hooks :</h4>";
   
   if (is_array($sys['devmode']['hooks'])) 
@@ -131,7 +141,8 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
   else
     { $out['devmode'] .= "None."; }
     
-  $out['devmode'] .= "<h4>SQL queries :</h4>";
+  $out['devmode'] .= "</div><div id=\"tab102\" class=\"tabs\">"; 
+	$out['devmode'] .= "<h4>SQL queries :</h4>";
   
   $out['devmode'] .= "<table class=\"cells hovered\"><tr>";
   $out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">SQL query</td><td class=\"coltop\" style=\"width:10%;\">SQL Duration</td>";
@@ -150,6 +161,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	$out['devmode'] .= "<td><strong>Queries : ".$sys['qcount']. " ,  Average : ".sprintf("%.3f",round(($sys['tcount']/$sys['qcount'])*1000,3))."ms/query</strong>";
 	$out['devmode'] .= "</td></tr></table>";
 
+	$out['devmode'] .= "</div><div id=\"tab103\" class=\"tabs\">";
   $out['devmode'] .= "<h4>Auth :</h4>";
 
   if (is_array($sys['auth_log']))
@@ -158,7 +170,11 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
   $txt_w = ($usr['auth_write']) ? '1' : '0';
   $txt_a = ($usr['isadmin']) ? '1' : '0';
   $out['devauth'] .= " &nbsp; AUTH_FINAL_RWA:".$txt_r.$txt_w.$txt_a;
-  $out['devmode']	 .= $out['devauth'];
+  $out['devmode']	.= $out['devauth'];
+	$out['devmode'] .= "</div><div id=\"tab104\" class=\"tabs\">"; 
+	$out['devmode'] .= '<h4>$sys :</h4>';
+	$out['devmode'] .= sed_vardump($sys, 'print_r');
+	$out['devmode']	.= "</div></div></div>";
 	}
 
 $t->assign(array (
