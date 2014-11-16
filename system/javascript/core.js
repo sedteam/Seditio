@@ -468,6 +468,16 @@ var sedjs = {
 			if (contenttype == "inline")
 				t.contentarea.innerHTML = contentsource;	  
 		  else if (contenttype == "image") {
+				
+				/* Loading Indicator */
+				loader = document.createElement("div");
+				loader.setAttribute("style","position:absolute;");
+				loader.setAttribute("class","loading-indicator");
+				document.body.appendChild(loader);
+				sedjs.modal.moveTo(loader, 'middle', 'middle');					
+				t.loading=loader;		  
+	      /**/
+		  
 			  var i = new Image();  	     
 			  i.onload = function(isa) {				
 					var max_h = (window.innerHeight > 150) ?  window.innerHeight - 100 : sedjs.modal.maxheightimage;
@@ -478,8 +488,13 @@ var sedjs = {
 							i.height = newSize[1];
 					}	         			
 					t.setSize(i.width + 4, i.height);
-					t.moveTo('middle', 'middle');	
+					t.moveTo('middle', 'middle');
+					if(loader) document.body.removeChild(loader);	
 				};
+				i.onerror = function(asa) {
+					if(loader) document.body.removeChild(loader);	
+				};
+
 				i.src = contentsource;
 				t.contentarea.appendChild(i);
 				t.statusarea.style.display = "none";
