@@ -47,6 +47,12 @@ else
 sed_die(sed_sql_numrows($sql)==0);
 $pag = sed_sql_fetchassoc($sql);
 
+/* === Hook === */
+$extp = sed_getextplugins('page.fetch');
+if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $sys['catcode'] = $pag['page_cat']; //new in v175
 
 $pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);

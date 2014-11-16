@@ -96,8 +96,19 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."' 
 	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$cfg['plugin']['news']['category']]['order']." ".$sed_cat[$cfg['plugin']['news']['category']]['way']." LIMIT $d,".$cfg['plugin']['news']['maxpages']);
 
+	/* === Hook - Part1 : Set === */
+	$extpf = sed_getextplugins('news.loopfirst');
+	$extp = sed_getextplugins('news.loop');
+	/* ===== */
+
 	while ($pag = sed_sql_fetchassoc($sql))
-		{		
+		{	
+		
+		/* === Hook - Part2 : Include === */
+		if (is_array($extpf))
+			{ foreach($extpf as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+					
 		$jj++;
 		
     $sys['catcode'] = $pag['page_cat']; //new in v175
@@ -159,7 +170,13 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			}										
 		$pag['page_text'] = sed_cutreadmore($pag['page_text'], $pag['page_pageurl']);
 
-		$news->assign("PAGE_ROW_TEXT", $pag['page_text']);	
+		$news->assign("PAGE_ROW_TEXT", $pag['page_text']);
+		
+		/* === Hook - Part2 : Include === */
+		if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */		
+			
 		$news->parse("NEWS.PAGE_ROW");	
 	}	
 		    

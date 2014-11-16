@@ -121,8 +121,7 @@ if ($c != 'all')
 	{
 	$sql2 = sed_sql_query("SELECT structure_text, structure_code, structure_text_ishtml FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
 	$row2 = sed_sql_fetchassoc($sql2);
-  
-			
+  			
 	$list_text = sed_parse($row2['structure_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $row2['structure_text_ishtml']);
 
 	if (!$row2['structure_text_ishtml'] && $cfg['textmode']=='html')
@@ -279,11 +278,17 @@ while (list($i,$x) = each($sed_cat) )
 		}
 
 /* === Hook - Part1 : Set === */
+$extpf = sed_getextplugins('list.loopfirst');
 $extp = sed_getextplugins('list.loop');
 /* ===== */
 
 while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 	{
+	/* === Hook - Part2 : Include === */
+	if (is_array($extpf))
+		{ foreach($extpf as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	$jj++;
 	
   $sys['catcode'] = $pag['page_cat'];
