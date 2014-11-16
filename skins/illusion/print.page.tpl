@@ -1,13 +1,12 @@
-<!-- BEGIN: PRINT --><!-- BEGIN: HEADER -->{PRINT_HEADER_DOCTYPE}
+<!-- BEGIN: MAIN -->{PHP.cfg.doctype}
 <html>
 <head>
-{PRINT_HEADER_METAS}
-<title>{PRINT_HEADER_TITLE} - {PHP.L.Printversion}</title>
+<title>{PAGE_SHORTTITLE} - {PHP.L.Printversion}</title>
+<base href="{PHP.sys.abs_url}" />
 <link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" />
-<link rel="canonical" href="{PRINT_HEADER_CANONICAL_URL}" />
+<link rel="canonical" href="{PHP.out.canonical_url}" />
 </head>
 <body>
-<!-- END: HEADER -->
 
 <div id="print">
 
@@ -28,38 +27,43 @@
 
 </div>
 
-<div id="title"><h2>{PRINT_PAGE_TITLE}</h2></div>
-<div id="bolded-line"></div>
+<div id="title">
+
+	<h2>{PAGE_TITLE}</h2>
+
+</div>
 
 <div id="subtitle">
-	{PRINT_PAGE_DESC}<br />
-	{PHP.skinlang.page.Submittedby} {PRINT_PAGE_OWNER} | {PHP.skinlang.page.Date} {PRINT_PAGE_DATE}<br />
+	{PAGE_DESC}
+	<div class="clear">
+	{PHP.skinlang.page.Submittedby} {PAGE_OWNER} &nbsp; {PHP.skinlang.page.Date} {PAGE_DATE}<br />
 
 	<!-- BEGIN: PAGE_ADMIN -->
 
-	{PRINT_PAGE_ADMIN_UNVALIDATE} | {PRINT_PAGE_ADMIN_EDIT} ({PRINT_PAGE_ADMIN_COUNT})<br />
+	{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; {PAGE_ADMIN_CLONE} &nbsp; ({PAGE_ADMIN_COUNT})<br />
 
 	<!-- END: PAGE_ADMIN -->
+	</div>
 </div>
 
 <div id="page">
                
-	{PRINT_PAGE_TEXT}
+	{PAGE_TEXT}
 
 	<!-- BEGIN: PAGE_MULTI -->
 
 		<div class="paging">
 		   <ul class="pagination">
-			<li class="prev">{PRINT_PAGE_MULTI_PREV}</li>
-			{PRINT_PAGE_MULTI_TABNAV}
-			<li class="next">{PRINT_PAGE_MULTI_NEXT}</li>
+			<li class="prev">{PAGE_MULTI_PREV}</li>
+			{PAGE_MULTI_TABNAV}
+			<li class="next">{PAGE_MULTI_NEXT}</li>
 		  </ul>
-		  {PRINT_PAGE_MULTI_SELECT} 
+		  {PAGE_MULTI_SELECT} 
 		</div>
 
 		<div class="block">
 			<h5>{PHP.skinlang.page.Summary}</h5>
-			{PRINT_PAGE_MULTI_TABTITLES}
+			{PAGE_MULTI_TABTITLES}
 		</div>
 
 	<!-- END: PAGE_MULTI -->
@@ -68,8 +72,8 @@
 
 		<div class="download">
 
-			<a href="{PRINT_PAGE_FILE_URL}">Download : {PRINT_PAGE_SHORTTITLE} {PRINT_PAGE_FILE_ICON}</a><br/>
-			Size: {PRINT_PAGE_FILE_SIZE}KB, downloaded {PRINT_PAGE_FILE_COUNT} times
+			<a href="{PAGE_FILE_URL}">Download : {PAGE_SHORTTITLE} {PAGE_FILE_ICON}</a><br />
+			Size: {PAGE_FILE_SIZE}KB, downloaded {PAGE_FILE_COUNT} times
 
 		</div>
 
@@ -77,12 +81,10 @@
 
 </div>
 
-
-<!-- BEGIN: FOOTER -->
 <div id="footer">
 
-  {PRINT_FOOTER_BOTTOMLINE}<br />
-  {PRINT_FOOTER_COPYRIGHT}
+  {PHP.out.bottomline}<br />
+  {PHP.out.copyright}
 
 </div>
 
@@ -90,6 +92,4 @@
 
 </body>
 </html>
-<!-- END: FOOTER -->
-
-<!-- END: PRINT -->
+<!-- END: MAIN -->

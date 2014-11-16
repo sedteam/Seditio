@@ -36,10 +36,6 @@ switch($m)
 	case 'edit':
 	require('system/core/page/page.edit.inc.php');
 	break;
-  
-	case 'print':
-	require('system/core/page/page.print.inc.php');
-	break;
 
 	default:
 	require('system/core/page/page.inc.php');

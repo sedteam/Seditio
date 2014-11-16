@@ -109,11 +109,11 @@ if($pag['page_file'] && $a=='dl')
 	exit;
 	}
 
-if ($n!='modup' && $n!='moddown' && $n!='delete') 
-  {
-  $pag['page_count']++;
-  $sql = sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'");
-  }
+if(!$usr['isadmin'] || $cfg['disablehitstats']) 
+{ 
+	$pag['page_count']++; 
+	$sql = sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'"); 
+}
 
 // Multitabs, modify in Sed v175
 
@@ -210,9 +210,14 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
-
-$mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));  
+if ($m == 'print') {
+	sed_sendheaders();
+	$mskin = sed_skinfile(array('print.page', $sed_cat[$pag['page_cat']]['tpl'])); 
+}
+else {
+	require("system/header.php");
+	$mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));  
+}
 
 $t = new XTemplate($mskin);
 
@@ -317,6 +322,15 @@ if (is_array($extp))
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+if ($m == 'print') {
+	@ob_end_flush();
+	@ob_end_flush();	
+	sed_sql_close($connection_id);
+}
+else {
+	require("system/footer.php");
+}
+
+
 
 ?>
