@@ -254,6 +254,7 @@ $t->assign(array(
 	"PAGE_COMMENTS" => $comments_link,
 	"PAGE_COMMENTS_DISPLAY" => $comments_display,
 	"PAGE_COMMENTS_COUNT" => $comments_count,
+  "PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
 		));

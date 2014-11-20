@@ -209,6 +209,7 @@ $t->assign(array(
 	"LIST_COMMENTS_DISPLAY" => $list_comments_display,
 	"LIST_RATINGS" => $list_ratings,
 	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
+  "LIST_RSS" => sed_url("rss", "m=pages&c=".$c),
 	"LIST_EXTRATEXT" => $extratext,
 	"LIST_SUBMITNEWPAGE" => $submitnewpage
 	));

@@ -152,9 +152,9 @@ while ($row = sed_sql_fetchassoc($sql_gal))
 		"GALLERY_HOME_GALLERIES_ROW_SHORTTITLE" => sed_cutstring(sed_cc($row['pff_title']), 64),
 		"GALLERY_HOME_GALLERIES_ROW_DESC" => $row['pff_desc'],
 		"GALLERY_HOME_GALLERIES_ROW_COUNT" => $galcount[$row['pff_id']],
-  	"GALLERY_HOME_GALLERIES_ROW_USER" => sed_build_user($row['pff_userid'], sed_cc($row['user_name'])),
-    "GALLERY_HOME_GALLERIES_ROW_DATE" => date($cfg['formatyearmonthday'], $row['pff_date'] + $usr['timezone'] * 3600),
-    "GALLERY_HOME_GALLERIES_ROW_UPDATED" => date($cfg['formatyearmonthday'], $row['pff_updated'] + $usr['timezone'] * 3600),
+		"GALLERY_HOME_GALLERIES_ROW_USER" => sed_build_user($row['pff_userid'], sed_cc($row['user_name'])),
+		"GALLERY_HOME_GALLERIES_ROW_DATE" => date($cfg['formatyearmonthday'], $row['pff_date'] + $usr['timezone'] * 3600),
+		"GALLERY_HOME_GALLERIES_ROW_UPDATED" => date($cfg['formatyearmonthday'], $row['pff_updated'] + $usr['timezone'] * 3600),
 		"GALLERY_HOME_GALLERIES_ROW_COND1" => $pfs['cond1'],
 		"GALLERY_HOME_GALLERIES_ROW_COND2" => $pfs['cond2']
 			));

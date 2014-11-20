@@ -65,7 +65,7 @@ if ($a=='update')
 	$rusercountry = sed_import('rusercountry','P','ALP');
 	$ruseravatar = sed_import('ruseravatar','P','TXT');
 	$ruserphoto = sed_import('ruserphoto','P','TXT');
-  $rusersignature = sed_import('rusersignature','P','TXT');
+	$rusersignature = sed_import('rusersignature','P','TXT');
 	$rusertext = sed_import('rusertext','P','HTM');
 	$ruseremail = sed_import('ruseremail','P','TXT');
 	$ruserhideemail = sed_import('ruserhideemail','P','INT');
