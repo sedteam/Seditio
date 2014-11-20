@@ -3445,7 +3445,7 @@ function sed_redirect($url)
 /** 
  * Renders a dropdown 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @param array $values Options available
  * @param bool $empty_option Insert first empty element ---  
@@ -3471,7 +3471,7 @@ function sed_selectbox($check, $name, $values, $empty_option = true)
 /** 
  * Renders category dropdown 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @param bool $hideprivate Hide private categories 
  * @return string 
@@ -3499,7 +3499,7 @@ function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
 /** 
  * Renders country dropdown 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @return string 
  */ 
@@ -3676,7 +3676,7 @@ function sed_selectbox_gender($check, $name)
 /** 
  * Returns group selection dropdown code 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @param array $skip Hidden groups 
  * @return string 
@@ -3700,7 +3700,7 @@ function sed_selectbox_groups($check, $name, $skip = array(0))
 /** 
  * Returns language selection dropdown 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @return string 
  */ 
@@ -3732,7 +3732,7 @@ function sed_selectbox_lang($check, $name)
 /** 
  * Renders forum section selection dropdown 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @return string 
  */ 
@@ -3755,7 +3755,7 @@ function sed_selectbox_sections($check, $name)
 /** 
  * Returns skin selection dropdown 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @return string 
  */ 
@@ -3792,7 +3792,7 @@ function sed_selectbox_skin($check, $name)
 /** 
  * Returns skin selection radiobox 
  * 
- * @param string $check Selected value 
+ * @param string $check Seleced value 
  * @param string $name Dropdown name 
  * @return string 
  */ 
