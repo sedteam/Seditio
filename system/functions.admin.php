@@ -23,8 +23,12 @@ unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_
 $adminpath = array();
 $cfgmap = sed_loadconfigmap();
 
-/* ------------------ */
-
+/** 
+ * Converts an access character mask into a permission byte 
+ * 
+ * @param string $mask Access character mask, e.g. 'RW1A' 
+ * @return int 
+ */ 
 function sed_auth_getvalue($mask)
 	{
 	$mn['0'] = 0;
@@ -47,8 +51,10 @@ function sed_auth_getvalue($mask)
 	return($res);
 	}
 
-/* ------------------ */
-
+/** 
+ * Optimizes auth table by sorting its rows 
+ * @global $db_auth 
+ */ 
 function sed_auth_reorder()
 	{
 	global $db_auth;
@@ -57,8 +63,10 @@ function sed_auth_reorder()
 	return(TRUE);
 	}
 
-/* ------------------ */
-
+/** 
+ * Reset user auth 
+ * @global $db_auth 
+ */
 function sed_auth_reset()
 	{
 	global $db_users;
@@ -66,8 +74,12 @@ function sed_auth_reset()
   return(TRUE);
 	}
 
-/* ------------------ */
-
+/** 
+ * Returns an access character mask for a given access byte 
+ * 
+ * @param int $rn Permission byte 
+ * @return string 
+ */ 
 function sed_build_admrights($rn)
 	{
 	$res = ($rn & 1) ? 'R' : '';
@@ -81,8 +93,12 @@ function sed_build_admrights($rn)
 	return($res);
 	}
 
-/* ------------------ */
-
+/** 
+ * Build admin sections path 
+ * 
+ * @param array $adminpath Array with path links 
+ * @return string 
+ */ 
 function sed_build_adminsection($adminpath)
 	{
 	global $cfg, $L;
@@ -96,8 +112,18 @@ function sed_build_adminsection($adminpath)
 	return($result);
 	}
 
-/* ------------------ */
-
+/** 
+ * Registers a set of configuration entries at once. 
+ * 
+ * @param string $owner Option type core or plug 
+ * @param string $cat Structure category code. Only for per-category config options
+ * @param string $order A string that determines position of the option in the list    
+ * @param string $name Option name, alphanumeric. Must be unique for a module/plugin 
+ * @param string $type Option type
+ * @param string $default Default and initial value, by default is an empty string
+ * @param string $text Textual description. It is usually omitted and stored in langfiles 
+ * @global $db_config 
+ */ 
 function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $text)
   {
   global $db_config;
@@ -129,8 +155,12 @@ function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $t
             VALUES ('$owner', '$cat', '$order', '$name', ".(int)$type1.", '$value', '$default', '".sed_sql_prep($text)."')");
   }
 
-/* ------------------ */
-
+/** 
+ * Delete forums section 
+ * 
+ * @param int $id Section ID 
+ * @return int 
+ */
 function sed_forum_deletesection($id)
 	{
 	global $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_auth;
@@ -147,8 +177,11 @@ function sed_forum_deletesection($id)
 	return($num);
 	}
 
-/* ------------------ */
-
+/** 
+ * Recounts posts & topics in section
+ * 
+ * @param int $id Section ID 
+ */ 
 function sed_forum_resync($id)
 	{
 	global $db_forum_topics, $db_forum_posts, $db_forum_sections;
@@ -163,8 +196,11 @@ function sed_forum_resync($id)
 	return;
 	}
 
-/* ------------------ */
-
+/** 
+ * Recounts posts in a given topic 
+ * 
+ * @param int $id Topic ID 
+ */ 
 function sed_forum_resynctopic($id)
 	{
 	global $db_forum_topics, $db_forum_posts;
@@ -190,8 +226,11 @@ function sed_forum_resynctopic($id)
 	return;
 	}
 
-/* ------------------ */
-
+/** 
+ * Recounts posts & topics all sections
+ * 
+ * @param int $id Section ID 
+ */ 
 function sed_forum_resyncall()
 	{
 	global $db_forum_sections;
@@ -202,8 +241,14 @@ function sed_forum_resyncall()
 	return;
 	}
 
-/* ------------------ */
-
+/** 
+ * Returns link or title url depending on the permissions
+ * 
+ * @param string $url Url
+ * @param string $text Title url  
+ * @param string $cond Permissions 
+ * @return string 
+ */ 
 function sed_linkif($url, $text, $cond)
 	{
 	if ($cond)
@@ -214,8 +259,11 @@ function sed_linkif($url, $text, $cond)
 	return($res);
 	}
 
-/* ------------------ */
-
+/** 
+ * Load charsets into Array
+ * 
+ * @return array 
+ */ 
 function sed_loadcharsets()
 	{
 	$result = array();
@@ -243,8 +291,11 @@ function sed_loadcharsets()
 	return($result);
 	}
 
-/* ------------------ */
-
+/** 
+ * Load default config
+ * 
+ * @return array 
+ */ 
 function sed_loadconfigmap()
 	{
 $result = array();
@@ -307,7 +358,7 @@ $result[] = array ('lang', '10', 'forcedefaultlang', 3, '0',  '');
 $result[] = array ('menus', '10', 'topline', 0, '', '');
 $result[] = array ('menus', '10', 'banner', 0, '', '');
 $result[] = array ('menus', '10', 'bottomline', 0, '', '');
-$result[] = array ('menus', '15', 'menu1', 0, '<ul><li><a href="index.php">Home</a></li><li><a href="forums.php">Forums</a></li><li><a href="list.php?c=articles">Articles</a></li><li><a href="gallery.php">Galleries</a></li><li><a href="plug.php?e=contact">Contact</a></li></ul>', '');
+$result[] = array ('menus', '15', 'menu1', 0, '<ul><li><a href="/">Home</a></li><li><a href="forums.php">Forums</a></li><li><a href="list.php?c=articles">Articles</a></li><li><a href="gallery.php">Galleries</a></li><li><a href="plug.php?e=contact">Contact</a></li></ul>', '');
 $result[] = array ('menus', '15', 'menu2', 0, '',  '');
 $result[] = array ('menus', '15', 'menu3', 0, '', '');
 $result[] = array ('menus', '15', 'menu4', 0, '', '');
@@ -441,8 +492,11 @@ $result[] = array ('users', '20', 'extra9uchange', 3, '0', '');
 	return($result);
 	}
 
-/* ------------------ */
-
+/** 
+ * Load doctypes
+ * 
+ * @return array 
+ */ 
 function sed_loaddoctypes()
 	{
 	$result = array();
@@ -458,6 +512,12 @@ function sed_loaddoctypes()
 	return($result);
 	}
 
+/** 
+ * Build plugin icon
+ * 
+ * @param $code Plugin code
+ * @return string 
+ */ 
 function sed_plugin_icon($code)
 	{
   $icon = "plugins/".$code."/".$code.".png";
@@ -467,8 +527,12 @@ function sed_plugin_icon($code)
      { return ("<img src=\"system/img/admin/plugins.png\" alt=\"\" />"); }
   }
 
-/* ------------------ */
-
+/** 
+ * Plugin installation
+ * 
+ * @param $pl Plugin code
+ * @return string 
+ */ 
 function sed_plugin_install($pl)
 	{
   global $db_plugins, $db_config, $db_auth, $db_users, $sed_groups, $usr, $cfg;
@@ -641,8 +705,13 @@ function sed_plugin_install($pl)
   return ($res);
   }
   
-/* ------------------ */
-
+/** 
+ * Plugin uninstall
+ * 
+ * @param $pl Plugin code
+ * @param $all If TRUE - uninstall all plugins 
+ * @return string 
+ */ 
 function sed_plugin_uninstall($pl, $all = FALSE)
 	{
 	global $db_plugins, $db_config, $db_auth, $db_users;
@@ -682,9 +751,12 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 	return ($res);
 	}
   
-/* ------------------ */
-
-
+/** 
+ * Removes a category 
+ * 
+ * @param int $id Category ID
+ * @param string $c Category code
+ */
 function sed_structure_delcat($id, $c)
 	{
 	global $db_structure, $db_auth;
@@ -696,8 +768,17 @@ function sed_structure_delcat($id, $c)
 	return($res);
 	}
 
-/* ------------------ */
-
+/** 
+ * Adds a new category 
+ * 
+ * @param string $code Category code 
+ * @param string $path Category path
+ * @param string $title Category title 
+ * @param string $desc Category description
+ * @param string $icon Category icon src path
+ * @param int $group Category group flag
+ * @return bool      
+ */ 
 function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 	{
 	global $db_structure, $db_auth, $sed_groups, $usr;
