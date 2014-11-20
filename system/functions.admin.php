@@ -769,7 +769,7 @@ function sed_structure_delcat($id, $c)
 	}
 
 /** 
- * Adds a new category 
+ * Add a new category 
  * 
  * @param string $code Category code 
  * @param string $path Category path
@@ -828,8 +828,12 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 	}
 
 
-/* ------------------ */
-
+/** 
+ * Removing an item from trash 
+ * 
+ * @param int $id Trash item ID
+ * @return int      
+ */
 function sed_trash_delete($id)
 	{
 	global $db_trash;
@@ -838,8 +842,12 @@ function sed_trash_delete($id)
 	return (sed_sql_affectedrows());
 	}
 
-/* ------------------ */
-
+/** 
+ * Get an item from trash 
+ * 
+ * @param int $id Trash item ID
+ * @return mixed      
+ */
 function sed_trash_get($id)
 	{
 	global $db_trash;
@@ -854,8 +862,13 @@ function sed_trash_get($id)
 		{ return (FALSE); }
 	}
 
-/* ------------------ */
-
+/** 
+ * Adding an item to trash 
+ * 
+ * @param array $dat Data item from trash
+ * @param string $db Name of DB table to restory item 
+ * @return mixed      
+ */
 function sed_trash_insert($dat, $db)
 	{
 	foreach ($dat as $k => $v)
@@ -867,8 +880,12 @@ function sed_trash_insert($dat, $db)
 	return (TRUE);
 	}
 
-/* ------------------ */
-
+/** 
+ * Restore an item from trash 
+ * 
+ * @param int $id Trash item ID 
+ * @return bool      
+ */
 function sed_trash_restore($id)
 	{
 	global $db_forum_topics, $db_forum_posts, $db_trash;
