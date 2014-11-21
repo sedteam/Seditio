@@ -37,9 +37,6 @@ $moremetas .= "<script type=\"text/javascript\" src=\"plugins/syntaxhighlight/sc
 <script type=\"text/javascript\" src=\"plugins/syntaxhighlight/scripts/shBrush.js\"></script>
 <link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/syntaxhighlight/styles/shCore.css\"/>
 <link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/syntaxhighlight/styles/".$syntaxhighlight_theme."\"/>
-<script type=\"text/javascript\">
-		SyntaxHighlighter.config.clipboardSwf = 'plugins/syntaxhighlight/scripts/clipboard.swf';
-		SyntaxHighlighter.all();
-</script>";
+<script type=\"text/javascript\">SyntaxHighlighter.config.clipboardSwf = 'plugins/syntaxhighlight/scripts/clipboard.swf'; SyntaxHighlighter.all();</script>";
 
 ?>
