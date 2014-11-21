@@ -30,16 +30,15 @@ function sed_get_latestpages($limit, $mask)
 	while ($row = sed_sql_fetchassoc($sql))
 		{
 		if (sed_auth('page', $row['page_cat'], 'R'))
-			{
-			
-      $sys['catcode'] = $row['page_cat']; //new in v175
-      
-      $row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
-		$res .= sprintf($mask,
-			"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-			"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
-			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
-				);
+			{			
+			$sys['catcode'] = $row['page_cat']; //new in v175
+
+			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
+			$res .= sprintf($mask,
+				"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
+				"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
+				date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
+					);
 			}
 		}
 
@@ -105,11 +104,40 @@ function sed_get_latestpolls($limit, $mask)
 
 	$modal = ($cfg['enablemodal']) ? ',1' : ''; 
 	
+	$ajax = sed_import('ajax', 'G', 'BOL');
+	$a = sed_import('a','G','ALP');
+	$id = sed_import('id','G','ALP',8);
+	$vote = sed_import('vote','G','INT');
+	
+	// -- AJAX Poll vote
+	if ($ajax && $cfg['ajax'] && $a == "send" && !empty($id) && !empty($vote))
+	{
+		if ($usr['id']>0)
+			{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
+				else
+			{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
+		
+		$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;
+
+		if (!$alreadyvoted)
+			{
+			$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 
+						WHERE po_pollid='$id' AND po_id='$vote'");
+			if (sed_sql_affectedrows()==1)
+				{
+				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) 
+						VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
+				}
+			}
+	}
+	else { $ajax = false; }
+	// --
+
+	$res_all = "<div id=\"pollajx\">";
 	while ($row_p = sed_sql_fetchassoc($sql_p))
 		{
 		unset($res);
-		
-    $poll_id = $row_p['poll_id'];
+		$poll_id = $row_p['poll_id'];
 
 		if ($usr['id']>0)
 	 		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$poll_id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
@@ -124,12 +152,12 @@ function sed_get_latestpolls($limit, $mask)
 			}
 		else
 			{ 
-        $alreadyvoted = 0; 
-        $res .= "<form name=\"pollvote_".$poll_id."\" action=\"javascript:sedjs.pollvote(document.pollvote_".$poll_id.".id.value, document.pollvote_".$poll_id.".cvote_".$poll_id.".value); window.location.reload();\" method=\"post\">"; // sed175      
-      }
+			$alreadyvoted = 0; 
+			$res .= "<form name=\"pollvote_".$poll_id."\" action=\"javascript:sedjs.pollvote(document.pollvote_".$poll_id.".id.value, document.pollvote_".$poll_id.".cvote_".$poll_id.".value); window.location.reload();\" method=\"post\">"; // sed175      
+			}
     
 		$res .= "<h5>".$row_p['poll_text']."</h5>\n";
-    $res .= "<div style=\"padding:10px 0;\" id=\"pollajx_".$poll_id."\">\n";
+		$res .= "<div style=\"padding:10px 0;\" id=\"pollajx_".$poll_id."\">\n";
 
 		$sql = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$poll_id' ORDER by po_id ASC");
 
@@ -148,32 +176,41 @@ function sed_get_latestpolls($limit, $mask)
  
 		if ($alreadyvoted)
 			{         
-        $res .= "<div style=\"text-align:center;\"><a href=\"javascript:sedjs.polls('".$poll_id."'".$modal.")\">".$L['polls_viewresults']."</a> &nbsp; \n";
-        $res .= "<a href=\"javascript:sedjs.polls('viewall'".$modal.")\">".$L['polls_viewarchives']."</a></div>\n";
-      }
-    else
-      {
-        $res .= "<input type=\"hidden\" name=\"id\" value=".$poll_id.">\n";
-        $res .= "<input type=\"hidden\" id=\"cvote_".$poll_id."\" name=\"cvote_".$poll_id."\" value=\"\">\n";
-        $res .= "<input type=\"hidden\" name=\"a\" value=\"send\">\n";
-        if ($cfg['ajax']) 
-        	{					
-					$onclick = "javascript:sedjs.ajax.bind({'url': 'plug.php?ajx=recentitems&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx_".$poll_id."', 'loading': 'pollajx_".$poll_id."', 'formid':  'pollajx_".$poll_id."'});";					
-					$res .= "<div style=\"text-align:center;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
-      		}
-      	else 
-					{
-				  $res .= "<div style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
-					}
-				$res .= "</form>\n";
+			$res .= "<div style=\"text-align:center;\"><a href=\"javascript:sedjs.polls('".$poll_id."'".$modal.")\">".$L['polls_viewresults']."</a> &nbsp; \n";
+			$res .= "<a href=\"javascript:sedjs.polls('viewall'".$modal.")\">".$L['polls_viewarchives']."</a></div>\n";
+			}
+		else
+			{
+			$res .= "<input type=\"hidden\" name=\"id\" value=".$poll_id.">\n";
+			$res .= "<input type=\"hidden\" id=\"cvote_".$poll_id."\" name=\"cvote_".$poll_id."\" value=\"\">\n";
+			$res .= "<input type=\"hidden\" name=\"a\" value=\"send\">\n";
+			if ($cfg['ajax']) 
+				{					
+				$onclick = "javascript:sedjs.ajax.bind({'url': 'index.php?ajax=1&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx', 'loading': 'pollajx', 'formid':  'pollajx_".$poll_id."'});";					
+				$res .= "<div style=\"text-align:center;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
+				}
+			else 
+				{
+				$res .= "<div style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
+				}
+					$res .= "</form>\n";
 			}
 			
-		$res .= "</div>";	  
- 
-    $res_all .= sprintf($mask, $res);
+		$res .= "</div>";	   
+		$res_all .= sprintf($mask, $res);
 		}
-
-  $res_all = (empty($res_all)) ? $plu_empty : $res_all;
+	
+	$res_all .= "</div>";
+    
+	if ($ajax) {		
+		ob_clean();
+		sed_sendheaders();		
+        echo $res_all; 
+        ob_flush(); 
+        exit; 		
+	}
+	
+	$res_all = (empty($res_all)) ? $plu_empty : $res_all;
 
 	return($res_all);
 	}

@@ -72,7 +72,7 @@ $t-> assign(array(
 	"PLUGIN_LATESTPAGES" => $latestpages,
 	"PLUGIN_LATESTTOPICS" => $latesttopics,
 	"PLUGIN_LATESTPOLL" => $latestpoll,
-  "PLUGIN_LATESTCOMMENTS" => $latestcomments  
+	"PLUGIN_LATESTCOMMENTS" => $latestcomments  
 	));
 
 ?>
