@@ -119,8 +119,14 @@ else
 	
 if ($c != 'all')
 	{
-	$sql2 = sed_sql_query("SELECT structure_text, structure_code, structure_text_ishtml FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
+	$sql2 = sed_sql_query("SELECT structure_title, structure_desc, structure_text, structure_code, structure_text_ishtml FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
 	$row2 = sed_sql_fetchassoc($sql2);
+
+  /* === Hook === */
+  $extp = sed_getextplugins('list.fetch');
+  if (is_array($extp))
+  	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+  /* ===== */
   			
 	$list_text = sed_parse($row2['structure_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $row2['structure_text_ishtml']);
 
