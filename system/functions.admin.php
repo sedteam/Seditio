@@ -64,8 +64,10 @@ function sed_auth_reorder()
 	}
 
 /** 
- * Reset user auth 
- * @global $db_auth 
+ * Reset user auth
+ *   
+ * @global string $db_users
+ * @return bool  
  */
 function sed_auth_reset()
 	{
@@ -96,6 +98,8 @@ function sed_build_admrights($rn)
 /** 
  * Build admin sections path 
  * 
+ * @global array $cfg Config array
+ * @global array $L Lang array
  * @param array $adminpath Array with path links 
  * @return string 
  */ 
@@ -114,7 +118,8 @@ function sed_build_adminsection($adminpath)
 
 /** 
  * Registers a set of configuration entries at once. 
- * 
+ *
+ * @global string $db_config Name of MySQL table config  
  * @param string $owner Option type core or plug 
  * @param string $cat Structure category code. Only for per-category config options
  * @param string $order A string that determines position of the option in the list    
@@ -122,7 +127,6 @@ function sed_build_adminsection($adminpath)
  * @param string $type Option type
  * @param string $default Default and initial value, by default is an empty string
  * @param string $text Textual description. It is usually omitted and stored in langfiles 
- * @global $db_config 
  */ 
 function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $text)
   {
@@ -159,7 +163,7 @@ function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $t
  * Delete forums section 
  * 
  * @param int $id Section ID 
- * @return int 
+ * @return int Count deleted rows 
  */
 function sed_forum_deletesection($id)
 	{

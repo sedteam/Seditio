@@ -27,7 +27,6 @@ $usr = array();
 
 require('system/config.urltranslation.php');
 
-
 /* ======== Xtemplate class ========= */
 
 require('system/templates.php');
@@ -123,6 +122,25 @@ if (!function_exists('str_split'))
 function sed_alphaonly($text)
 	{
 	return(preg_replace('/[^a-zA-Z0-9_]/', '', $text));
+	}
+	
+/** 
+ * Displays results AJAX request 
+ * 
+ * Clearing the output buffer and sending a new content generated as a result of the AJAX call.
+ * 
+ * @param string $res Result of the AJAX call
+ */	
+function sed_ajax_flush($res, $ajax)
+	{	
+	if ($ajax)
+		{
+		ob_clean();
+		sed_sendheaders();		
+	  echo $res; 
+	  ob_flush(); 
+	  exit; 		
+		}
 	}
 
 /**
@@ -1297,10 +1315,13 @@ function sed_build_pm($user)
  * @param bool $allow Enable or disable ratings an item  
  * @return array 
  */
-function sed_build_ratings($code, $url, $display, $allow = TRUE)
+function sed_build_ratings($code, $url, $display, $allow = true)
 	{
 	global $db_ratings, $db_rated, $db_pages, $db_users, $cfg, $usr, $sys, $L;
-
+	
+	$ajax = sed_import('ajax', 'P', 'BOL');
+	$ajax = ($cfg['ajax']) ? $ajax : false;
+	
 	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = sed_auth('ratings', 'a');
 
 	if ($cfg['disable_ratings'] || !$usr['auth_read_rat'])
@@ -1317,18 +1338,63 @@ function sed_build_ratings($code, $url, $display, $allow = TRUE)
     $url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
     $url_params = mb_substr($url, mb_strpos($url, '?')+1, mb_strlen($url));
     }
-  //----------------
+  
+	//----------------
     
+	$ina = sed_import('ina','G','ALP');
+	$newrate = sed_import('newrate','P','INT');
+
+	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
+
+	if ($ina == 'send' && $newrate >= 1 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0 && $allow)
+		{
+		/* == Hook for the plugins == */
+		$extp = sed_getextplugins('ratings.send.first');
+		if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
+		if (!$yetrated)
+			{
+			$sql = sed_sql_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".sed_sql_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
+			}
+
+		$sql = sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".sed_sql_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")");
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
+		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
+		$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ( $rating_voters );
+		$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
+
+		if (mb_substr($code, 0, 1) == 'p')
+			{
+			$page_id = mb_substr($code, 1, 10);
+			$sql = sed_sql_query("UPDATE $db_pages SET page_rating='$ratingnewaverage' WHERE page_id=".(int)$page_id);
+			}
+
+		/* == Hook for the plugins == */
+		$extp = sed_getextplugins('ratings.send.done');
+		if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+		if (!$ajax)
+			{
+			sed_redirect(sed_url($url_part, $url_params."&ratings=1&ina=added", "", true));
+			exit;
+			}
+		}
+
+	//----------------
+
 	$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
 
 	if ($row = sed_sql_fetchassoc($sql))
 		{
 		$rating_average = $row['rating_average'];
 		$yetrated = TRUE;
-		if ($rating_average < 1)
-			{ $rating_average = 1; }
-		elseif ($rating_average>10)
-			{ $rating_average = 10; }
+		
+		if ($rating_average < 1)  { $rating_average = 1; }
+		elseif ($rating_average > 10) { $rating_average = 10; }
+		
 		$rating_cntround = round($rating_average, 0);
 		}
 	else
@@ -1338,50 +1404,23 @@ function sed_build_ratings($code, $url, $display, $allow = TRUE)
 		$rating_cntround = 0;
 		}
 
-	$res = "<a href=\"".sed_url($url_part, $url_params."&ratings=1")."\"><img src=\"skins/".$usr['skin']."/img/system/vote".$rating_cntround.".gif\" alt=\"\" /></a>";
+	$res = "<div class=\"rating-box\" id=\"rat-".$code."\"><ul class=\"rating s".$rating_cntround."\">\n";
+	  for($i = 1; $i <= 10; $i++) 
+	    {
+			  $onclick = "javascript:sedjs.ajax.bind({'url': '".sed_url($url_part, $url_params."&ratings=1&display=1&ina=send&ajax=1&newrate=".$i."&".sed_xg())."', 'format':  'text', 'method':  'POST', 'update':  'rat-".$code."', 'loading': 'rat-".$code."'});";
+				$res .= "<li class=\"s".$i."\"><a href=\"javascript:void(0);\" onClick=\"".$onclick."\" title=\"".$i." - ".$L['rat_choice'.$i]."\">".$i." - ".$L['rat_choice'.$i]."</a></li>\n";
+			}	
+	$res .= "</ul></div>";
+	
+	if ($yetrated || !$cfg['ajax'] || $usr['id'] == 0) $res = "<a href=\"".sed_url($url_part, $url_params."&ratings=1")."\"><img src=\"skins/".$usr['skin']."/img/system/vote".$rating_cntround.".gif\" alt=\"\" /></a>";
+	
+	sed_ajax_flush($res, $ajax);  // AJAX Output
 
-	if ($display)
+	if (!$display)
 		{
-		$ina = sed_import('ina','G','ALP');
-		$newrate = sed_import('newrate','P','INT');
-
-		$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
-
-		if ($ina=='send' && $newrate>=1 && $newrate<=10 && $usr['auth_write_rat'] && $alr_rated<=0 && $allow)
-			{
-			/* == Hook for the plugins == */
-			$extp = sed_getextplugins('ratings.send.first');
-			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-			/* ===== */
-
-			if (!$yetrated)
-				{
-				$sql = sed_sql_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".sed_sql_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
-				}
-
-			$sql = sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".sed_sql_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")");
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
-			$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-			$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ( $rating_voters );
-			$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
-
-			if (mb_substr($code, 0, 1) == 'p')
-  			{
-  			$page_id = mb_substr($code, 1, 10);
-  			$sql = sed_sql_query("UPDATE $db_pages SET page_rating='$ratingnewaverage' WHERE page_id=".(int)$page_id);
-  			}
-
-			/* == Hook for the plugins == */
-			$extp = sed_getextplugins('ratings.send.done');
-			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-			/* ===== */
-
-			sed_redirect(sed_url($url_part, $url_params."&ratings=1&ina=added", "", true));
-			exit;
-			}
-
+		   return(array($res, ''));
+		}
+		
 		$votedcasted = ($ina=='added') ? 1 : 0;
 
 		$rate_form = "<input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"1\" /><img src=\"skins/".$usr['skin']."/img/system/vote1.gif\" alt=\"\" /> 1 - ".$L['rat_choice1']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"2\" /><img src=\"skins/".$usr['skin']."/img/system/vote2.gif\" alt=\"\" /> 2 - ".$L['rat_choice2']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"3\" /><img src=\"skins/".$usr['skin']."/img/system/vote3.gif\" alt=\"\" /> 3 - ".$L['rat_choice3']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"4\" /><img src=\"skins/".$usr['skin']."/img/system/vote4.gif\" alt=\"\" /> 4 - ".$L['rat_choice4']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"5\" checked=\"checked\" /><img src=\"skins/".$usr['skin']."/img/system/vote5.gif\" alt=\"\" /> 5 - ".$L['rat_choice5']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"6\" /><img src=\"skins/".$usr['skin']."/img/system/vote6.gif\" alt=\"\" /> 6 - ".$L['rat_choice6']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"7\" /><img src=\"skins/".$usr['skin']."/img/system/vote7.gif\" alt=\"\" /> 7 - ".$L['rat_choice7']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"8\" /><img src=\"skins/".$usr['skin']."/img/system/vote8.gif\" alt=\"\" /> 8 - ".$L['rat_choice8']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"9\" /><img src=\"skins/".$usr['skin']."/img/system/vote9.gif\" alt=\"\" /> 9 - ".$L['rat_choice9']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"10\" /><img src=\"skins/".$usr['skin']."/img/system/vote10.gif\" alt=\"\" /> 10 - ".$L['rat_choice10'];
@@ -1493,12 +1532,7 @@ function sed_build_ratings($code, $url, $display, $allow = TRUE)
 
 		$t->parse("RATINGS");
 		$res_display = $t->text("RATINGS");
-		}
-	else
-		{
-		$res_display = '';
-		}
-
+		
 	return(array($res, $res_display));
 	}
 

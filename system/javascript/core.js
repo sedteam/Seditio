@@ -192,7 +192,7 @@ var sedjs = {
 					var postparams = '';			
 					if(opt.formid) postparams = '&' + this.serialize(opt.formid);			
 					var parts = url.split("\?");
-					url = parts[0];
+					//url = parts[0];
 					parameters = parts[1] + postparams; 
 				}			
 				http.open(method, url, true);	

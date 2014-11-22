@@ -202,13 +202,7 @@ function sed_get_latestpolls($limit, $mask)
 	
 	$res_all .= "</div>";
     
-	if ($ajax) {		
-		ob_clean();
-		sed_sendheaders();		
-        echo $res_all; 
-        ob_flush(); 
-        exit; 		
-	}
+	sed_ajax_flush($res_all, $ajax);  // AJAX Output
 	
 	$res_all = (empty($res_all)) ? $plu_empty : $res_all;
 
