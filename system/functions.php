@@ -890,27 +890,6 @@ function sed_build_bbcodes($c1, $c2, $title)
 	return($result);
 	}
 
-/* ------------------ */
-/* Deprecated function
-function sed_build_bbcodes_local($limit)
-    {
-    global $sed_bbcodes;
-
-    reset ($sed_bbcodes);
-
-    $result = '<div class="bbcodes">';
-
-    while (list($i,$dat)=each($sed_bbcodes))
-        {
-        $kk = 'bbcodes_'.$dat[1];
-        $result .= "<a href=\"javascript:addtxt('".$dat[0]."')\"><img src=\"system/img/bbcodes/".$dat[1].".gif\" alt=\"\" /></a> ";
-        }
-
-    $result .= "</div>";
-    return($result);
-    }
-*/
-
 /** 
  * Build a link for open popup or modal window with smilies 
  * 
@@ -926,29 +905,6 @@ function sed_build_smilies($c1, $c2, $title)
 	$result = "<a href=\"javascript:sedjs.help('smilies','".$c1."','".$c2."'".$modal.")\">".$title."</a>";
 	return($result);
 	}
-
-/* ------------------ */
-/* Deprecated function
-function sed_build_smilies_local($limit)
-    {
-    global $sed_smilies;
-
-    $result = '<div class=\"smilies\">';
-
-    if (is_array($sed_smilies))
-        {
-        reset ($sed_smilies);
-        while (list($i,$dat) = each($sed_smilies))
-            {
-            $result .= "<a href=\"javascript:addtxt('".$dat[1]."')\"><img src=\"".$dat['smilie_image']."\" alt=\"\" /></a> ";
-            }
-        }
-
-    $result .= "</div>";
-    return($result);
-    }
-*/
-/* ------------------ */
 
 /** 
  * Parsing user signature text 
@@ -1117,7 +1073,7 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
  */ 
 function sed_build_gallery($id, $c1, $c2, $title)
 	{
-	return("<a href=\"javascript:gallery('".$id."','".$c1."','".$c2."')\">".$title."</a>");
+	return("<a href=\"javascript:sedjs.gallery('".$id."','".$c1."','".$c2."')\">".$title."</a>");
 	}
 
 /** 
@@ -1344,38 +1300,61 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	$ina = sed_import('ina','G','ALP');
 	$newrate = sed_import('newrate','P','INT');
 
-	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
+ 	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
 
 	if ($ina == 'send' && $newrate >= 1 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0 && $allow)
 		{
+		
+		$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
+		
+		if ($row = sed_sql_fetchassoc($sql))
+			{
+			$rating_average = $row['rating_average'];
+			$yetrated = TRUE;
+			
+			if ($rating_average < 1)  { $rating_average = 1; }
+			elseif ($rating_average > 10) { $rating_average = 10; }
+			
+			$rating_cntround = round($rating_average, 0);
+			}
+		else
+			{
+			$yetrated = FALSE;
+			$rating_average = 0;
+			$rating_cntround = 0;
+			}
+
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.first');
 		if (is_array($extp))
 			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
-
+		
 		if (!$yetrated)
 			{
 			$sql = sed_sql_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".sed_sql_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
 			}
-
+		
 		$sql = sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".sed_sql_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")");
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
 		$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ( $rating_voters );
 		$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
-
+		
+		$alr_rated = 1;
+		
 		if (mb_substr($code, 0, 1) == 'p')
 			{
 			$page_id = mb_substr($code, 1, 10);
 			$sql = sed_sql_query("UPDATE $db_pages SET page_rating='$ratingnewaverage' WHERE page_id=".(int)$page_id);
 			}
-
+		
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.done');
 		if (is_array($extp))
 			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
+		
 		if (!$ajax)
 			{
 			sed_redirect(sed_url($url_part, $url_params."&ratings=1&ina=added", "", true));
@@ -1405,134 +1384,138 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		}
 
 	$res = "<div class=\"rating-box\" id=\"rat-".$code."\"><ul class=\"rating s".$rating_cntround."\">\n";
-	  for($i = 1; $i <= 10; $i++) 
-	    {
-			  $onclick = "javascript:sedjs.ajax.bind({'url': '".sed_url($url_part, $url_params."&ratings=1&display=1&ina=send&ajax=1&newrate=".$i."&".sed_xg())."', 'format':  'text', 'method':  'POST', 'update':  'rat-".$code."', 'loading': 'rat-".$code."'});";
-				$res .= "<li class=\"s".$i."\"><a href=\"javascript:void(0);\" onClick=\"".$onclick."\" title=\"".$i." - ".$L['rat_choice'.$i]."\">".$i." - ".$L['rat_choice'.$i]."</a></li>\n";
-			}	
+  for($i = 1; $i <= 10; $i++) 
+    {
+	  $onclick = "javascript:sedjs.ajax.bind({'url': '".sed_url($url_part, $url_params."&ratings=1&display=1&ina=send&ajax=1&newrate=".$i."&".sed_xg())."', 'format':  'text', 'method':  'POST', 'update':  'rat-".$code."', 'loading': 'rat-".$code."'});";
+		$res .= "<li class=\"s".$i."\"><a href=\"javascript:void(0);\" onClick=\"".$onclick."\" title=\"".$i." - ".$L['rat_choice'.$i]."\">".$i." - ".$L['rat_choice'.$i]."</a></li>\n";
+		}	
 	$res .= "</ul></div>";
 	
-	if ($yetrated || !$cfg['ajax'] || $usr['id'] == 0) $res = "<a href=\"".sed_url($url_part, $url_params."&ratings=1")."\"><img src=\"skins/".$usr['skin']."/img/system/vote".$rating_cntround.".gif\" alt=\"\" /></a>";
+	if (($usr['id'] == 0) || ($alr_rated > 0) || !$cfg['ajax'])  
+		{
+		$res = "<a href=\"".sed_url($url_part, $url_params."&ratings=1")."\"><img src=\"skins/".$usr['skin']."/img/system/vote".$rating_cntround.".gif\" alt=\"\" /></a>";
+	  }
 	
 	sed_ajax_flush($res, $ajax);  // AJAX Output
 
 	if (!$display)
 		{
-		   return(array($res, ''));
+		return(array($res, ''));
 		}
 		
-		$votedcasted = ($ina=='added') ? 1 : 0;
-
-		$rate_form = "<input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"1\" /><img src=\"skins/".$usr['skin']."/img/system/vote1.gif\" alt=\"\" /> 1 - ".$L['rat_choice1']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"2\" /><img src=\"skins/".$usr['skin']."/img/system/vote2.gif\" alt=\"\" /> 2 - ".$L['rat_choice2']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"3\" /><img src=\"skins/".$usr['skin']."/img/system/vote3.gif\" alt=\"\" /> 3 - ".$L['rat_choice3']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"4\" /><img src=\"skins/".$usr['skin']."/img/system/vote4.gif\" alt=\"\" /> 4 - ".$L['rat_choice4']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"5\" checked=\"checked\" /><img src=\"skins/".$usr['skin']."/img/system/vote5.gif\" alt=\"\" /> 5 - ".$L['rat_choice5']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"6\" /><img src=\"skins/".$usr['skin']."/img/system/vote6.gif\" alt=\"\" /> 6 - ".$L['rat_choice6']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"7\" /><img src=\"skins/".$usr['skin']."/img/system/vote7.gif\" alt=\"\" /> 7 - ".$L['rat_choice7']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"8\" /><img src=\"skins/".$usr['skin']."/img/system/vote8.gif\" alt=\"\" /> 8 - ".$L['rat_choice8']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"9\" /><img src=\"skins/".$usr['skin']."/img/system/vote9.gif\" alt=\"\" /> 9 - ".$L['rat_choice9']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"10\" /><img src=\"skins/".$usr['skin']."/img/system/vote10.gif\" alt=\"\" /> 10 - ".$L['rat_choice10'];
-
-		if ($usr['id']>0)
+	$votedcasted = ($ina == 'added') ? 1 : 0;
+	
+	$rate_form = "<input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"1\" /><img src=\"skins/".$usr['skin']."/img/system/vote1.gif\" alt=\"\" /> 1 - ".$L['rat_choice1']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"2\" /><img src=\"skins/".$usr['skin']."/img/system/vote2.gif\" alt=\"\" /> 2 - ".$L['rat_choice2']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"3\" /><img src=\"skins/".$usr['skin']."/img/system/vote3.gif\" alt=\"\" /> 3 - ".$L['rat_choice3']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"4\" /><img src=\"skins/".$usr['skin']."/img/system/vote4.gif\" alt=\"\" /> 4 - ".$L['rat_choice4']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"5\" checked=\"checked\" /><img src=\"skins/".$usr['skin']."/img/system/vote5.gif\" alt=\"\" /> 5 - ".$L['rat_choice5']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"6\" /><img src=\"skins/".$usr['skin']."/img/system/vote6.gif\" alt=\"\" /> 6 - ".$L['rat_choice6']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"7\" /><img src=\"skins/".$usr['skin']."/img/system/vote7.gif\" alt=\"\" /> 7 - ".$L['rat_choice7']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"8\" /><img src=\"skins/".$usr['skin']."/img/system/vote8.gif\" alt=\"\" /> 8 - ".$L['rat_choice8']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"9\" /><img src=\"skins/".$usr['skin']."/img/system/vote9.gif\" alt=\"\" /> 9 - ".$L['rat_choice9']."<br /><input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"10\" /><img src=\"skins/".$usr['skin']."/img/system/vote10.gif\" alt=\"\" /> 10 - ".$L['rat_choice10'];
+	
+	if ($usr['id'] > 0)
+		{
+		$sql1 = sed_sql_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
+	
+		if ($row1 = sed_sql_fetchassoc($sql1))
 			{
-			$sql1 = sed_sql_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
-
-			if ($row1 = sed_sql_fetchassoc($sql1))
-				{
-				$alreadyvoted = TRUE;
-				$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
-				}
+			$alreadyvoted = TRUE;
+			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 			}
-
-		$t = new XTemplate(sed_skinfile('ratings'));
-
-		/* == Hook for the plugins == */
-			$extp = sed_getextplugins('ratings.main');
-		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
-
-		if (!empty($error_string))
-			{
-			$t->assign("RATINGS_ERROR_BODY",$error_string);
-			$t->parse("RATINGS.RATINGS_ERROR");
-			}
-
-		if ($yetrated)
-			{
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-			$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-			$rating_average = $row['rating_average'];
-			$rating_since = $L['rat_since']." ".date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
-				if ($rating_average<1)
-				{ $rating_average = 1; }
-			elseif ($ratingaverage>10)
-				{ $rating_average = 10; }
-
-			$rating = round($rating_average,0);
-			$rating_averageimg = "<img src=\"skins/".$usr['skin']."/img/system/vote".$rating.".gif\" alt=\"\" />";
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-			$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-			}
-		else
-			{
-			$rating_voters = 0;
-			$rating_since = '';
-			$rating_average = $L['rat_notyetrated'];
-			$rating_averageimg = '';
-			}
-
-		$t->assign(array(
-			"RATINGS_AVERAGE" => $rating_average,
-			"RATINGS_AVERAGEIMG" => $rating_averageimg,
-			"RATINGS_VOTERS" => $rating_voters,
-			"RATINGS_SINCE" => $rating_since
-				));
-
-
-		if ($usr['id']>0 && $votedcasted && $allow)
-			{
-			$t->assign(array(
-				"RATINGS_EXTRATEXT" => $L['rat_votecasted'],
-					));
-			$t->parse("RATINGS.RATINGS_EXTRA");
-			}
-		elseif ($usr['id']>0 && $alreadyvoted && $allow)
-			{
-			$t->assign(array(
-				"RATINGS_EXTRATEXT" => $rating_uservote,
-					));
-			$t->parse("RATINGS.RATINGS_EXTRA");
-			}
-		elseif ($usr['id']==0 && $allow)
-			{
-			$t->assign(array(
-				"RATINGS_EXTRATEXT" => $L['rat_registeredonly'],
-					));
-			$t->parse("RATINGS.RATINGS_EXTRA");
-			}
-
-		elseif ($usr['id']>0 && !$alreadyvoted && $allow)
-			{
-			$t->assign(array(
-				"RATINGS_NEWRATE_FORM_SEND" => sed_url($url_part, $url_params."&ratings=1&ina=send"),
-				"RATINGS_NEWRATE_FORM_VOTER" => $usr['name'],
-				"RATINGS_NEWRATE_FORM_RATE" => $rate_form
-					));
-			$t->parse("RATINGS.RATINGS_NEWRATE");
-			}
-			
-		/* ==== sed 173 */
-    if (!$allow) 
-      {      
-			$t-> assign(array(
-				"RATINGS_DISABLETEXT" => $L['rat_disable']
-					));
-			$t->parse("RATINGS.RATINGS_DISABLE");      
-      }
-    /* ===   	
-
-		/* == Hook for the plugins == */
-		$extp = sed_getextplugins('ratings.tags');
-		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
-
-		$t->parse("RATINGS");
-		$res_display = $t->text("RATINGS");
+		}
+	
+	$t = new XTemplate(sed_skinfile('ratings'));
+	
+	/* == Hook for the plugins == */
+		$extp = sed_getextplugins('ratings.main');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+	
+	if (!empty($error_string))
+		{
+		$t->assign("RATINGS_ERROR_BODY",$error_string);
+		$t->parse("RATINGS.RATINGS_ERROR");
+		}
+	
+	if ($yetrated)
+		{
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
+		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
+		$rating_average = $row['rating_average'];
+		$rating_since = $L['rat_since']." ".date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
 		
+		if ($rating_average < 1)
+			{ $rating_average = 1; }
+		elseif ($ratingaverage > 10)
+			{ $rating_average = 10; }
+	
+		$rating = round($rating_average,0);
+		$rating_averageimg = "<img src=\"skins/".$usr['skin']."/img/system/vote".$rating.".gif\" alt=\"\" />";
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
+		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
+		}
+	else
+		{
+		$rating_voters = 0;
+		$rating_since = '';
+		$rating_average = $L['rat_notyetrated'];
+		$rating_averageimg = '';
+		}
+	
+	$t->assign(array(
+		"RATINGS_AVERAGE" => $rating_average,
+		"RATINGS_AVERAGEIMG" => $rating_averageimg,
+		"RATINGS_VOTERS" => $rating_voters,
+		"RATINGS_SINCE" => $rating_since
+			));
+	
+	
+	if ($usr['id']>0 && $votedcasted && $allow)
+		{
+		$t->assign(array(
+			"RATINGS_EXTRATEXT" => $L['rat_votecasted'],
+				));
+		$t->parse("RATINGS.RATINGS_EXTRA");
+		}
+	elseif ($usr['id']>0 && $alreadyvoted && $allow)
+		{
+		$t->assign(array(
+			"RATINGS_EXTRATEXT" => $rating_uservote,
+				));
+		$t->parse("RATINGS.RATINGS_EXTRA");
+		}
+	elseif ($usr['id']==0 && $allow)
+		{
+		$t->assign(array(
+			"RATINGS_EXTRATEXT" => $L['rat_registeredonly'],
+				));
+		$t->parse("RATINGS.RATINGS_EXTRA");
+		}
+	
+	elseif ($usr['id']>0 && !$alreadyvoted && $allow)
+		{
+		$t->assign(array(
+			"RATINGS_NEWRATE_FORM_SEND" => sed_url($url_part, $url_params."&ratings=1&ina=send"),
+			"RATINGS_NEWRATE_FORM_VOTER" => $usr['name'],
+			"RATINGS_NEWRATE_FORM_RATE" => $rate_form
+				));
+		$t->parse("RATINGS.RATINGS_NEWRATE");
+		}
+		
+	/* ==== sed 173 */
+	if (!$allow) 
+	  {      
+		$t-> assign(array(
+			"RATINGS_DISABLETEXT" => $L['rat_disable']
+				));
+		$t->parse("RATINGS.RATINGS_DISABLE");      
+	  }
+	/* ===   	
+	
+	/* == Hook for the plugins == */
+	$extp = sed_getextplugins('ratings.tags');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+	
+	$t->parse("RATINGS");
+	$res_display = $t->text("RATINGS");
+	
 	return(array($res, $res_display));
 	}
 
@@ -1855,15 +1838,17 @@ function sed_check_xp()
  * @param bool $more Forward OR backward
  * @return string 
  */ 
-function sed_checkmore($text, $more = false) {
+function sed_checkmore($text, $more = false) 
+	{
   global $cfg;  
-  if ($more == true) 
+  
+	if ($more == true) 
     { $text = preg_replace('/(\<hr id="readmore"(.*?)?\>)/' ,'<!--readmore-->', $text);	}
   else 
     { $text = preg_replace('/(\<!--readmore--\>)/' ,'<hr id="readmore" />', $text); }
   
   return($text);
-}
+	}
 
 /** 
  * Truncates a string 
@@ -1877,9 +1862,9 @@ function sed_cutstring($res, $l)
 	global $cfg;
 
 	$enc = mb_strtolower($cfg['charset']);
-	if ($enc=='utf-8')
+	if ($enc == 'utf-8')
 		{
-		if(mb_strlen($res)>$l)
+		if(mb_strlen($res) > $l)
 			{ $res = mb_substr($res, 0, ($l-3), $enc).'...'; }
 		}
 	else
@@ -1887,8 +1872,8 @@ function sed_cutstring($res, $l)
 		if(mb_strlen($res)>$l)
 			{ $res = mb_substr($res, 0, ($l-3)).'...'; }
 		}
-       return($res);
-    }
+  return($res);
+  }
     
 /** 
  * Truncates a string and add readmore link 
@@ -1897,7 +1882,8 @@ function sed_cutstring($res, $l)
  * @param string $url Url 
  * @return string 
  */
-function sed_cutreadmore($text, $url) {
+function sed_cutreadmore($text, $url) 
+	{
   global $cfg, $L;
    
   $readmore = mb_strpos($text, "<!--readmore-->");
@@ -1905,12 +1891,12 @@ function sed_cutreadmore($text, $url) {
 
   if ($readmore > 0) 
     { 
-      $text = mb_substr($text, 0, $readmore)." ";      
-      $text .= sprintf($cfg['readmore'], "<a href=\"".$url."\">".$L['ReadMore']."</a>");
+		$text = mb_substr($text, 0, $readmore)." ";      
+		$text .= sprintf($cfg['readmore'], "<a href=\"".$url."\">".$L['ReadMore']."</a>");
     }
   
   return($text);  
-}
+	}
 
 /** 
  * Creates image thumbnail 
@@ -1977,11 +1963,9 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
 		else
 			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
-      
-    //Set the blending mode for an image
-  	imagealphablending($new, false);  
-  	//Set the flag to save full alpha channel information
-  	imagesavealpha($new, true);   
+          
+  	imagealphablending($new, false); //Set the blending mode for an image  	
+  	imagesavealpha($new, true); //Set the flag to save full alpha channel information  
 
 		$background_color = imagecolorallocate ($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
 		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2, $background_color);
@@ -1998,11 +1982,9 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
 		else
 			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
-
-    //Set the blending mode for an image
-    imagealphablending($new, false);
-    //Set the flag to save full alpha channel information
-    imagesavealpha($new, true); 
+    
+    imagealphablending($new, false);  //Set the blending mode for an image    
+    imagesavealpha($new, true);  //Set the flag to save full alpha channel information
     
     $background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
 		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*4+14, $background_color);
@@ -2478,11 +2460,9 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
 		{ $new = imagecreate($thumb_x, $thumb_y); }
 	else
 		{ $new = imagecreatetruecolor($thumb_x, $thumb_y); }
-    
-  //Set the blending mode for an image
-  imagealphablending($new, false);
-  //Set the flag to save full alpha channel information
-  imagesavealpha($new, true);     
+      
+  imagealphablending($new, false); //Set the blending mode for an image  
+  imagesavealpha($new, true); //Set the flag to save full alpha channel information    
 
 	if ($cfg['th_amode']=='GD1')
 		{ imagecopyresized($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
@@ -2553,9 +2533,9 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		}
 
 	if ($v=='' || $v == NULL)
-       	{ return($v); }
+      { return($v); }
 
-    if ($maxlen>0)
+  if ($maxlen>0)
     	{ $v = mb_substr($v, 0, $maxlen); }
 
 	$pass = FALSE;
@@ -2754,11 +2734,11 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  * @return string 
  */ 
 function sed_inputbox($type, $name, $value, $check = FALSE)
-{
-    $checked = ($check) ? " checked=\"checked\" " : " ";    
-    $res = "<input type=\"".$type."\" class=\"".$type."\" name=\"".$name."\" value=\"".$value."\"".$checked."/>";
-    return($res);
-}
+	{
+  $checked = ($check) ? " checked=\"checked\" " : " ";    
+  $res = "<input type=\"".$type."\" class=\"".$type."\" name=\"".$name."\" value=\"".$value."\"".$checked."/>";
+  return($res);
+	}
 
 /** 
  * Check SSL 
@@ -2767,21 +2747,19 @@ function sed_inputbox($type, $name, $value, $check = FALSE)
  */ 
 function sed_is_ssl()   // New in 175
   {     
-		if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+	if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
 		{
-    		$_SERVER['HTTPS'] = 'on'; 
-		}
-		
-		if (isset($_SERVER['HTTPS'])) 
-    { 
-        if (mb_strtolower($_SERVER['HTTPS']) == 'on') return true; 
-        if ($_SERVER['HTTPS'] == '1') return true; 
-    } 
-    elseif (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')) 
-    { 
-        return true; 
-    } 
-    return false; 
+		$_SERVER['HTTPS'] = 'on'; 
+		}	
+	if (isset($_SERVER['HTTPS'])) 
+		{ 
+		if (mb_strtolower($_SERVER['HTTPS']) == 'on' || $_SERVER['HTTPS'] == '1') return true; 
+		} 
+  elseif (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')) 
+		{ 
+		return true; 
+		} 
+	return false; 
   } 
 
 /** 
@@ -2985,7 +2963,7 @@ function sed_load_forum_structure()
  * @param string $text Event description 
  * @param string $group Event group 
  */
-function sed_log($text, $group='def')
+function sed_log($text, $group = 'def')
 	{
 	global $db_logger, $sys, $usr, $_SERVER;
 
@@ -3032,43 +3010,43 @@ function sed_mail($fmail, $subject, $body, $headers='', $param='', $content='pla
   	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
   /* ===== */
           
-  if (!$connector) {
+  if (!$connector) 
+		{
     if(empty($fmail)) 
-        { 
-        return(FALSE); 
-        } 
+			{ 
+			return(FALSE); 
+			} 
     else 
-        { 
-        
-        $hdrs   = array();  // new in 175
-        $hdrs[] = "MIME-Version: 1.0";
-        $hdrs[] = "Content-type: text/".$content."; charset=".$cfg['charset'];
-        $hdrs[] = "Content-Transfer-Encoding: 8bit";
-        $hdrs[] = "Message-ID: <" . md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'];
-        $hdrs[] = "From: =?".$cfg['charset']."?B?".base64_encode($cfg['maintitle'])."?= <".$cfg['adminemail'].">";
-        $hdrs[] = "Reply-To: <".$cfg['adminemail'].">";
-        $hdrs[] = "Subject: =?".$cfg['charset']."?B?".base64_encode($subject)."?=";
-        $hdrs[] = "X-Mailer: PHP/".phpversion();        
-
-        $headers = (empty($headers)) ? implode("\r\n", $hdrs) : $headers; 
-        
-        $param = empty($param) ? "-f".$cfg['adminemail'] : $param;
-         
-        $body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle']; 
-                
-        if(ini_get('safe_mode'))
-        { 
-            mail($fmail, $subject, $body, $headers); 
-        } 
-        else 
-        { 
-            mail($fmail, $subject, $body, $headers, $param); 
-        } 
-        
-        sed_stat_inc('totalmailsent'); 
-        return(TRUE); 
-        } 
-  } 
+			{        
+			$hdrs   = array();  // new in 175
+			$hdrs[] = "MIME-Version: 1.0";
+			$hdrs[] = "Content-type: text/".$content."; charset=".$cfg['charset'];
+			$hdrs[] = "Content-Transfer-Encoding: 8bit";
+			$hdrs[] = "Message-ID: <" . md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'];
+			$hdrs[] = "From: =?".$cfg['charset']."?B?".base64_encode($cfg['maintitle'])."?= <".$cfg['adminemail'].">";
+			$hdrs[] = "Reply-To: <".$cfg['adminemail'].">";
+			$hdrs[] = "Subject: =?".$cfg['charset']."?B?".base64_encode($subject)."?=";
+			$hdrs[] = "X-Mailer: PHP/".phpversion();        
+			
+			$headers = (empty($headers)) ? implode("\r\n", $hdrs) : $headers; 
+			
+			$param = empty($param) ? "-f".$cfg['adminemail'] : $param;
+			 
+			$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle']; 
+			        
+			if(ini_get('safe_mode'))
+			  { 
+			  mail($fmail, $subject, $body, $headers); 
+			  } 
+			else 
+			  { 
+			  mail($fmail, $subject, $body, $headers, $param); 
+			  } 
+			
+			sed_stat_inc('totalmailsent'); 
+			return(TRUE); 
+			} 
+  	} 
   }
 
 /** 
@@ -3114,7 +3092,7 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 	$stamp += $second;
 
 	return $stamp;
-   }
+	}
 
 /** 
  * Mobile detect 
@@ -3152,21 +3130,25 @@ function sed_mobile_detect()
  * @return string 
  */
 function sed_newname($name, $underscore = TRUE)
-{
+	{
 	global $lang, $sed_translit;
-  
-  $newname = mb_substr($name, 0, mb_strrpos($name, "."));
+	
+	$newname = mb_substr($name, 0, mb_strrpos($name, "."));
 	$ext = mb_strtolower(mb_substr($name, mb_strrpos($name, ".")+1));
 	if($lang != 'en' && is_array($sed_translit))
-	{
+		{
 		$newname = strtr($newname, $sed_translit);
-	}
-  if($underscore) $newname = str_replace(' ', '_', $newname);
+		}
+	if ($underscore) 
+		{ $newname = str_replace(' ', '_', $newname); }
+		
 	$newname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $newname);
 	$newname = str_replace('..', '.', $newname);
-  if(empty($newname)) $newname = sed_unique();
+	if (empty($newname)) 
+		{ $newname = sed_unique(); }
+	
 	return $newname.".".$ext;
-}
+	}
 
 /** 
  * Standard SED output filters, adds XSS protection to forms 
@@ -3209,7 +3191,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 	{
 	global $cfg;
 
-	if ($entries<=$perpage)
+	if ($entries <= $perpage)
 		{ return (""); }
 
 	$address = $url.((mb_strpos($url, '?') !== false) ? '&amp;' : '?').$characters.'=';
@@ -3277,10 +3259,10 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 
 	$address = $url.((mb_strpos($url, '?') !== false) ? '&amp;' : '?').$characters.'=';
   
-  if ($current>0)
+  if ($current > 0)
 		{
 		$prevpage = $current - $perpage;
-		if ($prevpage<0)
+		if ($prevpage < 0)
 			{ $prevpage = 0; }
 		$res_l = "<a href=\"".$address.$prevpage."\">".$cfg['pagination_arrowleft']." ".$L['Previous']."</a>";
 		}
@@ -3306,11 +3288,12 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
  * @param int $ishtml Text mode 0 - BBCode mode, 1 - HTML mode     
  * @return string 
  */
-function sed_parse($text, $parse_bbcodes=TRUE, $parse_smilies=TRUE, $parse_newlines=TRUE, $ishtml=NULL)
+function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE, $ishtml = NULL)
 	{
 	global  $cfg, $sys, $sed_smilies, $L;
 	
-	if (is_null($ishtml)) { $ishtml = ($cfg['textmode'] == "bbcode") ? 0 : 1; }
+	if (is_null($ishtml)) 
+		{ $ishtml = ($cfg['textmode'] == "bbcode") ? 0 : 1; }
 	
 	if ($ishtml) return(sed_html($text));
 
@@ -3325,16 +3308,16 @@ function sed_parse($text, $parse_bbcodes=TRUE, $parse_smilies=TRUE, $parse_newli
 		{
 		$p1 = 1;
 		$p2 = 1;
-		while ($p1>0 && $p2>0 && $ii<5031)
+		while ($p1 > 0 && $p2 > 0 && $ii < 5031)
 			{
 			$ii++;
 			$p1 = mb_strpos($text, '[code]');
 			$p2 = mb_strpos($text, '[/code]');
-			if ($p2>$p1 && $p1>0)
+			if ($p2 > $p1 && $p1 > 0)
 				{
 				$key = '**'.$ii.$unique_seed.'**';
-				$code[$key]= mb_substr ($text, $p1+6, ($p2-$p1)-6);
-				$code_len = mb_strlen($code[$key])+13;
+				$code[$key]= mb_substr ($text, $p1 + 6, ($p2 - $p1) - 6);
+				$code_len = mb_strlen($code[$key]) + 13;
 				$code[$key] = str_replace('\t','&nbsp; &nbsp;', $code[$key]);
 				$code[$key] = str_replace('  ', '&nbsp; ', $code[$key]);
 				$code[$key] = str_replace('  ', ' &nbsp;', $code[$key]);
