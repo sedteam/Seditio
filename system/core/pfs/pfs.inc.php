@@ -120,8 +120,10 @@ if ($a=='upload')
 		}
 
 	$disp_errors = "<ul class=\"cross_list\">";
-
-	for ($ii = 0; $ii < $cfg['pfsmaxuploads']*2; $ii++)
+	
+	$count_userfile = count($_FILES['userfile']['name']);
+	
+	for ($ii = 0; $ii < $count_userfile; $ii++)
 		{
 		$u_tmp_name = $_FILES['userfile']['tmp_name'][$ii];
 		$u_type = $_FILES['userfile']['type'][$ii];
@@ -162,7 +164,7 @@ if ($a=='upload')
 					}
 				}
 
-			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024   )
+			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024)
 				{
 				if (!file_exists($cfg['pfs_dir'].$u_name))
 					{
@@ -387,10 +389,10 @@ else
 		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 
-		$is_folder_delete = ($pff_fcount > 0) ? "-" : "<a href=\"".sed_url("pfs", "a=deletefolder&".sed_xg()."&f=".$pff_id."&".$more)."\">".$out['img_delete']."</a>";
+		$is_folder_delete = ($pff_fcount > 0) ? "-" : "<a href=\"".sed_url("pfs", "a=deletefolder&".sed_xg()."&f=".$pff_id."&".$more)."\" title=\"".$L['Delete']."\">".$out['img_delete']."</a>";
     
     $list_folders .= "<tr><td style=\"text-align:center;\">".$is_folder_delete."</td>";
-		$list_folders .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "m=editfolder&f=".$pff_id."&".$more)."\">".$out['img_edit']."</a></td>";
+		$list_folders .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "m=editfolder&f=".$pff_id."&".$more)."\" title=\"".$L['Edit']."\">".$out['img_edit']."</a></td>";
 
 		if ($pff_type==2)
 			{ $icon_f = "<img src=\"skins/$skin/img/system/icon-gallery.gif\" alt=\"\" />"; }
@@ -431,6 +433,8 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
+	
+	unset($add_thumbnail, $add_image, $add_file); 
 		
 	if ($pfs_extension!=$pfs_realext);
 		{
@@ -442,7 +446,7 @@ while ($row = sed_sql_fetchassoc($sql))
   
   if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
 		{		
-    $setassample = ($pfs_id==$pff_sample) ?  $out['img_checked'] : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\">".$out['img_set']."</a>";    
+    $setassample = ($pfs_id==$pff_sample) ?  $out['img_checked'] : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\">".$out['img_set']."</a>";    
     $pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"sedthumb\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
 		
 		if (!file_exists($cfg['th_dir'].$pfs_file) && file_exists($cfg['pfs_dir'].$pfs_file))
@@ -451,32 +455,33 @@ while ($row = sed_sql_fetchassoc($sql))
 			$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 			sed_createthumb($cfg['pfs_dir'].$pfs_file, $cfg['th_dir'].$pfs_file, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
 			}			
-	  }
- 
-	/* === New Hook Sed 170 === */
-	$stndl_icons_list = "";
-	$stndl_icons_disp = "";
-	$extp = sed_getextplugins('pfs.stndl.icons');
-	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		
-	/* ======================== */
 
-	$list_files .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more)."\">".$out['img_delete']."</a></td>";
-	$list_files .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs" ,"m=edit&id=".$pfs_id."&".$more)."\">".$out['img_edit']."</a></td>";
+  	if ($standalone) 
+      { 
+      $add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" alt=\"".$L['pfs_insertasthumbnail']."\" /></a>"; 
+      $add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" alt=\"".$L['pfs_insertasimage']."\" /></a>"; 
+      } 
+	  }
+	  
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>" : '';
+	
+	if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) 
+		{ 
+		$add_file = "<a href=\"javascript:addfile_pageurl('".$cfg['pfs_dir'].$pfs_file."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>"; 
+		$add_thumbnail = "";
+		$add_image = "";
+		} 
+
+	$list_files .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more)."\" title=\"".$L['Delete']."\">".$out['img_delete']."</a></td>";
+	$list_files .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs" ,"m=edit&id=".$pfs_id."&".$more)."\" title=\"".$L['Edit']."\">".$out['img_edit']."</a></td>";
 	$list_files .= "<td>".$pfs_icon."</td>";
 	$list_files .= "<td><a href=\"".$pfs_fullfile."\">".$pfs_file."</a><br />";
 	$list_files .= date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600)."<br />";
 	$list_files .= $pfs_filesize.$L['kb']."</td>";    
 	$list_files .= "<td>".$pfs_title."</td>";  
 	$list_files .= "<td style=\"text-align:right;\">".$row['pfs_count']."</td>";
-	$list_files .= ($f>0) ? "<td style=\"text-align:center;\">".$setassample."</td>" : '';	
-  
-  /*=== for hook stndl.icons ===*/
-	$list_files .= $stndl_icons_list;
-	
-	/*======*/  
-  
+	$list_files .= ($f>0) ? "<td style=\"text-align:center;\">".$setassample."</td>" : '';	  
+	$list_files .= "<td style=\"text-align:center;\">".$add_thumbnail." ".$add_image." ".$add_file."</td>";  
   $list_files .= "</tr>";
 	$pfs_foldersize = $pfs_foldersize + $pfs_filesize;
 	}
@@ -517,11 +522,7 @@ if ($files_count>0 || $folders_count>0)
 		$disp_main .= "<td class=\"coltop\" style=\"width:40%;\">".$L['Title']."</td>";
 		$disp_main .= "<td class=\"coltop\">".$L['Hits']."</td>";
 		$disp_main .= ($f>0) ? "<td class=\"coltop\">".$L['pfs_setassample']."</td>" : '';
-
-		/*=== for hook stndl.icons ===*/
-		$disp_main .= $stndl_icons_disp;
-		/*======*/   
-
+		$disp_main .= "<td class=\"coltop\">&nbsp;</td>";   
 		$disp_main .= "</tr>";
 		$disp_main .= $list_files."</table>";
 		}
@@ -544,11 +545,13 @@ $disp_stats .= "<div class=\"bar_front\" style=\"width:".$pfs_precentbar."%;\"><
 
 $disp_upload = "<h4>".$L['pfs_newfile']."</h4>";
 $disp_upload .= "<form enctype=\"multipart/form-data\" action=\"".sed_url("pfs", "a=upload"."&".$more)."\" method=\"post\">";
-$disp_upload .= "<table class=\"cells striped\"><tr><td colspan=\"3\" style=\"vertical-align:top;\">";
+$disp_upload .= "<table class=\"cells striped\"><tr><td colspan=\"3\" style=\"vertical-align:middle;\">";
+
 $disp_upload .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($maxfile*1024)."\" />";
 $disp_upload .= $L['Folder']." : ".sed_selectbox_folders($userid, "", $f);
 $disp_upload .= ($cfg['gallery_imgmaxwidth']>0) ? " &nbsp; &nbsp; ".sprintf($L['pfs_resize'], $cfg['gallery_imgmaxwidth'])." : <input type=\"checkbox\" class=\"checkbox\" name=\"nresize\" />" : '';
 $disp_upload .= (!empty($cfg['gallery_logofile'])) ? " &nbsp; &nbsp; ".$L['pfs_addlogo']." : <input type=\"checkbox\" class=\"checkbox\" name=\"naddlogo\" /> &nbsp;  <img src=\"".$cfg['gallery_logofile']."\" alt=\"\" />" : '';
+
 $disp_upload .= "</td></tr>";
 $disp_upload .= "<tr><td class=\"coltop\">&nbsp;</td><td class=\"coltop\">".$L['Title']."</td>";
 $disp_upload .= "<td class=\"coltop\">".$L['File']."</td></tr>";
@@ -556,7 +559,7 @@ $disp_upload .= "<td class=\"coltop\">".$L['File']."</td></tr>";
 for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 	{
 	$disp_upload .= "<tr><td style=\"text-align:center;\">#".($ii+1)."</td>\n";
-	$disp_upload .= "<td style=\"width:48%;\"><input type=\"text\" class=\"text\" name=\"ntitle[$ii]\" value=\"\" size=\"30\" maxlength=\"255\" /></td>\n";
+	$disp_upload .= "<td style=\"width:48%;\"><input type=\"text\" class=\"text\" name=\"ntitle[$ii]\" value=\"\" size=\"38\" maxlength=\"255\" /></td>\n";
 	$disp_upload .= "<td style=\"width:48%;\"><input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"32\" />\n";
   $disp_upload .= ($ii+1==$cfg['pfsmaxuploads']) ? " &nbsp; <a href=\"javascript:sedjs.toggleblock('moreuploads')\"><img src=\"skins/".$skin."/img/system/arrow-down.gif\" alt=\"\" /></a>": '';
   $disp_upload .= "</td></tr>";
@@ -567,15 +570,27 @@ $disp_upload .= "<tbody id=\"moreuploads\" style=\"display:none;\">";
 for ($ii = $cfg['pfsmaxuploads']; $ii < $cfg['pfsmaxuploads']*2; $ii++)
 	{
 	$disp_upload .= "<tr><td style=\"text-align:center;\">#".($ii+1)."</td>\n";
-	$disp_upload .= "<td style=\"width:48%;\"><input type=\"text\" class=\"text\" name=\"ntitle[$ii]\" value=\"\" size=\"48\" maxlength=\"255\" />\n</td>";
+	$disp_upload .= "<td style=\"width:48%;\"><input type=\"text\" class=\"text\" name=\"ntitle[$ii]\" value=\"\" size=\"38\" maxlength=\"255\" />\n</td>";
 	$disp_upload .= "<td style=\"width:48%;\"><input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"32\" /></td>\n</tr>";
 	}
 $disp_upload .= "</tbody>";
 
-$disp_upload .= "<tr><td colspan=\"3\" style=\"text-align:center;\">";
-$disp_upload .= "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Upload']."\" /></td></tr></table></form>";
+$disp_upload .= "<tr><td style=\"text-align:center;\"></td>\n";
+$disp_upload .= "<td style=\"width:48%; text-align:right;\">".$L['pfs_multiuploading']."</td>";
+$disp_upload .= "<td style=\"width:48%;\"><input name=\"userfile[]\" type=\"file\" class=\"file\" multiple=\"true\" size=\"32\" /></td>\n</tr>";
+
+$disp_upload .= "<tr><td style=\"text-align:center;\" colspan=\"3\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Upload']."\" /></td></tr></table>";
+$disp_upload .= "</form>";
 
 
+
+
+// ========== Icons Help =========
+
+$disp_iconshelp = "<h4>".$L['Help']." :</h4>";
+$disp_iconshelp .= "<img src=\"skins/$skin/img/system/icon-pastethumb.gif\" alt=\"\" /> : ".$L['pfs_insertasthumbnail']." &nbsp; &nbsp; 
+	<img src=\"skins/$skin/img/system/icon-pasteimage.gif\" alt=\"\" /> : ".$L['pfs_insertasimage']." &nbsp; &nbsp; 
+	<img src=\"skins/$skin/img/system/icon-pastefile.gif\" alt=\"\" /> : ".$L['pfs_insertaslink']; 
 
 // ========== Allowed =========
 
@@ -630,6 +645,8 @@ $body .= ($usr['auth_write']) ? "<div id=\"tab3\" class=\"tabs\">".$disp_newfold
 
 $body .= "</div></div>";
 
+$body .= ($standalone) ? "<div>".$disp_iconshelp."</div>" : '';
+
 $body .= ($usr['auth_write']) ? "<div>".$disp_allowed."</div>" : '';
 
 $out['subtitle'] = $L['Mypfs'];
@@ -642,17 +659,16 @@ $out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
 
 if ($standalone)
 	{
-	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."
-<title>".$cfg['maintitle']."</title>";
+	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$cfg['maintitle']."</title>";
 
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
 	
-	/* === New Hook Sed 160 by Amro === */
+	/* === Hook === */
 	$extp = sed_getextplugins('pfs.stndl');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ================================ */		
+	/* ====== */		
 
 	$mskin = sed_skinfile(array('pfs', 'standalone'));
 	$t = new XTemplate($mskin);

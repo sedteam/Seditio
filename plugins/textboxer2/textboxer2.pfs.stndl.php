@@ -32,14 +32,16 @@ $pfs_header1 = $cfg['doctype']."<html><head>
 <title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript($morejavascript)."
 <script type=\"text/javascript\">
 <!--
-function addthumb(thmb, image, c1,c2)
+function addthumb(thmb, image)
 	{ ".$openerparent.".document.".$c1.".".$c2.".value += '[thumb='+thmb+']'+image+'[/thumb]'; }
-function addpix(gfile,c1,c2)
+function addpix(gfile)
 	{ ".$openerparent.".document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
-function addfile(gfile,c1,c2)
+function addfile(gfile)
 	{ ".$openerparent.".document.".$c1.".".$c2.".value += '[pfs]".$cfg['rel_dir']."'+gfile+'[/pfs]'; }
-function addglink(id,c1,c2)
-	{ ".$openerparent.".document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; }
+function addglink(id)
+	{ ".$openerparent.".document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; }	
+function addfile_pageurl(gfile)
+	{ ".$openerparent.".document.".$c1.".".$c2.".value += gfile; }	
 //-->
 </script>
 ";

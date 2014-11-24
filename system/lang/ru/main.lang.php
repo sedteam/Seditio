@@ -595,6 +595,11 @@ $L['pfs_ispublic'] = "Публичная?";
 $L['pfs_isgallery'] = "Галерея?";
 $L['pfs_extallowed'] = "Допустимые расширения";
 
+$L['pfs_insertasthumbnail'] = "Вставить как эскиз"; // New in v175
+$L['pfs_insertasimage'] = "Вставить изображение"; // New in v175
+$L['pfs_insertaslink'] = "Вставить ссылку на файл"; // New in v175
+$L['pfs_multiuploading'] = "Мультизагрузка файлов"; // New in v175
+
 $L['pfs_setassample'] = "Установить как образец";  // New in v150
 $L['pfs_addlogo'] = "Добавить лого";  // New in v150
 $L['pfs_resize'] = "Изменить размер, если больше чем %1\$s пикселей";  // New in v150

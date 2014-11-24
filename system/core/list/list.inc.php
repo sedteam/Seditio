@@ -291,6 +291,7 @@ $extp = sed_getextplugins('list.loop');
 
 while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 	{
+
 	/* === Hook - Part2 : Include === */
 	if (is_array($extpf))
 		{ foreach($extpf as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
