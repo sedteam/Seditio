@@ -321,18 +321,18 @@ switch($m)
 		while ($row = sed_sql_fetchassoc($sql))
 			{
 			$sed_groups[$row['grp_id']] = array (
-				'id' => $row['grp_id'],
-				'alias' => $row['grp_alias'],
-				'level' => $row['grp_level'],
-   				'disabled' => $row['grp_disabled'],
-   				'hidden' => $row['grp_hidden'],
-				'state' => $row['grp_state'],
-				'title' => sed_cc($row['grp_title']),
-				'desc' => sed_cc($row['grp_desc']),
-				'icon' => $row['grp_icon'],
-				'pfs_maxfile' => $row['grp_pfs_maxfile'],
-				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
-				'ownerid' => $row['grp_ownerid']
+					'id' => $row['grp_id'],
+					'alias' => $row['grp_alias'],
+					'level' => $row['grp_level'],
+					'disabled' => $row['grp_disabled'],
+					'hidden' => $row['grp_hidden'],
+					'state' => $row['grp_state'],
+					'title' => sed_cc($row['grp_title']),
+					'desc' => sed_cc($row['grp_desc']),
+					'icon' => $row['grp_icon'],
+					'pfs_maxfile' => $row['grp_pfs_maxfile'],
+					'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
+					'ownerid' => $row['grp_ownerid']
 					);
 			}
 		}

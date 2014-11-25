@@ -661,11 +661,9 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	if ($cfg['textmode']=='bbcode')
 		{
 		$smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies("newpost", "newmsg", $L['Smilies'])." &nbsp; " : '';
-		$smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
 		$bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes("newpost", "newmsg", $L['BBcodes']): '';
-		$bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : ''; 
 		}
-	else { $bbcodes = ''; $bbcodes_local =''; $smilies = ''; $smilies_local = ''; } 
+	else { $bbcodes = ''; $smilies = ''; } 
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=".$s."&q=".$q),
@@ -674,8 +672,6 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main.$bbcodes." ".$smilies." ".$pfs,
 		"FORUMS_POSTS_NEWPOST_SMILIES" => $smilies,
 		"FORUMS_POSTS_NEWPOST_BBCODES" => $bbcodes,
-		"FORUMS_POSTS_NEWPOST_SMILIESLOCAL" => $smilies_local,
-		"FORUMS_POSTS_NEWPOST_BBCODESLOCAL" => $bbcodes_local, 
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 			));
 

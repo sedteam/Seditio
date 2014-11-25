@@ -45,7 +45,7 @@ var sedjs = {
 		{
 		  var ptop=(window.screen.height-200)/2;
 		  var pleft=(window.screen.width-200)/2;
-		  window.open(url,'Picture','toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left='+pleft+',top='+ptop+'');
+		  window.open(sedjs.get_basehref()+url,'Picture','toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left='+pleft+',top='+ptop+'');
 		},
 	  
 	/*= Redirect

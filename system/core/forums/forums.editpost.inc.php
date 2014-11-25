@@ -61,7 +61,7 @@ if ($row = sed_sql_fetchassoc($sql))
 else
 	{ sed_die(); }
 
-$sql = sed_sql_query("SELECT fs_state, fs_title, fs_category FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
+$sql = sed_sql_query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
 
 if ($row = sed_sql_fetchassoc($sql))
 	{
@@ -70,6 +70,8 @@ if ($row = sed_sql_fetchassoc($sql))
 		sed_redirect(sed_url('message','msg=602','',true));
 		}
 
+	$fs_allowbbcodes = $row['fs_allowbbcodes'];
+	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_title = $row['fs_title'];
 	$fs_category = $row['fs_category'];
 	}
@@ -147,11 +149,9 @@ if ($row = sed_sql_fetchassoc($sql))
 if ($cfg['textmode']=='bbcode')
     {
     $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('editpost', 'rtext', $L['BBcodes']) : '';
-    $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
     $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies('editpost', 'rtext', $L['Smilies'])." &nbsp; " : '';
-    $smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : ''; 
     }
-else { $bbcodes = ''; $bbcodes_local =''; $smilies = ''; $smilies_local = ''; } 
+else { $bbcodes = ''; $smilies = ''; } 
 // -------
    
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
@@ -205,9 +205,6 @@ $t->assign(array(
 	"FORUMS_EDITPOST_DESC" => "<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".$ft_desc."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_EDITPOST_SMILIES" => $smilies,
 	"FORUMS_EDITPOST_BBCODES" => $bbcodes,
-	"FORUMS_EDITPOST_MYPFS" => $pfs,
-	"FORUMS_EDITPOST_SMILIESLOCAL" => $smilies_local,
-	"FORUMS_EDITPOST_BBCODESLOCAL" => $bbcodes_local,
 	"FORUMS_EDITPOST_MYPFS" => $pfs
 		));
 

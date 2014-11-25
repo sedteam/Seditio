@@ -176,11 +176,9 @@ if ($a=='newtopic')
 if ($cfg['textmode']=='bbcode')
     {
     $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies('newtopic', 'newmsg', $L['Smilies'])." &nbsp; " : '';
-    $smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
     $bbcodes = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_bbcodes('newtopic', 'newmsg', $L['BBcodes']): '';
-    $bbcodes_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_bbcodes_local(99) : '';
     } 
-else { $bbcodes = ''; $bbcodes_local =''; $smilies = ''; $smilies_local = ''; } 
+else { $bbcodes = ''; $smilies = ''; } 
 // -----------
 
 
@@ -231,8 +229,6 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main.$bbcodes." ".$smilies." ".$pfs.$poll_form,
 	"FORUMS_NEWTOPIC_SMILIES" => $smilies,
 	"FORUMS_NEWTOPIC_BBCODES" => $bbcodes,
-	"FORUMS_NEWTOPIC_SMILIESLOCAL" => $smilies_local,
-	"FORUMS_NEWTOPIC_BBCODESLOCAL" => $bbcodes_local, 
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 	"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
 		));

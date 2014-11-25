@@ -40,7 +40,7 @@ $pfs_header1 = $cfg['doctype']."<html>
 <!--
 function addthumb(thmb, image)
 	{ 
-	var html = '<a href=\"'+image+'\" rel=\"sedthumb\"><img src=\"'+thmb+'\" alt=\"\" /></a>'; 
+	var html = '<a href=\"".$cfg['pfs_dir']."'+image+'\" rel=\"sedthumb\"><img src=\"'+thmb+'\" alt=\"\" /></a>'; 
 	window.".$openerparent.".CKEDITOR.instances['".$c2."'].insertHtml(html); ".$auto_popup_close."
 	}
 function addpix(gfile)

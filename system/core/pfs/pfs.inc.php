@@ -463,11 +463,11 @@ while ($row = sed_sql_fetchassoc($sql))
       } 
 	  }
 	  
-	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>" : '';
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>" : '';
 	
 	if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) 
 		{ 
-		$add_file = "<a href=\"javascript:addfile_pageurl('".$cfg['pfs_dir'].$pfs_file."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>"; 
+		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>"; 
 		$add_thumbnail = "";
 		$add_image = "";
 		} 

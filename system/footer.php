@@ -127,7 +127,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 
     foreach ($sys['devmode']['hooks'] as $k => $i)
       {
-      $out['devmode'] .= "<td>".$i[0]."</td>";
+      $out['devmode'] .= "<tr><td>".$i[0]."</td>";
       $out['devmode'] .= "<td>".$i[1]."</td>";
       $out['devmode'] .= "<td>".$i[2]."</td>";
       $out['devmode'] .= "<td>".$i[3]."</td>";
