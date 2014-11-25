@@ -136,7 +136,7 @@ if ($a=='upload')
 			{
 			$disp_errors .= "<li>".$u_name." : ";
 
-			$title = sed_import($ntitle[$ii],'D','TXT');   // New in Sed 170
+			$u_title = sed_import($ntitle[$ii],'D','TXT');   // New in Sed 170
       $desc = '';
 
     	$u_name = mb_strtolower($u_name);
@@ -216,7 +216,7 @@ if ($a=='upload')
 						'".sed_sql_prep($u_sqlname)."',
 						'".sed_sql_prep($f_extension)."',
 						".(int)$folderid.",
-						'".sed_sql_prep($title)."',
+						'".sed_sql_prep($u_title)."',
 						'".sed_sql_prep($desc)."',
             ".(int)$ishtml.",
 						".(int)$u_size.",
@@ -408,7 +408,7 @@ else
 		$list_folders .= "<td>".$icon_f." ".$L_pff_type[$pff_type]." ".$icon_g."</td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fcount."</td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fsize." ".$L['kb']."</td>";
-		$list_folders .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row1['pff_updated'] + $usr['timezone'] * 3600)."</td>";	
+		$list_folders .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row1['pff_updated'])."</td>";	
   	$list_folders .= "<td style=\"text-align:right;\">".$pff_count."</td>";
 		$list_folders .= "</tr>";
 		}
@@ -476,7 +476,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$list_files .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs" ,"m=edit&id=".$pfs_id."&".$more)."\" title=\"".$L['Edit']."\">".$out['img_edit']."</a></td>";
 	$list_files .= "<td>".$pfs_icon."</td>";
 	$list_files .= "<td><a href=\"".$pfs_fullfile."\">".$pfs_file."</a><br />";
-	$list_files .= date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600)."<br />";
+	$list_files .= sed_build_date($cfg['dateformat'], $pfs_date)."<br />";
 	$list_files .= $pfs_filesize.$L['kb']."</td>";    
 	$list_files .= "<td>".$pfs_title."</td>";  
 	$list_files .= "<td style=\"text-align:right;\">".$row['pfs_count']."</td>";
@@ -582,9 +582,6 @@ $disp_upload .= "<td style=\"width:48%;\"><input name=\"userfile[]\" type=\"file
 $disp_upload .= "<tr><td style=\"text-align:center;\" colspan=\"3\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Upload']."\" /></td></tr></table>";
 $disp_upload .= "</form>";
 
-
-
-
 // ========== Icons Help =========
 
 $disp_iconshelp = "<h4>".$L['Help']." :</h4>";
@@ -659,7 +656,9 @@ $out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
 
 if ($standalone)
 	{
-	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$cfg['maintitle']."</title>";
+	sed_sendheaders();
+	
+	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$out['subtitle']."</title>";
 
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
@@ -689,6 +688,12 @@ if ($standalone)
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
+
+	
+	@ob_end_flush();
+	@ob_end_flush();
+	
+	sed_sql_close($connection_id);
 	}
 else
 	{
@@ -713,5 +718,4 @@ else
 
 	require("system/footer.php");
 	}
-
 ?>
