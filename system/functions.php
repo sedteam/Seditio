@@ -809,7 +809,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					"COMMENTS_ROW_AUTHORID" => $row['com_authorid'],
 					"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
 					"COMMENTS_ROW_TEXT" => $com_text,
-					"COMMENTS_ROW_DATE" => @date($cfg['dateformat'], $row['com_date'] + $usr['timezone'] * 3600),
+					"COMMENTS_ROW_DATE" => sed_build_date($cfg['dateformat'], $row['com_date']),
 					"COMMENTS_ROW_ODDEVEN" => sed_build_oddeven($i),
 					"COMMENTS_ROW_ADMIN" => $com_quote.$com_admin
 						));
@@ -982,6 +982,21 @@ function sed_build_country($flag)
 	$result = "<a href=\"".sed_url("users", "f=country_".$flag)."\">".$sed_countries[$flag]."</a>";
 	return($result);
 	}
+	
+/** 
+ * Returns date 
+ * 
+ * @param string $formatmask Date mask
+ * @param int $udate Date in UNIX timestamp  
+ * @return string 
+ */
+function sed_build_date($dateformat, $udate)
+	{
+	global $usr, $cfg;
+	
+	$result = @date($dateformat, $udate + $usr['timezone'] * 3600);
+	return($result);	   
+	}	
 
 /** 
  * Returns user email link 
@@ -1440,7 +1455,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
 		$rating_average = $row['rating_average'];
-		$rating_since = $L['rat_since']." ".date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
+		$rating_since = $L['rat_since']." ".sed_build_date($cfg['dateformat'], $row['rating_creationdate']);
 		
 		if ($rating_average < 1)
 			{ $rating_average = 1; }
