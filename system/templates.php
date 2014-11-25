@@ -549,7 +549,7 @@ class XTemplate {
 
 		$out = $this->text($bname);
 
-		echo $out;
+		echo trim($out);
 	}
 
 	public function out_file ($bname, $fname) {
