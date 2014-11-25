@@ -401,7 +401,7 @@ while ($fsn = sed_sql_fetchassoc($sql2))
 			$fsn['fs_lt_posterid'] = 0;
 			}
 
-		$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
+		$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? sed_build_date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date']) : '';
     	$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
 	    $fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
 
@@ -488,7 +488,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		{
 		$row['ft_url'] = sed_url("forums", "m=posts&q=".$row['ft_id']);
 		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a>";
-		$row['ft_lastposturl'] .= " ".@date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
+		$row['ft_lastposturl'] .= " ".sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated']);
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
@@ -534,7 +534,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		"FORUMS_TOPICS_ROW_ICON" => $row['ft_icon'],
 		"FORUMS_TOPICS_ROW_TITLE" => sed_cc($row['ft_title']),
 		"FORUMS_TOPICS_ROW_DESC" => sed_cc($row['ft_desc']),		
-		"FORUMS_TOPICS_ROW_CREATIONDATE" => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
+		"FORUMS_TOPICS_ROW_CREATIONDATE" => sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_creationdate']),
 		"FORUMS_TOPICS_ROW_UPDATED" => $row['ft_lastposturl'],
 		"FORUMS_TOPICS_ROW_TIMEAGO" => $row['ft_timago'],
 		"FORUMS_TOPICS_ROW_POSTCOUNT" => $row['ft_postcount'],

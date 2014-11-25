@@ -119,8 +119,8 @@ if ($a=='update' && !empty($f))
 	exit;
 	}
 
-$row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
-$row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
+$row['pff_date'] = sed_build_date($cfg['dateformat'], $row['pff_date']);
+$row['pff_updated'] = sed_build_date($cfg['dateformat'], $row['pff_updated']);
 
 $body .= "<table class=\"cells striped\">";
 $body .= "<form id=\"editfolder\" action=\"".sed_url("pfs" ,"m=editfolder&a=update&f=".$pff_id."&".$more)."\" method=\"post\">";

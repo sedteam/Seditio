@@ -93,7 +93,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=banlist&a=delete&id=".$banlist_id."&".sed_xg())."\">".$out['img_delete']."</a></td>";
 
 	if ($banlist_expire>0)
-		{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'],$banlist_expire)." GMT</td>"; }
+		{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $banlist_expire)." GMT</td>"; }
        else
 		{ $adminmain .= "<td style=\"text-align:center;\">".$L['adm_neverexpire']."</td>"; }
 

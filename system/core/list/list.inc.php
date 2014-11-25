@@ -338,7 +338,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_DESC" => $pag['page_desc'],
 		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
 		"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
-		"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
+		"LIST_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $pag['page_date']),
 		"LIST_ROW_FILEURL" => $pag['page_url'],
 		"LIST_ROW_SIZE" => $pag['page_size'],
 		"LIST_ROW_COUNT" => $pag['page_count'],

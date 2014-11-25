@@ -142,7 +142,7 @@ $t-> assign(array(
       "GALLERY_DETAILS_SHORTTITLE" => sed_cc($pfs['pfs_title']),
       "GALLERY_DETAILS_DESC" => $pfs['pfs_desc'],
       "GALLERY_DETAILS_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
-      "GALLERY_DETAILS_DATE" => date($cfg['dateformat'], $pfs['pfs_date'] + $usr['timezone'] * 3600),
+      "GALLERY_DETAILS_DATE" => sed_build_date($cfg['dateformat'], $pfs['pfs_date']),
       "GALLERY_DETAILS_SIZE" => $pfs['pfs_filesize'].$L['kb'],
       "GALLERY_DETAILS_ROW_DIMX" => $pfs['pfs_imgsize'][0],
       "GALLERY_DETAILS_ROW_DIMY" => $pfs['pfs_imgsize'][1],

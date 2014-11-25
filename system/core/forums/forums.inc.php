@@ -196,7 +196,7 @@ while ($fsn = sed_sql_fetchassoc($sql))
 			$fsn['fs_lt_posterid'] = 0;
 			}
 
-		$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
+		$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? sed_build_date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date']) : '';
     	$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
 	    $fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
 
@@ -253,7 +253,7 @@ foreach ($forum_subforums as $key => $row)
 		if ($row['fs_lt_date'] > $lt_date)
 			{
 			$fsnn = $forum_subforums[$key];
-			$fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $fsnn['fs_lt_date'] + $usr['timezone'] * 3600);
+			$fsnn['fs_lt_date'] = sed_build_date($cfg['formatmonthdayhourmin'], $fsnn['fs_lt_date']);
 			$fsnn['lastpost'] = ($usr['id']>0 && $fsnn['fs_lt_date']>$usr['lastvisit'] && $fsnn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=unread", "#unread").">" : "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom")."\">";
 			$fsnn['lastpost'] .= sed_cutstring($fsnn['fs_lt_title'], 32)."</a>";
 			$fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);

@@ -76,7 +76,7 @@ if ($row = sed_sql_fetchassoc($sql))
 	{
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
-	$pfs_date = @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600);
+	$pfs_date = sed_build_date($cfg['dateformat'], $row['pfs_date']);
 	$pfs_folderid = $row['pfs_folderid'];
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = $row['pfs_desc'];

@@ -100,7 +100,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		}
 
 	$adminmain .= "<tr>";
-	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['tr_date']+$usr['timezone']*3600)."</td>";
+	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['tr_date'])."</td>";
 	$adminmain .= "<td><img src=\"system/img/admin/".$icon."\" alt=\"".$typestr."\" /> ".$typestr."</td>";
 	$adminmain .= "<td>".sed_cc($row['tr_title'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">";

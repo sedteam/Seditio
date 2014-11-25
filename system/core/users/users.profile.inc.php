@@ -401,7 +401,7 @@ while( list($i,$x) = each($timezonelist) )
 	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
 	$profile_form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
 	}
-$profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
+$profile_form_timezone .= "</select> ".$usr['gmttime']." / ".sed_build_date($cfg['dateformat'], $sys['now_offset'])." ".$usr['timetext'];
 
 $profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
@@ -527,8 +527,8 @@ $t->assign(array(
 	"USERS_PROFILE_TIMEZONE" => $profile_form_timezone,
 	"USERS_PROFILE_LOCATION" => "<input type=\"text\" class=\"text\" name=\"ruserlocation\" value=\"".sed_cc($urr['user_location'])."\" size=\"32\" maxlength=\"64\" />",
 	"USERS_PROFILE_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"ruseroccupation\" value=\"".sed_cc($urr['user_occupation'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_PROFILE_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
-	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
+	"USERS_PROFILE_REGDATE" => sed_build_date($cfg['dateformat'], $urr['user_regdate'])." ".$usr['timetext'],
+	"USERS_PROFILE_LASTLOG" => sed_build_date($cfg['dateformat'], $urr['user_lastlog'])." ".$usr['timetext'],
 	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_PROFILE_ADMINRIGHTS" => '',
 	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",

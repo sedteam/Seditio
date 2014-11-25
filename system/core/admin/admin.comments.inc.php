@@ -95,7 +95,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$adminmain .= "<td style=\"text-align:center;\">".$row['com_id']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['com_code']."</td>";
 	$adminmain .= "<td>".$row['com_author']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['com_date'])."</td>";
+	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['com_date'])."</td>";
 	$adminmain .= "<td>".$row['com_text']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$row['com_url']."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td></tr>";
 	$ii++;

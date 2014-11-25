@@ -27,7 +27,7 @@ $adminmain .= "<tr><td>".$L['adm_time2']."</td><td> ".gmdate("Y-m-d H:i")." GMT 
 $adminmain .= "<tr><td>".$L['adm_time3']."</td>";
 $adminmain .= "<td>".$usr['gmttime']." </td></tr>";
 $adminmain .= "<tr><td>".$L['adm_time4']." : </td>";
-$adminmain .= "<td>".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone'] * 3600)." ".$usr['timetext']." </td></tr>";
+$adminmain .= "<td>".sed_build_date($cfg['dateformat'], $sys['now_offset'])." ".$usr['timetext']." </td></tr>";
 $adminmain .= "</table>";
 
 ?>

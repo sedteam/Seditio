@@ -228,7 +228,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 	$t-> assign(array(
 		"PM_ROW_ID" => $row['pm_id'],
 		"PM_ROW_STATE" => $row['pm_state'],
-		"PM_ROW_DATE" => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
+		"PM_ROW_DATE" => sed_build_date($cfg['dateformat'], $row['pm_date']),
 		"PM_ROW_FROMUSERID" => $pm_fromuserid,
 		"PM_ROW_FROMUSER" => sed_build_user($pm_fromuserid, $pm_fromuser),
 		"PM_ROW_TOUSERID" => $pm_touserid,

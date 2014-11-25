@@ -14,7 +14,6 @@ Type=Core
 Author=Neocrome
 Description=Polls
 [END_SED]
-
 ==================== */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
@@ -28,19 +27,11 @@ if (is_array($extp))
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['auth_read']);
 
-$polls_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
-<script type=\"text/javascript\">
-<!--
-function help(rcode,c1,c2)
-	{ window.open('plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
-function pfs(id,c1,c2)
-	{ window.open('pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'); }
-//-->
-</script>";
+$polls_header1 = $cfg['doctype']."\n<html>\n<head>
+<title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript($morejavascript);
 
-$polls_header2 = "</head><body>";
-$polls_footer = "</body></html>";
+$polls_header2 = "</head>\n<body>";
+$polls_footer = "</body>\n</html>";
 
 $id = sed_import('id','G','ALP',8);
 $vote = sed_import('vote','G','INT');
@@ -99,6 +90,8 @@ else
 
 $out['subtitle'] = $L['Polls'];
 
+sed_sendheaders();
+
 /* === Hook === */
 $extp = sed_getextplugins('polls.main');
 if (is_array($extp))
@@ -129,7 +122,7 @@ elseif ($id=='viewall')
 		while ($row = sed_sql_fetchassoc($sql))
 			{
 			$result .= "<tr>";
-			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
+			$result .= "<td style=\"width:128px;\">".sed_build_date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
 			$result .= "<td><a href=\"".sed_url("polls", "id=".$row['poll_id'])."\"><img src=\"system/img/admin/polls.png\" alt=\"\" /></a></td>";
 			$result .= "<td>".$row['poll_text']."</td>";
 			$result .= "</tr>";
@@ -166,11 +159,12 @@ else
   
   $url_poll = array('part' => 'polls', 'params' => "id=".$id."&comments=1");
   
+	$cfg['enablemodal'] = false;
 	list($comments_link, $comments_display) = sed_build_comments($item_code, $url_poll, $comments);
 
 	$t->assign(array(
 		"POLLS_VOTERS" => $totalvotes,
-		"POLLS_SINCE" => date($cfg['dateformat'], $poll_creationdate + $usr['timezone'] * 3600),
+		"POLLS_SINCE" => sed_build_date($cfg['dateformat'], $poll_creationdate),
 		"POLLS_TITLE" => $poll_title,
 		"POLLS_RESULTS" => $result,
 		"POLLS_COMMENTS" => $comments_link,
@@ -202,8 +196,8 @@ if (is_array($extp))
 $t->parse("MAIN");
 $t->out("MAIN");
 
-sed_sendheaders();
 @ob_end_flush();
 @ob_end_flush();
 
+sed_sql_close($connection_id);
 ?>

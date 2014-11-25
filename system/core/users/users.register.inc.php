@@ -296,7 +296,7 @@ while( list($i,$x) = each($timezonelist) )
 	$selected = ($x==$rtimezone) ? "selected=\"selected\"" : '';
 	$form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
 	}
-$form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
+$form_timezone .= "</select> ".$usr['gmttime']." / ".sed_build_date($cfg['dateformat'], $sys['now_offset'])." ".$usr['timetext'];
 
 $out['subtitle'] = $L['aut_registertitle'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');

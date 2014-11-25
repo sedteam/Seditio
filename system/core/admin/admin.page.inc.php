@@ -507,7 +507,7 @@ switch($mn)
     	$adminmain .= "<td>".$row['page_id']."</td>";
     	$adminmain .= "<td><a href=\"".sed_url("page", "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a></td>";
     	$adminmain .= "<td>".sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>")."</td>";
-    	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)."</td>";
+    	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['page_date'])."</td>";
     	$adminmain .= "<td style=\"text-align:center;\">".sed_build_user($row['page_ownerid'], sed_cc($row['user_name']))."</td>";  	
     	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=page&mn=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Validate']."</a></td>";
     	$adminmain .= "</tr>";

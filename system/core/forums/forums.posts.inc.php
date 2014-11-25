@@ -540,9 +540,9 @@ while ($row = sed_sql_fetchassoc($sql))
 		$sql3 = sed_sql_query("UPDATE $db_forum_posts SET fp_text_ishtml=1, fp_text='".sed_sql_prep($row['fp_text'])."' WHERE fp_id=".$row['fp_id']); 
 		}	
 	
-	$row['fp_created'] = @date($cfg['dateformat'], $row['fp_creation'] + $usr['timezone'] * 3600)." ".$usr['timetext'];
+	$row['fp_created'] = sed_build_date($cfg['dateformat'], $row['fp_creation'])." ".$usr['timetext'];
 	$row['fp_updated_ago'] = sed_build_timegap($row['fp_updated'], $sys['now_offset']);
-	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)." ".$usr['timetext'];
+	$row['fp_updated'] = sed_build_date($cfg['dateformat'], $row['fp_updated'])." ".$usr['timetext'];
 	$row['user_text'] = ($fs_allowusertext) ? $row['user_text'] : '';
 	$lastposterid = $row['fp_posterid'];
 	$lastposterip = $row['fp_posterip'];

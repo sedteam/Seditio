@@ -55,9 +55,9 @@ if (is_array($extp))
 
 $sys['catcode'] = $pag['page_cat']; //new in v175
 
-$pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
-$pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
-$pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
+$pag['page_date'] = sed_build_date($cfg['dateformat'], $pag['page_date']);
+$pag['page_begin'] = sed_build_date($cfg['dateformat'], $pag['page_begin']);
+$pag['page_expire'] = sed_build_date($cfg['dateformat'], $pag['page_expire']);
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']) : sed_url("page", "al=".$pag['page_alias']);
 

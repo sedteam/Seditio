@@ -37,7 +37,7 @@ function sed_get_latestpages($limit, $mask)
 			$res .= sprintf($mask,
 				"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
 				"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
-				date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
+				sed_build_date($cfg['formatyearmonthday'], $row['page_date'])
 					);
 			}
 		}
@@ -81,7 +81,7 @@ function sed_get_latesttopics($limit, $mask)
 			
 			$res .= sprintf($mask,
 				$img,
-				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
+				sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated']),
 				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],25), sed_cutstring($row['fs_category'],16), TRUE, $parentcat),
 				"<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),50))."</a>",
 				$row['ft_postcount']-1
@@ -263,7 +263,7 @@ function sed_get_latestcomments($limit, $mask)
     $com_author = sed_cc($row['com_author']);
 	$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author ;
 	
-	$res .= sprintf($mask, $lnk, $com_authorlink, date($cfg['formatyearmonthday'], $row['com_date'] + $usr['timezone'] * 3600), sed_build_userimage($row['user_avatar']), $com_text);
+	$res .= sprintf($mask, $lnk, $com_authorlink, sed_build_date($cfg['formatyearmonthday'], $row['com_date']), sed_build_userimage($row['user_avatar']), $com_text);
     }
 
   $res = (empty($res)) ? $plu_empty : $res;

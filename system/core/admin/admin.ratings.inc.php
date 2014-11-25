@@ -89,7 +89,7 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=ratings&a=delete&id=".$row['rating_code']."&".sed_xg())."\">".$out['img_delete']."</a></td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_code']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
+	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$votes."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_average']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$rat_url."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\"></a></td></tr>";

@@ -122,8 +122,8 @@ $t->assign(array(
 	"USERS_DETAILS_TIMEZONE" => sed_build_timezone($urr['user_timezone']),
 	"USERS_DETAILS_LOCATION" => sed_cc($urr['user_location']),
 	"USERS_DETAILS_OCCUPATION" => sed_cc($urr['user_occupation']),
-	"USERS_DETAILS_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
-	"USERS_DETAILS_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
+	"USERS_DETAILS_REGDATE" => sed_build_date($cfg['dateformat'], $urr['user_regdate'])." ".$usr['timetext'],
+	"USERS_DETAILS_LASTLOG" => sed_build_date($cfg['dateformat'], $urr['user_lastlog'])." ".$usr['timetext'],
 	"USERS_DETAILS_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_DETAILS_POSTCOUNT" => $urr['user_postcount'],
 	"USERS_DETAILS_LASTIP" => $urr['user_lastip']

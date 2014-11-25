@@ -196,7 +196,7 @@ if (!empty($error_string))
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
-	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600)." ".$usr['timetext'],
+	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".sed_build_date($cfg['dateformat'], $fp_updated)." ".$usr['timetext'],
 	"FORUMS_EDITPOST_SEND" => sed_url("forums","m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
 	"FORUMS_EDITPOST_TEXT" => $editpost_text.$bbcodes." ".$smilies." ".$pfs,
 	"FORUMS_EDITPOST_TEXTONLY" => $editpost_text,

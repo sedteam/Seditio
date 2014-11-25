@@ -85,7 +85,7 @@ $adminmain .= "<td class=\"coltop\">".$L['Log']."</td></tr>";
 while ($row = sed_sql_fetchassoc($sql))
 	{
 	$adminmain .= "<tr><td>".$row['log_id']."</td>";
-	$adminmain .= "<td>".date($cfg['dateformat'], $row['log_date'])." &nbsp;</td>";
+	$adminmain .= "<td>".sed_build_date($cfg['dateformat'], $row['log_date'])." &nbsp;</td>";
 	$adminmain .= "<td><a href=\"".sed_url("admin", "m=tools&p=ipsearch&a=search&id=".$row['log_ip']."&".sed_xg())."\">";
 	$adminmain .= $row['log_ip']."</a> &nbsp;</td>";
 	$adminmain .= "<td>".$row['log_name']." &nbsp;</td>";

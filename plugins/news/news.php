@@ -150,7 +150,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
 			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
 			"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar']),
-			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
+			"PAGE_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $pag['page_date']),
 			"PAGE_ROW_FILEURL" => $pag['page_url'],
 			"PAGE_ROW_SIZE" => $pag['page_size'],
 			"PAGE_ROW_COUNT" => $pag['page_count'],

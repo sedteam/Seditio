@@ -188,7 +188,7 @@ if (!empty($q) && empty($newpmtext))
 
 	if ($row = sed_sql_fetchassoc($sql))
 		{
-		$pm_date = @date($cfg['dateformat'], $row['pm_date']).' GMT';
+		$pm_date = sed_build_date($cfg['dateformat'], $row['pm_date']).' GMT';
 		$newpmtext = "<br /><br />-------- ".$L['Originalmessage']." --------<br />".$L['Date']." : ".$pm_date."<br />".$L['Title']." : ".$row['pm_title']."\n".$row['pm_text']."<br />-------------<br />";
 		$newpmtitle = "Re: ".$row['pm_title'];
 		}

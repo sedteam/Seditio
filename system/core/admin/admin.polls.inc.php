@@ -66,7 +66,7 @@ if ($n=='options')
  	$adminmain .= "<form id=\"pollchgtitle\" action=\"".sed_url("admin", "m=polls&n=options&a=updatetitle&id=".$id)."\" method=\"post\">";
 	$adminmain .= $L['Title']." : <input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($row["poll_text"])."\" size=\"56\" maxlength=\"255\">";
 	$adminmain .= " <input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\"></form><br />";
-	$adminmain .= $L['Date']." : ".date($cfg['dateformat'], $row["poll_creationdate"])." GMT<br />";
+	$adminmain .= $L['Date']." : ".sed_build_date($cfg['dateformat'], $row["poll_creationdate"])." GMT<br />";
 	$adminmain .= "<table class=\"cells striped\">";
 	$adminmain .= "<tr><td>".$L['Delete']."</td><td>#</td><td>".$L['Option']."</td><td>&nbsp;</td></tr>";
 
@@ -175,7 +175,7 @@ else
 		$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=polls&a=delete&id=".$id."&".sed_xg())."\">".$out['img_delete']."</a></td>";
 		$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url("admin", "m=polls&a=reset&id=".$id."&".sed_xg())."\">R</a>]</td>";
 		$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url("admin", "m=polls&a=bump&id=".$id."&".sed_xg())."\">B</a>]</td>";
-		$adminmain .= "<td style=\"text-align:center;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
+		$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
 
 
 		$adminmain .= "<td><a href=\"".sed_url("admin", "m=polls&n=options&id=".$row['poll_id'])."\">".sed_cc($row['poll_text'])."</a></td>";
