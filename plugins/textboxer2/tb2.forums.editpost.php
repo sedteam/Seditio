@@ -40,7 +40,7 @@ $tb2ParseBBcodes=TRUE;
 $tb2ParseSmilies=TRUE;
 $tb2ParseBR=TRUE;
 
-$ta = $edittopictitle.sed_textboxer2('rtext',
+$ta = $edittopictitle.sed_textboxer2('rmsg',
 			'editpost',
 			sed_cc($fp_text),
 			$tb2TextareaRows,

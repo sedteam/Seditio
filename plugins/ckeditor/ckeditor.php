@@ -51,7 +51,8 @@ if ($usr['maingrp'] > 3) {
   //  
   $ck_rusertext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['rusertext'] : $ckeditor_global_toolbar;
   $ck_rtext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor'][$cfnt] : $ckeditor_global_toolbar;  
-  $ck_newmsg_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newmsg'] : $ckeditor_global_toolbar; 
+  $ck_rmsg_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newmsg'] : $ckeditor_global_toolbar;
+	$ck_newmsg_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newmsg'] : $ckeditor_global_toolbar; 
   $ck_newpagetext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['newpagetext'] : $ckeditor_global_toolbar;
   $ck_rpagetext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['rpagetext'] : $ckeditor_global_toolbar;
   $ck_rstext_toolbar = ($ckeditor_global_toolbar == 'Default') ? $cfg['plugin']['ckeditor']['rpagetext'] : $ckeditor_global_toolbar; 
@@ -59,6 +60,7 @@ if ($usr['maingrp'] > 3) {
   //
   $ck_rusertext_height = $cfg['plugin']['ckeditor']['rusertext_height'];  
   $ck_rtext_height = $cfg['plugin']['ckeditor'][$cfnh];
+  $ck_rmsg_height = $cfg['plugin']['ckeditor']['newmsg_height'];
   $ck_newmsg_height = $cfg['plugin']['ckeditor']['newmsg_height'];
   $ck_newpagetext_height = $cfg['plugin']['ckeditor']['newpagetext_height'];
   $ck_rstext_height = $cfg['plugin']['ckeditor']['newpagetext_height'];  
@@ -70,6 +72,7 @@ if ($usr['maingrp'] > 3) {
   $CkTextareas_option .= "CkTextareasName['rstext'] = '".$ck_rstext_toolbar."'; "."CkTextareasHeight['rstext'] = '".$ck_rstext_height."';";
   $CkTextareas_option .= "CkTextareasName['rdesc'] = '".$ck_rusertext_toolbar."'; "."CkTextareasHeight['rdesc'] = '".$ck_rusertext_height."';";
   $CkTextareas_option .= "CkTextareasName['newmsg'] = '".$ck_newmsg_toolbar."'; "."CkTextareasHeight['newmsg'] = '".$ck_newmsg_height."';";
+	$CkTextareas_option .= "CkTextareasName['rmsg'] = '".$ck_rmsg_toolbar."'; "."CkTextareasHeight['rmsg'] = '".$ck_rmsg_height."';";
   $CkTextareas_option .= "CkTextareasName['newpagetext'] = '".$ck_newpagetext_toolbar."'; "."CkTextareasHeight['newpagetext'] = '".$ck_newpagetext_height."';";
   $CkTextareas_option .= "CkTextareasName['rpagetext'] = '".$ck_rpagetext_toolbar."'; "."CkTextareasHeight['rpagetext'] = '".$ck_rpagetext_height."';";
   $CkTextareas_option .= "CkTextareasName['newpmtext'] = '".$ck_newpmtext_toolbar."'; "."CkTextareasHeight['newpmtext'] = '".$ck_newpmtext_height."';";     

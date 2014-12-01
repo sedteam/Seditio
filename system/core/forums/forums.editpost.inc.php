@@ -102,14 +102,14 @@ if ($a=='update')
 		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$rtext = sed_import('rtext','P','HTM');
+	$rmsg = sed_import('rmsg','P','HTM');
 	$rtopictitle = sed_import('rtopictitle','P','TXT', 64);
 	$rtopicdesc = sed_import('rtopicdesc','P','TXT', 64);
 	$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
-	if (!empty($rtext))
+	if (!empty($rmsg))
 		{
-		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='".sed_sql_prep($rtext)."', fp_text_ishtml='$ishtml', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
+		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='".sed_sql_prep($rmsg)."', fp_text_ishtml='$ishtml', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
 		}
 
 	if (!empty($rtopictitle))
@@ -148,16 +148,16 @@ if ($row = sed_sql_fetchassoc($sql))
 // -------
 if ($cfg['textmode']=='bbcode')
     {
-    $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('editpost', 'rtext', $L['BBcodes']) : '';
-    $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies('editpost', 'rtext', $L['Smilies'])." &nbsp; " : '';
+    $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('editpost', 'rmsg', $L['BBcodes']) : '';
+    $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies('editpost', 'rmsg', $L['Smilies'])." &nbsp; " : '';
     }
 else { $bbcodes = ''; $smilies = ''; } 
 // -------
    
-$pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
-$morejavascript .= sed_build_addtxt('editpost', 'rtext');
-$editpost_text = "<div id=\"ep\"><textarea name=\"rtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($fp_text, ENT_QUOTES)."</textarea></div>";
+$pfs = sed_build_pfs($usr['id'], 'editpost', 'rmsg', $L['Mypfs']);
+$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rmsg", $L['SFS']) : '';
+$morejavascript .= sed_build_addtxt('editpost', 'rmsg');
+$editpost_text = "<div id=\"ep\"><textarea name=\"rmsg\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($fp_text, ENT_QUOTES)."</textarea></div>";
 
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums","m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
