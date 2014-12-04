@@ -1,0 +1,24 @@
+div.tb3 table.tb3-special-chars {
+	width: 100%;
+}
+
+div.tb3 table.tb3-special-chars a {
+	display: block;
+	text-decoration: none;
+	color: #333;
+	width: 22px;
+	border: 1px solid #999;
+	border-top-color: #dedede;
+	border-left-color: #dedede;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+}
+
+div.tb3 table.tb3-special-chars a:hover {
+	background-color: #dedede;
+}
+
+div.tb3 table.tb3-special-chars td {
+	padding: 1px;
+}

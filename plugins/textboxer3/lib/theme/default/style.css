@@ -1,0 +1,77 @@
+div.tb3 {
+	background: #fff url(img/toolbar-bg.png) repeat-x;
+	border: 1px solid #999;
+}
+div.tb3-textarea {
+	border: 1px solid #999;
+	background: #fff url(img/textarea-bg.png) repeat-x;
+}
+div.tb3 textarea {
+	line-height: 18px;
+	padding: 4px 0;
+	height: 350px;
+	color: #333;
+	font-size: 14px;
+	background: #FFF;
+	clear: both;
+	line-height: 18px;
+	overflow: auto;
+	resize: vertical;
+	
+	
+}
+div.tb3-toolbar {
+	padding: 8px 0 8px 4px;
+}
+div.tb3-preview {
+	background: #fff url(img/toolbar-bg.png) repeat-x;
+}
+div.tb3-preview iframe {
+	background: #fff;
+}
+div.tb3-preview-header {
+	background: url(../img/preview.png) no-repeat 4px center;
+	border-bottom: 1px solid #999;
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
+	padding-left: 24px;
+	font-weight: bold;
+}
+div.tb3-dialog-body {
+	background: url(img/dialog-bg.png);
+}
+
+div.tb3-dialog-header, 
+div.tb3-dialog-footer, 
+div.tb3-dialog-tl,
+div.tb3-dialog-tr,
+div.tb3-dialog-bl,
+div.tb3-dialog-br {
+	height: 9px;
+}
+
+div.tb3-dialog-tl {
+	margin-right: 9px;
+	background: url(img/dialog-tl.png) no-repeat;
+}
+
+div.tb3-dialog-tr, div.tb3-dialog-br {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 9px;
+}
+
+div.tb3-dialog-tr {
+	background: url(img/dialog-tr.png) no-repeat;
+}
+
+div.tb3-dialog-br {
+	background: url(img/dialog-br.png) no-repeat;
+}
+
+div.tb3-dialog-bl {
+	margin-right: 9px;
+	background: url(img/dialog-bl.png) no-repeat;
+}
