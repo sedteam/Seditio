@@ -151,7 +151,7 @@ var sedjs = {
 				imgtitle = this.getAttribute("title");
 			  }          
 			  var randid = imglink.replace(/[^a-z0-9]/gi,'');
-			  sedjs.modal.open('img-'+randid, 'image', sedjs.get_basehref() + imglink, imgtitle, 'resize=0,scrolling=0,center=1', 'load');
+			  sedjs.modal.open('img-'+randid, 'image', imglink, imgtitle, 'resize=0,scrolling=0,center=1', 'load');
 			  return false;
 			}
 		  }
