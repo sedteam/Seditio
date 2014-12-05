@@ -367,7 +367,7 @@ Tb3.conf.html = {
 				{
 					open: '<a{attributes}>',
 					close: '</a>',
-					name: 'a',
+					name: 'url',
 					title: 'Link',
 					attributes: [
 						{
@@ -414,7 +414,104 @@ Tb3.conf.html = {
     		}
 			]
 		},		
-    Tb3.addons.hcolorPicker,	
+    Tb3.addons.hcolorPicker,
+		{
+			name: 'video',
+			title: 'Insert Video',
+			className: 'video',      
+			dropDownMenu: [
+    		{
+    			name: 'youtube',
+			    className: 'youtube',
+    			title: 'Youtube video',
+    			open: '<iframe width="425" height="300" src="//www.youtube.com/embed/{videoid}" frameborder="0" allowfullscreen></iframe>',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://www.youtube.com/watch?v=(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'vk',
+			    className: 'vk',
+    			title: 'Vkontakte video',
+    			open: '<iframe src="http://vkontakte.ru/video_ext.php?oid={videoid}" width="425" height="350" frameborder="0"></iframe>',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://vkontakte.ru/video_ext.php?oid=(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'dailymotion',
+			    className: 'dailymotion',
+    			title: 'Dailymotion video',
+    			open: '<iframe width="425" height="300" src="http://www.dailymotion.com/embed/video/{videoid}" frameborder="0" allowfullscreen></iframe>',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://www.dailymotion.com/embed/video/(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'vimeo',
+			    className: 'vimeo',
+    			title: 'Vimeo video',
+    			open: '<iframe src="http://player.vimeo.com/video/{videoid}" width="425" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://player.vimeo.com/video/(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'metacafe',
+			    className: 'metacafe',
+    			title: 'MetaCafe video',
+    			open: '<iframe src="http://www.metacafe.com/embed/{videoid}/" width="425" height="248" allowFullScreen frameborder=0></iframe>',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://www.metacafe.com/fplayer/(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'rutube',
+			    className: 'rutube',
+    			title: 'Rutube video',
+    			open: '<iframe width="425" height="281" src="http://rutube.ru/video/embed/{videoid}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://video.rutube.ru/(***)'
+    				}       
+    			]
+    		}  
+			]
+		},			
 		{
 			name: 'stags',
 			title: 'Seditio tags',
@@ -615,7 +712,7 @@ Tb3.conf.html = {
 		{
 			name: 'more',
 			title: 'More separator line',
-			open: '[more]',
+			open: '<hr id="readmore" />',
 			close: ''
 		},
 		Tb3.addons.searchAndReplace,				

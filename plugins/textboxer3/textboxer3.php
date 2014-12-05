@@ -30,6 +30,8 @@ $tb3_detect_lang = $cfg['plugin']['textboxer3']['tb3_detectlang'];
 
 $tb3_lang = ($tb3_detect_lang == "No") ? $cfg['plugin']['textboxer3']['tb3_lang'] : $usr['lang'];
 
+$tb3_mode = ($cfg['textmode'] == 'html') ? 'html' : 'bbcode'; 
+
 // Toolbars
 $tb3_toolbar['pages'] = $cfg['plugin']['textboxer3']['tb3_toolbar_pages'];  //pages toolbar
 $tb3_toolbar['forums'] = $cfg['plugin']['textboxer3']['tb3_toolbar_forums'];  //forums toolbar
@@ -70,16 +72,17 @@ $moremetas .= "<script type=\"text/javascript\">
 ".$smiley."
 var tb3textareasName = {'rusertext':'".$tb3_toolbar['users']."','rtext':'".$tb3_toolbar['comments']."','rstext':'".$tb3_toolbar['pages']."','rdesc':'".$tb3_toolbar['users']."','rmsg':'".$tb3_toolbar['forums']."','newmsg':'".$tb3_toolbar['forums']."','newpagetext':'".$tb3_toolbar['pages']."','rpagetext':'".$tb3_toolbar['pages']."','newpmtext':'".$tb3_toolbar['pm']."'};
 var tb3textareasHeight = {'rusertext':'".$tb3_height['users']."','rtext':'".$tb3_height['comments']."','rstext':'".$tb3_height['pages']."','rdesc':'".$tb3_height['users']."','rmsg':'".$tb3_height['forums']."','newmsg':'".$tb3_height['forums']."','newpagetext':'".$tb3_height['pages']."','rpagetext':'".$tb3_height['pages']."','newpmtext':'".$tb3_height['pm']."'};
+
 function tb3Replace() {
 	var textareas = document.getElementsByTagName('textarea');
 	for (var i = 0; i < textareas.length; i++) { 
 		if (tb3textareasName[textareas[i].getAttribute('name')] != undefined) {
 			 Tb3.toolbar = tb3toolbars[tb3textareasName[textareas[i].getAttribute('name')]];
-			 Tb3.bind(textareas[i], 'bbcode', tb3textareasHeight[textareas[i].getAttribute('name')]);
+			 Tb3.bind(textareas[i], '".$tb3_mode."', tb3textareasHeight[textareas[i].getAttribute('name')]);
 		}
 		if (textareas[i].getAttribute('class') != 'noeditor' && tb3textareasName[textareas[i].getAttribute('name')] == undefined) {
 			 Tb3.toolbar = tb3toolbars[tb3textareasName[textareas[i].getAttribute('name')]];
-			 Tb3.bind(textareas[i], 'bbcode', ".$tb3_height['other'].");
+			 Tb3.bind(textareas[i], '".$tb3_mode."', ".$tb3_height['other'].");
 		}
 	}
 }

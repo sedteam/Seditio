@@ -4,7 +4,7 @@ tb3toolbars['Full'] =
 [
 	'bold', 'italic', 'underline', 'del', '/',
 	'h', 'htags', 'aligns', 'omega', '/',
-	'img', 'thumb', 'columns', 'urls', 'colors', 'color', 'stags', '/',
+	'img', 'thumb', 'columns', 'urls', 'colors', 'color', 'video', 'stags', '/',
 	'fonts', 'ul', 'ol', 'li', 'quote', 'code', 'smilies',  '/',
 	'help', 'find', 'more', 'preview'
 ];

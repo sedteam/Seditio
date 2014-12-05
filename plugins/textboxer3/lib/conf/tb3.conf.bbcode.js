@@ -441,6 +441,103 @@ Tb3.conf.bbcode = {
 			]
 		},
 		{
+			name: 'video',
+			title: 'Insert Video',
+			className: 'video',      
+			dropDownMenu: [
+    		{
+    			name: 'youtube',
+			    className: 'youtube',
+    			title: 'Youtube video',
+    			open: '[youtube={videoid}]',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://www.youtube.com/watch?v=(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'vk',
+			    className: 'vk',
+    			title: 'Vkontakte video',
+    			open: '[vk={videoid}]',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://vkontakte.ru/video_ext.php?oid=(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'dailymotion',
+			    className: 'dailymotion',
+    			title: 'Dailymotion video',
+    			open: '[dailymotion={videoid}]',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://www.dailymotion.com/embed/video/(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'vimeo',
+			    className: 'vimeo',
+    			title: 'Vimeo video',
+    			open: '[vimeo={videoid}]',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://player.vimeo.com/video/(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'metacafe',
+			    className: 'metacafe',
+    			title: 'MetaCafe video',
+    			open: '[metacafe={videoid}]',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://www.metacafe.com/fplayer/(***)'
+    				}       
+    			]
+    		},
+    		{
+    			name: 'rutube',
+			    className: 'rutube',
+    			title: 'Rutube video',
+    			open: '[rutube={videoid}]',
+    			close: '',
+    			attributes: [
+    				{
+    					type: 'text',
+    					name: 'videoid',
+    					label: 'Video #ID',
+    					help: 'Enter part *** URL http://video.rutube.ru/(***)'
+    				}       
+    			]
+    		}  
+			]
+		},
+		{
 			name: 'stags',
 			title: 'Seditio tags',
 			className: 'stags',      

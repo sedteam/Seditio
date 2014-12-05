@@ -191,7 +191,7 @@ div.tb3 div.tb3-dialog dt {
 	float: left;
 	display: block;
 	margin-right: 8px;
-	width: 140px;
+	width: 138px;
 	text-align: right;
 	line-height: 27px;
 	height: 27px;
@@ -200,6 +200,12 @@ div.tb3 div.tb3-dialog dt {
 div.tb3 div.tb3-dialog dt label {
 	color: #666666;
 	font-size: 13px;
+}
+
+div.tb3 div.tb3-dialog .tb3help {
+	color: #990000;
+	font-size: 11px;
+	text-align:center;
 }
 
 div.tb3 div.tb3-dialog dd input {
@@ -303,6 +309,7 @@ div.tb3 a.htags 			{ background-position: 0px -800px; }
 div.tb3 a.more 				{ background-position: 0px -820px; }
 div.tb3 a.find 				{ background-position: 0px -860px; }
 div.tb3 a.smilies 		{ background-position: 0px -980px; }
+div.tb3 a.video 			{ background-position: 0px -1000px; }
 div.tb3 a.preview 		{ background-position: 0px -1340px; }
 div.tb3 a.h 					{ background-position: 0px -1140px; }
 div.tb3 a.del 				{ background-position: 0px -1360px; }
@@ -349,6 +356,12 @@ div.tb3 div.tb3-ddmenu a.topic 					{ background-position: 0px -880px; }
 div.tb3 div.tb3-ddmenu a.spost 					{ background-position: 0px -900px; }
 div.tb3 div.tb3-ddmenu a.pm 						{ background-position: 0px -920px; }
 div.tb3 div.tb3-ddmenu a.user 					{ background-position: 0px -720px; }
+div.tb3 div.tb3-ddmenu a.youtube 				{ background-position: 0px -1000px; }
+div.tb3 div.tb3-ddmenu a.dailymotion		{ background-position: 0px -1020px; }
+div.tb3 div.tb3-ddmenu a.metacafe				{ background-position: 0px -1040px; }
+div.tb3 div.tb3-ddmenu a.vimeo					{ background-position: 0px -1060px; }
+div.tb3 div.tb3-ddmenu a.rutube					{ background-position: 0px -1100px; }
+div.tb3 div.tb3-ddmenu a.vk							{ background-position: 0px -1120px; }
 div.tb3 div.tb3-ddmenu a.h1 						{ background-position: 0px -1140px; }
 div.tb3 div.tb3-ddmenu a.h2 						{ background-position: 0px -1160px; }
 div.tb3 div.tb3-ddmenu a.h3 						{ background-position: 0px -1180px; }

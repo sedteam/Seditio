@@ -78,7 +78,14 @@ Tb3.lang = {
 		'more':           ['Link read more', ''],
 		'del':            ['Strikeout text', 'Make the selected text strikeout'],
 		'omega':          ['Special chars', 'Insert Special Chars'],
-		'commons':        ['Plugins', '']
+		'commons':        ['Plugins', ''],
+		'video':          ['Video', 'Insert video'],
+		'youtube':        ['Youtube video', 'Insert Youtube video'],
+		'vk':             ['Vkontakte video', 'Insert Vkontakte video'],
+		'metacafe':       ['Metacafe video', 'Insert Metacafe video'],
+		'vimeo':          ['Vimeo video', 'Insert Vimeo video'],
+		'rutube':         ['Rutube video', 'Insert Rutube video'],
+		'dailymotion':    ['Dailymotion video', 'Insert Dailymotion video']
 	},
 	attributes:
 	{
@@ -108,6 +115,7 @@ Tb3.lang = {
 		'file':           ['File Name', ''],
 		'topic':          ['ID topic', ''],
 		'post':           ['ID messages', ''],
-		'pm':             ['ID user', '']
+		'pm':             ['ID user', ''],
+		'videoid':        ['Video URL', '']
 	}
 };

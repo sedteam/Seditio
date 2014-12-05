@@ -36,26 +36,32 @@ function addthumb(thmb, image)
 	{ 	
 	var textarea = window.".$openerparent.".Tb3.getInstanceByName('".$c2."');
 	var selection = textarea.selection(); console.log(selection);
-	textarea.paste('[thumb='+thmb+']'+image+'[/thumb]');
+	var textmode = textarea.activeconfig();
+	var html = '<a href=\"".$cfg['pfs_dir']."'+image+'\" rel=\"sedthumb\"><img src=\"'+thmb+'\" alt=\"\" /></a>';
+	var bbcode = '[thumb='+thmb+']'+image+'[/thumb]';
+	var pastetext = (textmode == 'html') ? html : bbcode;
+	textarea.paste(pastetext);
  }
 function addpix(gfile)
 	{ 
 	var textarea = window.".$openerparent.".Tb3.getInstanceByName('".$c2."');
 	var selection = textarea.selection(); console.log(selection);
-	textarea.paste('[img]'+gfile+'[/img]');	
+	var textmode = textarea.activeconfig();
+	var html = '<img src=\"'+gfile+'\" alt=\"\" />';
+	var bbcode = '[img]'+gfile+'[/img]';
+	var pastetext = (textmode == 'html') ? html : bbcode;	 
+	textarea.paste(pastetext);	
  }
 function addfile(gfile, gpath)
 	{ 
 	var textarea = window.".$openerparent.".Tb3.getInstanceByName('".$c2."');
 	var selection = textarea.selection(); console.log(selection);
-	textarea.paste('[pfs]".$cfg['rel_dir']."'+gfile+'[/pfs]');		
+	var textmode = textarea.activeconfig();
+	var html = '<a href=\"'+gpath+'\" title=\"\">'+gfile+'</a>';
+	var bbcode = '[pfs]".$cfg['rel_dir']."'+gfile+'[/pfs]';
+	var pastetext = (textmode == 'html') ? html : bbcode;	
+	textarea.paste(pastetext);		
  }
-function addglink(id)
-	{ 
-	var textarea = window.".$openerparent.".Tb3.getInstanceByName('".$c2."');
-	var selection = textarea.selection(); console.log(selection);
-	textarea.paste('[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]');	
- }	
 function addfile_pageurl(gfile)
 	{ ".$openerparent.".document.".$c1.".".$c2.".value += gfile; }	
 //-->

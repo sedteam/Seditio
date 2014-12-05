@@ -244,10 +244,11 @@ var Tb3 = function() {
 		
 		var cnt = 0, container;
 		
-		var append = function(o1, o2) {		
+		var append = function(o1, o2, o3) {		
 			container.innerHTML += '<dl><dt></dt><dd></dd></dl>';
 			container.getElementsByTagName('dt')[cnt].appendChild(o1);
 			container.getElementsByTagName('dd')[cnt++].appendChild(o2);
+			if (o3) container.innerHTML += '<div class="tb3help">' + o3 + '</div>';
 		};
 		
 		var label = function(value) {
@@ -273,7 +274,7 @@ var Tb3 = function() {
 			if (langat[atts.name]) { atts.label = langat[atts.name][0]; } 
 			/////
 						
-			append(label(atts.label), input);
+			append(label(atts.label), input, atts.help);
 			input = null;
 		};
 		
@@ -1290,6 +1291,10 @@ var Tb3 = function() {
 		
 		this.paste = function(string) {
 			paste(string);
+		};
+		
+		this.activeconfig = function() {
+			return config.name;
 		};
 		
 		this.insert = function(options) {
