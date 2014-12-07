@@ -254,7 +254,7 @@ foreach ($forum_subforums as $key => $row)
 			{
 			$fsnn = $forum_subforums[$key];
 			$fsnn['fs_lt_date'] = sed_build_date($cfg['formatmonthdayhourmin'], $fsnn['fs_lt_date']);
-			$fsnn['lastpost'] = ($usr['id']>0 && $fsnn['fs_lt_date']>$usr['lastvisit'] && $fsnn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=unread", "#unread").">" : "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom")."\">";
+			$fsnn['lastpost'] = ($usr['id']>0 && $fsnn['fs_lt_date']>$usr['lastvisit'] && $fsnn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=unread", "#unread")."\">" : "<a href=\"".sed_url("forums", "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom")."\">";
 			$fsnn['lastpost'] .= sed_cutstring($fsnn['fs_lt_title'], 32)."</a>";
 			$fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);
 
