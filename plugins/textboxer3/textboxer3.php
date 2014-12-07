@@ -27,6 +27,7 @@ Order=10
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $tb3_detect_lang = $cfg['plugin']['textboxer3']['tb3_detectlang'];
+$tb3_other_textarea = $cfg['plugin']['textboxer3']['tb3_other_textarea'];
 
 $tb3_lang = ($tb3_detect_lang == "No") ? $cfg['plugin']['textboxer3']['tb3_lang'] : $usr['lang'];
 
@@ -68,6 +69,11 @@ $moremetas .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/textbox
 <script type=\"text/javascript\" src=\"plugins/textboxer3/lib/conf/tb3.conf.html.js\"></script>
 <script type=\"text/javascript\" src=\"plugins/textboxer3/lib/conf/tb3.toolbars.js\"></script>";
 
+$other_textarea = ($tb3_other_textarea == "Yes") ? "if (textareas[i].getAttribute('class') != 'noeditor' && tb3textareasName[textareas[i].getAttribute('name')] == undefined) {
+			 Tb3.toolbar = tb3toolbars['".$tb3_toolbar['other']."'];
+			 Tb3.bind(textareas[i], '".$tb3_mode."', ".$tb3_height['other'].");
+		}" : "";
+
 $moremetas .= "<script type=\"text/javascript\">
 ".$smiley."
 var tb3textareasName = {'rusertext':'".$tb3_toolbar['users']."','rtext':'".$tb3_toolbar['comments']."','rstext':'".$tb3_toolbar['pages']."','rdesc':'".$tb3_toolbar['users']."','rmsg':'".$tb3_toolbar['forums']."','newmsg':'".$tb3_toolbar['forums']."','newpagetext':'".$tb3_toolbar['pages']."','rpagetext':'".$tb3_toolbar['pages']."','newpmtext':'".$tb3_toolbar['pm']."'};
@@ -80,10 +86,7 @@ function tb3Replace() {
 			 Tb3.toolbar = tb3toolbars[tb3textareasName[textareas[i].getAttribute('name')]];
 			 Tb3.bind(textareas[i], '".$tb3_mode."', tb3textareasHeight[textareas[i].getAttribute('name')]);
 		}
-		if (textareas[i].getAttribute('class') != 'noeditor' && tb3textareasName[textareas[i].getAttribute('name')] == undefined) {
-			 Tb3.toolbar = tb3toolbars[tb3textareasName[textareas[i].getAttribute('name')]];
-			 Tb3.bind(textareas[i], '".$tb3_mode."', ".$tb3_height['other'].");
-		}
+		".$other_textarea."
 	}
 }
 if (window.addEventListener) { window.addEventListener('load', tb3Replace, false);
