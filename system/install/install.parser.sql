@@ -64,4 +64,4 @@ INSERT INTO `sed_parser` VALUES(63, 'Columns', 0, 1, 330, '\\[c1\\:([^\\\\[]*)\\
 INSERT INTO `sed_parser` VALUES(64, 'Paragraph', 0, 0, 23, '[p]', '[/p]', '<p>', '</p>', 1);
 INSERT INTO `sed_parser` VALUES(65, 'PFS', 0, 1, 25, '\\[pfs\\]([^\\\\([]*)\\[\\/pfs\\]', NULL, '<a href="datas/users/$1"><img src="system/img/admin/pfs.png" alt="" />$1</a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(66, 'Headers h1-h6', 0, 1, 24, '\\[h([1-6])\\](.+?)\\[/h\\1\\]', '', '<h$1>$2</h$1>', '', 1);
-INSERT INTO `sed_parser` VALUES(67, 'Size 1-29', 0, 1, 25, '\\[size=([1-2][0-9]?)\\](.+?)\\[\\/size\\]', '', '<span style="font-size:$1pt">$2</span>', '', 1);
+INSERT INTO `sed_parser` VALUES(67, 'Size 1-29', 0, 1, 25, '\\[size=([1-2]?[0-9]?)\\](.+?)\\[\\/size\\]', '', '<span style="font-size:$1pt">$2</span>', '', 1);
