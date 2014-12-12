@@ -56,7 +56,7 @@ switch ($a)
 	$avatar = str_replace($cfg['av_dir'],'', $usr['profile']['user_avatar']);
 	$avatarpath = $usr['profile']['user_avatar'];
 
-	if (file_exists($avatarpath))
+	if (file_exists($avatarpath) && mb_strpos($avatarpath, $cfg['defav_dir']) === false)
 		{ unlink($avatarpath); }
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
@@ -430,7 +430,9 @@ if ($a=='avatarchoose')
 	$handle = opendir($cfg['defav_dir']);
 	while ($f = readdir($handle))
 		{
-		if ($f != "." && $f != "..")
+		$extens = pathinfo($f, PATHINFO_EXTENSION);
+		
+		if ($f != "." && $f != ".." && in_array($extens, $cfg['gd_supported']))
 			{ $profile_form_avatar .= "<a href=\"".sed_url("users", "m=profile&a=avatarselect&".sed_xg()."&id=".urlencode($f), "#avatar")."\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> "; }
 		}
 	closedir($handle);

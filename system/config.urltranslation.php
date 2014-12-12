@@ -209,6 +209,11 @@ $sed_urltrans['users'] = array(
     ),
     /**/
     array(
+          'params' => 'm=*&a=*', 
+          'rewrite' => 'users/{m}/{a}'
+    ),
+    /**/
+    array(
           'params' => 'm=*&id=*', 
           'rewrite' => 'users/{m}/{id}'
     ),

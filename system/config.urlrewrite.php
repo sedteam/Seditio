@@ -158,7 +158,11 @@ $sed_urlrewrite = array(
     array(
          'cond' => '#^/users/maingroup/([0-9]+)(/?)$#',
          'rule' => 'users.php?g=$1'
-    ),   
+    ),
+    array(
+         'cond' => '#^/users/([a-zA-Z]+)/([a-zA-Z]+)(/?)$#',
+         'rule' => 'users.php?m=$1&a=$2'
+    ),  		   
     array(
          'cond' => '#^/users/([a-zA-Z]+)/([0-9]+)(/?)$#',
          'rule' => 'users.php?m=$1&id=$2'
