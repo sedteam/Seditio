@@ -282,10 +282,11 @@ switch($m)
 	$checked = ($v=='jevix' && $cfg['textmode']=='bbcode') ? '' : $checked;
 	$checked = ($v=='ckeditor' && $cfg['textmode']=='bbcode') ? '' : $checked;
 	
-	$checked = ($v=='textboxer2' && $cfg['textmode']=='html') ? '' : $checked;
+	$checked = ($v=='textboxer2') ? '' : $checked;
+	$checked = ($v=='textboxer3' && $cfg['textmode']=='html') ? '' : $checked;
 	$checked = ($v=='parserman' && $cfg['textmode']=='html') ? '' : $checked;
        
-    $disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
+  $disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
 	
 	$res .= "<tr><td style=\"width:6%; text-align:center;\">";
     $res .= sed_plugin_icon($v);  
