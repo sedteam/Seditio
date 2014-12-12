@@ -271,6 +271,14 @@ $adminmain .= "Adding the 'enablemodal' new config into the core<br />";
 $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
 VALUES ('core', 'main', '14', 'enablemodal', 3, '0', '')";
 $adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+// Thumbnail rel atribute
+
+$adminmain .= "Adding the 'th_rel' new config into the core<br />";
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'pfs', '10', 'th_rel', 2, 'sedthumb', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);  
 
 $adminmain .= "Changing the SQL version number to 175...<br />";
