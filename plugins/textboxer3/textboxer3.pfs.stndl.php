@@ -37,7 +37,7 @@ function addthumb(thmb, image)
 	var textarea = window.".$openerparent.".Tb3.getInstanceByName('".$c2."');
 	var selection = textarea.selection(); console.log(selection);
 	var textmode = textarea.activeconfig();
-	var html = '<a href=\"".$cfg['pfs_dir']."'+image+'\" rel=\"sedthumb\"><img src=\"'+thmb+'\" alt=\"\" /></a>';
+	var html = '<a href=\"".$cfg['pfs_dir']."'+image+'\" rel=\"".$cfg['th_rel']."\"><img src=\"'+thmb+'\" alt=\"\" /></a>';
 	var bbcode = '[thumb='+thmb+']'+image+'[/thumb]';
 	var pastetext = (textmode == 'html') ? html : bbcode;
 	textarea.paste(pastetext);

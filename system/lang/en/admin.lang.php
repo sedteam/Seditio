@@ -167,6 +167,7 @@ $L['cfg_th_keepratio'] = array("Thumbnail, keep ratio ?", "");
 $L['cfg_th_jpeg_quality'] = array("Thumbnails, Jpeg quality", "Default: 85");
 $L['cfg_th_colorbg'] = array("Thumbnails, border color", "Default: 000000, hex color code");
 $L['cfg_th_colortext'] = array("Thumbnails, text color", "Default: FFFFFF, hex color code");
+$L['cfg_th_rel'] = array("Thumbnail rel attribute", "Default: sedthumb"); // New in v175
 $L['cfg_th_dimpriority'] = array("Thumbnails, resize by", "Default: Width");       // New in v160
 $L['cfg_th_textsize'] = array("Thumbnails, size of the text", "");
 $L['cfg_pfs_filemask'] = array("File names based on pattern of time", "Generate file names on a pattern of time");  // New in sed172

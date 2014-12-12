@@ -416,6 +416,7 @@ $result[] = array ('pfs', '10', 'th_keepratio', 3, '1', '');
 $result[] = array ('pfs', '10', 'th_jpeg_quality', 2, '85', array(0,5,10,20,30,40,50,60,70,75,80,85,90,95,100));
 $result[] = array ('pfs', '10', 'th_colorbg', 2, '000000', '');
 $result[] = array ('pfs', '10', 'th_colortext', 2, 'FFFFFF', '');
+$result[] = array ('pfs', '10', 'th_rel', 2, 'sedthumb', '');
 $result[] = array ('pfs', '10', 'th_textsize', 2, '0', array(0,1,2,3,4,5));
 // ---- New in v173
 $result[] = array ('rss', '01', 'disable_rss', 3, '0', '');

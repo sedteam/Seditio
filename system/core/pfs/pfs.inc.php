@@ -447,7 +447,7 @@ while ($row = sed_sql_fetchassoc($sql))
   if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
 		{		
     $setassample = ($pfs_id==$pff_sample) ?  $out['img_checked'] : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\">".$out['img_set']."</a>";    
-    $pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"sedthumb\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
+    $pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"".$cfg['th_rel']."\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
 		
 		if (!file_exists($cfg['th_dir'].$pfs_file) && file_exists($cfg['pfs_dir'].$pfs_file))
 			{

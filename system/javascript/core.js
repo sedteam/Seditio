@@ -41,11 +41,17 @@ var sedjs = {
 		
 	/*= Picture show 
 	-------------------------------------*/						
-	picture : function(url,sx,sy)
+	picture : function(url,sx,sy,modal)
 		{
-		  var ptop=(window.screen.height-200)/2;
-		  var pleft=(window.screen.width-200)/2;
-		  window.open(sedjs.get_basehref()+url,'Picture','toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left='+pleft+',top='+ptop+'');
+		  if (!modal) { 
+				var ptop=(window.screen.height-200)/2;
+			  var pleft=(window.screen.width-200)/2;
+			  window.open(sedjs.get_basehref()+'pfs.php?m=view&v='+url,'Picture','toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left='+pleft+',top='+ptop+'');
+			} else {
+			  var imglink = 'datas/users/'+url;
+			  var randid = imglink.replace(/[^a-z0-9]/gi,'');
+			  sedjs.modal.open('img-'+randid, 'image', imglink, 'Picture', 'resize=0, scrolling=0, center=1', 'load');
+			}
 		},
 	  
 	/*= Redirect
