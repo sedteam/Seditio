@@ -987,15 +987,26 @@ function sed_build_country($flag)
  * Returns date 
  * 
  * @param string $formatmask Date mask
- * @param int $udate Date in UNIX timestamp  
- * @return string 
+ * @param int $udate Date in UNIX timestamp
+ * @param string $mask Custom date mask   
+ * @return string
+ * @example $mask = "<span class=\"sdate\">{d-m-Y}</span><span class=\"stime\">{H:i}</span>";  
  */
-function sed_build_date($dateformat, $udate)
+function sed_build_date($dateformat, $udate, $mask = "")
 	{
 	global $usr, $cfg;
 	
-	$result = @date($dateformat, $udate + $usr['timezone'] * 3600);
-	return($result);	   
+	$udate = $udate + $usr['timezone'] * 3600;
+	
+	if (!empty($mask))
+		{
+		$mask = preg_replace('#\{(.+?)\}#isu', "{{".$udate."}{\$1}}", $mask); 
+		$result = preg_replace_callback('#\{\{(.+?)\}\{(.+?)\}\}#isu', create_function('$matches', 'return @date($matches[2], $matches[1]);'), $mask);
+		return($result);
+		}
+
+	$result = @date($dateformat, 	$udate);
+	return($result);
 	}	
 
 /** 
