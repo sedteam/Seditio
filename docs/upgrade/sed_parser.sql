@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `sed_parser` (
   `parser_code2` mediumtext COLLATE utf8_unicode_ci,
   `parser_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`parser_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=68 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 INSERT INTO `sed_parser` VALUES(1, 'Bold', 0, 0, 1, '[b]', '[/b]', '<strong>', '</strong>', 1);
 INSERT INTO `sed_parser` VALUES(2, 'Underline', 0, 0, 2, '[u]', '[/u]', '<u>', '</u>', 1);
@@ -39,8 +39,8 @@ INSERT INTO `sed_parser` VALUES(24, 'BR', 0, 0, 21, '[br]', '', '<br />', '', 1)
 INSERT INTO `sed_parser` VALUES(25, 'More', 0, 0, 22, '[more]', '[/more]', '<!--readmore-->', '', 1);
 INSERT INTO `sed_parser` VALUES(26, 'Image 1', 0, 1, 10, '\\[img\\]([^\\\\\\''\\;\\?[]*)\\.(jpg|jpeg|gif|png)\\[\\/img\\]', '', '<img src="$1.$2" alt="" />', '', 1);
 INSERT INTO `sed_parser` VALUES(27, 'Image 2', 0, 1, 20, '\\[img=([^\\\\\\''\\;\\?[]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/img\\]', '', '<a href="$1.$2"><img src="$3.$4" alt="" /></a>', '', 1);
-INSERT INTO `sed_parser` VALUES(28, 'Thumbnail PFS', 0, 1, 30, '\\[thumb=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/thumb\\]', NULL, '<a href="javascript:picture(''pfs.php?m=view&amp;v=$3.$4'', 200,200)"><img src="$1.$2" alt="" /></a>', NULL, 1);
-INSERT INTO `sed_parser` VALUES(29, 'Thumbnails', 0, 1, 40, '\\[t=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/t\\]', NULL, '<a href="$3.$4"><img src="$1.$2" alt="" /></a>', NULL, 1);
+INSERT INTO `sed_parser` VALUES(28, 'Thumbnail PFS', 0, 1, 30, '\\[thumb=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/thumb\\]', NULL, '<a href="javascript:sedjs.picture(''$3.$4'', 200,200)"><img src="$1.$2" alt="" /></a>', NULL, 1);
+INSERT INTO `sed_parser` VALUES(29, 'Thumbnails', 0, 1, 40, '\\[t=([^\\\\\\''\\;\\?([]*)\\.(jpg|jpeg|gif|png)\\]([^\\\\[]*)\\.(jpg|jpeg|gif|png)\\[\\/t\\]', NULL, '<a href="$3.$4" rel="sedthumb"><img src="$1.$2" alt="" /></a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(30, 'Url 1', 0, 1, 50, '\\[url\\]([^\\\\([]*)\\[\\/url\\]', NULL, '<a href="$1">$1</a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(31, 'Url 2', 0, 1, 60, '\\[url=([^\\\\\\''\\;([]*)\\]([^\\\\[]*)\\[\\/url\\]', NULL, '<a href="$1">$2</a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(32, 'Colors', 0, 1, 70, '\\[color=([0-9A-F]{6})\\]([^\\\\[]*)\\[\\/color\\]', '', '<span style="color:#$1">$2</span>', NULL, 1);
@@ -78,4 +78,4 @@ INSERT INTO `sed_parser` VALUES(63, 'Columns', 0, 1, 330, '\\[c1\\:([^\\\\[]*)\\
 INSERT INTO `sed_parser` VALUES(64, 'Paragraph', 0, 0, 23, '[p]', '[/p]', '<p>', '</p>', 1);
 INSERT INTO `sed_parser` VALUES(65, 'PFS', 0, 1, 25, '\\[pfs\\]([^\\\\([]*)\\[\\/pfs\\]', NULL, '<a href="datas/users/$1"><img src="system/img/admin/pfs.png" alt="" />$1</a>', NULL, 1);
 INSERT INTO `sed_parser` VALUES(66, 'Headers h1-h6', 0, 1, 24, '\\[h([1-6])\\](.+?)\\[/h\\1\\]', '', '<h$1>$2</h$1>', '', 1);
-INSERT INTO `sed_parser` VALUES(67, 'Size 1-29', 0, 1, 25, '\\[size=([1-2][0-9]?)\\](.+?)\\[\\/size\\]', '', '<span style="font-size:$1pt">$2</span>', '', 1);
+INSERT INTO `sed_parser` VALUES(67, 'Size 1-29', 0, 1, 25, '\\[size=([1-2]?[0-9]?)\\](.+?)\\[\\/size\\]', '', '<span style="font-size:$1pt">$2</span>', '', 1);
