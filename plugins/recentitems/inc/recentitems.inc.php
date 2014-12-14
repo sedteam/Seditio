@@ -110,23 +110,26 @@ function sed_get_latestpolls($limit, $mask)
 	$vote = sed_import('vote','G','INT');
 	
 	// -- AJAX Poll vote
-	if ($ajax && $cfg['ajax'] && $a == "send" && !empty($id) && !empty($vote))
+	if ($ajax && $cfg['ajax'] && $a == "send")
 	{
-		if ($usr['id']>0)
-			{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
-				else
-			{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
-		
-		$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;
-
-		if (!$alreadyvoted)
+		if (!empty($id) && !empty($vote))
 			{
-			$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 
-						WHERE po_pollid='$id' AND po_id='$vote'");
-			if (sed_sql_affectedrows()==1)
+			if ($usr['id']>0)
+				{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
+					else
+				{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
+			
+			$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;
+	
+			if (!$alreadyvoted)
 				{
-				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) 
-						VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
+				$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 
+							WHERE po_pollid='$id' AND po_id='$vote'");
+				if (sed_sql_affectedrows()==1)
+					{
+					$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) 
+							VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
+					}
 				}
 			}
 	}
