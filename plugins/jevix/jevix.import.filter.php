@@ -26,9 +26,30 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-global $usr, $location;
+global $usr, $location, $flocation;
 
 require_once('plugins/jevix/inc/jevix.class.php');
+
+$jevix_filter_settings = array(
+  'Pages' => 'full', 
+  'Private_Messages' => 'medium', 
+  'Polls' => 'micro', 
+  'Gallery' => 'micro', 
+  'PFS' => 'micro', 
+  'Users' => 'micro', 
+  'Plugins' => 'full', 
+  'Forums' => 'full',
+  'Comments' => 'medium', 
+  'Administration' => 'full'
+);
+
+$flocation = (empty($flocation)) ? $location : $flocation;
+
+if (array_key_exists($flocation, $jevix_filter_settings))
+  {
+  $filter = $jevix_filter_settings[$flocation];
+  }
+else { $filter = 'micro'; }
 
 // Use XHTML ?
 $use_xhtml = ($cfg['plugin']['jevix']['use_xhtml'] == "yes") ? true : false;  
@@ -37,8 +58,6 @@ $use_xhtml = ($cfg['plugin']['jevix']['use_xhtml'] == "yes") ? true : false;
 $use_admin = (($cfg['plugin']['jevix']['use_for_admin'] == "no") && ($usr['maingrp'] == 5)) ? false : true;
 
 // Use jevix only html mode
-if ($cfg['textmode'] != "bbcode") { $v = jevix($v, $use_xhtml, $use_admin); }
-
-
+if ($cfg['textmode'] != "bbcode") { $v = sed_jevix($v, $filter, $use_xhtml, $use_admin); }
 
 ?>

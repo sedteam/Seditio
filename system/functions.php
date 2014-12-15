@@ -461,7 +461,9 @@ function sed_build_catpath($cat, $mask)
  */
 function sed_build_comments($code, $url, $display, $allow = TRUE)
 	{
-	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $skin, $ishtml;
+	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $skin, $flocation, $ishtml;
+	
+	$flocation = 'Comments';
 	
 	$n = sed_import('n', 'G', 'ALP');
 	$a = sed_import('a', 'G', 'ALP');

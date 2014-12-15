@@ -1,125 +1,169 @@
 <?php
 
-function jevix($text, $xhtml = false, $use_admin = true) {
-      
-  global $location;
+function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true) 
+  {	
+  if ($use_admin == false) return $text; //Disable Jevix for Admin	
 	
-	if ($use_admin == false) return $text;
-	
-	$jevix = new Jevix();
+  $jevix = new Jevix();
 
-	// For User profile text
-	if ($location == "Users") 
-	{
-		$jevix->cfgAllowTags(array('p','a','i','b','u','s','em','strong','br','strike'));
-		$jevix->cfgSetTagShort(array('br'));
-		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
-		$jevix->cfgSetTagParamsRequired('a', 'href');    	
-		$jevix->cfgSetTagIsEmpty(array('a'));		
-	}
-	// For Pages, Forums, Comments, Pm's
-	else 
-	{	
-		$jevix->cfgAllowTags(array(
-		'p','a','img','i','b','u','s','em','strong','strike',
-		'nobr','li','ol','ul','sup','abbr','sub','acronym','h1', 'h2', 
-		'h3', 'h4', 'h5', 'h6','br','hr','pre','code','object','param','embed','adabracut',
-		'blockquote','iframe','span','div','table', 'tr', 'td', 'th'
-		));    
-		 //2. Establish short tags. (Not having closing tag)
-		$jevix->cfgSetTagShort(array('br','img', 'hr'));       
-		//3. Establish preformatted tags. (In all of them will be will be replaced on HTML essence)
-		$jevix->cfgSetTagPreformatted(array('pre','code'));        
-		//4. Establish tags which are necessary for cutting out from the text together with a content.
-		//$jevix->cfgSetTagCutWithContent(array('script', 'object', 'iframe', 'style')); 
-		$jevix->cfgSetTagCutWithContent(array('script', 'style'));    	
-		//5. Establish the resolved parametres tags. Also it is possible to establish admissible values of these parametres.
-		$jevix->cfgAllowTagParams('p', array('style'));
-		$jevix->cfgAllowTagParams('span', array('style')); 
-		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));  
-		$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));    
-		$jevix->cfgAllowTagParams('object', array('width' => '#int', 'height' => '#int', 'data' => array('#domain'=>array('youtube.com','rutube.ru','vimeo.com','player.vimeo.com')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
-		$jevix->cfgAllowTagParams('param', array('name' => '#text', 'value' => '#text'));
-		$jevix->cfgAllowTagParams('embed', array('src' => '#image', 'type' => '#text','allowscriptaccess' => '#text', 'allowfullscreen' => '#text','width' => '#int', 'height' => '#int', 'flashvars'=> '#text', 'wmode'=> '#text'));
-		$jevix->cfgAllowTagParams('iframe', array('width' => '#int', 'height' => '#int', 'src' => array('#domain'=>array('youtube.com','rutube.ru','vimeo.com','player.vimeo.com')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
-		$jevix->cfgAllowTagParams('pre',	array('class')); 
-		$jevix->cfgAllowTagParams('acronym', array('title'));
-		$jevix->cfgAllowTagParams('abbr',	array('title'));
-		$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));		
-		$jevix->cfgAllowTagParams('div', array('class', 'id', 'style'));
-		$jevix->cfgAllowTagParams('h1', array('style'));
-		$jevix->cfgAllowTagParams('h2', array('style'));
-		$jevix->cfgAllowTagParams('h3', array('style'));
-		$jevix->cfgAllowTagParams('h4', array('style'));
-		$jevix->cfgAllowTagParams('h5', array('style'));
-		$jevix->cfgAllowTagParams('h6', array('style'));
-		$jevix->cfgAllowTagParams('span', array('class', 'id', 'style'));	
-		$jevix->cfgAllowTagParams('table', array('border', 'class', 'width', 'align', 'valign', 'style'));
-		$jevix->cfgAllowTagParams('tr', array('height', 'class'));
-		$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
-		$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
+  switch($filter)
+  	{
+  	/* -- Full settings -- */
+  	case 'full':
+
+      $jevix->cfgAllowTags(array(
+      		'p','a','img','i','b','u','s','em','strong','strike','small',
+      		'nobr','li','ol','ul','sup','abbr','sub','acronym','h1', 'h2', 
+      		'h3', 'h4', 'h5', 'h6','br','hr','pre','code','object','param','embed','adabracut',
+      		'blockquote','iframe','span','div','table','tbody','thead','tfoot','tr','td','th'
+  		));    
+  		 // Establish short tags. (Not having closing tag)
+  		$jevix->cfgSetTagShort(array('br','img', 'hr'));       
+  		// Establish preformatted tags. (In all of them will be will be replaced on HTML essence)
+  		$jevix->cfgSetTagPreformatted(array('pre','code'));        
+  		// Establish tags which are necessary for cutting out from the text together with a content.
+  		$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));    	
+  		// Establish the resolved parametres tags. Also it is possible to establish admissible values of these parametres.
+  		$jevix->cfgAllowTagParams('p', array('style'));
+  		$jevix->cfgAllowTagParams('span', array('style')); 
+  		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));  
+  		$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));    
+  		$jevix->cfgAllowTagParams('object', array('width' => '#int', 'height' => '#int', 'data' => array('#domain'=>array('youtube.com','rutube.ru','vimeo.com','player.vimeo.com')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
+  		$jevix->cfgAllowTagParams('param', array('name' => '#text', 'value' => '#text'));
+  		$jevix->cfgAllowTagParams('embed', array('src' => '#image', 'type' => '#text','allowscriptaccess' => '#text', 'allowfullscreen' => '#text','width' => '#int', 'height' => '#int', 'flashvars'=> '#text', 'wmode'=> '#text'));
+  		$jevix->cfgAllowTagParams('iframe', array('width' => '#int', 'height' => '#int', 'src' => array('#domain'=>array('youtube.com','rutube.ru','vimeo.com','player.vimeo.com')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
+  		$jevix->cfgAllowTagParams('pre',	array('class')); 
+  		$jevix->cfgAllowTagParams('acronym', array('title'));
+  		$jevix->cfgAllowTagParams('abbr',	array('title'));
+  		$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));		
+  		$jevix->cfgAllowTagParams('div', array('class', 'id', 'style'));
+  		$jevix->cfgAllowTagParams('h1', array('style'));
+  		$jevix->cfgAllowTagParams('h2', array('style'));
+  		$jevix->cfgAllowTagParams('h3', array('style'));
+  		$jevix->cfgAllowTagParams('h4', array('style'));
+  		$jevix->cfgAllowTagParams('h5', array('style'));
+  		$jevix->cfgAllowTagParams('h6', array('style'));
+  		$jevix->cfgAllowTagParams('span', array('class', 'id', 'style'));	
+  		$jevix->cfgAllowTagParams('table', array('border', 'class', 'width', 'align', 'valign', 'style'));
+  		$jevix->cfgAllowTagParams('tr', array('height', 'class'));
+  		$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
+  		$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));    
+      // Establish the resolved parametres css styles for tags
+  		$jevix->cfgSetTagStyleParams(array('span'), 
+  			array(
+  				'text-decoration'   =>  array('none', 'line-through', 'underline'),
+  				'font-style'        =>  array('normal', 'italic'),
+  				'font-family',
+  				'font-weight'       =>  array('normal', 'bold'),
+  				'font-size'         =>  '#regexp:%^(8|10|12|14|16|18|20)px$%i',          
+  				'color'             =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i',           
+  				'background-color'  =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i'            
+  			)
+  		);
+      // Allowed style for tags		
+  		$jevix->cfgSetTagStyleParams(array('p'), 
+  			array(
+  				'padding-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
+  				'margin-left'       =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
+  				'text-align'        =>  array('left', 'center', 'right', 'justify')        
+  			)
+  		);    		
+  		// Establish parametres tags being the obligatory. Without them cuts out tag leaving contents.
+  		$jevix->cfgSetTagParamsRequired('img', 'src');
+  		$jevix->cfgSetTagParamsRequired('a', 'href');    		
+  		// Establish tags which can contain tag the container
+  		$jevix->cfgSetTagChilds('ul', array('li'), false, true);      
+  		$jevix->cfgSetTagChilds('ol', array('li'), false, true);
+  		$jevix->cfgSetTagChilds('object', 'param', false, true);
+  		$jevix->cfgSetTagChilds('object', 'embed', false, false);    
+  		// Establish tags which can be empty
+  		$jevix->cfgSetTagIsEmpty(array('param','embed','a','iframe'));			
+  		// Establish attributes tags which will be automatically added
+  		$jevix->cfgSetTagParamDefault('embed', 'wmode',	'opaque',	true);			
+  		// Establish autoreplacement
+  		$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));    
+  		// Disconnect typografy in defined tag	
+  		$jevix->cfgSetTagNoTypography('code','video','object');
+       	
+    break;
+    /* ---- */
+           
+    /* -- Medium settings -- */
+  	case 'medium':
+
+      $jevix->cfgAllowTags(array(
+      		'p','a','img','i','b','u','s','em','strong','strike','small',
+      		'nobr','li','ol','ul','sup','abbr','sub','acronym','h1', 'h2', 
+      		'h3', 'h4', 'h5', 'h6','br','hr','pre','code','blockquote','span'
+  		));    
+  		$jevix->cfgSetTagShort(array('br','img', 'hr'));  
+  		$jevix->cfgSetTagPreformatted(array('pre','code')); 
+  		$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));      
+  		$jevix->cfgAllowTagParams('p', array('style'));
+  		$jevix->cfgAllowTagParams('span', array('style')); 
+  		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));  
+  		$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));    
+  		$jevix->cfgAllowTagParams('pre',	array('class')); 
+  		$jevix->cfgAllowTagParams('acronym', array('title'));
+  		$jevix->cfgAllowTagParams('abbr',	array('title'));
+  		$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));		
+  		$jevix->cfgAllowTagParams('h1', array('style'));
+  		$jevix->cfgAllowTagParams('h2', array('style'));
+  		$jevix->cfgAllowTagParams('h3', array('style'));
+  		$jevix->cfgAllowTagParams('h4', array('style'));
+  		$jevix->cfgAllowTagParams('h5', array('style'));
+  		$jevix->cfgAllowTagParams('h6', array('style'));
+  		$jevix->cfgSetTagStyleParams(array('span'), 
+  			array(
+  				'text-decoration'   =>  array('none', 'line-through', 'underline'),
+  				'font-style'        =>  array('normal', 'italic'),
+  				'font-family',
+  				'font-weight'       =>  array('normal', 'bold'),
+  				'font-size'         =>  '#regexp:%^(8|10|12|14|16|18|20)px$%i',          
+  				'color'             =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i',           
+  				'background-color'  =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i'            
+  			)
+  		);	
+  		$jevix->cfgSetTagStyleParams(array('p'), 
+  			array(
+  				'padding-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
+  				'margin-left'       =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
+  				'text-align'        =>  array('left', 'center', 'right', 'justify')        
+  			)
+  		); 
+  		$jevix->cfgSetTagParamsRequired('img', 'src');
+  		$jevix->cfgSetTagParamsRequired('a', 'href');    		
+  		$jevix->cfgSetTagChilds('ul', array('li'), false, true);      
+  		$jevix->cfgSetTagChilds('ol', array('li'), false, true);			
+  		$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));    
+  		$jevix->cfgSetTagNoTypography('code');
+
+  	break;
+    /* ---- */
     
-    // 20. Establish the resolved parametres css styles for tags
-		$jevix->cfgSetTagStyleParams(array('span'), 
-			array(
-				'text-decoration'   =>  array('none', 'line-through', 'underline'),
-				'font-style'        =>  array('normal', 'italic'),
-				'font-family',
-				'font-weight'       =>  array('normal', 'bold'),
-				'font-size'         =>  '#regexp:%^(8|10|12|14|16|18|20)px$%i',          
-				'color'             =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i',           
-				'background-color'  =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i'            
-			)
-		);
-		
-		$jevix->cfgSetTagStyleParams(array('p'), 
-			array(
-				'padding-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
-				'margin-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
-				'text-align'        =>  array('left', 'center', 'right', 'justify'),        
-			)
-		);    
-		
-		//6. Establish parametres tags being the obligatory. Without them cuts out tag leaving contents.
-		$jevix->cfgSetTagParamsRequired('img', 'src');
-		$jevix->cfgSetTagParamsRequired('a', 'href');    
-		
-		// 7. Establish tags which can contain tag the container
-		$jevix->cfgSetTagChilds('ul', array('li'), false, true);      
-		$jevix->cfgSetTagChilds('ol', array('li'), false, true);
-		$jevix->cfgSetTagChilds('object', 'param', false, true);
-		$jevix->cfgSetTagChilds('object', 'embed', false, false);    
-		
-		$jevix->cfgSetTagIsEmpty(array('param','embed','a','iframe'));
-			
-		// 8.  Establish attributes tags which will be automatically added
-		//$jevix->cfgSetTagParamDefault('a', 'rel', null, true);
-		$jevix->cfgSetTagParamDefault('embed', 'wmode',	'opaque',	true);
-			
-		// 9. Establish autoreplacement
-		$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));    
-			
-		$jevix->cfgSetTagNoTypography('code','video','object');
-    }    
-    // 10. Include or switch off mode XHTML. It (is by default included)
-    $jevix->cfgSetXHTMLMode($xhtml);    
-    
-    // 11. Include or switch off a mode of replacement of carrying over of lines on тег <br/>. It (is by default included)
-    //$jevix->cfgSetAutoBrMode(true); 
-    $jevix->cfgSetAutoBrMode(false);    
-    
-    // 12. Include or switch off a mode of automatic definition of references. It (is by default included)
-    //$jevix->cfgSetAutoLinkMode(true);  
-    $jevix->cfgSetAutoLinkMode(false);    
-    
-    // 13. Disconnect typografy in defined tag
-    //$jevix->cfgSetTagNoTypography('code');      
-    
-    // Variable in which will be write errors
-    $errors = null;
-         
-    return $jevix->parse($text, $errors);  
-}
+    /* -- Micro settings - default -- */
+    default:
+
+      $jevix->cfgAllowTags(array('p','a','i','b','u','s','em','strong','br','strike'));
+  		$jevix->cfgSetTagShort(array('br'));
+  		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
+  		$jevix->cfgSetTagParamsRequired('a', 'href');    	
+  		$jevix->cfgSetTagIsEmpty(array('a'));
+
+    break;
+    /* ---- */    
+  	}
+
+  // Include or switch off mode XHTML. It (is by default included)
+  $jevix->cfgSetXHTMLMode($xhtml);    
+  // Include or switch off a mode of replacement of carrying over of lines on тег <br/>. It (is by default included)
+  $jevix->cfgSetAutoBrMode(false);        
+  // Include or switch off a mode of automatic definition of references. It (is by default included)
+  $jevix->cfgSetAutoLinkMode(false);    
+  // Variable in which will be write errors
+  $errors = null;       
+  return $jevix->parse($text, $errors);  
+  }
 
 /**
  * Jevix — means of automatic application of rules of a set of texts,
