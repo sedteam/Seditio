@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.plugins.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -31,7 +31,10 @@ $status[2] = '<span style="color:#A78731; font-weight:bold;">'.$L['adm_partrunni
 $status[3] = '<span style="color:#AC5866; font-weight:bold;">'.$L['adm_notinstalled'].'</span>';
 $found_txt[0] = '<span style="color:#AC5866; font-weight:bold;">'.$L['adm_missing'].'</span>';
 $found_txt[1] = '<span style="color:#739E48; font-weight:bold;">'.$L['adm_present'].'</span>';
+
 unset($disp_errors);
+
+$t = new XTemplate(sed_skinfile('admin.plug', true));
 
 switch ($a)
 	{
@@ -67,64 +70,44 @@ switch ($a)
 		$info['Lock_members'] = sed_auth_getvalue($info['Lock_members']);
 		$info['Auth_guests'] = sed_auth_getvalue($info['Auth_guests']);
 		$info['Lock_guests'] = sed_auth_getvalue($info['Lock_guests']);
-    
-		$adminmain .= "<h2>".sed_plugin_icon($pl)." ".$info['Name']."</h2>";
-
-		$adminmain .= "<table class=\"cells striped\">";
-		$adminmain .= "<tr><td style=\"width:33%;\">".$L['Code'].":</td><td>".$info['Code']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Description'].":</td><td>".$info['Description']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Version'].":</td><td>".$info['Version']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Date'].":</td><td>".$info['Date']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Configuration'].":</td><td>".$info['Config']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"".sed_url("admin", "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"system/img/admin/rights2.png\" alt=\"\" /></a></td></tr>";
-		$adminmain .= "<tr><td>".$L['adm_defauth_guests'].":</td><td>".sed_build_admrights($info['Auth_guests']);
-		$adminmain .= " (".$info['Auth_guests'].")</td></tr>";
-		$adminmain .= "<tr><td>".$L['adm_deflock_guests'].":</td><td>".sed_build_admrights($info['Lock_guests']);
-		$adminmain .= " (".$info['Lock_guests'].")</td></tr>";
-		$adminmain .= "<tr><td>".$L['adm_defauth_members'].":</td><td>".sed_build_admrights($info['Auth_members']);
-		$adminmain .= " (".$info['Auth_members'].")</td></tr>";
-		$adminmain .= "<tr><td>".$L['adm_deflock_members'].":</td><td>".sed_build_admrights($info['Lock_members']);
-		$adminmain .= " (".$info['Lock_members'].")</td></tr>";
-		$adminmain .= "<tr><td>".$L['Author'].":</td><td>".$info['Author']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Copyright'].":</td><td>".$info['Copyright']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Notes'].":</td><td>".$info['Notes']."</td></tr>";
-		$adminmain .= "</table>";
-
-		$adminmain .= "<h4>".$L['Options']." :</h4>";
-		$adminmain .= "<table class=\"cells striped\">";
-		$adminmain .= "<tr><td style=\"width:33%;\"><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=install&".sed_xg())."\" title=\"".$L['adm_opt_installall']."\"><img src=\"system/img/admin/play.png\" alt=\"\" /> ".$L['adm_opt_installall']."</a></td>";
-		$adminmain .= "<td>".$L['adm_opt_installall_explain']."</td></tr>";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&".sed_xg())."\" title=\"".$L['adm_opt_uninstallall']."\"><img src=\"system/img/admin/stop.png\" alt=\"\" /> ".$L['adm_opt_uninstallall']."</a></td>";
-		$adminmain .= "<td>".$L['adm_opt_uninstallall_explain']."</td></tr>";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=pause&".sed_xg())."\" title=\"".$L['adm_opt_pauseall']."\"><img src=\"system/img/admin/pause.png\" alt=\"\" /> ".$L['adm_opt_pauseall']."</a></td>";
-		$adminmain .= "<td>".$L['adm_opt_pauseall_explain']."</td></tr>";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=unpause&".sed_xg())."\" title=\"".$L['adm_opt_unpauseall']."\"><img src=\"system/img/admin/forward.png\" alt=\"\" /> ".$L['adm_opt_unpauseall']."</a></td>";
-		$adminmain .= "<td>".$L['adm_opt_unpauseall_explain']."</td></tr>";
-		$adminmain .= "</table>";
-
-		$adminmain .= "<h4>".$L['Parts']." :</h4>";
-		$adminmain .= "<table class=\"cells striped\"><tr>";
-		$adminmain .= "<td class=\"coltop\" colspan=\"2\">".$L['adm_part']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['File']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Hooks']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Order']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Status']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Action']."</td>";
-		$adminmain .= "</tr>";
-
+		
+		$t->assign(array(   		
+			"PLUG_DETAILS_NAME" => $info['Name'],
+			"PLUG_DETAILS_CODE" => $info['Code'],
+			"PLUG_DETAILS_DESC" => $info['Description'],
+			"PLUG_DETAILS_VERSION" => $info['Version'],
+			"PLUG_DETAILS_DATE" => $info['Date'],
+			"PLUG_DETAILS_CONFIG" => $info['Config'],
+			"PLUG_DETAILS_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=plug&io=".$info['Code']),
+			"PLUG_DETAILS_DEFAUTH_GUESTS" => sed_build_admrights($info['Auth_guests']),
+			"PLUG_DETAILS_DEFLOCK_GUESTS" => sed_build_admrights($info['Lock_guests']),
+			"PLUG_DETAILS_DEFAUTH_MEMBERS" => sed_build_admrights($info['Auth_members']),
+			"PLUG_DETAILS_DEFLOCK_MEMBERS" => sed_build_admrights($info['Lock_members']),
+			"PLUG_DETAILS_AUTHOR" => $info['Author'],
+			"PLUG_DETAILS_COPYRIGHT" => $info['Copyright'],
+			"PLUG_DETAILS_NOTES" => $info['Notes'],
+			"PLUG_DETAILS_INSTALL_URL" => sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=install&".sed_xg()),
+			"PLUG_DETAILS_UNINSTALL_URL" => sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&".sed_xg()),
+			"PLUG_DETAILS_PAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=pause&".sed_xg()),
+			"PLUG_DETAILS_UNPAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=unpause&".sed_xg())		
+		));
+		
 		while( list($i,$x) = each($parts) )
 			{
 			$extplugin_file = "plugins/".$pl."/".$x;
 			$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 			if (!empty($info_file['Error']))
-				{
-				$adminmain .= "<tr>";
-				$adminmain .= "<td style=\"width:32px;\">#".($i+1)."</td>";
-				$adminmain .= "<td>-</td>";
-				$adminmain .= "<td>".$x."</td>";				
-				$adminmain .= "<td colspan=\"4\">".$info_file['Error']."</td>";
-				$adminmain .= "</tr>";
+				{			
+				
+				$t->assign(array( 		
+					"PARTS_LIST_NUMBER" => ($i+1),
+					"PARTS_LIST_FILE" => $x,
+					"PARTS_LIST_ERROR" => $info_file['Error']
+					));		
+					
+				$t -> parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST.PLUG_PARTS_ERROR");
+					
 				}
 			else
 				{
@@ -134,48 +117,43 @@ switch ($a)
 					{ $info_file['Status'] = $row['pl_active']; }
 				else
 					{ $info_file['Status'] = 3; }
-
-				$adminmain .= "<tr>";
-				$adminmain .= "<td style=\"width:32px;\">#".($i+1)."</td>";
-				$adminmain .= "<td>".$info_file['Part']."</td>";
-				$adminmain .= "<td>".$info_file['File'].".php</td>";
-				
-				$adminmain .= "<td>";
-				
-				//Multihooks New v 173
+		
+				$multi_hooks = "";
 				$mhooks = explode(",", $info_file['Hooks']);
 				foreach ($mhooks as $kh => $vh)
 				{
-					$adminmain .= $vh."<br />";
+					$multi_hooks .= $vh."<br />";
 				}
-				
-				$adminmain .= "</td>";				
-				$adminmain .= "<td style=\"text-align:center;\">";
-				
-				//Multihooks New v 173
+
+				$multi_order = '';
 				$morder = explode(",", $info_file['Order']);
 				foreach ($morder as $ko => $vo)
 				{
-					$adminmain .= $vo."<br />";
-				}								
-				$adminmain .= "</td>";
-				
-				$adminmain .= "<td style=\"text-align:center;\">".$status[$info_file['Status']]."</td>";
-				$adminmain .= "<td style=\"text-align:center;\">";
+					$multi_order .= $vo."<br />";
+				}	
 
 				if ($info_file['Status']==3)
-					{ $adminmain .= "-"; }
+					{ $pl_action = "-"; }
 				elseif ($row['pl_active']==1)
-					{ $adminmain .= "<a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Pause</a>"; }
+					{ $pl_action = "<a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Pause</a>"; }
 				elseif ($row['pl_active']==0)
-					{ $adminmain .= "<a href=\"".sed_url("admin" ,"m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Un-pause</a>"; }
+					{ $pl_action = "<a href=\"".sed_url("admin" ,"m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Un-pause</a>"; }
 
-				$adminmain .= "</td></tr>";
-				$listtags .= "<tr><td style=\"width:32px;\">#".($i+1)."</td><td>".$info_file['Part']."</td><td>";
-
+				$t->assign(array( 		
+					"PARTS_LIST_NUMBER" => ($i+1),
+					"PARTS_LIST_PART" => $info_file['Part'],
+					"PARTS_LIST_FILE" => $info_file['File'],
+					"PARTS_LIST_HOOKS" => $multi_hooks,			
+					"PARTS_LIST_ORDER" => $multi_order,				
+					"PARTS_LIST_STATUS" => $status[$info_file['Status']],
+					"PARTS_LIST_ACTION" => $pl_action
+				));
+				
+				$t -> parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST.PLUG_PARTS"); 
+				
 				if (empty($info_file['Tags']))
 					{
-					$listtags .= $L['None'];
+					$listtags = $L['None'];
 					}
 				else
 					{
@@ -204,18 +182,23 @@ switch ($a)
 							$listtags .= "<br />";
 						}
 					}
+				
+				$t->assign(array( 
+					"TAGS_LIST_NUMBER" => ($i+1),
+					"TAGS_LIST_PART" => $info_file['Part'],
+					"TAGS_LIST_BODY" => $listtags
+				));
+				
+				$t -> parse("ADMIN_PLUG.PLUG_DETAILS.TAGS_LIST");
 
-				$listtags .= "</td></tr>";
-				$adminmain .= "</td></tr>";
 				}
-
+				
+				$t -> parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST");  
+			
 			}
-		$adminmain .= "</table>";
-
-		$adminmain .= "<h4>".$L['Tags']." :</h4>";
-		$adminmain .= "<table class=\"cells striped\">";
-		$adminmain .= "<tr><td class=\"coltop\" colspan=\"2\">".$L['Part']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Files']." / ".$L['Tags']."</td>".$listtags."</table>";
+		
+		$t -> parse("ADMIN_PLUG.PLUG_DETAILS");		
+		
 		}
 	else
 		{
@@ -233,15 +216,26 @@ switch ($a)
 		case 'install' :
 		sed_check_xg();
 		$pl =(mb_strtolower($pl)=='core') ? 'error' : $pl;
-		$adminmain .= sed_plugin_install($pl);
-		$adminmain .= "<a href=\"".sed_url("admin", "m=plug&a=details&pl=".$pl)."\">Continue...</a>";
+		
+		$t->assign(array(		
+			"PLUG_UN_INSTALL_INFO" => sed_plugin_install($pl),
+			"PLUG_UN_INSTALL_URL" => sed_url("admin", "m=plug&a=details&pl=".$pl)
+		));	
+		
+		$t -> parse("ADMIN_PLUG.PLUG_UN_INSTALL");	
 
 		break;
 
 		case 'uninstall' :
 		sed_check_xg();
-		$adminmain .= sed_plugin_uninstall($pl);
-		$adminmain .= "<a href=\"".sed_url("admin", "m=plug")."\">Continue...</a>";
+		
+		$t->assign(array(		
+			"PLUG_UN_INSTALL_INFO" => sed_plugin_uninstall($pl),
+			"PLUG_UN_INSTALL_URL" => sed_url("admin", "m=plug")
+		));	
+		
+		$t -> parse("ADMIN_PLUG.PLUG_UN_INSTALL");	
+		
 		break;
 
 		case 'pause' :
@@ -293,12 +287,6 @@ switch ($a)
     sed_cache_clearall();
     }
 
-	$disp_plugins = "<table class=\"cells striped\">";
-	$disp_plugins .= "<tr>";
-	$disp_plugins .= "<td class=\"coltop\">".$L['Plugins']."</td>";
-	$disp_plugins .= "<td class=\"coltop\">".$L['Status']."</td>";
-	$disp_plugins .= "</tr>";
-
 	$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner='plug' GROUP BY config_cat");
 	while ($row = sed_sql_fetchassoc($sql))
 		{ $cfgentries[$row['config_cat']] = $row['COUNT(*)']; }
@@ -323,19 +311,10 @@ switch ($a)
 	$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
 	while ($row3 = sed_sql_fetchassoc($sql3))
 		{ $plg_tools[$row3['pl_code']] = TRUE; }
-
-	$adminmain = "<h2><img src=\"system/img/admin/plugins.png\" alt=\"\" /> ".$L['Plugins']." (".$cnt_extp.")</h2>";
-
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr>";
-	$adminmain .= "<td class=\"coltop\">".$L['Plugins']." ".$L['adm_clicktoedit']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Version']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Status']." (".$L['Parts'].")</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Configuration']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"width:50px;\">".$L['Rights']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"width:50px;\">".$L['Open']."</td>";
-	$adminmain .= "</tr>";
+	
+	$t->assign(array(
+		"PLUG_LISTING_COUNT" => $cnt_extp
+	)); 
 
 	while( list($i,$x) = each($extplugins) )
 		{
@@ -346,7 +325,14 @@ switch ($a)
 
 			if (!empty($info['Error']))
 				{
-				$adminmain .= "<tr><td>".$x."</td><td colspan=\"7\">".$info['Error']."</td></tr>";
+				
+				$t->assign(array(		
+					"PLUG_LIST_CODE" => $x,
+					"PLUG_LIST_ERROR" => $info['Error']
+				));
+				
+				$t -> parse("ADMIN_PLUG.PLUG_LISTING.PLUG_LIST.PLUG_LIST_ERROR");					
+
 				}
 			else
 				{
@@ -372,69 +358,92 @@ switch ($a)
 						{ $part_status = 1; }
 					}
 
-				$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=plug&a=details&pl=".$info['Code'])."\">";				
-				$adminmain .= sed_plugin_icon($info['Code']);
-				$adminmain .= " ".$info['Name']."</a></td><td>".$x."</td>";
-				$adminmain .= "<td style=\"text-align:center;\">".$info['Version']."</td>";
-				$adminmain .= "<td style=\"text-align:center;\">".$status[$part_status]." ".$info['Partscount']."</td>";
-				$adminmain .= "<td style=\"text-align:center;\">";
-				$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$info['Code'])."\"><img src=\"system/img/admin/config.png\" alt=\"\" /></a>" : '&nbsp;';
-				$adminmain .= "</td>";
-				$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"system/img/admin/rights2.png\" alt=\"\" /></a></td>";
-				$adminmain .= "<td style=\"text-align:center;\">";
-
+				if ($cfgentries[$info['Code']] > 0)
+					{
+					$t->assign(array(
+						"PLUG_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=plug&p=".$info['Code'])
+					));
+					
+					$t -> parse("ADMIN_PLUG.PLUG_LISTING.PLUG_LIST.PLUG_LIST_CONFIG");
+					}
+					
 				if ($plg_tools[$info['Code']])
 					{
-					$adminmain .= "<a href=\"".sed_url("admin", "m=tools&p=".$info['Code'])."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a>";
+					$pl_url = sed_url("admin", "m=tools&p=".$info['Code']);
 					}
 				else
 					{
-					$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"".sed_url("plug", "e=".$info['Code'])."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a>" : '&nbsp;';
+					$pl_url = ($plg_standalone[$info['Code']]) ? sed_url("plug", "e=".$info['Code']) : '';
 					}
-				$adminmain .= "</td></tr>";
+				
+				if (!empty($pl_url))
+					{				
+					$t->assign(array(
+						"PLUG_LIST_OPEN_URL" => $pl_url	
+					));
+					
+					$t -> parse("ADMIN_PLUG.PLUG_LISTING.PLUG_LIST.PLUG_LIST_OPEN");
+					}
+					
+				$t->assign(array(				
+					"PLUG_LIST_ICON" => sed_plugin_icon($info['Code']),
+					"PLUG_LIST_NAME" => $info['Name'],
+					"PLUG_LIST_DETAILS_URL" => sed_url("admin", "m=plug&a=details&pl=".$info['Code']),
+					"PLUG_LIST_CODE" => $x,
+					"PLUG_LIST_VERSION" => $info['Version'],
+					"PLUG_LIST_STATUS" => $status[$part_status],
+					"PLUG_LIST_PARTS_COUNT" => $info['Partscount'],
+					"PLUG_LIST_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=plug&io=".$info['Code'])
+				));
+				
+				$t -> parse("ADMIN_PLUG.PLUG_LISTING.PLUG_LIST");
+
 				}
 			}
 		else
 			{
-			$disp_errors .= "<tr><td>plugins/".$x."</td><td colspan=\"7\">Error: Setup file is missing !</td></tr>";
+				$t->assign(array(		
+					"PLUG_LIST_CODE" => $x,
+					"PLUG_LIST_ERROR" => "Error: Setup file is missing !"
+				));
+				
+				$t -> parse("ADMIN_PLUG.PLUG_LISTING.PLUG_LIST.PLUG_LIST_ERROR");	
 			}
 		}
-	$adminmain .= $disp_errors;
-	$adminmain .= "</table>";
 
 	if ($o=='code')
 		{ $sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC"); }
 	else
 		{ $sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC"); }
-
-	$adminmain .= "<h4 id=\"hooks\">".$L['Hooks']." (".sed_sql_numrows($sql).") :</h4>";
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td class=\"coltop\">".$L['Hooks']."</td><td class=\"coltop\">".$L['Plugin']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['File']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['Order']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['Active']."</td></tr>";
+		
+	$t->assign(array(		
+		"HOOKS_COUNT" => sed_sql_numrows($sql)
+	));	
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
 		$extplugin_file = "plugins/".$row['pl_code']."/".$row['pl_file'].".php";
 		$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
-		
-		$adminmain .= "<tr>";
-		$adminmain .= "<td>".$row['pl_hook']."</td>";
-		$adminmain .= "<td>".$row['pl_title']." (".$row['pl_code'].")</td>";
-		$adminmain .= "<td>";
-		
-		$adminmain .= (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">".$extplugin_file."</span>" : "<a href=\"".sed_url("admin", "m=plug&a=delhook&id=".$row['pl_id']."&".sed_xg(), "#hooks")."\">".$out['img_delete']."</a> <span style=\"color:#AC5866; font-weight:bold;\">".$L['adm_missing']." : ".$extplugin_file."</span>";
-	 
-		$adminmain .= "</td>";
-		$adminmain .= "<td style=\"text-align:center;\">".$row['pl_order']."</td>";
-		$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['pl_active']]."</td>";
-		$adminmain .= "</tr>";
-		}
 
-	$adminmain .= "</table>";
+		$t->assign(array(		
+			"HOOK_LIST_HOOK" => $row['pl_hook'],
+			"HOOK_LIST_PLUG_TITLE" => $row['pl_title'],
+			"HOOK_LIST_PLUG_CODE" => $row['pl_code'],
+			"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">".$extplugin_file."</span>" : "<a href=\"".sed_url("admin", "m=plug&a=delhook&id=".$row['pl_id']."&".sed_xg(), "#hooks")."\">".$out['img_delete']."</a> <span style=\"color:#AC5866; font-weight:bold;\">".$L['adm_missing']." : ".$extplugin_file."</span>",
+			"HOOK_LIST_ORDER" => $row['pl_order'],
+			"HOOK_LIST_STATUS" => $sed_yesno[$row['pl_active']]
+		));
+		
+		$t -> parse("ADMIN_PLUG.PLUG_LISTING.HOOK_LIST");
+		}
+  
+	$t -> parse("ADMIN_PLUG.PLUG_LISTING");
 
 	break;
-	}
+	}  
+	
+$t -> parse("ADMIN_PLUG");  
+
+$adminmain .= $t -> text("ADMIN_PLUG");
 
 ?>

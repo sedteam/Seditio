@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/recentitems/recentitems.php
-Version=175
+Version=177
 Updated=2013-jul-08
 Type=Plugin
 Author=Neocrome

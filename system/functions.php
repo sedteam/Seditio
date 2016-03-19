@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/functions.php
-Version=175
-Updated=2014-nov-20
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome & Seditio Team
 Description=Functions
@@ -60,13 +60,20 @@ $cfg['textarea_default_width'] = 75;
 $cfg['textarea_default_height'] = 16;
 $cfg['sqldb'] = 'mysql';
 $cfg['sqldbprefix'] = 'sed_';
-$cfg['version'] = '175';
-$cfg['versions_list'] = array (120, 121, 125, 126, 130, 150, 159, 160, 161, 162, 170, 171, 172, 173, 175);
+$cfg['version'] = '177';
+$cfg['versions_list'] = array (120, 121, 125, 126, 130, 150, 159, 160, 161, 162, 170, 171, 172, 173, 175, 177);
 $cfg['group_colors'] = array ('red', 'yellow', 'black', 'blue', 'white', 'green', 'gray', 'navy', 'darkmagenta', 'pink', 'cadetblue', 'linen', 'deepskyblue', 'inherit');
+
+/* Message type:  attention => a, error => e, success => s, information => i */
+$cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e', 
+'152' => 'e', '153' => 'e', '157' => 'a', '300' => 's', '400' => 'e', '401' => 'e', '403' => 'e', '404' => 'e', '500' => 'e', '502' => 's', '602' => 'a', 
+'603' => 'a', '900' => 'a', '904' => 'a', '907' => 'e', '911' => 'e', '915' => 'e', '916' => 's', '917' => 's', '930' => 'a', '940' => 'a', '950' => 'e');
+
+$cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'information', 'a' => 'attention');
 
 /* ======== Names of the SQL tables ========= */
 
-$sed_dbnames = array ('auth', 'banlist', 'cache', 'com', 'core', 'config', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'online', 'pages', 'parser', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
+$sed_dbnames = array ('auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'extra_fields', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'online', 'pages', 'parser', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
 
 foreach($sed_dbnames as $k => $i)
 	{
@@ -1747,16 +1754,20 @@ function sed_cache_clearall()
 /** 
  * Fetches cache value 
  * 
- * @param string $name Item name 
+ * @param string $name Item name
+ * @param bool $expire Flag disable expire time 
  * @return mixed 
  */ 
-function sed_cache_get($name)
+function sed_cache_get($name, $expire = true)
 	{
 	global $cfg, $sys, $db_cache;
 
 	if (!$cfg['cache'])
           	{ return FALSE; }
-	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
+          	
+    $sql_exp = ($expire) ? " AND c_expire > '".$sys['now']."'" : "";
+     
+	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name'".$sql_exp);
 	if ($row = sed_sql_fetchassoc($sql))
 		{ return(unserialize($row['c_value'])); }
 	else
@@ -1775,9 +1786,9 @@ function sed_cache_getall($auto = 1)
 
 	if (!$cfg['cache'])
           	{ return FALSE; }
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
+	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire < '".$sys['now']."'");
 	if ($auto)
-		{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1"); }
+		{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto = 1"); }
        else
 		{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache"); }
 	if (sed_sql_numrows($sql)>0)
@@ -2048,6 +2059,33 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 	imagedestroy($source);
 	return;
 	}
+
+/** 
+ * JS build antispam
+ * 
+ * @return bool 
+ */	
+function sed_build_antispam ()
+{
+	$hash1 = sed_unique(5);
+	$hash2 = sed_unique(3);		
+	$_SESSION['antispam'] = $hash1.$hash2; 		
+	$res = sed_textbox_hidden('anti1', $hash1).sed_textbox_hidden('anti2', $hash2);
+	return $res;	
+}	
+
+/** 
+ * JS check antispam
+ * 
+ * @return bool 
+ */
+function sed_check_antispam ()
+{
+	$anti1 = sed_import('anti1', 'P', 'TXT');
+	$anti2 = sed_import('anti2', 'P', 'TXT');	
+	if ($_SESSION['antispam'] == $anti1) { return 1; }
+	return false;	
+}  	
 
 /** 
  * Terminates script execution and performs redirect 
@@ -2756,7 +2794,7 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 	}
   
 /** 
- * Creating input field 
+ * Creating input field checkbox
  * 
  * @param string $type Type input tag 
  * @param string $name Name input tag 
@@ -2764,12 +2802,48 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  * @param bool $check Checked flag  
  * @return string 
  */ 
-function sed_inputbox($type, $name, $value, $check = FALSE)
+function sed_radiobox($type, $name, $value, $check = FALSE)
 	{
   $checked = ($check) ? " checked=\"checked\" " : " ";    
   $res = "<input type=\"".$type."\" class=\"".$type."\" name=\"".$name."\" value=\"".$value."\"".$checked."/>";
   return($res);
 	}
+
+/** 
+ * Creating input field text
+ * 
+ * @return string 
+ */  
+function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text")
+{
+  $res = "<input type=\"text\" class=\"".$class."\" name=\"".$name."\" value=\"".sed_cc($value)."\" size=\"".$size."\" maxlength=\"".$maxlength."\" />";
+  return($res);
+} 
+
+/** 
+ * Creating hidden input field text
+ * 
+ * @return string 
+ */ 
+function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255)
+{
+  $res = "<input type=\"hidden\" name=\"".$name."\" value=\"".sed_cc($value)."\" size=\"".$size."\" maxlength=\"".$maxlength."\" />";
+  return($res);
+} 
+
+/** 
+ * Creating field textarea
+ * 
+ * @return string 
+ */
+function sed_textarea($name, $value, $rows, $cols)
+{
+  global $cfg;
+  $rows = (empty($rows)) ? $cfg['textarea_default_height'] : $rows;
+  $cols = (empty($cols)) ? $cfg['textarea_default_width'] : $cols;
+  $res = "<textarea name=\"".$name."\" rows=\"".$rows."\" cols=\"".$cols."\">".sed_cc(sed_checkmore($value, false), ENT_QUOTES)."</textarea>";
+  return($res);
+} 
 
 /** 
  * Check SSL 
@@ -3465,9 +3539,11 @@ function sed_readraw($file)
  * 
  * @param string $url Target URI 
  */ 
-function sed_redirect($url)
+function sed_redirect($url, $base64=false)
 	{
 	global $cfg;
+	
+	$url = ($base64) ? base64_decode($url) : $url;
 
 	if ($cfg['redirmode'])
 		{
@@ -3504,18 +3580,24 @@ function sed_redirect($url)
 function sed_selectbox($check, $name, $values, $empty_option = true)
 	{
 	$check = trim($check);
-	$values = explode(',', $values);
+	
+	if (is_array($values))  
+		{ $isarray = true; } 
+	else 
+		{ $values = explode(',', $values); }
+	
 	$selected = (empty($check) || $check=="00") ? "selected=\"selected\"" : '';
 	if ($empty_option) { $first_option = "<option value=\"\" $selected>---</option>"; } else { $first_option = ''; }
 	$result =  "<select name=\"$name\" size=\"1\">".$first_option;
 	foreach ($values as $k => $x)
 		{
 		$x = trim($x);
-		$selected = ($x == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$x\" $selected>".sed_cc($x)."</option>";
+		$v = ($isarray) ? $k : $x;
+		$selected = ($v == $check) ? "selected=\"selected\"" : '';
+		$result .= "<option value=\"$v\" $selected>".sed_cc($x)."</option>";
 		}
 	$result .= "</select>";
-	return($result);
+	return($result);	
 	}
 
 /** 
@@ -3526,11 +3608,14 @@ function sed_selectbox($check, $name, $values, $empty_option = true)
  * @param bool $hideprivate Hide private categories 
  * @return string 
  */ 
-function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
+/* 
+function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirecturl = "", $additional="")
 	{
 	global $db_structure, $usr, $sed_cat, $L;
 
-	$result =  "<select name=\"$name\" size=\"1\">";
+	$onchange = (!empty($redirecturl)) ? " onchange=\"sedjs.redirect(this)\"" : ""; 
+	
+	$result =  "<select name=\"$name\"".$onchange." size=\"1\">".$additional;
 
 	foreach($sed_cat as $i => $x)
 		{
@@ -3539,7 +3624,34 @@ function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
 		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
 			{
 			$selected = ($i==$check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
+			$result .= "<option value=\"".$redirecturl.$i."\" $selected> ".$x['tpath']."</option>";
+			}
+		}
+	$result .= "</select>";
+	return($result);
+	}
+*/
+
+function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirecturl = "", $additional="")
+	{
+	global $db_structure, $usr, $sed_cat, $L;
+
+	$onchange = (!empty($redirecturl)) ? " onchange=\"sedjs.redirect(this)\"" : ""; 
+	
+	$result =  "<select name=\"$name\"".$onchange." size=\"1\">".$additional;
+	
+	foreach($sed_cat as $i => $x)
+		{
+		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : TRUE;
+		
+		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
+			{				
+			$points_count = substr_count($x['path'], '.');			
+			$x['title'] = str_repeat("--", $points_count)." ".$x['title'];			
+			$x['tpath'] = str_repeat("&nbsp;&nbsp;&nbsp;", $points_count)." ".$x['title']; 				
+				
+			$selected = ($i==$check) ? "selected=\"selected\"" : '';
+			$result .= "<option value=\"".$redirecturl.$i."\" $selected> ".$x['tpath']."</option>";
 			}
 		}
 	$result .= "</select>";
@@ -4144,19 +4256,32 @@ function sed_shield_update($shield_add, $shield_newaction)
  * @param mixed $base Item name (string), or base names (array) 
  * @return string 
  */ 
-function sed_skinfile($base)
+function sed_skinfile($base, $adminskin = false)
 	{
-	global $usr;
+	global $usr, $cfg;
 	$base_depth = count($base);
-	if ($base_depth == 1) { return($skinfile = 'skins/'.$usr['skin'].'/'.$base.'.tpl'); }
+  
+  $tpl_path = 'skins/'.$usr['skin'].'/'.$base.'.tpl';
+  $tpl_admin_path = 'skins/'.$usr['skin'].'/admin/'.$base.'.tpl';  
+  $tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
+  
+	if ($base_depth == 1) { 	return ($adminskin) ? $tpl_admin_path : $tpl_path; }
 
 	for($i = $base_depth; $i > 1; $i--)
 		{
 		$levels = array_slice($base, 0, $i);
-		$skinfile = 'skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
+    $skinfile = 'skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
+    $skinfile_admin = 'skins/'.$usr['skin'].'/admin/'.implode('.', $levels).'.tpl';		
+    $skinfile_admin = (file_exists($skinfile_admin)) ? $skinfile_admin : $skinfile;
+    $skinfile = ($adminskin) ? $skinfile_admin : $skinfile;
 		if(file_exists($skinfile)) { return($skinfile); }
 		}
-	return('skins/'.$usr['skin'].'/'.$base[0].'.tpl');
+
+  $tpl_path = 'skins/'.$usr['skin'].'/'.$base[0].'.tpl';
+  $tpl_admin_path = 'skins/'.$usr['skin'].'/admin/'.$base[0].'.tpl';  
+  $tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
+  
+	return ($adminskin) ? $tpl_admin_path : $tpl_path;
 	}
 
 /** 
@@ -4522,7 +4647,7 @@ function sed_sefurlredirect()
       if ($params_arr['r'] != 'tb2preview') {   //fix textboxer preview   
           $redirect301 = sed_url($section, $params, "", true);  
 		   
-		  		header("HTTP/1.1 301 Moved Permanently");
+		  header("HTTP/1.1 301 Moved Permanently");
           header("Location: ".$redirect301);
           exit;
       }   
@@ -4611,6 +4736,180 @@ function sed_xp()
 	{
 	return ("<div><input type=\"hidden\" id=\"x\" name=\"x\" value=\"".sed_sourcekey()."\" /></div>");
 	}
+	
+/** 
+ * Add extra field for pages 
+ * 
+ * @param string $sql_table Table for adding extrafield (without sed_) 
+ * @param string $name Field name (unique) 
+ * @param string $type Field type (input, textarea etc) 
+ * @param string $html HTML display of element without parameter "name=" 
+ * @param string $variants Variants of values (for radiobuttons, selectors etc) 
+ * @param string $description Description of field (optional, for admin) 
+ * @param bool $noalter Do not ALTER the table, just register the extra field 
+ * @return bool 
+ * 
+ */ 
+function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="", $noalter = FALSE) 
+{ 
+    global $db_extra_fields; 
+    $fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'"); 
+    while($row = sed_sql_fetchassoc($fieldsres)) 
+    { 
+        $extrafieldsnames[] = $row['field_name']; 
+    } 
+    if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist 
+
+    // Check table sed_$sql_table - if field with same name exists - exit. 
+    if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $sql_table LIKE '%\_$name'")) > 0 && !$noalter) 
+    { 
+        return FALSE; 
+    } 
+    $fieldsres = sed_sql_query("SELECT * FROM $sql_table LIMIT 1"); 
+    while ($i < sed_sql_numfields($fieldsres)) 
+    { 
+        $column = sed_sql_fetchfield($fieldsres, $i); 
+        // get column prefix in this table 
+        $column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
+        preg_match("#.*?_$name$#",$column->name,$match); 
+        if($match[1]!="" && !$noalter) return false; // No adding - fields already exist 
+        $i++; 
+    } 
+    
+    $step1 = sed_sql_query("INSERT INTO $db_extra_fields (
+					field_location, 
+					field_name, 
+					field_type, 
+					field_html, 
+					field_variants, 
+					field_description) 
+					VALUES 
+					'".sed_sql_prep($sql_table)."',
+					'".sed_sql_prep($name)."',
+					'".sed_sql_prep($type)."',
+					'".sed_sql_prep($html)."',
+					'".sed_sql_prep($variants)."',
+					'".sed_sql_prep($description)."'
+					");
+        
+    if ($noalter) 
+    { 
+        return $step1; 
+    } 
+    switch($type) 
+    { 
+        case "input": $sqltype = "VARCHAR(255)"; break; 
+        case "textarea": $sqltype = "TEXT"; break; 
+        case "select": $sqltype = "VARCHAR(255)"; break; 
+        case "checkbox": $sqltype = "BOOL"; break; 
+        case "radio": $sqltype = "VARCHAR(255)"; break; 
+    } 
+    $sql = "ALTER TABLE $sql_table ADD ".$column_prefix."_$name $sqltype "; 
+    $step2 = sed_sql_query($sql); 
+    return $step1&&$step2; 
+} 
+
+/** 
+ * Update extra field
+ * 
+ * @param string $sql_table Table contains extrafield (without sed_) 
+ * @param string $oldname Exist name of field 
+ * @param string $name Field name (unique) 
+ * @param string $type Field type (input, textarea etc) 
+ * @param string $html HTML display of element without parameter "name=" 
+ * @param string $variants Variants of values (for radiobuttons, selectors etc) 
+ * @param string $description Description of field (optional, for admin) 
+ * @return bool 
+ * 
+ */ 
+function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="") 
+{ 
+    global $db_extra_fields; 
+    $fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields 
+            WHERE field_name = '$oldname' AND field_location='$sql_table'"); 
+    if (sed_sql_numrows($fieldsres) <= 0 
+        || $name != $oldname 
+            && sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $sql_table LIKE '%\_$name'")) > 0) 
+    { 
+        // Attempt to edit non-extra field or override an existing field 
+        return FALSE; 
+    } 
+    $field = sed_sql_fetchassoc($fieldsres); 
+    $fieldsres = sed_sql_query("SELECT * FROM $sql_table LIMIT 1"); 
+    $column = sed_sql_fetchfield($fieldsres, 0); 
+    $column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
+    $alter = FALSE; 
+    if ($name != $field['field_name']) 
+    { 
+        $extf['name'] = $name; 
+        $alter = TRUE; 
+    } 
+    if ($type != $field['field_type']) 
+    { 
+        $extf['type'] = $type; 
+        $alter = TRUE; 
+    } 
+    if ($html != $field['field_html']) 
+        $extf['html'] = $html; 
+    if ($variants != $field['field_variants']) 
+        $extf['variants'] = $variants; 
+    if ($description != $field['field_description']) 
+        $extf['description'] = $description; 
+    
+		$step1 = sed_sql_query("UPDATE $db_extra_fields SET 
+					field_name = '".sed_sql_prep($extf['name'])."', 
+					field_type = '".sed_sql_prep($extf['type'])."', 
+					field_html = '".sed_sql_prep($extf['html'])."', 
+					field_variants = '".sed_sql_prep($extf['variants'])."', 
+					field_description = '".sed_sql_prep($extf['description'])."'  
+					WHERE field_name = '$oldname' AND field_location='$sql_table' 
+					");  
+    
+    if (!$alter) return $step1; 
+
+    switch ($type) 
+    { 
+        case "input": $sqltype = "VARCHAR(255)"; break; 
+        case "textarea": $sqltype = "TEXT"; break; 
+        case "select": $sqltype = "VARCHAR(255)"; break; 
+        case "checkbox": $sqltype = "BOOL"; break; 
+        case "radio": $sqltype = "VARCHAR(255)"; break; 
+    } 
+    $sql = "ALTER TABLE $sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype "; 
+    $step2 = sed_sql_query($sql); 
+
+    return $step1&&$step2; 
+} 
+
+/** 
+ * Delete extra field 
+ * 
+ * @param string $sql_table Table contains extrafield (without sed_) 
+ * @param string $name Name of extra field 
+ * @return bool 
+ * 
+ */ 
+function sed_extrafield_remove($sql_table, $name) 
+{ 
+    global $db_extra_fields, $cfg; 
+    if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields 
+        WHERE field_name = '$name' AND field_location='$sql_table'"), 0, 0) <= 0) 
+    { 
+        // Attempt to remove non-extra field 
+        return FALSE; 
+    } 
+
+    $fieldsres = sed_sql_query("SELECT * FROM $sql_table LIMIT 1"); 
+    $column = sed_sql_fetchfield($fieldsres, 0); 
+    $column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
+    
+		$step1 = sed_sql_query("DELETE FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$sql_table'");    
+    
+    $sql = "ALTER TABLE $sql_table DROP ".$column_prefix."_".$name; 
+    $step2 = sed_sql_query($sql); 
+    return $step1&&$step2; 
+} 
+
 	
 /* ============== FLAGS AND COUNTRIES (ISO 3166) =============== */
 

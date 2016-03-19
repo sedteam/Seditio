@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.pfs.stndl.php
-Version=175
+Version=177
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro

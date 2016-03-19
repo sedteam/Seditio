@@ -6,9 +6,9 @@ Copyright Neocrome & Seditio Team
 http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
-File=system/functions/database.lib.php
-Version=175
-Updated=2012-dec-31
+File=system/database.mysql.php
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Functions
@@ -32,8 +32,10 @@ if (!function_exists('mysql_set_charset'))
  * 
  * @return int Number of rows affected by the last INSERT, UPDATE, REPLACE or DELETE query.  
  */
-function sed_sql_affectedrows()
-	{ return (mysql_affected_rows()); }
+function sed_sql_affectedrows($conn_id = null) {  
+  global $connection_id;   
+  return is_null($conn_id) ? mysql_affected_rows($connection_id) : mysql_affected_rows($conn_id);
+}
 
 /** 
  * Сloses the non-persistent connection to the MySQL server that's associated with the specified link identifier.
@@ -41,8 +43,10 @@ function sed_sql_affectedrows()
  * @param resource $conn_id The MySQL connection link identifier   
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
-function sed_sql_close($conn_id = '')
-	{ return(mysql_close($conn_id)); }
+function sed_sql_close($conn_id = null) { 
+  global $connection_id; 
+  return is_null($conn_id) ? mysql_close($connection_id) : mysql_close($conn_id); 
+}	
 
 /** 
  * Open a connection to a MySQL Server & Select a MySQL database
@@ -65,16 +69,20 @@ function sed_sql_connect($host, $user, $pass, $db)
  * 
  * @return int Returns the error number from the last MySQL function, or 0 (zero) if no error occurred.  
  */
-function sed_sql_errno()
-	{ return(mysql_errno()); }
+function sed_sql_errno($conn_id = null) { 
+  global $connection_id; 
+  return is_null($conn_id) ? mysql_errno($connection_id) : mysql_errno($conn_id); 
+}	
 
 /** 
  * Returns the error text from the last MySQL function.
  *
  * @return string Returns the error text from the last MySQL function, or '' (empty string) if no error occurred.  
  */
-function sed_sql_error()
-	{ return(mysql_error()); }
+function sed_sql_error($conn_id = null) { 
+  global $connection_id; 
+  return is_null($conn_id) ? mysql_error($connection_id) : mysql_error($conn_id); 
+}	
 
 /** 
  * Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
@@ -102,7 +110,25 @@ function sed_sql_fetchassoc($res)
  */
 function sed_sql_fetchrow($res)
 	{ return (mysql_fetch_row($res)); }
-
+		
+/** 
+ * Returns an object containing field information. This function can be used to obtain information about fields in the provided query result.
+ *   
+ * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @return Returns an object containing field information  
+ */
+function sed_sql_fetchfield($res, $field_offset = 0)
+	{ return (mysql_fetch_field($res, $field_offset)); }
+		
+/** 
+ * Retrieves the number of fields from a query.
+ *   
+ * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @return Returns the number of fields in the result set resource on success or FALSE on failure.
+ */
+function sed_sql_numfields($res)
+	{ return (mysql_num_fields($res)); }	
+		
 /** 
  * Free result memory
  *   
@@ -119,8 +145,10 @@ function sed_sql_freeresult($res)
  *
  * @return int|bool The ID generated for an AUTO_INCREMENT column by the previous query on success, 0 if the previous query does not generate an AUTO_INCREMENT value, or FALSE if no MySQL connection was established. 
  */
-function sed_sql_insertid()
-	{ return (mysql_insert_id()); }
+function sed_sql_insertid($conn_id = null) { 
+  global $connection_id; 
+  return is_null($conn_id) ? mysql_insert_id($connection_id) : mysql_insert_id($conn_id);   
+}	
 
 /** 
  * List tables in a MySQL database
@@ -150,11 +178,10 @@ function sed_sql_numrows($res)
  * @param string $res The string that is to be escaped.
  * @return string Returns the escaped string.
  */
-function sed_sql_prep($res)
-	{
-	$res = mysql_real_escape_string($res);
-	return($res);
-	}
+function sed_sql_prep($res, $conn_id = null) {
+  global $connection_id; 
+  return is_null($conn_id) ? mysql_real_escape_string($res, $connection_id) : mysql_real_escape_string($res, $conn_id);  
+}	
 
 /** 
  * Send a MySQL query & build sql statistics
@@ -163,15 +190,18 @@ function sed_sql_prep($res)
  * @param bool $halterr Show SQL error 
  * @return mixed Returns a resource on success, or FALSE on error for SELECT, SHOW, DESCRIBE, EXPLAIN. Returns TRUE on success or FALSE on error for INSERT, UPDATE, DELETE, DROP
  */
-function sed_sql_query($query, $halterr = true)
+function sed_sql_query($query, $halterr = true, $conn_id = null)
 	{
-	global $sys, $cfg, $usr;
+	global $sys, $cfg, $usr, $connection_id;
+
+	$conn_id = is_null($conn_id) ? $connection_id : $conn_id; 
+
 	$sys['qcount']++;
 	$xtime = microtime();
 	if ($halterr)
-    { $result = mysql_query($query) OR sed_diefatal('SQL error : '.sed_sql_error()); }
+    { $result = mysql_query($query, $conn_id) OR sed_diefatal('SQL error : '.sed_sql_error()); }
   else
-    { $result = mysql_query($query); }
+    { $result = mysql_query($query, $conn_id); }
     
 	$ytime = microtime();
 	$xtime = explode(' ',$xtime);

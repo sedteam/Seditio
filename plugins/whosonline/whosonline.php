@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/whosonline.php
-Version=175
+Version=177
 Updated=2007-mar-03
 Type=Plugin
 Author=Neocrome

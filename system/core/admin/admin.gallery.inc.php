@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.gallery.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -22,14 +22,12 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=gallery"), $L['Gallery']);
+
 $adminhelp = $L['adm_help_gallery'];
-$adminmain = "<h2><img src=\"system/img/admin/gallery.png\" alt=\"\" /> ".$L['Gallery']."</h2>";
 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=gallery")."\">".$L['Configuration']."</a></li>";
-$adminmain .= "</ul>";
-
-
-$adminmain .= "PLACEHOLDER";
-
+$t = new XTemplate(sed_skinfile('admin.gallery', true)); 
+		
+$t -> parse("ADMIN_GALLERY");
+$adminmain .= $t -> text("ADMIN_GALLERY");
 
 ?>

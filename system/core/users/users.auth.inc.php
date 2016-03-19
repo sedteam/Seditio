@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.auth.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=User authentication
@@ -40,7 +40,7 @@ if ($a=='check')
 	$rcookiettl = sed_import('rcookiettl','P','INT');
 	
 	// New in sed171
-	$sql = sed_sql_query("SELECT user_salt, user_passtype FROM $db_users WHERE user_name='".sed_sql_prep($rusername)."'");
+	$sql = sed_sql_query("SELECT user_salt, user_passtype FROM $db_users WHERE user_name='".sed_sql_prep($rusername)."' OR user_email = '".sed_sql_prep($rusername)."'");
 
 	if (sed_sql_numrows($sql) == 1)
 	{
@@ -49,7 +49,8 @@ if ($a=='check')
 	  $rmdpass = ($row['user_passtype'] == 0) ?  sed_hash($rpassword, 0) : sed_hash($rpassword, 1, $mdsalt); // New sed172 
 	}
 
-	$sql = sed_sql_query("SELECT user_id, user_secret, user_maingrp, user_banexpire, user_skin, user_lang FROM $db_users WHERE user_password='$rmdpass' AND user_name='".sed_sql_prep($rusername)."'");
+	$sql = sed_sql_query("SELECT user_id, user_secret, user_maingrp, user_banexpire, user_skin, user_lang 
+						FROM $db_users WHERE user_password = '$rmdpass' AND (user_name='".sed_sql_prep($rusername)."' OR user_email = '".sed_sql_prep($rusername)."')");
 
 	if ($row = sed_sql_fetchassoc($sql))
 		{
@@ -102,7 +103,7 @@ if ($a=='check')
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");  
-    sed_redirect(sed_url("message", "msg=104&redirect=".$redirect, "", true));
+		sed_redirect(sed_url("message", "msg=104&redirect=".$redirect, "", true));
 		exit;
 		}
 	else
@@ -135,7 +136,7 @@ $t = new XTemplate("skins/".$skin."/users.auth.tpl");
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
 	"USERS_AUTH_SEND" => sed_url("users", "m=auth&a=check&redirect=".$redirect),
-	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
+	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"100\" />",
 	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />".$redir,
 	"USERS_AUTH_REGISTER" => sed_url("users", "m=register"),
 	"USERS_AUTH_LOSTPASSWORD" => sed_url("plug", "e=passrecover")

@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.polls.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -26,9 +26,12 @@ $po = sed_import('po','G','TXT');
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=polls"), $L['Polls']);
 $adminhelp = $L['adm_help_polls'];
-$adminmain = "<h2><img src=\"system/img/admin/polls.png\" alt=\"\" /> ".$L['Polls']."</h2>";
 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']."</a></li></ul>";
+//$adminmain = "<h2><img src=\"system/img/admin/polls.png\" alt=\"\" /> ".$L['Polls']."</h2>";
+
+//$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']."</a></li></ul>";
+
+$t = new XTemplate(sed_skinfile('admin.polls', true)); 
 
 if ($n=='options')
 	{
@@ -61,28 +64,35 @@ if ($n=='options')
 	$row = sed_sql_fetchassoc($sql);
 
 	$adminpath[] = array (sed_url("admin", "m=polls&n=options&id=".$id), $L['Options']." (#$id)");
-	$adminmain .= $L['editdeleteentries']." :<br />&nbsp;<br />";
-	$adminmain .= "<a href=\"javascript:polls('".$row["poll_id"]."')\">".$L['Poll']." #".$row["poll_id"]."</a><br />";
- 	$adminmain .= "<form id=\"pollchgtitle\" action=\"".sed_url("admin", "m=polls&n=options&a=updatetitle&id=".$id)."\" method=\"post\">";
-	$adminmain .= $L['Title']." : <input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($row["poll_text"])."\" size=\"56\" maxlength=\"255\">";
-	$adminmain .= " <input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\"></form><br />";
-	$adminmain .= $L['Date']." : ".sed_build_date($cfg['dateformat'], $row["poll_creationdate"])." GMT<br />";
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td>".$L['Delete']."</td><td>#</td><td>".$L['Option']."</td><td>&nbsp;</td></tr>";
+	
+	$t->assign(array(
+		"POLL_EDIT_ID" => $row["poll_id"],
+		"POLL_EDIT_SEND" => sed_url("admin", "m=polls&n=options&a=updatetitle&id=".$id),
+		"POLL_EDIT_TEXT" => sed_textbox('rtitle', sed_cc($row['poll_text']), 56, 255),
+		"POLL_EDIT_CREATION_DATE" => sed_build_date($cfg['dateformat'], $row["poll_creationdate"])
+	));
 
 	while ($row1 = sed_sql_fetchassoc($sql1))
 		{
- 		$adminmain .= "<form id=\"savepollopt\" action=\"".sed_url("admin", "m=polls&n=options&a=update&id=".$row1['po_pollid']."&po=".$row1['po_id'])."\" method=\"post\">";
-		$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=polls&n=options&a=delete&id=".$row1['po_pollid']."&po=".$row1['po_id']."&".sed_xg())."\">".$out['img_delete']."</a>";
-		$adminmain .= "<td>".$row1['po_id']."</td><td> <input type=\"text\" class=\"text\" name=\"rtext\" value=\"".sed_cc($row1['po_text'])."\" size=\"32\" maxlength=\"128\"> </td>";
-		$adminmain .= "<td><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\"></td></tr></form>";
+ 
+		$t->assign(array(
+			"POLL_EDIT_OPTIONS_SEND" => sed_url("admin", "m=polls&n=options&a=update&id=".$row1['po_pollid']."&po=".$row1['po_id']),
+			"POLL_EDIT_OPTIONS_DELETE_URL" => sed_url("admin", "m=polls&n=options&a=delete&id=".$row1['po_pollid']."&po=".$row1['po_id']."&".sed_xg()),
+			"POLL_EDIT_OPTIONS_ID" => $row1['po_id'],
+			"POLL_EDIT_OPTIONS_TEXT" => sed_textbox('rtext', sed_cc($row1['po_text']), 32, 128)
+		)); 
+		
+		$t -> parse("ADMIN_POLLS.POLL_EDIT.OPTIONS_LIST");
+		
 		}
+	
+	$t->assign(array(
+		"POLL_OPTIONS_ADD_SEND" => sed_url("admin", "m=polls&n=options&a=add&id=".$row["poll_id"]),
+		"POLL_OPTIONS_ADD_TEXT" => sed_textbox('ntext', '', 32, 128)
+	));
+	
+	$t -> parse("ADMIN_POLLS.POLL_EDIT");	
 
-	$adminmain .= "</table><br />&nbsp;<br />".$L['addnewentry']." :<br />&nbsp;<br /><table class=\"cells striped\"><tr>";
-	$adminmain .= "<td>".$L['Option']."</td><td>&nbsp;</td><tr>";
-	$adminmain .= "<form id=\"addpollopt\" action=\"".sed_url("admin", "m=polls&n=options&a=add&id=".$row["poll_id"])."\" method=\"post\"><tr>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"\" size=\"32\" maxlength=\"128\"> </td>";
-	$adminmain .= "<td><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\"></td></tr></form></table>";
 	}
 else
 	{
@@ -99,7 +109,7 @@ else
 		$num = $num + sed_sql_affectedrows();
 		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 		$num = $num + sed_sql_affectedrows();
-		sed_redirect(sed_url("message", "msg=916&rc=102&num=".$num, "", true));
+		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=".$num, "", true));
 		exit;
 		}
 
@@ -110,7 +120,7 @@ else
 		$num = sed_sql_affectedrows();
 		$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
 		$num = $num + sed_sql_affectedrows();
-		sed_redirect(sed_url("message", "msg=916&rc=102&num=".$num, "", true));
+		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=".$num, "", true));
 		exit;
 		}
 
@@ -118,22 +128,19 @@ else
 		{
 		sed_check_xg();
 		$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
-		sed_redirect(sed_url("message", "msg=916&rc=102&num=1", "", true));
+		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=1", "", true));
 		exit;
 		}
 
 	if ($a=='add')
 		{
 		$ntext = sed_import('ntext','P','HTM');
-		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) valueS (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
+		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
 		}
 
 	$sql = sed_sql_query("SELECT p.*, t.ft_id FROM $db_polls AS p
 		LEFT JOIN $db_forum_topics AS t ON t.ft_poll = p.poll_id
 		WHERE 1 ORDER BY p.poll_type ASC, p.poll_id DESC LIMIT 20");
-
-	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<table class=\"cells striped\">";
 
 	$ii = 0;
 	$prev = -1;
@@ -143,59 +150,33 @@ else
 		$id = $row['poll_id'];
 		$type = $row['poll_type'];
 
-		if ($type==0 && $prev==-1)
-			{
-			$prev = 0;
-			$adminmain .= "<tr><td colspan=\"8\">Index polls (recent at top) :</td></tr>";
-			$adminmain .= "<tr><td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Reset']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Bump']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:128px;\">".$L['Date']."</td>";
-			$adminmain .= "<td class=\"coltop\">".$L['Poll']." ".$L['adm_clicktoedit']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Votes']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Open']."</td></tr>";
-			}
-
-		if ($type==1 && $prev==0)
-			{
-			$prev = 1;
-			$adminmain .= "<tr><td colspan=\"8\">Polls from forums (recent at top) :</td></tr>";
-			$adminmain .= "<tr><td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Reset']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Bump']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:128px;\">".$L['Date']."</td>";
-			$adminmain .= "<td class=\"coltop\">".$L['Topic']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Votes']."</td>";
-			$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Open']."</td></tr>";
-			}
-
 		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
 		$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 
-		$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=polls&a=delete&id=".$id."&".sed_xg())."\">".$out['img_delete']."</a></td>";
-		$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url("admin", "m=polls&a=reset&id=".$id."&".sed_xg())."\">R</a>]</td>";
-		$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url("admin", "m=polls&a=bump&id=".$id."&".sed_xg())."\">B</a>]</td>";
-		$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
+		$t->assign(array(		
+			"POLLS_LIST_DELETE_URL" => sed_url("admin", "m=polls&a=delete&id=".$id."&".sed_xg()),
+			"POLLS_LIST_RESET_URL" => sed_url("admin", "m=polls&a=reset&id=".$id."&".sed_xg()),
+			"POLLS_LIST_BUMP_URL" => sed_url("admin", "m=polls&a=bump&id=".$id."&".sed_xg()),
+			"POLLS_LIST_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['poll_creationdate']),
+			"POLLS_LIST_OPTIONS_URL" => sed_url("admin", "m=polls&n=options&id=".$row['poll_id']),
+			"POLLS_LIST_POLLTEXT" => sed_cc($row['poll_text']),
+			"POLLS_LIST_TOTALVOTES" => $totalvotes,
+			"POLLS_LIST_OPEN_URL" => ($type==0) ? sed_url("polls", "id=".$row['poll_id']) : sed_url("forums", "m=posts&q=".$row['ft_id'])
+		));
+		$t -> parse("ADMIN_POLLS.POLLS.POLLS_LIST"); 
 
-
-		$adminmain .= "<td><a href=\"".sed_url("admin", "m=polls&n=options&id=".$row['poll_id'])."\">".sed_cc($row['poll_text'])."</a></td>";
-		$adminmain .= "<td style=\"text-align:center;\">".$totalvotes."</td>";
-		$adminmain .= "<td style=\"text-align:center;\">";
-
-		if ($type==0)
-			{ $adminmain .= "<a href=\"".sed_url("polls", "id=".$row['poll_id'])."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\"></a>"; }
-		else
-			{ $adminmain .= "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id'])."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\"></a>"; }
-
-		$adminmain .= "</td></tr>";
 		$ii++;
 		}
-	$adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$ii."</td></tr></table>";
-	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$adminmain .= "<form id=\"addpoll\" action=\"".sed_url("admin", "m=polls&a=add")."\" method=\"post\">";
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td>Poll topic</td><td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"\" size=\"64\" maxlength=\"255\"></tr>";
-	$adminmain .= "<td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\"> </td></tr></table></form>";
+		
+	$t->assign(array(		
+		"POLLS_TOTAL" => $ii,
+		"POLL_ADD_SEND" => sed_url("admin", "m=polls&a=add"),
+		"POLL_ADD_TEXT" => sed_textbox('ntext', '', 64, 255)
+	));
+	$t -> parse("ADMIN_POLLS.POLLS");  	
 	}
+
+$t -> parse("ADMIN_POLLS");  
+$adminmain .= $t -> text("ADMIN_POLLS");
 
 ?>

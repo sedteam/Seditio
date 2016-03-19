@@ -12,8 +12,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Lang
 Author=Neocrome
 Description=Language main
@@ -109,6 +109,7 @@ $L['Pictures'] = "pictures";
 $L['Ghost'] = "Ghost";
 $L['Group'] = "Group";
 $L['Groups'] = "Groups";
+$L['Gotosite'] = "Go to site";
 $L['Guest'] = "Guest";
 $L['Guests'] = "Guests";
 $L['Headlines'] = "View headlines";
@@ -128,6 +129,7 @@ $L['ICQ'] = "ICQ Number";
 $L['Id'] = "ID";
 $L['Image'] = "Image";
 $L['ImageURL'] = "Image URL";
+$L['Install'] = "Installing";
 $L['Ip'] = "IP";
 $L['Ipsearch'] = "IP search";
 $L['Ipmask'] = "IP mask";
@@ -314,6 +316,7 @@ $L['Website'] = "Website";
 $L['Wipe'] = "Wipe";
 $L['Wipeall'] = "Wipe all";
 $L['Write'] = "Write";
+$L['Uninstall'] = "Uninstalling";
 $L['Yes'] = "Yes";
 $L['YIM'] = "Yahoo Messenger";
 

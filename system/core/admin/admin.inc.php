@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Administration panel
@@ -26,6 +26,7 @@ $o = sed_import('o','P','TXT');
 $w = sed_import('w','P','TXT');
 $u = sed_import('u','P','TXT');
 $s = sed_import('s','G','ALP', 24);
+$msg = sed_import('msg', 'G', 'ALP');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'any');
 sed_block($usr['auth_read']);
@@ -50,50 +51,119 @@ $allow_img['1']['0'] = "<img src=\"system/img/admin/allow.gif\" alt=\"\" />";
 $allow_img['0']['1'] = "<img src=\"system/img/admin/deny_locked.gif\" alt=\"\" />";
 $allow_img['1']['1'] = "<img src=\"system/img/admin/allow_locked.gif\" alt=\"\" />";
 
-$adminmenu = "<table style=\"width:100%;\"><tr>";
+$t = new XTemplate(sed_skinfile('admin.menu', true)); 
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"".sed_url("admin")."\">";
-$adminmenu .= "<img src=\"system/img/admin/admin.png\" alt=\"\" /><br />".$L['Home']."</a>";
-$adminmenu .= "</td>";
+// Options menu
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=config"), "<img src=\"system/img/admin/config.png\" alt=\"\" /><br />".$L['Configuration'], sed_auth('admin', 'a', 'A'));
-$adminmenu .= "</td>";
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=page"), "<img src=\"system/img/admin/page.png\" alt=\"\" /><br />".$L['Pages'], sed_auth('page', 'any', 'A'));
-$adminmenu .= "</td>";
+if (sed_auth('admin', 'a', 'A'))
+	{    
+		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'");			
+		$config_menu .= "<ul>";
+		
+		while ($row = sed_sql_fetchassoc($sql))
+			{
+			$config_menu .= "<li>";
+			$code = "core_".$row['config_cat'];
+			$config_menu_class = ($row['config_cat'] == $p) ? "current" : '';
+			$config_menu .= "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=".$row['config_cat'])."\" class=\"".$config_menu_class."\">".$L[$code]."</a>";
+			$config_menu .= "</li>";
+			}
+			
+		$config_menu .= "</ul>";		
+		
+		$t -> assign(array( 
+		    "ADMINMENU_CONFIG_URL" => sed_url('admin', "m=config"), 
+		    "ADMINMENU_CONFIG_URL_CLASS" => ($_GET['m'] == "config") ? "current" : "",
+		    "ADMINMENU_CONFIG" => $config_menu
+		));		
+		$t -> parse("ADMINMENU.CONFIG_MENU"); 
+	}
+// Pages menu 
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=forums"), "<img src=\"system/img/admin/forums.png\" alt=\"\" /><br />".$L['Forums'], sed_auth('admin', 'a', 'A'));
-$adminmenu .= "</td>";
+$page_menu .= "<ul>";
+$page_menu .= ($_GET['mn'] == 'queue') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'))."</li>";
+$page_menu .= ($_GET['m'] == 'page' && $_GET['s'] == 'add') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
+$page_menu .= ($_GET['m'] == 'page' && $_GET['s'] == 'manager') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'))."</li>";
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=users"), "<img src=\"system/img/admin/users.png\" alt=\"\" /><br />".$L['Users'], sed_auth('users', 'a', 'A'));
-$adminmenu .= "</td>";
+if (sed_auth('admin', 'a', 'A'))
+{
+	$page_menu .= ($_GET['mn'] == 'catorder') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>"; 
+	$page_menu .= ($_GET['mn'] == 'structure') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['adm_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
+}
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"".sed_url("admin", "m=tools")."\">";
-$adminmenu .= "<img src=\"system/img/admin/manage.png\" alt=\"\" /><br />".$L['adm_manage']."</a>";
-$adminmenu .= "</td>";
+$page_menu .= "</ul>";
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=plug"), "<img src=\"system/img/admin/plugins.png\" alt=\"\" /><br />".$L['Plugins'], sed_auth('admin', 'a', 'A'));
-$adminmenu .= "</td>";
+$t -> assign(array( 
+    "ADMINMENU_PAGE_URL" => sed_url('admin', "m=page"),
+    "ADMINMENU_PAGE_URL_CLASS" => ($_GET['m'] == "page" || $_GET['m'] == "pageadd") ? "current" : "",
+    "ADMINMENU_PAGE" => $page_menu
+));    
+     
+$t -> parse("ADMINMENU.PAGE_MENU"); 
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=trashcan"), "<img src=\"system/img/admin/trash.png\" alt=\"\" /><br />".$L['Trashcan'], sed_auth('admin', 'a', 'A'));
-$adminmenu .= "</td>";
 
-$adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif(sed_url("admin", "m=log"), "<img src=\"system/img/admin/log.png\" alt=\"\" /><br />".$L['adm_log'], sed_auth('admin', 'a', 'A'));
-$adminmenu .= "</td>";
+// Forums menu & other
 
-$adminmenu .= "</tr></table>";
+if (sed_auth('admin', 'a', 'A'))
+{
+  $forums_menu .= "<ul class=\"arrow_list\">";
+  $forums_menu .= ($_GET['m'] == "forums" && empty($s)) ? "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'))."</li>";
+  $forums_menu .= ($_GET['s'] == "structure") ? "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'))."</li>";
+  $forums_menu .= "</ul>";
+
+  $t -> assign(array( 
+      "ADMINMENU_FORUMS_URL" => sed_url('admin', "m=forums"),
+      "ADMINMENU_FORUMS_URL_CLASS" => ($_GET['m'] == "forums") ? "current" : "",
+      "ADMINMENU_FORUMS" => $forums_menu
+  )); 
+  
+  $t -> parse("ADMINMENU.FORUMS_MENU");
+
+  $t -> assign(array( 
+      "ADMINMENU_USERS_URL" => sed_url('admin', "m=users"),
+      "ADMINMENU_USERS_URL_CLASS" => ($_GET['m'] == 'users') ? 'current' : ''    
+  ));
+  
+  $t -> parse("ADMINMENU.USERS_MENU");
+  
+  $t -> assign(array(    
+      "ADMINMENU_PLUGINS_URL" => sed_url('admin', "m=plug"),
+      "ADMINMENU_PLUGINS_URL_CLASS" => ($_GET['m'] == 'plug') ? 'current' : ''     
+  ));  
+
+  $t -> parse("ADMINMENU.PLUGINS_MENU");
+
+  $t -> assign(array(   
+      "ADMINMENU_LOG_URL" => sed_url('admin', "m=log"),
+      "ADMINMENU_LOG_URL_CLASS" => ($_GET['m'] == 'log') ? 'current' : ''      
+  ));
+
+  $t -> parse("ADMINMENU.LOG_MENU");
+
+  $t -> assign(array( 
+      "ADMINMENU_TOOLS_URL" => sed_url('admin', "m=tools"),
+      "ADMINMENU_TOOLS_URL_CLASS" => ($_GET['m'] == 'tools') ? 'current' : ''    
+  ));
+  
+  $t -> parse("ADMINMENU.TOOLS_MENU");
+
+}
+
+$t -> assign(array( 
+    "ADMINMENU_URL" => sed_url('admin'), 
+    "ADMINMENU_URL_CLASS" => (empty($_GET['m'])) ? 'current' : ''     
+)); 
+ 
+$t -> parse("ADMINMENU"); 
+
+$adminmenu = $t -> text("ADMINMENU");
 
 require($sys['inc']);
 
-$adminmain .= (empty($adminhelp)) ? '' : "<h4>".$L['Help']." :</h4>".$adminhelp;
-
+$adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box\"><div class=\"content-box-header\"><h3>".$L['Help']."</h3></div>";
+$adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box-content\">".$adminhelp."</div></div>";
 
 $out['subtitle'] = $L['Administration'];
 
@@ -104,17 +174,40 @@ $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('admintitle', $title_tags, $title_data);
 /**/
 
-
 require("system/header.php");
 
-$t = new XTemplate("skins/".$skin."/admin.tpl");
+$t = new XTemplate(sed_skinfile("admin", true));
 
 $t->assign(array(
 	"ADMIN_TITLE" => sed_build_adminsection($adminpath),
+	"ADMIN_BREADCRUMBS" => sed_build_adminsection($adminpath, 'breadcrumbs', '<i class="fa fa-lg fa-home"></i> '),
 	"ADMIN_SUBTITLE" => $adminsubtitle,
 	"ADMIN_MENU" => $adminmenu,
+	"ADMIN_URL" => sed_url('admin'),
 	"ADMIN_MAIN" => $adminmain,
 		));
+		
+$t->assign(array (
+	"ADMIN_USER_NAME" => $usr['name'],
+	"ADMIN_USER_LOGINOUT" => $out['loginout']
+		));
+
+$t->parse("MAIN.ADMIN_USER");		
+    
+if (!empty($msg)) 
+  {
+  require("system/lang/$lang/message.lang.php");
+  	
+  $msg_type = (array_key_exists($msg, $cfg['msgtype'])) ? $cfg['msgtype_name'][$cfg['msgtype'][$msg]] : $cfg['msgtype_name']['i'];	
+
+  $t->assign(array(
+    "ADMIN_MSG_CLASS" => $msg_type,
+    "ADMIN_MSG_TITLE" => $L["msg".$msg."_0"],
+    "ADMIN_MSG_TEXT" => $L["msg".$msg."_1"]
+  ));
+  
+  $t->parse("MAIN.ADMIN_MESSAGE");
+  }   
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.tags');

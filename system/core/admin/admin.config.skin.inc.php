@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.config.skin.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -27,8 +27,6 @@ if ($setskin == "update")
 	sed_redirect(sed_url("admin", "m=config&n=edit&o=core&p=skin", "", true));
 }
 
-$adminmain .= "<h3>".$L['core_skin']." :</h3>";
-
 $handle = opendir("skins/");
 
 while ($f = readdir($handle))
@@ -40,34 +38,33 @@ while ($f = readdir($handle))
 closedir($handle);
 sort($skinlist);
 
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td class=\"coltop\">".$L['core_skin']."</td>";
-$adminmain .= "<td class=\"coltop\" width=\"200\">".$L['Preview']."</td>";
-$adminmain .= "<td class=\"coltop\">&nbsp;</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Default']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Set']."</td></tr>";
+$t = new XTemplate(sed_skinfile('admin.config.skin', true)); 
 
 while(list($i,$x) = each($skinlist))
 	{
 	$skininfo = "skins/".$x."/".$x.".php";
-	$info = sed_infoget($skininfo);
-	$adminmain .= "</tr>";
-	$adminmain .= "<td style=\"width:20%;\"><strong>"; 	
-	$adminmain .= (!empty($info['Error'])) ? $x." (".$info['Error'].")" : $info['Name'];
-	$adminmain .= "</strong>";	
-	$adminmain .= "</td><td><img src=\"skins/$x/$x.png\" alt=\"".$info['Name']."\" />";
-	$adminmain .= "<td style=\"width:30%;\">"; 	   
-	$adminmain .= $L['Version']." : ".$info['Version']."<br />";
-	$adminmain .= $L['Updated']." : ".$info['Updated']."<br />";
-	$adminmain .= $L['Author']." : ".$info['Author']."<br />";
-	$adminmain .= $L['URL']." : ".$info['Url']."<br />";
-	$adminmain .= $L['Description']." : ".$info['Description']."";  
-	$adminmain .= "</td><td style=\"text-align:center; vertical-align:middle; width:10%;\">";  
-	$adminmain .= ($x == $cfg['defaultskin']) ? $out['img_checked'] : $out['img_unchecked'];
-	$adminmain .= "</td><td style=\"text-align:center; vertical-align:middle; width:10%;\">";
-	$adminmain .= ($x == $cfg['defaultskin']) ? $out['img_checked'] : "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=skin&setskin=update&skin_name=".$x."&".sed_xg())."\">".$out['img_set']."</a>";
-	$adminmain .= "</td></tr>"; 
+	$info = sed_infoget($skininfo);	 	
+	$skin_name = (!empty($info['Error'])) ? $x." (".$info['Error'].")" : $info['Name'];	   	
+	$skin_desc = $L['Version']." : ".$info['Version']."<br />";
+	$skin_desc .= $L['Updated']." : ".$info['Updated']."<br />";
+	$skin_desc .= $L['Author']." : ".$info['Author']."<br />";
+	$skin_desc .= $L['URL']." : ".$info['Url']."<br />";
+	$skin_desc .= $L['Description']." : ".$info['Description']."";   	
+	$skin_default = ($x == $cfg['defaultskin']) ? $out['img_checked'] : $out['img_unchecked'];	
+	$skin_set = ($x == $cfg['defaultskin']) ? $out['img_checked'] : "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=skin&setskin=update&skin_name=".$x."&".sed_xg())."\">".$out['img_set']."</a>";
+		
+	$t -> assign(array( 
+		"SKIN_LIST_NAME" => $skin_name,
+		"SKIN_LIST_PREVIEW" => "<img src=\"skins/$x/$x.png\" alt=\"".$info['Name']."\" />",
+		"SKIN_LIST_DESC" => $skin_desc,
+		"SKIN_LIST_SET" => $skin_set,
+		"SKIN_LIST_DEFAULT" => $skin_default
+	));
+		
+	$t -> parse("ADMIN_CONFIG_SKIN.SKIN_LIST");
   }
-$adminmain .= "</table>";
-
+  
+$t -> parse("ADMIN_CONFIG_SKIN");
+$adminmain .= $t -> text("ADMIN_CONFIG_SKIN");  
+  
 ?>

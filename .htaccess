@@ -2,9 +2,10 @@ Options -Indexes
 <IfModule mod_rewrite.c>
 RewriteEngine On
 #RewriteBase /
-#RewriteCond %{REQUEST_FILENAME} -d [OR] 
+RewriteCond %{REQUEST_FILENAME} -d [OR] 
 RewriteCond %{REQUEST_FILENAME} -f [OR] 
 RewriteCond %{REQUEST_FILENAME} -l 
+#RewriteRule ^(datas.*) sefurls.php
 RewriteRule ^(.*)$ - [NC,L] 
-RewriteRule ^(.*)$ sefurls.php [QSA,L]
+RewriteRule ^(.*)$ sefurls.php [QSA,L]   
 </IfModule>

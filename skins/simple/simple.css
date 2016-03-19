@@ -75,8 +75,19 @@ body {
 	float: left;
 	overflow: hidden;
 }
+
+#containerright {
+	width: 100%;
+	float: right;
+	overflow: hidden;
+}
+
 #content {
 	padding: 0 320px 0 0;
+}
+
+#contentright {
+	padding: 0 0 0 320px;
 }
 
 /* = Right Sidebar
@@ -86,6 +97,16 @@ body {
 	float: left;
 	width: 300px;
 	margin-left: -300px;
+	position: relative;
+}
+
+/* = Right Sidebar
+-----------------------------------------------------------------------------*/
+
+#left-sidebar {
+	float: right;
+	width: 300px;
+	margin-right: -300px;
 	position: relative;
 }
 
@@ -1163,4 +1184,49 @@ ul.tabs li a.selected
   font-size: 0;
   margin-right:5px;
   margin-bottom:5px;
+}
+
+/************ Shortcut Buttons ************/
+
+.shortcut-button {
+	background: #f7f7f7 url('img/shortcut-button-bg.gif') top left no-repeat;
+	display: block;
+	margin: 0 0 15px 0;
+	}
+
+.shortcut-button span {
+	border: 1px solid #ccc;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	display:block;
+	padding: 15px 10px 15px 10px;
+	text-align: center;
+	color: #555;
+	min-width:80px;
+	font-size: 13px;
+	line-height: 1.3em;
+}
+
+.shortcut-button span img {
+	margin-bottom: 10px;
+}
+
+.shortcut-button:hover {
+	background: #fff;
+}
+
+/* ============== */
+
+ul.admin-buttons {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+ul.admin-buttons li {
+	display: inline;
+	display: inline-block;
+	margin-right:6px;
+	vertical-align: top;
 }

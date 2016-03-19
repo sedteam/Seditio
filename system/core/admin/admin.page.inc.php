@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.page.inc.php
-Version=175
+Version=177
 Updated=2012-may-31
 Type=Core.admin
 Author=Neocrome
@@ -24,24 +24,17 @@ $mn = sed_import('mn', 'G', 'TXT');
 
 $adminpath[] = array (sed_url("admin", "m=page"), $L['Pages']);
 
-$adminmain = "<h2><img src=\"system/img/admin/pages.png\" alt=\"\" /> ".$L['Pages']."</h2>";
+//$adminmain = "<h2><img src=\"system/img/admin/pages.png\" alt=\"\" /> ".$L['Pages']."</h2>";
 
 $totaldbpages = sed_sql_rowcount($db_pages);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = sed_sql_result($sql,0,'COUNT(*)');
                      
-$adminmain .= "<ul class=\"arrow_list\">";
-$adminmain .= "<li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=page")."\">".$L['Configuration']."</a></li>";
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue']." : ".$sys['pagesqueued'], sed_auth('admin', 'any', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url("page", "m=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>"; 
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['Structure'], sed_auth('admin', 'a', 'A'))."</li>"; 
-$adminmain .= "<li>".$L['Pages']." : ".$totaldbpages." (<a href=\"".sed_url("list", "c=all")."\">".$L['adm_showall']."</a>)</li>";
-$adminmain .= "</ul>";
-
 $structure_mode[0] = $L['Default'];
 $structure_mode[1] = $L['Group'];
 $structure_mode[2] = $L['Sub'];
+
+$t = new XTemplate(sed_skinfile('admin.page', true));
 
 switch($mn)
 	{
@@ -54,7 +47,7 @@ switch($mn)
     
     $adminpath[] = array (sed_url("admin", "m=page&mn=structure"), $L['Structure']);
 
-    $adminmain .= "<h4>".$L['Structure']."</h4>";
+   // $adminmain .= "<h4>".$L['Structure']."</h4>";
     
     if ($n=='options')
     	{
@@ -92,7 +85,7 @@ switch($mn)
     			WHERE structure_id='".$id."'");
     
     		  sed_cache_clear('sed_cat');
-    		  sed_redirect(sed_url("admin", "m=page&mn=structure", "", true));
+    		  sed_redirect(sed_url("admin", "m=page&mn=structure&msg=917", "", true));
     		  exit;
     		  }
     
@@ -146,49 +139,40 @@ switch($mn)
     
     	$adminpath[] = array(sed_url("admin", "m=page&mn=structure&n=options&id=".$id), sed_cc($structure_title));
     
-    	$adminmain .= "<h4>".$L['editdeleteentries']."</h4>";    	
-    	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=page&mn=structure&n=options&a=update&id=".$structure_id)."\" method=\"post\">";
-     
-    	$adminmain .= "<table class=\"cells striped\">";
-    	$adminmain .= "<tr><td>".$L['Code']." :</td>";
-    	$adminmain .= "<td>".$structure_code."</td></tr>";
-    	$adminmain .= "<tr><td>".$L['Path']." :</td>";
-    	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$structure_path."\" size=\"16\" maxlength=\"16\" /></td></tr>";
-    	$adminmain .= "<tr><td>".$L['Title']." :</td>";
-    	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$structure_title."\" size=\"64\" maxlength=\"32\" /></td></tr>";
-    	$adminmain .= "<tr><td>".$L['Description']." :</td>";
-    	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$structure_desc."\" size=\"64\" maxlength=\"255\" /></td></tr>";
-    	$adminmain .= "<tr><td>".$L['Icon']." :</td>";
-    	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$structure_icon."\" size=\"64\" maxlength=\"128\" /></td></tr>";
-    	
-    	$adminmain .= "<tr><td colspan=\"2\">".$L['Text']." :<br />";
-    	$adminmain .= "<textarea name=\"rstext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($structure_text, ENT_QUOTES)."</textarea></td></tr>";
-
-    	$checked = $structure_pages ? "checked=\"checked\"" : '';
-    	$checked = $structure_group ? "checked=\"checked\"" : '';
-    	$adminmain .= "<tr><td>".$L['Group']." :</td>";
-    	$adminmain .= "<td><input type=\"checkbox\" class=\"checkbox\" name=\"rgroup\" $checked /></td></tr>";
-    	$adminmain .= "<tr><td>".$L['adm_tpl_mode']." :</td><td>";
-    	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
-    	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"2\" $check2 /> ".$L['adm_tpl_forced'];
-    	$adminmain .=  " <select name=\"rtplforced\" size=\"1\">";
-    
+		$st_tpl = "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
+    	$st_tpl .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"2\" $check2 /> ".$L['adm_tpl_forced'];
+    	$st_tpl .=  " <select name=\"rtplforced\" size=\"1\">";    
     	foreach($sed_cat as $i => $x)
     		{
     		if ($i!='all')
     			{
     			$selected = ($i==$row['structure_tpl']) ? "selected=\"selected\"" : '';
-    			$adminmain .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
+    			$st_tpl .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
     			}
     		}
-    	$adminmain .= "</select><br/>";
-    	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
-    	$adminmain .= "</td></tr>";
-    	$adminmain .= "<tr><td>".$L['adm_enablecomments']." :</td><td>".$form_allowcomments."</td></tr>";
-    	$adminmain .= "<tr><td>".$L['adm_enableratings']." :</td><td>".$form_allowratings."</td></tr>";
-    	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-    	$adminmain .= "</table>";
-    	$adminmain .= "</form>";
+    	$st_tpl .= "</select><br/>";
+    	$st_tpl .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
+
+    	$checked = $structure_pages ? "checked=\"checked\"" : '';
+    	$checked = $structure_group ? "checked=\"checked\"" : '';
+    	$st_group = "<input type=\"checkbox\" class=\"checkbox\" name=\"rgroup\" $checked />";
+    	
+		$t->assign(array(   	
+			"STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=page&mn=structure&n=options&a=update&id=".$structure_id),
+			"STRUCTURE_UPDATE_CODE" => $structure_code,
+			"STRUCTURE_UPDATE_PATH" => "<input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$structure_path."\" size=\"16\" maxlength=\"16\" />",
+			"STRUCTURE_UPDATE_TITLE" => "<input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$structure_title."\" size=\"64\" maxlength=\"32\" />",
+			"STRUCTURE_UPDATE_DESC" => "<input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$structure_desc."\" size=\"64\" maxlength=\"255\" />",
+			"STRUCTURE_UPDATE_ICON" => "<input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$structure_icon."\" size=\"64\" maxlength=\"128\" />",
+			"STRUCTURE_UPDATE_TEXT" => "<textarea name=\"rstext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($structure_text, ENT_QUOTES)."</textarea>",
+			"STRUCTURE_UPDATE_GROUP" => $st_group,
+			"STRUCTURE_UPDATE_TPL" => $st_tpl,
+			"STRUCTURE_UPDATE_ALLOWCOMMENTS" => $form_allowcomments,
+			"STRUCTURE_UPDATE_ALLOWRATINGS" => $form_allowratings
+		));
+    	
+    	$t -> parse("ADMIN_PAGE.STRUCTURE_UPDATE");
+    	
     	}
     else
     	{
@@ -205,7 +189,7 @@ switch($mn)
     			}
     		sed_auth_clear('all');
     		sed_cache_clear('sed_cat');
-    		sed_redirect(sed_url("admin", "m=page", "", true));
+    		sed_redirect(sed_url("admin", "m=page&mn=structure&msg=917", "", true));
     		exit;
     		}
     	elseif ($a=='add')
@@ -214,14 +198,14 @@ switch($mn)
     		foreach($g as $k => $x) $$x = $_POST[$x];
     		$group = (isset($group)) ? 1 : 0;
     		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
-    		sed_redirect(sed_url("admin", "m=page&mn=structure", "", true));
+    		sed_redirect(sed_url("admin", "m=page&mn=structure&msg=301", "", true));
     		exit;
     		}
     	elseif ($a=='delete')
     		{
     		sed_check_xg();
     		sed_structure_delcat($id, $c);
-    		sed_redirect(sed_url("admin", "m=page&mn=structure", "", true));
+    		sed_redirect(sed_url("admin", "m=page&mn=structure&msg=302", "", true));
     		exit;
     		}
     
@@ -233,28 +217,6 @@ switch($mn)
     	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
     
     	$skinpath = "skins/".$skin."/";
-    
-		$adminmain .= "<div class=\"sedtabs\">	
-			<ul class=\"tabs\">
-		  <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Structure']."</a></li>
-		  <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
-		</ul>    
-		<div class=\"tab-box\">";
-
-		$adminmain .= "<div id=\"tab1\" class=\"tabs\">";
-
-		$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=page&mn=structure&a=update")."\" method=\"post\">";  
-      
-    	$adminmain .= "<table class=\"cells striped\">";
-    	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['Title']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['Path']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['TPL']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['Group']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['Pages']."</td>";
-    	$adminmain .= "<td class=\"coltop\">".$L['Rights']."</td>";
-    	$adminmain .= "</tr>";
     
     	while ($row = sed_sql_fetchassoc($sql))
     		{
@@ -277,67 +239,51 @@ switch($mn)
     		else
     			{ $structure_tpl_sym = $L['adm_tpl_forced']." : ".$sed_cat[$row['structure_tpl']]['tpath']; }
     
-    		$adminmain .= "<tr><td style=\"text-align:center;\">";
-    		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "<a href=\"".sed_url("admin", "m=page&mn=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">".$out['img_delete']."</a>";
-    		$adminmain .= "</td>";
-    		$adminmain .= "<td>".$structure_code."</td>";
-    		$adminmain .= "<td><a href=\"".sed_url("admin", "m=page&mn=structure&n=options&id=".$structure_id."&".sed_xg())."\">".sed_cc($structure_title)."</a></td>";
-    		$adminmain .= "<td>".$pathfieldimg."<input type=\"text\" class=\"text\" name=\"s[$structure_id][rpath]\" value=\"".$structure_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
-    		$adminmain .= "<td>".$structure_tpl_sym." / ";
-    		$adminmain .= "<span class=\"desc\">".str_replace($skinpath, '', sed_skinfile(array('page', $sed_cat[$row['structure_code']]['tpl'])));
-    
-    		$adminmain .= "+";    
+    		$st_tpl = $structure_tpl_sym." / ";
+    		$st_tpl .= "<span class=\"desc\">".str_replace($skinpath, '', sed_skinfile(array('page', $sed_cat[$row['structure_code']]['tpl'])));   
+    		$st_tpl .= "+";    
     		if ($sed_cat[$row['structure_code']]['group'])
-    		{  $adminmain .= str_replace($skinpath, '', sed_skinfile(array('list', 'group', $sed_cat[$row['structure_code']]['tpl']))); }
+				{  $st_tpl .= str_replace($skinpath, '', sed_skinfile(array('list', 'group', $sed_cat[$row['structure_code']]['tpl']))); }
     		else
-    		{  $adminmain .= str_replace($skinpath, '', sed_skinfile(array('list', $sed_cat[$row['structure_code']]['tpl']))); }
-               
-    		$adminmain .= "</span></td>";    
-        
-    //		$checked = $structure_group ? "checked=\"checked\"" : '';
-    //		$adminmain .= "<td style=\"text-align:center;\"><input type=\"checkbox\" class=\"checkbox\" name=\"s[$structure_id][rgroup]\" $checked /></td>";
+				{  $st_tpl .= str_replace($skinpath, '', sed_skinfile(array('list', $sed_cat[$row['structure_code']]['tpl']))); }              
+    		$st_tpl .= "</span>";    
      
-    		$adminmain .= "<td style=\"text-align:center;\">"; 
-    		$adminmain .= "<select name=\"s[$structure_id][rgroup]\" size=\"1\">";
-    
+    		$st_group = "<select name=\"s[$structure_id][rgroup]\" size=\"1\">";   
     		for ($i=0; $i<3; $i++)
     			{
     			$selected = ($i==$structure_group) ? "selected=\"selected\"" : '';
-    			$adminmain .= "<option value=\"$i\" $selected>".$structure_mode[$i]."</option>";	   
+    			$st_group .= "<option value=\"$i\" $selected>".$structure_mode[$i]."</option>";	   
     			}
-    		$adminmain .=  "</select>";    
-    		$adminmain .= "</td>";       
-          
-    		$adminmain .= "<td style=\"text-align:right;\">".$pagecount[$structure_code]." ";
-    		$adminmain .= "<a href=\"".sed_url("list", "c=".$structure_code)."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td>";
-    		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin" ,"m=rightsbyitem&ic=page&io=".$structure_code)."\"><img src=\"system/img/admin/rights2.png\" alt=\"\" /></a></td>";
-    		$adminmain .= "</tr>";
+    		$st_group .=  "</select>";    
+        		
+			$t->assign(array(     		
+				"STRUCTURE_LIST_DELETE" => ($pagecount[$structure_code] > 0) ? '' : "<a href=\"".sed_url("admin", "m=page&mn=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">".$out['img_delete']."</a>",
+				"STRUCTURE_LIST_CODE" => $structure_code,
+				"STRUCTURE_LIST_TITLE" => "<a href=\"".sed_url("admin", "m=page&mn=structure&n=options&id=".$structure_id."&".sed_xg())."\">".sed_cc($structure_title)."</a>",
+				"STRUCTURE_LIST_PATH" => $pathfieldimg."<input type=\"text\" class=\"text\" name=\"s[$structure_id][rpath]\" value=\"".$structure_path."\" size=\"$pathfieldlen\" maxlength=\"24\" />",
+				"STRUCTURE_LIST_TPL" => $st_tpl,
+				"STRUCTURE_LIST_GROUP" => $st_group,
+				"STRUCTURE_LIST_PAGECOUNT" => $pagecount[$structure_code],
+				"STRUCTURE_LIST_OPEN_URL" => sed_url("list", "c=".$structure_code),
+				"STRUCTURE_LIST_RIGHTS_URL" => sed_url("admin" ,"m=rightsbyitem&ic=page&io=".$structure_code)
+    		));
+    		
+			$t -> parse("ADMIN_PAGE.PAGE_STRUCTURE.STRUCTURE_LIST");   		
+    		   		
     		}
 
-    	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-    	$adminmain .= "</table>";
-    	$adminmain .= "</form>";
-		
-		$adminmain .= "</div>";
-		
-		$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
+			$t->assign(array( 
+				"PAGE_STRUCTURE_SEND" => sed_url("admin", "m=page&mn=structure&a=update"),
+				"PAGE_STRUCTURE_ADD_SEND" => sed_url("admin", "m=page&mn=structure&a=add"),
+				"PAGE_STRUCTURE_ADD_CODE" => "<input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"48\" maxlength=\"255\" />", 
+				"PAGE_STRUCTURE_ADD_PATH" => "<input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"255\" />",
+				"PAGE_STRUCTURE_ADD_TITLE" => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"64\" />",
+				"PAGE_STRUCTURE_ADD_DESC" => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" />",
+				"PAGE_STRUCTURE_ADD_ICON" => "<input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" />",
+				"PAGE_STRUCTURE_ADD_GROUP" => "<input type=\"checkbox\" class=\"checkbox\" name=\"ngroup\" />"
+			));
 
-    	$adminmain .= "<h4>".$L['addnewentry']."</h4>"; 
-    	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url("admin", "m=page&mn=structure&a=add")."\" method=\"post\">";
-      
-    	$adminmain .= "<table class=\"cells striped\">";
-    	$adminmain .= "<tr><td style=\"width:160px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"48\" maxlength=\"255\" /> ".$L['adm_required']."</td></tr>";
-    	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"255\" /> ".$L['adm_required']."</td></tr>";
-    	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"64\" /> ".$L['adm_required']."</td></tr>";
-    	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" /></td></tr>";
-    	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
-    	$adminmain .= "<tr><td>".$L['Group']." :</td><td><input type=\"checkbox\" class=\"checkbox\" name=\"ngroup\" /></td></tr>";
-    	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr>";
-    	$adminmain .= "</table>";
-    	$adminmain .= "</form>"; 
-
-		$adminmain .= "</div></div></div>"; 
-		
+			$t -> parse("ADMIN_PAGE.PAGE_STRUCTURE"); 		
     	}
 
   break;
@@ -350,8 +296,6 @@ switch($mn)
     sed_block($usr['isadmin']);
     
     $adminpath[] = array (sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder']);
-    
-    $adminmain .= "<h4 id=\"catorder\">".$L['adm_sortingorder']."</h4>";
     
     $options_sort = array(
     	'id' => $L['Id'],
@@ -386,17 +330,12 @@ switch($mn)
     		$order = $s[$i]['order'].'.'.$s[$i]['way'];
     		$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
     		}
-    	  sed_cache_clear('sed_cat');
+    	sed_cache_clear('sed_cat');
        	sed_redirect(sed_url("admin", "m=page&mn=catorder", "#catorder", true));
     	}
     
     $sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");
-    
-    $adminmain .= "<form id=\"chgorder\" action=\"".sed_url("admin", "m=page&mn=catorder&a=reorder")."\" method=\"post\">";
-    
-    $adminmain .= "<table class=\"cells striped\"><tr><td class=\"coltop\">".$L['Code']."</td><td class=\"coltop\">".$L['Path']."</td>";
-    $adminmain .= "<td class=\"coltop\">".$L['Title']."</td><td class=\"coltop\">".$L['Order']."</td></tr>";
-    
+       
     while ($row = sed_sql_fetchassoc($sql))
     	{
     	$structure_id = $row['structure_id'];
@@ -405,9 +344,7 @@ switch($mn)
     	$structure_title = $row['structure_title'];
     	$structure_desc = $row['structure_desc'];
     	$structure_order = $row['structure_order'];
-    
-    	$adminmain .= "<tr><td>".$structure_code."</td><td>".$structure_path."</td><td>".sed_cc($structure_title)."</td>";
-    
+       
     	$raw = explode('.',$structure_order);
     	$sort = $raw[0];
     	$way = $raw[1];
@@ -430,21 +367,29 @@ switch($mn)
     		$form_way .= "<option value=\"$i\" $selected>".$x."</option>";
     		}
     	$form_way .= "</select> ";
-    
-    	$adminmain  .= "<td>".$form_sort.' '.$form_way."</td></tr>";
+    	
+		$t->assign(array( 
+			"STRUCTURE_LIST_CODE" => $structure_code,
+			"STRUCTURE_LIST_PATH" => $structure_path,
+			"STRUCTURE_LIST_TITLE" => sed_cc($structure_title),
+			"STRUCTURE_LIST_ORDER" => $form_sort.' '.$form_way
+		));
+
+		$t -> parse("ADMIN_PAGE.PAGE_SORTING.SORTING_STRUCTURE_LIST"); 		   	
+    	
     	}
     
-    $adminmain  .= "<tr><td colspan=\"4\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-    $adminmain  .= "</table>";
-    $adminmain  .= "</form>";
+    $t->assign(array( 
+		"PAGE_SORTING_SEND" => sed_url("admin", "m=page&mn=catorder&a=reorder")
+	));
+    
+    $t -> parse("ADMIN_PAGE.PAGE_SORTING");
   
   break;
   
   default:
 
     // ============= Pages queued ==============================
-    
-    $adminmain .= "<h4>".$L['adm_valqueue']."</h4>";
     
     $id = sed_import('id','G','INT');
     
@@ -459,7 +404,7 @@ switch($mn)
     		sed_block($usr['isadmin_local']);
     		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
     		sed_cache_clear('latestpages');
-    		sed_redirect(sed_url("admin", "m=page&mn=queue", "", true));
+    		sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true));
     		exit;
     		}
     	else
@@ -477,7 +422,8 @@ switch($mn)
     		sed_block($usr['isadmin_local']);
     		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
     		sed_cache_clear('latestpages');
-    		sed_redirect(sed_url("list", "c=".$row['page_cat'], "", true));
+    		//sed_redirect(sed_url("list", "c=".$row['page_cat'], "", true));
+    		sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true));
     		exit;
     		}
     	else
@@ -489,34 +435,33 @@ switch($mn)
     	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid 
     	WHERE page_state=1 ORDER by page_id DESC");
     
-    $adminmain .= "<table class=\"cells striped\">";
-    $adminmain .= "<tr>";
-    $adminmain .= "<td class=\"coltop\">#</td>";
-    $adminmain .= "<td class=\"coltop\">".$L['Title']." ".$L['adm_clicktoedit']."</td>";
-    $adminmain .= "<td class=\"coltop\">".$L['Category']."</td>";
-    $adminmain .= "<td class=\"coltop\">".$L['Date']."</td>";
-    $adminmain .= "<td class=\"coltop\">".$L['Owner']."</td>";
-    $adminmain .= "<td class=\"coltop\">".$L['Validate']."</td>";
-    $adminmain .= "</tr>";
-    
     while ($row = sed_sql_fetchassoc($sql))
     	{
     	$row['page_title'] = empty($row['page_title']) ? '(empty title)' : $row['page_title'];
     	$sys['catcode'] = $row['page_cat'];
-    	$adminmain .= "<tr>";
-    	$adminmain .= "<td>".$row['page_id']."</td>";
-    	$adminmain .= "<td><a href=\"".sed_url("page", "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a></td>";
-    	$adminmain .= "<td>".sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>")."</td>";
-    	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['page_date'])."</td>";
-    	$adminmain .= "<td style=\"text-align:center;\">".sed_build_user($row['page_ownerid'], sed_cc($row['user_name']))."</td>";  	
-    	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=page&mn=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Validate']."</a></td>";
-    	$adminmain .= "</tr>";
+         
+		$t->assign(array( 
+			"PAGE_LIST_ID" => $row['page_id'],
+			"PAGE_LIST_TITLE" => "<a href=\"".sed_url("page", "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a>",
+			"PAGE_LIST_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
+			"PAGE_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['page_date']),
+			"PAGE_LIST_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name'])), 	
+			"PAGE_LIST_VALIDATE" => "<a href=\"".sed_url("admin", "m=page&mn=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Validate']."</a>"		
+		));
+		
+		$t -> parse("ADMIN_PAGE.PAGE_QUEUE.PAGE_QUEUE_LIST");      
       }
-    $adminmain .= "</table>";
-    $adminmain .= (sed_sql_numrows($sql)==0) ? "<p>".$L['None']."</p>" : '';
+
+    if (sed_sql_numrows($sql) == 0) { $t -> parse("ADMIN_PAGE.PAGE_QUEUE.WARNING"); }
+    
+    $t -> parse("ADMIN_PAGE.PAGE_QUEUE");
   
   break;
   }
+
+$t -> parse("ADMIN_PAGE");  
+
+$adminmain .= $t -> text("ADMIN_PAGE");
   
 $adminhelp = $L['adm_help_page'];
 

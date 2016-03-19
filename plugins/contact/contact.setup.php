@@ -8,7 +8,7 @@ http://www.seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.setup.php
 Version=150
-Updated=2012-dec-31
+Updated=2015-feb-06
 Type=Plugin
 Author=Neocrome
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=contact
 Name=Contact
 Description=Web based email form
-Version=175
+Version=177
 Date=2010-feb-05
 Author=Neocrome
 Copyright=

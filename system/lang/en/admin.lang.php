@@ -12,8 +12,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/core/admin/lang/en/admin.lang.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Lang
 Author=Neocrome
 Description=Admin panel
@@ -25,6 +25,7 @@ Description=Admin panel
 $L['core_main'] = "Main setup";
 $L['core_parser'] = "Parser"; 			// New in v120
 $L['core_rss'] = "RSS feeds"; 			// New in v173
+$L['core_dic'] = "Directories"; 			// New in v173
 $L['core_time'] = "Time and date";
 $L['core_skin'] = "Skins";
 $L['core_lang'] = "Languages";
@@ -80,6 +81,7 @@ $L['adm_valqueue'] = "Waiting for validation";
 $L['adm_required'] = "(Required)";
 $L['adm_clicktoedit'] = "(Click to edit)";
 $L['adm_manage'] = "Manage";  // New in v150
+$L['adm_pagemanager'] = "Page manager";  // New in v177
 
 /* ====== Banlist ====== */
 
@@ -305,6 +307,7 @@ $L['adm_autoprune'] = "Auto-prune topics after * days";
 $L['adm_postcounters'] = "Check the counters";
 $L['adm_help_forums'] = "Not available";
 $L['adm_forum_structure'] = "Structure of the forums (categories)";	
+$L['adm_forum_structure_cat'] = "Structure of the forums";	
 $L['adm_help_forums_structure'] = "Not available";	
 $L['adm_defstate'] = "Default state";	
 $L['adm_defstate_0'] = "Folded";	
@@ -320,6 +323,22 @@ $L['adm_dnsrecord'] = "DNS record for this address";
 /* ====== Smilies ====== */
 
 $L['adm_help_smilies'] = "Not available";
+
+/* ====== Dictionary ====== */
+
+$L['adm_dic_list'] = "Directories list";
+$L['adm_dictionary'] = "Directory";
+$L['adm_dic_title'] = "Title of the directory";
+$L['adm_dic_code'] = "Code of the directory";
+$L['adm_dic_list'] = "List of the directories";
+$L['adm_dic_term_list'] = "List of terms";
+$L['adm_dic_add'] = "Add new directory";
+$L['adm_dic_edit'] = "Edit directory";
+$L['adm_dic_add_term'] = "Add a new term";
+$L['adm_dic_term_title'] = "Title of the term";
+$L['adm_dic_term_value'] = "Value of the term";
+$L['adm_dic_term_defval'] = "Make a term default?";
+$L['adm_dic_term_edit'] = "Edit term from directory";
 
 /* ====== PFS ====== */
 

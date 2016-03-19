@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.config.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Configuration
@@ -21,7 +21,6 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin',
 sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=config"), $L['Configuration']);
-$adminmain = "<h2><img src=\"system/img/admin/config.png\" alt=\"\" /> ".$L['Configuration']."</h2>";
 
 $sed_select_charset = sed_loadcharsets();
 $sed_select_doctypeid = sed_loaddoctypes();
@@ -42,54 +41,6 @@ if ($o == 'plug' && !empty($p))  //New in v173
     $plug_langfile = "plugins/".$p."/lang/".$p.".".$usr['lang'].".lang.php";
     if (@file_exists($plug_langfile)) { require($plug_langfile); }
   } 
-	
-$adminmain .= "<table class=\"flat\"><tr>";
-$adminmain .= "<td style=\"width:25%; vertical-align:top;\">";
-
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td>";
-	
-$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'");
-	
-$adminmain .= "<div class=\"nav-v\">";
-$adminmain .= "<ul>";
-while ($row = sed_sql_fetchassoc($sql))
-	{
-	$adminmain .= "<li>";
-  $code = "core_".$row['config_cat'];
-	$adminmain .= ($o=='core' && $row['config_cat']==$p) ? "<strong>" : '';
-	$adminmain .= "<a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=".$row['config_cat'])."\">";
-	$adminmain .= "<img src=\"system/img/admin/".$row['config_cat'].".png\" alt=\"\" /> ".$L[$code]."</a>";
-	$adminmain .= ($o=='core' && $row['config_cat']==$p) ? "</strong>" : '';
-	$adminmain .= "</li>";
-	}
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
-
-$adminmain .= "</td></tr></table>";
-$adminmain .= "<table class=\"cells striped\"><tr><td class=\"coltop\">".$L['Plugins']."</td></tr>";
-$adminmain .= "<tr><td>";
-
-$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='plug' ORDER BY config_cat ASC");
-
-$adminmain .= "<div class=\"nav-v\">";
-$adminmain .= "<ul>";
-while ($row = sed_sql_fetchassoc($sql))
-	{
-	$adminmain .= "<li>";
-  $adminmain .= ($o=='plug' && $row['config_cat']==$p) ? "<strong>" : '';	
-	$adminmain .= "<a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$row['config_cat'])."\">";
-	$adminmain .= sed_plugin_icon($row['config_cat']);
-	$adminmain .= " ".$sed_plugins[$row['config_cat']]['pl_title']."</a>";
-	$adminmain .= ($o=='plug' && $row['config_cat']==$p) ? "</strong>" : '';
-	$adminmain .= "</li>";
-	}	
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
-	
-$adminmain .= "</td></tr></table>";	
-	
-$adminmain .= "</td><td style=\"vertical-align:top;\">";	
 
 switch ($n)
 	{
@@ -122,7 +73,7 @@ switch ($n)
 				$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
 				}
 			}
-		sed_redirect(sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p, "", true));
+		sed_redirect(sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&msg=917", "", true));
 		exit;
 		}
 
@@ -169,22 +120,18 @@ switch ($n)
 		{ 
 			$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L["core_".$p]); 
 			$adminhelpconfig = $L["adm_help_config_$p"]; 
-		  $adminlegend = $L["core_".$p];
+			$adminlegend = $L["core_".$p];
     }
 	else
 		{
 		$extplugin_info = "plugins/".$p."/".$p.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 		$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L['Plugin'].' : '.$info['Name'].' ('.$p.')');
-    $adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';
+		$adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';
 		}
 
-	$adminmain .= "<form id=\"saveconfig\" action=\"".sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=update&".sed_xg())."\" method=\"post\">";	
-
-	$adminmain .= "<table class=\"cells striped\">";
-  
-  $adminmain .= "<tr><td  class=\"coltop\" colspan=\"2\">".$L['Configuration']."</td><td class=\"coltop\">".$L['Reset']."</td></tr>";
-
+	$t = new XTemplate(sed_skinfile('admin.config', true)); 
+		
 	while ($row = sed_sql_fetchassoc($sql))
 		{
 		$config_owner = $row['config_owner'];
@@ -203,89 +150,101 @@ switch ($n)
 		$config_title = (!empty($config_text) && $check_config_title) ? $config_text : $config_title; //fix Sed v173 
 
 		if ($config_type == 7) { continue; } //Hidden config New v173
-		
-		$adminmain .= "<tr><td style=\"width:40%;\">".$config_title." : </td><td style=\"width:60%;\">";
 
 		if ($config_type == 1)
-			{ $adminmain .= "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"32\" maxlength=\"255\" />"; }
+			{ $config_field = "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"32\" maxlength=\"255\" />"; }
 		elseif ($config_type == 2)
 			{
 			if ($o=='plug' && !empty($row['config_default']))
 				{
 				$cfg_params[$config_name] = explode(",", $row['config_default']);
-				//$config_more = "&nbsp;";
 				}
 
 			if (is_array($cfg_params[$config_name]))
 				{
 				reset($cfg_params[$config_name]);
-				$adminmain .= "<select name=\"$config_name\" size=\"1\">";
+				$config_field = "<select name=\"$config_name\" size=\"1\">";
 				while( list($i,$x) = each($cfg_params[$config_name]) )
 					{
 					$x = trim($x);
 					$selected = ($x == $config_value) ? "selected=\"selected\"" : '';
-					$adminmain .= "<option value=\"".$x."\" $selected>".$x;
+					$config_field .= "<option value=\"".$x."\" $selected>".$x;
 					}
-				$adminmain .= "</select>";
+				$config_field .= "</select>";
 				}
 			elseif ($cfg_params[$config_name]=="userlevels")
 				{
-				$adminmain .= sed_selectboxlevels(0, 99, $config_value, $config_name);
+				$config_field = sed_selectboxlevels(0, 99, $config_value, $config_name);
 				}
 			else
 				{
-				$adminmain .= "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"8\" maxlength=\"11\" />";
+				$config_field = "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"8\" maxlength=\"11\" />";
 				}
 			}
 		elseif ($config_type == 3)
 			{
 			if ($config_value == 1)
-				{ $adminmain .= "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" checked=\"checked\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" />".$L['No']; 	}
+				{ $config_field = "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" checked=\"checked\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" />".$L['No']; 	}
 			else
-				{ $adminmain .= "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" checked=\"checked\" />".$L['No']; }
+				{ $config_field = "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" checked=\"checked\" />".$L['No']; }
 			}
 		elseif ($config_type == 4)
 			{
 			$varname = "sed_select_".$config_name;
-			$adminmain .= "<select name=\"".$config_name."\" size=\"1\">";
+			$config_field = "<select name=\"".$config_name."\" size=\"1\">";
 			reset($$varname);
 			while ( list($i,$x) = each($$varname) )
 				{
 				$selected = ($config_value==$x[0]) ? "selected=\"selected\"" : '';
-				$adminmain .= "<option value=\"".$x[0]."\" $selected>".$x[1]."</option>";
+				$config_field .= "<option value=\"".$x[0]."\" $selected>".$x[1]."</option>";
 				}
-			$adminmain .= "</select>";
+			$config_field .= "</select>";
 			}
 		else
 			{
-			$adminmain .= "<textarea name=\"$config_name\" rows=\"5\" cols=\"56\" class=\"noeditor\">".$config_value."</textarea>";
+			$config_field = "<textarea name=\"$config_name\" rows=\"5\" cols=\"56\" class=\"noeditor\">".$config_value."</textarea>";
 			}
-		$adminmain .= "<br /><div class=\"descr\">".$config_more."</div></td>";
-		$adminmain .= "<td style=\"text-align:center; width:7%;\">";
-		$adminmain .= ($o=='core') ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg())."\"><img src=\"system/img/admin/reset.png\" alt=\"\" /></a>" : '';
-		$adminmain .= ($o=='plug') ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg())."\"><img src=\"system/img/admin/reset.png\" alt=\"\" /></a>" : '&nbsp;';    
-		$adminmain .= "</td>";
-		$adminmain .= "</tr>";
+
+		$config_reset_url = ($o=='core') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '';
+		$config_reset_url .= ($o=='plug') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '&nbsp;';
+		
+		$t -> assign(array( 
+			"CONFIG_LIST_TITLE" => $config_title,
+			"CONFIG_LIST_FIELD" => $config_field,
+			"CONFIG_LIST_DESC" => $config_more,
+			"CONFIG_LIST_RESET_URL" => $config_reset_url
+		));
+		
+		$t -> parse("ADMIN_CONFIG.CONFIG_LIST");   
+		
 		}
-	$adminmain .= "<tr><td colspan=\"3\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-	$adminmain .= (empty($adminhelpconfig)) ? '' : "<tr><td colspan=\"3\"><h4>".$L['Help']." :</h4>".$adminhelpconfig."</td></tr>";
-	$adminmain .= "</table>";	
-	$adminmain .= "</form>";
   
-  $sys['inc_cfg_options'] = 'system/core/admin/admin.config.'.$p.'.inc.php';
-  if (file_exists($sys['inc_cfg_options']))
-    { require($sys['inc_cfg_options']); }
+	if (!empty($adminhelpconfig))
+	{
+		$t -> assign(array( 
+			"HELP_CONFIG" => $adminhelpconfig 
+		)); 
+		
+		$t -> parse("ADMIN_CONFIG.HELP");  	
+	}
+	
+	$t -> assign(array( 
+		"ADMIN_CONFIG_FORM_SEND" => sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=update&".sed_xg()),
+		"ADMIN_CONFIG_ADMINLEGEND" => $adminlegend
+	)); 
+		
+	$t -> parse("ADMIN_CONFIG");
+
+	$adminmain = $t -> text("ADMIN_CONFIG");   	 
+  
+	$sys['inc_cfg_options'] = 'system/core/admin/admin.config.'.$p.'.inc.php';
+	if (file_exists($sys['inc_cfg_options'])) { require($sys['inc_cfg_options']); }
 
 	break;
 
 	default:
 
-	//
-
 	break;
 	}
-	
-
-$adminmain .= "</td></tr></table>";
 
 ?>

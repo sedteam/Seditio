@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/massmovetopics/massmovetopics.setup.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Plugin
 Author=Neocrome
 Description=

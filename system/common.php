@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/common.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Common
@@ -524,12 +524,12 @@ if (!$cfg['disablehitstats'])
 		{ sed_stat_create($sys['day']); }
 
 	$sys['referer'] = mb_substr(mb_strtolower($_SERVER['HTTP_REFERER']), 0, 255);
-  $sys['httphost'] = mb_strtolower($_SERVER['HTTP_HOST']); // New Sed175
+	$sys['httphost'] = mb_strtolower($_SERVER['HTTP_HOST']); // New Sed175
 
 	if (!empty($sys['referer'])
 		&& mb_stripos($sys['referer'], $cfg['mainurl']) === FALSE
 		&& mb_stripos($sys['referer'], $cfg['hostip']) === FALSE
-    && mb_stripos($sys['referer'], $sys['httphost']) === FALSE 
+		&& mb_stripos($sys['referer'], $sys['httphost']) === FALSE 
 		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === FALSE
 		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === FALSE)
 	{
@@ -590,6 +590,43 @@ $sed_img_up = $out['img_up'];
 $sed_img_down = $out['img_down'];
 $sed_img_left = $out['img_left'];
 $sed_img_right = $out['img_right'];
+
+/* ======== Directories ======== */
+
+if (!$sed_dic && ($cfg['version'] < 177))
+	{
+	// Load directories
+	$sql = sed_sql_query("SELECT * FROM $db_dic WHERE 1");
+	if (sed_sql_numrows($sql) > 0)
+		{	
+		while ($row = sed_sql_fetchassoc($sql))
+			{
+			$sed_dic[$row['dic_id']] = array (
+				'id' => $row['dic_id'],
+				'title' => $row['dic_title'],
+				'code' => $row['dic_code'],
+				'type' => $row['dic_type'],
+				'terms' => array()
+					);
+			$sed_dicid_arr[] = $row['dic_id']; 		
+			}
+		// Load terms
+		$sql2 = sed_sql_query("SELECT * FROM $db_dic_items WHERE 1");
+		if (sed_sql_numrows($sql2) > 0)
+			{
+			while ($row2 = sed_sql_fetchassoc($sql2))
+				{
+					$sed_dic[$row2['ditem_dicid']]['terms'][] = array(
+						'tid' => $row2['ditem_id'], 
+						'ttitle' => $row2['ditem_title'], 
+						'tcode' => $row2['ditem_code'],
+						'tdefval' => $row2['ditem_defval']
+					); 
+				}
+			}	
+		}
+	sed_cache_store('sed_dic',$sed_dic,3600);
+	}
 
 /* ======== Smilies ======== */
 

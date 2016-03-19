@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer3/textboxer3.pfs.stndl.php
-Version=175
+Version=177
 Updated=2014-nov-29
 Type=Plugin
 Author=Amro

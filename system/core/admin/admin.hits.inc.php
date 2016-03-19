@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.statistics.hits.inc.php
-Version=175
+Version=177
 Updated=2012-may-31
 Type=Core.admin
 Author=Neocrome

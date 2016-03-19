@@ -12,7 +12,7 @@ Localization done by : Antar, Antony & Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
-Version=175
+Version=177
 Updated=2012-май-16
 Type=Lang
 Author=Neocrome
@@ -108,7 +108,8 @@ $L['Picture'] = "Картинка";
 $L['Pictures'] = "картинок";
 $L['Ghost'] = "Оставить уведомление о перемещении";
 $L['Group'] = "Группа";
-$L['Groups'] = "Группы (кликните для редактирования)";
+$L['Groups'] = "Группы";
+$L['Gotosite'] = "Перейти на сайт";
 $L['Guest'] = "Гость";
 $L['Guests'] = "Гости";
 $L['Headlines'] = "Просмотреть заголовки";
@@ -128,6 +129,7 @@ $L['ICQ'] = "Номер ICQ";
 $L['Id'] = "ID";
 $L['Image'] = "Изображение";
 $L['ImageURL'] = "URL к файлу изображения";
+$L['Install'] = "Установка";
 $L['Ip'] = "IP";
 $L['Ipsearch'] = "Поиск по IP";
 $L['Ipmask'] = "Маска IP";
@@ -314,6 +316,7 @@ $L['Website'] = "Вебсайт";
 $L['Wipe'] = "Удалить окончательно";                
 $L['Wipeall'] = "Удалить все окончательно";                
 $L['Write'] = "Запись";
+$L['Uninstall'] = "Удаление";
 $L['Yes'] = "Да";
 $L['YIM'] = "Yahoo Messenger";
 

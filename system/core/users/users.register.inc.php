@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=users.register.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=User auth
@@ -69,7 +69,7 @@ if ($a=='add')
 	$ruserextra1 = sed_import('ruserextra1','P','TXT');
 	$ruserextra2 = sed_import('ruserextra2','P','TXT');
  	$ruserextra3 = sed_import('ruserextra3','P','TXT');
-  $ruserextra4 = sed_import('ruserextra4','P','TXT');
+	$ruserextra4 = sed_import('ruserextra4','P','TXT');
 	$ruserextra5 = sed_import('ruserextra5','P','TXT');
 	$ruserextra6 = sed_import('ruserextra6','P','HTM');
  	$ruserextra7 = sed_import('ruserextra7','P','HTM');
@@ -116,7 +116,7 @@ if ($a=='add')
 			{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
 
 		$mdsalt = sed_unique(16); // New sed172    
-    $mdpass = sed_hash($rpassword1, 1, $mdsalt);  // New sed172
+		$mdpass = sed_hash($rpassword1, 1, $mdsalt);  // New sed172
     		    	
 		$mdpass_secret = md5(sed_unique(16)); // New sed172 for generate cookies
 		
@@ -138,7 +138,7 @@ if ($a=='add')
 		$sql = sed_sql_query("INSERT into $db_users
 			(user_name,
 			user_password,
-      user_salt,
+			user_salt,
 			user_secret,
 			user_passtype,
 			user_maingrp,

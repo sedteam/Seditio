@@ -60,6 +60,13 @@ var sedjs = {
 		{ 
 		location.href = url.options[url.selectedIndex].value; 
 		},
+
+	/*= Confirm action
+	-------------------------------------*/	
+	confirmact : function(mess) 
+		{
+		if (confirm(mess)) { return true; } else { return false; }
+		},
 		
 	/*= Get base href
 	-------------------------------------*/	
@@ -769,9 +776,9 @@ var sedjs = {
 	{  
 	    if (days) 
 	    {    
-	    var date = new Date();    
-	    date.setTime(date.getTime()+(days*24*60*60*1000));    
-	    var expires = "; expires="+date.toGMTString();  
+		    var date = new Date();    
+		    date.setTime(date.getTime()+(days*24*60*60*1000));    
+		    var expires = "; expires="+date.toGMTString();  
 	    }  
 	    else expires = "";  
 	    document.cookie = name+"="+value+expires+"; path=/";
@@ -789,6 +796,64 @@ var sedjs = {
 	        return c.substring(nameEQ.length,c.length);  
 	    }  
 	    return null;
+	},
+
+	antispam : function()
+	{
+		if (document.getElementById('anti1'))
+		  { 
+		    document.getElementById('anti1').value += document.getElementById('anti2').value;	
+	  	  }
+	},
+
+	genSEF : function(from, to, allow_slashes )
+	{
+	   var str = from.value.toLowerCase();
+	   var slash = "";
+	   if (allow_slashes) slash = "\\/";
+	   
+	   var LettersFrom = "абвгдезиклмнопрстуфыэйхё";
+	   var LettersTo   = "abvgdeziklmnoprstufyejxe";
+	   var Consonant = "бвгджзйклмнпрстфхцчшщ";
+	   var Vowel = "аеёиоуыэюя";
+	   var BiLetters = { 
+		 "ж" : "zh", "ц" : "ts",  "ч" : "ch",
+		 "ш" : "sh", "щ" : "sch", "ю" : "ju", "я" : "ja"
+		               };
+
+	   str = str.replace( /[_\s\.,?!\[\](){}]+/g, "_");
+	   str = str.replace( /-{2,}/g, "--");
+	   str = str.replace( /_\-+_/g, "--");
+
+	   str = str.toLowerCase();
+
+	   //here we replace ъ/ь
+	   str = str.replace(
+		  new RegExp( "(ь|ъ)(["+Vowel+"])", "g" ), "j$2");
+	   str = str.replace( /(ь|ъ)/g, "");
+
+	   //transliterating
+	   var _str = "";
+	   for( var x=0; x<str.length; x++)
+		if ((index = LettersFrom.indexOf(str.charAt(x))) > -1)
+		 _str+=LettersTo.charAt(index);
+		else
+		 _str+=str.charAt(x);
+	   str = _str;
+
+	   var _str = "";
+	   for( var x=0; x<str.length; x++)
+		if (BiLetters[str.charAt(x)])
+		 _str+=BiLetters[str.charAt(x)];
+		else
+		 _str+=str.charAt(x);
+	   str = _str;
+
+	   str = str.replace( /j{2,}/g, "j");
+
+	   str = str.replace( new RegExp( "[^"+slash+"0-9a-z_\\-]+", "g"), "");
+
+	   to.value = str;
 	}
 }
 

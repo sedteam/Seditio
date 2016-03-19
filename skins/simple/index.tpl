@@ -2,7 +2,7 @@
 
 		<div id="container">
 			<div id="content">
-        {INDEX_NEWS}
+					{INDEX_NEWS}
 			</div><!-- .content-->
 		</div><!-- .container-->
     

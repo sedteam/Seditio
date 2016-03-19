@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=skins/simple/simple.php
-Version=175
+Version=177
 Updated=2014-oct-31
 Type=Skin
 Name=Simple
@@ -19,8 +19,8 @@ Description=Official skin
 
 $cfg['pagination'] = '<li>%s</li>';
 $cfg['pagination_cur'] = '<li><span>%s</span></li>';
-$cfg['pagination_arrowleft'] = "←"; 
-$cfg['pagination_arrowright'] = "→";
+$cfg['pagination_arrowleft'] = "<"; 
+$cfg['pagination_arrowright'] = ">";
 
 // ========= Plugin RecentItems ============================= //
 

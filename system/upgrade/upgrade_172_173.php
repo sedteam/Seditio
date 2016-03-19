@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=upgrade_172_173.php
-Version=175
+Version=177
 Updated=2012-oct-23
 Type=Core.upgrade
 Author=Neocrome & Seditio Team

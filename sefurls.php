@@ -6,8 +6,8 @@ Copyright Neocrome & Seditio Team
 http://www.seditio.org
 [BEGIN_SED]
 File=sefurls.php
-Version=175
-Updated=2013-nov-22
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Seditio Team
 Description=SEF Url's loader

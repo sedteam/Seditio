@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=install.database.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.install
 Author=Neocrome
 Description=Database builder
@@ -84,6 +84,35 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."core (
   ct_lock tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY (ct_id),
   KEY ct_code (ct_code)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+
+$sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."dic (
+  dic_id mediumint(8) NOT NULL auto_increment,
+  dic_title varchar(255) NOT NULL default '',
+  dic_code varchar(255) NOT NULL default '',
+  dic_type tinyint(1) default '0',
+  PRIMARY KEY  (dic_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+
+$sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."dic_items (
+  ditem_id mediumint(8) NOT NULL auto_increment,
+  ditem_dicid mediumint(8) NOT NULL default '0',
+  ditem_title varchar(255) NOT NULL default '',
+  ditem_code varchar(255) NOT NULL default '',
+  ditem_defval tinyint(1) default '0',
+  KEY ditem_dicid (ditem_dicid), 
+  PRIMARY KEY  (ditem_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+
+$sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."extra_fields (
+  field_location varchar(255) NOT NULL,
+  field_name varchar(255) NOT NULL,
+  field_type varchar(255) NOT NULL,
+  field_html text NOT NULL,
+  field_variants text NOT NULL,
+  field_description text NOT NULL,
+  KEY field_location (field_location),
+  KEY field_name (field_name)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."forum_posts (
@@ -234,6 +263,11 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_extra3 varchar(255) NOT NULL default '',
   page_extra4 varchar(255) NOT NULL default '',
   page_extra5 varchar(255) NOT NULL default '',
+  page_extra6 varchar(255) NOT NULL default '',
+  page_extra7 varchar(255) NOT NULL default '',
+  page_extra8 varchar(255) NOT NULL default '',
+  page_extra9 varchar(255) NOT NULL default '',
+  page_extra10 varchar(255) NOT NULL default '',  
   page_title varchar(255) default NULL,
   page_desc varchar(255) default NULL,
   page_text text,
@@ -257,6 +291,8 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_seo_title varchar(255) default NULL,
   page_seo_desc varchar(255) default NULL,
   page_seo_keywords varchar(255) default NULL, 
+  page_price varchar(11) NOT NULL default '0',
+  page_thumb varchar(255) NOT NULL default '',
   PRIMARY KEY  (page_id),
   KEY page_cat (page_cat)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
@@ -434,7 +470,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."trash (
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   user_id int(11) unsigned NOT NULL auto_increment,
   user_banexpire int(11) default '0',
-  user_name varchar(24) NOT NULL default '',
+  user_name varchar(100) NOT NULL default '',
   user_password varchar(32) NOT NULL default '',
   user_salt varchar(16) NOT NULL default '',
   user_secret varchar(32) NOT NULL default '',
@@ -479,6 +515,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   user_sid char(32) NOT NULL default '',
   user_lostpass char(32) NOT NULL default '',
   user_auth text,
+  user_token varchar(255) NOT NULL default '',
   PRIMARY KEY (user_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
@@ -542,6 +579,7 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (11, 'ratings',
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (12, 'users', 'Users', '100', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (13, 'trash', 'Trash Can', '110', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (14, 'gallery', 'Gallery', '150', 1, 0);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (15, 'dic', 'Directories', '150', 1, 0);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (1, 'guests', 0, 0, 0, 'Guests', '', '', 'darkmagenta', 0, 0, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 'white', 0, 0, 1);");
@@ -659,16 +697,38 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (93, 6, 'page',
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (94, 6, 'page', 'sample2', 131, 0, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (95, 6, 'page', 'news', 131, 0, 1);");
 
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (96, 1, 'dic', 'a', 1, 254, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (97, 2, 'dic', 'a', 1, 254, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (98, 3, 'dic', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (99, 4, 'dic', 'a', 3, 128, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (100, 5, 'dic', 'a', 255, 255, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (101, 6, 'dic', 'a', 131, 0, 1);");
+
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."extra_fields VALUES
+('pages', 'extra1', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('pages', 'extra2', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('pages', 'extra3', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('pages', 'extra4', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('pages', 'extra5', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('users', 'extra1', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('users', 'extra2', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('users', 'extra3', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('users', 'extra4', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('users', 'extra5', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
+('users', 'extra6', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
+('users', 'extra7', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
+('users', 'extra8', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
+('users', 'extra9', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', '');");
 
 if ($textmode == "html") 
   {
     $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-    (1, 0, 1, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"http://www.seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"http://www.seditio.org/forums.php\">discussion forums</a>.', 1, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '');");
+    (1, 0, 1, 'news', '', '', '', '', '', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"http://www.seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"http://www.seditio.org/forums.php\">discussion forums</a>.', 1, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', 0, '');");
   }
 else
   {
     $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-    (1, 0, 0, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nThe next step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.\r\nYou''ll find more instructions and tutorials in the [url=http://www.seditio.org/list.php?c=docs]Documentation page for Seditio at Seditio.org[/url], and technical support in our [url=http://www.seditio.org/forums.php]discussion forums[/url].', 0, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 27, 1, 1, 0.00, 0, 0, '', '', '', '');");
+    (1, 0, 0, 'news', '', '', '', '', '', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nThe next step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.\r\nYou''ll find more instructions and tutorials in the [url=http://www.seditio.org/list.php?c=docs]Documentation page for Seditio at Seditio.org[/url], and technical support in our [url=http://www.seditio.org/forums.php]discussion forums[/url].', 0, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 27, 1, 1, 0.00, 0, 0, '', '', '', '',  0, '');");
   }
 
 $lines = file("system/install/install.parser.sql");

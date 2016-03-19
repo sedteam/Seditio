@@ -8,8 +8,8 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/adminqv/adminqv.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Plugin
 Author=Neocrome
 Description=
@@ -81,15 +81,19 @@ while (list($i,$dat) = each($tables))
 	$total_data_length += $dat['Data_length'];
 	}
 
-$adminmain .= "<h4>".$L['plu_title']." :</h4>";
+$adminmain .= "<div class=\"content-box\">
+<div class=\"content-box-header\">					
+					<h3>".$L['plu_title']."</h3>					
+				</div>";
 
-$adminmain .= "<table style=\"width:100%;\">";
-$adminmain .= "<tr><td style=\"width:50%; vertical-align:top; padding:8px;\">";
+$adminmain .= "<div class=\"content-box-content\">";
 
 $adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td colspan=\"2\" class=\"coltop\">".$L['plu_pastdays']."</td></tr>";
+
+$adminmain .= "<thead><tr><th colspan=\"2\" class=\"coltop\">".$L['plu_pastdays']."</th></tr></thead>";
+
 $adminmain .= "<tr><td><a href=\"".sed_url("users", "f=all&s=regdate&w=desc")."\">".$L['plu_newusers']."</a></td>";
-$adminmain .= "<td style=\"text-align:center;\">".$newusers ."</td></tr>";
+$adminmain .= "<td style=\"text-align:center; width:20%;\">".$newusers ."</td></tr>";
 $adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=page")."\">".$L['plu_newpages']."</a></td>";
 $adminmain .= "<td style=\"text-align:center;\">".$newpages ."</td></tr>";
 $adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newtopics']."</a></td>";
@@ -100,25 +104,25 @@ $adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=comments")."\">".$L['plu_
 $adminmain .= "<td style=\"text-align:center;\">".$newcomments ."</td></tr>";
 $adminmain .= "<tr><td>".$L['plu_newpms']."</td>";
 $adminmain .= "<td style=\"text-align:center;\">".$newpms ."</td></tr>";
-$adminmain .= "</table>";
-
-$adminmain .= "<h4>".$L['Statistics']." :</h4>";
+$adminmain .= "</table><br />";
 
 $adminmain .= "<table class=\"cells striped\">";
+
+$adminmain .= "<thead><tr><th colspan=\"2\" class=\"coltop\">".$L['plu_db']."</th></tr></thead>";
+
 $adminmain .= "<tr><td>".$L['plu_db_rows']."</td>";
-$adminmain .= "<td style=\"text-align:right;\">".$total_rows."</td></tr>";
+$adminmain .= "<td style=\"text-align:center; width:20%;\">".$total_rows."</td></tr>";
 $adminmain .= "<tr><td>".$L['plu_db_indexsize']."</td>";
-$adminmain .= "<td style=\"text-align:right;\">".number_format(($total_index_length/1024),1,'.',' ')."</td></tr>";
+$adminmain .= "<td style=\"text-align:center;\">".number_format(($total_index_length/1024),1,'.',' ')."</td></tr>";
 $adminmain .= "<tr><td>".$L['plu_db_datassize']."</td>";
-$adminmain .= "<td style=\"text-align:right;\">".number_format(($total_data_length/1024),1,'.',' ')."</td></tr>";
+$adminmain .= "<td style=\"text-align:center;\">".number_format(($total_data_length/1024),1,'.',' ')."</td></tr>";
 $adminmain .= "<tr><td>".$L['plu_db_totalsize']."</td>";
-$adminmain .= "<td style=\"text-align:right;\">".number_format(($total_length/1024),1,'.',' ')."</td></tr>";
-$adminmain .= "</table>";
-
-$adminmain .= "</td><td style=\"width:50%; vertical-align:top; padding:8px;\">";
+$adminmain .= "<td style=\"text-align:center;\">".number_format(($total_length/1024),1,'.',' ')."</td></tr>";
+$adminmain .= "</table><br />";
 
 $adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td colspan=\"4\" class=\"coltop\">".$L['plu_hitsmonth']."</td></tr>";
+
+$adminmain .= "<thead><tr><th colspan=\"4\" class=\"coltop\">".$L['plu_hitsmonth']."</th></tr></thead>";
 
 foreach ($hits_d as $day => $hits)
 	{
@@ -126,7 +130,7 @@ foreach ($hits_d as $day => $hits)
 	$adminmain .= "<tr><td style=\"width:90px;\">".$day."</td>";
 	$adminmain .= "<td style=\"text-align:right; width:138px;\">".$hits." ".$L['Hits']."</td>";
 	$adminmain .= "<td style=\"text-align:right; width:40px;\">$percentbar%</td><td>";
-	$adminmain .= "<div style=\"width:128px;\"><div class=\"bar_back\">";
+	$adminmain .= "<div style=\"width:100%;\"><div class=\"bar_back\">";
 	$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
 	}
 
@@ -134,5 +138,7 @@ $adminmain .= "<tr><td colspan=\"4\"><a href=\"".sed_url("admin", "m=hits")."\">
 $adminmain .= "</table>";
 
 $adminmain .= "</td></tr></table>";
+
+$adminmain .= "</div></div>";
 
 ?>

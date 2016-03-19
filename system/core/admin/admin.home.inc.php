@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.home.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Administration panel
@@ -33,15 +33,18 @@ if (!empty($adminwarnings))
 	{ $adminmain .= "<div class=\"error\">".$L['adm_warnings']." :".$adminwarnings."</div>"; }
 
 
-$adminmain .= "<div class=\"sedtabs\">	
-<ul class=\"tabs\">
-  <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Pages']."</a></li>
-  <li><a href=\"".$sys['request_uri']."#tab2\">".$L['upg_upgrade']."</a></li>
-  <li><a href=\"".$sys['request_uri']."#tab3\">".$L['adm_infos']."</a></li>
-</ul>    
-<div class=\"tab-box\">";
+$adminmain .= "<div class=\"content-box sedtabs\"><div class=\"content-box-header\">					
+	<h3>".$L['Home']."</h3>					
+	<ul class=\"content-box-tabs\">
+		  <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Pages']."</a></li>
+		  <li><a href=\"".$sys['request_uri']."#tab2\">".$L['upg_upgrade']."</a></li>
+		  <li><a href=\"".$sys['request_uri']."#tab3\">".$L['adm_infos']."</a></li>
+	</ul>					
+	<div class=\"clear\"></div>					
+</div>";
 
-$adminmain .= "<div id=\"tab1\" class=\"tabs\">";	
+$adminmain .= "<div class=\"content-box-content\">";
+$adminmain .= "<div class=\"tab-content default-tab\" id=\"tab1\">";	
 	
 $adminmain .= "<h4>".$L['adm_valqueue']." :</h4><ul class=\"arrow_list\">";
 $adminmain .= "<li><a href=\"".sed_url("admin", "m=page")."\">".$L['Pages']." : ".$pagesqueued."</a></li>";
@@ -69,7 +72,7 @@ if ($sys['user_istopadmin'])
     $cfg['sqlversion'] = $cfg['version'];
     }
 
-	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
+	$adminmain .= "<div class=\"tab-content\" id=\"tab2\">";
 
 	$adminmain .= "<h4>".$L['upg_upgrade']." :</h4>";
 
@@ -124,7 +127,7 @@ if ($sys['user_istopadmin'])
 	$adminmain .= "</div>";
 	}
 
-$adminmain .= "<div id=\"tab3\" class=\"tabs\">";
+$adminmain .= "<div class=\"tab-content\" id=\"tab3\">";
 
 $adminmain .= "<h4>".$L['adm_infos']." :</h4>";
 $adminmain .= "<div name=\"log\" id=\"infos\">";

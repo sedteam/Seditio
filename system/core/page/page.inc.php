@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=175
+Version=177
 Updated=2013-nov-24
 Type=Core
 Author=Neocrome
@@ -244,6 +244,13 @@ $t->assign(array(
 	"PAGE_EXTRA3" => $pag['page_extra3'],
 	"PAGE_EXTRA4" => $pag['page_extra4'],
 	"PAGE_EXTRA5" => $pag['page_extra5'],
+	"PAGE_EXTRA6" => $pag['page_extra6'],
+	"PAGE_EXTRA7" => $pag['page_extra7'],
+	"PAGE_EXTRA8" => $pag['page_extra8'],
+	"PAGE_EXTRA9" => $pag['page_extra9'],
+	"PAGE_EXTRA10" => $pag['page_extra10'],
+  "PAGE_PRICE" => $pag['page_price'],
+  "PAGE_THUMB" => $pag['page_thumb'],
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),

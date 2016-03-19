@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/inc/textboxer2.en.lang.php
-Version=175
+Version=177
 Updated=2012-oct-19
 Type=Core
 Author=Arkkimaagi

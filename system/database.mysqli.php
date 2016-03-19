@@ -6,9 +6,9 @@ Copyright Neocrome & Seditio Team
 http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
-File=system/functions/database.mysqli.php
-Version=175
-Updated=2012-may-24
+File=system/database.mysqli.php
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Functions MySQLi driver
@@ -118,6 +118,24 @@ function sed_sql_fetchassoc($res) {
 function sed_sql_fetchrow($res) {     
   return (mysqli_fetch_row($res)); 
 }
+
+/** 
+ * Returns an object containing field information. This function can be used to obtain information about fields in the provided query result.
+ *   
+ * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @return Returns an object containing field information  
+ */
+function sed_sql_fetchfield($res, $field_offset = 0)
+	{ return (mysqli_fetch_field($res)); }
+		
+/** 
+ * Retrieves the number of fields from a query.
+ *   
+ * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @return Returns the number of fields in the result set resource on success or FALSE on failure.
+ */
+function sed_sql_numfields($res)
+	{ return (mysqli_num_fields($res)); }	
 
 /** 
  * Free result memory

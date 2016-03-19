@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Functions
@@ -103,18 +103,23 @@ function sed_build_admrights($rn)
  * @param array $adminpath Array with path links 
  * @return string 
  */ 
-function sed_build_adminsection($adminpath)
+function sed_build_adminsection($adminpath, $breadcrumbsclass = "", $homeicon = "")
 	{
 	global $cfg, $L;
 
 	$result = array();
-	$result[] = "<a href=\"".sed_url("admin")."\">".$L['Adminpanel']."</a>";
+	$adminhome = "<a href=\"".sed_url("admin")."\">".$homeicon.$L['Adminpanel']."</a>";
+	$result[] = $adminhome; 
+	$bread = "<ul class=\"".$breadcrumbsclass."\"><li>".$adminhome."</li>";
 	foreach($adminpath as $i => $k)
-		{ $result[] = "<a href=\"".$k[0]."\">".$k[1]."</a>"; }
+		{ $result[] = "<a href=\"".$k[0]."\">".$k[1]."</a>"; 
+		  $bread .=	"<li><a href=\"".$k[0]."\">".$k[1]."</a></li>";
+		}
 		$result = implode(" ".$cfg['separator']." ", $result);
-
-	return($result);
+	$bread .= "</ul>";
+	return((!empty($breadcrumbsclass)) ? $bread : $result);
 	}
+		
 
 /** 
  * Registers a set of configuration entries at once. 
@@ -250,15 +255,17 @@ function sed_forum_resyncall()
  * 
  * @param string $url Url
  * @param string $text Title url  
- * @param string $cond Permissions 
+ * @param string $cond Permissions
+ * @param string $class CSS class for link  
  * @return string 
  */ 
-function sed_linkif($url, $text, $cond)
+function sed_linkif($url, $text, $cond, $class="")
 	{
+	$class = (empty($class)) ? "" : " class=\"".$class."\"";	
 	if ($cond)
-		{ $res = "<a href=\"".$url."\">".$text."</a>"; }
+		{ $res = "<a href=\"".$url."\"".$class."><span>".$text."</span></a>"; }
 	else
-		{ $res = $text; }
+		{ $res = "<span>".$text."</span>"; }
 
 	return($res);
 	}
@@ -797,7 +804,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
 		if (sed_sql_numrows($sql)==0)
 			{
-			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('$code', '$path', '$title', '$desc', '$icon', ".(int)$group.")");
+			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.")");
 
 			foreach($sed_groups as $k => $v)
 				{

@@ -12,8 +12,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/en/message.lang.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Lang
 Author=Neocrome
 Description=Language messages
@@ -61,6 +61,10 @@ $L['msg157_1'] = "This validation URL isn't valid.";
 
 $L['msg300_0'] = "New submission";
 $L['msg300_1'] = "Ok, this item is now recorded in the database.<br />A moderator will check it as soon as possible,<br />Thanks !";
+$L['msg301_0'] = "New submission";
+$L['msg301_1'] = "Ok, this item is now recorded in the database.";
+$L['msg302_0'] = "Record deleted";
+$L['msg302_1'] = "Ok, record is deleted from the database.";
 
 /* ======== Error Pages ======== */
 
@@ -103,6 +107,8 @@ $L['msg915_0'] = "Error !";
 $L['msg915_1'] = "At least 1 field is empty.";
 $L['msg916_0'] = "Database updated";
 $L['msg916_1'] = "Done, database successfully updated.<br />Affected entries : $num";
+$L['msg917_0'] = "Database updated";
+$L['msg917_1'] = "Done, database successfully updated.";
 $L['msg930_0'] = "Access denied";
 $L['msg930_1'] = "You're not allowed to do this.";
 $L['msg940_0'] = "Section disabled";

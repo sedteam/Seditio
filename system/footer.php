@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=system/footer.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Global footer
@@ -68,7 +68,8 @@ if (is_array($extp))
 if ($cfg['enablecustomhf'])
 	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
 else
-	{ $mskin = "skins/".$usr['skin']."/footer.tpl"; }
+	{ $mskin = sed_skinfile('footer', $adminskin); }
+	
 $t = new XTemplate($mskin);
 
 $t->assign(array (

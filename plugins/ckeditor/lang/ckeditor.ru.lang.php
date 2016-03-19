@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/lang/ckeditor.ru.lang.php
-Version=175
+Version=177
 Updated=2012-оct-19
 Type=Plugin
 Author=Neocrome

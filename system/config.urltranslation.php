@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 http://www.seditio.org
 [BEGIN_SED]
 File=system/config.urlrewrite.php
-Version=175
+Version=177
 Updated=2013-sep-26
 Type=Core
 Author=Seditio Team

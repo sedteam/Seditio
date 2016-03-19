@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.comments.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Administration panel
@@ -23,11 +23,8 @@ sed_block($usr['isadmin']);
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=comments"), $L['Comments']);
 $adminhelp = $L['adm_help_comments'];
-$adminmain = "<h2><img src=\"system/img/admin/comments.png\" alt=\"\" /> ".$L['Comments']."</h2>"; 
- 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=comments")."\">".$L['Configuration']."</a></li></ul>";
 
-if ($a=='delete')
+if ($a == 'delete')
 	{
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
@@ -42,22 +39,18 @@ list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']*2);
 
-$adminmain .= "<div class=\"paging\">";
-$adminmain .= "<ul class=\"pagination\">";
-$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
-$adminmain .= $pagination;
-$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
+$t = new XTemplate(sed_skinfile('admin.comments', true)); 
 
-$adminmain .= "<h4>".$L['viewdeleteentries']." :</h4><table class=\"cells striped\"><tr>";
-$adminmain .= "<td style=\"width:40px;\" class=\"coltop\">".$L['Delete']."</td>";
-$adminmain .= "<td style=\"width:40px;\" class=\"coltop\">#</td>";
-$adminmain .= "<td style=\"width:40px;\" class=\"coltop\">".$L['Code']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Author']."</td>";
-$adminmain .= "<td style=\"width:128px;\" class=\"coltop\">".$L['Date']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Comment']."</td>";
-$adminmain .= "<td style=\"width:64px;\" class=\"coltop\">".$L['Open']."</td></tr>";
+if (!empty($pagination))
+	{
+	$t->assign(array(
+		"COMMENTS_PAGINATION" => $pagination,
+		"COMMENTS_PAGEPREV" => $pagination_prev,
+		"COMMENTS_PAGENEXT" => $pagination_next
+	));	
+	$t->parse("ADMIN_COMMENTS.COMMENTS_PAGINATION_TP");
+	$t->parse("ADMIN_COMMENTS.COMMENTS_PAGINATION_BM");		
+	}
 
 $ii = 0;
 
@@ -89,25 +82,28 @@ while ($row = sed_sql_fetchassoc($sql))
 			$row['com_url'] = '';
 		break;
 		}
-
-	$adminmain .= "<tr><td style=\"text-align:center;\">";
-	$adminmain .= "<a href=\"".sed_url("admin", "m=comments&a=delete&id=".$row['com_id']."&".sed_xg())."\">".$out['img_delete']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$row['com_id']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$row['com_code']."</td>";
-	$adminmain .= "<td>".$row['com_author']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['com_date'])."</td>";
-	$adminmain .= "<td>".$row['com_text']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$row['com_url']."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td></tr>";
+	
+	$t -> assign(array( 	
+		"COMMENTS_LIST_DELETE_URL" => sed_url("admin", "m=comments&a=delete&id=".$row['com_id']."&".sed_xg()),
+		"COMMENTS_LIST_ID" => $row['com_id'],
+		"COMMENTS_LIST_CODE" => $row['com_code'],
+		"COMMENTS_LIST_AUTHOR" => $row['com_author'],
+		"COMMENTS_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['com_date']),
+		"COMMENTS_LIST_TEXT" => $row['com_text'],
+		"COMMENTS_LIST_OPEN_URL" => $row['com_url']
+	));
+		
+	$t -> parse("ADMIN_COMMENTS.COMMENTS_LIST");	
+	
 	$ii++;
 	}
-$adminmain .= "<tr><td colspan=\"7\">".$L['Total']." : ".$ii."</td></tr></table>";
+	
+	$t -> assign(array( 
+		"COMMENTS_TOTAL" => $ii
+	));	
+	
+$t -> parse("ADMIN_COMMENTS");
 
-$adminmain .= "<div class=\"paging\">";
-$adminmain .= "<ul class=\"pagination\">";
-$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
-$adminmain .= $pagination;
-$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
+$adminmain .= $t -> text("ADMIN_COMMENTS"); 
 
 ?>

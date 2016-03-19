@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.en.lang.php
-Version=175
+Version=177
 Updated=2006-jun-05
 Type=Plugin.standalone
 Author=Neocrome

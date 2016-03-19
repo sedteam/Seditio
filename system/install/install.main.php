@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=install.php
-Version=175
+Version=177
 Updated=2012-may-17
 Type=Core
 Author=Neocrome

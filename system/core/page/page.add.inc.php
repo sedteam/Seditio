@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -48,6 +48,16 @@ if ($a=='add')
 	$newpageextra3 = sed_import('newpageextra3','P','TXT');
  	$newpageextra4 = sed_import('newpageextra4','P','TXT');
 	$newpageextra5 = sed_import('newpageextra5','P','HTM');
+  
+	$newpageextra6 = sed_import('newpageextra6','P','HTM'); 
+	$newpageextra7 = sed_import('newpageextra7','P','HTM');  
+	$newpageextra8 = sed_import('newpageextra8','P','HTM'); 
+	$newpageextra9 = sed_import('newpageextra9','P','HTM');
+	$newpageextra10 = sed_import('newpageextra10','P','HTM');
+
+	$newpageprice = sed_import('newpageprice','P','TXT');
+	$newpagethumb = sed_import('newpagethumb','P','TXT');  
+      
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
 	$newpagetext = sed_import('newpagetext','P','HTM');
@@ -74,8 +84,8 @@ if ($a=='add')
 	$newpageallowcomments = sed_import('newpageallowcomments','P','BOL');
 	$newpageallowratings = sed_import('newpageallowratings','P','BOL');
   
-  $newpageallowcomments  = (empty($newpageallowcomments) && $newpageallowcomments != 0) ? 1 : $newpageallowcomments ;  //Fix 175
-  $newpageallowratings = (empty($newpageallowratings) && $newpageallowratings != 0) ? 1 : $newpageallowratings; //Fix 175
+	$newpageallowcomments  = (empty($newpageallowcomments) && $newpageallowcomments != 0) ? 1 : $newpageallowcomments ;  //Fix 175
+	$newpageallowratings = (empty($newpageallowratings) && $newpageallowratings != 0) ? 1 : $newpageallowratings; //Fix 175
 		
 	$newpagebegin = sed_mktime($newpagehour_beg, $newpageminute_beg, 0, $newpagemonth_beg, $newpageday_beg, $newpageyear_beg) - $usr['timezone'] * 3600;
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
@@ -85,9 +95,9 @@ if ($a=='add')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
-  //Parsing for BBCode Mode New v173
-  $newpagetype = ($usr['isadmin'] && ($cfg['textmode']=='bbcode')) ? sed_import('newpagetype','P','INT') : 0;  // New v173
-  if ($cfg['textmode']=='html') { $newpagetype = 1; }  // New v173
+	//Parsing for BBCode Mode New v173
+	$newpagetype = ($usr['isadmin'] && ($cfg['textmode']=='bbcode')) ? sed_import('newpagetype','P','INT') : 0;  // New v173
+	if ($cfg['textmode']=='html') { $newpagetype = 1; }  // New v173
 
   //Autovalidation New v173
 	$newpagepublish = sed_import('newpagepublish', 'P', 'ALP');
@@ -100,7 +110,7 @@ if ($a=='add')
 		{
 		if (!empty($newpagealias))
 			{     
-      $sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
+			$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
 			}
 
@@ -114,6 +124,11 @@ if ($a=='add')
 			page_extra3,
 			page_extra4,
 			page_extra5,
+			page_extra6,
+			page_extra7,
+			page_extra8,
+			page_extra9,
+			page_extra10,      
 			page_title,
 			page_desc,
 			page_text,
@@ -128,11 +143,13 @@ if ($a=='add')
 			page_url,
 			page_size,
 			page_alias,
-      page_allowcomments,
-      page_allowratings,
+			page_allowcomments,
+			page_allowratings,
 			page_seo_title,
 			page_seo_desc,
-			page_seo_keywords
+			page_seo_keywords,
+			page_price,
+			page_thumb
 			)
 			VALUES
 			(".(int)$newpagestate.",
@@ -144,6 +161,11 @@ if ($a=='add')
 			'".sed_sql_prep($newpageextra3)."',
 			'".sed_sql_prep($newpageextra4)."',
 			'".sed_sql_prep($newpageextra5)."',
+			'".sed_sql_prep($newpageextra6)."',
+			'".sed_sql_prep($newpageextra7)."',
+			'".sed_sql_prep($newpageextra8)."',
+			'".sed_sql_prep($newpageextra9)."',
+			'".sed_sql_prep($newpageextra10)."',      
 			'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep(sed_checkmore($newpagetext, true))."',
@@ -162,7 +184,9 @@ if ($a=='add')
 			".(int)$newpageallowratings.",
 			'".sed_sql_prep($newpageseotitle)."',
 			'".sed_sql_prep($newpageseodesc)."',			
-			'".sed_sql_prep($newpageseokeywords)."')");
+			'".sed_sql_prep($newpageseokeywords)."',
+			'".sed_sql_prep($newpageprice)."',      
+			'".sed_sql_prep($newpagethumb)."')");
 
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
@@ -171,7 +195,10 @@ if ($a=='add')
 		/* ===== */
 
 		sed_shield_update(30, "New page");
-		sed_redirect(sed_url("message", "msg=300", "", true));
+		
+		if (defined('SED_ADMIN')) { sed_redirect(sed_url("admin", "m=page&s=manager&c=".$newpagecat."&msg=300", "", true)); }
+		else { sed_redirect(sed_url("message", "msg=300", "", true)); }
+		
 		exit;
 		}
 	}
@@ -199,6 +226,16 @@ if (($a=='clone') && ($id > 0))
 	$newpageextra3 = $row1['page_extra3'];
  	$newpageextra4 = $row1['page_extra4'];
 	$newpageextra5 = $row1['page_extra5'];
+  
+	$newpageextra6 = $row1['page_extra6'];
+ 	$newpageextra7 = $row1['page_extra7'];
+	$newpageextra8 = $row1['page_extra8'];
+ 	$newpageextra9 = $row1['page_extra9'];
+	$newpageextra10 = $row1['page_extra10'];
+  
+	$newpageprice = $row1['page_price']; 
+	$newpagethumb = $row1['page_thumb'];    
+  
 	$newpagetitle = $row1['page_title'];
 	$newpagedesc = $row1['page_desc'];
 	$newpagetext = $row1['page_text'];
@@ -221,19 +258,19 @@ if (empty($newpagecat) && !empty($c))
 }
 
 if ($newpagefile)
-	{ $pageadd_form_file = sed_inputbox("radio", "newpagefile", 1, TRUE).$L['Yes']." ".sed_inputbox("radio", "newpagefile", 0, FALSE).$L['No']; }
+	{ $pageadd_form_file = sed_radiobox("radio", "newpagefile", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "newpagefile", 0, FALSE).$L['No']; }
 	else
-	{ $pageadd_form_file = sed_inputbox("radio", "newpagefile", 1, FALSE).$L['Yes']." ".sed_inputbox("radio", "newpagefile", 0, TRUE).$L['No'];  }
+	{ $pageadd_form_file = sed_radiobox("radio", "newpagefile", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "newpagefile", 0, TRUE).$L['No'];  }
 
 if (($newpageallowcomments) || !isset($newpageallowcomments))
-	{ $pageadd_form_allowcomments = sed_inputbox("radio", "newpageallowcomments", 1, TRUE).$L['Yes']." ".sed_inputbox("radio", "newpageallowcomments", 0, FALSE).$L['No']; }
+	{ $pageadd_form_allowcomments = sed_radiobox("radio", "newpageallowcomments", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "newpageallowcomments", 0, FALSE).$L['No']; }
 	else
-	{ $pageadd_form_allowcomments = sed_inputbox("radio", "newpageallowcomments", 1, FALSE).$L['Yes']." ".sed_inputbox("radio", "newpageallowcomments", 0, TRUE).$L['No']; }
+	{ $pageadd_form_allowcomments = sed_radiobox("radio", "newpageallowcomments", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "newpageallowcomments", 0, TRUE).$L['No']; }
 
 if (($newpageallowratings) || !isset($newpageallowratings))
-  { $pageadd_form_allowratings = sed_inputbox("radio", "newpageallowratings", 1, TRUE).$L['Yes']." ".sed_inputbox("radio", "newpageallowratings", 0, FALSE).$L['No']; }
+  { $pageadd_form_allowratings = sed_radiobox("radio", "newpageallowratings", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "newpageallowratings", 0, FALSE).$L['No']; }
 	else
-	{ $pageadd_form_allowratings = sed_inputbox("radio", "newpageallowratings", 1, FALSE).$L['Yes']." ".sed_inputbox("radio", "newpageallowratings", 0, TRUE).$L['No']; }
+	{ $pageadd_form_allowratings = sed_radiobox("radio", "newpageallowratings", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "newpageallowratings", 0, TRUE).$L['No']; }
 
 if ($usr['isadmin'] && ($cfg['textmode']=='bbcode'))
 {
@@ -276,9 +313,16 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+if (defined('SED_ADMIN'))
+	{
+	$mskin = sed_skinfile(array('admin', 'page', 'add', $sed_cat[$newpagecat]['tpl']), true);	
+	}
+else 
+	{
+	require("system/header.php");
+	$mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));	
+	}
 
-$mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));
 $t = new XTemplate($mskin);
 
 if (!empty($error_string))
@@ -295,25 +339,34 @@ if ($usr['isadmin'] && ($cfg['textmode']=='bbcode'))
 
 if ($usr['isadmin'])  { $t->parse("MAIN.PAGEADD_PUBLISH"); }
 
+$form_send_url = (defined('SED_ADMIN')) ? sed_url("admin", "m=page&s=add&a=add") : sed_url("page", "m=add&a=add");
+
 $t->assign(array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
-	"PAGEADD_FORM_SEND" => sed_url("page", "m=add&a=add"),
+	"PAGEADD_FORM_SEND" => $form_send_url,
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
-	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".sed_cc($newpagekey)."\" size=\"16\" maxlength=\"16\" />",
-	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"newpageextra1\" value=\"".sed_cc($newpageextra1)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"newpageextra2\" value=\"".sed_cc($newpageextra2)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"newpageextra3\" value=\"".sed_cc($newpageextra3)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA4" => "<input type=\"text\" class=\"text\" name=\"newpageextra4\" value=\"".sed_cc($newpageextra4)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA5" => "<input type=\"text\" class=\"text\" name=\"newpageextra4\" value=\"".sed_cc($newpageextra4)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpagetitle\" value=\"".sed_cc($newpagetitle)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"newpagedesc\" value=\"".sed_cc($newpagedesc)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_SEOTITLE" => "<input type=\"text\" class=\"text\" name=\"newpageseotitle\" value=\"".sed_cc($newpageseotitle)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_SEODESC" => "<input type=\"text\" class=\"text\" name=\"newpageseodesc\" value=\"".sed_cc($newpageseodesc)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_SEOKEYWORDS" => "<input type=\"text\" class=\"text\" name=\"newpageseokeywords\" value=\"".sed_cc($newpageseokeywords)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"newpageauthor\" value=\"".sed_cc($newpageauthor)."\" size=\"16\" maxlength=\"24\" />",
+	"PAGEADD_FORM_KEY" => sed_textbox('newpagekey', $newpagekey, 16, 16),
+	"PAGEADD_FORM_ALIAS" => sed_textbox('newpagealias', $newpagealias),
+	"PAGEADD_FORM_EXTRA1" => sed_textbox('newpageextra1', $newpageextra1),
+	"PAGEADD_FORM_EXTRA2" => sed_textbox('newpageextra2', $newpageextra2),
+	"PAGEADD_FORM_EXTRA3" => sed_textbox('newpageextra3', $newpageextra3),
+	"PAGEADD_FORM_EXTRA4" => sed_textbox('newpageextra4', $newpageextra4),
+	"PAGEADD_FORM_EXTRA5" => sed_textbox('newpageextra5', $newpageextra5),
+	"PAGEADD_FORM_EXTRA6" => sed_textbox('newpageextra6', $newpageextra6),
+	"PAGEADD_FORM_EXTRA7" => sed_textbox('newpageextra7', $newpageextra7),
+	"PAGEADD_FORM_EXTRA8" => sed_textbox('newpageextra8', $newpageextra8),
+	"PAGEADD_FORM_EXTRA9" => sed_textbox('newpageextra9', $newpageextra9),
+	"PAGEADD_FORM_EXTRA10" => sed_textbox('newpageextra10', $newpageextra10),  
+	"PAGEADD_FORM_TITLE" => sed_textbox('newpagetitle', $newpagetitle),
+	"PAGEADD_FORM_DESC" => sed_textbox('newpagedesc', $newpagedesc),
+	"PAGEADD_FORM_SEOTITLE" => sed_textbox('newpageseotitle', $newpageseotitle),
+	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', $newpageseodesc),
+	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', $newpageseokeywords),
+ 	"PAGEADD_FORM_PRICE" => sed_textbox('newpageprice', $newpageprice, 16, 16),
+	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', $newpagethumb),
+	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', $newpageauthor, 16, 24),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),
 	"PAGEADD_FORM_OWNERID" => $usr['id'],
 	"PAGEADD_FORM_BEGIN" => $newpage_form_begin,
@@ -321,11 +374,11 @@ $t->assign(array(
 	"PAGEADD_FORM_FILE" => $pageadd_form_file,
 	"PAGEADD_FORM_ALLOWRATINGS" => $pageadd_form_allowratings,
 	"PAGEADD_FORM_ALLOWCOMMENTS" => $pageadd_form_allowcomments,
-	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".sed_cc($newpageurl)."\" size=\"56\" maxlength=\"255\" /> ".$pfs_form_url_myfiles,
-	"PAGEADD_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"newpagesize\" value=\"".sed_cc($newpagesize)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_TEXT" => "<div><textarea name=\"newpagetext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc(sed_checkmore($newpagetext, false), ENT_QUOTES)."</textarea></div>".$bbcodes." ".$smilies." ".$pfs,
-	"PAGEADD_FORM_TEXT2" => "<div><textarea name=\"newpagetext2\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc(sed_checkmore($newpagetext2, false), ENT_QUOTES)."</textarea></div>",
-	"PAGEADD_FORM_TEXTBOXER" => "<div><textarea name=\"newpagetext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc(sed_checkmore($newpagetext, false), ENT_QUOTES)."</textarea></div>".$bbcodes." ".$smilies." ".$pfs,
+	"PAGEADD_FORM_URL" => sed_textbox('newpageurl', $newpageurl)." ".$pfs_form_url_myfiles,
+	"PAGEADD_FORM_SIZE" => sed_textbox('newpagesize', $newpagesize),
+	"PAGEADD_FORM_TEXT" => sed_textarea('newpagetext', $newpagetext, $cfg['textarea_default_height'], $cfg['textarea_default_width']).$bbcodes." ".$smilies." ".$pfs,
+	"PAGEADD_FORM_TEXT2" => sed_textarea('newpagetext2', $newpagetext2, $cfg['textarea_default_height'], $cfg['textarea_default_width']),
+	"PAGEADD_FORM_TEXTBOXER" => sed_textarea('newpagetext', $newpagetext, $cfg['textarea_default_height'], $cfg['textarea_default_width']).$bbcodes." ".$smilies." ".$pfs,
 	"PAGEADD_FORM_BBCODES" => $bbcodes,
 	"PAGEADD_FORM_SMILIES" => $smilies,
 	"PAGEADD_FORM_MYPFS" => $pfs
@@ -337,9 +390,15 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
-
-require("system/footer.php");
-
+if (defined('SED_ADMIN'))
+	{
+	$t -> parse("MAIN"); 
+	$adminmain = $t -> text("MAIN");
+	}
+else 
+	{
+	$t->parse("MAIN");
+	$t->out("MAIN");
+	require("system/footer.php");
+	}
 ?>

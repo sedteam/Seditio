@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/adminqv/lang/adminqv.ru.lang.php
-Version=175
+Version=177
 Updated=2012-may-16
 Type=Plugin
 Author=Neocrome
@@ -28,6 +28,8 @@ $L['plu_newtopics'] = "Новые темы";
 $L['plu_newposts'] = "Новые сообщения на форуме";
 $L['plu_newcomments'] = "Новые комментарии";
 $L['plu_newpms'] = "Новые Личные Сообщения";
+
+$L['plu_db'] = "Статистика БД SQL";
 
 $L['plu_db_rows'] = "БД SQL, число строк";
 $L['plu_db_indexsize'] = "БД SQL, размер индекса (KB)";

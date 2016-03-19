@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.setup.php
-Version=175
+Version=177
 Updated=2014-oct-23
 Type=Plugin
 Author=Amro
@@ -18,8 +18,8 @@ Description=
 Code=ckeditor
 Name=Ckeditor
 Description=Ckeditor for Seditio (Universal textarea JS connector) 
-Version=4.2.1
-Date=2014-oct-30
+Version=4.5.6
+Date=2015-dec-30
 Author=Amro
 Copyright=Amro
 Notes=

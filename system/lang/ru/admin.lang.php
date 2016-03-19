@@ -12,7 +12,7 @@ Localization done by : Antar, Antony, Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
-Version=175
+Version=177
 Updated=2012-may-20
 Type=Lang
 Author=Neocrome
@@ -25,6 +25,7 @@ Description=Admin panel
 $L['core_main'] = "Основные настройки";
 $L['core_parser'] = "Настройки парсинга"; 			// New in v120
 $L['core_rss'] = "Настройка RSS лент"; 			// New in v173
+$L['core_dic'] = "Справочники"; 			// New in v173
 $L['core_time'] = "Время и дата";
 $L['core_skin'] = "Настройки оформления";
 $L['core_lang'] = "Языки";
@@ -80,6 +81,7 @@ $L['adm_valqueue'] = "В очереди на публикацию";
 $L['adm_required'] = "(обязательное)";
 $L['adm_clicktoedit'] = "(нажми для редактирования)";
 $L['adm_manage'] = "Инструменты";  // New in v150
+$L['adm_pagemanager'] = "Менеджер страниц";  // New in v177
 
 /* ====== Banlist ====== */
 
@@ -306,6 +308,7 @@ $L['adm_autoprune'] = "Автоматически удалять темы пос
 $L['adm_postcounters'] = "Сверить счётчики";
 $L['adm_help_forums'] = "Не доступно";
 $L['adm_forum_structure'] = "Структура категорий форума";	// New in v11
+$L['adm_forum_structure_cat'] = "Структура разделов форума";	// New in v11
 $L['adm_help_forums_structure'] = "Недоступно";	// New in v11
 $L['adm_defstate'] = "Состояние по умолчанию";	// New in v11
 $L['adm_defstate_0'] = "Свёрнуто";	// New in v11
@@ -321,6 +324,21 @@ $L['adm_dnsrecord'] = "Запись DNS для этого адреса";
 /* ====== Smilies ====== */
 
 $L['adm_help_smilies'] = "Недоступно";
+
+/* ====== Directories ====== */
+
+$L['adm_directory'] = "Справочник";
+$L['adm_dic_title'] = "Заголовок справочника";
+$L['adm_dic_code'] = "Код справочника";
+$L['adm_dic_list'] = "Список справочников";
+$L['adm_dic_term_list'] = "Список терминов";
+$L['adm_dic_add'] = "Добавить новый справочник";
+$L['adm_dic_edit'] = "Редактирование справочника";
+$L['adm_dic_add_term'] = "Добавить новый термин";
+$L['adm_dic_term_title'] = "Название термина";
+$L['adm_dic_term_value'] = "Значение термина";
+$L['adm_dic_term_defval'] = "Термин по умолчанию?";
+$L['adm_dic_term_edit'] = "Редактирование термина из справочника";
 
 /* ====== PFS ====== */
 
@@ -344,7 +362,7 @@ $L['adm_nogd'] = "Графическая библиотека GD не подде
 $L['adm_structure'] = "Структура страниц (категорий)";
 $L['adm_syspages'] = "Смотреть категорию 'системные'";
 $L['adm_help_page'] = "Страницы, которые относятся к категории 'системные', не показываются в публично доступных списках страниц. Это сделано для создания изолированных страниц.";
-$L['adm_sortingorder'] = "Установить для категорий порядок сортировки по умолчанию";
+$L['adm_sortingorder'] = "Порядок сортировки для категорий";
 $L['adm_fileyesno'] = "Файл (да/нет)";
 $L['adm_fileurl'] = "URL файла";
 $L['adm_filesize'] = "Размер файла";

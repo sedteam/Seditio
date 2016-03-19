@@ -8,7 +8,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.ru.lang.php
-Version=175
+Version=177
 Updated=2012-may-16
 Type=
 Author=Neocrome (Translated - Antar)

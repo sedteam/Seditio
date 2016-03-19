@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=skins/simple/simple.en.lang.php
-Version=175
+Version=177
 Updated=2014-oct-31
 Type=Skin
 Name=Simple

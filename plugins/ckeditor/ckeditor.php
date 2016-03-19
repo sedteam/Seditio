@@ -7,7 +7,7 @@ http://www.seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.php
-Version=175
+Version=177
 Updated=2013-oct-09
 Type=Plugin
 Author=Amro

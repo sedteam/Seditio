@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.banlist.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Banlist
@@ -23,12 +23,6 @@ sed_block($usr['isadmin']);
 $adminpath[] = array (sed_url("admin", "m=users"), $L['Users']);
 $adminpath[] = array (sed_url("admin", "m=banlist"), $L['Banlist']);
 $adminhelp = $L['adm_help_banlist'];
-$adminmain = "<h2><img src=\"system/img/admin/banlist.png\" alt=\"\" /> ".$L['Banlist']."</h2>";
-
-$adminmain .= "<ul class=\"arrow_list\">";
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=config&n=edit&o=core&p=users"), $L['Configuration'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=users"), $L['Users'], sed_auth('users', 'a', 'A'))."</li>";
-$adminmain .= "</ul>";
 
 if ($a=='update')
 	{
@@ -70,17 +64,9 @@ elseif ($a=='delete')
 	exit;
 	}
 
-$sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC");
+$t = new XTemplate(sed_skinfile('admin.banlist', true));
 
-$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<table class=\"cells striped\"><tr>";
-$adminmain .= "<td class=\"coltop\">".$L['Delete']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Until']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['adm_ipmask']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['adm_emailmask']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Reason']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Update']."</td>";
-$adminmain .= "</tr>";
+$sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC");
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
@@ -89,34 +75,37 @@ while ($row = sed_sql_fetchassoc($sql))
 	$banlist_email = $row['banlist_email'];
 	$banlist_reason = $row['banlist_reason'];
 	$banlist_expire = $row['banlist_expire'];
-	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url("admin", "m=banlist&a=update&id=".$banlist_id."&".sed_xg())."\" method=\"post\">";
-	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=banlist&a=delete&id=".$banlist_id."&".sed_xg())."\">".$out['img_delete']."</a></td>";
 
-	if ($banlist_expire>0)
-		{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $banlist_expire)." GMT</td>"; }
-       else
-		{ $adminmain .= "<td style=\"text-align:center;\">".$L['adm_neverexpire']."</td>"; }
+	$t->assign(array(
+		"BANLIST_EDIT_ID" => $banlist_id,
+		"BANLIST_EDIT_SEND_URL" => sed_url("admin", "m=banlist&a=update&id=".$banlist_id."&".sed_xg()),
+		"BANLIST_EDIT_DELETE_URL" => sed_url("admin", "m=banlist&a=delete&id=".$banlist_id."&".sed_xg()),
+		"BANLIST_EDIT_EXPIRE" => ($banlist_expire > 0) ? date($cfg['dateformat'], $banlist_expire)." GMT" : $L['adm_neverexpire'], 
+		"BANLIST_EDIT_IP" => sed_textbox('rbanlistip', $banlist_ip, 14, 16),
+		"BANLIST_EDIT_EMAIL_MASK" => sed_textbox('rbanlistemail', $banlist_email, 10, 64),
+		"BANLIST_EDIT_REASON" => sed_textbox('rbanlistreason', $banlist_reason, 18, 64)
+	));
 
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistip\" value=\"".$banlist_ip."\" size=\"14\" maxlength=\"16\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistemail\" value=\"".$banlist_email."\" size=\"10\" maxlength=\"64\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistreason\" value=\"".$banlist_reason."\" size=\"18\" maxlength=\"64\" /></td>";
-	$adminmain .= "<td><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr></form>";
+	$t -> parse("ADMIN_BANLIST.BANLIST_EDIT_LIST");
+
 	}
-$adminmain .= "</table>";
 
-$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addbanlist\" action=\"".sed_url("admin", "m=banlist&a=add&".sed_xg())."\" method=\"post\">";
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td>".$L['Duration']." :</td><td><select name=\"nexpire\" size=\"1\">";
-$adminmain .= "<option value=\"3600\">1 hour</option><option value=\"7200\">2 hours</option><option value=\"14400\">4 hours</option><option value=\"28800\">8 hours</option>";
-$adminmain .= "<option value=\"57600\">16 hours</option><option value=\"86400\">1 day</option><option value=\"172800\">2 days</option><option value=\"345600\">4 days</option>";
-$adminmain .= "<option value=\"604800\">1 week</option><option value=\"1209600\">2 weeks</option><option value=\"1814400\">3 weeks</option><option value=\"2592000\">1 month</option>";
-$adminmain .= "<option value=\"0\" selected=\"selected\">".$L['adm_neverexpire']."</option></select></td></tr>";
+	$nexpire = "<select name=\"nexpire\" size=\"1\">";
+	$nexpire .= "<option value=\"3600\">1 hour</option><option value=\"7200\">2 hours</option><option value=\"14400\">4 hours</option><option value=\"28800\">8 hours</option>";
+	$nexpire .= "<option value=\"57600\">16 hours</option><option value=\"86400\">1 day</option><option value=\"172800\">2 days</option><option value=\"345600\">4 days</option>";
+	$nexpire .= "<option value=\"604800\">1 week</option><option value=\"1209600\">2 weeks</option><option value=\"1814400\">3 weeks</option><option value=\"2592000\">1 month</option>";
+	$nexpire .= "<option value=\"0\" selected=\"selected\">".$L['adm_neverexpire']."</option></select>";
 
-$adminmain .= "<tr><td>".$L['Ipmask']." :</td><td>";
-$adminmain .= "<input type=\"text\" class=\"text\" name=\"nbanlistip\" value=\"\" size=\"15\" maxlength=\"15\" /></td></tr>";
-$adminmain .= "<tr><td>".$L['Emailmask']." :</td><td><input type=\"text\" class=\"text\" name=\"nbanlistemail\" value=\"\" size=\"24\" maxlength=\"64\" /></td></tr>";
-$adminmain .= "<tr><td>".$L['Reason']." :</td><td><input type=\"text\" class=\"text\" name=\"nbanlistreason\" value=\"\" size=\"48\" maxlength=\"64\" /></td></tr>";
-$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr></table></form>";
+	$t->assign(array(
+		"BANLIST_ADD_SEND_URL" => sed_url("admin", "m=banlist&a=add&".sed_xg()),
+		"BANLIST_ADD_NEXPIRE" => $nexpire,
+		"BANLIST_ADD_IP" => sed_textbox('nbanlistip', $nbanlistip, 14, 16),
+		"BANLIST_ADD_EMAIL_MASK" => sed_textbox('nbanlistemail', $nbanlistemail, 24, 64),
+		"BANLIST_ADD_REASON" => sed_textbox('nbanlistreason', $nbanlistreason, 48, 64)
+	));
+
+$t -> parse("ADMIN_BANLIST");
+
+$adminmain .= $t -> text("ADMIN_BANLIST"); 
 
 ?>

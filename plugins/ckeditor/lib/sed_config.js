@@ -1,8 +1,11 @@
 CKEDITOR.editorConfig = function( config )
 {
   config.toolbar = 'Basic';
+  config.extraPlugins = 'more,uploadimage,uploadwidget';
+config.uploadUrl = 'plug.php?ajx=ckeditor';
+	config.filebrowserUploadUrl = '/plug.php?ajx=ckeditor&fl=filebrowser';
 
-  config.extraPlugins = 'more';
+
   
   config.htmlEncodeOutput = false;
   config.entities = false;

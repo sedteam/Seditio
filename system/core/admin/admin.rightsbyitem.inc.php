@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.rightsbyitem.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Rights
@@ -21,7 +21,7 @@ $ic = sed_import('ic','G','ALP');
 $io = sed_import('io','G','TXT');
 $advanced = sed_import('advanced','G','BOL');
 
-$adminmain = "<h2><img src=\"system/img/admin/rights2.png\" alt=\"\" /> ".$L['Rights']."</h2>";
+//$adminmain = "<h2><img src=\"system/img/admin/rights2.png\" alt=\"\" /> ".$L['Rights']."</h2>";
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
@@ -38,6 +38,9 @@ $L['adm_code']['pm'] = $L['Private_Messages'];
 $L['adm_code']['polls'] = $L['Polls'];
 $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
+$L['adm_code']['dic'] = $L['core_dic'];
+
+$t = new XTemplate(sed_skinfile('admin.rightsbyitem', true)); 
 
 if ($a=='update')
 	{
@@ -82,9 +85,9 @@ switch($ic)
 	break;
 
 	case 'plug':
-  $extplugin_info = "plugins/".$io."/".$io.".setup.php";
+	$extplugin_info = "plugins/".$io."/".$io.".setup.php";
 	$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-  $title = " : ".$info['Name'];
+	$title = " : ".$info['Name'];
   
 	break;
 
@@ -101,8 +104,6 @@ if (is_array($extp))
 
 $adminpath[] = array(sed_url("admin", "m=rightsbyitem&ic=".$ic."&io=".$io), $L['Rights']." / ".$L['adm_code'][$ic].$title);
 
-$adv_columns = ($advanced) ? 5 : 0;
-
 $legend = "<img src=\"system/img/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
 $legend .= "<img src=\"system/img/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
 $legend .= ($advanced) ? "<img src=\"system/img/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
@@ -112,29 +113,16 @@ $legend .= ($advanced) ? "<img src=\"system/img/admin/auth_4.gif\" alt=\"\" /> :
 $legend .= ($advanced) ? "<img src=\"system/img/admin/auth_5.gif\" alt=\"\" /> : ".$L['Custom']." #5<br />" : '';
 $legend .= "<img src=\"system/img/admin/auth_a.gif\" alt=\"\" /> : ".$L['Administration'];
 
-$headcol .= "<tr><td class=\"coltop\" rowspan=\"2\">".$L['Groups']."</td>";
-$headcol .= "<td class=\"coltop\" colspan=\"".(3+$adv_columns)."\">".$L['Rights']."</td>";
-$headcol .= "<td class=\"coltop\" rowspan=\"2\" style=\"width:128px;\">".$L['adm_setby']."</td>";
-$headcol .= "<td class=\"coltop\" rowspan=\"2\" style=\"width:64px;\">".$L['Open']."</td>";
-$headcol .= "</tr>";
-
-$headcol .= "<tr>\n";
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_r.gif\" alt=\"\" /></td>\n";
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_w.gif\" alt=\"\" /></td>\n";
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_5.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_a.gif\" alt=\"\" /></td>\n";
-$headcol .= "</tr>\n";
-
-$adminmain .= "<form id=\"saverightsbyitem\" action=\"".sed_url("admin", "m=rightsbyitem&a=update&ic=".$ic."&io=".$io)."\" method=\"post\">";
-$adminmain .= "<table class=\"cells striped\">";
+$t->assign(array(
+	"RIGHTS_TITLE" => $L['Rights']." / ".$L['adm_code'][$ic].$title,
+	"RIGHTS_COLUMN_COUNT" => ($advanced) ? 8 : 3,
+	"RIGHTS_UPDATECOLUMN_COUNT" => ($advanced) ? 12 : 7,
+	"RIGHTS_UPDATE_SEND" => sed_url("admin", "m=rightsbyitem&a=update&ic=".$ic."&io=".$io)
+));
 
 function sed_rights_parseline($row, $title, $link)
 	{
-	global $L, $allow_img, $advanced;
+	global $L, $allow_img, $advanced, $t;
 
 	$mn['R'] = 1;
 	$mn['W'] = 2;
@@ -168,35 +156,42 @@ function sed_rights_parseline($row, $title, $link)
 			{
 			$box[$code] = "<input type=\"checkbox\" class=\"checkbox\" name=\"auth[".$row['auth_groupid']."][".$code."]\" ".$disabled[$code]." ".$checked[$code]." />";
 			}
-
-
+		
+		$t->assign(array(	
+			"RIGHTS_OPTIONS" => $box[$code]
+		));
+		
+		$t -> parse("ADMIN_RIGHTS.RIGHTSBYITEM.RIGHTS_LIST.RIGHTS_LIST_OPTIONS");
+		
 		}
-
-	$res .= "<tr>\n";
-	$res .= "<td style=\"padding:1px;\">\n";
-	$res .= "<img src=\"system/img/admin/groups.png\" alt=\"\" /> ";
-	$res .= "<a href=\"$link\">".$title."</a></td>\n";
-	$res .= "<td style=\"text-align:center; padding:2px;\">".implode("</td><td style=\"text-align:center; padding:2px;\">", $box)."</td>\n";
-	$res .= "<td style=\"text-align:center; padding:2px;\">".sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name']))."</td>\n";
-	$res .= "<td style=\"text-align:center;\"><a href=\"".sed_url("users", "g=".$row['auth_groupid'])."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td>";
-	$res .= "</tr>\n";
-
-	return($res);
+		
+		$t->assign(array(	
+			"RIGHTS_LIST_CODE" => $row['auth_code'],
+			"RIGHTS_LIST_URL" => $link,
+			"RIGHTS_LIST_TITLE" => $title,
+			"RIGHTS_LIST_RIGHTBYITEM_URL" => sed_url("admin", "m=rightsbyitem&ic=".$row['auth_code']."&io=".$row['auth_option']),
+			"RIGHTS_LIST_SETBYUSER" => sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name'])),
+			"RIGHTS_LIST_OPEN_URL" => sed_url("users", "g=".$row['auth_groupid'])
+			));
+			
+		$t -> parse("ADMIN_RIGHTS.RIGHTSBYITEM.RIGHTS_LIST");
 	}
 
-$adminmain .= $headcol;
+if ($advanced) { $t -> parse("ADMIN_RIGHTS.RIGHTSBYITEM.ADVANCED_RIGHTS"); }
 
 while ($row = sed_sql_fetcharray($sql))
 	{
 	$link = sed_url("admin", "m=rights&g=".$row['auth_groupid']);
 //	$title = $sed_groups[$row['auth_groupid']]['title'];
 	$title = sed_cc($row['grp_title']);
-	$adminmain .= sed_rights_parseline($row, $title, $link);
+	sed_rights_parseline($row, $title, $link);
 	}
-
-$adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-$adminmain .= "</table></form>";
+	
+$t -> parse("ADMIN_RIGHTS.RIGHTSBYITEM");
 
 $adminhelp = $legend;
+
+$t -> parse("ADMIN_RIGHTS");  
+$adminmain .= $t -> text("ADMIN_RIGHTS");
 
 ?>

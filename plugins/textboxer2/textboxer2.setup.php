@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/textboxer2/textboxer2.setup.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Plugin
 Author=Arkkimaagi
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=textboxer2
 Name=Textboxer 2.0
 Description=Inline BBcode editor
-Version=175
+Version=177
 Date=2012-mar-01
 Author=Arkkimaagi
 Copyright=Arkkimaagi

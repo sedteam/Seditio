@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.users.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Users
@@ -23,12 +23,27 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['isadmin']);
 
 $adminpath[] = array(sed_url("admin", "m=users"), $L['Users']);
-$adminmain = "<h2><img src=\"system/img/admin/users.png\" alt=\"\" /> ".$L['Users']."</h2>";
-
+//$adminmain = "<h2><img src=\"system/img/admin/users.png\" alt=\"\" /> ".$L['Users']."</h2>";
+/*
 $adminmain .= "<ul class=\"arrow_list\">";
 $adminmain .= "<li>".sed_linkif(sed_url("admin", "m=config&n=edit&o=core&p=users"), $L['Configuration'], sed_auth('admin', 'a', 'A'))."</li>";
 $adminmain .= "<li>".sed_linkif(sed_url("admin", "m=banlist"), $L['Banlist'], sed_auth('users', 'a', 'A'))."</li>";
 $adminmain .= "</ul>";
+*/
+
+$t = new XTemplate(sed_skinfile('admin.users', true)); 
+
+
+if (sed_auth('admin', 'a', 'A'))
+{
+	$t->assign(array(
+		"BUTTON_USERS_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=users"),
+		"BUTTON_USERS_BANLIST_URL" => sed_url("admin", "m=banlist"), $L['Banlist'] 
+	));	
+
+	$t -> parse("ADMIN_USERS.USERS_BUTTONS");
+}
+
 
 switch($n)
 	{
@@ -36,7 +51,7 @@ switch($n)
 
 	$ntitle = sed_import('ntitle','P','TXT');
 	$ndesc = sed_import('ndesc','P','TXT');
-  $ncolor = sed_import('ncolor','P','TXT');
+	$ncolor = sed_import('ncolor','P','TXT');
 	$nicon = sed_import('nicon','P','TXT');
 	$nalias = sed_import('nalias','P','TXT');
 	$nlevel = sed_import('nlevel','P','LVL');
@@ -71,7 +86,7 @@ switch($n)
 		$rtitle = sed_import('rtitle','P','TXT');
 		$rdesc = sed_import('rdesc','P','TXT');
 		$ricon = sed_import('ricon','P','TXT');
-    $rcolor = sed_import('rcolor','P','TXT');
+		$rcolor = sed_import('rcolor','P','TXT');
 		$ralias = sed_import('ralias','P','TXT');
 		$rlevel = sed_import('rlevel','P','LVL');
 		$rmaxfile = sed_import('rmaxfile','P','INT');
@@ -79,9 +94,9 @@ switch($n)
 		$rdisabled = ($g<6) ? 0 : sed_import('rdisabled','P','BOL');
 		$rhidden = ($g==4) ? 0 : sed_import('rhidden','P','BOL');
 		$rtitle = sed_sql_prep($rtitle);
-	  $rdesc = sed_sql_prep($rdesc);
-	  $ricon = sed_sql_prep($ricon);
-	  $ralias = sed_sql_prep($ralias);
+		$rdesc = sed_sql_prep($rdesc);
+		$ricon = sed_sql_prep($ricon);
+		$ralias = sed_sql_prep($ralias);
 
 		$sql = sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_color='$rcolor', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'");
 
@@ -100,7 +115,7 @@ switch($n)
 		exit;
 		}
 
-  $sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_id='$g'");
+	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_id='$g'");
 	sed_die(sed_sql_numrows($sql)==0);
 	$row = sed_sql_fetchassoc($sql);
 
@@ -113,69 +128,57 @@ switch($n)
 	$row['grp_alias'] = sed_cc($row['grp_alias']);
 
 	$adminpath[] = array(sed_url("admin", "m=users&n=edit&g=".$g), $row['grp_title']);
-
-	$adminmain .= "<form id=\"editlevel\" action=\"".sed_url("admin", "m=users&n=edit&a=update&g=".$g)."\" method=\"post\">";
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td>".$L['Group']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$row['grp_title']."\" size=\"40\" maxlength=\"64\" /> ".$L['adm_required']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Description']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$row['grp_desc']."\" size=\"40\" maxlength=\"64\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Icon']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$row['grp_icon']."\" size=\"40\" maxlength=\"128\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Alias']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ralias\" value=\"".$row['grp_alias']."\" size=\"16\" maxlength=\"24\" /></td></tr>";
-
-	$adminmain .= "<tr><td>".$L['adm_color']." :</td>";
-
-	$adminmain .= "<td><select name=\"rcolor\" size=\"1\" style=\"color:#202020; background-color:".$row['grp_color'].";\">";
-  foreach ($cfg['group_colors'] as $color)
-  {
+  
+	if ($g>5 && $row['grp_memberscount']==0) 
+		{
+		$t->assign(array(
+			"USERS_EDIT_DELETE_URL" => sed_url("admin", "m=users&n=edit&a=delete&g=".$g."&".sed_xg())
+		));		
+		$t -> parse("ADMIN_USERS.USERS_EDIT.USERS_EDIT_ADMIN");
+		}
+	
+	$grpcolor = "<select name=\"rcolor\" size=\"1\" style=\"color:#202020; background-color:".$row['grp_color'].";\">";
+	foreach ($cfg['group_colors'] as $color)
+		{
 			$selected = ($color == $row['grp_color']) ? "selected=\"selected\"" : '';
-			$adminmain .= "<option value=\"".$color."\" ".$selected." style=\"color:#202020; background-color:".$color.";\">".$color."</option>";    
-  }
-  $adminmain .= "</select></td></tr>";
+			$grpcolor .= "<option value=\"".$color."\" ".$selected." style=\"color:#202020; background-color:".$color.";\">".$color."</option>";    
+		}
+	$grpcolor .= "</select>";
 
-	$adminmain .= "<tr><td>".$L['adm_maxsizesingle']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rmaxfile\" value=\"".$row['grp_pfs_maxfile']."\" size=\"16\" maxlength=\"16\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['adm_maxsizeallpfs']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rmaxtotal\" value=\"".$row['grp_pfs_maxtotal']."\" size=\"16\" maxlength=\"16\" /></td></tr>";
-
-
-	$adminmain .= "<tr><td>".$L['Enabled']." :</td><td>";
-
-	if ($g>5)
-		{
-		$adminmain .= (!$row['grp_disabled']) ? "<input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"0\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"1\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"0\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"1\" checked=\"checked\" />".$L['No'];
+	if ($g > 5) {
+		$grpdisable = (!$row['grp_disabled']) ? "<input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"0\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"1\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"0\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"1\" checked=\"checked\" />".$L['No'];
+	} else { $grpdisable .= $L['Yes']; }
+	
+	if ($g != 4) {
+		$grphidden = ($row['grp_hidden']) ? "<input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"0\" checked=\"checked\" />".$L['No'];
 		}
 	else
-		{ $adminmain .= $L['Yes']; }
-	$adminmain .= "</td></tr>";
+		{ $grphidden = $L['No']; }
 
-	$adminmain .= "<tr><td>".$L['Hidden']." :</td><td>";
-
-	if ($g!=4)
+	$grplevel = "<select name=\"rlevel\" size=\"1\">";
+	for ($i = 1; $i < 100; $i++)
 		{
-		$adminmain .= ($row['grp_hidden']) ? "<input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"0\" checked=\"checked\" />".$L['No'];
+		$selected = ($i == $row['grp_level']) ? "selected=\"selected\"" : '';
+		$grplevel .= "<option value=\"$i\" $selected>".$i."</option>";
 		}
-	else
-		{ $adminmain .= $L['No']; }
+	$grplevel .= "</select>";
 
-	$adminmain .= "</td></tr>";
-
-	$adminmain .= "<tr><td>".$L['Level']." :</td>";
-	$adminmain .= "<td><select name=\"rlevel\" size=\"1\">";
-		for ($i = 1; $i < 100; $i++)
-			{
-			$selected = ($i == $row['grp_level']) ? "selected=\"selected\"" : '';
-			$adminmain .= "<option value=\"$i\" $selected>".$i."</option>";
-			}
-		$adminmain .= "</select></td></tr>";
-
-	$adminmain .= "<tr><td>".$L['Rights']." :</td>";
-	$adminmain .= "<td><a href=\"".sed_url("admin", "m=rights&g=".$g)."\"><img src=\"system/img/admin/rights1.png\" alt=\"\" /></a></tr>";
-
-	$adminmain .= ($g>5 && $row['grp_memberscount']==0) ? "<tr><td>".$L['Delete']." :</td><td><a href=\"".sed_url("admin", "m=users&n=edit&a=delete&g=".$g."&".sed_xg())."\">".$out['img_delete']."</a></td></tr>" : '';
-	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr></table></form>";
+	$t->assign(array(
+		"USERS_EDIT_SEND" => sed_url("admin", "m=users&n=edit&a=update&g=".$g),
+		"USERS_EDIT_TITLE" => sed_textbox('rtitle', $row['grp_title'], 40, 64),
+		"USERS_EDIT_DESC" => sed_textbox('rdesc', $row['grp_desc'], 40, 64),
+		"USERS_EDIT_ICON" => sed_textbox('ricon', $row['grp_icon'], 40, 128),
+		"USERS_EDIT_ALIAS" => sed_textbox('ralias', $row['grp_alias'], 16, 24),
+		"USERS_EDIT_COLOR" => $grpcolor,
+		"USERS_EDIT_MAXFILESIZE" => sed_textbox('rmaxfile', $row['grp_pfs_maxfile'], 16, 24),
+		"USERS_EDIT_MAXTOTALSIZE" => sed_textbox('rmaxtotal', $row['grp_pfs_maxtotal'], 16, 24),
+		"USERS_EDIT_GRPDISABLE" => $grpdisable,
+		"USERS_EDIT_GRPHIDDEN" => $grphidden,
+		"USERS_EDIT_GRPLEVEL" => $grplevel,
+		"USERS_EDIT_RIGHT_URL" => sed_url("admin", "m=rights&g=".$g)
+		));
+		
+	$t -> parse("ADMIN_USERS.USERS_EDIT");
 
 	break;
 
@@ -191,97 +194,67 @@ switch($n)
 
 	$sql = sed_sql_query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
 
-	$adminmain .= "<div class=\"sedtabs\">	
-		<ul class=\"tabs\">
-      <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['Users']."</a></li>
-      <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
-    </ul>    
-    <div class=\"tab-box\">";
-
-	$adminmain .= "<div id=\"tab1\" class=\"tabs\">";
-
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr>";
-	$adminmain .= "<td  class=\"coltop\">#ID</td>";
-	$adminmain .= "<td  class=\"coltop\">".$L['Groups']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"width:15%;\">".$L['Members']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"width:15%;\">".$L['Main']."</td>";  
-	$adminmain .= "<td class=\"coltop\" style=\"width:12%;\">".$L['Enabled']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"width:12%;\">".$L['Hidden']."</td>";
-	$adminmain .= "<td class=\"coltop\" style=\"width:12%;\">".$L['Rights']."</td>";
-	$adminmain .= "</tr>";
-
 	if (sed_sql_numrows($sql)>0)
 		{
 		while ($row = sed_sql_fetchassoc($sql))
 			{
 			$row['grp_hidden'] = ($row['grp_hidden']) ? '1' : '0';
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
-			$adminmain .= "<tr>";
-			$adminmain .= "<td style=\"text-align:center;\">".$row['grp_id']."</td>";
-			$adminmain .= "<td><img src=\"system/img/admin/groups.png\" alt=\"\" /> ";
-			$adminmain .= "<a href=\"".sed_url("admin", "m=users&n=edit&g=".$row['grp_id'])."\">".sed_cc($row['grp_title'])."</a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("users", "gm=".$row['grp_id'])."\">".$members[$row['grp_id']]."</a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("users", "g=".$row['grp_id'])."\">".$members_main[$row['grp_id']]."</a></td>";
-			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[!$row['grp_disabled']]."</td>";
-			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['grp_hidden']]."</td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=rights&g=".$row['grp_id'])."\"><img src=\"system/img/admin/rights1.png\" alt=\"\" /></a></td>";
-			$adminmain .= "</tr>";
+			
+			$t->assign(array(
+				"GROUP_LIST_ID" => $row['grp_id'],
+				"GROUP_LIST_URL" => sed_url("admin", "m=users&n=edit&g=".$row['grp_id']),
+				"GROUP_LIST_TITLE" => sed_cc($row['grp_title']),
+				"GROUP_LIST_GRP_COUNT" => "<a href=\"".sed_url("users", "gm=".$row['grp_id'])."\">".$members[$row['grp_id']]."</a>",
+				"GROUP_LIST_MAINGRP_COUNT" => "<a href=\"".sed_url("users", "g=".$row['grp_id'])."\">".$members_main[$row['grp_id']]."</a>",
+				"GROUP_LIST_DISABLE" => $sed_yesno[!$row['grp_disabled']],
+				"GROUP_LIST_COUNT" => $sed_yesno[$row['grp_hidden']],
+				"GROUP_LIST_RIGHT_URL" => sed_url("admin", "m=rights&g=".$row['grp_id'])
+			));
+
+			$t -> parse("ADMIN_USERS.USERS_GROUPS.GROUP_LIST");
 			}
 		}
-	$adminmain .= "</table>";
-	
-	$adminmain .= "</div>";
-	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
 
-	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$adminmain .= "<form id=\"addlevel\" action=\"".sed_url("admin", "m=users&n=add")."\" method=\"post\">";
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td>".$L['Group']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"40\" maxlength=\"64\" /> ".$L['adm_required']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Description']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"40\" maxlength=\"64\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Icon']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"40\" maxlength=\"128\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Alias']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nalias\" value=\"\" size=\"16\" maxlength=\"24\" /></td></tr>";
-
-	$adminmain .= "<tr><td>".$L['adm_color']." :</td>";
-
-	$adminmain .= "<td><select name=\"ncolor\" size=\"1\">";
-  foreach ($cfg['group_colors'] as $color)
-  {
-			$adminmain .= "<option value=\"".$color."\" style=\"color:#202020; background-color:".$color.";\">".$color."</option>";    
-  }
-  $adminmain .= "</select></td></tr>";
-
-	$adminmain .= "<tr><td>".$L['adm_maxsizesingle']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nmaxsingle\" value=\"0\" size=\"16\" maxlength=\"16\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['adm_maxsizeallpfs']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"nmaxtotal\" value=\"0\" size=\"16\" maxlength=\"16\" /></td></tr>";
-
-	$adminmain .= "<tr><td>".$L['adm_copyrightsfrom']." :</td>";
-	$adminmain .= "<td>".sed_selectbox_groups(4, 'ncopyrightsfrom', array('5'))." ".$L['adm_required']."</td></tr>";
-
-	$adminmain .= "<tr><td>".$L['Level']." :</td>";
-	$adminmain .= "<td><select name=\"nlevel\" size=\"1\">";
+		$grpcolor = "<select name=\"ncolor\" size=\"1\">";
+		foreach ($cfg['group_colors'] as $color)
+			{
+			$grpcolor .= "<option value=\"".$color."\" style=\"color:#202020; background-color:".$color.";\">".$color."</option>";    
+			}
+		$grpcolor .= "</select>";
+		
+		$grplevel = "<select name=\"nlevel\" size=\"1\">";
 		for ($i = 1; $i < 100; $i++)
-			{ $adminmain .= "<option value=\"$i\" $selected>".$i."</option>"; }
-		$adminmain .= "</select></td></tr>";
+			{ $grplevel .= "<option value=\"$i\" $selected>".$i."</option>"; }
+		$grplevel .= "</select>";		
+		
+		$grpdisable = "<input type=\"radio\" class=\"radio\" name=\"ndisabled\" value=\"0\" checked=\"checked\" /> ".$L['Yes'];
+		$grpdisable .= "<input type=\"radio\" class=\"radio\" name=\"ndisabled\" value=\"1\" /> ".$L['No'];
 
-	$adminmain .= "<tr><td>".$L['Enabled']." :</td><td>";
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"ndisabled\" value=\"0\" checked=\"checked\" /> ".$L['Yes'];
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"ndisabled\" value=\"1\" /> ".$L['No'];
-	$adminmain .= "</td></tr>";
+		$grphidden = "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"1\" /> ".$L['Yes'];
+		$grphidden .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"0\" checked=\"checked\" /> ".$L['No'];	
+	
+		$t->assign(array(
+			"GROUP_ADD_SEND" => sed_url("admin", "m=users&n=add"),
+			"GROUP_ADD_TITLE" => sed_textbox('ntitle','', 40, 64),
+			"GROUP_ADD_DESC" => sed_textbox('ndesc','', 40, 64),
+			"GROUP_ADD_ICON" => sed_textbox('nicon','', 40, 128),
+			"GROUP_ADD_ALIAS" => sed_textbox('nalias','', 16, 24),
+			"GROUP_ADD_COLOR" => $grpcolor, 
+			"GROUP_ADD_MAXFILESIZE" => sed_textbox('nmaxsingle', '0', 16, 16),
+			"GROUP_ADD_MAXTOTALSIZE" => sed_textbox('nmaxtotal', '0', 16, 16),
+			"GROUP_ADD_COPYRIGHTSFROM" => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5')),
+			"GROUP_ADD_GRPLEVEL" => $grplevel, 
+			"GROUP_ADD_GRPDISABLE" => $grpdisable,
+			"GROUP_ADD_GRPHIDDEN" => $grphidden
+		));
+		
+		$t -> parse("ADMIN_USERS.USERS_GROUPS");
 
-	$adminmain .= "<tr><td>".$L['Hidden']." :</td><td>";
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"1\" /> ".$L['Yes'];
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"0\" checked=\"checked\" /> ".$L['No'];
-	$adminmain .= "</td></tr>";
-
-	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr></table></form>";
-	$adminmain .= "</div></div></div>";
 	break;
 	}
+
+$t -> parse("ADMIN_USERS");  
+$adminmain .= $t -> text("ADMIN_USERS");
 
 ?>

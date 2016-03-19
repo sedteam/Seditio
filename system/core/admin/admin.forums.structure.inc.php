@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=admin.forums.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core.admin
 Author=Neocrome
 Description=Forums & categories
@@ -24,12 +24,10 @@ $id = sed_import('id','G','INT');
 
 $adminpath[] = array (sed_url("admin", "m=forums"), $L['Forums']);
 $adminpath[] = array (sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure']);
-$adminhelp = $L['adm_help_forum_structure'];
-$adminmain = "<h2><img src=\"system/img/admin/forums.png\" alt=\"\" /> ".$L['adm_forum_structure']."</h2>"; 
 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=forums")."\">".$L['Configuration']."</a></li><li>";
-$adminmain .= sed_linkif(sed_url("admin", "m=forums"), $L['Forums'], sed_auth('admin', 'a', 'A'));
-$adminmain .= "</li></ul>";
+$adminhelp = $L['adm_help_forum_structure'];
+
+$t = new XTemplate(sed_skinfile('admin.forums.structure', true));
 
 if ($n=='options')
 	{
@@ -46,8 +44,6 @@ if ($n=='options')
 		{ $rtpl = ''; }
 	elseif ($rtplmode==3)
 		{ $rtpl = 'same_as_parent'; }
-//	else
-//		{ $rtpl = sed_import('rtplforced','P','ALP'); }		
 
 		$sql = sed_sql_query("UPDATE $db_forum_structure SET
 			fn_path='".sed_sql_prep($rpath)."',
@@ -99,40 +95,32 @@ if ($n=='options')
 		$check1 = " checked=\"checked\"";
 		}	
 
-
 	$adminpath[] = array (sed_url("admin", "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
-
-	$adminmain .= "<h4>".$L['editdeleteentries']." : ".sed_cc($fn_title)."</h4>";
-
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=forums&s=structure&n=options&a=update&id=".$fn_id)."\" method=\"post\">";  
-  
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td>".$L['Code']." :</td>";
-	$adminmain .= "<td>".$fn_code."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Path']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$fn_path."\" size=\"16\" maxlength=\"16\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Title']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$fn_title."\" size=\"64\" maxlength=\"32\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Description']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$fn_desc."\" size=\"64\" maxlength=\"255\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Icon']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$fn_icon."\" size=\"64\" maxlength=\"128\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['adm_defstate']." :</td>";
-
-	$adminmain .= "<td>";
+    
 	$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 	$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
-	$adminmain .= "<select name=\"rdefstate\" size=\"1\">";	
-	$adminmain .= "<option value=\"1\" $selected1>".$L['adm_defstate_1'];
-	$adminmain .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
-	$adminmain .= "</select></td></tr>";
-	$adminmain .= "<tr><td>".$L['adm_tpl_mode']." :</td><td>";
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];	
-	$adminmain .= "</td></tr>";
-	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-	$adminmain .= "</table>";
-  $adminmain .= "</form>";
+	$fn_defstate = "<select name=\"rdefstate\" size=\"1\">";	
+	$fn_defstate .= "<option value=\"1\" $selected1>".$L['adm_defstate_1'];
+	$fn_defstate .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
+	$fn_defstate .= "</select>";
+	
+	$fn_tplmode = "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
+	$fn_tplmode .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];	  
+  
+	$t->assign(array(  
+		"FN_UPDATE_FORM_TITLE" => sed_cc($fn_title),
+		"FN_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&n=options&a=update&id=".$fn_id),
+		"FN_UPDATE_CODE" => $fn_code,
+		"FN_UPDATE_PATH" => "<input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$fn_path."\" size=\"16\" maxlength=\"16\" />",
+		"FN_UPDATE_TITLE" => "<input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$fn_title."\" size=\"64\" maxlength=\"32\" />",
+		"FN_UPDATE_DESC" => "<input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$fn_desc."\" size=\"64\" maxlength=\"255\" />",
+		"FN_UPDATE_ICON" => "<input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$fn_icon."\" size=\"64\" maxlength=\"128\" />",
+		"FN_UPDATE_DEFSTATE" => $fn_defstate,
+		"FN_UPDATE_TPLMODE" => $fn_tplmode
+	));
+	
+	$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE_UPDATE");  
+   
 	}
 else
 	{
@@ -184,31 +172,7 @@ else
 	while ($row = sed_sql_fetchassoc($sql))
 		{ $sectioncount[$row['fs_category']] = $row['COUNT(*)']; }
 
-	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC");
-  
-	$adminmain .= "<div class=\"sedtabs\">	
-	<ul class=\"tabs\">
-      <li><a href=\"".$sys['request_uri']."#tab1\" class=\"selected\">".$L['editdeleteentries']."</a></li>
-      <li><a href=\"".$sys['request_uri']."#tab2\">".$L['addnewentry']."</a></li>
-    </ul>    
-    <div class=\"tab-box\">";
-
-	$adminmain .= "<div id=\"tab1\" class=\"tabs\">";	
-	
-	$adminmain .= "<h4>".$L['editdeleteentries']."</h4>";  
-
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url("admin", "m=forums&s=structure&a=update")."\" method=\"post\">";
-  
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Path']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['adm_defstate']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['TPL']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Title']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Sections']."</td>";
-	$adminmain .= "<td class=\"coltop\">".$L['Options']."</td>";
-	$adminmain .= "</tr>";
+	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC");   
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
@@ -230,52 +194,45 @@ else
 		else
 			{ $fn_tpl_sym = "+"; }
 		
-		$adminmain .= "<tr><td style=\"text-align:center;\">";
-		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "<a href=\"".sed_url("admin", "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg())."\">".$out['img_delete']."</a>";
-		$adminmain .= "</td>";
-		$adminmain .= "<td>".$fn_code."</td>";
-		$adminmain .= "<td>$pathfieldimg<input type=\"text\" class=\"text\" name=\"s[$fn_id][rpath]\" value=\"".$fn_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
-
-		$adminmain .= "<td style=\"text-align:center;\">";
 		$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 		$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
-		$adminmain .= "<select name=\"s[$fn_id][rdefstate]\" size=\"1\">";	
-		$adminmain .= "<option value=\"1\" $selected1>".$L['adm_defstate_1'];
-		$adminmain .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
-		$adminmain .= "</select>";
-		$adminmain .= "</td>";
-		
-		$adminmain .= "<td style=\"text-align:center;\">".$fn_tpl_sym."</td>";
+		$fn_defstate = "<select name=\"s[$fn_id][rdefstate]\" size=\"1\">";	
+		$fn_defstate .= "<option value=\"1\" $selected1>".$L['adm_defstate_1'];
+		$fn_defstate .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
+		$fn_defstate .= "</select>";
 
-		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" /></td>";
-		$adminmain .= "<td style=\"text-align:right;\">".$sectioncount[$fn_code]." ";
-		$adminmain .= "<a href=\"".sed_url("forums", "c=".$fn_code)."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\" /></a></td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a></td>";
-		$adminmain .= "</tr>";
+		$t->assign(array( 
+			"STRUCTURE_LIST_DELETE" => ($sectioncount[$fn_code] > 0) ? '' : "<a href=\"".sed_url("admin", "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg())."\">".$out['img_delete']."</a>",
+			"STRUCTURE_LIST_CODE" => $fn_code,
+			"STRUCTURE_LIST_PATH" => $pathfieldimg."<input type=\"text\" class=\"text\" name=\"s[$fn_id][rpath]\" value=\"".$fn_path."\" size=\"$pathfieldlen\" maxlength=\"24\" />",
+			"STRUCTURE_LIST_DEFSTATE" => $fn_defstate,
+			"STRUCTURE_LIST_TPL" => $fn_tpl_sym,
+			"STRUCTURE_LIST_TITLE" => "<input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" />",
+			"STRUCTURE_LIST_SECTIONCOUNT" => $sectioncount[$fn_code],
+			"STRUCTURE_LIST_OPEN_URL" => sed_url("forums", "c=".$fn_code),
+			"STRUCTURE_LIST_OPTIONS" => "<a href=\"".sed_url("admin", "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a>"
+		));
+		
+		$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE.STRUCTURE_LIST"); 		
 		}
 
-	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-	$adminmain .= "</table>";
-	$adminmain .= "</form>";
+	$t->assign(array(
+		"FORUMS_STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&a=update"),
+		"FN_ADD_SEND" => sed_url("admin", "m=forums&s=structure&a=add"),
+		"FN_ADD_CODE" => "<input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" />",
+		"FN_ADD_PATH" => "<input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" />",
+		"FN_ADD_DEFSTATE" => "<input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"1\" checked=\"checked\" />".$L['adm_defstate_1']." <input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"0\" />".$L['adm_defstate_0'],
+		"FN_ADD_TITLE" => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"32\" />",
+		"FN_ADD_DESC" => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" />",
+		"FN_ADD_ICON" => "<input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" />"
+	));
 	
-	$adminmain .= "</div>";
-	$adminmain .= "<div id=\"tab2\" class=\"tabs\">";
-  
-	$adminmain .= "<h4>".$L['addnewentry']."</h4>"; 
-	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url("admin", "m=forums&s=structure&a=add")."\" method=\"post\">";
-
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<tr><td style=\"width:180px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['adm_defstate']." :</td><td><input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"1\" checked=\"checked\" />".$L['adm_defstate_1']." <input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"0\" />".$L['adm_defstate_0']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"32\" /> ".$L['adm_required']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
-	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\" /></td></tr>";
-	$adminmain .= "</table>";
-	$adminmain .= "</form>";  
 	
-	$adminmain .= "</div></div></div>";
+	$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE"); 
+	
 	}
+	
+$t -> parse("ADMIN_FORUMS");  
+$adminmain .= $t -> text("ADMIN_FORUMS");
 
 ?>

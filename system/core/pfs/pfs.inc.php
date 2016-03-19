@@ -7,8 +7,8 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=pfs.inc.php
-Version=175
-Updated=2012-dec-31
+Version=177
+Updated=2015-feb-06
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -697,9 +697,15 @@ if ($standalone)
 	}
 else
 	{
-	require("system/header.php");
-
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
+	if (defined('SED_ADMIN'))
+		{
+		$t = new XTemplate(sed_skinfile("admin.apfs", true));
+		}
+	else
+		{
+		require("system/header.php");
+		$t = new XTemplate(sed_skinfile("pfs"));
+		}
 
 	$t-> assign(array(
 		"PFS_TITLE" => $title,
@@ -713,9 +719,16 @@ else
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
-
-	require("system/footer.php");
+	if (defined('SED_ADMIN'))
+		{
+		$t -> parse("MAIN"); 
+		$adminmain = $t -> text("MAIN");
+		}
+	else 
+		{
+		$t->parse("MAIN");
+		$t->out("MAIN");
+		require("system/footer.php");
+		}
 	}
 ?>
