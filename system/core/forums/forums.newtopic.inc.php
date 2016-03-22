@@ -218,8 +218,8 @@ if (!empty($error_string))
 	}
 
 $t->assign(array(
-
-	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
+	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle,
+	"FORUMS_NEWTOPIC_SHORTTITLE" => $L['for_newtopic'],	
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_bbcode($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s),
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",

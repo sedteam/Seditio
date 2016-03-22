@@ -519,6 +519,7 @@ if (!empty($pages))
 
 $t->assign(array(
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
+	"FORUMS_POSTS_SHORTTITLE" => $fs_title,
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
 	"FORUMS_POSTS_POLL" => $poll_result,

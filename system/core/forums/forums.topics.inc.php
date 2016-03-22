@@ -340,6 +340,7 @@ if (!empty($pages))
 
 $t->assign(array(
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
+	"FORUMS_TOPICS_SHORTTITLE" => $fs_title,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url("forums", "m=newtopic&s=".$s),	
