@@ -30,6 +30,12 @@ $tid = sed_import('tid','G','INT');
 
 $dic_type = array(1 => 'selectbox', 2 => 'optionbox', 3 => 'checkbox');
 
+$sql_dic = sed_sql_query("SELECT * FROM $db_dic WHERE 1 ORDER BY dic_title ASC");
+while ($row_dic = sed_sql_fetchassoc($sql_dic))
+	{
+		$dic_list[$row_dic['dic_id']] = $row_dic['dic_title']; 
+	}
+
 $t = new XTemplate(sed_skinfile('admin.dic', true)); 
 
 switch($mn)
@@ -40,10 +46,12 @@ switch($mn)
 		{		
 		$ititle = sed_import('ititle','P','TXT');
 		$icode = sed_import('icode','P','TXT');
-		$idefval = sed_import('idefval','P','INT');	
+		$idefval = sed_import('idefval','P','INT');
+		$ichildren = sed_import('ichildren', 'P', 'INT');	
 		
 		$sql = sed_sql_query("UPDATE $db_dic_items SET ditem_title = '".sed_sql_prep($ititle)."', 
-				ditem_code = '".sed_sql_prep($icode)."', ditem_defval = '".(int)$idefval."' WHERE ditem_id = '".$tid."'");
+				ditem_code = '".sed_sql_prep($icode)."', ditem_children = '".(int)$ichildren."', 
+				ditem_defval = '".(int)$idefval."' WHERE ditem_id = '".$tid."'");
 				
 		sed_log("Update term #".$tid,'adm');
 		sed_cache_clear('sed_dic');
@@ -62,9 +70,10 @@ switch($mn)
 		$ditemtitle = sed_import('ditemtitle','P','TXT');
 		$ditemcode = sed_import('ditemcode','P','TXT');
 		$ditemdefval = sed_import('ditemdefval','P','TXT');
+		$ditemchildren = sed_import('ditemchildren', 'P', 'INT');
 		
-		$sql = sed_sql_query("INSERT into $db_dic_items (ditem_dicid, ditem_title, ditem_code, ditem_defval) 
-                          VALUES (".(int)$did.", '".sed_sql_prep($ditemtitle)."', '".sed_sql_prep($ditemcode)."', '".(int)$ditemdefval."')");	
+		$sql = sed_sql_query("INSERT into $db_dic_items (ditem_dicid, ditem_title, ditem_code, ditem_children, ditem_defval) 
+                          VALUES (".(int)$did.", '".sed_sql_prep($ditemtitle)."', '".sed_sql_prep($ditemcode)."', '".(int)$ditemchildren."', '".(int)$ditemdefval."')");	
 		sed_log("Added new term in directory #".$did,'adm');
 		sed_cache_clear('sed_dic');
 		sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=".$did."&msg=917", "", true));
@@ -90,10 +99,13 @@ switch($mn)
 		  $t -> parse("ADMIN_DIC.DIC_TERMS.TERMS_LIST.TERM_DEFAULT");
 		  }
 		  
+		$children_url = (!empty($row['ditem_children'])) ? sed_url('admin', 'm=dic&mn=dicitem&did='.$row['ditem_children']) : '';
+		
 		$t -> assign(array(
 			"TERM_LIST_ID" => $row['ditem_id'],
 			"TERM_LIST_TITLE" => sed_cc($row['ditem_title']),
 			"TERM_LIST_CODE" => sed_cc($row['ditem_code']),
+			"TERM_LIST_CHILDRENDIC" => (!empty($row['ditem_children'])) ? "<a href=\"".$children_url."\">ID#".$row['ditem_children'].' '.$dic_list[$row['ditem_children']]."</a>" : '',
 			"TERM_LIST_DELETE_URL" => sed_url('admin', 'm=dic&mn=dicitem&a=delete&tid='.$row['ditem_id']."&did=".$row['dic_id']),
 			"TERM_LIST_EDIT_URL" => sed_url('admin', 'm=dic&mn=dicitemedit&tid='.$row['ditem_id'])				
 		));		
@@ -107,6 +119,7 @@ switch($mn)
 		"TERM_ADD_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=add&did='.$did),
 		"TERM_ADD_TITLE" => sed_textbox('ditemtitle', $ditemtitle),
 		"TERM_ADD_CODE" => sed_textbox('ditemcode', $ditemcode),
+		"TERM_ADD_CHILDRENDIC" => sed_selectbox('', 'ditemchildren', $dic_list),	
 		"TERM_ADD_DEFVAL" => sed_radiobox("radio", "ditemdefval", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "ditemdefval", 0, TRUE).$L['No']
 	));	    
     
@@ -116,6 +129,13 @@ switch($mn)
   
   case 'dicedit':
   
+	$dicparent = array();
+	$sqlp = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id != '".$did."'");
+	while ($rowp = sed_sql_fetchassoc($sqlp))
+	{
+		$dicparent[$rowp['dic_code']] = $rowp['dic_title'];
+	}	
+	
 	$sql = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id = '".$did."'");
 	$row = sed_sql_fetchassoc($sql);
 	
@@ -123,7 +143,8 @@ switch($mn)
 		"DIC_EDIT_SEND" => sed_url('admin', 'm=dic&a=update&did='.$did),
 		"DIC_EDIT_TITLE" => sed_textbox('dtitle', $row['dic_title']),
 		"DIC_EDIT_CODE" => sed_textbox('dcode', $row['dic_code']),
-		"DIC_EDIT_TYPE" => sed_selectbox($row['dic_type'], 'dtype', $dic_type) //sed_textbox('dtype', $row['dic_type'])		
+		"DIC_EDIT_TYPE" => sed_selectbox($row['dic_type'], 'dtype', $dic_type),	
+		"DIC_EDIT_DICPARENT" => sed_selectbox($row['dic_parent'], 'dparent', $dicparent) //sed_textbox('dtype', $row['dic_type'])		
 	));			
 
 	$t -> parse("ADMIN_DIC.DIC_EDIT");	  
@@ -141,6 +162,7 @@ switch($mn)
 		"DIC_TITLE" => sed_cc($row['dic_title']),
 		"DIC_ITEM_EDIT_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=update&tid='.$tid."&did=".$row['dic_id']),
 		"DIC_ITEM_EDIT_TITLE" => sed_textbox('ititle', $row['ditem_title']),
+		"DIC_ITEM_EDIT_CHILDRENDIC" => sed_selectbox($row['ditem_children'], 'ichildren', $dic_list),
 		"DIC_ITEM_EDIT_CODE" => sed_textbox('icode', $row['ditem_code']),
 		"DIC_ITEM_EDIT_DEFVAL" => $defval		
 	));			
@@ -153,12 +175,13 @@ switch($mn)
 	
 	$dtitle = sed_import('dtitle','P','TXT');
 	$dcode = sed_import('dcode','P','TXT');
+	$dparent = sed_import('dparent','P','TXT');
 	$dtype = sed_import('dtype','P','INT');
 	
 	if ($a == 'update' && (!empty($did)))
 			{
 			$sql = sed_sql_query("UPDATE $db_dic SET dic_title = '".sed_sql_prep($dtitle)."', 
-					dic_code = '".sed_sql_prep($dcode)."', dic_type = '".(int)$dtype."' WHERE dic_id = '".$did."'");
+					dic_code = '".sed_sql_prep($dcode)."', dic_type = '".(int)$dtype."', dic_parent = '".sed_sql_prep($dparent)."' WHERE dic_id = '".$did."'");
 			sed_log("Update directory #".$did,'adm');
 			sed_cache_clear('sed_dic');
 			sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));    				
@@ -213,7 +236,7 @@ switch($mn)
 			"DIC_LIST_URL" => sed_url('admin', 'm=dic&mn=dicitem&did='.$row['dic_id']),
 			"DIC_LIST_TITLE" => $row['dic_title'],
 			"DIC_LIST_CODE" => $row['dic_code'],
-			"DIC_LIST_TYPE" =>	$row['dic_type']		
+			"DIC_LIST_TYPE" =>	$dic_type[$row['dic_type']]	
 		));
 		$t -> parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST");
 		}

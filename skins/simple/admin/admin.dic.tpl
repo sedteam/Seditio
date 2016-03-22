@@ -21,6 +21,7 @@
 			<th class="coltop" style="width:20px;">{PHP.L.Id}</th>
 			<th class="coltop">{PHP.L.Title}</th>			
 			<th class="coltop">{PHP.L.Code}</th>
+			<th class="coltop">{PHP.L.Type}</th>
 			<th class="coltop" style="width:100px;">{PHP.L.Options}</th>
 		</tr>
 		</thead>
@@ -31,6 +32,7 @@
 			<td style="text-align:center;">{DIC_LIST_ID}</td>
 			<td><a href="{DIC_LIST_URL}">{DIC_LIST_TITLE}</a></td>			
 			<td>{DIC_LIST_CODE}</td>
+			<td>{DIC_LIST_TYPE}</td>
 			<td style="text-align:center;">
       
       <!-- BEGIN: ADMIN_DELETE -->
@@ -121,6 +123,11 @@
 	</tr>
 	
 	<tr>
+		<td>{PHP.L.adm_parentcat} :</td>
+		<td>{DIC_EDIT_DICPARENT}</td>
+	</tr>
+	
+	<tr>
 		<td colspan="2"><input type="submit" class="submit btn" value="{PHP.L.Update}" /></td>
 	</tr>
 	
@@ -155,6 +162,7 @@
 			<th class="coltop" style="width:20px;">{PHP.L.Id}</th>
 			<th class="coltop">{PHP.L.adm_dic_term_title}</th>			
 			<th class="coltop">{PHP.L.adm_dic_term_value}</th>
+			<th class="coltop">{PHP.L.adm_dic_children}</th>
 			<th class="coltop" style="width:50px;">{PHP.L.adm_dic_term_defval}</th>
 			<th class="coltop" style="width:100px;">{PHP.L.Options}</th>
 		</tr>
@@ -165,7 +173,8 @@
 		<tr>
 			<td style="text-align:center;">{TERM_LIST_ID}</td>
 			<td>{TERM_LIST_TITLE}</td>			
-			<td>{TERM_LIST_CODE}</td>
+			<td style="width:50px; text-align:center">{TERM_LIST_CODE}</td>
+			<td style="width:150px; text-align:center">{TERM_LIST_CHILDRENDIC}</td>
 			<td style="width:50px; text-align:center">
 			<!-- BEGIN: TERM_DEFAULT -->
 			  <i class="fa fa-check"></i>
@@ -198,8 +207,13 @@
 
 	<tr>
 		<td style="width:180px;">{PHP.L.adm_dic_term_value} :</td>
-		<td>{TERM_ADD_CODE} {PHP.L.adm_required}</td>
+		<td>{TERM_ADD_CODE}</td>
 	</tr>
+	
+	<tr>
+		<td style="width:180px;">{PHP.L.adm_dic_children} :</td>
+		<td>{TERM_ADD_CHILDRENDIC}</td>
+	</tr>	
 	
 	<tr>
 		<td>{PHP.L.adm_dic_term_defval} :</td>
@@ -245,8 +259,13 @@
 
 	<tr>
 		<td style="width:180px;">{PHP.L.adm_dic_term_value} :</td>
-		<td>{DIC_ITEM_EDIT_CODE} {PHP.L.adm_required}</td>
+		<td>{DIC_ITEM_EDIT_CODE}</td>
 	</tr>
+	
+	<tr>
+		<td style="width:180px;">{PHP.L.adm_dic_children} :</td>
+		<td>{DIC_ITEM_EDIT_CHILDRENDIC}</td>
+	</tr>		
 	
 	<tr>
 		<td>{PHP.L.adm_dic_term_defval} :</td>

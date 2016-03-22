@@ -339,6 +339,7 @@ $L['adm_dic_term_title'] = "Title of the term";
 $L['adm_dic_term_value'] = "Value of the term";
 $L['adm_dic_term_defval'] = "Make a term default?";
 $L['adm_dic_term_edit'] = "Edit term from directory";
+$L['adm_dic_children'] = "Children directory";
 
 /* ====== PFS ====== */
 
