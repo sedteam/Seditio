@@ -65,6 +65,8 @@ $L['msg301_0'] = "New submission";
 $L['msg301_1'] = "Ok, this item is now recorded in the database.";
 $L['msg302_0'] = "Record deleted";
 $L['msg302_1'] = "Ok, record is deleted from the database.";
+$L['msg303_0'] = "An error occurred while data entry";
+$L['msg303_1'] = "An error occurred, one / more of the required fields unfilled, or filled incorrectly.";
 
 /* ======== Error Pages ======== */
 
