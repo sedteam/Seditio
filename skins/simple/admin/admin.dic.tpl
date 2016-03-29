@@ -20,7 +20,7 @@
 		<tr>
 			<th class="coltop" style="width:20px;">{PHP.L.Id}</th>
 			<th class="coltop">{PHP.L.Title}</th>			
-			<th class="coltop">{PHP.L.Code}</th>
+			<th class="coltop">{PHP.L.adm_dic_code}</th>
 			<th class="coltop">{PHP.L.Type}</th>
 			<th class="coltop" style="width:100px;">{PHP.L.Options}</th>
 		</tr>
@@ -66,9 +66,19 @@
 	</tr>
 
 	<tr>
-		<td style="width:180px;">{PHP.L.Code} :</td>
+		<td>{PHP.L.adm_dic_code} :</td>
 		<td>{DIC_ADD_CODE} {PHP.L.adm_required}</td>
 	</tr>
+	
+	<tr>
+		<td>{PHP.L.adm_dic_mera} :</td>
+		<td>{DIC_ADD_MERA}</td>
+	</tr>
+	
+	<tr>
+		<td>{PHP.L.adm_dic_values} :</td>
+		<td>{DIC_ADD_VALUES}{PHP.L.adm_dic_comma_separat}</td>
+	</tr>		
 	
 	<tr>
 		<td>{PHP.L.Type} :</td>
@@ -111,11 +121,16 @@
 		<td style="width:180px;">{PHP.L.Title} :</td>
 		<td>{DIC_EDIT_TITLE} {PHP.L.adm_required}</td>
 	</tr>
-
+	
 	<tr>
-		<td style="width:180px;">{PHP.L.Code} :</td>
-		<td>{DIC_EDIT_CODE} {PHP.L.adm_required}</td>
+		<td>{PHP.L.adm_dic_mera} :</td>
+		<td>{DIC_EDIT_MERA}</td>
 	</tr>
+	
+	<tr>
+		<td>{PHP.L.adm_dic_values} :</td>
+		<td>{DIC_EDIT_VALUES}{PHP.L.adm_dic_comma_separat}</td>
+	</tr>	
 	
 	<tr>
 		<td>{PHP.L.Type} :</td>

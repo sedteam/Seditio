@@ -182,11 +182,8 @@ switch ($n)
 				}
 			}
 		elseif ($config_type == 3)
-			{
-			if ($config_value == 1)
-				{ $config_field = "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" checked=\"checked\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" />".$L['No']; 	}
-			else
-				{ $config_field = "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" checked=\"checked\" />".$L['No']; }
+			{			
+			$config_field  = sed_radiobox($config_name, $yesno_arr, $config_value); // sed177			
 			}
 		elseif ($config_type == 4)
 			{

@@ -329,7 +329,7 @@ $L['adm_help_smilies'] = "Not available";
 $L['adm_dic_list'] = "Directories list";
 $L['adm_dictionary'] = "Directory";
 $L['adm_dic_title'] = "Title of the directory";
-$L['adm_dic_code'] = "Code of the directory";
+$L['adm_dic_code'] = "Code of the directory (name of extra field)";
 $L['adm_dic_list'] = "List of the directories";
 $L['adm_dic_term_list'] = "List of terms";
 $L['adm_dic_add'] = "Add new directory";
@@ -340,6 +340,22 @@ $L['adm_dic_term_value'] = "Value of the term";
 $L['adm_dic_term_defval'] = "Make a term default?";
 $L['adm_dic_term_edit'] = "Edit term from directory";
 $L['adm_dic_children'] = "Children directory";
+
+$L['adm_dic_mera'] = "Unit";
+$L['adm_dic_values'] = "List of values for directory";
+
+$L['adm_dic_form_title'] = "Title for form element";
+$L['adm_dic_form_desc'] = "Text for form element";
+$L['adm_dic_form_size'] = "Size of text field";
+$L['adm_dic_form_maxsize'] = "The maximum size of text field";
+$L['adm_dic_form_cols'] = "The cols of text field";
+$L['adm_dic_form_rows'] = "The rows of text field";
+
+$L['adm_dic_extra_location'] = "Name of table";
+$L['adm_dic_extra_type'] = "Data type of field";
+$L['adm_dic_extra_size'] = "Length of field";
+
+$L['adm_dic_comma_separat'] = "(values comma separated)";
 
 /* ====== PFS ====== */
 

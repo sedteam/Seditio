@@ -228,7 +228,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$page_form_delete = sed_radiobox("radio", "rpagedelete", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "rpagedelete", 0, TRUE).$L['No'];
+$page_form_delete =  sed_radiobox("rpagedelete", $yesno_arr, 0);
 
 $page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');
 
@@ -239,21 +239,9 @@ $page_form_type .= "<option value=\"0\" $selected0>".$L['Default']."</option>";
 $page_form_type .= "<option value=\"1\" $selected1>HTML</option>";
 $page_form_type .= "</select>"; 
 
-if ($pag['page_file'])
-	{ $page_form_file = sed_radiobox("radio", "rpagefile", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "rpagefile", 0, FALSE).$L['No']; }
-	else
-	{ $page_form_file = sed_radiobox("radio", "rpagefile", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "rpagefile", 0, TRUE).$L['No']; }
-
-if ($pag['page_allowcomments'])
-	{ $page_form_allowcomments = sed_radiobox("radio", "rpageallowcomments", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "rpageallowcomments", 0, FALSE).$L['No']; }
-	else
-	{ $page_form_allowcomments = sed_radiobox("radio", "rpageallowcomments", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "rpageallowcomments", 0, TRUE).$L['No']; }
-
-if ($pag['page_allowratings'])
-	{ $page_form_allowratings = sed_radiobox("radio", "rpageallowratings", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "rpageallowratings", 0, FALSE).$L['No']; }
-	else
-	{ $page_form_allowratings = sed_radiobox("radio", "rpageallowratings", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "rpageallowratings", 0, TRUE).$L['No']; }
-
+$page_form_file = sed_radiobox("rpagefile", $yesno_arr, $pag['page_file']);
+$page_form_allowcomments = sed_radiobox("rpageallowcomments", $yesno_arr, $pag['page_allowcomments']); 
+$page_form_allowratings = sed_radiobox("rpageallowratings", $yesno_arr, $pag['page_allowratings']);	
 
 if ($cfg['textmode']=='bbcode')
     {

@@ -10,7 +10,7 @@ File=admin.dic.inc.php
 Version=177
 Updated=2015-feb-06
 Type=Core.admin
-Author=Neocrome
+Author=Amro
 Description=Administration panel
 [END_SED]
 ==================== */
@@ -28,9 +28,10 @@ $mn = sed_import('mn', 'G', 'TXT');
 $did = sed_import('did','G','INT');
 $tid = sed_import('tid','G','INT');
 
-$dic_type = array(1 => 'selectbox', 2 => 'optionbox', 3 => 'checkbox');
+$dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
 
 $sql_dic = sed_sql_query("SELECT * FROM $db_dic WHERE 1 ORDER BY dic_title ASC");
+
 while ($row_dic = sed_sql_fetchassoc($sql_dic))
 	{
 		$dic_list[$row_dic['dic_id']] = $row_dic['dic_title']; 
@@ -133,7 +134,7 @@ switch($mn)
 	$sqlp = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id != '".$did."'");
 	while ($rowp = sed_sql_fetchassoc($sqlp))
 	{
-		$dicparent[$rowp['dic_code']] = $rowp['dic_title'];
+		$dicparent[$rowp['dic_id']] = $rowp['dic_title'];
 	}	
 	
 	$sql = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id = '".$did."'");
@@ -142,8 +143,9 @@ switch($mn)
 	$t -> assign(array(
 		"DIC_EDIT_SEND" => sed_url('admin', 'm=dic&a=update&did='.$did),
 		"DIC_EDIT_TITLE" => sed_textbox('dtitle', $row['dic_title']),
-		"DIC_EDIT_CODE" => sed_textbox('dcode', $row['dic_code']),
 		"DIC_EDIT_TYPE" => sed_selectbox($row['dic_type'], 'dtype', $dic_type),	
+		"DIC_EDIT_VALUES" => sed_textarea('dvalues', $row['dic_values'], 5, 60),
+		"DIC_EDIT_MERA" => sed_textbox('dvalues', $row['dic_mera']),		
 		"DIC_EDIT_DICPARENT" => sed_selectbox($row['dic_parent'], 'dparent', $dicparent) //sed_textbox('dtype', $row['dic_type'])		
 	));			
 
@@ -174,14 +176,18 @@ switch($mn)
   default:
 	
 	$dtitle = sed_import('dtitle','P','TXT');
-	$dcode = sed_import('dcode','P','TXT');
-	$dparent = sed_import('dparent','P','TXT');
+	$dcode = sed_import('dcode','P','ALP');
+	$dparent = sed_import('dparent','P','INT');
 	$dtype = sed_import('dtype','P','INT');
+	$dvalues = sed_import('dvalues','P','TXT');
+	$dmera = sed_import('dmera','P','TXT');
 	
 	if ($a == 'update' && (!empty($did)))
 			{
 			$sql = sed_sql_query("UPDATE $db_dic SET dic_title = '".sed_sql_prep($dtitle)."', 
-					dic_code = '".sed_sql_prep($dcode)."', dic_type = '".(int)$dtype."', dic_parent = '".sed_sql_prep($dparent)."' WHERE dic_id = '".$did."'");
+								dic_type = '".(int)$dtype."', dic_values = '".sed_sql_prep($dvalues)."', dic_mera = '".sed_sql_prep($dmera)."', 
+								dic_parent = '".sed_sql_prep($dparent)."' WHERE dic_id = '".$did."'");
+								
 			sed_log("Update directory #".$did,'adm');
 			sed_cache_clear('sed_dic');
 			sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));    				
@@ -200,10 +206,18 @@ switch($mn)
 			}
 	elseif ($a == 'add')
 			{
-			$sql = sed_sql_query("INSERT into $db_dic (dic_title, dic_code, dic_type) VALUES ('".sed_sql_prep($dtitle)."', '".sed_sql_prep($dcode)."', '".(int)$dtype."')");
-			sed_log("Addded directory #".$did,'adm');
-			sed_cache_clear('sed_dic');
-			sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));
+			if (empty($dtitle) || empty($dcode))
+				{
+				$msg = 303;
+				}
+			else
+				{			
+				$sql = sed_sql_query("INSERT into $db_dic (dic_title, dic_code, dic_type, dic_values, dic_mera) 
+										VALUES ('".sed_sql_prep($dtitle)."', '".sed_sql_prep($dcode)."', '".(int)$dtype."', '".sed_sql_prep($dvalues)."', '".sed_sql_prep($dmera)."')");
+				sed_log("Addded directory #".$did,'adm');
+				sed_cache_clear('sed_dic');
+				sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));
+				}
 			}
 		
     
@@ -244,6 +258,8 @@ switch($mn)
 	$t -> assign(array(
 		"DIC_ADD_SEND" => sed_url('admin', 'm=dic&a=add'),
 		"DIC_ADD_TITLE" => sed_textbox('dtitle', $dtitle),
+		"DIC_ADD_VALUES" => sed_textarea('dvalues', $dvalues, 5, 60),
+		"DIC_ADD_MERA" => sed_textbox('dvalues', $dmera),				
 		"DIC_ADD_CODE" => sed_textbox('dcode', $dcode),
 		"DIC_ADD_TYPE" => sed_selectbox($dtype, 'dtype', $dic_type) //sed_textbox('dtype', $dtype)			
 	));			

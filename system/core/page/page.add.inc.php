@@ -21,6 +21,10 @@ $id = sed_import('id','G','INT');
 $r = sed_import('r','G','ALP');
 $c = sed_import('c','G','TXT');
 
+$newpageallowcomments = 1;
+$newpageallowratings = 1;
+
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['auth_write']);
 
@@ -89,8 +93,8 @@ if ($a=='add')
 		
 	$newpagebegin = sed_mktime($newpagehour_beg, $newpageminute_beg, 0, $newpagemonth_beg, $newpageday_beg, $newpageyear_beg) - $usr['timezone'] * 3600;
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
-	$newpageexpire = ($newpageexpire<=$newpagebegin) ? 1861916400 : $newpageexpire;
-	$newpagebegin = ($newpagebegin<0) ? 0 : $newpagebegin;
+	$newpageexpire = ($newpageexpire <= $newpagebegin) ? 1861916400 : $newpageexpire;
+	$newpagebegin = ($newpagebegin < 0) ? 0 : $newpagebegin;
   
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
@@ -257,20 +261,9 @@ if (empty($newpagecat) && !empty($c))
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
 }
 
-if ($newpagefile)
-	{ $pageadd_form_file = sed_radiobox("radio", "newpagefile", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "newpagefile", 0, FALSE).$L['No']; }
-	else
-	{ $pageadd_form_file = sed_radiobox("radio", "newpagefile", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "newpagefile", 0, TRUE).$L['No'];  }
-
-if (($newpageallowcomments) || !isset($newpageallowcomments))
-	{ $pageadd_form_allowcomments = sed_radiobox("radio", "newpageallowcomments", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "newpageallowcomments", 0, FALSE).$L['No']; }
-	else
-	{ $pageadd_form_allowcomments = sed_radiobox("radio", "newpageallowcomments", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "newpageallowcomments", 0, TRUE).$L['No']; }
-
-if (($newpageallowratings) || !isset($newpageallowratings))
-  { $pageadd_form_allowratings = sed_radiobox("radio", "newpageallowratings", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "newpageallowratings", 0, FALSE).$L['No']; }
-	else
-	{ $pageadd_form_allowratings = sed_radiobox("radio", "newpageallowratings", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "newpageallowratings", 0, TRUE).$L['No']; }
+$pageadd_form_file = sed_radiobox("newpagefile", $yesno_arr, $newpagefile);
+$pageadd_form_allowcomments = sed_radiobox("newpageallowcomments", $yesno_arr, $newpageallowcomments); 
+$pageadd_form_allowratings = sed_radiobox("newpageallowratings", $yesno_arr, $newpageallowratings);
 
 if ($usr['isadmin'] && ($cfg['textmode']=='bbcode'))
 {

@@ -2794,19 +2794,36 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 	}
   
 /** 
- * Creating input field checkbox
+ * Creating input field radio
  * 
- * @param string $type Type input tag 
  * @param string $name Name input tag 
- * @param mixed $value Value input tag
+ * @param array $data Value input tag
  * @param bool $check Checked flag  
  * @return string 
  */ 
-function sed_radiobox($type, $name, $value, $check = FALSE)
+
+function sed_radiobox($name, $data, $check_data = '')
 	{
-  $checked = ($check) ? " checked=\"checked\" " : " ";    
-  $res = "<input type=\"".$type."\" class=\"".$type."\" name=\"".$name."\" value=\"".$value."\"".$checked."/>";
-  return($res);
+	if (is_array($data))  
+		{ $isarray = true; } 
+	else 
+		{ $data = explode(',', $data); }
+	
+	$jj = 0;
+	foreach ($data as $key => $v) 
+		{
+		$jj++;
+		if ($key == $check_data) 
+			{
+			$result .= '<input type="radio" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key. '" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			} 
+		else 
+			{
+			$result .= '<input type="radio" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			}
+		}
+		
+	return($result);
 	}
 
 /** 
@@ -2820,14 +2837,9 @@ function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text
   return($res);
 } 
 
-/** 
- * Creating hidden input field text
- * 
- * @return string 
- */ 
-function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255)
+function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255, $class = "text")
 {
-  $res = "<input type=\"hidden\" name=\"".$name."\" value=\"".sed_cc($value)."\" size=\"".$size."\" maxlength=\"".$maxlength."\" />";
+  $res = "<input type=\"hidden\" class=\"".$class."\" name=\"".$name."\" value=\"".sed_cc($value)."\" size=\"".$size."\" maxlength=\"".$maxlength."\" />";
   return($res);
 } 
 
@@ -2836,6 +2848,7 @@ function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255)
  * 
  * @return string 
  */
+ 
 function sed_textarea($name, $value, $rows, $cols)
 {
   global $cfg;
@@ -2844,6 +2857,41 @@ function sed_textarea($name, $value, $rows, $cols)
   $res = "<textarea name=\"".$name."\" rows=\"".$rows."\" cols=\"".$cols."\">".sed_cc(sed_checkmore($value, false), ENT_QUOTES)."</textarea>";
   return($res);
 } 
+
+/** 
+ * Creating input field checkbox
+ * 
+ * @param string $name Name input tag 
+ * @param array $data Value input tag
+ * @param bool $check Checked flag  
+ * @return string 
+ */ 
+
+function sed_checkbox($name, $data, $check_data = FALSE)
+	{
+	
+	if (is_array($data))  
+		{ $isarray = true; } 
+	else 
+		{ $data = explode(',', $data); }
+	
+	$jj = 0;
+	foreach ($data as $key => $v) 
+		{
+		$jj++;
+		if (is_array($check_data) && in_array($key, $check_data)) 
+			{
+			$result .= '<input type="checkbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			} 
+		else 
+			{
+			$result .= '<input type="checkbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			}
+		}
+		
+	return($result);	
+	
+	}
 
 /** 
  * Check SSL 

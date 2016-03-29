@@ -329,9 +329,10 @@ $L['adm_help_smilies'] = "Недоступно";
 
 $L['adm_directory'] = "Справочник";
 $L['adm_dic_title'] = "Заголовок справочника";
-$L['adm_dic_code'] = "Код справочника";
+$L['adm_dic_code'] = "Код справочника (имя экстраполя)";
 $L['adm_dic_list'] = "Список справочников";
 $L['adm_dic_term_list'] = "Список терминов";
+
 $L['adm_dic_add'] = "Добавить новый справочник";
 $L['adm_dic_edit'] = "Редактирование справочника";
 $L['adm_dic_add_term'] = "Добавить новый термин";
@@ -340,6 +341,23 @@ $L['adm_dic_term_value'] = "Значение термина";
 $L['adm_dic_term_defval'] = "Термин по умолчанию?";
 $L['adm_dic_term_edit'] = "Редактирование термина из справочника";
 $L['adm_dic_children'] = "Дочерний справочник";
+
+$L['adm_dic_mera'] = "Единица измерения";
+$L['adm_dic_values'] = "Значения справочника";
+
+$L['adm_dic_form_title'] = "Заголовок для элемента формы";
+$L['adm_dic_form_desc'] = "Подпись для элемента формы";
+$L['adm_dic_form_size'] = "Размер текстового поля";
+$L['adm_dic_form_maxsize'] = "Максимальный размер поля";
+$L['adm_dic_form_cols'] = "Ширина текстового поля";
+$L['adm_dic_form_rows'] = "Высота текстового поля";
+
+$L['adm_dic_extra_location'] = "Наименование таблицы";
+$L['adm_dic_extra_type'] = "Тип данных поля";
+$L['adm_dic_extra_size'] = "Длина поля";
+
+$L['adm_dic_comma_separat'] = "(значения, разделенные через запятую)";
+
 
 /* ====== PFS ====== */
 

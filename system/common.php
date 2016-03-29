@@ -478,6 +478,8 @@ if (!file_exists($mlang))
 $lang = $usr['lang'];
 require($mlang);
 
+$yesno_arr = array(1 => $L['Yes'], 0 => $L['No']);
+
 /* ======== Who's online part 2 ======== */
 
 $out['whosonline'] = ($cfg['disablewhosonline']) ? '' : $sys['whosonline_reg_count'].' '.$L['com_members'].', '.$sys['whosonline_vis_count'].' '.$L['com_guests'];

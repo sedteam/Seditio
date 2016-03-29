@@ -91,6 +91,20 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."dic (
   dic_title varchar(255) NOT NULL default '',
   dic_code varchar(255) NOT NULL default '',
   dic_type tinyint(1) default '0',
+  dic_values text NOT NULL,
+  dic_parent mediumint(8) NOT NULL default '0',
+  dic_mera varchar(16) NOT NULL default '',
+  dic_form_title varchar(255) NOT NULL default '', 
+  dic_form_desc varchar(255) NOT NULL default '',
+  dic_form_size smallint(5) NOT NULL default '0',
+  dic_form_maxsize smallint(5) NOT NULL default '0',
+  dic_form_cols smallint(5) NOT NULL default '0',
+  dic_form_rows smallint(5) NOT NULL default '0',
+  dic_extra_location varchar(40) NOT NULL default '',
+  dic_extra_type varchar(20) NOT NULL default '',
+  dic_extra_size smallint(5) NOT NULL default '0',
+  KEY dic_code (dic_code), 
+  KEY dic_parent (dic_parent),
   PRIMARY KEY  (dic_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
@@ -99,20 +113,11 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."dic_items (
   ditem_dicid mediumint(8) NOT NULL default '0',
   ditem_title varchar(255) NOT NULL default '',
   ditem_code varchar(255) NOT NULL default '',
+  ditem_children mediumint(8) NOT NULL default '0',  
   ditem_defval tinyint(1) default '0',
-  KEY ditem_dicid (ditem_dicid), 
+  KEY ditem_dicid (ditem_dicid),
+  KEY ditem_children (ditem_children), 
   PRIMARY KEY  (ditem_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
-
-$sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."extra_fields (
-  field_location varchar(255) NOT NULL,
-  field_name varchar(255) NOT NULL,
-  field_type varchar(255) NOT NULL,
-  field_html text NOT NULL,
-  field_variants text NOT NULL,
-  field_description text NOT NULL,
-  KEY field_location (field_location),
-  KEY field_name (field_name)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."forum_posts (
@@ -703,22 +708,6 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (98, 3, 'dic', 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (99, 4, 'dic', 'a', 3, 128, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (100, 5, 'dic', 'a', 255, 255, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (101, 6, 'dic', 'a', 131, 0, 1);");
-
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."extra_fields VALUES
-('pages', 'extra1', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra2', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra3', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra4', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra5', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra1', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra2', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra3', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra4', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra5', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra6', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
-('users', 'extra7', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
-('users', 'extra8', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
-('users', 'extra9', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', '');");
 
 if ($textmode == "html") 
   {
