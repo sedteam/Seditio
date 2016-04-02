@@ -249,8 +249,8 @@ $t->assign(array(
 	"PAGE_EXTRA8" => $pag['page_extra8'],
 	"PAGE_EXTRA9" => $pag['page_extra9'],
 	"PAGE_EXTRA10" => $pag['page_extra10'],
-  "PAGE_PRICE" => $pag['page_price'],
-  "PAGE_THUMB" => $pag['page_thumb'],
+	"PAGE_PRICE" => $pag['page_price'],
+	"PAGE_THUMB" => $pag['page_thumb'],
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
@@ -261,11 +261,24 @@ $t->assign(array(
 	"PAGE_COMMENTS" => $comments_link,
 	"PAGE_COMMENTS_DISPLAY" => $comments_display,
 	"PAGE_COMMENTS_COUNT" => $comments_count,
-  "PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
+	"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
 		));
+		
+	// ---------- Extra fields - getting
+	$extrafields = array(); 
+	$extrafields = sed_extrafield_get('pages');  
+	$number_of_extrafields = count($extrafields);
 
+	if(count($extrafields) > 0) 
+	{ 
+		$extra_array = sed_build_extrafields_data('page', 'PAGE', $extrafields, $pag);
+	} 
+  
+	$t->assign($extra_array); 
+	// ----------------------		
+		
 	if($pag['page_totaltabs']>1)
 		{
 		$t->assign(array(

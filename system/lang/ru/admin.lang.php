@@ -352,6 +352,9 @@ $L['adm_dic_form_maxsize'] = "Максимальный размер поля";
 $L['adm_dic_form_cols'] = "Ширина текстового поля";
 $L['adm_dic_form_rows'] = "Высота текстового поля";
 
+$L['adm_dic_extra'] = "Экстраполе";
+$L['adm_dic_addextra'] = "Добавление экстраполя";
+$L['adm_dic_editextra'] = "Редактирование экстраполя";
 $L['adm_dic_extra_location'] = "Наименование таблицы";
 $L['adm_dic_extra_type'] = "Тип данных поля";
 $L['adm_dic_extra_size'] = "Длина поля";

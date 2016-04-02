@@ -28,11 +28,11 @@
 
 <div class="sedtabs">
 	
-		<ul class="tabs">
-      <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Page}</a></li>
-      <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.Meta}</a></li>
-      <li><a href="{PHP.sys.request_uri}#tab3">{PHP.L.Options}</a></li>
-    </ul>
+	<ul class="tabs">
+		<li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Page}</a></li>
+		<li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.Meta}</a></li>
+		<li><a href="{PHP.sys.request_uri}#tab3">{PHP.L.Options}</a></li>
+	</ul>
     
     <div class="tab-box">
     
@@ -64,15 +64,16 @@
 					<td>{PHP.skinlang.pageedit.Alias}</td>
 					<td>{PAGEEDIT_FORM_ALIAS}</td>
 				</tr>
+								
 			
-			  <!-- BEGIN: PAGEEDIT_PARSING -->
-			
-			  <tr>
-			    <td>{PHP.skinlang.pageedit.Parsing}</td>
-			    <td>{PAGEEDIT_FORM_TYPE}</td>
-			  </tr>   
-			  
-			  <!-- END: PAGEEDIT_PARSING -->
+				<!-- BEGIN: PAGEEDIT_PARSING -->
+
+				<tr>
+					<td>{PHP.skinlang.pageedit.Parsing}</td>
+					<td>{PAGEEDIT_FORM_TYPE}</td>
+				</tr>   
+
+				<!-- END: PAGEEDIT_PARSING -->
 			
 				<tr>
 					<td colspan="2">{PHP.skinlang.pageedit.Bodyofthepage}<br /><br />{PAGEEDIT_FORM_TEXT}</td>

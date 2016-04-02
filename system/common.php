@@ -586,8 +586,8 @@ $out['img_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
 $out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
 $out['img_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
 
-$sed_yesno[0] = $L['No'];
 $sed_yesno[1] = $L['Yes'];
+$sed_yesno[0] = $L['No'];
 $sed_img_up = $out['img_up'];
 $sed_img_down = $out['img_down'];
 $sed_img_left = $out['img_left'];
@@ -595,35 +595,54 @@ $sed_img_right = $out['img_right'];
 
 /* ======== Directories ======== */
 
-if (!$sed_dic && ($cfg['version'] < 177))
+$dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
+$dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT');
+
+if (!$sed_dic && ($cfg['version'] >= 177))
 	{
 	// Load directories
-	$sql = sed_sql_query("SELECT * FROM $db_dic WHERE 1");
+	$sql = sed_sql_query("SELECT * FROM $db_dic");
 	if (sed_sql_numrows($sql) > 0)
 		{	
 		while ($row = sed_sql_fetchassoc($sql))
 			{
-			$sed_dic[$row['dic_id']] = array (
-				'id' => $row['dic_id'],
-				'title' => $row['dic_title'],
-				'code' => $row['dic_code'],
-				'type' => $row['dic_type'],
-				'terms' => array()
+			if ($row['dic_type'] == 3) 
+				{ $vartype = 'ARR'; }
+			else 
+				{ $vartype = (!empty($row['dic_extra_type'])) ? $dic_var_type[$row['dic_extra_type']] : 'TXT'; }
+			
+			$sed_dic[$row['dic_code']] = array (
+			'id' => $row['dic_id'],
+			'title' => $row['dic_title'],
+			'code' => $row['dic_code'],
+			'type' => $dic_type[$row['dic_type']],
+			'vartype' => $vartype,
+			'values' => $row['dic_values'],
+			'parent' => $row['dic_parent'],
+			'mera' => $row['dic_mera'],
+			'form_title' => $row['dic_form_title'],
+			'form_desc' => $row['dic_form_desc'],
+			'form_size' => $row['dic_form_size'],
+			'form_maxsize' => $row['dic_form_maxsize'],
+			'form_cols' => $row['dic_form_cols'],
+			'form_rows' => $row['dic_form_rows'],
+			'extra_location' => $row['dic_extra_location'],
+			'extra_type' => $row['dic_extra_type'],
+			'extra_size' => $row['dic_extra_size'],       
+			'terms' => '',
+			'term_default' => ''
 					);
-			$sed_dicid_arr[] = $row['dic_id']; 		
+			$sed_dicid_arr[$row['dic_id']] = $row['dic_code']; 		
 			}
 		// Load terms
-		$sql2 = sed_sql_query("SELECT * FROM $db_dic_items WHERE 1");
+		$sql2 = sed_sql_query("SELECT * FROM $db_dic_items");
 		if (sed_sql_numrows($sql2) > 0)
 			{
 			while ($row2 = sed_sql_fetchassoc($sql2))
 				{
-					$sed_dic[$row2['ditem_dicid']]['terms'][] = array(
-						'tid' => $row2['ditem_id'], 
-						'ttitle' => $row2['ditem_title'], 
-						'tcode' => $row2['ditem_code'],
-						'tdefval' => $row2['ditem_defval']
-					); 
+				$term_code = (!empty($row2['ditem_code'])) ? $row2['ditem_code'] : $row2['ditem_id'];
+				$sed_dic[$sed_dicid_arr[$row2['ditem_dicid']]]['terms'][$term_code] = $row2['ditem_title'];
+				if (!empty($row2['ditem_defval'])) $sed_dic[$sed_dicid_arr[$row2['ditem_dicid']]]['term_default'] = $term_code; 
 				}
 			}	
 		}

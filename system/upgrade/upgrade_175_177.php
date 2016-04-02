@@ -22,39 +22,6 @@ $sql = sed_sql_query("TRUNCATE TABLE ".$cfg['sqldbprefix']."cache");
 
 $adminmain .= "Changing the SQL version number to 177...<br />";
 
-$sqlqr = "CREATE TABLE ".$cfg['sqldbprefix']."extra_fields (
-  field_location varchar(255) NOT NULL,
-  field_name varchar(255) NOT NULL,
-  field_type varchar(255) NOT NULL,
-  field_html text NOT NULL,
-  field_variants text NOT NULL,
-  field_description text NOT NULL,
-  KEY field_location (field_location),
-  KEY field_name (field_name)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-
-$adminmain .= sed_cc($sqlqr)."<br />";
-$sql = sed_sql_query($sqlqr);  
-
-$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."extra_fields VALUES
-('pages', 'extra1', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra2', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra3', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra4', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('pages', 'extra5', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra1', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra2', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra3', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra4', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra5', 'input', '<input class=\"text\" type=\"text\" maxlength=\"255\" size=\"56\" />', '', ''),
-('users', 'extra6', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
-('users', 'extra7', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
-('users', 'extra8', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', ''),
-('users', 'extra9', 'textarea', '<textarea cols=\"80\" rows=\"6\" ></textarea>', '', '');";
-
-$adminmain .= sed_cc($sqlqr)."<br />";
-$sql = sed_sql_query($sqlqr);  
-
 $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."core VALUES ('', 'dic', 'Directories', '150', 1, 0);";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);  
@@ -84,12 +51,27 @@ $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr); 
 
 $sqlqr = "CREATE TABLE ".$cfg['sqldbprefix']."dic (
-  dic_id mediumint(8) NOT NULL auto_increment,
+	dic_id mediumint(8) NOT NULL auto_increment,
   dic_title varchar(255) NOT NULL default '',
   dic_code varchar(255) NOT NULL default '',
-  dic_type tinyint(10) default '0',
+  dic_type tinyint(1) default '0',
+  dic_values text NOT NULL,
+  dic_parent mediumint(8) NOT NULL default '0',
+  dic_mera varchar(16) NOT NULL default '',
+  dic_form_title varchar(255) NOT NULL default '', 
+  dic_form_desc varchar(255) NOT NULL default '',
+  dic_form_size smallint(5) NOT NULL default '0',
+  dic_form_maxsize smallint(5) NOT NULL default '0',
+  dic_form_cols smallint(5) NOT NULL default '0',
+  dic_form_rows smallint(5) NOT NULL default '0',
+  dic_extra_location varchar(40) NOT NULL default '',
+  dic_extra_type varchar(20) NOT NULL default '',
+  dic_extra_size smallint(5) NOT NULL default '0',
+  KEY dic_code (dic_code), 
+  KEY dic_parent (dic_parent),
   PRIMARY KEY  (dic_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr); 
 

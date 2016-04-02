@@ -34,6 +34,12 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+// ---------- Extra fields - getting
+$extrafields = array(); 
+$extrafields = sed_extrafield_get('pages');  
+$number_of_extrafields = count($extrafields);
+// ----------------------
+
 if ($a=='add')
 	{
 	sed_shield_protect();
@@ -95,7 +101,11 @@ if ($a=='add')
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
 	$newpageexpire = ($newpageexpire <= $newpagebegin) ? 1861916400 : $newpageexpire;
 	$newpagebegin = ($newpagebegin < 0) ? 0 : $newpagebegin;
-  
+
+	// --------- Extra fields     
+	if ($number_of_extrafields > 0) $newpageextrafields = sed_extrafield_buildvar($extrafields, 'newpage', 'page');    
+	// ----------------------
+	
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
@@ -103,7 +113,7 @@ if ($a=='add')
 	$newpagetype = ($usr['isadmin'] && ($cfg['textmode']=='bbcode')) ? sed_import('newpagetype','P','INT') : 0;  // New v173
 	if ($cfg['textmode']=='html') { $newpagetype = 1; }  // New v173
 
-  //Autovalidation New v173
+	//Autovalidation New v173
 	$newpagepublish = sed_import('newpagepublish', 'P', 'ALP');
 	$newpagestate = (($newpagepublish == "OK") && $usr['isadmin']) ? 0 : 1;
 
@@ -118,6 +128,20 @@ if ($a=='add')
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
 			}
 
+    // ------ Extra fields 
+    if(count($extrafields) > 0) 
+    { 
+        foreach($extrafields as $i => $row) 
+        { 
+            if(!is_null($newpageextrafields['page_'.$row['code']])) 
+            { 
+                $ssql_extra_columns .= ', page_'.$row['code']; 
+                $ssql_extra_values .= ", '".sed_sql_prep($newpageextrafields['page_'.$row['code']])."'"; 
+            } 
+        } 
+    } 
+	// ----------------------
+		
 		$sql = sed_sql_query("INSERT into $db_pages
 			(page_state,
 			page_type,
@@ -153,7 +177,7 @@ if ($a=='add')
 			page_seo_desc,
 			page_seo_keywords,
 			page_price,
-			page_thumb
+			page_thumb".$ssql_extra_columns."
 			)
 			VALUES
 			(".(int)$newpagestate.",
@@ -190,7 +214,7 @@ if ($a=='add')
 			'".sed_sql_prep($newpageseodesc)."',			
 			'".sed_sql_prep($newpageseokeywords)."',
 			'".sed_sql_prep($newpageprice)."',      
-			'".sed_sql_prep($newpagethumb)."')");
+			'".sed_sql_prep($newpagethumb)."'".$ssql_extra_values.")");
 
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
@@ -376,6 +400,15 @@ $t->assign(array(
 	"PAGEADD_FORM_SMILIES" => $smilies,
 	"PAGEADD_FORM_MYPFS" => $pfs
 		));
+
+
+	// Extra fields 
+	if(count($extrafields)>0) 
+	{ 
+		$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, $newpageextrafields, 'newpage'); 
+	} 
+  
+	$t->assign($extra_array); 
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');

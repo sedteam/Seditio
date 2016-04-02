@@ -28,7 +28,7 @@
   
 <div class="sedtabs">
 	
-		<ul class="tabs">
+	<ul class="tabs">
       <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Page}</a></li>
       <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.Meta}</a></li>
       <li><a href="{PHP.sys.request_uri}#tab3">{PHP.L.Options}</a></li>
@@ -64,24 +64,25 @@
 				<td>{PHP.skinlang.pageadd.Alias}</td>
 				<td>{PAGEADD_FORM_ALIAS}</td>
 			</tr>
+      	  		                    
 			
-		  <!-- BEGIN: PAGEADD_PARSING -->
-		
-		  <tr>
-		    <td>{PHP.skinlang.pageadd.Parsing}</td>
-		    <td>{PAGEADD_FORM_TYPE}</td>
-		  </tr>   
-		  
-		  <!-- END: PAGEADD_PARSING -->			
-		  
+			<!-- BEGIN: PAGEADD_PARSING -->
+
+			<tr>
+				<td>{PHP.skinlang.pageadd.Parsing}</td>
+				<td>{PAGEADD_FORM_TYPE}</td>
+			</tr>   
+
+			<!-- END: PAGEADD_PARSING -->			
+
 			<tr>
 				<td colspan="2">{PHP.skinlang.pageadd.Bodyofthepage}<br /><br />{PAGEADD_FORM_TEXT}</td>
 			</tr>  
-		
+
 			</table>
 					
 		</div>
-    <div id="tab2" class="tabs">
+		<div id="tab2" class="tabs">
     
 			<table class="cells striped" class="simple tableforms">
 			

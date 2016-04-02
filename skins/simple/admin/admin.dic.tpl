@@ -78,8 +78,38 @@
 	<tr>
 		<td>{PHP.L.adm_dic_values} :</td>
 		<td>{DIC_ADD_VALUES}{PHP.L.adm_dic_comma_separat}</td>
-	</tr>		
-	
+	</tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_title} :</td>
+    <td>{DIC_ADD_FORM_TITLE}</td>
+  </tr>  		 
+ 
+  <tr> 
+    <td>{PHP.L.adm_dic_form_desc} :</td>   
+    <td>{DIC_ADD_FORM_DESC}</td>
+  </tr>
+ 
+  <tr>
+    <td>{PHP.L.adm_dic_form_size} :</td>  
+    <td>{DIC_ADD_FORM_SIZE}</td>
+  </tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_maxsize} :</td>  
+    <td>{DIC_ADD_FORM_MAXSIZE}</td>
+  </tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_cols} :</td>  
+    <td>{DIC_ADD_FORM_COLS}</td>
+  </tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_rows} :</td>  
+    <td>{DIC_ADD_FORM_ROWS}</td>	
+	</tr>
+  
 	<tr>
 		<td>{PHP.L.Type} :</td>
 		<td>{DIC_ADD_TYPE}</td>
@@ -131,6 +161,36 @@
 		<td>{PHP.L.adm_dic_values} :</td>
 		<td>{DIC_EDIT_VALUES}{PHP.L.adm_dic_comma_separat}</td>
 	</tr>	
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_title} :</td>
+    <td>{DIC_EDIT_FORM_TITLE}</td>
+  </tr>  		 
+ 
+  <tr> 
+    <td>{PHP.L.adm_dic_form_desc} :</td>   
+    <td>{DIC_EDIT_FORM_DESC}</td>
+  </tr>
+ 
+  <tr>
+    <td>{PHP.L.adm_dic_form_size} :</td>  
+    <td>{DIC_EDIT_FORM_SIZE}</td>
+  </tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_maxsize} :</td>  
+    <td>{DIC_EDIT_FORM_MAXSIZE}</td>
+  </tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_cols} :</td>  
+    <td>{DIC_EDIT_FORM_COLS}</td>
+  </tr>
+  
+  <tr>
+    <td>{PHP.L.adm_dic_form_rows} :</td>  
+    <td>{DIC_EDIT_FORM_ROWS}</td>	
+	</tr>
 	
 	<tr>
 		<td>{PHP.L.Type} :</td>
@@ -300,5 +360,67 @@
 </div>  
 
 <!-- END: DIC_ITEM_EDIT -->
+
+
+<!-- BEGIN: DIC_EXTRA -->
+
+<div class="content-box">
+	
+	<div class="content-box-header">
+		<h3>{PHP.L.adm_dic_extra} / {DIC_EXTRA_TITLE}</h3>
+		<div class="content-box-header-right">
+			
+			<div class="clear"></div>					
+		</div>
+	</div>
+
+	<div class="content-box-content">	
+   	 
+	<form id="addextra" action="{DIC_EXTRA_SEND}" method="post">
+  
+  <table class="cells striped">
+	
+	<tr>
+		<td style="width:180px;">{PHP.L.adm_dic_code} :</td>
+		<td>{DIC_EXTRA_DICCODE}</td>
+	</tr>
+  
+  <tr>
+		<td style="width:180px;">{PHP.L.adm_dic_extra_location} :</td>
+		<td>{DIC_EXTRA_LOCATION}</td>
+	</tr>
+	
+	<tr>
+		<td>{PHP.L.adm_dic_extra_type} :</td>
+		<td>{DIC_EXTRA_TYPE}</td>
+	</tr>
+	
+	<tr>
+		<td>{PHP.L.adm_dic_extra_size} :</td>
+		<td>{DIC_EXTRA_SIZE}</td>
+	</tr>
+  
+  <!-- BEGIN: DIC_EXTRA_DELETE -->
+  
+	<tr>
+		<td>{PHP.L.Delete} :</td>
+		<td>{DIC_EXTRA_DELETE}</td>
+	</tr>
+    
+  <!-- END: DIC_EXTRA_DELETE -->
+  	
+	<tr>
+		<td colspan="2"><input type="submit" class="submit btn" value="{DIC_EXTRA_SUBMIT_NAME}" /></td>
+	</tr>
+	
+	</table>
+	
+	</form>    
+  
+  </div>
+  
+</div>  
+
+<!-- END: DIC_EXTRA -->
 
 <!-- END: ADMIN_DIC -->

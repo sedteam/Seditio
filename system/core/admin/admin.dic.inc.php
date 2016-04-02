@@ -28,8 +28,6 @@ $mn = sed_import('mn', 'G', 'TXT');
 $did = sed_import('did','G','INT');
 $tid = sed_import('tid','G','INT');
 
-$dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
-
 $sql_dic = sed_sql_query("SELECT * FROM $db_dic WHERE 1 ORDER BY dic_title ASC");
 
 while ($row_dic = sed_sql_fetchassoc($sql_dic))
@@ -121,7 +119,7 @@ switch($mn)
 		"TERM_ADD_TITLE" => sed_textbox('ditemtitle', $ditemtitle),
 		"TERM_ADD_CODE" => sed_textbox('ditemcode', $ditemcode),
 		"TERM_ADD_CHILDRENDIC" => sed_selectbox('', 'ditemchildren', $dic_list),	
-		"TERM_ADD_DEFVAL" => sed_radiobox("radio", "ditemdefval", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "ditemdefval", 0, TRUE).$L['No']
+		"TERM_ADD_DEFVAL" => sed_radiobox("ditemdefval", $sed_yesno, $ditemdefval)
 	));	    
     
 	$t -> parse("ADMIN_DIC.DIC_TERMS");
@@ -145,7 +143,13 @@ switch($mn)
 		"DIC_EDIT_TITLE" => sed_textbox('dtitle', $row['dic_title']),
 		"DIC_EDIT_TYPE" => sed_selectbox($row['dic_type'], 'dtype', $dic_type),	
 		"DIC_EDIT_VALUES" => sed_textarea('dvalues', $row['dic_values'], 5, 60),
-		"DIC_EDIT_MERA" => sed_textbox('dvalues', $row['dic_mera']),		
+		"DIC_EDIT_MERA" => sed_textbox('dmera', $row['dic_mera']),
+		"DIC_EDIT_FORM_TITLE" => sed_textbox('dformtitle', $row['dic_form_title']),		 
+		"DIC_EDIT_FORM_DESC" => sed_textarea('dformdesc', $row['dic_form_desc'], 5, 60),
+		"DIC_EDIT_FORM_SIZE" => sed_textbox('dformsize', $row['dic_form_size'], 3, 10),
+		"DIC_EDIT_FORM_MAXSIZE" => sed_textbox('dformmaxsize', $row['dic_form_maxsize'], 3, 10),
+		"DIC_EDIT_FORM_COLS" => sed_textbox('dformcols', $row['dic_form_cols'], 3, 10),
+		"DIC_EDIT_FORM_ROWS" => sed_textbox('dformrows', $row['dic_form_rows'], 3, 10),		
 		"DIC_EDIT_DICPARENT" => sed_selectbox($row['dic_parent'], 'dparent', $dicparent) //sed_textbox('dtype', $row['dic_type'])		
 	));			
 
@@ -172,6 +176,89 @@ switch($mn)
 	$t -> parse("ADMIN_DIC.DIC_ITEM_EDIT");	  
   
   break;
+  
+  case 'extra':
+  
+  $extralocation = sed_import('extralocation','P','TXT');
+  $extratype = sed_import('extratype','P','TXT');
+  $extrasize = sed_import('extrasize','P','INT');  
+  
+  $sql = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id = '".$did."'");
+  if (sed_sql_numrows($sql) > 0)
+    {
+    $row = sed_sql_fetchassoc($sql);    
+    
+    //---
+  	if ($a == 'add' && (!empty($did)))
+		{ 
+		if (!empty($extralocation) && !empty($row['dic_code']))
+			{
+			sed_extrafield_add($extralocation, $row['dic_code'], $extratype, $extrasize);
+			sed_redirect(sed_url("admin", "m=dic&mn=extra&did=".$did, "", true));			
+			} 
+		} 
+    //---      	
+  	if ($a == 'update' && (!empty($did)))
+		{ 
+		$extradelete = sed_import('extradelete','P','BOL');
+		if ($extradelete)
+			{
+			sed_extrafield_remove($row['dic_extra_location'], $row['dic_code']);
+			}
+		else
+			{ 
+			sed_extrafield_update($row['dic_extra_location'], $row['dic_code'], $extratype, $extrasize);
+			}
+		sed_redirect(sed_url("admin", "m=dic&mn=extra&did=".$did, "", true));	            
+		} 
+
+    $adminpath[] = array (sed_url("admin", "m=dic&mn=dicitem&did=".$did), $row['dic_title']);
+    $adminpath[] = array (sed_url("admin", "m=dic&mn=extra&did=".$did), $L['adm_dic_extra']);
+    
+    $location_arr = array('pages' => 'Pages', 'users' => 'Users', 'com' => 'Comments', 'forum_topics' => 'Forum topics');
+  	$type_arr = array('varchar' => 'VARCHAR', 'text' => 'TEXT', 'int' => 'INTEGER', 'tinyint' => 'TINY INTEGER');
+    
+    for ($i = 1; $i <= 255; $i++) { $maxsize_arr[$i] = $i; }
+
+    if (!empty($row['dic_extra_location']))
+      {
+        $i = 1;
+        $colname = $row['dic_code'];
+        $fieldsres = sed_sql_query("SELECT * FROM ".$cfg['sqldbprefix'].$row['dic_extra_location']." LIMIT 1"); 
+    	$isset_column = "";
+       
+        while ($i <= sed_sql_numfields($fieldsres)) 
+          { 
+            $column = sed_sql_fetchfield($fieldsres, $i);                                   
+            preg_match("#.*?_$colname$#", $column->name, $match);                       
+            if($match[0] != "") { $isset_column = $match[0]; break; }            
+            $i++; 
+          } 
+      }  
+    
+    if (!empty($isset_column))
+      {
+      $t -> assign(array(
+        "DIC_EXTRA_DELETE" => sed_radiobox("extradelete", $yesno_arr, 0)
+      ));
+      $t -> parse("ADMIN_DIC.DIC_EXTRA.DIC_EXTRA_DELETE");
+      }
+      
+    $t -> assign(array(
+       "DIC_EXTRA_SEND" => sed_url('admin', 'm=dic&mn=extra&did='.$did.'&a='.((!empty($isset_column)) ? "update" : "add")),
+       "DIC_EXTRA_SUBMIT_NAME" => (!empty($isset_column)) ? $L['Update'] : $L['Add'],
+       "DIC_EXTRA_TITLE" => $row['dic_title'],
+       "DIC_EXTRA_DICCODE" => $row['dic_code'],
+       "DIC_EXTRA_LOCATION" => (!empty($isset_column)) ? 
+                              $row['dic_extra_location']." / <strong>".$isset_column."</strong>" : 
+                              sed_selectbox($row['dic_extra_location'], 'extralocation', $location_arr),
+       "DIC_EXTRA_TYPE" => sed_selectbox($row['dic_extra_type'], 'extratype', $type_arr, false),
+       "DIC_EXTRA_SIZE" => sed_selectbox($row['dic_extra_size'], 'extrasize', $maxsize_arr)
+    ));  
+    
+    $t -> parse("ADMIN_DIC.DIC_EXTRA");	 
+    }
+  break;
 
   default:
 	
@@ -181,12 +268,29 @@ switch($mn)
 	$dtype = sed_import('dtype','P','INT');
 	$dvalues = sed_import('dvalues','P','TXT');
 	$dmera = sed_import('dmera','P','TXT');
-	
+  
+	$dformtitle = sed_import('dformtitle','P','TXT');	 
+	$dformdesc = sed_import('dformdesc','P','TXT');	 
+	$dformsize = sed_import('dformsize','P','TXT');	 
+	$dformmaxsize = sed_import('dformmaxsize','P','TXT');	 
+	$dformcols = sed_import('dformcols','P','TXT');	 
+	$dformrows = sed_import('dformrows','P','TXT');	 	
+
 	if ($a == 'update' && (!empty($did)))
 			{
-			$sql = sed_sql_query("UPDATE $db_dic SET dic_title = '".sed_sql_prep($dtitle)."', 
-								dic_type = '".(int)$dtype."', dic_values = '".sed_sql_prep($dvalues)."', dic_mera = '".sed_sql_prep($dmera)."', 
-								dic_parent = '".sed_sql_prep($dparent)."' WHERE dic_id = '".$did."'");
+			$sql = sed_sql_query("UPDATE $db_dic SET 
+				dic_title = '".sed_sql_prep($dtitle)."', 
+				dic_type = '".(int)$dtype."', 
+				dic_values = '".sed_sql_prep($dvalues)."', 
+				dic_mera = '".sed_sql_prep($dmera)."', 
+				dic_parent = '".sed_sql_prep($dparent)."', 
+				dic_form_title = '".sed_sql_prep($dformtitle)."', 
+				dic_form_desc = '".sed_sql_prep($dformdesc)."',
+				dic_form_size = '".sed_sql_prep($dformsize)."',
+				dic_form_maxsize = '".sed_sql_prep($dformmaxsize)."',
+				dic_form_cols = '".sed_sql_prep($dformcols)."',
+				dic_form_rows = '".sed_sql_prep($dformrows)."'          
+				WHERE dic_id = '".$did."'");
 								
 			sed_log("Update directory #".$did,'adm');
 			sed_cache_clear('sed_dic');
@@ -212,8 +316,32 @@ switch($mn)
 				}
 			else
 				{			
-				$sql = sed_sql_query("INSERT into $db_dic (dic_title, dic_code, dic_type, dic_values, dic_mera) 
-										VALUES ('".sed_sql_prep($dtitle)."', '".sed_sql_prep($dcode)."', '".(int)$dtype."', '".sed_sql_prep($dvalues)."', '".sed_sql_prep($dmera)."')");
+				$sql = sed_sql_query("INSERT into $db_dic 
+					(dic_title, 
+					dic_code, 
+					dic_type, 
+					dic_values, 
+					dic_mera,
+					dic_form_title, 
+					dic_form_desc,
+					dic_form_size,
+					dic_form_maxsize,
+					dic_form_cols,
+					dic_form_rows             
+					) 
+					VALUES 
+					('".sed_sql_prep($dtitle)."', 
+					'".sed_sql_prep($dcode)."', 
+					'".(int)$dtype."', 
+					'".sed_sql_prep($dvalues)."', 
+					'".sed_sql_prep($dmera)."',
+					'".sed_sql_prep($dformtitle)."', 
+					'".sed_sql_prep($dformdesc)."',
+					'".sed_sql_prep($dformsize)."',
+					'".sed_sql_prep($dformmaxsize)."',
+					'".sed_sql_prep($dformcols)."',
+					'".sed_sql_prep($dformrows)."')");
+				
 				sed_log("Addded directory #".$did,'adm');
 				sed_cache_clear('sed_dic');
 				sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));
@@ -245,11 +373,30 @@ switch($mn)
       		
 		$t -> parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST.ADMIN_ACTIONS");  
 
+		$dic_code = "<a href=\"".sed_url('admin', 'm=dic&mn=extra&did='.$row['dic_id'])."\">".$row['dic_code']."</a>";
+	   
+		if (!empty($row['dic_extra_location']))
+		  {
+			$i = 1;
+			$colname = $row['dic_code'];
+			$fieldsres = sed_sql_query("SELECT * FROM ".$cfg['sqldbprefix'].$row['dic_extra_location']." LIMIT 1"); 
+			$isset_column = "";
+		   
+			while ($i <= sed_sql_numfields($fieldsres)) 
+			  { 
+				$column = sed_sql_fetchfield($fieldsres, $i);                                   
+				preg_match("#.*?_$colname$#", $column->name, $match);                       
+				if($match[0] != "") { $dic_code .= " <strong>(".$column->table."#".$match[0].")</strong>"; break; }            
+				$i++; 
+			  } 
+		  }  
+
+
 		$t -> assign(array(
 			"DIC_LIST_ID" => $row['dic_id'],
 			"DIC_LIST_URL" => sed_url('admin', 'm=dic&mn=dicitem&did='.$row['dic_id']),
 			"DIC_LIST_TITLE" => $row['dic_title'],
-			"DIC_LIST_CODE" => $row['dic_code'],
+			"DIC_LIST_CODE" => $dic_code,
 			"DIC_LIST_TYPE" =>	$dic_type[$row['dic_type']]	
 		));
 		$t -> parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST");
@@ -259,14 +406,20 @@ switch($mn)
 		"DIC_ADD_SEND" => sed_url('admin', 'm=dic&a=add'),
 		"DIC_ADD_TITLE" => sed_textbox('dtitle', $dtitle),
 		"DIC_ADD_VALUES" => sed_textarea('dvalues', $dvalues, 5, 60),
-		"DIC_ADD_MERA" => sed_textbox('dvalues', $dmera),				
+		"DIC_ADD_MERA" => sed_textbox('dmera', $dmera, 8, 50),				
 		"DIC_ADD_CODE" => sed_textbox('dcode', $dcode),
-		"DIC_ADD_TYPE" => sed_selectbox($dtype, 'dtype', $dic_type) //sed_textbox('dtype', $dtype)			
+		"DIC_ADD_TYPE" => sed_selectbox($dtype, 'dtype', $dic_type),
+		"DIC_ADD_FORM_TITLE" => sed_textbox('dformtitle', $dformtitle),		 
+		"DIC_ADD_FORM_DESC" => sed_textarea('dformdesc', $dformdesc, 5, 60),
+		"DIC_ADD_FORM_SIZE" => sed_textbox('dformsize', $dformsize, 3, 10),
+		"DIC_ADD_FORM_MAXSIZE" => sed_textbox('dformmaxsize', $dformmaxsize, 3, 10),
+		"DIC_ADD_FORM_COLS" => sed_textbox('dformcols', $dformcols, 3, 10),
+		"DIC_ADD_FORM_ROWS" => sed_textbox('dformrows', $dformrows, 3, 10)		
 	));			
 	
 	$t -> parse("ADMIN_DIC.DIC_STRUCTURE");	
 	break;
-	}	
+	}		
 
 $t -> parse("ADMIN_DIC");  
 $adminmain .= $t -> text("ADMIN_DIC");

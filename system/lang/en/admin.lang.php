@@ -351,6 +351,9 @@ $L['adm_dic_form_maxsize'] = "The maximum size of text field";
 $L['adm_dic_form_cols'] = "The cols of text field";
 $L['adm_dic_form_rows'] = "The rows of text field";
 
+$L['adm_dic_extra'] = "Extra field";
+$L['adm_dic_addextra'] = "Add extra field";
+$L['adm_dic_editextra'] = "Edit extra field";
 $L['adm_dic_extra_location'] = "Name of table";
 $L['adm_dic_extra_type'] = "Data type of field";
 $L['adm_dic_extra_size'] = "Length of field";

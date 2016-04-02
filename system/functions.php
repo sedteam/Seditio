@@ -2870,10 +2870,8 @@ function sed_textarea($name, $value, $rows, $cols)
 function sed_checkbox($name, $data, $check_data = FALSE)
 	{
 	
-	if (is_array($data))  
-		{ $isarray = true; } 
-	else 
-		{ $data = explode(',', $data); }
+	if (!is_array($data)) $data = explode(',', $data); 		
+	if (!is_array($check_data)) $check_data = explode(',', $check_data);
 	
 	$jj = 0;
 	foreach ($data as $key => $v) 
@@ -4785,178 +4783,268 @@ function sed_xp()
 	return ("<div><input type=\"hidden\" id=\"x\" name=\"x\" value=\"".sed_sourcekey()."\" /></div>");
 	}
 	
+/* ============== EXTRA FIELD FUNCTION =============== */	
+  
 /** 
- * Add extra field for pages 
- * 
- * @param string $sql_table Table for adding extrafield (without sed_) 
- * @param string $name Field name (unique) 
- * @param string $type Field type (input, textarea etc) 
- * @param string $html HTML display of element without parameter "name=" 
- * @param string $variants Variants of values (for radiobuttons, selectors etc) 
- * @param string $description Description of field (optional, for admin) 
- * @param bool $noalter Do not ALTER the table, just register the extra field 
- * @return bool 
- * 
- */ 
-function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="", $noalter = FALSE) 
+ * Get extra field for table 
+ */  
+ 
+function sed_extrafield_get($sql_table) 
 { 
-    global $db_extra_fields; 
-    $fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'"); 
-    while($row = sed_sql_fetchassoc($fieldsres)) 
-    { 
-        $extrafieldsnames[] = $row['field_name']; 
-    } 
-    if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist 
+    global $sed_dic, $cfg;
+    foreach ($sed_dic as $key => $row)
+    {
+        if ($row['extra_location'] == $sql_table)
+        {
+           $res[$key] = $row;
+        }
+    }
+    return $res;   
+} 
+
+/** 
+ * Build vars if data is ARRAY? convert to type TXT 
+ */  
+function sed_array_buildvars($data)
+{
+	$res = array();
+	foreach ($data as $k => $v) {
+		$res[] = sed_import($v, 'D', 'TXT');
+	}	
+	return $res;
+}
+
+
+/** 
+ * Build extra field variable 
+ */  
+function sed_extrafield_buildvar($extrafields, $var_prefix, $table_prefix)
+{ 
+    if(count($extrafields) > 0)
+		{ 
+		foreach($extrafields as $row) 
+			{
+			$import = sed_import($var_prefix.$row['code'], 'P', $row['vartype']);	
+			$import = (is_array($import)) ? implode(',', sed_array_buildvars($import)) : $import;	 
+			$res[$table_prefix.'_'.$row['code']] = $import; 
+			} 	
+		}
+    return $res;
+}     
+	
+/** 
+ * Add extra field 
+ */
+function sed_extrafield_add($sql_table, $name, $type, $size) 
+{ 
+    global $db_dic, $cfg;
+    
+	$table_prefix = $cfg['sqldbprefix']; 
+
+	$fieldsres = sed_sql_query("SELECT dic_code FROM $db_dic WHERE dic_extra_location = '$sql_table'"); 
+
+	while ($row = sed_sql_fetchassoc($fieldsres)) 
+		{ 
+		$extrafieldsnames[] = $row['dic_code']; 
+		} 
+
+	if (count($extrafieldsnames) > 0) if (in_array($name, $extrafieldsnames)) return 0; // No adding - fields already exist 
 
     // Check table sed_$sql_table - if field with same name exists - exit. 
-    if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $sql_table LIKE '%\_$name'")) > 0 && !$noalter) 
-    { 
-        return FALSE; 
-    } 
-    $fieldsres = sed_sql_query("SELECT * FROM $sql_table LIMIT 1"); 
-    while ($i < sed_sql_numfields($fieldsres)) 
-    { 
-        $column = sed_sql_fetchfield($fieldsres, $i); 
-        // get column prefix in this table 
-        $column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
-        preg_match("#.*?_$name$#",$column->name,$match); 
-        if($match[1]!="" && !$noalter) return false; // No adding - fields already exist 
-        $i++; 
-    } 
+    if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM ".$table_prefix.$sql_table." LIKE '%\_$name'")) > 0) 
+		{ 
+		return FALSE; 
+		} 
     
-    $step1 = sed_sql_query("INSERT INTO $db_extra_fields (
-					field_location, 
-					field_name, 
-					field_type, 
-					field_html, 
-					field_variants, 
-					field_description) 
-					VALUES 
-					'".sed_sql_prep($sql_table)."',
-					'".sed_sql_prep($name)."',
-					'".sed_sql_prep($type)."',
-					'".sed_sql_prep($html)."',
-					'".sed_sql_prep($variants)."',
-					'".sed_sql_prep($description)."'
-					");
-        
-    if ($noalter) 
-    { 
-        return $step1; 
-    } 
+    $fieldsres = sed_sql_query("SELECT * FROM ".$table_prefix.$sql_table." LIMIT 1"); 
+    
+	while ($i < sed_sql_numfields($fieldsres)) 
+		{ 
+		$column = sed_sql_fetchfield($fieldsres, $i); 
+		
+		// get column prefix in this table 
+		$column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
+		preg_match("#.*?_$name$#", $column->name, $match);
+		 
+		if ($match[1] != "") return false; // No adding - fields already exist 
+		$i++; 
+		} 
+       
+    $step1 = sed_sql_query("UPDATE $db_dic SET 
+		dic_extra_location = '".sed_sql_prep($sql_table)."', 
+		dic_extra_type = '".sed_sql_prep($type)."', 
+		dic_extra_size = '".$size."' 
+		WHERE dic_code = '".$name."'");    
+
     switch($type) 
-    { 
-        case "input": $sqltype = "VARCHAR(255)"; break; 
-        case "textarea": $sqltype = "TEXT"; break; 
-        case "select": $sqltype = "VARCHAR(255)"; break; 
-        case "checkbox": $sqltype = "BOOL"; break; 
-        case "radio": $sqltype = "VARCHAR(255)"; break; 
-    } 
-    $sql = "ALTER TABLE $sql_table ADD ".$column_prefix."_$name $sqltype "; 
-    $step2 = sed_sql_query($sql); 
-    return $step1&&$step2; 
+		{ 
+		case "varchar": $sqltype = "VARCHAR(".$size.")"; break; 
+		case "text": $sqltype = "TEXT"; break; 
+		case "int": $sqltype = "VARCHAR(".$size.")"; break; 
+		case "tinyint": $sqltype = "TINYINT(".$size.")"; break; 
+		} 
+     
+    $step2 = sed_sql_query("ALTER TABLE ".$table_prefix.$sql_table." ADD ".$column_prefix."_$name $sqltype "); 
+    return TRUE;
 } 
 
 /** 
  * Update extra field
- * 
- * @param string $sql_table Table contains extrafield (without sed_) 
- * @param string $oldname Exist name of field 
- * @param string $name Field name (unique) 
- * @param string $type Field type (input, textarea etc) 
- * @param string $html HTML display of element without parameter "name=" 
- * @param string $variants Variants of values (for radiobuttons, selectors etc) 
- * @param string $description Description of field (optional, for admin) 
- * @return bool 
- * 
  */ 
-function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="") 
+function sed_extrafield_update($sql_table, $name, $type, $size) 
 { 
-    global $db_extra_fields; 
-    $fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields 
-            WHERE field_name = '$oldname' AND field_location='$sql_table'"); 
-    if (sed_sql_numrows($fieldsres) <= 0 
-        || $name != $oldname 
-            && sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $sql_table LIKE '%\_$name'")) > 0) 
+    global $db_dic, $cfg;
+    
+	$table_prefix = $cfg['sqldbprefix']; 
+		 
+    $fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_dic WHERE dic_code = '$name' AND dic_extra_location='$sql_table'"); 
+    
+	if (sed_sql_numrows($fieldsres) <= 0 || sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM ".$table_prefix.$sql_table." LIKE '%\_$name'")) <= 0) 
     { 
-        // Attempt to edit non-extra field or override an existing field 
         return FALSE; 
     } 
-    $field = sed_sql_fetchassoc($fieldsres); 
-    $fieldsres = sed_sql_query("SELECT * FROM $sql_table LIMIT 1"); 
+    
+    $fieldsres = sed_sql_query("SELECT * FROM ".$table_prefix.$sql_table." LIMIT 1"); 
     $column = sed_sql_fetchfield($fieldsres, 0); 
-    $column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
-    $alter = FALSE; 
-    if ($name != $field['field_name']) 
-    { 
-        $extf['name'] = $name; 
-        $alter = TRUE; 
-    } 
-    if ($type != $field['field_type']) 
-    { 
-        $extf['type'] = $type; 
-        $alter = TRUE; 
-    } 
-    if ($html != $field['field_html']) 
-        $extf['html'] = $html; 
-    if ($variants != $field['field_variants']) 
-        $extf['variants'] = $variants; 
-    if ($description != $field['field_description']) 
-        $extf['description'] = $description; 
-    
-		$step1 = sed_sql_query("UPDATE $db_extra_fields SET 
-					field_name = '".sed_sql_prep($extf['name'])."', 
-					field_type = '".sed_sql_prep($extf['type'])."', 
-					field_html = '".sed_sql_prep($extf['html'])."', 
-					field_variants = '".sed_sql_prep($extf['variants'])."', 
-					field_description = '".sed_sql_prep($extf['description'])."'  
-					WHERE field_name = '$oldname' AND field_location='$sql_table' 
-					");  
-    
-    if (!$alter) return $step1; 
+    $column_prefix = substr($column->name, 0, strpos($column->name, "_"));    
 
-    switch ($type) 
-    { 
-        case "input": $sqltype = "VARCHAR(255)"; break; 
-        case "textarea": $sqltype = "TEXT"; break; 
-        case "select": $sqltype = "VARCHAR(255)"; break; 
-        case "checkbox": $sqltype = "BOOL"; break; 
-        case "radio": $sqltype = "VARCHAR(255)"; break; 
-    } 
-    $sql = "ALTER TABLE $sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype "; 
-    $step2 = sed_sql_query($sql); 
+    $step1 = sed_sql_query("UPDATE $db_dic SET 
+		dic_extra_location = '".sed_sql_prep($sql_table)."', 
+		dic_extra_type = '".sed_sql_prep($type)."', 
+		dic_extra_size = '".$size."' 
+		WHERE dic_code = '".$name."'");    
 
-    return $step1&&$step2; 
+    if (empty($size)) $size = 11;
+    
+    switch($type) 
+		{ 
+		case "varchar": $sqltype = "VARCHAR(".$size.")"; break; 
+		case "text": $sqltype = "TEXT"; break; 
+		case "int": $sqltype = "INT(".$size.")"; break; 
+		case "tinyint": $sqltype = "TINYINT(".$size.")"; break; 
+		} 
+     
+    $step2 = sed_sql_query("ALTER TABLE ".$table_prefix.$sql_table." CHANGE ".$column_prefix."_$name ".$column_prefix."_$name $sqltype ");
+    return TRUE;
 } 
 
 /** 
  * Delete extra field 
- * 
- * @param string $sql_table Table contains extrafield (without sed_) 
- * @param string $name Name of extra field 
- * @return bool 
- * 
  */ 
 function sed_extrafield_remove($sql_table, $name) 
 { 
-    global $db_extra_fields, $cfg; 
-    if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields 
-        WHERE field_name = '$name' AND field_location='$sql_table'"), 0, 0) <= 0) 
-    { 
-        // Attempt to remove non-extra field 
-        return FALSE; 
-    } 
+    global $db_dic, $cfg;
+    
+    $table_prefix = $cfg['sqldbprefix']; 
+     
+    if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_dic 
+        WHERE dic_code = '$name' AND dic_extra_location='$sql_table'"), 0, 0) <= 0) 
+		{ 			
+			return FALSE; // Attempt to remove non-extra field 
+		} 
 
-    $fieldsres = sed_sql_query("SELECT * FROM $sql_table LIMIT 1"); 
+    $fieldsres = sed_sql_query("SELECT * FROM ".$table_prefix.$sql_table." LIMIT 1"); 
     $column = sed_sql_fetchfield($fieldsres, 0); 
     $column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
     
-		$step1 = sed_sql_query("DELETE FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$sql_table'");    
-    
-    $sql = "ALTER TABLE $sql_table DROP ".$column_prefix."_".$name; 
-    $step2 = sed_sql_query($sql); 
-    return $step1&&$step2; 
+	$step1 = sed_sql_query("UPDATE $db_dic SET 
+		dic_extra_location = '', 
+		dic_extra_type = '', 
+		dic_extra_size = '' 
+		WHERE dic_code = '".$name."'");  
+  
+    $step2 = sed_sql_query("ALTER TABLE ".$table_prefix.$sql_table." DROP ".$column_prefix."_".$name); 
+    return TRUE; 
 } 
+
+/** 
+ * Build extra field 
+ */ 
+function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data = array(), $importrowname) 
+{ 
+    global $sed_dic; 
+    
+    foreach($extrafields as $i => $row) 
+    {        
+        $t1 = $tpl_tag.'_'.strtoupper($row['code']);
+        $t3 = $tpl_tag.'_'.strtoupper($row['code'].'_TITLE'); 
+        $t4 = $tpl_tag.'_'.strtoupper($row['code'].'_DESC'); 
+
+        switch($row['type']) 
+        { 
+            case 'textinput': 
+                $t2 = sed_textbox($importrowname.$row['code'], $data[$rowname.'_'.$row['code']], $row['form_size'], $row['form_maxsize']);
+            break; 
+            
+            case "textarea": 
+                $t2 = sed_textarea($importrowname.$row['code'], $data[$rowname.'_'.$row['code']], $row['form_rows'], $row['form_cols']);
+            break; 
+            
+            case "select":                 
+                $t2 = sed_selectbox($data[$rowname.'_'.$row['code']], $importrowname.$row['code'], $row['terms']);  
+            break; 
+            
+            case "checkbox": 
+                $t2 = sed_checkbox($importrowname.$row['code'], $row['terms'], $data[$rowname.'_'.$row['code']]);
+            break;
+             
+            case "radio": 
+                $t2 = sed_radiobox($importrowname.$row['code'], $row['terms'], $data[$rowname.'_'.$row['code']]);
+            break; 
+        } 
+        
+        $return_arr[$t1] = $t2;
+        $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title']; 
+        $return_arr[$t4] = $row['form_desc']; 
+    } 
+    return $return_arr; 
+} 
+
+/** 
+ * Show extra field 
+ */ 
+function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data) 
+{ 
+    global $sed_dic; 
+    
+    foreach($extrafields as $i => $row) 
+    {        
+        $t1 = $tpl_tag.'_'.strtoupper($row['code']);
+
+        switch($row['type']) 
+        { 
+            case 'textinput': 
+                $t2 = $data[$rowname.'_'.$row['code']];
+            break; 
+            
+            case "textarea": 
+                 $t2 = $data[$rowname.'_'.$row['code']];
+            break; 
+            
+            case "select":                 
+                $t2 = $row['terms'][$data[$rowname.'_'.$row['code']]];  
+            break; 
+            
+            case "checkbox":                
+                $data_arr = explode(',', $data[$rowname.'_'.$row['code']]);
+                $res_arr = array();
+                foreach ($data_arr as $k => $v)
+                {
+					$res_arr[] = $row['terms'][$v];
+				}
+                $t2 = implode(', ', $res_arr);
+            break;
+             
+            case "radio": 
+                $t2 = $row['terms'][$data[$rowname.'_'.$row['code']]];
+            break; 
+        } 
+        
+        $return_arr[$t1] = $t2;
+    } 
+    return $return_arr; 
+} 
+
 
 	
 /* ============== FLAGS AND COUNTRIES (ISO 3166) =============== */
