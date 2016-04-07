@@ -25,6 +25,11 @@ $w = sed_import('w','G','ALP',4);
 $o = sed_import('o','G','ALP',16);
 $p = sed_import('p','G','ALP',16);
 
+// ---------- Extra fields - getting
+$extrafields = array(); 
+$extrafields = sed_extrafield_get('pages');  
+$number_of_extrafields = count($extrafields);
+
 if ($c=='all' || $c=='system')
 	{
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
@@ -167,14 +172,12 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = $sed_cat[$c]['title'];
 $out['subdesc'] = $sed_cat[$c]['desc'];
 
-
 /**/
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('listtitle', $title_tags, $title_data);
 /**/
-
 
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
@@ -215,7 +218,7 @@ $t->assign(array(
 	"LIST_COMMENTS_DISPLAY" => $list_comments_display,
 	"LIST_RATINGS" => $list_ratings,
 	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
-  "LIST_RSS" => sed_url("rss", "m=pages&c=".$c),
+	"LIST_RSS" => sed_url("rss", "m=pages&c=".$c),
 	"LIST_EXTRATEXT" => $extratext,
 	"LIST_SUBMITNEWPAGE" => $submitnewpage
 	));
@@ -228,7 +231,7 @@ if (!$sed_cat[$c]['group'])
 	"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 	"LIST_TOP_TOTALPAGES" => $totalpages,
 	"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-  <a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Title'],
+	<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Title'],
 	"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
 	<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Key'],
 	"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
@@ -242,7 +245,7 @@ if (!$sed_cat[$c]['group'])
 	"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
 	<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
 	"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-  <a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Date'],
+	<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Date'],
 	"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
 	<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Author'],
 	"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
@@ -252,6 +255,17 @@ if (!$sed_cat[$c]['group'])
 	"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
 	<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits']
 		));
+
+	// ----- Extra fields 
+	if($number_of_extrafields > 0) 
+		{ 
+		foreach($extrafields as $row) 
+			{ 
+			$extratitle = isset($L['page_'.$row['code'].'_title']) ? $L['page_'.$row['code'].'_title'] : $row['title']; 
+			$t->assign('LIST_TOP_'.strtoupper($row['code']), "<a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=asc&o=$o&p=$p")."\">$sed_img_down</a><a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=desc&o=$o&p=$p")."\">$sed_img_up</a> $extratitle"); 
+			} 
+		}
+	//--------------- 
 	}
 
 $ii=0;
@@ -299,9 +313,9 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	$jj++;
 	
-  $sys['catcode'] = $pag['page_cat'];
-  
-  $pag['page_desc'] = sed_cc($pag['page_desc']);
+	$sys['catcode'] = $pag['page_cat'];
+
+	$pag['page_desc'] = sed_cc($pag['page_desc']);
 	$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']) : sed_url("page", "al=".$pag['page_alias']);
 
 	if (!empty($pag['page_url']) && $pag['page_file'])
@@ -313,10 +327,10 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 	else
 		{ $pag['page_fileicon'] = ''; }
 
-  $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
-  
-  $pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
-  $pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
+	$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+
+	$pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
+	$pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
 
 	$item_code = 'p'.$pag['page_id'];
 	$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
@@ -350,6 +364,16 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_ADMIN" => $pag['admin'],
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 			));
+			
+	// ---------- Extra fields - getting
+	if(count($extrafields) > 0) 
+		{ 
+		$extra_array = sed_build_extrafields_data('page', 'LIST_ROW', $extrafields, $pag);
+		} 
+  
+	$t->assign($extra_array); 
+	// ----------------------				
+			
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
