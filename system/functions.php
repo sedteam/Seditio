@@ -2815,11 +2815,11 @@ function sed_radiobox($name, $data, $check_data = '')
 		$jj++;
 		if ($key == $check_data) 
 			{
-			$result .= '<input type="radio" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key. '" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			$result .= '<input type="radio" class="sedradiobox" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key. '" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
 			} 
 		else 
 			{
-			$result .= '<input type="radio" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			$result .= '<input type="radio" class="sedradiobox" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
 			}
 		}
 		
@@ -2879,11 +2879,11 @@ function sed_checkbox($name, $data, $check_data = FALSE)
 		$jj++;
 		if (is_array($check_data) && in_array($key, $check_data)) 
 			{
-			$result .= '<input type="checkbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			$result .= '<input type="checkbox" class="sedcheckbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
 			} 
 		else 
 			{
-			$result .= '<input type="checkbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+			$result .= '<input type="checkbox" class="sedcheckbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
 			}
 		}
 		
@@ -4792,6 +4792,8 @@ function sed_xp()
 function sed_extrafield_get($sql_table) 
 { 
     global $sed_dic, $cfg;
+    if (!empty($sed_dic))
+    {
     foreach ($sed_dic as $key => $row)
     {
         if ($row['extra_location'] == $sql_table)
@@ -4800,6 +4802,7 @@ function sed_extrafield_get($sql_table)
         }
     }
     return $res;   
+    }
 } 
 
 /** 

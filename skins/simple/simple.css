@@ -428,7 +428,7 @@ input[type="checkbox"] {
 }
 
 
-input[type=radio] + label, input[type=checkbox] + label {
+.sedradiobox + label, .sedcheckbox + label {
 	display: inline-block;
 	cursor: pointer;
 	position: relative;
@@ -439,11 +439,12 @@ input[type=radio] + label, input[type=checkbox] + label {
 	height:18px;
 }
 
-input[type=radio],
-input[type=checkbox] {
+.sedradiobox,
+.sedcheckbox {
 	display: none;
 }
-input[type=radio] + label:before, input[type=checkbox] + label:before {
+
+.sedradiobox + label:before, .sedcheckbox + label:before {
 	content: "";
 	display: inline-block;
 	width: 16px;
@@ -466,15 +467,15 @@ input[type=radio] + label:before, input[type=checkbox] + label:before {
     white-space: nowrap;		
 }
 
-input[type=radio] + label:before {
+.sedradiobox + label:before {
 	border-radius: 9px;
 }
 
-input[type=checkbox] + label:before {
+.sedcheckbox + label:before {
     border-radius: 3px;
 }
 
-input[type=radio]:checked + label:before {
+.sedradiobox:checked + label:before {
     content: "\2022";
     color: #444;
     font-size: 30px;
@@ -482,13 +483,13 @@ input[type=radio]:checked + label:before {
     line-height: 18px;
 }
 
-input[type=checkbox]:checked + label:before {
+.sedcheckbox:checked + label:before {
 	content: "\2713";
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
 	font-size: 15px;
 	color: #444;
 	text-align: center;
-    line-height: 15px;
+  line-height: 15px;
 }
 
 
