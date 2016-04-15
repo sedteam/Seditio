@@ -549,8 +549,8 @@ $disp_upload .= "<table class=\"cells striped\"><tr><td colspan=\"3\" style=\"ve
 
 $disp_upload .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($maxfile*1024)."\" />";
 $disp_upload .= $L['Folder']." : ".sed_selectbox_folders($userid, "", $f);
-$disp_upload .= ($cfg['gallery_imgmaxwidth']>0) ? " &nbsp; &nbsp; ".sprintf($L['pfs_resize'], $cfg['gallery_imgmaxwidth'])." : <input type=\"checkbox\" class=\"checkbox\" name=\"nresize\" />" : '';
-$disp_upload .= (!empty($cfg['gallery_logofile'])) ? " &nbsp; &nbsp; ".$L['pfs_addlogo']." : <input type=\"checkbox\" class=\"checkbox\" name=\"naddlogo\" /> &nbsp;  <img src=\"".$cfg['gallery_logofile']."\" alt=\"\" />" : '';
+$disp_upload .= ($cfg['gallery_imgmaxwidth']>0) ? " &nbsp; &nbsp; ".sprintf($L['pfs_resize'], $cfg['gallery_imgmaxwidth'])." : ".sed_checkbox('nresize') : '';
+$disp_upload .= (!empty($cfg['gallery_logofile'])) ? " &nbsp; &nbsp; ".$L['pfs_addlogo']." : ".sed_checkbox('naddlogo')." &nbsp;  <img src=\"".$cfg['gallery_logofile']."\" alt=\"\" />" : '';
 
 $disp_upload .= "</td></tr>";
 $disp_upload .= "<tr><td class=\"coltop\">&nbsp;</td><td class=\"coltop\">".$L['Title']."</td>";

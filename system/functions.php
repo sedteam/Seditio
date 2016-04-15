@@ -2867,28 +2867,33 @@ function sed_textarea($name, $value, $rows, $cols)
  * @return string 
  */ 
 
-function sed_checkbox($name, $data, $check_data = FALSE)
-	{
-	
-	if (!is_array($data)) $data = explode(',', $data); 		
-	if (!is_array($check_data)) $check_data = explode(',', $check_data);
-	
-	$jj = 0;
-	foreach ($data as $key => $v) 
-		{
-		$jj++;
-		if (is_array($check_data) && in_array($key, $check_data)) 
-			{
-			$result .= '<input type="checkbox" class="sedcheckbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
-			} 
-		else 
-			{
-			$result .= '<input type="checkbox" class="sedcheckbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
-			}
-		}
-		
-	return($result);	
-	
+function sed_checkbox($name, $data = '', $check_data = FALSE)
+	{	
+	if (empty($data))
+    {
+       $result = ($check_data) 
+          ? '<input type="checkbox" class="sedcheckbox" id="'.$name.'" name="'.$name.'" checked /><label for="'.$name.'"></label>'
+          : '<input type="checkbox" class="sedcheckbox" id="'.$name.'" name="'.$name.'" /><label for="'.$name.'"></label>';
+    }
+  else
+    {    
+      if (!is_array($data)) $data = explode(',', $data); 		
+    	if (!is_array($check_data)) $check_data = explode(',', $check_data);    	
+    	$jj = 0;
+    	foreach ($data as $key => $v) 
+    		{
+    		$jj++;
+    		if (is_array($check_data) && in_array($key, $check_data)) 
+    			{
+    			$result .= '<input type="checkbox" class="sedcheckbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'" checked /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+    			} 
+    		else 
+    			{
+    			$result .= '<input type="checkbox" class="sedcheckbox" id="'.$name."_".$jj.'" name="'.$name.'[]'.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label>';
+    			}
+    		}
+  	}	
+	return($result);		
 	}
 
 /** 

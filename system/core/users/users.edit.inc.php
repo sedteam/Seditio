@@ -270,7 +270,7 @@ if ($a=='update')
 		}
 	}
 
-$user_form_delete = ($sys['user_istopadmin']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"0\" checked=\"checked\" />".$L['No']."<br />+ ".$L['PFS'].":<input type=\"checkbox\" class=\"checkbox\" name=\"ruserdelpfs\" />" : $L['na'];
+$user_form_delete = ($sys['user_istopadmin']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"0\" checked=\"checked\" />".$L['No']."<br />+ ".$L['PFS'].":".sed_checkbox('ruserdelpfs') : $L['na'];
 
 $user_form_hideemail = ($urr['user_hideemail']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" checked=\"checked\" />".$L['No'];
 
