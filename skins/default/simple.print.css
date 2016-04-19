@@ -1,0 +1,205 @@
+/* ============ Skin CSS =============================*/
+
+body {
+  font-size:13px;
+}
+
+/* #Links
+================================================== */
+	a, a:visited {color: #5ca20d; text-decoration: none; outline: 0; -webkit-transition: color 0.1s ease-in-out; -moz-transition: color 0.1s ease-in-out; -o-transition: color 0.1s ease-in-out; -transition: color 0.1s ease-in-out;}
+	a:hover, a:focus { color: #888; }
+
+#print
+ {
+  background: #fff;
+  width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+#header {
+  width:100%;
+  height:90px;
+  float:left;
+  clear:both;
+}
+
+.leftcolumn {
+  float:left;
+  width:50%;
+}
+
+.rightcolumn {
+  float:right;
+  width:50%;
+  text-align:right;
+}
+
+
+/* =========== Logo & Slogan ========== */
+
+#logo {
+	margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#logo a img {
+	float: left
+}
+
+.logos {
+  float:left;
+  display:block;
+  width:114px;
+  height:24px
+}
+
+#slogan {
+	color: #888;
+	border-left: 1px solid #e9e9e9;
+	margin: 0 0 0 20px;
+	padding: 5px 0 5px 20px;
+	float: left
+}
+
+/* ============== Various ============== */
+
+.disp {
+	padding: 12px;
+	margin: 0;
+}
+.block {
+	padding: 8px;
+	margin: 8px;
+	background-color: #F6F6F6;
+}
+.error {
+	padding: 48px;
+	margin: 0;
+	color: #CC1212;
+	font-size: 120%;
+	text-align: center;
+}
+.codetitle {
+	font-size: 10px;
+	color: #59739B;
+	padding: 2px;
+	margin-top: 5px;
+}
+.code {
+	font-size: 11px;
+	color: #59739B;
+	background-color: #EFF0C2;
+	padding: 2px;
+	margin-bottom: 5px;
+	font-family: monospace;
+}
+.valid {
+	height: 48px;
+	text-align: center;
+	vertical-align: middle;
+}
+.download {
+	font-size: 110%;
+	text-align: center;
+	background-color: #E8E8E8;
+	padding: 16px;
+	margin-top: 16px;
+}
+.paging {
+	text-align: center;
+	padding: 8px;
+	width: 100%;
+}
+.coltop {
+	font-weight: normal;
+	color: #f6f6f6;
+	text-align: center;
+	color: rgba(255,255,255,0.9);
+	background-color: #4c4c4c!important;
+}
+
+.cattop {
+	background-color: #e8e7e7!important;
+}
+
+.odd { background-color: #ffffff;  }
+.even { background-color: #f7f7f7;  }
+
+.centerall {
+	text-align: center;
+	vertical-align: middle;
+}
+.desc {
+	font-size: 90%;
+	padding: 3px;
+	color: #646464;
+  font-style:italic;
+}
+.spoiler {
+	padding: 8px;
+	margin: 8px;
+	border: 1px dashed #CCCCCC;
+	background-color: #DBE5E9;
+}
+.more {
+	font-size: 90%;
+	margin-left: 8px;
+}
+
+.colleft {
+	float: left;
+	margin: 0px 4px 0px 4px;
+}
+.colright {
+	float: right;
+	margin: 0px 4px 0px 4px;
+}
+
+.signature {
+	color: #979797;
+	font-size: 90%;
+	max-height: 96px;
+	overflow: auto;
+	margin-top: 16px;
+}
+.signature a {
+	color: #000000;
+}
+.fhead {
+	font-size: 140%;
+	margin: 0;
+	letter-spacing: -1px;
+	font-weight: normal;
+	background-color: #FFCC00;
+}
+.fblock {
+	background-color: #FF0000;
+}
+
+/* ============== Tables ============== */
+
+table.flat {
+	width: 100%;
+}
+table.main {
+	width: 100%;
+}
+table.cells {
+	width: 100%;
+}
+table.list {
+	width: 100%;
+}
+table.striped td {
+  vertical-align:middle;
+}
+
+table.hovered tbody tr:hover td,
+table.hovered thead tr:hover th {
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.2);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+}

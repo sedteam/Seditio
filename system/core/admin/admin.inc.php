@@ -19,6 +19,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
 $c = sed_import('c','G','TXT');
 $id = sed_import('id','G','TXT');
+$m = sed_import('m','G','ALP', 24);
+$mn = sed_import('mn','G','ALP', 24);
 $po = sed_import('po','G','TXT');
 $p = sed_import('p','G','TXT');
 $l = sed_import('l','G','TXT');
@@ -75,29 +77,30 @@ if (sed_auth('admin', 'a', 'A'))
 		
 		$t -> assign(array( 
 		    "ADMINMENU_CONFIG_URL" => sed_url('admin', "m=config"), 
-		    "ADMINMENU_CONFIG_URL_CLASS" => ($_GET['m'] == "config") ? "current" : "",
+		    "ADMINMENU_CONFIG_URL_CLASS" => ($m == "config") ? "current" : "",
 		    "ADMINMENU_CONFIG" => $config_menu
 		));		
 		$t -> parse("ADMINMENU.CONFIG_MENU"); 
 	}
+
 // Pages menu 
 
 $page_menu .= "<ul>";
-$page_menu .= ($_GET['mn'] == 'queue') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'))."</li>";
-$page_menu .= ($_GET['m'] == 'page' && $_GET['s'] == 'add') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
-$page_menu .= ($_GET['m'] == 'page' && $_GET['s'] == 'manager') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'))."</li>";
+$page_menu .= ($mn == 'queue') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'))."</li>";
+$page_menu .= ($m == 'page' && $s == 'add') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
+$page_menu .= ($m == 'page' && $s == 'manager') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'))."</li>";
 
 if (sed_auth('admin', 'a', 'A'))
 {
-	$page_menu .= ($_GET['mn'] == 'catorder') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>"; 
-	$page_menu .= ($_GET['mn'] == 'structure') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['adm_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
+	$page_menu .= ($mn == 'catorder') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>"; 
+	$page_menu .= ($mn == 'structure') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['adm_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=structure"), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
 }
 
 $page_menu .= "</ul>";
 
 $t -> assign(array( 
     "ADMINMENU_PAGE_URL" => sed_url('admin', "m=page"),
-    "ADMINMENU_PAGE_URL_CLASS" => ($_GET['m'] == "page" || $_GET['m'] == "pageadd") ? "current" : "",
+    "ADMINMENU_PAGE_URL_CLASS" => ($m == "page" || $m == "pageadd") ? "current" : "",
     "ADMINMENU_PAGE" => $page_menu
 ));    
      
@@ -109,13 +112,13 @@ $t -> parse("ADMINMENU.PAGE_MENU");
 if (sed_auth('admin', 'a', 'A'))
 {
   $forums_menu .= "<ul class=\"arrow_list\">";
-  $forums_menu .= ($_GET['m'] == "forums" && empty($s)) ? "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'))."</li>";
-  $forums_menu .= ($_GET['s'] == "structure") ? "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'))."</li>";
+  $forums_menu .= ($m == "forums" && empty($s)) ? "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'))."</li>";
+  $forums_menu .= ($s == "structure") ? "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'))."</li>";
   $forums_menu .= "</ul>";
 
   $t -> assign(array( 
       "ADMINMENU_FORUMS_URL" => sed_url('admin', "m=forums"),
-      "ADMINMENU_FORUMS_URL_CLASS" => ($_GET['m'] == "forums") ? "current" : "",
+      "ADMINMENU_FORUMS_URL_CLASS" => ($m == "forums") ? "current" : "",
       "ADMINMENU_FORUMS" => $forums_menu
   )); 
   
@@ -123,28 +126,28 @@ if (sed_auth('admin', 'a', 'A'))
 
   $t -> assign(array( 
       "ADMINMENU_USERS_URL" => sed_url('admin', "m=users"),
-      "ADMINMENU_USERS_URL_CLASS" => ($_GET['m'] == 'users') ? 'current' : ''    
+      "ADMINMENU_USERS_URL_CLASS" => ($m == 'users') ? 'current' : ''    
   ));
   
   $t -> parse("ADMINMENU.USERS_MENU");
   
   $t -> assign(array(    
       "ADMINMENU_PLUGINS_URL" => sed_url('admin', "m=plug"),
-      "ADMINMENU_PLUGINS_URL_CLASS" => ($_GET['m'] == 'plug') ? 'current' : ''     
+      "ADMINMENU_PLUGINS_URL_CLASS" => ($m == 'plug') ? 'current' : ''     
   ));  
 
   $t -> parse("ADMINMENU.PLUGINS_MENU");
 
   $t -> assign(array(   
       "ADMINMENU_LOG_URL" => sed_url('admin', "m=log"),
-      "ADMINMENU_LOG_URL_CLASS" => ($_GET['m'] == 'log') ? 'current' : ''      
+      "ADMINMENU_LOG_URL_CLASS" => ($m == 'log') ? 'current' : ''      
   ));
 
   $t -> parse("ADMINMENU.LOG_MENU");
 
   $t -> assign(array( 
       "ADMINMENU_TOOLS_URL" => sed_url('admin', "m=tools"),
-      "ADMINMENU_TOOLS_URL_CLASS" => ($_GET['m'] == 'tools') ? 'current' : ''    
+      "ADMINMENU_TOOLS_URL_CLASS" => ($m == 'tools') ? 'current' : ''    
   ));
   
   $t -> parse("ADMINMENU.TOOLS_MENU");
@@ -153,7 +156,7 @@ if (sed_auth('admin', 'a', 'A'))
 
 $t -> assign(array( 
     "ADMINMENU_URL" => sed_url('admin'), 
-    "ADMINMENU_URL_CLASS" => (empty($_GET['m'])) ? 'current' : ''     
+    "ADMINMENU_URL_CLASS" => (empty($m)) ? 'current' : ''     
 )); 
  
 $t -> parse("ADMINMENU"); 
@@ -194,16 +197,16 @@ $t->assign(array (
 
 $t->parse("MAIN.ADMIN_USER");		
     
-if (!empty($msg)) 
+if (!empty($msg) || !empty($adminwarnings)) 
   {
   require("system/lang/$lang/message.lang.php");
   	
   $msg_type = (array_key_exists($msg, $cfg['msgtype'])) ? $cfg['msgtype_name'][$cfg['msgtype'][$msg]] : $cfg['msgtype_name']['i'];	
 
   $t->assign(array(
-    "ADMIN_MSG_CLASS" => $msg_type,
-    "ADMIN_MSG_TITLE" => $L["msg".$msg."_0"],
-    "ADMIN_MSG_TEXT" => $L["msg".$msg."_1"]
+    "ADMIN_MSG_CLASS" => (!empty($adminwarnings)) ? $cfg['msgtype_name']['a'] : $msg_type,
+    "ADMIN_MSG_TITLE" => (!empty($adminwarnings)) ? $L['adm_warnings'] : $L["msg".$msg."_0"],
+    "ADMIN_MSG_TEXT" => (!empty($adminwarnings)) ? $adminwarnings : $L["msg".$msg."_1"]
   ));
   
   $t->parse("MAIN.ADMIN_MESSAGE");

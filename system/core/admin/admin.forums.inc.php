@@ -23,6 +23,8 @@ sed_block($usr['isadmin']);
 $id = sed_import('id','G','INT');
 
 $adminpath[] = array (sed_url("admin", "m=forums"), $L['Forums']);
+
+
 /*$adminmain = "<h2><img src=\"system/img/admin/forums.png\" alt=\"\" /> ".$L['Forums']."</h2>"; */
 
 /*

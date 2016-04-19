@@ -17,25 +17,18 @@ Description=Administration panel
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-
 $adminhelp = $L['adm_help_versions'];
 
-$adminmain .= "<div class=\"content-box\">";
-$adminmain .= "<div class=\"content-box-header\">";					
-$adminmain .= "				<h3>".$L['adm_clocks']."</h3>";					
-$adminmain .= "</div>";
+$t = new XTemplate(sed_skinfile('admin.config.time', true)); 
 
-$adminmain .= "<div class=\"content-box-content\">";
-
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td>".$L['adm_time1']."</td><td> ".date("Y-m-d H:i")." </td></tr>";
-$adminmain .= "<tr><td>".$L['adm_time2']."</td><td> ".gmdate("Y-m-d H:i")." GMT </td></tr>";
-$adminmain .= "<tr><td>".$L['adm_time3']."</td>";
-$adminmain .= "<td>".$usr['gmttime']." </td></tr>";
-$adminmain .= "<tr><td>".$L['adm_time4']." : </td>";
-$adminmain .= "<td>".sed_build_date($cfg['dateformat'], $sys['now_offset'])." ".$usr['timetext']." </td></tr>";
-$adminmain .= "</table>";
-
-$adminmain .= "</div></div>";
+	$t -> assign(array( 
+		"CONFIG_TIME_1" => date("Y-m-d H:i"),
+		"CONFIG_TIME_2" => gmdate("Y-m-d H:i"),
+		"CONFIG_TIME_3" => $usr['gmttime'],
+		"CONFIG_TIME_4" => sed_build_date($cfg['dateformat'], $sys['now_offset'])." ".$usr['timetext']
+	));
+		 
+$t -> parse("ADMIN_CONFIG_TIME");
+$adminmain .= $t -> text("ADMIN_CONFIG_TIME");  
 
 ?>

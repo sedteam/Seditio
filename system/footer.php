@@ -66,7 +66,7 @@ if (is_array($extp))
 /* ===== */
 
 if ($cfg['enablecustomhf'])
-	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
+	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location)), $adminskin); }
 else
 	{ $mskin = sed_skinfile('footer', $adminskin); }
 	
