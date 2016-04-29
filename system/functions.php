@@ -4835,7 +4835,7 @@ function sed_extrafield_buildvar($extrafields, $var_prefix, $table_prefix)
 			$import = sed_import($var_prefix.$row['code'], 'P', $row['vartype']);	
 			$import = (is_array($import)) ? implode(',', sed_array_buildvars($import)) : $import;	 
 			$res[$table_prefix.'_'.$row['code']] = $import; 
-			} 	
+			}	
 		}
     return $res;
 }     
@@ -4890,6 +4890,7 @@ function sed_extrafield_add($sql_table, $name, $type, $size)
 		case "text": $sqltype = "TEXT"; break; 
 		case "int": $sqltype = "VARCHAR(".$size.")"; break; 
 		case "tinyint": $sqltype = "TINYINT(".$size.")"; break; 
+		case "boolean": $sqltype = "TINYINT(1)"; break; 		
 		} 
      
     $step2 = sed_sql_query("ALTER TABLE ".$table_prefix.$sql_table." ADD ".$column_prefix."_$name $sqltype "); 
@@ -4930,6 +4931,7 @@ function sed_extrafield_update($sql_table, $name, $type, $size)
 		case "text": $sqltype = "TEXT"; break; 
 		case "int": $sqltype = "INT(".$size.")"; break; 
 		case "tinyint": $sqltype = "TINYINT(".$size.")"; break; 
+		case "boolean": $sqltype = "TINYINT(1)"; break; 
 		} 
      
     $step2 = sed_sql_query("ALTER TABLE ".$table_prefix.$sql_table." CHANGE ".$column_prefix."_$name ".$column_prefix."_$name $sqltype ");
@@ -4977,7 +4979,10 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data = array()
         $t1 = $tpl_tag.'_'.strtoupper($row['code']);
         $t3 = $tpl_tag.'_'.strtoupper($row['code'].'_TITLE'); 
         $t4 = $tpl_tag.'_'.strtoupper($row['code'].'_DESC'); 
+        $t5 = $tpl_tag.'_'.strtoupper($row['code'].'_MERA'); 
 
+		$data[$rowname.'_'.$row['code']] = (empty($data[$rowname.'_'.$row['code']]) && !empty($row['term_default'])) ? $row['term_default'] : $data[$rowname.'_'.$row['code']];
+        
         switch($row['type']) 
         { 
             case 'textinput': 
@@ -5004,6 +5009,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data = array()
         $return_arr[$t1] = $t2;
         $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title']; 
         $return_arr[$t4] = $row['form_desc']; 
+        $return_arr[$t5] = $row['form_mera']; 
     } 
     return $return_arr; 
 } 

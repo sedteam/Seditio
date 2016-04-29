@@ -60,7 +60,6 @@ if ($a=='update')
 	$rpageextra9 = sed_import('rpageextra9','P','HTM');
 	$rpageextra10 = sed_import('rpageextra10','P','HTM');
   
-	$rpageprice = sed_import('rpageprice','P','TXT'); 
 	$rpagethumb = sed_import('rpagethumb','P','TXT');       
   
 	$rpagetype = sed_import('rpagetype','P','INT');
@@ -165,15 +164,12 @@ if ($a=='update')
 				
 			// ------ Extra fields 
 			if(count($extrafields) > 0) 
-			{ 
-				foreach($extrafields as $i => $row) 
 				{ 
-					if(!is_null($rpageextrafields['page_'.$row['code']])) 
+				foreach($extrafields as $i => $row) 
 					{ 
-						$ssql_extra .= ", page_".$row['code']." = "."'".sed_sql_prep($rpageextrafields['page_'.$row['code']])."'"; 
+					$ssql_extra .= ", page_".$row['code']." = "."'".sed_sql_prep($rpageextrafields['page_'.$row['code']])."'"; 
 					} 
 				} 
-			} 
 			// ----------------------				
 				
 	
@@ -213,7 +209,6 @@ if ($a=='update')
 				page_seo_title = '".sed_sql_prep($rpageseotitle)."',
 				page_seo_desc = '".sed_sql_prep($rpageseodesc)."',				
 				page_seo_keywords = '".sed_sql_prep($rpageseokeywords)."',
-				page_price = '".sed_sql_prep($rpageprice)."',
 				page_thumb = '".sed_sql_prep($rpagethumb)."'".$ssql_extra."          				
 				WHERE page_id='$id'");
 
@@ -351,7 +346,6 @@ $t->assign(array(
 	"PAGEEDIT_FORM_EXTRA8" => sed_textbox('rpageextra8', $pag['page_extra8']),
 	"PAGEEDIT_FORM_EXTRA9" => sed_textbox('rpageextra9', $pag['page_extra9']),
 	"PAGEEDIT_FORM_EXTRA10" => sed_textbox('rpageextra10', $pag['page_extra10']),
-	"PAGEEDIT_FORM_PRICE" => sed_textbox('rpageprice', $pag['page_price'], 16, 16),
 	"PAGEEDIT_FORM_THUMB" => sed_textbox('rpagethumb', $pag['page_thumb']),
 	"PAGEEDIT_FORM_TITLE" => sed_textbox('rpagetitle', $pag['page_title']),
 	"PAGEEDIT_FORM_DESC" => sed_textbox('rpagedesc', $pag['page_desc']),

@@ -596,7 +596,7 @@ $sed_img_right = $out['img_right'];
 /* ======== Directories ======== */
 
 $dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
-$dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT');
+$dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT', 'boolean' => 'BOL');
 
 if (!$sed_dic && ($cfg['version'] >= 177))
 	{
@@ -606,7 +606,7 @@ if (!$sed_dic && ($cfg['version'] >= 177))
 		{	
 		while ($row = sed_sql_fetchassoc($sql))
 			{
-			if ($row['dic_type'] == 3) 
+			if ($row['dic_type'] == 3 && $row['dic_extra_type'] != 'boolean') 
 				{ $vartype = 'ARR'; }
 			else 
 				{ $vartype = (!empty($row['dic_extra_type'])) ? $dic_var_type[$row['dic_extra_type']] : 'TXT'; }

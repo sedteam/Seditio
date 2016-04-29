@@ -65,7 +65,6 @@ if ($a=='add')
 	$newpageextra9 = sed_import('newpageextra9','P','HTM');
 	$newpageextra10 = sed_import('newpageextra10','P','HTM');
 
-	$newpageprice = sed_import('newpageprice','P','TXT');
 	$newpagethumb = sed_import('newpagethumb','P','TXT');  
       
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
@@ -130,19 +129,16 @@ if ($a=='add')
 
     // ------ Extra fields 
     if(count($extrafields) > 0) 
-    { 
-        foreach($extrafields as $i => $row) 
-        { 
-            if(!is_null($newpageextrafields['page_'.$row['code']])) 
-            { 
-                $ssql_extra_columns .= ', page_'.$row['code']; 
-                $ssql_extra_values .= ", '".sed_sql_prep($newpageextrafields['page_'.$row['code']])."'"; 
-            } 
-        } 
-    } 
+		{ 
+		foreach($extrafields as $i => $row) 
+			{ 
+			$ssql_extra_columns .= ', page_'.$row['code']; 
+			$ssql_extra_values .= ", '".sed_sql_prep($newpageextrafields['page_'.$row['code']])."'"; 
+			} 
+		} 
 	// ----------------------
 		
-		$sql = sed_sql_query("INSERT into $db_pages
+	$sql = sed_sql_query("INSERT into $db_pages
 			(page_state,
 			page_type,
 			page_cat,
@@ -176,7 +172,6 @@ if ($a=='add')
 			page_seo_title,
 			page_seo_desc,
 			page_seo_keywords,
-			page_price,
 			page_thumb".$ssql_extra_columns."
 			)
 			VALUES
@@ -212,8 +207,7 @@ if ($a=='add')
 			".(int)$newpageallowratings.",
 			'".sed_sql_prep($newpageseotitle)."',
 			'".sed_sql_prep($newpageseodesc)."',			
-			'".sed_sql_prep($newpageseokeywords)."',
-			'".sed_sql_prep($newpageprice)."',      
+			'".sed_sql_prep($newpageseokeywords)."',     
 			'".sed_sql_prep($newpagethumb)."'".$ssql_extra_values.")");
 
 		/* === Hook === */
@@ -261,7 +255,6 @@ if (($a=='clone') && ($id > 0))
  	$newpageextra9 = $row1['page_extra9'];
 	$newpageextra10 = $row1['page_extra10'];
   
-	$newpageprice = $row1['page_price']; 
 	$newpagethumb = $row1['page_thumb'];    
   
 	$newpagetitle = $row1['page_title'];
@@ -381,7 +374,6 @@ $t->assign(array(
 	"PAGEADD_FORM_SEOTITLE" => sed_textbox('newpageseotitle', $newpageseotitle),
 	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', $newpageseodesc),
 	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', $newpageseokeywords),
- 	"PAGEADD_FORM_PRICE" => sed_textbox('newpageprice', $newpageprice, 16, 16),
 	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', $newpagethumb),
 	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', $newpageauthor, 16, 24),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),

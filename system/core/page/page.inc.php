@@ -249,7 +249,6 @@ $t->assign(array(
 	"PAGE_EXTRA8" => $pag['page_extra8'],
 	"PAGE_EXTRA9" => $pag['page_extra9'],
 	"PAGE_EXTRA10" => $pag['page_extra10'],
-	"PAGE_PRICE" => $pag['page_price'],
 	"PAGE_THUMB" => $pag['page_thumb'],
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],

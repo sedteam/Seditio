@@ -162,15 +162,13 @@ switch($mn)
 	$sql = sed_sql_query("SELECT d.*, t.* FROM $db_dic_items AS t LEFT JOIN $db_dic AS d ON t.ditem_dicid = d.dic_id WHERE t.ditem_id = '".$tid."' LIMIT 1");
 	$row = sed_sql_fetchassoc($sql);
 
-	$defval = ($row['ditem_defval'] > 0) ? sed_radiobox("radio", "idefval", 1, TRUE).$L['Yes']." ".sed_radiobox("radio", "idefval", 0, FALSE).$L['No'] :
-												sed_radiobox("radio", "idefval", 1, FALSE).$L['Yes']." ".sed_radiobox("radio", "idefval", 0, TRUE).$L['No'];
 	$t -> assign(array(
 		"DIC_TITLE" => sed_cc($row['dic_title']),
 		"DIC_ITEM_EDIT_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=update&tid='.$tid."&did=".$row['dic_id']),
 		"DIC_ITEM_EDIT_TITLE" => sed_textbox('ititle', $row['ditem_title']),
 		"DIC_ITEM_EDIT_CHILDRENDIC" => sed_selectbox($row['ditem_children'], 'ichildren', $dic_list),
 		"DIC_ITEM_EDIT_CODE" => sed_textbox('icode', $row['ditem_code']),
-		"DIC_ITEM_EDIT_DEFVAL" => $defval		
+		"DIC_ITEM_EDIT_DEFVAL" => sed_radiobox("idefval", $sed_yesno, $row['ditem_defval'])	
 	));			
 
 	$t -> parse("ADMIN_DIC.DIC_ITEM_EDIT");	  
@@ -216,7 +214,7 @@ switch($mn)
     $adminpath[] = array (sed_url("admin", "m=dic&mn=extra&did=".$did), $L['adm_dic_extra']);
     
     $location_arr = array('pages' => 'Pages', 'users' => 'Users', 'com' => 'Comments', 'forum_topics' => 'Forum topics');
-  	$type_arr = array('varchar' => 'VARCHAR', 'text' => 'TEXT', 'int' => 'INTEGER', 'tinyint' => 'TINY INTEGER');
+  	$type_arr = array('varchar' => 'VARCHAR', 'text' => 'TEXT', 'int' => 'INTEGER', 'tinyint' => 'TINY INTEGER', 'boolean' => 'BOOLEAN');
     
     for ($i = 1; $i <= 255; $i++) { $maxsize_arr[$i] = $i; }
 

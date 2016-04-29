@@ -23,17 +23,18 @@ sed_block($usr['auth_read']);
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=hits"), $L['Hits']);
 $adminhelp = $L['adm_help_hits'];
-$adminmain = "<h2><img src=\"system/img/admin/statistics.png\" alt=\"\" /> ".$L['Hits']."</h2>";
+
+//$adminmain = "<h2><img src=\"system/img/admin/statistics.png\" alt=\"\" /> ".$L['Hits']."</h2>";
 
 $f = sed_import('f','G','ALP',10);
 $v = sed_import('v','G','TXT',8);
+
+$t = new XTemplate(sed_skinfile('admin.hits', true)); 
 
 if ($f=='year' || $f=='month')
 	{
 	$adminpath[] = array (sed_url("admin", "m=hits&f=".$f."&v=".$v), "(".$v.")");
 	$sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
-	$adminmain .= "<h4>".$v." :</h4>";
-	$adminmain .= "<table class=\"cells striped\">";
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
@@ -49,14 +50,18 @@ if ($f=='year' || $f=='month')
 	foreach ($hits_d as $day => $hits)
 		{
 		$percentbar = floor(($hits / $hits_d_max) * 100);
-		$adminmain .= "<tr><td style=\"width:128px; text-align:center; padding:1px;\">".$day."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td><td>";
-		$adminmain .= "<div style=\"width:320px;\"><div class=\"bar_back\">";
-		$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
+		
+		$t -> assign(array( 		
+			"HITS_ROW_DAY" => $day,
+			"HITS_ROW_HITS" => $hits,
+			"HITS_ROW_PERCENTBAR" => $percentbar
+		));
+		
+		$t -> parse("ADMIN_HITS.YEAR_OR_MONTH.HITS_ROW"); 
+		
 		}
 
-	$adminmain .= "</table>";
+	$t -> parse("ADMIN_HITS.YEAR_OR_MONTH"); 
 	}
 else
 	{
@@ -67,8 +72,6 @@ else
 	$max_hits = $rowmax['stat_value'];
 
 	$L['adm_maxhits'] = (empty($L['adm_maxhits'])) ? "Maximum hitcount was reached %1\$s, %2\$s pages displayed this day." : $L['adm_maxhits']; 
-
-	$adminmain .= sprintf($L['adm_maxhits'], $max_date, $max_hits);
 
 	$ii = 0;
 	$hits_m = array();
@@ -89,54 +92,59 @@ else
 	$hits_m_max = max($hits_m);
 	$hits_y_max = max($hits_y);
 
-	$adminmain .= "<h4>".$L['adm_byyear']." :</h4>";
-	$adminmain .= "<table class=\"cells striped\">";
-
 	foreach ($hits_y as $year => $hits)
 		{
 		$percentbar = floor(($hits / $hits_y_max) * 100);
-		$adminmain .= "<tr><td style=\"width:80px;text-align:center; padding:1px;\">";
-		$adminmain .= "<a href=\"".sed_url("admin", "m=hits&f=year&v=".$year)."\">".$year."</a></td>";
-		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td><td>";
-		$adminmain .= "<div style=\"width:320px;\"><div class=\"bar_back\">";
-		$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
+		
+		$t -> assign(array( 
+            "HITS_YEAR_ROW_URL" => sed_url('admin', 'm=hits&f=year&v='.$year), 
+            "HITS_YEAR_ROW_YEAR" => $year, 
+            "HITS_YEAR_ROW_HITS" => $hits, 
+            "HITS_YEAR_ROW_PERCENTBAR" => $percentbar 
+            )); 		
+
+		$t -> parse("ADMIN_HITS.DEFAULT.HITS_YEAR_ROW"); 
+
 		}
-
-	$adminmain .= "</table>";
-
-	$adminmain .= "<h4>".$L['adm_bymonth']." :</h4>";
-	$adminmain .= "<table class=\"cells striped\">";
 
 	foreach ($hits_m as $month => $hits)
 		{
 		$percentbar = floor(($hits / $hits_m_max) * 100);
-		$adminmain .= "<tr><td style=\"width:80px; text-align:center; padding:1px;\">";
-		$adminmain .= "<a href=\"".sed_url("admin", "m=hits&f=month&v=".$month)."\">".$month."</a></td>";
-		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td>";
-		$adminmain .= "<td style=\"padding:1px;\">";
-		$adminmain .= "<div style=\"width:320px;\"><div class=\"bar_back\">";
-		$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
+		
+		$t -> assign(array( 
+            "HITS_MONTH_ROW_URL" => sed_url('admin', 'm=hits&f=month&v='.$month), 
+            "HITS_MONTH_ROW_MONTH" => $month, 
+            "HITS_MONTH_ROW_HITS" => $hits, 
+            "HITS_MONTH_ROW_PERCENTBAR" => $percentbar 
+            )); 		
+
+		$t -> parse("ADMIN_HITS.DEFAULT.HITS_MONTH_ROW"); 
 		}
-
-	$adminmain .= "</table>";
-
-	$adminmain .= "<h4>".$L['adm_byweek']." :</h4>";
-	$adminmain .= "<table class=\"cells striped\">";
 
 	foreach ($hits_w as $week => $hits)
 		{
 		$ex = explode ("-W", $week);
 		$percentbar = floor(($hits / $hits_w_max) * 100);
-		$adminmain .= "<tr><td style=\"width:80px; text-align:center; padding:1px;\">".$week."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td>";
-		$adminmain .= "<td style=\"padding:1px;\">";
-		$adminmain .= "<div style=\"width:320px;\"><div class=\"bar_back\">";
-		$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
+		
+		$t -> assign(array( 
+            "HITS_WEEK_ROW_WEEK" => $week, 
+            "HITS_WEEK_ROW_HITS" => $hits, 
+            "HITS_WEEK_ROW_PERCENTBAR" => $percentbar 
+            )); 		
+
+		$t -> parse("ADMIN_HITS.DEFAULT.HITS_WEEK_ROW"); 
 		}
-	$adminmain .= "</table>";
+
+	$t -> assign(array( 
+        "HITS_MAXHITS" => sprintf($L['adm_maxhits'], $max_date, $max_hits) 
+        )); 
+	
+	$t -> parse("ADMIN_HITS.DEFAULT");
+
 	}
+
+$t -> parse("ADMIN_HITS"); 
+
+$adminmain .= $t -> text("ADMIN_HITS");
 
 ?>
