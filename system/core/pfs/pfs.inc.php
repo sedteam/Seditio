@@ -471,6 +471,14 @@ while ($row = sed_sql_fetchassoc($sql))
 		$add_thumbnail = "";
 		$add_image = "";
 		} 
+		
+	/* === New Hook Sed 170 by Amro === */
+	$stndl_icons_list = "";
+	$stndl_icons_disp = "";
+	$extp = sed_getextplugins('pfs.stndl.icons');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* =============================== */		
 
 	$list_files .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more)."\" title=\"".$L['Delete']."\">".$out['img_delete']."</a></td>";
 	$list_files .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs" ,"m=edit&id=".$pfs_id."&".$more)."\" title=\"".$L['Edit']."\">".$out['img_edit']."</a></td>";
@@ -481,7 +489,13 @@ while ($row = sed_sql_fetchassoc($sql))
 	$list_files .= "<td>".$pfs_title."</td>";  
 	$list_files .= "<td style=\"text-align:right;\">".$row['pfs_count']."</td>";
 	$list_files .= ($f>0) ? "<td style=\"text-align:center;\">".$setassample."</td>" : '';	  
-	$list_files .= "<td style=\"text-align:center;\">".$add_thumbnail." ".$add_image." ".$add_file."</td>";  
+	
+	$list_files .= (empty($stndl_icons_list)) ? "<td style=\"text-align:center;\">".$add_thumbnail." ".$add_image." ".$add_file."</td>" : ""; 
+	
+  /*=== for hook stndl.icons ===*/
+	$list_files .= $stndl_icons_list;
+	/*======*/  	
+	 
   $list_files .= "</tr>";
 	$pfs_foldersize = $pfs_foldersize + $pfs_filesize;
 	}
@@ -522,7 +536,13 @@ if ($files_count>0 || $folders_count>0)
 		$disp_main .= "<td class=\"coltop\" style=\"width:40%;\">".$L['Title']."</td>";
 		$disp_main .= "<td class=\"coltop\">".$L['Hits']."</td>";
 		$disp_main .= ($f>0) ? "<td class=\"coltop\">".$L['pfs_setassample']."</td>" : '';
-		$disp_main .= "<td class=\"coltop\">&nbsp;</td>";   
+		
+		$disp_main .= (empty($stndl_icons_disp)) ? "<td class=\"coltop\">&nbsp;</td>" : ""; 
+		  
+		/*=== for hook stndl.icons ===*/
+		$disp_main .= $stndl_icons_disp;
+		/*======*/  
+		
 		$disp_main .= "</tr>";
 		$disp_main .= $list_files."</table>";
 		}

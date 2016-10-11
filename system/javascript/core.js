@@ -301,7 +301,7 @@ var sedjs = {
 								q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
 							}						
 							break;
-						case 'file':
+						case 'file':						
 							break;
 						}
 						break;			 

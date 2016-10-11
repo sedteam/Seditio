@@ -34,14 +34,17 @@ $filter_vars = array();
 $filter_sql = array();
 $sql_where = "";
 
-foreach ($extrafields as $key => $val)
-  {
-      if (in_array($val['vartype'], array('INT', 'BOL'))) 
-          { 
-          $filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
-          $filter_sql[] = (!empty($filter_vars['filter_'.$key])) ? " AND page_".$key." = '".$filter_vars['filter_'.$key]."'" : " ";
-          }  
-  }
+if (count($extrafields) > 0)
+{
+	foreach ($extrafields as $key => $val)
+	  {
+	      if (in_array($val['vartype'], array('INT', 'BOL'))) 
+	          { 
+	          $filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
+	          $filter_sql[] = (!empty($filter_vars['filter_'.$key])) ? " AND page_".$key." = '".$filter_vars['filter_'.$key]."'" : " ";
+	          }  
+	  }
+}
 
 $sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
 

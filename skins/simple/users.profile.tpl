@@ -24,7 +24,7 @@
 
 <!-- END: USERS_PROFILE_ERROR -->
 
-<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile">
+<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile" id="profile">
 
 <div><input type="hidden" name="userid" value="{USERS_PROFILE_ID}"><input type="hidden" name="curpassword" value="{USERS_PROFILE_PASSWORD}"></div>
 
@@ -125,6 +125,7 @@
 	<tr>
 		<td colspan="2" class="valid">
 		<input type="submit" class="submit btn" value="{PHP.skinlang.usersprofile.Update}">
+		
 		</td>
 	</tr>
 

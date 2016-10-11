@@ -48,7 +48,7 @@
 				<tr>
 					<td>{PHP.skinlang.pageedit.Title}</td>
 					<td>{PAGEEDIT_FORM_TITLE}</td>
-				</tr>
+				</tr>       
 			
 				<tr>
 					<td>{PHP.skinlang.pageedit.Description}</td>

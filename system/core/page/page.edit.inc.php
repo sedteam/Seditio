@@ -108,7 +108,8 @@ if ($a=='update')
 	$rpagedelete = sed_import('rpagedelete','P','BOL');
 	
 	// --------- Extra fields     
-	if ($number_of_extrafields > 0) $rpageextrafields = sed_extrafield_buildvar($extrafields, 'rpage', 'page');    
+	if ($number_of_extrafields > 0) $rpageextrafields = sed_extrafield_buildvar($extrafields, 'rpage', 'page');
+     
 	// ----------------------	
 
 	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
@@ -169,7 +170,7 @@ if ($a=='update')
 					{ 
 					$ssql_extra .= ", page_".$row['code']." = "."'".sed_sql_prep($rpageextrafields['page_'.$row['code']])."'"; 
 					} 
-				} 
+      	} 
 			// ----------------------				
 				
 	
@@ -348,7 +349,7 @@ $t->assign(array(
 	"PAGEEDIT_FORM_EXTRA10" => sed_textbox('rpageextra10', $pag['page_extra10']),
 	"PAGEEDIT_FORM_THUMB" => sed_textbox('rpagethumb', $pag['page_thumb']),
 	"PAGEEDIT_FORM_TITLE" => sed_textbox('rpagetitle', $pag['page_title']),
-	"PAGEEDIT_FORM_DESC" => sed_textbox('rpagedesc', $pag['page_desc']),
+	"PAGEEDIT_FORM_DESC" => sed_textarea('rpagedesc', $pag['page_desc'], 3, 75),
 	"PAGEEDIT_FORM_SEOTITLE" => sed_textbox('rpageseotitle', $pag['page_seo_title']),
 	"PAGEEDIT_FORM_SEODESC" => sed_textbox('rpageseodesc', $pag['page_seo_desc']),
 	"PAGEEDIT_FORM_SEOKEYWORDS" => sed_textbox('rpageseokeywords', $pag['page_seo_keywords']),

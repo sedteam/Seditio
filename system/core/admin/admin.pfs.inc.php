@@ -22,15 +22,23 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=pfs"), $L['PFS']);
-$adminhelp = $L['adm_help_pfs'];
-$adminmain = "<h2><img src=\"system/img/admin/pfs.png\" alt=\"\" /> ".$L['PFS']."</h2>";
 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=pfs")."\">".$L['Configuration']."</a></li>";
-$adminmain .= "<li><a href=\"".sed_url("pfs", "userid=0")."\">".$L['SFS']."</a></li></ul>";
+$adminhelp = $L['adm_help_pfs'];
+
+/* $adminmain = "<h2><img src=\"system/img/admin/pfs.png\" alt=\"\" /> ".$L['PFS']."</h2>";
+$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".."\">".$L['Configuration']."</a></li>";
+$adminmain .= "<li><a href=\"".."\">".$L['SFS']."</a></li></ul>"; */
+
+$t = new XTemplate(sed_skinfile('admin.pfs', true)); 
+
+$t -> assign(array( 
+	"BUTTON_PFS_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=pfs"),
+	"BUTTON_SFS_CONFIG_URL" => sed_url("pfs", "userid=0")
+));
+
+$t -> parse("ADMIN_PFS.PFS_BUTTONS");
 
 // ============= All PFS ==============================
-
-$adminmain .= "<h3>".$L['adm_allpfs']."</h3>";
 
 unset ($disp_list);
 
@@ -43,15 +51,18 @@ while ($row = sed_sql_fetchassoc($sql))
 	$row['user_name'] = ($row['user_id']==0) ? $L['SFS'] : $row['user_name'];
 	$row['user_id'] = ($row['user_id']==0) ? "0" : $row['user_id'];
 	
-	$disp_list .= "<tr>";
-	$disp_list .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "userid=".$row['user_id'])."\">".$out['img_edit']."</a></td>";
-	$disp_list .= "<td>".sed_build_user($row['user_id'], sed_cc($row['user_name']))."</td>";
- 	$disp_list .= "<td style=\"text-align:center;\">".$row['COUNT(*)']."</td>";
-	$disp_list .= "</tr>";
+	$t -> assign(array( 
+		"PFS_LIST_EDIT" => "<a href=\"".sed_url("pfs", "userid=".$row['user_id'])."\">".$out['img_edit']."</a>",
+		"PFS_LIST_USER" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+		"PFS_LIST_COUNTFILES" => $row['COUNT(*)']
+	));
+
+	$t -> parse("ADMIN_PFS.PFS_LIST");
 	}
 
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td class=\"coltop\">".$L['Edit']."</td><td class=\"coltop\">".$L['User']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Files']."</td></tr>".$disp_list."</table>";
+$t -> parse("ADMIN_PFS");
+
+$adminmain .= $t -> text("ADMIN_PFS"); 
+
 
 ?>

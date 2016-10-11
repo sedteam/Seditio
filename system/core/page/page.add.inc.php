@@ -270,6 +270,17 @@ if (($a=='clone') && ($id > 0))
 	$newpageseotitle = $row1['page_seo_title'];
 	$newpageseodesc = $row1['page_seo_desc'];
 	$newpageseokeywords = $row1['page_seo_keywords'];
+	
+
+	if(count($extrafields) > 0)
+		{ 
+		foreach($extrafields as $row) 
+			{
+			$a = 'newpage'.$row['code'];
+			$$a = $row1['page_'.$row['code']];			
+			}	
+		$newpageextrafields = $row1;
+		}	
 	}		
 
 if (empty($newpagecat) && !empty($c))
@@ -370,7 +381,7 @@ $t->assign(array(
 	"PAGEADD_FORM_EXTRA9" => sed_textbox('newpageextra9', $newpageextra9),
 	"PAGEADD_FORM_EXTRA10" => sed_textbox('newpageextra10', $newpageextra10),  
 	"PAGEADD_FORM_TITLE" => sed_textbox('newpagetitle', $newpagetitle),
-	"PAGEADD_FORM_DESC" => sed_textbox('newpagedesc', $newpagedesc),
+	"PAGEADD_FORM_DESC" => sed_textarea('newpagedesc', $newpagedesc, 3, 75),
 	"PAGEADD_FORM_SEOTITLE" => sed_textbox('newpageseotitle', $newpageseotitle),
 	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', $newpageseodesc),
 	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', $newpageseokeywords),
