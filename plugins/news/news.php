@@ -32,6 +32,11 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $d = sed_import('d','G','INT');
 $c = sed_import('c','G','TXT',16);
 
+// ---------- Extra fields - getting
+$extrafields = array(); 
+$extrafields = sed_extrafield_get('pages');  
+$number_of_extrafields = count($extrafields);
+
 if (empty($d)) { $d = '0'; }
 if (empty($c)) { $c = $cfg['plugin']['news']['category']; }
 
@@ -160,6 +165,15 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 				));
+				
+			// ---------- Extra fields - getting
+			if(count($extrafields) > 0) 
+				{ 
+				$extra_array = sed_build_extrafields_data('page', 'PAGE_ROW', $extrafields, $pag);
+				} 
+			
+			$news->assign($extra_array); 
+			// ----------------------									
 				
 		$ishtml_page = ($pag['page_type']==1 || $pag['page_text_ishtml']);				
 		$pag['page_text'] = sed_parse($pag['page_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $ishtml_page);
