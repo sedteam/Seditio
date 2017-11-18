@@ -41,7 +41,7 @@ if (count($extrafields) > 0)
 	      if (in_array($val['vartype'], array('INT', 'BOL'))) 
 	          { 
 	          $filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
-	          $filter_sql[] = (!empty($filter_vars['filter_'.$key])) ? " AND page_".$key." = '".$filter_vars['filter_'.$key]."'" : " ";
+	          if (!empty($filter_vars['filter_'.$key])) $filter_sql[] = " AND page_".$key." = '".$filter_vars['filter_'.$key]."'";
 	          }  
 	  }
 }

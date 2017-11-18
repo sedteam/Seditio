@@ -548,6 +548,8 @@ class XTemplate {
 	public function out ($bname) {
 
 		$out = $this->text($bname);
+    
+    $out = preg_replace('/\s+$/m', '', $out); // fix Amro 04.11.2017
 
 		echo trim($out);
 	}
