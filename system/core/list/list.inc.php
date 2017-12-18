@@ -190,6 +190,11 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = $sed_cat[$c]['title'];
 $out['subdesc'] = $sed_cat[$c]['desc'];
 
+/* ===== */
+$sys['catcode'] = $c;
+$out['canonical_url'] = $sys['abs_url'].sed_url("list", "c=".$c."&d=".$d);
+/* ===== */
+
 /**/
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');

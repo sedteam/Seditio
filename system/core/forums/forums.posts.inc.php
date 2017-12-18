@@ -354,6 +354,10 @@ $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 /**/
 
+/* ===== */
+$out['canonical_url'] = $sys['abs_url'].sed_url("forums", "m=posts&q=".$q."&d=".$d);
+/* ===== */
+
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.main');
 if (is_array($extp))

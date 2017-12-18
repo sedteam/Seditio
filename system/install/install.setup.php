@@ -19,7 +19,7 @@ if ( !defined('SED_CODE') || !defined('SED_INSTALL') ) { die('Wrong URL.'); }
 
 $cfg['config_file'] = "datas/config.php";
 $cfg['data_root'] = "datas";
-$cfg['default_skin'] = 'artic';
+$cfg['default_skin'] = 'simple';
 
 $cfg['sqldb'] = "mysql";
 

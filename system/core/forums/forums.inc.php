@@ -99,6 +99,10 @@ $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 
+/* ===== */
+$out['canonical_url'] = $sys['abs_url'].sed_url("forums");
+/* ===== */
+
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.main');
 if (is_array($extp))

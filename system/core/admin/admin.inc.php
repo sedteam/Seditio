@@ -142,8 +142,15 @@ if (sed_auth('admin', 'a', 'A'))
       "ADMINMENU_LOG_URL" => sed_url('admin', "m=log"),
       "ADMINMENU_LOG_URL_CLASS" => ($m == 'log') ? 'current' : ''      
   ));
-
+  
   $t -> parse("ADMINMENU.LOG_MENU");
+
+  $t -> assign(array(   
+      "ADMINMENU_TRASHCAN_URL" => sed_url('admin', "m=trashcan"),
+      "ADMINMENU_TRASHCAN_URL_CLASS" => ($m == 'trashcan') ? 'current' : ''      
+  ));  
+
+  $t -> parse("ADMINMENU.TRASHCAN_MENU");
 
   $t -> assign(array( 
       "ADMINMENU_TOOLS_URL" => sed_url('admin', "m=tools"),
