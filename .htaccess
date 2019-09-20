@@ -2,6 +2,11 @@ Options -Indexes
 <IfModule mod_rewrite.c>
 RewriteEngine On
 #RewriteBase /
+## -- Redirect from http to https
+#RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteCond %{HTTPS} off
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+## --
 RewriteCond %{REQUEST_FILENAME} -d [OR] 
 RewriteCond %{REQUEST_FILENAME} -f [OR] 
 RewriteCond %{REQUEST_FILENAME} -l 
