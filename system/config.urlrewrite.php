@@ -32,6 +32,16 @@ $sed_urlrewrite = array(
          'rule' => 'rss.php'
     ),
     
+    /*  Sitemap rewriting */
+    array(
+         'cond' => '#^/sitemap/([a-zA-Z0-9]+)(/?)$#',
+         'rule' => 'sitemap.php?m=$1'
+    ),
+    array(
+         'cond' => '#^/sitemap(/?)$#',
+         'rule' => 'sitemap.php'
+    ),       
+    
     /*  Poll rewriting */
     array(
          'cond' => '#^/polls/([a-zA-Z0-9]+)(/?)$#',

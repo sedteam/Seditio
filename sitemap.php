@@ -172,7 +172,7 @@ default:
         foreach($smcfg as $key => $value)
         {
                 $feed .= "<sitemap>\n";
-                $feed .= "<loc>".$cfg['mainurl']."/sitemap.php?m=".$key."</loc>\n";
+                $feed .= "<loc>".$cfg['mainurl']."/".sed_url("sitemap", "m=".$key)."</loc>\n";
                 $feed .= "<lastmod>".@date("Y-m-d\TH:i:s+00:00", $sys['now'])."</lastmod>\n";
                 $feed .= "</sitemap>\n";
         }
@@ -212,8 +212,15 @@ function miscGzHandler($buf) {
     return $bufZiped;
 }
 
+/*
 @ob_start('miscGzHandler');
 echo(utf8_encode($feed));
 @ob_end_flush(); // miscGzHandler
+*/
+
+@ob_clean();
+header("Content-type: text/xml; charset=UTF-8");
+echo(utf8_encode($feed));
+exit;
 
 ?>

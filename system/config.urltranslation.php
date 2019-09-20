@@ -27,6 +27,19 @@ $sed_urltrans['rss'] = array(
     )
 );
 
+/*  Sitemap translation */  
+
+$sed_urltrans['sitemap'] = array(
+    array( 
+          'params' => 'm=*', 
+          'rewrite' => 'sitemap/{m}'
+    ),
+    array( 
+          'params' => '', 
+          'rewrite' => 'sitemap'
+    )
+);
+
 /*  Polls translation */                                               
 
 $sed_urltrans['polls'] = array(
