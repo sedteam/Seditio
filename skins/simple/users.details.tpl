@@ -20,6 +20,16 @@
 		<td style="width:176px;">{PHP.skinlang.usersdetails.Sendprivatemessage}</td>
 		<td >{USERS_DETAILS_PM}</td>
 	</tr>
+  
+	<tr>
+		<td>{PHP.skinlang.usersdetails.Userfirstname} </td>
+		<td>{USERS_DETAILS_FIRSTNAME}</td>
+	</tr>  
+  
+	<tr>
+		<td>{PHP.skinlang.usersdetails.Userlastname}</td>
+		<td>{USERS_DETAILS_LASTNAME}</td>
+	</tr>    
 
 	<tr>
 		<td>{PHP.skinlang.usersdetails.Maingroup}</td>

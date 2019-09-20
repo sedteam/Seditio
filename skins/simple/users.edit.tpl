@@ -37,6 +37,16 @@
 		<td>{PHP.skinlang.usersedit.Username}</td>
 		<td>{USERS_EDIT_NAME}</td>
 	</tr>
+  
+	<tr>
+		<td>{PHP.skinlang.usersedit.Userfirstname}</td>
+		<td>{USERS_EDIT_FIRSTNAME}</td>
+	</tr>
+  
+	<tr>
+		<td>{PHP.skinlang.usersedit.Userlastname}</td>
+		<td>{USERS_EDIT_LASTNAME}</td>
+	</tr>      
 
 	<tr>
 		<td>{PHP.skinlang.usersedit.Groupsmembership}</td>

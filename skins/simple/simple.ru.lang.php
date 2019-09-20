@@ -212,7 +212,7 @@ $skinlang['ratings']['Rate'] = "Оценка:";
 $skinlang['ratings']['Rateit'] = "Оценить !";
 
 //user.auth.tpl
-$skinlang['usersauth']['Username'] = "Имя:";
+$skinlang['usersauth']['Username'] = "Логин:";
 $skinlang['usersauth']['Password'] = "Пароль:";
 $skinlang['usersauth']['Rememberme'] = "Запомнить?";
 $skinlang['usersauth']['Login'] = "Вход";
@@ -222,6 +222,8 @@ $skinlang['usersauth']['Lostpassword'] = "Вспомнить пароль?";
 //users.details.tpl
 $skinlang['usersdetails']['Sendprivatemessage'] = "Послать личное сообщение:";
 $skinlang['usersdetails']['Maingroup'] = "Основная группа:";
+$skinlang['usersdetails']['Userfirstname'] = "Имя:";
+$skinlang['usersdetails']['Userlastname'] = "Фамилия:";
 $skinlang['usersdetails']['Memberof'] = "Состоит в группах:";
 $skinlang['usersdetails']['Country'] = "Страна:";
 $skinlang['usersdetails']['Location'] = "Местоположение:";
@@ -242,7 +244,9 @@ $skinlang['usersdetails']['Photo'] = "Фотография:";
 
 //users.edit.tpl
 $skinlang['usersedit']['UserID'] = "ID пользователя:";
-$skinlang['usersedit']['Username'] = "Имя пользователя:";
+$skinlang['usersedit']['Username'] = "Логин:";
+$skinlang['usersedit']['Userfirstname'] = "Имя:";
+$skinlang['usersedit']['Userlastname'] = "Фамилия:";
 $skinlang['usersedit']['Groupsmembership'] = "Группы:";
 $skinlang['usersedit']['Maingroup'] = "(основная)";
 $skinlang['usersedit']['Memberof'] = "В группе:";
@@ -275,7 +279,9 @@ $skinlang['usersedit']['Deletethisuser'] = "! Удалить этого поль
 $skinlang['usersedit']['Update'] = "Обновить";
 
 //users.profile.tpl
-$skinlang['usersprofile']['Username'] = "Имя пользователя:";
+$skinlang['usersprofile']['Username'] = "Логин:";
+$skinlang['usersprofile']['Userfirstname'] = "Имя:";
+$skinlang['usersprofile']['Userlastname'] = "Фамилия:";
 $skinlang['usersprofile']['Groupsmembership'] = "Состоит в группах:";
 $skinlang['usersprofile']['Maingroup'] = "Основная группа:";
 $skinlang['usersprofile']['Registeredsince'] = "Зарегистрирован с:";
@@ -303,8 +309,10 @@ $skinlang['usersprofile']['Newpasswordhint'] = "(Оставь пустым, чт
 $skinlang['usersprofile']['Update'] = "Обновить";
 
 //users.register.tpl
-$skinlang['usersregister']['Username'] = "Имя пользователя :";
-$skinlang['usersregister']['Validemail'] = "Твой e-mail :";
+$skinlang['usersregister']['Username'] = "Логин :";
+$skinlang['usersregister']['Userfirstname'] = "Имя :";
+$skinlang['usersregister']['Userlastname'] = "Фамилия :";
+$skinlang['usersregister']['Validemail'] = "Ваш e-mail :";
 $skinlang['usersregister']['Validemailhint'] = "Для завершения процесса регистрации необходим действующий e-mail !";
 $skinlang['usersregister']['Password'] = "Пароль :";
 $skinlang['usersregister']['Confirmpassword'] = "Повтори пароль :";

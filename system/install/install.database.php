@@ -475,6 +475,8 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   user_id int(11) unsigned NOT NULL auto_increment,
   user_banexpire int(11) default '0',
   user_name varchar(100) NOT NULL default '',
+  user_firstname varchar(100) NOT NULL default '',   
+  user_lastname varchar(100) NOT NULL default '',  
   user_password varchar(32) NOT NULL default '',
   user_salt varchar(16) NOT NULL default '',
   user_secret varchar(32) NOT NULL default '',
@@ -520,6 +522,8 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   user_lostpass char(32) NOT NULL default '',
   user_auth text,
   user_token varchar(255) NOT NULL default '',
+  user_oauth_provider varchar(50) NOT NULL default '',
+  user_oauth_uid text NOT NULL,  
   PRIMARY KEY (user_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 

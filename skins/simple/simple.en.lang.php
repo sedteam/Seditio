@@ -211,7 +211,7 @@ $skinlang['ratings']['Rate'] = "Rate:";
 $skinlang['ratings']['Rateit'] = "Rate it !";
 
 //user.auth.tpl
-$skinlang['usersauth']['Username'] = "User name:";
+$skinlang['usersauth']['Username'] = "Login:";
 $skinlang['usersauth']['Password'] = "Password:";
 $skinlang['usersauth']['Rememberme'] = "Remember me ?";
 $skinlang['usersauth']['Login'] = "Login";
@@ -220,6 +220,8 @@ $skinlang['usersauth']['Lostpassword'] = "Lost your password ?";
 
 //users.details.tpl
 $skinlang['usersdetails']['Sendprivatemessage'] = "Send a private message:";
+$skinlang['usersdetails']['Userfirstname'] = "User first name:";
+$skinlang['usersdetails']['Userlastname'] = "User last name:";
 $skinlang['usersdetails']['Maingroup'] = "Main group:";
 $skinlang['usersdetails']['Memberof'] = "Member of:";
 $skinlang['usersdetails']['Country'] = "Country:";
@@ -241,7 +243,9 @@ $skinlang['usersdetails']['Photo'] = "Photo:";
 
 //users.edit.tpl
 $skinlang['usersedit']['UserID'] = "User ID:";
-$skinlang['usersedit']['Username'] = "User name:";
+$skinlang['usersedit']['Username'] = "Login:";
+$skinlang['usersedit']['Userfirstname'] = "User first name:";
+$skinlang['usersedit']['Userlastname'] = "User last name:";
 $skinlang['usersedit']['Groupsmembership'] = "Groups membership:";
 $skinlang['usersedit']['Maingroup'] = "Main group:";
 $skinlang['usersedit']['Memberof'] = "Member of:";
@@ -274,7 +278,9 @@ $skinlang['usersedit']['Deletethisuser'] = "! Delete this user !:";
 $skinlang['usersedit']['Update'] = "Update";
 
 //users.profile.tpl
-$skinlang['usersprofile']['Username'] = "User name:";
+$skinlang['usersprofile']['Username'] = "Login:";
+$skinlang['usersprofile']['Userfirstname'] = "User first name:";
+$skinlang['usersprofile']['Userlastname'] = "User last name:";
 $skinlang['usersprofile']['Groupsmembership'] = "Groups membership:";
 $skinlang['usersprofile']['Maingroup'] = "Main group:";
 $skinlang['usersprofile']['Registeredsince'] = "Registered since:";
@@ -302,7 +308,9 @@ $skinlang['usersprofile']['Newpasswordhint'] = "(Leave empty to keep<br />the cu
 $skinlang['usersprofile']['Update'] = "Update";
 
 //users.register.tpl
-$skinlang['usersregister']['Username'] = "User name:";
+$skinlang['usersregister']['Username'] = "Login:";
+$skinlang['usersregister']['Userfirstname'] = "User first name:";
+$skinlang['usersregister']['Userlastname'] = "User last name:";
 $skinlang['usersregister']['Validemail'] = "Valid email:";
 $skinlang['usersregister']['Validemailhint'] = "A valid email is required to complete the registration process !";
 $skinlang['usersregister']['Password'] = "Password:";

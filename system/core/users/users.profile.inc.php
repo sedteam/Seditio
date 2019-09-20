@@ -247,7 +247,10 @@ switch ($a)
 			}
 		}
 
-	$rusertext = sed_import('rusertext','P','HTM');
+	$ruserfirstname = sed_import('ruserfirstname','P','TXT', 100, TRUE);   // sed 177
+  $ruserlastname = sed_import('ruserlastname','P','TXT', 100, TRUE);     // sed 177  
+  
+  $rusertext = sed_import('rusertext','P','HTM');
 	$rusercountry = sed_import('rusercountry','P','ALP');
 	$ruserskin = sed_import('ruserskin','P','TXT');
 	$ruserlang = sed_import('ruserlang','P','ALP');
@@ -342,6 +345,8 @@ switch ($a)
 			{ $ruseremail = $urr['user_email']; }
 
 		$sql = sed_sql_query("UPDATE $db_users SET
+			user_firstname='".sed_sql_prep($ruserfirstname)."', 
+			user_lastname='".sed_sql_prep($ruserlastname)."',       
 			user_text='".sed_sql_prep($rusertext)."',
 			user_text_ishtml='".$ishtml."',
 			user_country='".sed_sql_prep($rusercountry)."',
@@ -489,6 +494,8 @@ $t->assign(array(
 	"USERS_PROFILE_FORM_SEND" => sed_url("users", "m=profile&a=update&".sed_xg()),
 	"USERS_PROFILE_ID" => $urr['user_id'],
 	"USERS_PROFILE_NAME" => sed_cc($urr['user_name']),
+	"USERS_PROFILE_FIRSTNAME" => sed_textbox('ruserfirstname', sed_cc($urr['user_firstname']), 32, 100), 
+  "USERS_PROFILE_LASTNAME" => sed_textbox('ruserlastname', sed_cc($urr['user_lastname']), 32, 100),    
 	"USERS_PROFILE_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_PROFILE_GROUPS" => sed_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
 	"USERS_PROFILE_COUNTRY" => $profile_form_countries,

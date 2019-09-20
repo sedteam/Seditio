@@ -34,6 +34,16 @@
 		<td style="width:176px;">{PHP.skinlang.usersprofile.Username}</td>
 		<td>{USERS_PROFILE_NAME}</td>
 	</tr>
+  
+	<tr>
+		<td>{PHP.skinlang.usersprofile.Userfirstname}</td>
+		<td>{USERS_PROFILE_FIRSTNAME}</td>
+	</tr>  
+  
+	<tr>
+		<td>{PHP.skinlang.usersprofile.Userlastname}</td>
+		<td>{USERS_PROFILE_LASTNAME}</td>
+	</tr> 
 
 	<tr>
 		<td>{PHP.skinlang.usersprofile.Groupsmembership}</td>

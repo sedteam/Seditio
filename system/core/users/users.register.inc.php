@@ -49,7 +49,11 @@ if ($a=='add')
 		{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$rusername = sed_import('rusername','P','TXT', 24, TRUE);
+	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
+ 
+  $ruserfirstname = sed_import('ruserfirstname','P','TXT', 100, TRUE);   // sed 177
+  $ruserlastname = sed_import('ruserlastname','P','TXT', 100, TRUE);     // sed 177
+  
 	$ruseremail = sed_import('ruseremail','P','TXT', 64, TRUE);
 	$rpassword1 = sed_import('rpassword1','P','TXT', 16);
 	$rpassword2 = sed_import('rpassword2','P','TXT',16);
@@ -137,6 +141,8 @@ if ($a=='add')
 
 		$sql = sed_sql_query("INSERT into $db_users
 			(user_name,
+      user_firstname,
+      user_lastname,
 			user_password,
 			user_salt,
 			user_secret,
@@ -174,6 +180,8 @@ if ($a=='add')
 			user_lastip)
 			VALUES
 			('".sed_sql_prep($rusername)."',
+      '".sed_sql_prep($ruserfirstname)."',
+      '".sed_sql_prep($ruserlastname)."',            
 			'$mdpass',
 			'$mdsalt',
 			'$mdpass_secret',
@@ -324,7 +332,9 @@ $t->assign(array(
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
 	"USERS_REGISTER_SEND" => sed_url("users", "m=register&a=add"),
-	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($rusername)."\" size=\"24\" maxlength=\"24\" />",
+	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($rusername)."\" size=\"24\" maxlength=\"100\" />",
+	"USERS_REGISTER_FIRSTNAME" => "<input type=\"text\" class=\"text\" name=\"ruserfirstname\" value=\"".sed_cc($ruserfirstname)."\" size=\"24\" maxlength=\"100\" />", 
+  "USERS_REGISTER_LASTNAME" => "<input type=\"text\" class=\"text\" name=\"ruserlastname\" value=\"".sed_cc($ruserlastname)."\" size=\"24\" maxlength=\"100\" />",   
 	"USERS_REGISTER_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($ruseremail)."\" size=\"24\" maxlength=\"64\" />",
 	"USERS_REGISTER_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword1\" size=\"8\" maxlength=\"16\" />",
 	"USERS_REGISTER_PASSWORDREPEAT" => "<input type=\"password\" class=\"password\" name=\"rpassword2\" size=\"8\" maxlength=\"16\" />",

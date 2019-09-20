@@ -60,6 +60,10 @@ if ($a=='update')
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT');
+  
+  $ruserfirstname = sed_import('ruserfirstname','P','TXT', 100, TRUE);   // sed 177
+  $ruserlastname = sed_import('ruserlastname','P','TXT', 100, TRUE);     // sed 177  
+  
 	$rusermaingrp = sed_import('rusermaingrp','P','INT');
 	$ruserbanexpire = sed_import('ruserbanexpire','P','INT');
 	$rusercountry = sed_import('rusercountry','P','ALP');
@@ -191,6 +195,8 @@ if ($a=='update')
 		$sql = sed_sql_query("UPDATE $db_users SET
 			user_banexpire='$rbanexpire',
 			user_name='".sed_sql_prep($rusername)."',
+			user_firstname='".sed_sql_prep($ruserfirstname)."', 
+			user_lastname='".sed_sql_prep($ruserlastname)."',            
 			user_password='".sed_sql_prep($ruserpassword)."',
 			user_salt='".sed_sql_prep($rusermdsalt)."',
 			user_passtype =".(int)$ruserpasstype.",
@@ -285,11 +291,12 @@ $user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
 $user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
 $urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
-$useredit_form_extra1 = "<input type=\"text\" class=\"text\" name=\"ruserextra1\" value=\"".sed_cc($urr['user_extra1'])."\" size=\"32\" maxlength=\"".$cfg['extra1tsetting']."\" /><input type=\"hidden\" name=\"ruserextra1_p\" value=\"1\" />";
-$useredit_form_extra2 = "<input type=\"text\" class=\"text\" name=\"ruserextra2\" value=\"".sed_cc($urr['user_extra2'])."\" size=\"32\" maxlength=\"".$cfg['extra2tsetting']."\" /><input type=\"hidden\" name=\"ruserextra2_p\" value=\"1\" />";
-$useredit_form_extra3 = "<input type=\"text\" class=\"text\" name=\"ruserextra3\" value=\"".sed_cc($urr['user_extra3'])."\" size=\"32\" maxlength=\"".$cfg['extra3tsetting']."\" /><input type=\"hidden\" name=\"ruserextra3_p\" value=\"1\" />";
-$useredit_form_extra4 = "<input type=\"text\" class=\"text\" name=\"ruserextra4\" value=\"".sed_cc($urr['user_extra4'])."\" size=\"32\" maxlength=\"".$cfg['extra4tsetting']."\" /><input type=\"hidden\" name=\"ruserextra4_p\" value=\"1\" />";
-$useredit_form_extra5 = "<input type=\"text\" class=\"text\" name=\"ruserextra5\" value=\"".sed_cc($urr['user_extra5'])."\" size=\"32\" maxlength=\"".$cfg['extra5tsetting']."\" /><input type=\"hidden\" name=\"ruserextra5_p\" value=\"1\" />";
+$useredit_form_extra1 = sed_textbox('ruserextra1', sed_cc($urr['user_extra1']), 32, $cfg['extra1tsetting'])."<input type=\"hidden\" name=\"ruserextra1_p\" value=\"1\" />";
+$useredit_form_extra2 = sed_textbox('ruserextra2', sed_cc($urr['user_extra2']), 32, $cfg['extra2tsetting'])."<input type=\"hidden\" name=\"ruserextra2_p\" value=\"1\" />";
+$useredit_form_extra3 = sed_textbox('ruserextra3', sed_cc($urr['user_extra3']), 32, $cfg['extra3tsetting'])."<input type=\"hidden\" name=\"ruserextra3_p\" value=\"1\" />";
+$useredit_form_extra4 = sed_textbox('ruserextra4', sed_cc($urr['user_extra4']), 32, $cfg['extra4tsetting'])."<input type=\"hidden\" name=\"ruserextra4_p\" value=\"1\" />";
+$useredit_form_extra5 = sed_textbox('ruserextra5', sed_cc($urr['user_extra5']), 32, $cfg['extra5tsetting'])."<input type=\"hidden\" name=\"ruserextra5_p\" value=\"1\" />";
+
 $useredit_form_extra6 = sed_selectbox($urr['user_extra6'], 'ruserextra6', $cfg['extra6tsetting'])."<input type=\"hidden\" name=\"ruserextra6_p\" value=\"1\" />";
 $useredit_form_extra7 = sed_selectbox($urr['user_extra7'], 'ruserextra7', $cfg['extra7tsetting'])."<input type=\"hidden\" name=\"ruserextra7_p\" value=\"1\" />";
 $useredit_form_extra8 = sed_selectbox($urr['user_extra8'], 'ruserextra8', $cfg['extra8tsetting'])."<input type=\"hidden\" name=\"ruserextra8_p\" value=\"1\" />";
@@ -331,6 +338,8 @@ $t->assign(array(
 	"USERS_EDIT_SEND" => sed_url("users", "m=edit&a=update&".sed_xg()."&id=".$urr['user_id']),
 	"USERS_EDIT_ID" => $urr['user_id'],
 	"USERS_EDIT_NAME" => $user_form_username,
+	"USERS_EDIT_FIRSTNAME" => sed_textbox('ruserfirstname', sed_cc($urr['user_firstname']), 32, 100), 
+  "USERS_EDIT_LASTNAME" => sed_textbox('ruserlastname', sed_cc($urr['user_lastname']), 32, 100),     
 	"USERS_EDIT_ACTIVE" => $user_form_active,
 	"USERS_EDIT_BANNED" => $user_form_banned,
 	"USERS_EDIT_SKIN" => "<input type=\"text\" class=\"text\" name=\"ruserskin\" value=\"".$urr['user_skin']."\" size=\"32\" maxlength=\"16\" />",

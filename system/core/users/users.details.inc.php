@@ -79,6 +79,8 @@ $t->assign(array(
 	"USERS_DETAILS_ID" => $urr['user_id'],
 	"USERS_DETAILS_PM" => sed_build_pm($urr['user_id']),
 	"USERS_DETAILS_NAME" => sed_cc($urr['user_name']),
+	"USERS_DETAILS_FIRSTNAME" => sed_cc($urr['user_firstname']), 
+	"USERS_DETAILS_LASTNAME" => sed_cc($urr['user_lastname']),   
 	"USERS_DETAILS_PASSWORD" => $urr['user_password'],
 	"USERS_DETAILS_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_DETAILS_MAINGRPID" => $urr['user_maingrp'],
