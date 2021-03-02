@@ -15,6 +15,9 @@ RewriteEngine On
 # XML
 RewriteRule ^sitemap.xml?$	sitemap.php  [L,QSA]
 
+# Captcha Image
+RewriteRule ^captcha.png?$	captcha.php  [L,QSA]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 #resizing_image

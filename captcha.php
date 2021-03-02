@@ -3,8 +3,11 @@
 define('SED_CODE', TRUE);
 
 require('system/functions.php');
+
+/*
 require('datas/config.php');
 require('system/common.php');
+*/
 
 $cfg['font_dir'] = "datas/fonts/";
 
