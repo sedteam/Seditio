@@ -7,10 +7,10 @@ http://www.neocrome.net
 [BEGIN_SED]
 File=datas/config.php
 Version=177
-Updated=2021-feb-19
+Updated=2021-jun-04
 Type=Config
 Author=Neocrome
-Description=Configuration file (Gen.:2021-Feb-19 16:09:56)
+Description=Configuration file (Gen.:2021-Jun-04 13:10:00)
 [END_SED]
 ==================== */
 
@@ -39,7 +39,7 @@ $cfg['defaultlang'] = 'ru';			// Default language code
 
 $cfg['sqldbprefix'] = 'sed_';			// Database tables prefix
 $cfg['sqldb'] = 'mysqli';  				// Type of the database connector driver, set 'mysql' or 'mysqli'.
-$cfg['site_secret'] = 'ba5b906ed22eb0c501c22370a066fedc'; 					// Site secret key
+$cfg['site_secret'] = '331a889faa21c46579fd505b404af34f'; 					// Site secret key
 $cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) default=3
 $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in on your server)
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed

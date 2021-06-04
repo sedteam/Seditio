@@ -76,13 +76,14 @@ class XTemplate {
 	'urlencode', 'urldecode',
 	'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
 	'number_format', 'money_format',
-	'var_dump', 'print_r'
+	'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image'
 	);
 
 	public $mainblock = 'main';
 	public $output_type = 'HTML';
 	public $force_globals = true;
 	public $debug = false;
+	public $compress_output = false; // HTML minify sed 177 by Amro
 	protected $_null_string = array('' => '');
 	protected $_null_block = array('' => '');
 	protected $_error = '';
@@ -500,6 +501,12 @@ class XTemplate {
 		$this->assign($var, $value);
 		$this->parse($bname);
 	}
+	
+	public function compress ($out) {
+		$out = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/", "", $out);	
+		$out = str_replace(array("\r\n", "\r", "\n", "\t", "  ", "    ", "    "), "", $out);
+		return $out;
+	}	
 
 	public function array_loop ($bname, $var, &$values) {
 
@@ -546,11 +553,9 @@ class XTemplate {
 	}
 
 	public function out ($bname) {
-
-		$out = $this->text($bname);
-    
-    $out = preg_replace('/\s+$/m', '', $out); // fix Amro 04.11.2017
-
+		$out = $this->text($bname);   
+		$out = preg_replace('/\s+$/m', '', $out); // fix Amro 04.11.2017
+		if ($this->compress_output) { $out = $this->compress($out); } 
 		echo trim($out);
 	}
 
