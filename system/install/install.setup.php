@@ -21,7 +21,7 @@ $cfg['config_file'] = "datas/config.php";
 $cfg['data_root'] = "datas";
 $cfg['default_skin'] = 'simple';
 
-$cfg['sqldb'] = "mysql";
+$cfg['sqldb'] = "mysqli";
 
 $steps[0] = $L['install_step0'];
 $steps[1] = $L['install_step1'];
