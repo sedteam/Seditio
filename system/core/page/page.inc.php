@@ -208,7 +208,7 @@ $out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
 
 $out['subkeywords'] = $pag['page_seo_keywords'];
 
-$out['canonical_url'] = $pag['page_pageurl'];
+$out['canonical_url'] = $sys['abs_url'].$pag['page_pageurl'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
