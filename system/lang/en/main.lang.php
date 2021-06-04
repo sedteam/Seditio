@@ -704,4 +704,26 @@ $L['mt_title'] = "Title"; // New in v175
 $L['mt_description'] = "Meta description"; // New in v175
 $L['mt_keywords'] = "Meta keywords"; // New in v175
 
+/* ====== Captcha Errors ====== */
+$L['captcha_error_many_incorrect'] = "You have entered too many incorrect captchas! Contact your administrator for help!";
+$L['captcha_error_you_robot_or_too_fast'] = "You or a robot or are entering captcha too fast!";
+$L['captcha_error_go_bad_robot'] = "Robot, go away!";
+$L['captcha_error_incorrect'] = "Incorrect captcha!";
+$L['captcha_error_hacker_go_home'] = "Hacker, go away!";
+
+$sed_months_list = array (
+   ".01." => "January",
+   ".02." => "February",
+   ".03." => "March",
+   ".04." => "April",
+   ".05." => "May",
+   ".06." => "June",
+   ".07." => "July",
+   ".08." => "August",
+   ".09." => "September",
+   ".10." => "October",
+   ".11." => "November",
+   ".12." => "December"
+);
+
 ?>
