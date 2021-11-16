@@ -22,7 +22,6 @@ $location = 'PFS';
 $z = 'pfs';
 
 require('system/functions.php');
-require('system/config.extensions.php');
 require('datas/config.php');
 require('system/common.php');
 

@@ -73,6 +73,7 @@ reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 	{
  	$icon[$line[0]] = "<img src=\"system/img/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+	$icon[$line[0]] = "<img src=\"system/img/ext/".$line[2].".svg\" alt=\"".$line[1]."\" width=\"16\" />";
  	$filedesc[$line[0]] = $line[1];
  	}
 
