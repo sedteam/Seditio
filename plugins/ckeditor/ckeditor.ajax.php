@@ -29,6 +29,8 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 require('system/config.extensions.php');
 
+$url = sed_import('url', 'G', 'TXT');
+
 $result_upload = array();
 $errors = array();
 
@@ -57,21 +59,32 @@ $u_totalsize=0;
 $sql = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='".$usr['id']."' ");
 $pfs_totalsize = sed_sql_result($sql,0,"SUM(pfs_size)");
 
-
 $u_tmp_name = $_FILES['upload']['tmp_name'];
 $u_type = $_FILES['upload']['type'];
 $u_name = $_FILES['upload']['name'];
 $u_size = $_FILES['upload']['size'];
 
+$upload_mode = "POST";
+
+if (!empty($url))
+{
+	if ($upl = sed_download($url)) {
+		$u_tmp_name = $upl['tmp_name'];
+		$u_type = $upl['type'];
+		$u_name = $upl['basename'];
+		$u_size = $upl['size'];	
+		$upload_mode = "CURL";
+	}
+}
+
 $u_name  = str_replace("\'",'',$u_name );
 $u_name  = trim(str_replace("\"",'',$u_name ));
 
-			$result_upload = array(
-				"uploaded" => 1, 
-				"fileName" => $u_name,
-				"url" => $cfg['pfs_dir'].$u_name
-				);
-
+$result_upload = array(
+	"uploaded" => 1, 
+	"filename" => $u_name,
+	"url" => $cfg['pfs_dir'].$u_name
+	);
 
 if (!empty($u_name))
 	{
@@ -103,12 +116,19 @@ if (!empty($u_name))
 			}
 		}
 
-	if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024)
+	
+	if ( $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024)
 		{
+
 		if (!file_exists($cfg['pfs_dir'].$u_name))
 			{
-
-			move_uploaded_file($u_tmp_name, $cfg['pfs_dir'].$u_name);
+			
+			if ($upload_mode == "CURL") {
+				copy($u_tmp_name, $cfg['pfs_dir'].$u_name);
+			} else {
+				move_uploaded_file($u_tmp_name, $cfg['pfs_dir'].$u_name);
+			}
+			
 			@chmod($cfg['pfs_dir'].$u_name, 0766);
 			
 			$uploaded = 1;
@@ -199,13 +219,15 @@ if (!empty($u_name))
 			
 	$result_upload = array(
 		"uploaded" => $uploaded, 
-		"fileName" => $u_name,
+		"filename" => $u_name,
 		"url" => $cfg['pfs_dir'].$u_name,
 		"error" => array("message" => $error)
 		);
 
 	}
 //}
+
+unlink($u_tmp_name);
 
 if ($_GET['fl'] == 'filebrowser') {
 	$funcNum = $_GET['CKEditorFuncNum'] ;
