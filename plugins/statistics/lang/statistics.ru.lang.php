@@ -4,7 +4,7 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/statistics/lang/statistics.ru.lang.php

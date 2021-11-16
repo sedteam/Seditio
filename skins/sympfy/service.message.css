@@ -1,0 +1,98 @@
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body {
+	line-height: 1.6em;
+  font-size:14px;
+  font-family: Tahoma, Arial;
+}
+a {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: #333333;
+	font-weight: 700;
+  line-height: 1.6em;
+}
+h1 {
+	font-size: 6em;
+}
+h2 {
+	font-size: 1.8em;
+}
+h3 {
+	font-size: 1.6em;
+}
+h4 {
+	font-size: 1.4em;
+}
+h5 {
+	font-size: 1.2em;
+}
+h6 {
+	font-size: 1em;
+}
+strong {
+	font-weight: 700;
+}
+
+.message-block {
+  width:100%;
+  margin:0 auto;
+  margin-top:100px;
+  text-align:center;
+}
+
+.main-btn {
+    display: inline-block;
+    vertical-align: middle;
+    /* width: 144px; */
+    height: 46px;
+    padding: 0 25px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 25px;
+    border: 2px solid #296eb0;
+    font-family: Roboto, Tahoma, sans-serif;
+    font-size: 16px;
+    line-height: 45px;
+    color: #296eb0;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+}
+
+.main-btn:hover {
+   background: #296eb0;
+   color:#ffffff;
+}
+
+.message-go-home {
+  margin-top:30px;
+}
+

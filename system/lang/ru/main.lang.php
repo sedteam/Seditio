@@ -4,7 +4,7 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 -----------------------
 Seditio language pack
 LANG : Russian (code:ru)
@@ -12,7 +12,7 @@ Localization done by : Antar, Antony & Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
-Version=177
+Version=178
 Updated=2012-май-16
 Type=Lang
 Author=Neocrome
@@ -42,6 +42,7 @@ $L['Announcement'] = "Обьявление";
 $L['Archives'] = "Архив";
 $L['Ascending'] = "Возрастание";
 $L['Author'] = "Автор";
+$L['Auth'] = "Авторизация"; // New in v178
 $L['Banned'] = "Заблокирован";
 $L['Banlist'] = "Список заблокированных";
 $L['BBcode'] = "BBcode";
@@ -181,7 +182,7 @@ $L['Myjournal'] = "Мой журнал";
 $L['na'] = "Не доступно";
 $L['Name'] = "Имя";
 $L['Names'] = "Имена";
-$L['Next'] = "Следующая страница";
+$L['Next'] = "Вперёд";
 $L['New'] = "Новый";
 $L['News'] = "Новости";
 $L['Newspost'] = "Новость";
@@ -216,7 +217,7 @@ $L['Post'] = "Сообщение";
 $L['Posts'] = "Сообщений";
 $L['Poster'] = "Автор";
 $L['Preview'] = "Предосмотр";
-$L['Previous'] = "Предыдущая страница";
+$L['Previous'] = "Назад";
 $L['Private'] = "Приватная";
 $L['Private_Messages'] = "Личные сообщения";
 $L['Print'] = "Печать";  // New in v175
@@ -503,6 +504,8 @@ $L['hea_mypfs'] = "Мои файлы"; // New in v175
 $L['hea_users'] = "Пользователи"; // New in v175
 $L['hea_administration'] = "Администрирование";  // New in v175
 
+$L['hea_pageadd'] = "Добавить страницу"; // New in v178
+
 /* ====== Footer ====== */
 
 $L['foo_poweredby'] = "Powered by";
@@ -562,6 +565,9 @@ $L['for_updatedby'] = "<br /><em>отредактировал(а) %1\$s: %2\$s</
 $L['for_antibump'] = "Включена система защиты от спама. Ты не можешь добавлять несколько сообщений подряд.";
 $L['for_mod_clear'] = "Очистить рейтинги";    // New in v160
 $L['for_mod_force'] = "Принудительно установить рейтинг ";    // New in v160
+
+$L['for_quickpost'] = "Быстрый ответ"; // New in v178
+$L['for_post_text'] = "Текст поста"; // New in v178
 
 /* ====== List ====== */
 

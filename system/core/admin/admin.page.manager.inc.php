@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=admin.page.manager.php
-Version=177
+Version=178
 Updated=2015-may-24
 Type=Core.admin
 Author=Neocrome

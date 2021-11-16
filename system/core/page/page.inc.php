@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=177
+Version=178
 Updated=2013-nov-24
 Type=Core
 Author=Neocrome
@@ -207,8 +207,12 @@ $out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
 /**/
 
 $out['subkeywords'] = $pag['page_seo_keywords'];
-
 $out['canonical_url'] = $sys['abs_url'].$pag['page_pageurl'];
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+sed_build_list_bc($pag['page_cat']);
+$urlpaths[$pag['page_pageurl']] = $pag['page_title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
@@ -233,27 +237,18 @@ $t->assign(array(
 	"PAGE_EXECUTE" => $pag['page_execute'],
 	"PAGE_TITLE" => $pag['page_fulltitle'],
 	"PAGE_SHORTTITLE" => $pag['page_title'],
+	"PAGE_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PAGE_CAT" => $pag['page_cat'],
 	"PAGE_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
 	"PAGE_CATPATH" => $catpath,
 	"PAGE_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
 	"PAGE_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 	"PAGE_KEY" => $pag['page_key'],
-	"PAGE_EXTRA1" => $pag['page_extra1'],
-	"PAGE_EXTRA2" => $pag['page_extra2'],
-	"PAGE_EXTRA3" => $pag['page_extra3'],
-	"PAGE_EXTRA4" => $pag['page_extra4'],
-	"PAGE_EXTRA5" => $pag['page_extra5'],
-	"PAGE_EXTRA6" => $pag['page_extra6'],
-	"PAGE_EXTRA7" => $pag['page_extra7'],
-	"PAGE_EXTRA8" => $pag['page_extra8'],
-	"PAGE_EXTRA9" => $pag['page_extra9'],
-	"PAGE_EXTRA10" => $pag['page_extra10'],
 	"PAGE_THUMB" => $pag['page_thumb'],
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
-	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar']),
+	"PAGE_OWNER_AVATAR" => sed_build_userimage($pag['user_avatar']),
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
 	"PAGE_EXPIRE" => $pag['page_expire'],
@@ -263,81 +258,94 @@ $t->assign(array(
 	"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
-		));
+));
 		
-	// ---------- Extra fields - getting
-	$extrafields = array(); 
-	$extrafields = sed_extrafield_get('pages');  
-	$number_of_extrafields = count($extrafields);
+// ---------- Extra fields - getting
+$extrafields = array(); 
+$extrafields = sed_extrafield_get('pages');  
+$number_of_extrafields = count($extrafields);
 
-	if(count($extrafields) > 0) 
+if(count($extrafields) > 0) 
 	{ 
-		$extra_array = sed_build_extrafields_data('page', 'PAGE', $extrafields, $pag);
+	$extra_array = sed_build_extrafields_data('page', 'PAGE', $extrafields, $pag);
 	} 
-  
-	$t->assign($extra_array); 
-	// ----------------------		
+
+$t->assign($extra_array); 
+// ----------------------
+
+
+if (!empty($pag['page_thumb']))
+	{	
+	$first_thumb_array = rtrim($pag['page_thumb']); 
+	if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+		{
+		$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+		}		
+	$first_thumb_array = explode(";", $first_thumb_array);
+	if (count($first_thumb_array) > 0)
+		{
+		$t->assign("PAGE_THUMB", $first_thumb_array[0]);  
+		$t->parse("MAIN.PAGE_THUMB");	
+		}		
+	}
+else 
+	{
+	$t->assign("PAGE_THUMB", sed_cc($pag['page_thumb']));
+	}	
+	
+if($pag['page_totaltabs']>1)
+	{
+	$t->assign(array(
+		"PAGE_MULTI_TABNAV" => $pag['page_tabnav'],
+		"PAGE_MULTI_TABTITLES" => $pag['page_tabtitles'],
+		"PAGE_MULTI_MAXTAB" => $pag['page_totaltabs'],
+		"PAGE_MULTI_SELECT" => $pag['page_tabselect'],
+		"PAGE_MULTI_PREV" => $pag['page_tabprev'],
+		"PAGE_MULTI_NEXT" => $pag['page_tabnext']
+	));
+	$t->parse("MAIN.PAGE_MULTI");
+	}
+
+if ($usr['isadmin'])
+	{
+	$t-> assign(array(
+		"PAGE_ADMIN_COUNT" => $pag['page_count'],
+		"PAGE_ADMIN_UNVALIDATE" => "<a href=\"".sed_url("admin", "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a>",
+		"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>",
+		"PAGE_ADMIN_CLONE" => "<a href=\"".sed_url("page", "m=add&id=".$pag['page_id']."&r=list&a=clone")."\">".$L['Clone']."</a>"
+	));
+
+	$t->parse("MAIN.PAGE_ADMIN");
+	}
+
+$pag['page_text'] = sed_parse($pag['page_text']);
+$pag['page_text2'] = sed_parse($pag['page_text2']);
 		
-	if($pag['page_totaltabs']>1)
-		{
-		$t->assign(array(
-			"PAGE_MULTI_TABNAV" => $pag['page_tabnav'],
-			"PAGE_MULTI_TABTITLES" => $pag['page_tabtitles'],
-			"PAGE_MULTI_MAXTAB" => $pag['page_totaltabs'],
-			"PAGE_MULTI_SELECT" => $pag['page_tabselect'],
-			"PAGE_MULTI_PREV" => $pag['page_tabprev'],
-			"PAGE_MULTI_NEXT" => $pag['page_tabnext']
+$t->assign("PAGE_TEXT", $pag['page_text']);
+$t->assign("PAGE_TEXT2", $pag['page_text2']);		
 
-				));
-		$t->parse("MAIN.PAGE_MULTI");
+if($pag['page_file'])
+	{
+	if (!empty($pag['page_url']))
+		{
+		$dotpos = mb_strrpos($pag['page_url'],".")+1;
+		$pag['page_fileicon'] = "system/img/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
+		if (!file_exists($pag['page_fileicon']))
+			{ $pag['page_fileicon'] = "system/img/admin/page.png"; }
+		$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\">";
 		}
+	else
+		{ $pag['page_fileicon'] = ''; }
 
-	if ($usr['isadmin'])
-		{
-		$t-> assign(array(
-			"PAGE_ADMIN_COUNT" => $pag['page_count'],
-			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"".sed_url("admin", "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a>",
-			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>",
-			"PAGE_ADMIN_CLONE" => "<a href=\"".sed_url("page", "m=add&id=".$pag['page_id']."&r=list&a=clone")."\">".$L['Clone']."</a>"
-			));
-
-		$t->parse("MAIN.PAGE_ADMIN");
-		}
-
-	$ishtml_page = ($pag['page_type']==1 || $pag['page_text_ishtml']);	
-	$pag['page_text'] = sed_parse($pag['page_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $ishtml_page);
-	$pag['page_text2'] = sed_parse($pag['page_text2'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $ishtml_page);
-
-	if (!$pag['page_text_ishtml'] && $cfg['textmode']=='html')
-		{
-		 $sql2 = sed_sql_query("UPDATE $db_pages SET page_text_ishtml=1, page_type=1, page_text='".sed_sql_prep($pag['page_text'])."', 
-								page_text2='".sed_sql_prep($pag['page_text2'])."' WHERE page_id=".$pag['page_id']);
-		}				
-	$t->assign("PAGE_TEXT", $pag['page_text']);
-	$t->assign("PAGE_TEXT2", $pag['page_text2']);		
-
-	if($pag['page_file'])
-		{
-		if (!empty($pag['page_url']))
-			{
-			$dotpos = mb_strrpos($pag['page_url'],".")+1;
-			$pag['page_fileicon'] = "system/img/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
-			if (!file_exists($pag['page_fileicon']))
-				{ $pag['page_fileicon'] = "system/img/admin/page.png"; }
-			$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\">";
-			}
-		else
-			{ $pag['page_fileicon'] = ''; }
-
-		$t->assign(array(
-			"PAGE_FILE_URL" => sed_url("page", $url_param."&a=dl"),
-			"PAGE_FILE_SIZE" => $pag['page_size'],
-			"PAGE_FILE_COUNT" => $pag['page_filecount'],
-			"PAGE_FILE_ICON" => $pag['page_fileicon'],
-			"PAGE_FILE_NAME" => basename($pag['page_url'])
-				));
-		$t->parse("MAIN.PAGE_FILE");
-		}
+	$t->assign(array(
+		"PAGE_FILE_URL" => sed_url("page", $url_param."&a=dl"),
+		"PAGE_FILE_SIZE" => $pag['page_size'],
+		"PAGE_FILE_COUNT" => $pag['page_filecount'],
+		"PAGE_FILE_ICON" => $pag['page_fileicon'],
+		"PAGE_FILE_NAME" => basename($pag['page_url'])
+	));
+	$t->parse("MAIN.PAGE_FILE");
+	}
 
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');

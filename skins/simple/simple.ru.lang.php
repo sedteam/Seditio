@@ -4,15 +4,15 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=skins/simple/simple.ru.lang.php
-Version=177
+Version=178
 Updated=2014-oct-31
 Type=Skin
 Name=Simple
 Author=Amro
-Url=http://www.seditio.org
+Url=https://seditio.org
 Description=Official skin
 [END_SED]
 ==================== */

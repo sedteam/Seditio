@@ -3,10 +3,10 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=system/config.urlrewrite.php
-Version=177
+Version=178
 Updated=2013-sep-26
 Type=Core
 Author=Seditio Team
@@ -15,260 +15,282 @@ Description=Url rewriting config
 ==================== */
 
 $sed_urlrewrite = array(
+
+    /*  Resizer rewriting */
+    array(
+         'cond' => '#^/datas/resized/(.+)#',
+         'rule' => 'system/core/resizer/resizer.php?file=$1'
+    ),
+
+    /*  Captcha rewriting */
+    array(
+         'cond' => '#^/captcha(/?)$#',
+         'rule' => 'system/core/captcha/captcha.php'
+    ),
+	
+    /*  Captcha rewriting */
+    array(
+         'cond' => '#^/captcha.png$#',
+         'rule' => 'system/core/captcha/captcha.php'
+    ),	
     
     /*  Viewer rewriting */
     array(
          'cond' => '#^/view/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'view.php?v=$1'
+         'rule' => 'system/core/view/view.php?v=$1'
     ),
     
     /*  RSS rewriting */
     array(
          'cond' => '#^/rss/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'rss.php?m=$1'
+         'rule' => 'system/core/rss/rss.php?m=$1'
     ),
     array(
          'cond' => '#^/rss(/?)$#',
-         'rule' => 'rss.php'
+         'rule' => 'system/core/rss/rss.php'
     ),
     
     /*  Sitemap rewriting */
     array(
          'cond' => '#^/sitemap/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'sitemap.php?m=$1'
+         'rule' => 'system/core/sitemap/sitemap.php?m=$1'
     ),
     array(
          'cond' => '#^/sitemap(/?)$#',
-         'rule' => 'sitemap.php'
-    ),       
+         'rule' => 'system/core/sitemap/sitemap.php'
+    ),  
+    array(
+         'cond' => '#^/sitemap.xml$#',
+         'rule' => 'system/core/sitemap/sitemap.php'
+    ), 	
     
     /*  Poll rewriting */
     array(
          'cond' => '#^/polls/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'polls.php?id=$1'
+         'rule' => 'system/core/polls/polls.php?id=$1'
     ),
     
     /*  Gallery rewriting */
     array(
          'cond' => '#^/gallery/pic/([0-9]+)(/?)$#',
-         'rule' => 'gallery.php?id=$1'
+         'rule' => 'system/core/gallery/gallery.php?id=$1'
     ),
     array(
          'cond' => '#^/gallery/([0-9]+)(/?)$#',
-         'rule' => 'gallery.php?f=$1'
+         'rule' => 'system/core/gallery/gallery.php?f=$1'
     ),    
     array(
          'cond' => '#^/gallery(/?)$#',
-         'rule' => 'gallery.php'
+         'rule' => 'system/core/gallery/gallery.php'
     ),  
     
     /*  PFS rewriting */
     array(
          'cond' => '#^/pfs/([0-9]+)(/?)$#',
-         'rule' => 'pfs.php?f=$1'
+         'rule' => 'system/core/pfs/pfs.php?f=$1'
     ),
     array(
          'cond' => '#^/pfs(/?)$#',
-         'rule' => 'pfs.php'
+         'rule' => 'system/core/pfs/pfs.php'
     ),     
     
     /*  Pm rewriting */
     array(
          'cond' => '#^/pm/mess/([0-9]+)(/?)$#',
-         'rule' => 'pm.php?id=$1'
+         'rule' => 'system/core/pm/pm.php?id=$1'
     ), 
     array(
          'cond' => '#^/pm/action/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'pm.php?m=$1'
+         'rule' => 'system/core/pm/pm.php?m=$1'
     ),                         
     array(
          'cond' => '#^/pm/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'pm.php?f=$1'
+         'rule' => 'system/core/pm/pm.php?f=$1'
     ),  
     array(
          'cond' => '#^/pm(/?)$#',
-         'rule' => 'pm.php'
+         'rule' => 'system/core/pm/pm.php'
     ),
     
     /*  Forums rewriting */
     array(
          'cond' => '#^/forums/topics/([0-9]+)(/?)$#',
-         'rule' => 'forums.php?m=topics&s=$1'
+         'rule' => 'system/core/forums/forums.php?m=topics&s=$1'
     ), 
     array(
          'cond' => '#^/forums/posts/([0-9]+)(/?)$#',
-         'rule' => 'forums.php?m=posts&q=$1'
+         'rule' => 'system/core/forums/forums.php?m=posts&q=$1'
     ),
     array(
          'cond' => '#^/forums/post/([0-9]+)(/?)$#',
-         'rule' => 'forums.php?m=posts&p=$1'
+         'rule' => 'system/core/forums/forums.php?m=posts&p=$1'
     ),
     array(
          'cond' => '#^/forums/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'forums.php?c=$1'
+         'rule' => 'system/core/forums/forums.php?c=$1'
     ),
     array(
          'cond' => '#^/forums(/?)$#',
-         'rule' => 'forums.php'
+         'rule' => 'system/core/forums/forums.php'
     ), 
     
     /*  Plugins rewriting */   
     array(
          'cond' => '#^/contact(/?)$#',
-         'rule' => 'plug.php?e=contact'
+         'rule' => 'system/core/plug/plug.php?e=contact'
     ),   
     array(
          'cond' => '#^/whosonline(/?)$#',
-         'rule' => 'plug.php?e=whosonline'
+         'rule' => 'system/core/plug/plug.php?e=whosonline'
     ),   
     array(
          'cond' => '#^/passrecover(/?)$#',
-         'rule' => 'plug.php?e=passrecover'
+         'rule' => 'system/core/plug/plug.php?e=passrecover'
     ), 
     array(
          'cond' => '#^/plug/([a-zA-Z0-9_-]+)(/?)$#',
-         'rule' => 'plug.php?e=$1'
+         'rule' => 'system/core/plug/plug.php?e=$1'
     ), 
     array(
          'cond' => '#^/plug(/?)$#',
-         'rule' => 'plug.php'
+         'rule' => 'system/core/plug/plug.php'
     ),    
     
     /*  Admin area rewriting */   
     array(
          'cond' => '#^/admin/([a-zA-Z0-9_-]+)(/?)$#',
-         'rule' => 'admin.php?m=$1'
+         'rule' => 'system/core/admin/admin.php?m=$1'
     ),
     array(
          'cond' => '#^/admin(/?)$#',
-         'rule' => 'admin.php'
+         'rule' => 'system/core/admin/admin.php'
     ),
     
     /*  Users rewriting */
     array(
          'cond' => '#^/users/filter/([a-zA-Z0-9_-]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-         'rule' => 'users.php?f=$1&s=$2&w=$3'
+         'rule' => 'system/core/users/users.php?f=$1&s=$2&w=$3'
     ),
     array(
          'cond' => '#^/users/filter/([a-zA-Z0-9_-]+)(/?)$#',
-         'rule' => 'users.php?f=$1'
+         'rule' => 'system/core/users/users.php?f=$1'
     ),
     array(
          'cond' => '#^/users/group/([0-9]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-         'rule' => 'users.php?f=all&gm=$1&s=$2&w=$3'
+         'rule' => 'system/core/users/users.php?f=all&gm=$1&s=$2&w=$3'
     ),
     array(
          'cond' => '#^/users/group/([0-9]+)(/?)$#',
-         'rule' => 'users.php?gm=$1'
+         'rule' => 'system/core/users/users.php?gm=$1'
     ),
     array(
          'cond' => '#^/users/maingroup/([0-9]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-         'rule' => 'users.php?f=all&g=$1&s=$2&w=$3'
+         'rule' => 'system/core/users/users.php?f=all&g=$1&s=$2&w=$3'
     ), 
     array(
          'cond' => '#^/users/maingroup/([0-9]+)(/?)$#',
-         'rule' => 'users.php?g=$1'
+         'rule' => 'system/core/users/users.php?g=$1'
     ),
     array(
          'cond' => '#^/users/([a-zA-Z]+)/([a-zA-Z]+)(/?)$#',
-         'rule' => 'users.php?m=$1&a=$2'
+         'rule' => 'system/core/users/users.php?m=$1&a=$2'
     ),  		   
     array(
          'cond' => '#^/users/([a-zA-Z]+)/([0-9]+)(/?)$#',
-         'rule' => 'users.php?m=$1&id=$2'
+         'rule' => 'system/core/users/users.php?m=$1&id=$2'
     ),      
     array(
          'cond' => '#^/users/([a-zA-Z]+)(/?)$#',
-         'rule' => 'users.php?m=$1'
+         'rule' => 'system/core/users/users.php?m=$1'
     ),    
     array(
          'cond' => '#^/users(/?)$#',
-         'rule' => 'users.php'
+         'rule' => 'system/core/users/users.php'
     ),
     array(
          'cond' => '#^/register(/?)$#',
-         'rule' => 'users.php?m=register'
+         'rule' => 'system/core/users/users.php?m=register'
     ),
     array(
          'cond' => '#^/login(/?)$#',
-         'rule' => 'users.php?m=auth'
+         'rule' => 'system/core/users/users.php?m=auth'
     ),
     
     /*  Messages rewriting */
     array(
          'cond' => '#^/message/([0-9]+)/([a-zA-Z0-9]+)(/?)$#',
-         'rule' => 'message.php?msg=$1&redirect=$2'
+         'rule' => 'system/core/message/message.php?msg=$1&redirect=$2'
     ), 
     array(
          'cond' => '#^/message/([0-9]+)(/?)$#',
-         'rule' => 'message.php?msg=$1'
+         'rule' => 'system/core/message/message.php?msg=$1'
     ),                 
     
     /*  Lists rewriting */
 	  array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([a-zA-Z0-9_\-\+/%]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-         'rule' => 'list.php?c=$2&s=$3&w=$4' 
+         'rule' => 'system/core/list/list.php?c=$2&s=$3&w=$4' 
     ),
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+%]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-         'rule' => 'list.php?c=$1&s=$2&w=$3' 
+         'rule' => 'system/core/list/list.php?c=$1&s=$2&w=$3' 
     ),    
                      
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([a-zA-Z0-9_\-\+/%]+)/$#',
-         'rule' => 'list.php?c=$2'
+         'rule' => 'system/core/list/list.php?c=$2'
     ),
     array(
          /* If you will not use the system pages set  #^/([a-zA-Z0-9_\-\+%]+)(/?)$#  */
          'cond' => '#^/([a-zA-Z0-9_\-\+%]+)/$#', 
-         'rule' => 'list.php?c=$1'
+         'rule' => 'system/core/list/list.php?c=$1'
          ),     
     
     /*  Pages rewriting */
     array(
          'cond' => '#^/page/([a-zA-Z]+)(/?)$#',
-         'rule' => 'page.php?m=$1'
+         'rule' => 'system/core/page/page.php?m=$1'
     ),
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([0-9]+)/download(/?)$#',
-         'rule' => 'page.php?id=$2&a=dl'
+         'rule' => 'system/core/page/page.php?id=$2&a=dl'
     ),
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([a-zA-Z0-9_\-\+%]+)/download(/?)$#',
-         'rule' => 'page.php?al=$2&a=dl'
+         'rule' => 'system/core/page/page.php?al=$2&a=dl'
     ), 
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([0-9]+)/comments(/?)$#',
-         'rule' => 'page.php?id=$2&comments=1'
+         'rule' => 'system/core/page/page.php?id=$2&comments=1'
     ),                  
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([a-zA-Z0-9_\-\+%]+)/comments(/?)$#',
-         'rule' => 'page.php?al=$2&comments=1'
+         'rule' => 'system/core/page/page.php?al=$2&comments=1'
     ),
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([0-9]+)$#',
-         'rule' => 'page.php?id=$2'
+         'rule' => 'system/core/page/page.php?id=$2'
     ),                   
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+/%]+)/([a-zA-Z0-9_\-\+%]+)$#',
-         'rule' => 'page.php?al=$2'          
+         'rule' => 'system/core/page/page.php?al=$2'          
     ),
     
     /* For "system" pages */
     array(
          'cond' => '#^/([0-9]+)$#',
-         'rule' => 'page.php?id=$1'
+         'rule' => 'system/core/page/page.php?id=$1'
     ),                   
     array(
          'cond' => '#^/([a-zA-Z0-9_\-\+%]+)$#',
-         'rule' => 'page.php?al=$1'          
+         'rule' => 'system/core/page/page.php?al=$1'          
     ),
     /*------------------*/
          
     /*  Index rewriting */
     array(
          'cond' => '#^/$#',
-         'rule' => 'index.php'                
+         'rule' => 'system/core/index/index.php'                
     )
 );
                  

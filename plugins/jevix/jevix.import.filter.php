@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/jevix/jevix.import.filter.php
-Version=177
+Version=178
 Updated=2012-may-22
 Type=Plugin
 Author=Amro

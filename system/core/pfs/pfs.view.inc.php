@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=pfs.view.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -40,7 +40,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $cfg['gd_suppo
 	echo ("<html><head>
 	<meta name=\"title\" content=\"".$cfg['maintitle']."\" />
 	<meta name=\"description\" content=\"".$cfg['maintitle']."\" />
-	<meta name=\"generator\" content=\"Seditio Copyright Neocrome & Seditio Team http://www.seditio.org\" />
+	<meta name=\"generator\" content=\"Seditio Copyright Neocrome & Seditio Team https://seditio.org\" />
 	<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
 	<meta http-equiv=\"pragma\" content\"=no-cache\" />
 	<meta http-equiv=\"cache-control\" content=\"no-cache\" />

@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Functions
@@ -197,11 +197,21 @@ function sed_forum_resync($id)
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$id'");
 	$num = sed_sql_result($sql,0,"COUNT(*)");
+	
+	$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1");
+	while ($row = sed_sql_fetchassoc($sql)) {
+		sed_forum_resynctopic($row['ft_id']);
+	}
+	
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
+	sed_forum_sectionsetlast($id);
+	
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$id'");
 	$num = sed_sql_result($sql, 0, "COUNT(*)");
+	
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
-  sed_log("Forums : Re-synced section ".$id,'adm'); 
+
+	sed_log("Forums : Re-synced section ".$id,'adm'); 
 	return;
 	}
 
@@ -227,8 +237,8 @@ function sed_forum_resynctopic($id)
 		{
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET
 			ft_lastposterid='".(int)$row['fp_posterid']."',
-			ft_lastpostername='".sed_sql_prep($row['fp_last_postername'])."',
-			ft_updated='".(int)$row['fp_last_updated']."'
+			ft_lastpostername='".sed_sql_prep($row['fp_postername'])."',
+			ft_updated='".(int)$row['fp_updated']."'
 			WHERE ft_id='$id'");
 
 		}
@@ -315,7 +325,7 @@ $result[] = array ('main', '02', 'subtitle', 1, 'Subtitle', '');
 $result[] = array ('main', '03', 'mainurl', 1, 'http://www.yourdomain.com', '');
 $result[] = array ('main', '03', 'multihost', 3, '1', '');    // New in v175
 $result[] = array ('main', '04', 'absurls', 3, '0', '');   // New in v175
-$result[] = array ('main', '04', 'sefurls', 3, '0', '');   // New in v175
+$result[] = array ('main', '04', 'sefurls', 3, '1', '');   // New in v175
 $result[] = array ('main', '04', 'sefurls301', 3, '0', '');   // New in v175
 $result[] = array ('main', '04', 'adminemail', 1, 'admin@mysite.com', '');
 $result[] = array ('main', '05', 'clustermode', 3, '0', '');
@@ -369,7 +379,7 @@ $result[] = array ('lang', '10', 'forcedefaultlang', 3, '0',  '');
 $result[] = array ('menus', '10', 'topline', 0, '', '');
 $result[] = array ('menus', '10', 'banner', 0, '', '');
 $result[] = array ('menus', '10', 'bottomline', 0, '', '');
-$result[] = array ('menus', '15', 'menu1', 0, '<ul><li><a href="/">Home</a></li><li><a href="forums.php">Forums</a></li><li><a href="list.php?c=articles">Articles</a></li><li><a href="gallery.php">Galleries</a></li><li><a href="plug.php?e=contact">Contact</a></li></ul>', '');
+$result[] = array ('menus', '15', 'menu1', 0, '<ul><li><a href="/">Home</a></li><li><a href="/forums/">Forums</a></li><li><a href="/articles/">Articles</a></li><li><a href="/gallery/">Galleries</a></li><li><a href="/plug/contact">Contact</a></li></ul>', '');
 $result[] = array ('menus', '15', 'menu2', 0, '',  '');
 $result[] = array ('menus', '15', 'menu3', 0, '', '');
 $result[] = array ('menus', '15', 'menu4', 0, '', '');
@@ -402,15 +412,6 @@ $result[] = array ('forums', '12', 'antibumpforums', 3, '0', '');
 $result[] = array ('page', '01', 'disable_page', 3, '0', '');
 $result[] = array ('page', '03', 'showpagesubcatgroup', 3, '0', '');
 $result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
-$result[] = array ('parser', '10', 'parser_vid', 3, '1', '');
-$result[] = array ('parser', '20', 'parsebbcodeusertext', 3, '1', '');
-$result[] = array ('parser', '20', 'parsebbcodecom', 3, '1', '');
-$result[] = array ('parser', '20', 'parsebbcodeforums', 3, '1', '');
-$result[] = array ('parser', '20', 'parsebbcodepages', 3, '1', '');
-$result[] = array ('parser', '30', 'parsesmiliesusertext', 3, '0', '');
-$result[] = array ('parser', '30', 'parsesmiliescom', 3, '1', '');
-$result[] = array ('parser', '30', 'parsesmiliesforums', 3, '1', '');
-$result[] = array ('parser', '30', 'parsesmiliespages', 3, '0', '');
 $result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
 $result[] = array ('pfs', '02', 'pfs_filemask', 3, '0', '');
 // $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
@@ -473,33 +474,7 @@ $result[] = array ('users', '13', 'sig_maxy', 2, '100', '');
 $result[] = array ('users', '14', 'ph_maxsize', 2, '64000', '');
 $result[] = array ('users', '14', 'ph_maxx', 2, '256', '');
 $result[] = array ('users', '14', 'ph_maxy', 2, '256', '');
-$result[] = array ('users', '20', 'extra1title', 1, 'Real name', '');
-$result[] = array ('users', '20', 'extra2title', 1, 'Title', '');
-$result[] = array ('users', '20', 'extra3title', 1, '', '');
-$result[] = array ('users', '20', 'extra4title', 1, '', '');
-$result[] = array ('users', '20', 'extra5title', 1, '', '');
-$result[] = array ('users', '20', 'extra6title', 1, '', '');
-$result[] = array ('users', '20', 'extra7title', 1, '', '');
-$result[] = array ('users', '20', 'extra8title', 1, '', '');
-$result[] = array ('users', '20', 'extra9title', 1, '', '');
-$result[] = array ('users', '20', 'extra1tsetting', 2, '255', array(0,1,8,16,32,64,128,255));
-$result[] = array ('users', '20', 'extra2tsetting', 2, '255', array(0,1,8,16,32,64,128,255));
-$result[] = array ('users', '20', 'extra3tsetting', 2, '255', array(0,1,8,16,32,64,128,255));
-$result[] = array ('users', '20', 'extra4tsetting', 2, '255', array(0,1,8,16,32,64,128,255));
-$result[] = array ('users', '20', 'extra5tsetting', 2, '255', array(0,1,8,16,32,64,128,255));
-$result[] = array ('users', '20', 'extra6tsetting', 1, '', '');
-$result[] = array ('users', '20', 'extra7tsetting', 1, '', '');
-$result[] = array ('users', '20', 'extra8tsetting', 1, '', '');
-$result[] = array ('users', '20', 'extra9tsetting', 1, '', '');
-$result[] = array ('users', '20', 'extra1uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra2uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra3uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra4uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra5uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra6uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra7uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra8uchange', 3, '0', '');
-$result[] = array ('users', '20', 'extra9uchange', 3, '0', '');
+
 
 	return($result);
 	}

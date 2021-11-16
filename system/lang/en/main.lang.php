@@ -4,7 +4,7 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 -----------------------
 Seditio language pack
 Language : English (code:en)
@@ -12,8 +12,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Lang
 Author=Neocrome
 Description=Language main
@@ -42,6 +42,7 @@ $L['Announcement'] = "Announcement";
 $L['Archives'] = "Archives";
 $L['Ascending'] = "Ascending";
 $L['Author'] = "Author";
+$L['Auth'] = "Authorization"; // New in v178
 $L['Banned'] = "Banned";
 $L['Banlist'] = "Banlist";
 $L['BBcode'] = "BBcode";
@@ -504,6 +505,8 @@ $L['hea_mypfs'] = "My files"; // New in v175
 $L['hea_users'] = "Users"; // New in v175
 $L['hea_administration'] = "Administration";  // New in v175
 
+$L['hea_pageadd'] = "Add new page"; // New in v178
+
 /* ====== Footer ====== */
 
 $L['foo_poweredby'] = "Powered by";
@@ -563,6 +566,9 @@ $L['for_updatedby'] = "<br /><em>This post was edited by %1\$s (%2\$s, %3\$s ago
 $L['for_antibump'] = "The anti-bump protection is up, you cannot post twice in a row.";
 $L['for_mod_clear'] = "Clear the ratings";    // New in v160
 $L['for_mod_force'] = "Force the rating to ";    // New in v160
+
+$L['for_quickpost'] = "Quick response"; // New in v178
+$L['for_post_text'] = "Текст поста"; // New in v178
 
 /* ====== List ====== */
 

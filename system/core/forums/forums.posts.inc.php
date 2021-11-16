@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=177
+Version=178
 Updated=2013-dec-08
 Type=Core
 Author=Neocrome
@@ -95,9 +95,7 @@ if ($row = sed_sql_fetchassoc($sql))
 	$fs_category = $row['fs_category'];
 	$fs_parentcat = $row['fs_parentcat'];
 	$fs_state = $row['fs_state'];
-	$fs_allowusertext = $row['fs_allowusertext'];
-	$fs_allowbbcodes = $row['fs_allowbbcodes'];
-	$fs_allowsmilies = $row['fs_allowsmilies'];
+	$fs_allowusertext = $row['fs_allowusertext'];;
 	$fs_countposts = $row['fs_countposts'];
 	
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
@@ -116,7 +114,7 @@ $sql2 = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' O
 while ($row2 = sed_sql_fetchassoc($sql2))
 	{ $post12[] = $row2['fp_id']; }
 
-if ($a=='newpost' && $usr['auth_write'])
+if ($a == 'newpost' && $usr['auth_write'])
 	{
 	sed_shield_protect();
 
@@ -147,6 +145,8 @@ if ($a=='newpost' && $usr['auth_write'])
 	/* ===== */
 
 	$newmsg = sed_import('newmsg','P','HTM');
+	
+	$error_string .= (mb_strlen($newmsg)<2) ? $L['for_msgtooshort']."<br />" : '';	
 
 	if (empty($error_string) && !empty($newmsg) && !empty($s) && !empty($q))
 		{
@@ -159,7 +159,6 @@ if ($a=='newpost' && $usr['auth_write'])
 			fp_updated,
 			fp_updater,
 			fp_text,
-			fp_text_ishtml,
 			fp_posterip)
 			VALUES
 			(".(int)$q.",
@@ -169,7 +168,7 @@ if ($a=='newpost' && $usr['auth_write'])
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			0,
-			'".sed_sql_prep($newmsg)."',".(int)$ishtml.",
+			'".sed_sql_prep($newmsg)."',
 			'".$usr['ip']."')");
 
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET
@@ -510,13 +509,19 @@ $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['sepa
 $toptitle .= " ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&q=".$q)."\">".$ft_title."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("forums")] = $L['Forums'];
+sed_build_forums_bc($s, $fs_title, $fs_category, TRUE, $parentcat);
+$urlpaths[sed_url("forums", "m=posts&q=".$q)] = $ft_title;
+
 if (!empty($pages))
 	{
 	$t->assign(array(
 		"FORUMS_POSTS_PAGES" => $pages,
 		"FORUMS_POSTS_PAGEPREV" => $pages_prev,
 		"FORUMS_POSTS_PAGENEXT" => $pages_next
-			));
+	));
 	$t->parse("MAIN.FORUMS_POSTS_PAGINATION_TP");
 	$t->parse("MAIN.FORUMS_POSTS_PAGINATION_BM");
 	}
@@ -524,11 +529,12 @@ if (!empty($pages))
 $t->assign(array(
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_SHORTTITLE" => $fs_title,
+	"FORUMS_POSTS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
 	"FORUMS_POSTS_POLL" => $poll_result,
 	"FORUMS_POSTS_JUMPBOX" => $jumpbox,
-		));
+));
 
 $totalposts = sed_sql_numrows($sql);
 
@@ -538,12 +544,7 @@ $extp = sed_getextplugins('forums.posts.loop');
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
-	$row['fp_text'] = sed_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1, $row['fp_text_ishtml']);
-
-	if (!$row['fp_text_ishtml'] && $cfg['textmode']=='html')
-		{
-		$sql3 = sed_sql_query("UPDATE $db_forum_posts SET fp_text_ishtml=1, fp_text='".sed_sql_prep($row['fp_text'])."' WHERE fp_id=".$row['fp_id']); 
-		}	
+	$row['fp_text'] = sed_parse($row['fp_text']);
 	
 	$row['fp_created'] = sed_build_date($cfg['dateformat'], $row['fp_creation'])." ".$usr['timetext'];
 	$row['fp_updated_ago'] = sed_build_timegap($row['fp_updated'], $sys['now_offset']);
@@ -566,9 +567,7 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$row['fp_posterip'] = ($usr['isadmin']) ? sed_build_ipsearch($row['fp_posterip']) : '';
 			
-	if ($cfg['textmode']=='bbcode') {
-		$row['user_text'] = sed_build_usertext($row['user_text']); 
-	}
+	$row['user_text'] = sed_build_usertext($row['user_text']); 
 	
 	if (sed_userisonline($row['fp_posterid']))
 		{
@@ -603,20 +602,11 @@ while ($row = sed_sql_fetchassoc($sql))
 		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
 		"FORUMS_POSTS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$row['user_maingrp']]['level']),
 		"FORUMS_POSTS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$row['user_maingrp']]['icon']),
-		"FORUMS_POSTS_ROW_USERTEXT" => sed_parse($row['user_text'],1,1,1),
+		"FORUMS_POSTS_ROW_USERTEXT" => sed_parse($row['user_text']),
 		"FORUMS_POSTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
 		"FORUMS_POSTS_ROW_PHOTO" => sed_build_userimage($row['user_photo']),
 		"FORUMS_POSTS_ROW_SIGNATURE" => sed_build_userimage($row['user_signature']),
 		"FORUMS_POSTS_ROW_GENDER" => $row['user_gender'] = ($row['user_gender']=='' || $row['user_gender']=='U') ? '' : $L["Gender_".$row['user_gender']],
-		"FORUMS_POSTS_ROW_USEREXTRA1" => sed_cc($row['user_extra1']),
-		"FORUMS_POSTS_ROW_USEREXTRA2" => sed_cc($row['user_extra2']),
-		"FORUMS_POSTS_ROW_USEREXTRA3" => sed_cc($row['user_extra3']),
-		"FORUMS_POSTS_ROW_USEREXTRA4" => sed_cc($row['user_extra4']),
-		"FORUMS_POSTS_ROW_USEREXTRA5" => sed_cc($row['user_extra5']),
-		"FORUMS_POSTS_ROW_USEREXTRA6" => sed_cc($row['user_extra6']),
-		"FORUMS_POSTS_ROW_USEREXTRA7" => sed_cc($row['user_extra7']),
-		"FORUMS_POSTS_ROW_USEREXTRA8" => sed_cc($row['user_extra8']),
-		"FORUMS_POSTS_ROW_USEREXTRA9" => sed_cc($row['user_extra9']),
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
 		"FORUMS_POSTS_ROW_USERONLINE" => $row['fp_useronline'],
 		"FORUMS_POSTS_ROW_USERONLINE_TEXT" => $row['fp_useronline_text'],
@@ -633,7 +623,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		"FORUMS_POSTS_ROW_POSTCOUNT" => $row['user_postcount'],
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
 		"FORUMS_POSTS_ROW" => $row,
-		));
+	));
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
@@ -653,32 +643,27 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		$sql4 = sed_sql_query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_sectionid='$s' AND fp_id='$quote' LIMIT 1");
 		if ($row4 = sed_sql_fetchassoc($sql4))
 			{ 
-			$newmsg = ($cfg['textmode'] == 'bbcode') ? "[quote][url=".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."]#".$row4['fp_id']."[/url] [b]".$row4['fp_postername']." :[/b]\n".$row4['fp_text']."\n[/quote]" :
-			"<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; 
+			$newmsg = "<blockquote><a href=\"".sed_url("forums", "m=posts&p=".$row4['fp_id'], "#".$row4['fp_id'])."\">#".$row4['fp_id']."</a> <strong>".$row4['fp_postername']." :</strong><br />".$row4['fp_text']."</blockquote><br />"; 
 			}
 		}
+		
+	if (!empty($error_string))
+		{
+		$t->assign("FORUMS_POSTS_NEWPOST_ERROR_BODY",$error_string);
+		$t->parse("MAIN.FORUMS_POSTS_NEWPOST.FORUMS_POSTS_NEWPOST_ERROR");
+		}		
 
 	$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
 	$post_main = "<div id=\"np\"><textarea name=\"newmsg\" rows=\"12\" cols=\"80\">".sed_cc($newmsg, ENT_QUOTES)."</textarea></div>";
 
-	if ($cfg['textmode']=='bbcode')
-		{
-		$smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies("newpost", "newmsg", $L['Smilies'])." &nbsp; " : '';
-		$bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes("newpost", "newmsg", $L['BBcodes']): '';
-		}
-	else { $bbcodes = ''; $smilies = ''; } 
-
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=".$s."&q=".$q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => $post_main.$bbcodes." ".$smilies." ".$pfs,
+		"FORUMS_POSTS_NEWPOST_TEXT" => $post_main." ".$pfs,
 		"FORUMS_POSTS_NEWPOST_TEXTONLY" => $post_main,
-		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main.$bbcodes." ".$smilies." ".$pfs,
-		"FORUMS_POSTS_NEWPOST_SMILIES" => $smilies,
-		"FORUMS_POSTS_NEWPOST_BBCODES" => $bbcodes,
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
-			));
+	));
 
 	/* === Hook  === */
 	$extp = sed_getextplugins('forums.posts.newpost.tags');

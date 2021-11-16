@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/statistics.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Plugin
 Author=Neocrome
 Description=
@@ -40,7 +40,7 @@ if ($m=='share')
 	$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
 	$totaldbposts += sed_sql_result($sql,0,"SUM(fs_postcount_pruned)");
 	$output = "Seditio - Website engine<br />Copyright Neocrome & Seditio Team<br />";
-	$output .= "<a href=\"http://www.seditio.org\">http://www.seditio.org</a><br />";
+	$output .= "<a href=\"https://seditio.org\">https://seditio.org</a><br />";
 	$output .= "&nbsp;<br />[BEGIN_SED]<br />Title=".$cfg['maintitle']."<br />";
 	$output .= "Subtitle=".$cfg['subtitle']."<br />Version=".$cfg['version']."<br />";
 	$output .= "Pages=".sed_sql_rowcount($db_pages)."<br />Users=".sed_sql_rowcount($db_users)."<br />";

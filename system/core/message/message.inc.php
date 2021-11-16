@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=message.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Messages
@@ -24,6 +24,8 @@ $msg = sed_import('msg','G','INT');
 $num = sed_import('num','G','INT');
 $rc = sed_import('rc','G','INT');
 $redirect = sed_import('redirect','G','SLU');
+
+$redirect = ($redirect == "/") ? "" : $redirect;
 
 require("system/lang/$lang/message.lang.php");
 

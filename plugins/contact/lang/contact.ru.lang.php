@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/lang/contact.ru.lang.php
-Version=177
+Version=178
 Updated=2012-may-16
 Type=
 Author=Neocrome

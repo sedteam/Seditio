@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/whosonline.php
-Version=177
+Version=178
 Updated=2007-mar-03
 Type=Plugin
 Author=Neocrome

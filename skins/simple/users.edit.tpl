@@ -128,6 +128,11 @@
 		<td>{PHP.skinlang.usersedit.Gender}</td>
 		<td>{USERS_EDIT_GENDER}</td>
 	</tr>
+	
+	<tr>
+		<td>{USERS_EDIT_INSTAGRAM_TITLE}</td>
+		<td>{USERS_EDIT_INSTAGRAM} {USERS_EDIT_INSTAGRAM_MERA}</td>
+	</tr>	
 
 	<tr>
 		<td>{PHP.skinlang.usersedit.Signature}</td>

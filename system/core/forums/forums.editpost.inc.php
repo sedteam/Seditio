@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -61,7 +61,7 @@ if ($row = sed_sql_fetchassoc($sql))
 else
 	{ sed_die(); }
 
-$sql = sed_sql_query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
+$sql = sed_sql_query("SELECT fs_state, fs_title, fs_category FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
 
 if ($row = sed_sql_fetchassoc($sql))
 	{
@@ -69,9 +69,6 @@ if ($row = sed_sql_fetchassoc($sql))
 		{
 		sed_redirect(sed_url('message','msg=602','',true));
 		}
-
-	$fs_allowbbcodes = $row['fs_allowbbcodes'];
-	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_title = $row['fs_title'];
 	$fs_category = $row['fs_category'];
 	}
@@ -109,7 +106,7 @@ if ($a=='update')
 
 	if (!empty($rmsg))
 		{
-		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='".sed_sql_prep($rmsg)."', fp_text_ishtml='$ishtml', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
+		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='".sed_sql_prep($rmsg)."', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
 		}
 
 	if (!empty($rtopictitle))
@@ -144,28 +141,21 @@ if ($row = sed_sql_fetchassoc($sql))
 	$fp_idp = $row['fp_id'];
 	$firstpost = ($fp_idp==$p) ? TRUE : FALSE;
 	}
-
-// -------
-if ($cfg['textmode']=='bbcode')
-    {
-    $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('editpost', 'rmsg', $L['BBcodes']) : '';
-    $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies('editpost', 'rmsg', $L['Smilies'])." &nbsp; " : '';
-    }
-else { $bbcodes = ''; $smilies = ''; } 
-// -------
-   
+	
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rmsg", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rmsg');
 $editpost_text = "<div id=\"ep\"><textarea name=\"rmsg\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($fp_text, ENT_QUOTES)."</textarea></div>";
 
-$toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums","m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
-$toptitle .= ($usr['isadmin']) ? " *" : '';
-
-
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("forums")] = $L['Forums'];
+sed_build_forums_bc($s, $fs_title, $fs_category);
+$urlpaths[sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$p."&".sed_xg())] = $L['Edit'];
 
 $sys['sublocation'] = $fs_title;
 $out['subtitle'] = $L['Forums'];
@@ -198,16 +188,14 @@ $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SHORTTITLE" => $fs_title." - ".$L['Edit'],	
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".sed_build_date($cfg['dateformat'], $fp_updated)." ".$usr['timetext'],
+	"FORUMS_EDITPOST_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_EDITPOST_SEND" => sed_url("forums","m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
-	"FORUMS_EDITPOST_TEXT" => $editpost_text.$bbcodes." ".$smilies." ".$pfs,
+	"FORUMS_EDITPOST_TEXT" => $editpost_text." ".$pfs,
 	"FORUMS_EDITPOST_TEXTONLY" => $editpost_text,
-	"FORUMS_EDITPOST_TEXTBOXER" => $editpost_text.$bbcodes." ".$smilies." ".$pfs,
 	"FORUMS_EDITPOST_TITLE" => " <input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".$ft_title."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_EDITPOST_DESC" => "<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".$ft_desc."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_EDITPOST_SMILIES" => $smilies,
-	"FORUMS_EDITPOST_BBCODES" => $bbcodes,
 	"FORUMS_EDITPOST_MYPFS" => $pfs
-		));
+));
 
 if ($firstpost)	
   { $t->parse("MAIN.FORUMS_EDITPOST_FIRST"); }

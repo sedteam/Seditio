@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=pm.send.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Private messages
@@ -48,11 +48,12 @@ $totalinbox = sed_sql_result($sql, 0, "COUNT(*)");
 
 if ($a=='send')
 	{
+		
 	/* === Hook === */
-$extp = sed_getextplugins('pm.send.send.first');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
+	$extp = sed_getextplugins('pm.send.send.first');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	sed_shield_protect();
 	$newpmtitle = sed_import('newpmtitle','P','TXT');
@@ -72,7 +73,7 @@ if (is_array($extp))
 		$touser_ids[] = $row['user_id'];
 		$row['user_name'] = sed_cc($row['user_name']);
 		$touser_names[] = $row['user_name'];
-		$touser_usrlnk[] .= ($cfg['parsebbcodecom']) ? "[user=".$row['user_id']."]".$row['user_name']."[/user]" : $row['user_name'];
+		$touser_usrlnk[] .= sed_build_user($row['user_id'], $row['user_name']);
 		}
 
 	$touser = ($totalrecipients>0) ? implode (",", $touser_names) : '';
@@ -95,8 +96,7 @@ if (is_array($extp))
 				pm_fromuser,
 				pm_touserid,
 				pm_title,
-				pm_text,
-				pm_text_ishtml)
+				pm_text)
 				VALUES
 				(0,
 				".(int)$sys['now_offset'].",
@@ -104,7 +104,7 @@ if (is_array($extp))
 				'".sed_sql_prep($usr['name'])."',
 				".(int)$userid.",
 				'".sed_sql_prep($newpmtitle)."',
-				'".sed_sql_prep($newpmtext)."', ".(int)$ishtml.")");
+				'".sed_sql_prep($newpmtext)."')");
 
 			$sql = sed_sql_query("UPDATE $db_users SET user_newpm=1 WHERE user_id='".$userid."'");
 
@@ -194,15 +194,6 @@ if (!empty($q) && empty($newpmtext))
 		}
 	}
 
-// ----------
-if ($cfg['textmode']=='bbcode')
-    {	
-	$bbcodes = ($cfg['parsebbcodecom']) ? sed_build_bbcodes('newlink', 'newpmtext', $L['BBcodes']) : '';
-	$smilies = ($cfg['parsesmiliescom']) ? " &nbsp; ".sed_build_smilies('newlink', 'newpmtext', $L['Smilies'])." &nbsp; " : ''; 	
-    }
-else { $bbcodes = ''; $smilies = ''; }
-// ----------
-	
 $pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url("pm", "m=send")."\">".$L['pm_sendnew']."</a>" : '';
@@ -212,6 +203,11 @@ $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('pmtitle', $title_tags, $title_data);
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("pm")] = $L['Private_Messages'];
+$urlpaths[sed_url("pm", "m=send")] = $L['pmsend_title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');
@@ -230,20 +226,19 @@ if (!empty($error_string))
 
 $t->assign(array(
 	"PMSEND_TITLE" => "<a href=\"".sed_url("pm")."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
+	"PMSEND_SHORTTITLE" => $L['pmsend_title'],
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
+	"PMSEND_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
 	"PMSEND_INBOX" => "<a href=\"".sed_url("pm")."\">".$L['pm_inbox']."</a>:".$totalinbox,
 	"PMSEND_ARCHIVES" => "<a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a>:".$totalarchives,
 	"PMSEND_SENTBOX" => "<a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PMSEND_FORM_SEND" => sed_url("pm", "m=send&a=send&to=".$to),
 	"PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".$newpmtitle."\" size=\"64\" maxlength=\"64\" />",
-	"PMSEND_FORM_TEXT" =>  "<div><textarea name=\"newpmtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".$newpmtext."</textarea></div>".$bbcodes." ".$smilies." ".$pfs,
-	"PMSEND_FORM_TEXTBOXER" => "<div><textarea name=\"newpmtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".$newpmtext."</textarea></div>".$bbcodes." ".$smilies." ".$pfs,
-  "PMSEND_FORM_BBCODES" => $bbcodes,
-  "PMSEND_FORM_SMILIES" => $smilies, 
+	"PMSEND_FORM_TEXT" =>  "<div><textarea name=\"newpmtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".$newpmtext."</textarea></div> ".$pfs,
 	"PMSEND_FORM_MYPFS" => $pfs,
 	"PMSEND_FORM_TOUSER" => "<div><textarea name=\"newpmrecipient\" rows=\"3\" cols=\"".$cfg['textarea_default_width']."\" class=\"noeditor\">".$touser."</textarea></div>"
-		));
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.tags');

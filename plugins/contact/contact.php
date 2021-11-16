@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Plugin
 Author=Neocrome
 Description=
@@ -49,7 +49,6 @@ if (empty($cfg['plugin']['contact']['recipients']))
 
 $cfg_emails = explode (",", $cfg['plugin']['contact']['emails']);
 $cfg_names = explode (",", $cfg['plugin']['contact']['recipients']);
-
 
 if ($a=='send')
 	{
@@ -115,18 +114,23 @@ $antispam_fak = implode ('.', $antispam_fak);
 
 $antispam .= "&nbsp; <strong>".$antispam_key."</strong> &nbsp;";
 $antispam .= "<input type=\"text\" class=\"text\" name=\"sender_key\" value=\"\" size=\"8\" maxlength=\"8\" />";
-$antispam .= "<input type=\"hidden\" name=\"sender_fak\" value=\"".$antispam_fak."\" /></div>";
+$antispam .= "<input type=\"hidden\" name=\"sender_fak\" value=\"".$antispam_fak."\" />";
 
-// ======================================================
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("plug", "e=contact")] = $L['plu_title'];	
 
 if (!empty($error_string))
 	{
 	$t->assign("PLUGIN_CONTACT_ERROR_BODY",$error_string);
 	$t->parse("MAIN.PLUGIN_CONTACT_ERROR");
 	}
-
+	
 $t->assign(array(
   "PLUGIN_CONTACT_TITLE" => "<a href=\"".sed_url("plug", "e=contact")."\">".$L['plu_title'] ."</a>",
+  "PLUGIN_CONTACT_SHORTTITLE" => $L['plu_title'],
+  "PLUGIN_CONTACT_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+  "PLUGIN_CONTACT_URL" => sed_url("plug", "e=contact"),
   "PLUGIN_CONTACT_EXPLAIN" => $L['plu_explain'],
   "PLUGIN_CONTACT_FORM" => sed_url("plug", "e=contact&a=send"),
   "PLUGIN_CONTACT_RECIPIENTS_TITLE" => $L['plu_recipients_title'],
@@ -147,7 +151,6 @@ $t->assign(array(
   "PLUGIN_CONTACT_EXTRA2" => $cfg['plugin']['contact']['extra2'],
   "PLUGIN_CONTACT_EXTRA3" => $cfg['plugin']['contact']['extra3'],
   "PLUGIN_CONTACT_SEND" => $L['plu_send']
-	));
-
+));
 
 ?>

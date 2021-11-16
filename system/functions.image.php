@@ -1,5 +1,20 @@
 <?php
 
+/* ====================
+Seditio - Website engine
+Copyright Neocrome & Seditio Team
+http://www.neocrome.net
+https://seditio.org
+[BEGIN_SED]
+File=system/functions.image.php
+Version=178
+Updated=2021-jun-17
+Type=Core
+Author=Amro
+Description=Image Functions
+[END_SED]
+==================== */
+
 $cfg['allowed_extentions'] = array('png', 'gif', 'jpg', 'jpeg', 'ico');
 
 $cfg['pfs_dir'] = $_SERVER["DOCUMENT_ROOT"].'/datas/users/';
@@ -50,23 +65,19 @@ function resize($filename)
 {        
 	global $cfg;
 	
-	list($source_file, $type, $width, $height, $set_watermark) = get_resize_params($filename);
-
-	// Если вайл удаленный (http://), зальем его себе
-	if (substr($source_file, 0, 7) == 'http://' || substr($source_file, 0, 8) == 'https://') {
-		// Имя оригинального файла
-		if (!$original_file = download_image($source_file)) {
-			return false;
-		}
-	} else {
-		$original_file = $source_file;
-	}
-
-	$resized_file = add_resize_params($original_file, $type, $width, $height, $set_watermark);
-	
 	// Пути к папкам с картинками
 	$originals_dir = $cfg['pfs_dir'];
-	$preview_dir = $cfg['res_dir'];
+	$preview_dir = $cfg['res_dir'];	
+	
+	list($original_file, $type, $width, $height, $set_watermark) = get_resize_params($filename);
+	
+	if (!file_exists($originals_dir . $original_file) || empty($original_file))
+		{ 
+		header("HTTP/1.1 404 Not Found");
+		exit;
+		}
+
+	$resized_file = add_resize_params($original_file, $type, $width, $height, $set_watermark);
 
 	$watermark_offset_x = $cfg['watermark_offset_x'];
 	$watermark_offset_y = $cfg['watermark_offset_y'];
@@ -79,7 +90,7 @@ function resize($filename)
 	} else {
 		$watermark = null;
 	}
-
+	
 	if (class_exists('Imagick') && $cfg['use_imagick']) {
 		image_constrain_imagick($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
 			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $sharpen);
@@ -124,6 +135,7 @@ function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_
  */
 function get_resize_params($filename)
 {
+	
 	// Определаяем параметры ресайза
 	if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)$/', $filename, $matches)) {
 		return false;
@@ -137,86 +149,6 @@ function get_resize_params($filename)
 	$ext = $matches[6];                     // расширение файла
 
 	return array($file . '.' . $ext, $type, $width, $height, $set_watermark);
-}
-
-/**
- * @param string $filename
- * @return string|false
- */
-function download_image($filename)
-{
-	global $cfg;
-	
-	$parse_url = parse_url($filename);
-
-	// Имя оригинального файла
-	$basename = basename($parse_url['path']);
-	$base = correct_filename(pathinfo($basename, PATHINFO_FILENAME));
-	$ext = pathinfo($basename, PATHINFO_EXTENSION);
-
-	// Если такой файл существует, нужно придумать другое название
-	$new_name = $base . '.' . $ext;
-
-	$cacheImagePath = getCacheImagePath();
-	while (file_exists($cfg['pfs_dir'] . $cacheImagePath . $new_name)) {
-		$new_base = pathinfo($new_name, PATHINFO_FILENAME);
-		if (preg_match('/_([0-9]+)$/', $new_base, $parts)) {
-			$new_name = $base . '_' . ($parts[1] + 1) . '.' . $ext;
-		} else {
-			$new_name = $base . '_1.' . $ext;
-		}
-	}
-
-	$directory = dirname($cfg['pfs_dir'] . $cacheImagePath . $new_name);
-
-	if (!is_dir($directory)) {
-		@mkdir($directory, 0777, true);
-	}
-
-	// Перед долгим копированием займем это имя
-	fclose(fopen($cfg['pfs_dir'] . $cacheImagePath . $new_name, 'w'));
-	copy($filename, $cfg['pfs_dir'] . $cacheImagePath . $new_name);
-	return $cacheImagePath . $new_name;
-}
-
-/**
- * @param $filename
- * @param $name
- * @param bool|string|int $product_id
- * @return bool|string
- */
-function upload_image($filename, $name, $product_id = false)
-{
-	global $cfg;
-	
-	// Имя оригинального файла
-	$cacheImagePath = getCacheImagePath();
-	$uploaded_file = $new_name = pathinfo($name, PATHINFO_BASENAME);
-	$base = pathinfo($uploaded_file, PATHINFO_FILENAME);
-	$base = correct_filename($base);
-	$ext = pathinfo($uploaded_file, PATHINFO_EXTENSION);
-	$new_name = $base . '.' . $ext;
-	if (in_array(strtolower($ext), $cfg['allowed_extentions'])) {
-		while (file_exists($cfg['pfs_dir'] . $cacheImagePath . $new_name)) {
-			$new_base = pathinfo($new_name, PATHINFO_FILENAME);
-			if (preg_match('/_([0-9]+)$/', $new_base, $parts)) {
-				$new_name = $base . '_' . ($parts[1] + 1) . '.' . $ext;
-			} else {
-				$new_name = $base . '_1.' . $ext;
-			}
-		}
-		$directory = dirname($cfg['pfs_dir'] . $cacheImagePath . $new_name);
-
-		if (!is_dir($directory)) {
-			@mkdir($directory, 0777, true);
-		}
-
-		if (move_uploaded_file($filename, $cfg['pfs_dir'] . $cacheImagePath . $new_name)) {
-			return $cacheImagePath . $new_name;
-		}
-	}
-
-	return false;
 }
 
 /**
@@ -577,22 +509,6 @@ function calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 'res
 }
 
 /**
- * @param string $filename
- * @return mixed|string
- */
-function correct_filename($filename)
-{
-	$ru = explode('-',
-		"А-а-Б-б-В-в-Ґ-ґ-Г-г-Д-д-Е-е-Ё-ё-Є-є-Ж-ж-З-з-И-и-І-і-Ї-ї-Й-й-К-к-Л-л-М-м-Н-н-О-о-П-п-Р-р-С-с-Т-т-У-у-Ф-ф-Х-х-Ц-ц-Ч-ч-Ш-ш-Щ-щ-Ъ-ъ-Ы-ы-Ь-ь-Э-э-Ю-ю-Я-я- ");
-	$en = explode('-',
-		"A-a-B-b-V-v-G-g-G-g-D-d-E-e-E-e-E-e-ZH-zh-Z-z-I-i-I-i-I-i-J-j-K-k-L-l-M-m-N-n-O-o-P-p-R-r-S-s-T-t-U-u-F-f-H-h-TS-ts-CH-ch-SH-sh-SCH-sch-_-Y-y-_-E-e-YU-yu-YA-ya-_");
-	$res = str_replace($ru, $en, $filename);
-	$res = strtolower($res);
-	$res = preg_replace("/[^a-z0-9_-]/", "", $res);
-	return $res;
-}
-
-/**
  * merge two true colour images while maintaining alpha transparency of both
  * images.
  *
@@ -623,14 +539,4 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
 
 	// insert cut resource to destination image
 	imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
-}
-
-function getCacheImagePath($product_id = '')
-{
-	if (!empty($product_id)) {
-
-		return implode('/', array($product_id % 1000, $product_id % 100, $product_id)) . '/';
-		// return implode('/', str_split($product_id)) . '/';
-	}
-	return '';
 }

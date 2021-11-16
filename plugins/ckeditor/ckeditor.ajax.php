@@ -3,11 +3,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.ajax.php
-Version=177
+Version=178
 Updated=2013-oct-09
 Type=Plugin
 Author=Amro
@@ -65,7 +65,6 @@ $u_size = $_FILES['upload']['size'];
 
 $u_name  = str_replace("\'",'',$u_name );
 $u_name  = trim(str_replace("\"",'',$u_name ));
-
 
 			$result_upload = array(
 				"uploaded" => 1, 
@@ -135,7 +134,6 @@ if (!empty($u_name))
 					pff_date,
 					pff_updated,
 					pff_desc,
-					pff_desc_ishtml,
 					pff_type,
 					pff_count)
 					VALUES
@@ -143,8 +141,7 @@ if (!empty($u_name))
 					'".sed_sql_prep($folder_title)."',
 					".(int)$sys['now'].",
 					".(int)$sys['now'].",
-					'',
-					".(int)$ishtml.",    
+					'',    
 					0,
 					0)");
 					
@@ -159,7 +156,6 @@ if (!empty($u_name))
 				pfs_folderid,
 				pfs_title,
 				pfs_desc,
-				pfs_desc_ishtml,
 				pfs_size,
 				pfs_count)
 				VALUES
@@ -170,7 +166,6 @@ if (!empty($u_name))
 				".(int)$folderid.",
 				'".sed_sql_prep($u_title)."',
 				'".sed_sql_prep($desc)."',
-				".(int)$ishtml.",
 				".(int)$u_size.",
 				0) ");
 

@@ -115,6 +115,11 @@
 		<td>{PHP.skinlang.usersprofile.Gender}</td>
 		<td>{USERS_PROFILE_GENDER}</td>
 	</tr>
+	
+	<tr>
+		<td>{USERS_PROFILE_INSTAGRAM_TITLE}</td>
+		<td>{USERS_PROFILE_INSTAGRAM} {USERS_PROFILE_INSTAGRAM_MERA}</td>
+	</tr>	
 
 	<tr>
 		<td>{PHP.skinlang.usersprofile.Avatar}</td>

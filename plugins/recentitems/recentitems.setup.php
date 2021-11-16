@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/recentitems/recentitems.setup.php
-Version=177
+Version=178
 Updated=2013-jul-08
 Type=Plugin
 Author=Neocrome
@@ -19,7 +19,7 @@ Description=
 Code=recentitems
 Name=Recent items
 Description=Recent pages, polls, commments and topics in forums, displayed on the home page
-Version=177
+Version=178
 Updated=2013-jul-08
 Author=Neocrome
 Copyright=

@@ -4,7 +4,7 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 -----------------------
 Seditio language pack
 LANG : Russian (code:ru)
@@ -13,7 +13,7 @@ Localization done by : Antar, http://subs.com.ru;
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/message.lang.php
-Version=177
+Version=178
 Updated=2012-may-16
 Type=Lang
 Author=Neocrome

@@ -1,0 +1,172 @@
+@media (max-width: 1600px) {
+
+}
+
+@media (max-width: 1300px) {
+
+}
+
+@media (max-width: 1200px) {
+
+}
+
+@media (max-width: 1000px) {
+
+}
+
+@media (max-width: 992px) {
+		
+	#header,
+	#header.header-sticky {
+		height: 62px!important;
+	}		
+	
+	#header .menu-col .menu-wrapper {
+		display: none;
+	}	
+	
+	#header .trigger-col {
+		display:table-cell;
+	}
+	
+	#header .logo-col,
+	#header .menu-col	{
+		padding:0;
+		height: 62px!important;
+	}
+	
+	#header.header-sticky .logo-col,
+	#header.header-sticky .menu-col {
+		padding:0;
+		height: 62px!important;
+	}
+	
+	#header.header-sticky .logo-col,
+	#header .logo-col {
+		width:150px!important;
+	}
+	
+	#header .logo,
+	#header.header-sticky .logo {
+		max-width: 134px!important;
+		max-height: 50px!important;
+	}	
+	
+	.menu-wrapper {
+		max-width: 550px;
+		float: right;
+		width: 100%;
+		font-size: 1.1em;
+	}
+	
+	#sidebar, #primary {
+		float:none;
+		width:100%;
+	}	
+	
+	.sidebar-box {
+		border: 0;
+		border-top: 1px solid #d4d4d4;
+		padding: 24px 0 0 0;
+		border-radius: 3px;
+		margin-bottom: 24px;
+	}
+
+	.sidebar-box .sidebar-title h3 {
+		font-weight: 300;
+		font-size: 2.5em;
+	}	
+	
+	.footer-wrapper {
+		display: block;
+		width:100%;
+	}
+	
+	.footer-about-col,
+	.footer-menu-col,
+	.footer-social-col {
+		width:100%;
+		display:block;
+	}
+	
+	.footer-menu-table {
+		margin: 0;
+	}	
+	
+	.footer-menu-col {
+		padding-top: 10px;
+	}	
+	
+	.footer-social-col {
+		padding-top: 25px;
+	}	
+	
+	#list,
+	#page,
+	#system,
+	#plugins,
+	#forums	{
+		padding-top: 104px;
+	}	
+
+	.post-sidebar-small-item .post-title h3 {
+		font-size: 1em;
+	}	
+	
+	
+}
+
+@media (max-width: 768px) {
+	.footer-bottom-table {
+		display:block;
+		width:100%;
+	}
+	.footer-bottom-copyright,
+	.footer-bottom-dev {
+		display:block;
+		width:100%;
+		text-align:center;
+	}	
+	
+	.responsive-form .form-label, 
+	.responsive-form .form-field {
+		width: 100%;
+		float: none;
+		max-width: 100%;
+		padding: 10px 0 0 0px;
+	}
+
+	.responsive-form .form-label {
+		padding: 20px 0 0 0px;
+	}
+	
+	.responsive-form .form-field {
+		border-bottom: 1px solid #f1efef;
+		padding-bottom:15px;
+	}
+	
+	.responsive-form .form-label  label {
+		font-weight:600;
+	}
+	
+	
+}
+
+@media (max-width: 570px) {
+	
+	body {
+	  font-size:14px;
+	}
+
+	#slider .slide-body h1, 
+	#slider .slide-body h2, 
+	#slider .slide-body h3 {
+		font-size: 2em;
+	}
+		
+}
+
+@media (max-width: 400px) {
+	
+}
+	

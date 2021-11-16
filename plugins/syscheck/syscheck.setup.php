@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.setup.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Plugin
 Author=Neocrome
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=syscheck
 Name=System check
 Description=Will check the versions of the PHP system files and TPL skin files
-Version=177
+Version=178
 Date=2010-feb-05
 Author=Neocrome
 Copyright=

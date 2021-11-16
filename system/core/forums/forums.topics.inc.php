@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -176,7 +176,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_forum_sectionsetlast($s);
 		sed_forum_sectionsetlast($ns);
 		sed_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
-    sed_redirect(sed_url("forums", "m=topics&s=".$s, "", true));
+		sed_redirect(sed_url("forums", "m=topics&s=".$s, "", true));
 		break;
 
 		case 'lock':
@@ -234,8 +234,8 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_log("Resetted the ratings for topic #".$q, 'for');
 		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_rating=0 WHERE fp_topicid='$q'");
 		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='".$q."'");
-    while ($row = sed_sql_fetchassoc($sql))
-	   { $sql1 = sed_sql_query("DELETE FROM $db_mod_votes WHERE mv_code='fp".$row['fp_id']."'"); }
+		while ($row = sed_sql_fetchassoc($sql))
+		{ $sql1 = sed_sql_query("DELETE FROM $db_mod_votes WHERE mv_code='fp".$row['fp_id']."'"); }
 		sed_redirect(sed_url("forums", "m=posts&q=".$q, "", true));
 		break;
 
@@ -331,13 +331,18 @@ list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=topics&s
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, TRUE, $parentcat);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("forums")] = $L['Forums'];
+sed_build_forums_bc($s, $fs_title, $fs_category, TRUE, $parentcat);
+
 if (!empty($pages))
 	{
 	$t->assign(array(
 		"FORUMS_TOPICS_PAGES" => $pages,
 		"FORUMS_TOPICS_PAGEPREV" => $pages_prev,
 		"FORUMS_TOPICS_PAGENEXT" => $pages_next
-			));
+	));
 	$t->parse("MAIN.FORUMS_TOPICS_PAGINATION_TP");
 	$t->parse("MAIN.FORUMS_TOPICS_PAGINATION_BM");
 	}		
@@ -346,6 +351,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
 	"FORUMS_TOPICS_SHORTTITLE" => $fs_title,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
+	"FORUMS_TOPICS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url("forums", "m=newtopic&s=".$s),	
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
@@ -378,7 +384,7 @@ while ($fsn = sed_sql_fetchassoc($sql2))
 		$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
 		$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
 		$fsn['fs_newposts'] = '0';
-		$fsn['fs_desc'] = sed_bbcode($fsn['fs_desc']);
+		$fsn['fs_desc'] = sed_cc($fsn['fs_desc']);
 		$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
 		$sed_sections_vw_cur = (!$sed_sections_vw[$fsn['fs_title']]) ? "0" : $sed_sections_vw[$fsn['fs_title']];
 

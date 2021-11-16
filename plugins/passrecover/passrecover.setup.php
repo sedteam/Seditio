@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.setup.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Plugin
 Author=Neocrome
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=passrecover
 Name=Password recovery
 Description=Sends emails to users so they can recover their lost passwords
-Version=177
+Version=178
 Date=2012-okt-04
 Author=Neocrome & Seditio Team
 Copyright=

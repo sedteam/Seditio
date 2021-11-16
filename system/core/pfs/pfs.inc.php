@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=pfs.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -79,11 +79,18 @@ foreach ($sed_extensions as $k => $line)
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
 $title = "<a href=\"".sed_url("pfs", $more)."\">".$L['pfs_title']."</a>";
+$shorttitle = $L['pfs_title'];
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("pfs", $more)] = $L['pfs_title'];
 
 if ($userid!=$usr['id'])
 	{
 	sed_block($usr['isadmin']);
 	$title .= ($userid==0) ? '' : " (".sed_build_user($user_info['user_id'], $user_info['user_name']).")";
+	$urlpaths[sed_url("users", "m=details&id=".$user_info['user_id'])] = $user_info['user_name']; 
+	$shorttitle = $user_info['user_name'];
 	}
 
 /* === Hook === */
@@ -105,7 +112,7 @@ if ($a=='upload')
 	$nresize = sed_import('nresize','P','BOL');
 	$naddlogo = sed_import('naddlogo','P','BOL');
 	$naddlogo = ($naddlogo) ? 1 : 0;
-  $nresize = ($nresize) ? 1 : 0;
+	$nresize = ($nresize) ? 1 : 0;
 
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.upload.first');
@@ -116,7 +123,7 @@ if ($a=='upload')
 	if ($folder_id!=0)
 		{
 		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
-		sed_die(sed_sql_numrows($sql)==0);
+		sed_die(sed_sql_numrows($sql) == 0);
 		}
 
 	$disp_errors = "<ul class=\"cross_list\">";
@@ -137,21 +144,21 @@ if ($a=='upload')
 			$disp_errors .= "<li>".$u_name." : ";
 
 			$u_title = sed_import($ntitle[$ii],'D','TXT');   // New in Sed 170
-      $desc = '';
+			$desc = '';
 
-    	$u_name = mb_strtolower($u_name);
+			$u_name = mb_strtolower($u_name);
 			$dotpos = mb_strrpos($u_name,".")+1;
 			$f_extension = mb_substr($u_name, $dotpos, 5);
 			$f_extension_ok = 0;
       
-      if ($cfg['pfs_filemask'])
-  			{
-  				$u_name = $userid."-".time()."-".sed_unique(3).".".$f_extension;
-  			}
-			else
-  			{
-  				$u_name = sed_newname($userid."-".$u_name, TRUE);
-  			}
+			if ($cfg['pfs_filemask'])
+				{
+					$u_name = $userid."-".time()."-".sed_unique(3).".".$f_extension;
+				}
+				else
+				{
+					$u_name = sed_newname($userid."-".$u_name, TRUE);
+				}
 
 			$u_sqlname = sed_sql_prep($u_name);
 
@@ -185,29 +192,28 @@ if ($a=='upload')
 						{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
-          if ($nresize && in_array($f_extension, $cfg['gd_supported']) && $cfg['gallery_imgmaxwidth']>0)
-            {
-            sed_image_resize($cfg['pfs_dir'].$u_name, $cfg['pfs_dir'].$u_name, $cfg['gallery_imgmaxwidth'], $f_extension, $cfg['gallery_logojpegqual']);
-            }
+					if ($nresize && in_array($f_extension, $cfg['gd_supported']) && $cfg['gallery_imgmaxwidth']>0)
+						{
+						sed_image_resize($cfg['pfs_dir'].$u_name, $cfg['pfs_dir'].$u_name, $cfg['gallery_imgmaxwidth'], $f_extension, $cfg['gallery_logojpegqual']);
+						}
 
-          if ($naddlogo && in_array($f_extension, $cfg['gd_supported']) && !empty($cfg['gallery_logofile']) && @file_exists($cfg['gallery_logofile']))
-            {
-            $img2_dotpos = mb_strrpos($cfg['gallery_logofile'], ".")+1;          
-            $img2_extension = mb_substr($cfg['gallery_logofile'], $img2_dotpos, 5);
-            sed_image_merge($cfg['pfs_dir'].$u_name, $f_extension, $cfg['gallery_logofile'], $img2_extension, $img2_x, $img2_y, $cfg['gallery_logopos'], $cfg['gallery_logotrsp'], $cfg['gallery_logojpegqual']);
-            }
+					if ($naddlogo && in_array($f_extension, $cfg['gd_supported']) && !empty($cfg['gallery_logofile']) && @file_exists($cfg['gallery_logofile']))
+					{
+						$img2_dotpos = mb_strrpos($cfg['gallery_logofile'], ".")+1;          
+						$img2_extension = mb_substr($cfg['gallery_logofile'], $img2_dotpos, 5);
+						sed_image_merge($cfg['pfs_dir'].$u_name, $f_extension, $cfg['gallery_logofile'], $img2_extension, $img2_x, $img2_y, $cfg['gallery_logopos'], $cfg['gallery_logotrsp'], $cfg['gallery_logojpegqual']);
+					}
 
 					$u_size = filesize($cfg['pfs_dir'].$u_name);
 
 					$sql = sed_sql_query("INSERT INTO $db_pfs
-					 (pfs_userid,
+						(pfs_userid,
 						pfs_date,
 						pfs_file,
 						pfs_extension,
 						pfs_folderid,
-            pfs_title,
+						pfs_title,
 						pfs_desc,
-            pfs_desc_ishtml,
 						pfs_size,
 						pfs_count)
 						VALUES
@@ -218,7 +224,6 @@ if ($a=='upload')
 						".(int)$folderid.",
 						'".sed_sql_prep($u_title)."',
 						'".sed_sql_prep($desc)."',
-            ".(int)$ishtml.",
 						".(int)$u_size.",
 						0) ");
 
@@ -293,7 +298,6 @@ elseif ($a=='newfolder')
 		pff_date,
 		pff_updated,
 		pff_desc,
-    pff_desc_ishtml,
 		pff_type,
 		pff_count)
 		VALUES
@@ -301,8 +305,7 @@ elseif ($a=='newfolder')
 		'".sed_sql_prep($ntitle)."',
 		".(int)$sys['now'].",
 		".(int)$sys['now'].",
-		'".sed_sql_prep($ndesc)."',
-    ".(int)$ishtml.",    
+		'".sed_sql_prep($ndesc)."', 
 		".(int)$ntype.",
 		0)");
 
@@ -315,15 +318,15 @@ elseif ($a=='deletefolder')
 	sed_block($usr['auth_write']);
 	sed_check_xg();
 
-  $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
-  $files_count = sed_sql_result($sql,0,"COUNT(*)");
-  if ($files_count == 0)
-  	{
-    $sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f'");
-  	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
-  	}
-    
-  sed_redirect(sed_url("pfs", $more, "", true));
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
+	$files_count = sed_sql_result($sql,0,"COUNT(*)");
+	if ($files_count == 0)
+		{
+		$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f'");
+		$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
+		}
+
+	sed_redirect(sed_url("pfs", $more, "", true));
 	exit;
 	}
 
@@ -354,6 +357,8 @@ if ($f>0)
 
 		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
 		$title .= " ".$cfg['separator']." <a href=\"".sed_url("pfs", "f=".$pff_id."&".$more)."\">".$pff_title."</a>";
+		$shorttitle = $pff_title;
+		$urlpaths[sed_url("pfs", "f=".$pff_id."&".$more)] = $pff_title; 
 		}
 	else
 		{ sed_die(); }
@@ -391,7 +396,7 @@ else
 
 		$is_folder_delete = ($pff_fcount > 0) ? "-" : "<a href=\"".sed_url("pfs", "a=deletefolder&".sed_xg()."&f=".$pff_id."&".$more)."\" title=\"".$L['Delete']."\">".$out['img_delete']."</a>";
     
-    $list_folders .= "<tr><td style=\"text-align:center;\">".$is_folder_delete."</td>";
+		$list_folders .= "<tr><td style=\"text-align:center;\">".$is_folder_delete."</td>";
 		$list_folders .= "<td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "m=editfolder&f=".$pff_id."&".$more)."\" title=\"".$L['Edit']."\">".$out['img_edit']."</a></td>";
 
 		if ($pff_type==2)
@@ -426,7 +431,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$pfs_date = $row['pfs_date'];
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = $row['pfs_desc'];
-  $pfs_title = $row['pfs_title'];
+	$pfs_title = $row['pfs_title'];
 	$pfs_fullfile = $cfg['pfs_dir'].$pfs_file;
 	$pfs_filesize = floor($row['pfs_size']/1024);
 	$pfs_icon = $icon[$pfs_extension];
@@ -489,14 +494,14 @@ while ($row = sed_sql_fetchassoc($sql))
 	$list_files .= "<td>".$pfs_title."</td>";  
 	$list_files .= "<td style=\"text-align:right;\">".$row['pfs_count']."</td>";
 	$list_files .= ($f>0) ? "<td style=\"text-align:center;\">".$setassample."</td>" : '';	  
-	
+
 	$list_files .= (empty($stndl_icons_list)) ? "<td style=\"text-align:center;\">".$add_thumbnail." ".$add_image." ".$add_file."</td>" : ""; 
-	
-  /*=== for hook stndl.icons ===*/
+
+	/*=== for hook stndl.icons ===*/
 	$list_files .= $stndl_icons_list;
 	/*======*/  	
 	 
-  $list_files .= "</tr>";
+	$list_files .= "</tr>";
 	$pfs_foldersize = $pfs_foldersize + $pfs_filesize;
 	}
   
@@ -581,8 +586,8 @@ for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 	$disp_upload .= "<tr><td style=\"text-align:center;\">#".($ii+1)."</td>\n";
 	$disp_upload .= "<td style=\"width:48%;\"><input type=\"text\" class=\"text\" name=\"ntitle[$ii]\" value=\"\" size=\"38\" maxlength=\"255\" /></td>\n";
 	$disp_upload .= "<td style=\"width:48%;\"><input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"32\" />\n";
-  $disp_upload .= ($ii+1==$cfg['pfsmaxuploads']) ? " &nbsp; <a href=\"javascript:sedjs.toggleblock('moreuploads')\"><img src=\"skins/".$skin."/img/system/arrow-down.gif\" alt=\"\" /></a>": '';
-  $disp_upload .= "</td></tr>";
+	$disp_upload .= ($ii+1==$cfg['pfsmaxuploads']) ? " &nbsp; <a href=\"javascript:sedjs.toggleblock('moreuploads')\"><img src=\"skins/".$skin."/img/system/arrow-down.gif\" alt=\"\" /></a>": '';
+	$disp_upload .= "</td></tr>";
 	}
 
 $disp_upload .= "<tbody id=\"moreuploads\" style=\"display:none;\">";
@@ -631,9 +636,10 @@ if ($f==0 && $usr['auth_write'])
 	$disp_newfolder .= "<td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"40\" maxlength=\"255\" /></td></tr>";
 	$disp_newfolder .= "<tr><td>".$L['Type']."</td>";
 	$disp_newfolder .= "<td>";
-	$disp_newfolder .= "<input type=\"radio\" class=\"radio\" name=\"ntype\" value=\"0\" checked=\"checked\" />".$L['Private'];
-	$disp_newfolder .= " &nbsp; <input type=\"radio\" class=\"radio\" name=\"ntype\" value=\"1\" />".$L['Public'];
-	$disp_newfolder .= ($usr['auth_write_gal']) ? " &nbsp; <input type=\"radio\" class=\"radio\" name=\"ntype\" value=\"2\" />".$L['Gallery'] : '';
+		
+	$ntype_arr = ($usr['auth_write_gal']) ? array(0 => $L['Private'], 1 => $L['Public'], 2 => $L['Gallery']) : array(0 => $L['Private'], 1 => $L['Public']);	
+	$disp_newfolder .= sed_radiobox("ntype", $ntype_arr, 0);
+	
 	$disp_newfolder .= "</td></tr>";
 	$disp_newfolder .= "<tr><td colspan=\"2\" style=\"text-align:center;\">";
 	$disp_newfolder .= "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Create']."\" /></td></tr>";
@@ -679,7 +685,6 @@ if ($standalone)
 	sed_sendheaders();
 	
 	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$out['subtitle']."</title>";
-
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
 	
@@ -691,18 +696,20 @@ if ($standalone)
 
 	$mskin = sed_skinfile(array('pfs', 'standalone'));
 	$t = new XTemplate($mskin);
-
+	
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
 		"PFS_STANDALONE_HEADER2" => $pfs_header2,
 		"PFS_STANDALONE_FOOTER" => $pfs_footer,
-			));
+	));
 
 	$t->parse("MAIN.STANDALONE_HEADER");
 	$t->parse("MAIN.STANDALONE_FOOTER");
 
 	$t-> assign(array(
 		"PFS_TITLE" => $title,
+		"PFS_SHORTTITLE" => $shorttitle,
+		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, false),
 		"PFS_BODY" => $body
 		));
 
@@ -727,11 +734,15 @@ else
 		$t = new XTemplate(sed_skinfile("pfs"));
 		}
 
+	sed_breadcrumbs($urlpaths);
+	
 	$t-> assign(array(
 		"PFS_TITLE" => $title,
+		"PFS_SHORTTITLE" => $shorttitle,
+		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),		
 		"PFS_SUBTITLE" => $subtitle,
 		"PFS_BODY" => $body
-		));
+	));
 
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.tags');

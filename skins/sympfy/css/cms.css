@@ -1,0 +1,705 @@
+/*-------------------------*/
+/***** USER MENU *****/
+/*-------------------------*/
+
+#user ul,
+ul.systemlist {
+	list-style: none;
+	padding: 25px;
+	margin:0 0 0 15px;
+}
+
+#user ul li,
+ul.systemlist li {
+	padding:3px 0;
+	position: relative;
+}
+
+#user ul li::before,
+ul.systemlist li::before {
+	font-family: 'Seditio' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 2.1em;
+    content: "\e90f";
+    color: #636369;
+    font-weight: bold;
+    display: inline-block;
+    width: 0.8em;
+    font-size: 0.6em;
+    vertical-align: bottom;
+    position: absolute;
+    left: -15px;
+}
+
+.admTools {
+    color:#ffffff;
+	position: fixed;
+    width: 250px;
+    left: -250px;
+    top: 118px;
+    background-color: #333;
+    -webkit-transition: left .5s ease 0s;
+    -moz-transition: left .5s ease 0s;
+    -o-transition: left .5s ease 0s;
+    transition: left .5s ease 0s;
+    z-index: 9999;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.2); 
+}
+
+.admTools.open {
+    left: -3px; 
+}
+
+.admTools a {
+    color: #ccd5e8;
+}
+
+.admTools p {
+    margin: 0.625rem;
+    line-height: 1.2em;
+    color: #fff; 
+}
+
+.admTools .tool-descr {
+    color: #8d8c8c;
+    font-size: 11px; 
+}
+
+.admTools .notices {
+	padding: 25px 25px 0 25px;
+}
+
+.admTools .tool-title {
+    background-color: #484848;
+    margin: 0.625rem 0;
+    padding: 0.4375rem 0;
+    text-align: center;
+    text-transform: uppercase;
+    border-top: 0.0625rem solid #6d6d6d;
+    border-bottom: 0.0625rem solid #6d6d6d; 
+}
+
+.openTools {
+	background: #333;
+	display: inline-block;
+	vertical-align: middle;
+	text-decoration: none;
+	width: 50px;
+	line-height: 55px;
+	height: 50px;
+	color: #ffffff;
+	position: absolute;
+	font-size: 22px;
+	text-align: center;
+	top: -1px;
+	right: -50px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-left: none;
+}
+
+.openTools:hover,
+.openTools:active,
+.openTools:focus {
+	text-decoration:none;
+	color: #ffffff;
+}
+    
+.admTools .tool-descr {
+	line-height:12px;
+}  
+
+/*-------------------------*/
+/***** TOOLTIP *****/
+/*-------------------------*/
+
+.adm-tooltip {
+    width: 210px;
+    display: none;
+    position: absolute;
+    opacity: .8;
+    padding: 0.5125rem;
+    font-size: 0.9em;
+    line-height: 1em;
+    background-color: #fff1f2;
+    border: 1px solid #b8b8b8;
+    z-index: 9999;
+    border-radius: 0 0.125rem 0.125rem; }
+.adm-tooltip:before, .adm-tooltip:after {
+    display: block;
+    position: absolute;
+    content: "";
+    border: 0.3125rem solid transparent; }
+.adm-tooltip:before {
+    top: -0.625rem;
+    left: -0.0625rem;
+    border-left-color: #b8b8b8;
+    border-bottom-color: #b8b8b8; }
+.adm-tooltip:after {
+    top: -0.4375rem;
+    left: 0;
+    border-left-color: #fff1f2;
+    border-bottom-color: #fff1f2; }
+.adm-tooltip a {
+    display: block;
+    color: #000;
+    padding: 0.1875rem 0.125rem 0.3125rem 1.8625rem;
+    background: no-repeat 0.3125rem center; }
+.adm-tooltip a:hover {
+    background-color: #b5b5b5; }
+.adm-tooltip .admin_tooltip_edit {
+    background-image: url("../img/adm_edit.png"); }
+.adm-tooltip .admin_tooltip_add {
+    background-image: url("../img/adm_add.png"); }
+
+/*-------------------------*/
+/***** FORM *****/
+/*-------------------------*/
+
+.form {
+  display:block;
+  margin:0;
+  padding:0;
+}
+
+.form img { margin:0; }
+
+.form .form-row {
+  display: block;
+  width: 100%;
+  position: relative;
+  clear: both;
+}
+
+.form .form-row:after, 
+.form .form-row:before {
+  content: " ";
+  display: table;
+  clear:both;
+}
+
+.form-field {
+	margin-bottom:0;
+} 
+
+.form .form-field {
+  display:block;
+  padding: 12px;
+  float:left; 
+  width:70%;
+}
+
+.form .form-field-2col {
+  display:block;
+  float:left; 
+  width:50%;
+  padding-right:10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form .form-field > span {
+  padding: 6px 0;
+}
+
+.form .form-field-help
+{
+	color: #929191;
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+.form .form-field-100 {
+	display:block;
+	padding: 12px 0;
+	width:100%;
+}
+
+.form .form-label {
+	display: block;
+	padding: 12px;
+	color: #7d7878;
+	font-weight: 300; 
+	float: left;
+	width: 30%;
+	max-width:200px;
+}
+
+.form .form-label label {
+     font-weight: 300; 
+}
+
+.form .form-legend {
+  font-size: 0.95em;
+  color: #8e8f90;
+}
+
+.auth-form {
+	max-width:700px;
+}
+
+.descr {
+	font-size: 0.9em;
+    line-height: 1.2em;
+    color: #ccc;
+}
+
+.error {
+	background: #fff6f6;
+    border: 1px solid #ffc3c3;
+    padding: 15px;
+    border-radius: 3px;
+    color: #ea0202;
+}
+
+.mess {
+    padding: 15px;
+	text-align:center;
+	font-size:1.2em;
+    color: #ea0202;
+}
+
+.user-groups {
+	line-height:1.5em;
+}
+
+.bar_front {
+	background-color: #72b626;
+	border-right: 0px solid #333333;
+	padding: 0;
+	color: #DDDDDD;
+	height: 13px;
+}
+
+.bar_back {
+    background-color: #EBECF1;
+    border: 1px solid #333333;
+    margin: 2px 0px 2px 0px;
+    height: 15px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.btn-adm {
+	font-size: 0.9em;
+    padding: 3px 8px;
+}
+
+/* = Horizontal Pils (use in forums)
+-----------------------------------------------------------------------------*/
+
+.nav-pills {
+  margin-bottom: 1.15em;
+}
+.nav-pills:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.nav-pills ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-pills ul:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.nav-pills ul li {
+  float: left;
+  margin-right: .5em;
+}
+.nav-pills ul li a,
+.nav-pills ul li span {
+  display: block;
+  padding: 6px 15px;
+  line-height: 1;
+  border-radius: 5px;
+}
+.nav-pills ul li a {
+  color: #777777;
+  text-decoration: none;
+  background-color: #f3f4f5;
+}
+.nav-pills ul li a:hover {
+  color: #555555;
+  text-decoration: underline;
+}
+
+/* = Tables
+-----------------------------------------------------------------------------*/
+.coltop {
+	background: #4c4c50;
+	color:#ffffff;
+}
+
+.coltop a {
+	color:#ffffff;
+}
+
+table {
+	margin: 0.5em 0;
+}
+
+tfoot th,
+tfoot td {
+  background-color: #f2f2f2;
+}
+th,
+td {
+ /* border-bottom: 1px solid #eeeeee;*/
+  padding: 0.5em 0.8em;
+}
+table caption {
+  text-transform: uppercase;
+  padding: 0 1em;
+  color: #999999;
+  font-size: 0.85em;
+}
+
+table.flat {
+	width: 100%;
+}
+
+table.flat th, 
+table.flat td {
+	border:0;
+}
+
+table.main {
+	width: 100%;
+}
+
+table.cells {
+	width: 100%;
+}
+
+table.cells td {
+vertical-align: middle;
+}
+
+table.list {
+	width: 100%;
+}
+
+table.cells tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+
+.table,
+.table-cells {
+	display:table;
+	margin: 0.5em 0;
+	width:100%;
+	position:relative;
+}
+
+.table-tr {
+	display:table-row;
+	position:relative;
+}
+
+.table-cells .table-tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.table-td {
+	display: table-cell;	
+	vertical-align: middle;
+	padding: 0.5em 0.8em;
+}
+
+.td-top {
+	vertical-align: top;
+}
+
+.table-thead    { display: table-header-group; }
+.table-tbody    { display: table-row-group; }
+.table-tfoot    { display: table-footer-group; }
+
+.table-colspan-100 {
+	display:block;
+	width:100%;
+	position:absolute;
+	vertical-align: middle;
+	padding: 0.5em 0.8em;
+}
+
+.cattop-tr {
+	height:34px;
+}
+
+.cattop {
+	background: #dcdcdc;
+}
+
+.forums-table h4 {
+	margin:0 0 10px 0;
+}
+
+.forums-table .table-td {
+	padding: 1em 0.8em;
+}
+
+.centered {
+	text-align:center;	
+}
+
+.signature {
+	color: #cccccc;
+    font-size: 0.9em;
+}
+
+.img-list_file {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100%;
+}
+
+.img-list_file li {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 2px 5px 2px;
+  text-align: center;
+  width:100px;
+  height:100px;
+}
+
+.img-list_file li img {
+  width:100px;
+  height:100px;
+}
+
+.btn-delete-img {
+  width:16px;
+  height:16px;
+  background-color:#cc0000;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  display:block;
+  text-align:center;
+  color:#ffffff;
+  font-size:10px;
+  line-height:18px;
+  text-decoration:none;
+  position:relative;
+  margin-top: -105px;
+  margin-left: 90px;
+}
+
+.btn-delete-img:hover {
+  color:#ffffff;
+  text-decoration:none;
+  background-color:#ff0000;
+}
+
+.img-list_file li:first-child a
+{
+  display:block;
+  width:100px;
+  height:100px;
+  text-indent:-9999px;
+  background:url("../img/addimg.png") top left no-repeat;
+}
+
+.img-list_file li:first-child a:hover
+ {
+  display:block;
+  width:100px;
+  height:100px;
+  text-indent:-9999px;
+  background:url("../img/addimg.png") bottom left no-repeat;
+} 
+
+/* = Tabs
+-----------------------------------------------------------------------------*/
+
+.sedtabs div.tabs { 
+	display:none; 	
+}
+
+.sedtabs div.tabs:first-child { 
+	display:block; 	
+}
+
+.tab-box {
+	background:#ffffff; 
+	border:1px solid #ccc;
+	min-height:100px;
+	clear:both;
+	padding:15px 15px 15px 15px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.noborder {
+  border:none;
+  border-top:1px solid #ccc;
+}
+
+ul.tabs {
+    margin:0px; padding:0px;
+}
+
+ul.tabs li {
+    list-style:none;
+    display:inline;
+}
+
+ul.tabs li a {
+    float:left;
+    padding:8px 25px 8px 25px;
+    text-decoration:none;
+    margin-right:3px;
+    margin-bottom:-1px;   
+}
+
+ul.tabs li a:hover {
+    color:#212121;
+}
+
+ul.tabs li a.selected  
+  {
+    background-color:#ffffff;
+    color:#282e32;
+    border:1px solid #ccc; 
+    border-bottom: 1px solid #ffffff; 
+		-webkit-border-top-left-radius: 3px;
+		-webkit-border-top-right-radius: 3px;
+		-moz-border-radius-topleft: 3px;
+		-moz-border-radius-topright: 3px;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+		background: rgba(237,237,237,1);
+		background: -moz-linear-gradient(top, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
+		background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(237,237,237,1)), color-stop(53%, rgba(246,246,246,1)), color-stop(100%, rgba(255,255,255,1)));
+		background: -webkit-linear-gradient(top, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
+		background: -o-linear-gradient(top, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
+		background: -ms-linear-gradient(top, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
+		background: linear-gradient(to bottom, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=0 );   			   
+}
+
+/* = Modal Windows
+-----------------------------------------------------------------------------*/
+
+.sed_modal {
+  position: absolute;
+  -moz-border-radius:5px; 
+  border-radius:5px;
+  border:1px solid #ccc;
+  visibility: hidden;
+  background-color: white;
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
+}
+
+.modal-handle { /*CSS for Drag Handle*/ 
+  padding: 7px;
+  text-indent: 3px;
+  font: bold 14px Arial;
+  background-color: #303030;
+  color: white;
+  cursor: move;
+  overflow: hidden;
+  width: auto;
+  filter:progid:DXImageTransform.Microsoft.alpha(opacity=100);
+  -moz-opacity: 1;
+  opacity: 1;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px; 
+}
+
+.modal-handle .modal-controls { /*CSS for controls (min, close etc) within Drag Handle*/
+  position: absolute;
+  right: 1px;
+  top: 2px;
+  cursor: hand;
+  cursor: pointer;
+  margin: 5px 5px 0 0;
+}
+
+* html .modal-handle { /*IE6 and below CSS hack. Width must be set to 100% in order for opaque title bar to render*/
+  width: 100%;
+}
+
+.modal-contentarea { /*CSS for Content Display Area div*/
+  background-color: white;
+  color: black;
+  height: 150px;
+  padding: 2px;
+  overflow: auto;
+  visibility: visible!important; /* sed178 */
+}
+
+.modal-contentarea iframe {
+	border: 0;
+}
+
+.modal-statusarea { /*CSS for Status Bar div (includes resizearea)*/
+  background-color: #F8F8F8;
+  height: 13px; /*height of resize image*/
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.modal-resizearea { /*CSS for Resize Area itself*/
+  float: right;
+  width: 13px; 
+  height: 13px; 
+  cursor: nw-resize;
+  font-size: 0;
+  margin-right:5px;
+  margin-bottom:5px;
+}
+
+/* ============== */
+
+ul.admin-buttons {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+ul.admin-buttons li {
+	display: inline;
+	display: inline-block;
+	margin-right:6px;
+	vertical-align: top;
+}
+
+#subtitle {
+  font-style: italic;
+  padding: 0 0 25px 0;
+}
+
+.help {
+  font-style: italic;
+  padding: 15px 0;
+  color:#ccc;
+}
+

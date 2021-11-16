@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=upgrade_173_175.php
-Version=177
+Version=178
 Updated=2013-jun-25
 Type=Core.upgrade
 Author=Neocrome & Seditio Team

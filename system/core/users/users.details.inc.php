@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=users.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Users
@@ -40,27 +40,22 @@ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);
 $urr = sed_sql_fetchassoc($sql);
 
-
 $urr['user_website'] = sed_build_url($urr['user_website']);
 $urr['user_age'] = ($urr['user_birthdate']!=0) ? sed_build_age($urr['user_birthdate']) : '';
 $urr['user_birthdate'] = ($urr['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
 $urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];
 
-if (!$urr['user_text_ishtml'] && $cfg['textmode']=='html')
-  {
-	$urr['user_text'] = sed_build_usertext(sed_cc($urr['user_text'])); 
-/*	$urr['user_text'] = sed_parse($urr['user_text'], 1, 1, 1);  */
-	$sql3 = sed_sql_query("UPDATE $db_users SET user_text_ishtml=1, user_text='".sed_sql_prep($urr['user_text'])."' WHERE user_id=".$urr['user_id']); 
-  }
-if ($cfg['textmode']=='bbcode') {
-	$urr['user_text'] = sed_build_usertext(sed_cc($urr['user_text']));
-}
+$urr['user_text'] = sed_build_usertext($urr['user_text']); 
 
 $out['subtitle'] = $L['User']." : ".sed_cc($urr['user_name']);
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
+
+// ---------- Breadcrumbs
+$urlpaths[sed_url("users")] = $L['Users'];
+$urlpaths[sed_url("users", "m=details&id=".$urr['user_id'])] = sed_cc($urr['user_name']);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.main');
@@ -74,8 +69,11 @@ $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
 $t->assign(array(
+	"USERS_DETAILS_URL" => sed_url("users", "m=details&id=".$urr['user_id']),
+	"USERS_DETAILS_SHORTTITLE" => $L['User']." &laquo;".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))."&raquo;",
 	"USERS_DETAILS_TITLE" => "<a href=\"".sed_url("users")."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
+	"USERS_DETAILS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"USERS_DETAILS_ID" => $urr['user_id'],
 	"USERS_DETAILS_PM" => sed_build_pm($urr['user_id']),
 	"USERS_DETAILS_NAME" => sed_cc($urr['user_name']),
@@ -93,31 +91,11 @@ $t->assign(array(
 	"USERS_DETAILS_AVATAR" => sed_build_userimage($urr['user_avatar']),
 	"USERS_DETAILS_PHOTO" => sed_build_userimage($urr['user_photo']),
 	"USERS_DETAILS_SIGNATURE" => sed_build_userimage($urr['user_signature']),
-	"USERS_DETAILS_EXTRA1" => sed_cc($urr['user_extra1']),
-	"USERS_DETAILS_EXTRA2" => sed_cc($urr['user_extra2']),
-	"USERS_DETAILS_EXTRA3" => sed_cc($urr['user_extra3']),
-	"USERS_DETAILS_EXTRA4" => sed_cc($urr['user_extra4']),
-	"USERS_DETAILS_EXTRA5" => sed_cc($urr['user_extra5']),
-	"USERS_DETAILS_EXTRA6" => sed_cc($urr['user_extra6']),
-	"USERS_DETAILS_EXTRA7" => sed_cc($urr['user_extra7']),
-	"USERS_DETAILS_EXTRA8" => sed_cc($urr['user_extra8']),
-	"USERS_DETAILS_EXTRA9" => sed_cc($urr['user_extra9']),
-	"USERS_DETAILS_EXTRA1_TITLE" => $cfg['extra1title'],
-	"USERS_DETAILS_EXTRA2_TITLE" => $cfg['extra2title'],
-	"USERS_DETAILS_EXTRA3_TITLE" => $cfg['extra3title'],
-	"USERS_DETAILS_EXTRA4_TITLE" => $cfg['extra4title'],
-	"USERS_DETAILS_EXTRA5_TITLE" => $cfg['extra5title'],
-	"USERS_DETAILS_EXTRA6_TITLE" => $cfg['extra6title'],
-	"USERS_DETAILS_EXTRA7_TITLE" => $cfg['extra7title'],
-	"USERS_DETAILS_EXTRA8_TITLE" => $cfg['extra8title'],
-	"USERS_DETAILS_EXTRA9_TITLE" => $cfg['extra9title'],
 	"USERS_DETAILS_EMAIL" => sed_build_email($urr['user_email'], $urr['user_hideemail']),
 	"USERS_DETAILS_PMNOTIFY" =>  $sed_yesno[$urr['user_pmnotify']],
 	"USERS_DETAILS_SKIN" => $urr['user_skin'],
 	"USERS_DETAILS_WEBSITE" => $urr['user_website'],
-	"USERS_DETAILS_ICQ" => sed_build_icq($urr['user_icq']),
 	"USERS_DETAILS_SKYPE" => sed_build_skype($urr['user_skype']),
-	"USERS_DETAILS_IRC" => sed_cc($urr['user_irc']),
 	"USERS_DETAILS_GENDER" => $urr['user_gender'],
 	"USERS_DETAILS_BIRTHDATE" => $urr['user_birthdate'],
 	"USERS_DETAILS_AGE" => $urr['user_age'],
@@ -129,7 +107,20 @@ $t->assign(array(
 	"USERS_DETAILS_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_DETAILS_POSTCOUNT" => $urr['user_postcount'],
 	"USERS_DETAILS_LASTIP" => $urr['user_lastip']
-		));
+));
+
+// ---------- Extra fields - getting
+$extrafields = array(); 
+$extrafields = sed_extrafield_get('users');  
+$number_of_extrafields = count($extrafields);
+
+if(count($extrafields) > 0) 
+	{ 
+	$extra_array = sed_build_extrafields_data('user', 'USERS_DETAILS', $extrafields, $urr);
+	} 
+
+$t->assign($extra_array); 
+// ----------------------
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.tags');
@@ -138,13 +129,13 @@ if (is_array($extp))
 /* ===== */
 
 if ($usr['isadmin'])
-		{
-		$t-> assign(array(
-			"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"".sed_url("users", "m=edit&id=".$urr['user_id'])."\">".$L['Edit']."</a>"
-			));
+	{
+	$t-> assign(array(
+		"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"".sed_url("users", "m=edit&id=".$urr['user_id'])."\">".$L['Edit']."</a>"
+	));
 
-		$t->parse("MAIN.USERS_DETAILS_ADMIN");
-		}
+	$t->parse("MAIN.USERS_DETAILS_ADMIN");
+	}
 
 $t->parse("MAIN");
 $t->out("MAIN");

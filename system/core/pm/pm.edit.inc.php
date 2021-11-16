@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=pm.edit.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Private messages
@@ -29,7 +29,7 @@ $d = sed_import('d','G','INT');
 
 unset ($touser);
 $totalrecipients = 0;
-$touser_all =array();
+$touser_all = array();
 $touser_sql = array();
 $touser_ids = array();
 $touser_names = array();
@@ -79,7 +79,7 @@ elseif ($a=='delete')
 	if ($row = sed_sql_fetchassoc($sql))
 		{
 		if ($cfg['trash_pm'])
-				{ sed_trash_put('pm', $L['Private_Messages']." #".$id." ".$row['pm_title']." (".$row['pm_fromuser'].")", $id, $row); }
+			{ sed_trash_put('pm', $L['Private_Messages']." #".$id." ".$row['pm_title']." (".$row['pm_fromuser'].")", $id, $row); }
 		$sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='$id'");
 		}
 

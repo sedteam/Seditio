@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plug.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Plugin loader
@@ -142,9 +142,16 @@ elseif (!empty($e))
 	if ($autoassigntags)
 		{
 		$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
+		
+		// ---------- Breadcrumbs
+		$urlpaths = array();
+		$urlpaths[sed_url("plug", "e=".$e)] = $plugin_title;			
 
 		$t-> assign(array(
 			"PLUGIN_TITLE" => "<a href=\"".sed_url("plug", "e=".$e)."\">".$plugin_title."</a>",
+			"PLUGIN_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+			"PLUGIN_SHORTTITLE" => $plugin_title,
+			"PLUGIN_URL" => sed_url("plug", "e=".$e),
 			"PLUGIN_SUBTITLE" => $plugin_subtitle,
 			"PLUGIN_BODY" => $plugin_body
 			));
@@ -194,7 +201,7 @@ elseif (!empty($o))
 		"POPUP_HEADER2" => $popup_header2,
 		"POPUP_FOOTER" => $popup_footer,
 		"POPUP_BODY" => $popup_body,
-			));
+	));
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
@@ -222,38 +229,6 @@ elseif (!empty($h))
 			{ $popup_body = $L['None']; }
 
 		}
-	elseif ($h=='bbcodes')
-		{
-		reset ($sed_bbcodes);
-		$ii=0;
-		$popup_body = $L['BBcodes']." (".$L['BBcodes_explain'].") :<p>";
-		$popup_body .= "<div class=\"bbcodes\"><table><tr>";
-
-		while (list($i,$dat) = each($sed_bbcodes))
-			{
-			$kk = "bbcodes_".$dat[1];
-			if (mb_substr($dat[1], 0, 5)=='style')
-			   	{
-				$popup_body .= "<td colspan=\"2\"><a href=\"javascript:add('".$dat[0]."')\">";
-				$popup_body .= "<span class=\"bb".$dat[1]."\">".$L[$kk]." &nbsp;</span></td>";
-			   	}
-			else
-			   	{
-				$popup_body .= "<td><a href=\"javascript:add('".$dat[0]."')\">";
-				$popup_body .= "<img src=\"system/img/bbcodes/".$dat[1].".gif\" alt=\"\" /></a></td>";
-				$popup_body .= "<td>".$L[$kk]." &nbsp;</td>";
-				}
-
-			$ii++;
-			if ($ii==3)
-				{
-				$ii=0;
-				$popup_body .= "</tr><tr>";
-				}
-			}
-
-		$popup_body .= "</table></div></p>";
-		}
 	else
 		{
 		$incl = "system/help/$h.txt";
@@ -278,7 +253,7 @@ elseif (!empty($h))
 		"POPUP_HEADER2" => $popup_header2,
 		"POPUP_FOOTER" => $popup_footer,
 		"POPUP_BODY" => $popup_body,
-			));
+	));
 
 	$t->parse("MAIN");
 	$t->out("MAIN");

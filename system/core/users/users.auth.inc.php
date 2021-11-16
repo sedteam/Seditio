@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=users.auth.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=User authentication
@@ -124,6 +124,9 @@ $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 
+// ---------- Breadcrumbs
+$urlpaths[sed_url("users", "m=auth")] = $L['Auth'];
+
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.main');
 if (is_array($extp))
@@ -136,11 +139,12 @@ $t = new XTemplate("skins/".$skin."/users.auth.tpl");
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
 	"USERS_AUTH_SEND" => sed_url("users", "m=auth&a=check&redirect=".$redirect),
-	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"100\" />",
-	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />".$redir,
+	"USERS_AUTH_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+	"USERS_AUTH_USER" => sed_textbox("rusername", "", 16, 100),
+	"USERS_AUTH_PASSWORD" => sed_textbox("rpassword", "", 16, 32, "password", false, "password").$redir,
 	"USERS_AUTH_REGISTER" => sed_url("users", "m=register"),
 	"USERS_AUTH_LOSTPASSWORD" => sed_url("plug", "e=passrecover")
-		));
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.tags');

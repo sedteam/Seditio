@@ -85,6 +85,11 @@
 		<td>{PHP.skinlang.usersdetails.Gender}</td>
 		<td>{USERS_DETAILS_GENDER}</td>
 	</tr>
+	
+	<tr>
+		<td>{USERS_DETAILS_INSTAGRAM_TITLE}</td>
+		<td>{USERS_DETAILS_INSTAGRAM} {USERS_DETAILS_INSTAGRAM_MERA}</td>
+	</tr>	
 
 	<tr>
 		<td>{PHP.skinlang.usersdetails.Signature}</td>

@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/recentitems/recentitems.php
-Version=177
+Version=178
 Updated=2013-jul-08
 Type=Plugin
 Author=Neocrome
@@ -19,7 +19,7 @@ Description=
 Code=recentitems
 Part=main
 File=recentitems
-Hooks=index.tags
+Hooks=index.tags,list.tags,page.tags
 Tags=index.tpl:{PLUGIN_LATESTPAGES},{PLUGIN_LATESTTOPICS},{PLUGIN_LATESTPOLL},{PLUGIN_LATESTCOMMENTS}
 Minlevel=0
 Order=10

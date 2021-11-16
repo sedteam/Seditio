@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.setup.php
 Version=150
-Updated=2015-feb-06
+Updated=2021-jun-17
 Type=Plugin
 Author=Neocrome
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=contact
 Name=Contact
 Description=Web based email form
-Version=177
+Version=178
 Date=2010-feb-05
 Author=Neocrome
 Copyright=

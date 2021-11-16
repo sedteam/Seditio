@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=install.php
-Version=177
+Version=178
 Updated=2012-may-17
 Type=Core
 Author=Neocrome
@@ -72,7 +72,7 @@ $disp_header .= '.coltop		{ text-align:center; font-size:95%;  background-color:
 $disp_header .= '.desc 		{ font-size:90%; padding:3px; color:#646464; }';
 $disp_header .= '-->';
 $disp_header .= '</style>';
-$disp_header .= '<link rel="stylesheet" type="text/css" href="skins/simple/simple.css" />';
+$disp_header .= '<link rel="stylesheet" type="text/css" href="skins/sympfy/css/sympfy.css" />';
 $disp_header .= '<title>'.$L['install_title'].'</title>';
 $disp_header .= '</head>';
 $disp_header .= '<body>';
@@ -104,8 +104,6 @@ switch($m)
 	$sqldbprefix = sed_import('sqldbprefix','P','TXT',16);
 	$defaultskin = sed_import('defaultskin','P','TXT',32);
 	$defaultlang = sed_import('defaultlang','P','ALP',2);
-	
-	$textmode = sed_import('textmode','P','ALP', 6);
 
 	require ('system/install/install.config.php');
 
@@ -191,19 +189,8 @@ switch($m)
 			user_lostpass,
 			user_gender,
 			user_birthdate,
-			user_icq,
-			user_irc,
 			user_skype,
 			user_website,
-			user_extra1,
-			user_extra2,
-			user_extra3,
-			user_extra4,
-			user_extra5,
-			user_extra6,
-			user_extra7,
-			user_extra8,
-			user_extra9,
 			user_lastip)
 			VALUES
 			('".sed_sql_prep($rusername)."',
@@ -227,7 +214,7 @@ switch($m)
 			'$validationkey',
 			'',
 			0,
-			'', '', '', '', '', '', '', '',	'', '', '', '', '', '".$usr['ip']."')");
+			'', '', '".$usr['ip']."')");
 
 		$userid = sed_sql_insertid();
 		$sql = sed_sql_query("INSERT INTO ".$sqldbprefix."groups_users (gru_userid, gru_groupid) VALUES (".(int)$userid.", ".(int)$defgroup.")");
@@ -277,16 +264,8 @@ switch($m)
 	$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 	$checked = ($info['Installer_skip']==1) ? '' : "checked=\"checked\"";
 	$disabled = '';
-	 
-	$checked = ($v=='syntaxhighlight' && $cfg['textmode']=='bbcode') ? '' : $checked;
-	$checked = ($v=='jevix' && $cfg['textmode']=='bbcode') ? '' : $checked;
-	$checked = ($v=='ckeditor' && $cfg['textmode']=='bbcode') ? '' : $checked;
-	
-	$checked = ($v=='textboxer2') ? '' : $checked;
-	$checked = ($v=='textboxer3' && $cfg['textmode']=='html') ? '' : $checked;
-	$checked = ($v=='parserman' && $cfg['textmode']=='html') ? '' : $checked;
        
-  $disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
+	$disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
 	
 	$res .= "<tr><td style=\"width:6%; text-align:center;\">";
     $res .= sed_plugin_icon($v);  
@@ -340,22 +319,22 @@ switch($m)
   }
   
   foreach($pl as $k => $v)
-		{
+	{
 		$j++;
 		$extplugin_info = "plugins/".$v."/".$v.".setup.php";
-	  $info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-    $res .= "- Installing : ".$info['Name']."<br />";
-    $log .= sed_plugin_install($v);
+		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+		$res .= "- Installing : ".$info['Name']."<br />";
+		$log .= sed_plugin_install($v);
     }
 
-  $res .= "<br />".$j." ".$L['install_installed_plugins'];
-  $res .= "<a onclick=\"return toggleblock('logf')\" href=\"#\">".$L['install_display_log']."</a>).<br />";
-  $res .= "<div name=\"log\" id=\"logf\" style=\"display:none;\" >";
-  $res .= $log."</div>";
+	$res .= "<br />".$j." ".$L['install_installed_plugins'];
+	$res .= "<a onclick=\"return toggleblock('logf')\" href=\"#\">".$L['install_display_log']."</a>).<br />";
+	$res .= "<div name=\"log\" id=\"logf\" style=\"display:none;\" >";
+	$res .= $log."</div>";
 
-  sed_stat_create('installed', 1);
-  
-  $res .= "<form name=\"install\" action=\"install.php?m=home\" method=\"post\">";
+	sed_stat_create('installed', 1);
+
+	$res .= "<form name=\"install\" action=\"install.php?m=home\" method=\"post\">";
 	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_homepage']."\">";
 	$res .= "</form>";
   
@@ -365,7 +344,7 @@ switch($m)
 
 	case 'home':
 
-	header("Location: index.php");
+	header("Location: /");
 	exit;
 
 	break;
@@ -418,21 +397,7 @@ switch($m)
 	$res .= sed_selectbox($cheked, 'sqldb', $param_value, false);
 	$res .= " (".$L['install_mysql_preffered'].")</td></tr>";
 	
-	$res .= "</table>";	
-	
-	$res .= "<h3>".$L['install_input_mode']."</h3>";
-
-	$res .= "<table style=\"width:100%;\" class=\"cells\">";	
-
-  $res .= "<tr><td><td style=\"vertical-align:top;\"><input type=\"radio\" name=\"textmode\" value=\"html\" checked=\"checked\">";
-  $res .= "</td><td style=\"width:95%;\">".$L['install_html_mode'];
-  $res .= "</td></tr>";
-
-  $res .= "<tr><td><td style=\"vertical-align:top;\"><input type=\"radio\" name=\"textmode\" value=\"bbcode\" >";
-  $res .= "</td><td style=\"width:95%;\">".$L['install_bbcode_mode'];
-  $res .= "</td></tr>";
-
-  $res .= "</table>";
+	$res .= "</table>";		
  
 	$res .= "<h3>".$L['install_skinandlang']."</h3>";
 	

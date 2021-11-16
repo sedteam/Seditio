@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/smtp/smtp.mail.connector.php
-Version=177
+Version=178
 Updated=2017-dec-09
 Type=Plugin
 Author=Amro

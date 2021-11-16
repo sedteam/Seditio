@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=system/header.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Global header
@@ -85,10 +85,10 @@ $t->assign(array (
 	"HEADER_BANNER" => $cfg['banner'],
 	"HEADER_GMTTIME" => $usr['gmttime'],
 	"HEADER_USERLIST" => $out['userlist'],
-	"HEADER_NOTICES" => $out['notices'],
+	"HEADER_NOTICES" => $out['notices']
 	));
-
-if ($usr['id']>0)
+	
+if ($usr['id'] > 0)
 	{
 	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"".sed_url("admin")."\">".$L['hea_administration']."</a>" : '';
 	$out['loginout_url'] = sed_url("users", "m=logout&".sed_xg());
@@ -96,7 +96,8 @@ if ($usr['id']>0)
 	$out['profile'] = "<a href=\"".sed_url("users", "m=profile")."\">".$L['hea_profile']."</a>";
 	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"".sed_url("pm")."\">".$L['hea_private_messages']."</a>";
 	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal']==0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile']==0) ? '' : "<a href=\"".sed_url("pfs")."\">".$L['hea_mypfs']."</a>";
-
+	$out['pageadd'] = sed_auth('page', 'any', 'W') ? "<a href=\"".sed_url("page", "m=add")."\">".$L['hea_pageadd']."</a>" : "";
+	
 	if (!$cfg['disable_pm'])
 		{
 		if ($usr['newpm'])
@@ -109,6 +110,8 @@ if ($usr['id']>0)
 		$out['pmreminder'] .= "</a>";
 		}
 
+	if (!empty($out['notices'])) $t->parse("HEADER.USER.HEADER_NOTICES");
+	
 	$t->assign(array (
 		"HEADER_USER_NAME" => $usr['name'],
 		"HEADER_USER_ADMINPANEL" => $out['adminpanel'],
@@ -117,8 +120,9 @@ if ($usr['id']>0)
 		"HEADER_USER_PMS" => $out['pms'],
 		"HEADER_USER_PFS" => $out['pfs'],
 		"HEADER_USER_PMREMINDER" => $out['pmreminder'],
+		"HEADER_USER_PAGEADD" => $out['pageadd'],
 		"HEADER_USER_MESSAGES" => $usr['messages']
-			));
+	));
 
 	$t->parse("HEADER.USER");
 	}

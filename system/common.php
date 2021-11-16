@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=system/common.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Common
@@ -137,7 +137,6 @@ if ($cfg['multihost'])
 }   
 /* ================================== */
 
-$ishtml = ($cfg['textmode'] == 'html') ? 1 : 0; //New v172
 $usr['user_agent'] = $_SERVER['HTTP_USER_AGENT']; //New v173
 $check_defskin = "skins/".$cfg['defskin']."/header.tpl"; //New v173
 $cfg['defaultskin'] = (!empty($cfg['defskin']) && @file_exists($check_defskin)) ? $cfg['defskin'] : $cfg['defaultskin']; //New v173
@@ -305,14 +304,6 @@ if ($usr['id']==0)
 	}
 
 
-/* ======== Parser ======== */
-
-if (!$sed_parser)
-	{
-	$sed_parser = sed_build_parser();
-	sed_cache_store('sed_parser', $sed_parser, 600);
-	}
-
 /* ======== GET imports ======== */
 
 $z = mb_strtolower(sed_import('z','G','ALP',32));
@@ -326,13 +317,13 @@ $b = sed_import('b','G','ALP',24);
 if (!$sed_plugins)
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
-	 if (sed_sql_numrows($sql)>0)
+	if (sed_sql_numrows($sql)>0)
 		{
 		while ($row = sed_sql_fetcharray($sql))
 			{
-      $sed_plugins[] = $row; 
-      $sed_plugins[$row['pl_code']]['pl_title'] = $row['pl_title'];
-      }
+			$sed_plugins[] = $row; 
+			$sed_plugins[$row['pl_code']]['pl_title'] = $row['pl_title'];
+			}
 		}
 	sed_cache_store('sed_plugins', $sed_plugins, 3300);
 	}
@@ -483,7 +474,7 @@ $yesno_arr = array(1 => $L['Yes'], 0 => $L['No']);
 /* ======== Who's online part 2 ======== */
 
 $out['whosonline'] = ($cfg['disablewhosonline']) ? '' : $sys['whosonline_reg_count'].' '.$L['com_members'].', '.$sys['whosonline_vis_count'].' '.$L['com_guests'];
-$out['copyright'] = "<a href=\"http://www.seditio.org\">".$L['foo_poweredby']." Seditio</a>";
+$out['copyright'] = "<a href=\"https://seditio.org\">".$L['foo_poweredby']." Seditio</a>";
 
 /* ======== Skin ======== */
 
@@ -598,7 +589,7 @@ $sed_img_right = $out['img_right'];
 $dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
 $dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT', 'boolean' => 'BOL');
 
-if (!$sed_dic && ($cfg['version'] >= 177))
+if (!$sed_dic && (sed_stat_get("version") >= 177))
 	{
 	// Load directories
 	$sql = sed_sql_query("SELECT * FROM $db_dic");
@@ -680,10 +671,6 @@ if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel'] && !defined(
 $extp = sed_getextplugins('global');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-
-/* ======== Pre-loads ======== */
-
-$sed_bbcodes = sed_loadbbcodes();
 
 /* ======== 301 Redirect to SEF URL's ======== */
 

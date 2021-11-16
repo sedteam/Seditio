@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=datas/config.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Config
 Author=Neocrome
 Description=Configuration
@@ -28,7 +28,7 @@ $cfg['mysqldb'] = 'seditio';		// Database name
 // Default skin and default language
 // ========================
 
-$cfg['defaultskin'] = 'artic';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
+$cfg['defaultskin'] = 'simple';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
 $cfg['defaultlang'] = 'en';			// Default language code
 
 // ========================
@@ -44,8 +44,6 @@ $cfg['site_secret'] = ''; 					// Site secret key
 $cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) default=3
 $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
-$cfg['textmode'] = 'html';				// 'bbcode' for BBcode content, or 'html' (default)
-
 $cfg['multihost'] = TRUE;            // Allow multiple host names for this site 
 
 // ========================

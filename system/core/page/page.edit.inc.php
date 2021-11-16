@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=page.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -48,21 +48,9 @@ if ($a=='update')
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
 	$rpagealias = sed_replacespace(sed_import('rpagealias','P','ALS')); //New in175
-	$rpageextra1 = sed_import('rpageextra1','P','TXT');
-	$rpageextra2 = sed_import('rpageextra2','P','TXT');
-	$rpageextra3 = sed_import('rpageextra3','P','TXT');
-	$rpageextra4 = sed_import('rpageextra4','P','TXT');
-	$rpageextra5 = sed_import('rpageextra5','P','HTM');
-
-	$rpageextra6 = sed_import('rpageextra6','P','HTM');  
-	$rpageextra7 = sed_import('rpageextra7','P','HTM');
-	$rpageextra8 = sed_import('rpageextra8','P','HTM');
-	$rpageextra9 = sed_import('rpageextra9','P','HTM');
-	$rpageextra10 = sed_import('rpageextra10','P','HTM');
   
 	$rpagethumb = sed_import('rpagethumb','P','TXT');       
   
-	$rpagetype = sed_import('rpagetype','P','INT');
 	$rpagetitle = sed_import('rpagetitle','P','TXT');
 	$rpagedesc = sed_import('rpagedesc','P','TXT');
 	$rpagetext = sed_import('rpagetext','P','HTM');
@@ -146,9 +134,6 @@ if ($a=='update')
 			$rpagebegin = sed_mktime($rhour_beg, $rminute_beg, 0, $rmonth_beg, $rday_beg, $ryear_beg) - $usr['timezone'] * 3600;
 			$rpageexpire = sed_mktime($rhour_exp, $rminute_exp, 0, $rmonth_exp, $rday_exp, $ryear_exp) - $usr['timezone'] * 3600;
 			$rpageexpire = ($rpageexpire<=$rpagebegin) ? $rpagebegin+31536000 : $rpageexpire;
-
-			$rpagetype = ($usr['maingrp']!=5 && $rpagetype >1) ? 0 : $rpagetype;
-			$rpagetype = ($cfg['textmode']=='html') ? 1 : $rpagetype;
 			
 			//Autovalidation New v175
 			$rpagestate = $row1['page_state'];
@@ -170,29 +155,17 @@ if ($a=='update')
 					{ 
 					$ssql_extra .= ", page_".$row['code']." = "."'".sed_sql_prep($rpageextrafields['page_'.$row['code']])."'"; 
 					} 
-      	} 
+				} 
 			// ----------------------				
 				
 	
 			$sql = sed_sql_query("UPDATE $db_pages SET
 				page_state = '$rpagestate',
 				page_cat = '".sed_sql_prep($rpagecat)."',
-				page_type = '".sed_sql_prep($rpagetype)."',
-				page_key = '".sed_sql_prep($rpagekey)."',
-				page_extra1 = '".sed_sql_prep($rpageextra1)."',
-				page_extra2 = '".sed_sql_prep($rpageextra2)."',
-				page_extra3 = '".sed_sql_prep($rpageextra3)."',
-				page_extra4 = '".sed_sql_prep($rpageextra4)."',
-				page_extra5 = '".sed_sql_prep($rpageextra5)."',
-				page_extra6 = '".sed_sql_prep($rpageextra6)."',
-				page_extra7 = '".sed_sql_prep($rpageextra7)."',
-				page_extra8 = '".sed_sql_prep($rpageextra8)."',
-				page_extra9 = '".sed_sql_prep($rpageextra9)."',
-				page_extra10 = '".sed_sql_prep($rpageextra10)."',        
+				page_key = '".sed_sql_prep($rpagekey)."',       
 				page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep(sed_checkmore($rpagetext, true))."',
-				page_text_ishtml='".$ishtml."',
 				page_text2='".sed_sql_prep(sed_checkmore($rpagetext2, true))."',
 				page_author = '".sed_sql_prep($rpageauthor)."',
 				page_ownerid = '$rpageownerid',
@@ -252,23 +225,9 @@ $page_form_delete =  sed_radiobox("rpagedelete", $yesno_arr, 0);
 
 $page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');
 
-$page_form_type = "<select name=\"rpagetype\" size=\"1\">";
-$selected0 = ($pag['page_type']==0) ? "selected=\"selected\"" : '';
-$selected1 = ($pag['page_type']==1) ? "selected=\"selected\"" : '';
-$page_form_type .= "<option value=\"0\" $selected0>".$L['Default']."</option>";
-$page_form_type .= "<option value=\"1\" $selected1>HTML</option>";
-$page_form_type .= "</select>"; 
-
 $page_form_file = sed_radiobox("rpagefile", $yesno_arr, $pag['page_file']);
 $page_form_allowcomments = sed_radiobox("rpageallowcomments", $yesno_arr, $pag['page_allowcomments']); 
 $page_form_allowratings = sed_radiobox("rpageallowratings", $yesno_arr, $pag['page_allowratings']);	
-
-if ($cfg['textmode']=='bbcode')
-    {
-      $bbcodes = ($cfg['parsebbcodepages']) ? sed_build_bbcodes('update', 'rpagetext', $L['BBcodes']) : '';
-      $smilies = ($cfg['parsesmiliespages']) ? " &nbsp; ".sed_build_smilies('update', 'rpagetext', $L['Smilies'])." &nbsp; " : '';
-    }
-else { $bbcodes = ''; $smilies = ''; }
 
 $pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
@@ -283,6 +242,10 @@ $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")] = $L['Edit'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.main');
@@ -309,12 +272,6 @@ if (!empty($error_string))
 	$t->parse("MAIN.PAGEEDIT_ERROR");
 	}
 
-if ($cfg['textmode']=='bbcode') 
-  {
-	$t->assign("PAGEEDIT_FORM_TYPE", $page_form_type);
-	$t->parse("MAIN.PAGEEDIT_PARSING");
-  }
-
 if ($usr['isadmin'])  
 	{ 
 	$publish_title = ($pag['page_state'] == 0) ? $L['Putinvalidationqueue'] : $L['Validate'];
@@ -331,22 +288,13 @@ $form_send_url = (defined('SED_ADMIN')) ? sed_url("admin", "m=page&s=edit&a=upda
 $t->assign(array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
+	"PAGEEDIT_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PAGEEDIT_FORM_SEND" => $form_send_url,
 	"PAGEEDIT_FORM_ID" => $pag['page_id'],
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],
 	"PAGEEDIT_FORM_CAT" => $page_form_categories,
 	"PAGEEDIT_FORM_KEY" => sed_textbox('rpagekey', $pag['page_key'], 16, 16),
 	"PAGEEDIT_FORM_ALIAS" => sed_textbox('rpagealias', $pag['page_alias']),
-	"PAGEEDIT_FORM_EXTRA1" => sed_textbox('rpageextra1', $pag['page_extra1']),
-	"PAGEEDIT_FORM_EXTRA2" => sed_textbox('rpageextra2', $pag['page_extra2']),
-	"PAGEEDIT_FORM_EXTRA3" => sed_textbox('rpageextra3', $pag['page_extra3']),
-	"PAGEEDIT_FORM_EXTRA4" => sed_textbox('rpageextra4', $pag['page_extra4']),
-	"PAGEEDIT_FORM_EXTRA5" => sed_textbox('rpageextra5', $pag['page_extra5']),
-	"PAGEEDIT_FORM_EXTRA6" => sed_textbox('rpageextra6', $pag['page_extra6']),
-	"PAGEEDIT_FORM_EXTRA7" => sed_textbox('rpageextra7', $pag['page_extra7']),
-	"PAGEEDIT_FORM_EXTRA8" => sed_textbox('rpageextra8', $pag['page_extra8']),
-	"PAGEEDIT_FORM_EXTRA9" => sed_textbox('rpageextra9', $pag['page_extra9']),
-	"PAGEEDIT_FORM_EXTRA10" => sed_textbox('rpageextra10', $pag['page_extra10']),
 	"PAGEEDIT_FORM_THUMB" => sed_textbox('rpagethumb', $pag['page_thumb']),
 	"PAGEEDIT_FORM_TITLE" => sed_textbox('rpagetitle', $pag['page_title']),
 	"PAGEEDIT_FORM_DESC" => sed_textarea('rpagedesc', $pag['page_desc'], 3, 75),
@@ -366,11 +314,8 @@ $t->assign(array(
 	"PAGEEDIT_FORM_SIZE" => sed_textbox('rpagesize', $pag['page_size']),
 	"PAGEEDIT_FORM_PAGECOUNT" => sed_textbox('rpagecount', $pag['page_count'], 8, 8),
 	"PAGEEDIT_FORM_FILECOUNT" => sed_textbox('rpagefilecount', $pag['page_filecount'], 8, 8),
-	"PAGEEDIT_FORM_TEXT" => sed_textarea('rpagetext', $pag['page_text'], $cfg['textarea_default_height'], $cfg['textarea_default_width']).$bbcodes." ".$smilies." ".$pfs,
-	"PAGEEDIT_FORM_TEXT2" => sed_textarea('rpagetext2', $pag['page_text2'], $cfg['textarea_default_height'], $cfg['textarea_default_width']),
-	"PAGEEDIT_FORM_TEXTBOXER" => sed_textarea('rpagetext', $pag['page_text'], $cfg['textarea_default_height'], $cfg['textarea_default_width']).$bbcodes." ".$smilies." ".$pfs,
-	"PAGEEDIT_FORM_BBCODES" => $bbcodes,
-	"PAGEEDIT_FORM_SMILIES" => $smilies,	
+	"PAGEEDIT_FORM_TEXT" => sed_textarea('rpagetext', $pag['page_text'], $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended')." ".$pfs,
+	"PAGEEDIT_FORM_TEXT2" => sed_textarea('rpagetext2', $pag['page_text2'], $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 		));

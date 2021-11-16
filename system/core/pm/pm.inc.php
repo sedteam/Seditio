@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=pm.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Private messages
@@ -41,13 +41,18 @@ if (is_array($extp))
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=2");
 $totalarchives = sed_sql_result($sql, 0, "COUNT(*)");
+
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_fromuserid='".$usr['id']."' AND pm_state=0");
 $totalsentbox = sed_sql_result($sql, 0, "COUNT(*)");
+
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state<2");
 $totalinbox = sed_sql_result($sql, 0, "COUNT(*)");
 
 if (empty($d)) { $d = '0'; }
 unset($pageprev, $pagenext);
+
+// ---------- Breadcrumbs
+$urlpaths = array();
 
 if (!empty($id)) // -------------- Single mode
 	{
@@ -57,18 +62,27 @@ if (!empty($id)) // -------------- Single mode
 	$row1 = sed_sql_fetchassoc($sql1);
 
 	$title = "<a href=\"".sed_url("pm")."\">".$L['Private_Messages']."</a> ".$cfg['separator'];
+	
+	$shorttitle = $L['Private_Messages'];
+	$urlpaths[sed_url("pm")] = $L['Private_Messages'];
 
 	if ($row1['pm_touserid']==$usr['id'] && $row1['pm_state']==2)
 		{
 		$f = 'archives';
 		$title .= " <a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a>";
 		$subtitle = '';
+		
+		$shorttitle = $L['pm_archives'];
+		$urlpaths[sed_url("pm", "f=archives")] = $L['pm_archives'];		
 		}
 	elseif ($row1['pm_touserid']==$usr['id'] && $row1['pm_state']<2)
 		{
 		$f = 'inbox';
 		$title .= " <a href=\"".sed_url("pm", "f=inbox")."\">".$L['pm_inbox']."</a>";
 		$subtitle = '';
+		
+		$shorttitle = $L['pm_inbox'];
+		$urlpaths[sed_url("pm", "f=inbox")] = $L['pm_inbox'];		
 
 		if ($row1['pm_state']==0)
 			{
@@ -84,6 +98,9 @@ if (!empty($id)) // -------------- Single mode
 		$f = 'sentbox';
 		$title .= " <a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a>";
 		$subtitle = '';
+		
+		$shorttitle = $L['pm_sentbox'];
+		$urlpaths[sed_url("pm", "f=sentbox")] = $L['pm_sentbox'];						
 		}
 	else
 		{
@@ -91,6 +108,8 @@ if (!empty($id)) // -------------- Single mode
 		}
 
 	$title .= ' '.$cfg['separator']." <a href=\"".sed_url("pm", "id=".$id)."\">#".$id."</a>";
+	$urlpaths[sed_url("pm", "id=".$id)] = "#".$id;		
+	
 	$sql = sed_sql_query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."'");
 	}
 
@@ -109,6 +128,9 @@ else // --------------- List mode
 			ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
        	$title .= " <a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a>";
        	$subtitle = $L['pm_arcsubtitle'];
+		
+		$shorttitle = $L['pm_archives'];
+		$urlpaths[sed_url("pm", "f=archives")] = $L['pm_archives'];
 		}
 	elseif ($f=='sentbox')
 		{
@@ -118,6 +140,9 @@ else // --------------- List mode
 			ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
 		$title .= " <a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a>";
 		$subtitle = $L['pm_sentboxsubtitle'];
+		
+		$shorttitle = $L['pm_sentbox'];
+		$urlpaths[sed_url("pm", "f=sentbox")] = $L['pm_sentbox'];		
      	}
 	else
      	{
@@ -128,13 +153,16 @@ else // --------------- List mode
 			ORDER BY pm_date DESC LIMIT  $d,".$cfg['maxrowsperpage']);
 		$title .= " <a href=\"".sed_url("pm")."\">".$L['pm_inbox']."</a>";
 		$subtitle = $L['pm_inboxsubtitle'];
+		
+		$shorttitle = $L['pm_inbox'];
+		$urlpaths[sed_url("pm")] = $L['pm_inbox'];		
       }
 
 	$pm_totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 	$pm_currentpage = ceil ($d / $cfg['maxrowsperpage'])+1;
 
-  $pm_pagination = sed_pagination(sed_url("pm", "f=".$f), $d, $totallines, $cfg['maxrowsperpage']);
-  list($pm_pageprev, $pm_pagenext) = sed_pagination_pn(sed_url("pm", "f=".$f), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+	$pm_pagination = sed_pagination(sed_url("pm", "f=".$f), $d, $totallines, $cfg['maxrowsperpage']);
+	list($pm_pageprev, $pm_pagenext) = sed_pagination_pn(sed_url("pm", "f=".$f), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
 	}
 
@@ -159,17 +187,19 @@ if ($pm_totalpages=='0') {$pm_totalpages = '1'; }
 
 $t-> assign(array(
 	"PM_PAGETITLE" => $title,
+	"PM_SHORTTITLE" => $shorttitle,
 	"PM_SUBTITLE" => $subtitle,
+	"PM_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PM_SENDNEWPM" => $pm_sendlink,
 	"PM_INBOX" => "<a href=\"".sed_url("pm")."\">".$L['pm_inbox']."</a> : ".$totalinbox,
 	"PM_ARCHIVES" => "<a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a> : ".$totalarchives,
 	"PM_SENTBOX" => "<a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a> : ".$totalsentbox,
 	"PM_TOP_PAGEPREV" => $pm_pageprev,
 	"PM_TOP_PAGENEXT" => $pm_pagenext,
-  "PM_TOP_PAGINATION" => $pm_pagination,
+	"PM_TOP_PAGINATION" => $pm_pagination,
 	"PM_TOP_CURRENTPAGE" => $pm_currentpage,
 	"PM_TOP_TOTALPAGES" => $pm_totalpages,
-		));
+));
 
 $jj=0;
 
@@ -219,11 +249,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 		$row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
 		}
 
-    $row['pm_text'] = sed_parse($row['pm_text'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $row['pm_text_ishtml']);
-	if (!$row['pm_text_ishtml'] && $cfg['textmode']=='html')
-      {      
-      $sql3 = sed_sql_query("UPDATE $db_pm SET pm_text_ishtml=1, pm_text='".sed_sql_prep($row['pm_text'])."' WHERE pm_id=".$row['pm_id']); 
-      }
+    $row['pm_text'] = sed_parse($row['pm_text']);
 
 	$t-> assign(array(
 		"PM_ROW_ID" => $row['pm_id'],
@@ -240,7 +266,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 		"PM_ROW_ICON_STATUS" => $row['pm_icon_status'],
 		"PM_ROW_ICON_ACTION" => $row['pm_icon_action'],
 		"PM_ROW_ODDEVEN" => sed_build_oddeven($jj)
-			));
+	));
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))

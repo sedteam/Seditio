@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=system/core/list/list.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Pages
@@ -37,13 +37,13 @@ $sql_where = "";
 if (count($extrafields) > 0)
 {
 	foreach ($extrafields as $key => $val)
-	  {
-	      if (in_array($val['vartype'], array('INT', 'BOL'))) 
-	          { 
-	          $filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
-	          if (!empty($filter_vars['filter_'.$key])) $filter_sql[] = " AND page_".$key." = '".$filter_vars['filter_'.$key]."'";
-	          }  
-	  }
+	{
+		if (in_array($val['vartype'], array('INT', 'BOL'))) 
+		  { 
+		  $filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
+		  if (!empty($filter_vars['filter_'.$key])) $filter_sql[] = " AND page_".$key." = '".$filter_vars['filter_'.$key]."'";
+		  }  
+	}
 }
 
 $sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
@@ -86,7 +86,7 @@ if ($c=='all')
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='0' $sql_where");
 	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
 	
-	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp ".$join_ratings_columns."
+	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp, u.user_avatar ".$join_ratings_columns."
 		FROM $db_pages as p ".$join_ratings_condition."
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE page_state='0'
@@ -97,7 +97,7 @@ elseif (!empty($o) && !empty($p) && $p!='password')
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p' $sql_where");
 	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
 	
-	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp ".$join_ratings_columns."
+	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp, u.user_avatar ".$join_ratings_columns."
 		FROM $db_pages as p ".$join_ratings_condition."
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p'
@@ -120,7 +120,7 @@ else
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat IN ('".implode("','", $catsub)."') AND (page_state='0' OR page_state='2') $sql_where");
 		$totallines = sed_sql_result($sql, 0, "COUNT(*)");
 		
-		$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp ".$join_ratings_columns."
+		$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp, u.user_avatar ".$join_ratings_columns."
 		  FROM $db_pages as p ".$join_ratings_condition."
 		  LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		  WHERE page_cat IN ('".implode("','", $catsub)."') AND (page_state='0' OR page_state='2')
@@ -131,7 +131,7 @@ else
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='$c' AND (page_state='0' OR page_state='2') $sql_where");
 		$totallines = sed_sql_result($sql, 0, "COUNT(*)");
 		
-		$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp ".$join_ratings_columns."
+		$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp, u.user_avatar ".$join_ratings_columns."
 		  FROM $db_pages as p ".$join_ratings_condition."
 		  LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		  WHERE page_cat='$c' AND (page_state='0' OR page_state='2')
@@ -142,21 +142,16 @@ else
 	
 if ($c != 'all')
 	{
-	$sql2 = sed_sql_query("SELECT structure_title, structure_desc, structure_text, structure_code, structure_text_ishtml FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
+	$sql2 = sed_sql_query("SELECT structure_title, structure_desc, structure_text, structure_code FROM $db_structure WHERE structure_code = '$c' LIMIT 1");
 	$row2 = sed_sql_fetchassoc($sql2);
 
-  /* === Hook === */
-  $extp = sed_getextplugins('list.fetch');
-  if (is_array($extp))
-  	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-  /* ===== */
+	/* === Hook === */
+	$extp = sed_getextplugins('list.fetch');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
   			
-	$list_text = sed_parse($row2['structure_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $row2['structure_text_ishtml']);
-
-	if (!$row2['structure_text_ishtml'] && $cfg['textmode']=='html')
-		{
-		 $sql2 = sed_sql_query("UPDATE $db_structure SET structure_text_ishtml = 1, structure_text = '".sed_sql_prep($list_text)."' WHERE structure_code = '".$row2['structure_code']."'");
-		}	
+	$list_text = sed_parse($row2['structure_text']);
 	}	
 	
 $incl="datas/content/list.$c.txt";
@@ -175,7 +170,6 @@ else
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
-$submitnewpage = ($usr['auth_write'] && $c!='all') ? "<a href=\"".sed_url("page", "m=add&c=".$c)."\">".$L['lis_submitnew']."</a>" : '';
 
 $pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p), $d, $totallines, $cfg['maxrowsperpage']);
 list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
@@ -202,6 +196,10 @@ $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('listtitle', $title_tags, $title_data);
 /**/
 
+// ---------- Breadcrumbs
+$urlpaths = array();
+sed_build_list_bc($c);
+
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
 if (is_array($extp))
@@ -227,9 +225,19 @@ if (!empty($pagination))
 	$t->parse("MAIN.LIST_PAGINATION_TP");
 	$t->parse("MAIN.LIST_PAGINATION_BM");		
 	}
+	
+if ($usr['auth_write'] && $c!='all')
+	{
+	$t->assign(array(
+		"LIST_SUBMITNEWPAGE" => "<a href=\"".sed_url("page", "m=add&c=".$c)."\">".$L['lis_submitnew']."</a>"
+	));
+	$t->parse("MAIN.LIST_AUTHUSER");	
+	}
 
 $t->assign(array(
 	"LIST_PAGETITLE" => $catpath,
+	"LIST_SHORTTITLE" => $sed_cat[$c]['title'],
+	"LIST_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"LIST_CATEGORY" => "<a href=\"".sed_url("list", "c=".$c)."\">".$sed_cat[$c]['title']."</a>",
 	"LIST_CAT" => $c,
 	"LIST_CATTITLE" => $sed_cat[$c]['title'],
@@ -242,42 +250,41 @@ $t->assign(array(
 	"LIST_RATINGS" => $list_ratings,
 	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
 	"LIST_RSS" => sed_url("rss", "m=pages&c=".$c),
-	"LIST_EXTRATEXT" => $extratext,
-	"LIST_SUBMITNEWPAGE" => $submitnewpage
-	));
+	"LIST_EXTRATEXT" => $extratext
+));
 
 if (!$sed_cat[$c]['group'])
 	{
 	$t->assign(array(
-	"LIST_TOP_CURRENTPAGE" => $currentpage,
-	"LIST_TOP_TOTALLINES" => $totallines,
-	"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
-	"LIST_TOP_TOTALPAGES" => $totalpages,
-	"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Title'],
-	"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Key'],
-	"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA2" => "<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA3" => "<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA4" => "<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-	"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Date'],
-	"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Author'],
-	"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Owner'],
-	"LIST_TOP_COUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=count&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=count&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits'],
-	"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-	<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits']
-		));
+		"LIST_TOP_CURRENTPAGE" => $currentpage,
+		"LIST_TOP_TOTALLINES" => $totallines,
+		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
+		"LIST_TOP_TOTALPAGES" => $totalpages,
+		"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Title'],
+		"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Key'],
+		"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA2" => "<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA3" => "<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA4" => "<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
+		"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Date'],
+		"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Author'],
+		"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Owner'],
+		"LIST_TOP_COUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=count&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=count&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits'],
+		"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits']
+	));
 
 	// ----- Extra fields 
 	if($number_of_extrafields > 0) 
@@ -298,28 +305,28 @@ $mtchlen = mb_strlen($mtch);
 $mtchlvl = mb_substr_count($mtch,".");
 
 while (list($i,$x) = each($sed_cat) )
+	{
+	if (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
 		{
-		if (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
-			{
-			$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
-				WHERE p.page_cat=s.structure_code
-				AND s.structure_path LIKE '".$sed_cat[$i]['rpath']."%'
-				AND page_state=0 ");
-			
-			$sub_count = sed_sql_result($sql4,0,"COUNT(*)");
+		$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
+			WHERE p.page_cat=s.structure_code
+			AND s.structure_path LIKE '".$sed_cat[$i]['rpath']."%'
+			AND page_state=0 ");
+		
+		$sub_count = sed_sql_result($sql4,0,"COUNT(*)");
 
-			$t-> assign(array(
-				"LIST_ROWCAT_URL" => sed_url("list", "c=".$i),
-				"LIST_ROWCAT_TITLE" => $x['title'],
-				"LIST_ROWCAT_DESC" => $x['desc'],
-				"LIST_ROWCAT_ICON" => $x['icon'],
-				"LIST_ROWCAT_COUNT" => $sub_count,
-				"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($ii)
-					));
-			$t->parse("MAIN.LIST_ROWCAT");
-			$ii++;
-			}
+		$t-> assign(array(
+			"LIST_ROWCAT_URL" => sed_url("list", "c=".$i),
+			"LIST_ROWCAT_TITLE" => $x['title'],
+			"LIST_ROWCAT_DESC" => $x['desc'],
+			"LIST_ROWCAT_ICON" => $x['icon'],
+			"LIST_ROWCAT_COUNT" => $sub_count,
+			"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($ii)
+		));
+		$t->parse("MAIN.LIST_ROWCAT");
+		$ii++;
 		}
+	}
 
 /* === Hook - Part1 : Set === */
 $extpf = sed_getextplugins('list.loopfirst');
@@ -344,8 +351,14 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 	if (!empty($pag['page_url']) && $pag['page_file'])
 		{
 		$dotpos = mb_strrpos($pag['page_url'],".")+1;
-		$pag['page_fileicon'] = (mb_strlen($pag['page_url'])-$dotpos>4) ? "system/img/admin/page.png" : "system/img/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
-		$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\" />";
+		$pag['page_fileicon'] = (mb_strlen($pag['page_url']) - $dotpos>4) ? "doc" : mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
+
+		$t-> assign(array(
+			"LIST_ROW_FILEICON" => $pag['page_fileicon'],
+			"LIST_ROW_FILECOUNT" => $pag['page_filecount']
+		));
+		
+		$t->parse("MAIN.LIST_ROW.LIST_ROW_FILE");
 		}
 	else
 		{ $pag['page_fileicon'] = ''; }
@@ -365,6 +378,8 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_URL" => $pag['page_pageurl'],
 		"LIST_ROW_ID" => $pag['page_id'],
 		"LIST_ROW_CAT" => $pag['page_cat'],
+		"LIST_ROW_CATURL" => sed_url("list", "c=".$pag['page_cat']),
+		"LIST_ROW_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
 		"LIST_ROW_KEY" => sed_cc($pag['page_key']),
 		"LIST_ROW_EXTRA1" => sed_cc($pag['page_extra1']),
 		"LIST_ROW_EXTRA2" => sed_cc($pag['page_extra2']),
@@ -372,24 +387,45 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_EXTRA4" => sed_cc($pag['page_extra4']),
 		"LIST_ROW_EXTRA5" => sed_cc($pag['page_extra5']),
 		"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
+		"LIST_ROW_THUMB" => sed_cc($pag['page_thumb']),
 		"LIST_ROW_DESC" => $pag['page_desc'],
 		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
 		"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
+		"LIST_ROW_OWNER_AVATAR" => sed_build_userimage($pag['user_avatar']),
 		"LIST_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $pag['page_date']),
 		"LIST_ROW_FILEURL" => $pag['page_url'],
 		"LIST_ROW_SIZE" => $pag['page_size'],
 		"LIST_ROW_COUNT" => $pag['page_count'],
-		"LIST_ROW_FILEICON" => $pag['page_fileicon'],
-		"LIST_ROW_FILECOUNT" => $pag['page_filecount'],
 		"LIST_ROW_JUMP" => $pag['page_pageurl']."&a=dl",
 		"LIST_ROW_COMMENTS" => $pag['page_comments'],
+		"LIST_ROW_COMCOUNT" => $pag['page_comcount'],
+		"LIST_ROW_COMURL" => $pag['page_pageurlcom'],
 		"LIST_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
 		"LIST_ROW_ADMIN" => $pag['admin'],
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
-			));
+	));
+	
+	if (!empty($pag['page_thumb']))
+		{	
+		$first_thumb_array = rtrim($pag['page_thumb']); 
+		if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+			{
+			$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+			}		
+		$first_thumb_array = explode(";", $first_thumb_array);
+		if (count($first_thumb_array) > 0)
+			{
+			$t->assign("LIST_ROW_THUMB", $first_thumb_array[0]);  
+			$t->parse("MAIN.LIST_ROW.LIST_ROW_THUMB");	
+			}		
+		}
+	else 
+		{
+		$t->assign("LIST_ROW_THUMB", sed_cc($pag['page_thumb']));
+		}	
 			
 	// ---------- Extra fields - getting
-	if(count($extrafields) > 0) 
+	if (count($extrafields) > 0) 
 		{ 
 		$extra_array = sed_build_extrafields_data('page', 'LIST_ROW', $extrafields, $pag);
 		} 

@@ -11,8 +11,8 @@ var sedjs = {
 	-------------------------------------*/
 	pfs : function(id,c1,c2,modal)
 		{	
-		if (!modal) { window.open(sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'); }
-		else { sedjs.modal.open("pfs", "iframe", sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2, "PFS", "width=754px,height=512px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=990,height=600,left=32,top=16'); }
+		else { sedjs.modal.open("pfs", "iframe", sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2, "PFS", "width=990px,height=600px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Help

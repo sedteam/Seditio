@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=install.database.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core.install
 Author=Neocrome
 Description=Database builder
@@ -260,23 +260,11 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."online (
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   page_id int(11) unsigned NOT NULL auto_increment,
   page_state tinyint(1) unsigned NOT NULL default '0',
-  page_type tinyint(1) default '0',
   page_cat varchar(255) default NULL,
   page_key varchar(16) default NULL,
-  page_extra1 varchar(255) NOT NULL default '',
-  page_extra2 varchar(255) NOT NULL default '',
-  page_extra3 varchar(255) NOT NULL default '',
-  page_extra4 varchar(255) NOT NULL default '',
-  page_extra5 varchar(255) NOT NULL default '',
-  page_extra6 varchar(255) NOT NULL default '',
-  page_extra7 varchar(255) NOT NULL default '',
-  page_extra8 varchar(255) NOT NULL default '',
-  page_extra9 varchar(255) NOT NULL default '',
-  page_extra10 varchar(255) NOT NULL default '',  
   page_title varchar(255) default NULL,
   page_desc varchar(255) default NULL,
   page_text text,
-  page_text_ishtml tinyint(1) DEFAULT '1',
   page_text2 text,	  
   page_author varchar(24) default NULL,
   page_ownerid int(11) NOT NULL default '0',
@@ -301,20 +289,6 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pages (
   KEY page_cat (page_cat)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
-$sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."parser (
-  parser_id int(11) unsigned NOT NULL auto_increment,
-  parser_title varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  parser_type tinyint(1) default '0',
-  parser_mode tinyint(1) default '0',
-  parser_order int(11) NOT NULL default '0',
-  parser_bb1 mediumtext collate utf8_unicode_ci,
-  parser_bb2 mediumtext collate utf8_unicode_ci,
-  parser_code1 mediumtext collate utf8_unicode_ci,
-  parser_code2 mediumtext collate utf8_unicode_ci,
-  parser_active tinyint(1) default '1',
-  PRIMARY KEY  (parser_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
-
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pfs (
   pfs_id int(11) NOT NULL auto_increment,
   pfs_userid int(11) NOT NULL default '0',
@@ -324,7 +298,6 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pfs (
   pfs_folderid int(11) NOT NULL default '0',
   pfs_title varchar(255) NOT NULL default '',  
   pfs_desc text NOT NULL,
-  pfs_desc_ishtml tinyint(1) DEFAULT '1',
   pfs_size int(11) NOT NULL default '0',
   pfs_count int(11) NOT NULL default '0',
   PRIMARY KEY  (pfs_id),
@@ -337,8 +310,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pfs_folders (
   pff_date int(11) NOT NULL default '0',
   pff_updated int(11) NOT NULL default '0',
   pff_title varchar(255) NOT NULL default '',
-  pff_desc text NOT NULL,
-  pff_desc_ishtml tinyint(1) DEFAULT '1',  
+  pff_desc text NOT NULL, 
   pff_type tinyint(1) NOT NULL default '0',
   pff_sample int(11) NOT NULL default '0',
   pff_count int(11) NOT NULL default '0',
@@ -367,7 +339,6 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."pm (
   pm_touserid int(11) NOT NULL default '0',
   pm_title varchar(64) NOT NULL default '0',
   pm_text text NOT NULL,
-  pm_text_ishtml tinyint(1) DEFAULT '1',
   PRIMARY KEY  (pm_id),
   KEY pm_fromuserid (pm_fromuserid),
   KEY pm_touserid (pm_touserid)
@@ -451,12 +422,12 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."structure (
   structure_title varchar(100) NOT NULL default '',
   structure_desc varchar(255) NOT NULL default '',
   structure_text text,
-  structure_text_ishtml tinyint(1) NOT NULL default '1',
   structure_icon varchar(128) NOT NULL default '',
   structure_group tinyint(1) NOT NULL default '0',
   structure_order varchar(16) NOT NULL default 'title.asc',
   structure_allowcomments tinyint(1) NOT NULL default '1',
   structure_allowratings tinyint(1) NOT NULL default '1',
+  structure_thumb varchar(255) NOT NULL default '',
   PRIMARY KEY  (structure_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
@@ -484,27 +455,15 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   user_maingrp int(11) unsigned NOT NULL default '4',
   user_country char(2) NOT NULL default '',
   user_text text NOT NULL,
-  user_text_ishtml tinyint(1) DEFAULT '1',
   user_avatar varchar(255) NOT NULL default '',
   user_photo varchar(255) NOT NULL default '',
   user_signature varchar(255) NOT NULL default '',
-  user_extra1 varchar(255) NOT NULL default '',
-  user_extra2 varchar(255) NOT NULL default '',
-  user_extra3 varchar(255) NOT NULL default '',
-  user_extra4 varchar(255) NOT NULL default '',
-  user_extra5 varchar(255) NOT NULL default '',
-  user_extra6 text,
-  user_extra7 text,
-  user_extra8 text,
-  user_extra9 text,
   user_occupation varchar(64) NOT NULL default '',
   user_location varchar(64) NOT NULL default '',
   user_timezone decimal(2,0) NOT NULL default '0',
   user_birthdate int(11) NOT NULL default '0',
   user_gender char(1) NOT NULL default 'U',
-  user_irc varchar(128) NOT NULL default '',
   user_skype varchar(64) NOT NULL default '',
-  user_icq varchar(16) NOT NULL default '',
   user_website varchar(128) NOT NULL default '',
   user_email varchar(64) NOT NULL default '',
   user_hideemail tinyint(1) unsigned NOT NULL default '1',
@@ -527,20 +486,10 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   PRIMARY KEY (user_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
-if ($textmode == "html") 
-{
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', 1, '', 1 ,'title.asc', 1, 1);");
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', 1, '',  0 ,'title.asc', 1, 1);");
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', 1, '',  0 ,'title.asc', 1, 1);");
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 1,  '', 0 ,'date.desc', 1, 1);");
-}
-else 
-{
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', 0, '', 1 ,'title.asc', 1, 1);");
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', 0, '',  0 ,'title.asc', 1, 1);");
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', 0, '',  0 ,'title.asc', 1, 1);");
-	$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', 0,  '', 0 ,'date.desc', 1, 1);");
-}
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', '', 1 ,'title.asc', 1, 1, '');");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', '',  0 ,'title.asc', 1, 1, '');");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', '',  0 ,'title.asc', 1, 1, '');");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (4, 'news', '2', '', 'News', '', '', '', 0 ,'date.desc', 1, 1, '');");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 0, 'General chat.', 'system/img/admin/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 0, 'Various and off-topic.', 'system/img/admin/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0);");
@@ -712,22 +661,7 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (99, 4, 'dic', 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (100, 5, 'dic', 'a', 255, 255, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (101, 6, 'dic', 'a', 131, 0, 1);");
 
-if ($textmode == "html") 
-  {
-    $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-    (1, 0, 1, 'news', '', '', '', '', '', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"http://www.seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"http://www.seditio.org/forums.php\">discussion forums</a>.', 1, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '');");
-  }
-else
-  {
-    $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-    (1, 0, 0, 'news', '', '', '', '', '', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nThe next step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.\r\nYou''ll find more instructions and tutorials in the [url=http://www.seditio.org/list.php?c=docs]Documentation page for Seditio at Seditio.org[/url], and technical support in our [url=http://www.seditio.org/forums.php]discussion forums[/url].', 0, '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 27, 1, 1, 0.00, 0, 0, '', '', '', '', '');");
-  }
-
-$lines = file("system/install/install.parser.sql");
-foreach($lines as $line)
-	{
-	$line = str_replace('sed_', $cfg['mysqldb'], $line);
-	sed_sql_query($line);
-	}
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
+(1, 0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"https://seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"https://seditio.org/forums.php\">discussion forums</a>.', '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '');");
 
 ?>

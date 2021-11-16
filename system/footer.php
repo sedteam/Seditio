@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=system/footer.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Global footer
@@ -29,13 +29,13 @@ $out['bottomline'] = ($cfg['keepcrbottom']) ? $out['copyright'] : '';
 
 if (!$cfg['disablewhosonline'])
 	{
-	if ($usr['id']>0)
+	if ($usr['id'] > 0)
 		{
 		$sql = sed_sql_query("SELECT online_id FROM $db_online WHERE online_userid='".$usr['id']."'");
 
 		if ($row = sed_sql_fetchassoc($sql))
 			{
-  		$online_count = 1;
+			$online_count = 1;
 			$sql2 = sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_userid='".$usr['id']."'");
 			}
 		else
@@ -46,9 +46,9 @@ if (!$cfg['disablewhosonline'])
    else
       {
       $sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_ip='".$usr['ip']."'");
-      $online_count = sed_sql_result($sql,0,'COUNT(*)');
+      $online_count = sed_sql_result($sql, 0, 'COUNT(*)');
 
-      if ($online_count>0)
+      if ($online_count > 0)
          {
          $sql2 = sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_userid = -1 AND online_ip='".$usr['ip']."'");
          }
@@ -113,43 +113,43 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab103\" class=\"selected\">Auth</a></li>";	
 	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab104\" class=\"selected\">".'$sys'."</a></li>";
 	$out['devmode'] .= "</ul>"; 
-  $out['devmode'] .= "<div class=\"tab-box\">";
+	$out['devmode'] .= "<div class=\"tab-box\">";
 	$out['devmode'] .= "<div id=\"tab101\" class=\"tabs\">"; 		
-  $out['devmode'] .= "<h4>Hooks :</h4>";
+	$out['devmode'] .= "<h4>Hooks :</h4>";
   
-  if (is_array($sys['devmode']['hooks'])) 
-    {  
-    $out['devmode'] .= "<table class=\"cells hovered\"><tr>";
-    $out['devmode'] .= "<td class=\"coltop\">#</td><td class=\"coltop\">Hook</td>";
-    $out['devmode'] .= "<td class=\"coltop\">Code</td><td class=\"coltop\">Part</td>";
-    $out['devmode'] .= "<td class=\"coltop\">Plugin</td><td class=\"coltop\">File</td>";
-    $out['devmode'] .= "<td class=\"coltop\">Order</td>";    
-    $out['devmode'] .= "</tr>";
+	if (is_array($sys['devmode']['hooks'])) 
+		{  
+		$out['devmode'] .= "<table class=\"cells hovered\"><tr>";
+		$out['devmode'] .= "<td class=\"coltop\">#</td><td class=\"coltop\">Hook</td>";
+		$out['devmode'] .= "<td class=\"coltop\">Code</td><td class=\"coltop\">Part</td>";
+		$out['devmode'] .= "<td class=\"coltop\">Plugin</td><td class=\"coltop\">File</td>";
+		$out['devmode'] .= "<td class=\"coltop\">Order</td>";    
+		$out['devmode'] .= "</tr>";
 
-    foreach ($sys['devmode']['hooks'] as $k => $i)
-      {
-      $out['devmode'] .= "<tr><td>".$i[0]."</td>";
-      $out['devmode'] .= "<td>".$i[1]."</td>";
-      $out['devmode'] .= "<td>".$i[2]."</td>";
-      $out['devmode'] .= "<td>".$i[3]."</td>";
-      $out['devmode'] .= "<td>".$i[4]."</td>";
-      $out['devmode'] .= "<td>plugins/".$i[2]."/".$i[5].".php</td>";                
-      $out['devmode'] .= "<td>".$i[6]."</td>";  
-      $out['devmode'] .= "</tr>";
-      }
-    $out['devmode'] .= "</table>";    
-    }
-  else
-    { $out['devmode'] .= "None."; }
+		foreach ($sys['devmode']['hooks'] as $k => $i)
+			{
+			$out['devmode'] .= "<tr><td>".$i[0]."</td>";
+			$out['devmode'] .= "<td>".$i[1]."</td>";
+			$out['devmode'] .= "<td>".$i[2]."</td>";
+			$out['devmode'] .= "<td>".$i[3]."</td>";
+			$out['devmode'] .= "<td>".$i[4]."</td>";
+			$out['devmode'] .= "<td>plugins/".$i[2]."/".$i[5].".php</td>";                
+			$out['devmode'] .= "<td>".$i[6]."</td>";  
+			$out['devmode'] .= "</tr>";
+			}
+		$out['devmode'] .= "</table>";    
+		}
+	else
+		{ $out['devmode'] .= "None."; }
     
-  $out['devmode'] .= "</div><div id=\"tab102\" class=\"tabs\">"; 
+	$out['devmode'] .= "</div><div id=\"tab102\" class=\"tabs\">"; 
 	$out['devmode'] .= "<h4>SQL queries :</h4>";
-  
-  $out['devmode'] .= "<table class=\"cells hovered\"><tr>";
-  $out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">SQL query</td><td class=\"coltop\" style=\"width:10%;\">SQL Duration</td>";
-  $out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">Timeline</td><td class=\"coltop\">Query</td></tr>";
+	$out['devmode'] .= "<table class=\"cells hovered\"><tr>";
+	$out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">SQL query</td><td class=\"coltop\" style=\"width:10%;\">SQL Duration</td>";
+	$out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">Timeline</td><td class=\"coltop\">Query</td></tr>";
 	$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
 	$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
+	
 	foreach ($sys['devmode']['queries'] as $k => $i)
 		{
 		$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
@@ -163,19 +163,21 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	$out['devmode'] .= "</td></tr></table>";
 
 	$out['devmode'] .= "</div><div id=\"tab103\" class=\"tabs\">";
-  $out['devmode'] .= "<h4>Auth :</h4>";
+	$out['devmode'] .= "<h4>Auth :</h4>";
 
-  if (is_array($sys['auth_log']))
-    { $out['devauth'] .= "AUTHLOG: ".implode(', ',$sys['auth_log']); }
-  $txt_r = ($usr['auth_read']) ? '1' : '0';
-  $txt_w = ($usr['auth_write']) ? '1' : '0';
-  $txt_a = ($usr['isadmin']) ? '1' : '0';
-  $out['devauth'] .= " &nbsp; AUTH_FINAL_RWA:".$txt_r.$txt_w.$txt_a;
-  $out['devmode']	.= $out['devauth'];
+	if (is_array($sys['auth_log']))
+	{ $out['devauth'] .= "AUTHLOG: ".implode(', ',$sys['auth_log']); }
+
+	$txt_r = ($usr['auth_read']) ? '1' : '0';
+	$txt_w = ($usr['auth_write']) ? '1' : '0';
+	$txt_a = ($usr['isadmin']) ? '1' : '0';
+	$out['devauth'] .= " &nbsp; AUTH_FINAL_RWA:".$txt_r.$txt_w.$txt_a;
+	$out['devmode']	.= $out['devauth'];
 	$out['devmode'] .= "</div><div id=\"tab104\" class=\"tabs\">"; 
 	$out['devmode'] .= '<h4>$sys :</h4>';
 	$out['devmode'] .= sed_vardump($sys, 'print_r');
 	$out['devmode']	.= "</div></div></div>";
+	
 	}
 
 $t->assign(array (
@@ -185,7 +187,7 @@ $t->assign(array (
 	));
 
 
-if ($usr['id']>0)
+if ($usr['id'] > 0)
 	{ $t->parse("FOOTER.USER"); }
 else
 	{ $t->parse("FOOTER.GUEST"); }

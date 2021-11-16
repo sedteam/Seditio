@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=pfs.edit.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=PFS
@@ -61,6 +61,11 @@ if (!empty($c1) || !empty($c2))
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
 $title = "<a href=\"".sed_url("pfs", $more)."\">".$L['pfs_title']."</a>";
+$shorttitle = $L['pfs_title'];
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("pfs", $more)] = $L['pfs_title'];
 
 if ($userid!=$usr['id'])
 	{
@@ -99,7 +104,7 @@ $out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
 if ($a=='update' && !empty($id))
 	{
 	$rdesc = sed_import('rdesc','P','HTM');
-  $rtitle = sed_import('rtitle','P','TXT');
+	$rtitle = sed_import('rtitle','P','TXT');
 	$folderid = sed_import('folderid','P','INT');
 	if ($folderid>0)
 		{
@@ -136,52 +141,34 @@ $body .= "</form></table>";
 
 if ($standalone)
 	{
-	$pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
-<script type=\"text/javascript\">
-<!--
-function help(rcode,c1,c2)
-	{ window.open('plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
-function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[thumb=".$cfg['th_dir']."'+gfile+']'+gfile+'[/thumb]'; }
-function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
-function addglink(id,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; }
-function comments(rcode)
-	{ window.open('comments.php?id='+rcode,'Comments','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=576,top=64'); }
-function picture(url,sx,sy)
-	{ window.open('pfs.php?m=view&id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
-function ratings(rcode)
-	{ window.open('ratings.php?id='+rcode,'Ratings','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=16,top=16'); }
-//-->
-</script>
-";
-
+	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$out['subtitle']."</title>";
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
-
+	
 	/* === New Hook Sed 175 === */
 	$extp = sed_getextplugins('pfs.stndl');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ================================ */		
-	
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
+	/* ================================ */	
+
+	$mskin = sed_skinfile(array('pfs', 'standalone'));
+	$t = new XTemplate($mskin);
 
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
 		"PFS_STANDALONE_HEADER2" => $pfs_header2,
 		"PFS_STANDALONE_FOOTER" => $pfs_footer,
-			));
+	));
 
 	$t->parse("MAIN.STANDALONE_HEADER");
 	$t->parse("MAIN.STANDALONE_FOOTER");
 
 	$t-> assign(array(
 		"PFS_TITLE" => $title,
+		"PFS_SHORTTITLE" => $shorttitle,
+		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, false),		
 		"PFS_BODY" => $body
-		));
+	));
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
@@ -191,11 +178,13 @@ else
 	require("system/header.php");
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
-
+	
 	$t-> assign(array(
 		"PFS_TITLE" => $title,
+		"PFS_SHORTTITLE" => $shorttitle,
+		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 		"PFS_BODY" => $body
-		));
+	));
 
 	$t->parse("MAIN");
 	$t->out("MAIN");

@@ -12,22 +12,11 @@ RewriteEngine On
 #RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 #RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
  
-# XML
-RewriteRule ^sitemap.xml?$	sitemap.php  [L,QSA]
-
-# Captcha Image
-RewriteRule ^captcha.png?$	captcha.php  [L,QSA]
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-#resizing_image
-RewriteRule ^datas/(.+)/(.+) resize/resize.php?object=$1&file=$2&token=%{QUERY_STRING}
-
 ## --
 RewriteCond %{REQUEST_FILENAME} -d [OR] 
 RewriteCond %{REQUEST_FILENAME} -f [OR] 
 RewriteCond %{REQUEST_FILENAME} -l 
-#RewriteRule ^(datas.*) sefurls.php
+#RewriteRule ^(datas.*) index.php
 RewriteRule ^(.*)$ - [NC,L] 
-RewriteRule ^(.*)$ sefurls.php [QSA,L]   
+RewriteRule ^(.*)$ index.php [QSA,L]   
 </IfModule>

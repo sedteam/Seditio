@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=users.profile.inc.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=User profile
@@ -33,6 +33,12 @@ $extp = sed_getextplugins('profile.first');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+
+// ---------- Extra fields - getting
+$extrafields = array(); 
+$extrafields = sed_extrafield_get('users');  
+$number_of_extrafields = count($extrafields);	
+// ----------------------	
 
 $id = sed_import('id','G','TXT');
 $a = sed_import('a','G','ALP');
@@ -61,7 +67,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_avatar='' WHERE user_id='".$usr['id']."'");
-  sed_redirect(sed_url("users", "m=profile", "#avatar", true));
+	sed_redirect(sed_url("users", "m=profile", "#avatar", true));
 	exit;
 
 	break;
@@ -179,6 +185,12 @@ switch ($a)
 				@chmod($avatarpath, 0666);
 				}
 			}
+		} else {
+			// autogeneration avatar from letter sed v178
+			if (empty($usr['profile']['user_avatar']))
+				{
+				sed_autogen_avatar($usr['id']);
+				}
 		}
 
 	if (!empty($uph_tmp_name) && $uph_size>0)
@@ -248,15 +260,13 @@ switch ($a)
 		}
 
 	$ruserfirstname = sed_import('ruserfirstname','P','TXT', 100, TRUE);   // sed 177
-  $ruserlastname = sed_import('ruserlastname','P','TXT', 100, TRUE);     // sed 177  
-  
-  $rusertext = sed_import('rusertext','P','HTM');
+	$ruserlastname = sed_import('ruserlastname','P','TXT', 100, TRUE);     // sed 177  
+
+	$rusertext = sed_import('rusertext','P','HTM');
 	$rusercountry = sed_import('rusercountry','P','ALP');
 	$ruserskin = sed_import('ruserskin','P','TXT');
 	$ruserlang = sed_import('ruserlang','P','ALP');
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
-	$rusericq = sed_import('rusericq','P','TXT');
-	$ruserirc = sed_import('ruserirc','P','TXT');
 	$ruserskype = sed_import('ruserskype','P','TXT');
 	$rusergender = sed_import('rusergender','P','ALP');
 	$ryear = sed_import('ryear','P','INT');
@@ -270,27 +280,13 @@ switch ($a)
 	$ruseremail = sed_import('ruseremail','P','TXT');
 	$ruserhideemail = sed_import('ruserhideemail','P','BOL');
 	$ruserpmnotify = sed_import('ruserpmnotify','P','BOL');
-	$ruserextra1 = sed_import('ruserextra1','P','TXT');
-	$ruserextra2 = sed_import('ruserextra2','P','TXT');
-	$ruserextra3 = sed_import('ruserextra3','P','TXT');
-	$ruserextra4 = sed_import('ruserextra4','P','TXT');
-	$ruserextra5 = sed_import('ruserextra5','P','TXT');
-	$ruserextra6 = sed_import('ruserextra6','P','HTM');
-	$ruserextra7 = sed_import('ruserextra7','P','HTM');
-	$ruserextra8 = sed_import('ruserextra8','P','HTM');
-	$ruserextra9 = sed_import('ruserextra9','P','HTM');
-	$ruserextra1_p = sed_import('ruserextra1_p','P','BOL');
-	$ruserextra2_p = sed_import('ruserextra2_p','P','BOL');
-	$ruserextra3_p = sed_import('ruserextra3_p','P','BOL');
-	$ruserextra4_p = sed_import('ruserextra4_p','P','BOL');
-	$ruserextra5_p = sed_import('ruserextra5_p','P','BOL');
-	$ruserextra6_p = sed_import('ruserextra6_p','P','BOL');
-	$ruserextra7_p = sed_import('ruserextra7_p','P','BOL');
-	$ruserextra8_p = sed_import('ruserextra8_p','P','BOL');
-	$ruserextra9_p = sed_import('ruserextra9_p','P','BOL');
 	$rnewpass1 = sed_import('rnewpass1','P','TXT');
 	$rnewpass2 = sed_import('rnewpass2','P','TXT');
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
+	
+	// --------- Extra fields     
+	if ($number_of_extrafields > 0) $ruserextrafields = sed_extrafield_buildvar($extrafields, 'ruser', 'user');    
+	// ----------------------	
 
 	if (!empty($rnewpass1) && !empty($rnewpass2))
 		{
@@ -303,16 +299,16 @@ switch ($a)
 		if (empty($error_string))
 			{
 			
-      $rmdsalt = sed_unique(16); // New sed172          
-      $rnewpass = sed_hash($rnewpass1, 1, $rmdsalt); // New sed172						
-      $rnewpass_secret = md5(sed_unique(16)); // New sed172
-			
+			$rmdsalt = sed_unique(16); // New sed172          
+			$rnewpass = sed_hash($rnewpass1, 1, $rmdsalt); // New sed172						
+			$rnewpass_secret = md5(sed_unique(16)); // New sed172
+				
 			$sql = sed_sql_query("UPDATE $db_users SET 
-        user_password='".sed_sql_prep($rnewpass)."',
-        user_salt='".sed_sql_prep($rmdsalt)."',
-        user_secret='".sed_sql_prep($rnewpass_secret)."',        
-        user_passtype=1  
-        WHERE user_id='".$usr['id']."'");
+				user_password='".sed_sql_prep($rnewpass)."',
+				user_salt='".sed_sql_prep($rmdsalt)."',
+				user_secret='".sed_sql_prep($rnewpass_secret)."',        
+				user_passtype=1  
+				WHERE user_id='".$usr['id']."'");
 
 			if ($cfg['authmode']==1 || $cfg['authmode']==3)
 				{
@@ -329,33 +325,31 @@ switch ($a)
 
 	if (empty($error_string))
 		{
-		$ruserextra1 = ($cfg['extra1uchange'] && $ruserextra1_p) ? mb_substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
-		$ruserextra2 = ($cfg['extra2uchange'] && $ruserextra2_p) ? mb_substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
-		$ruserextra3 = ($cfg['extra3uchange'] && $ruserextra3_p) ? mb_substr($ruserextra3,0,$cfg['extra3tsetting']) : $urr['user_extra3'];
-		$ruserextra4 = ($cfg['extra4uchange'] && $ruserextra4_p) ? mb_substr($ruserextra4,0,$cfg['extra4tsetting']) : $urr['user_extra4'];
-		$ruserextra5 = ($cfg['extra5uchange'] && $ruserextra5_p) ? mb_substr($ruserextra5,0,$cfg['extra5tsetting']) : $urr['user_extra5'];
-		$ruserextra6 = ($cfg['extra6uchange'] && $ruserextra6_p) ? $ruserextra6 : $urr['user_extra6'];
-		$ruserextra7 = ($cfg['extra7uchange'] && $ruserextra7_p) ? $ruserextra7 : $urr['user_extra7'];
-		$ruserextra8 = ($cfg['extra8uchange'] && $ruserextra8_p) ? $ruserextra8 : $urr['user_extra8'];
-		$ruserextra9 = ($cfg['extra9uchange'] && $ruserextra9_p) ? $ruserextra9 : $urr['user_extra9'];
 
 		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
 
 		if (!$cfg['useremailchange'])
 			{ $ruseremail = $urr['user_email']; }
+		
+		// ------ Extra fields 
+		if(count($extrafields) > 0) 
+			{ 
+			foreach($extrafields as $i => $row) 
+				{ 
+				$ssql_extra .= ", user_".$row['code']." = "."'".sed_sql_prep($ruserextrafields['user_'.$row['code']])."'"; 
+				} 
+			} 
+		// ----------------------		
 
 		$sql = sed_sql_query("UPDATE $db_users SET
 			user_firstname='".sed_sql_prep($ruserfirstname)."', 
 			user_lastname='".sed_sql_prep($ruserlastname)."',       
 			user_text='".sed_sql_prep($rusertext)."',
-			user_text_ishtml='".$ishtml."',
 			user_country='".sed_sql_prep($rusercountry)."',
 			user_skin='".sed_sql_prep($ruserskin)."',
 			user_lang='".sed_sql_prep($ruserlang)."',
 			user_website='".sed_sql_prep($ruserwebsite)."',
-			user_icq='".sed_sql_prep($rusericq)."',
 			user_skype='".sed_sql_prep($ruserskype)."',
-			user_irc='".sed_sql_prep($ruserirc)."',
 			user_gender='".sed_sql_prep($rusergender)."',
 			user_birthdate='".sed_sql_prep($ruserbirthdate)."',
 			user_timezone='".sed_sql_prep($rusertimezone)."',
@@ -364,16 +358,7 @@ switch ($a)
 			user_email='".sed_sql_prep($ruseremail)."',
 			user_hideemail='$ruserhideemail',
 			user_pmnotify='$ruserpmnotify',
-			user_extra1='".sed_sql_prep($ruserextra1)."',
-			user_extra2='".sed_sql_prep($ruserextra2)."',
-			user_extra3='".sed_sql_prep($ruserextra3)."',
-			user_extra4='".sed_sql_prep($ruserextra4)."',
-			user_extra5='".sed_sql_prep($ruserextra5)."',
-			user_extra6='".sed_sql_prep($ruserextra6)."',
-			user_extra7='".sed_sql_prep($ruserextra7)."',
-			user_extra8='".sed_sql_prep($ruserextra8)."',
-			user_extra9='".sed_sql_prep($ruserextra9)."',
-			user_auth=''
+			user_auth=''".$ssql_extra."
 			WHERE user_id='".$usr['id']."'");
 
 		/* === Hook === */
@@ -445,25 +430,8 @@ if ($a=='avatarchoose')
 else
 	{ $profile_form_avatar .= "<a href=\"".sed_url("users", "m=profile&a=avatarchoose&".sed_xg(), "#list")."\">".$L['pro_avatarspreset']."</a>"; }
 
-$user_form_extra1 = ($cfg['extra1uchange']) ? "<input type=\"text\" class=\"text\" name=\"ruserextra1\" value=\"".sed_cc($urr['user_extra1'])."\" size=\"32\" maxlength=\"".$cfg['extra1tsetting']."\" /><input type=\"hidden\" name=\"ruserextra1_p\" value=\"1\" />" : $urr['user_extra1'];
-$user_form_extra2 = ($cfg['extra2uchange']) ? "<input type=\"text\" class=\"text\" name=\"ruserextra2\" value=\"".sed_cc($urr['user_extra2'])."\" size=\"32\" maxlength=\"".$cfg['extra2tsetting']."\" /><input type=\"hidden\" name=\"ruserextra2_p\" value=\"1\" />" : $urr['user_extra2'];
-$user_form_extra3 = ($cfg['extra3uchange']) ? "<input type=\"text\" class=\"text\" name=\"ruserextra3\" value=\"".sed_cc($urr['user_extra3'])."\" size=\"32\" maxlength=\"".$cfg['extra3tsetting']."\" /><input type=\"hidden\" name=\"ruserextra3_p\" value=\"1\" />" : $urr['user_extra3'];
-$user_form_extra4 = ($cfg['extra4uchange']) ? "<input type=\"text\" class=\"text\"name=\"ruserextra4\" value=\"".sed_cc($urr['user_extra4'])."\" size=\"32\" maxlength=\"".$cfg['extra4tsetting']."\" /><input type=\"hidden\" name=\"ruserextra4_p\" value=\"1\" />" : $urr['user_extra4'];
-$user_form_extra5 = ($cfg['extra5uchange']) ? "<input type=\"text\" class=\"text\" name=\"ruserextra5\" value=\"".sed_cc($urr['user_extra5'])."\" size=\"32\" maxlength=\"".$cfg['extra5tsetting']."\" /><input type=\"hidden\" name=\"ruserextra5_p\" value=\"1\" />" : $urr['user_extra5'];
-$user_form_extra6 = ($cfg['extra6uchange']) ?  sed_selectbox($urr['user_extra6'], 'ruserextra6', $cfg['extra6tsetting'])."<input type=\"hidden\" name=\"ruserextra6_p\" value=\"1\" />" : $urr['user_extra6'];
-$user_form_extra7 = ($cfg['extra7uchange']) ?  sed_selectbox($urr['user_extra7'], 'ruserextra7', $cfg['extra7tsetting'])."<input type=\"hidden\" name=\"ruserextra7_p\" value=\"1\" />" : $urr['user_extra7'];
-$user_form_extra8 = ($cfg['extra8uchange']) ?  sed_selectbox($urr['user_extra8'], 'ruserextra8', $cfg['extra8tsetting'])."<input type=\"hidden\" name=\"ruserextra8_p\" value=\"1\" />" : $urr['user_extra8'];
-$user_form_extra9 = ($cfg['extra9uchange']) ? "<textarea name=\"ruserextra9\" rows=\"4\" cols=\"56\">".sed_cc($urr['user_extra9'])."</textarea><input type=\"hidden\" name=\"ruserextra9_p\" value=\"1\" />" : $urr['user_extra9'];
-
-$profile_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-$profile_form_hideemail = ($urr['user_hideemail']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-if (!$urr['user_text_ishtml'] && $cfg['textmode']=='html')
-  {
-	$urr['user_text'] = sed_parse(sed_cc($urr['user_text']), 1, 1, 1);
-  $sql3 = sed_sql_query("UPDATE $db_users SET user_text_ishtml=1, user_text='".sed_sql_prep($urr['user_text'])."' WHERE user_id=".$urr['user_id']); 
-	}
+$profile_form_pmnotify = sed_radiobox("ruserpmnotify", $yesno_arr, $urr['user_pmnotify']);
+$profile_form_hideemail = sed_radiobox("ruserhideemail", $yesno_arr, $urr['user_hideemail']);
 
 $out['subtitle'] = $L['Profile'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
@@ -487,62 +455,58 @@ if (!empty($error_string))
 	$t->assign("USERS_PROFILE_ERROR_BODY",$error_string);
 	$t->parse("MAIN.USERS_PROFILE_ERROR");
 	}
+	
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("users")] = $L['Users'];
+$urlpaths[sed_url("users", "m=profile")] = $L['pro_title'];	
 
 $t->assign(array(
 	"USERS_PROFILE_TITLE" => "<a href=\"".sed_url("users", "m=profile")."\">".$L['pro_title']."</a>",
+	"USERS_PROFILE_SHORTTITLE" => $L['pro_title'],
+	"USERS_PROFILE_URL" => sed_url("users", "m=profile"),
 	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
+	"USERS_PROFILE_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"USERS_PROFILE_FORM_SEND" => sed_url("users", "m=profile&a=update&".sed_xg()),
 	"USERS_PROFILE_ID" => $urr['user_id'],
 	"USERS_PROFILE_NAME" => sed_cc($urr['user_name']),
 	"USERS_PROFILE_FIRSTNAME" => sed_textbox('ruserfirstname', sed_cc($urr['user_firstname']), 32, 100), 
-  "USERS_PROFILE_LASTNAME" => sed_textbox('ruserlastname', sed_cc($urr['user_lastname']), 32, 100),    
+	"USERS_PROFILE_LASTNAME" => sed_textbox('ruserlastname', sed_cc($urr['user_lastname']), 32, 100),    
 	"USERS_PROFILE_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_PROFILE_GROUPS" => sed_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
 	"USERS_PROFILE_COUNTRY" => $profile_form_countries,
 	"USERS_PROFILE_AVATAR" => $profile_form_avatar,
 	"USERS_PROFILE_PHOTO" => $profile_form_photo,
 	"USERS_PROFILE_SIGNATURE" => $profile_form_signature,
-	"USERS_PROFILE_EXTRA1" => $user_form_extra1,
-	"USERS_PROFILE_EXTRA2" => $user_form_extra2,
-	"USERS_PROFILE_EXTRA3" => $user_form_extra3,
-	"USERS_PROFILE_EXTRA4" => $user_form_extra4,
-	"USERS_PROFILE_EXTRA5" => $user_form_extra5,
-	"USERS_PROFILE_EXTRA6" => $user_form_extra6,
-	"USERS_PROFILE_EXTRA7" => $user_form_extra7,
-	"USERS_PROFILE_EXTRA8" => $user_form_extra8,
-	"USERS_PROFILE_EXTRA9" => $user_form_extra9,
-	"USERS_PROFILE_EXTRA1_TITLE" => $cfg['extra1title'],
-	"USERS_PROFILE_EXTRA2_TITLE" => $cfg['extra2title'],
-	"USERS_PROFILE_EXTRA3_TITLE" => $cfg['extra3title'],
-	"USERS_PROFILE_EXTRA4_TITLE" => $cfg['extra4title'],
-	"USERS_PROFILE_EXTRA5_TITLE" => $cfg['extra5title'],
-	"USERS_PROFILE_EXTRA6_TITLE" => $cfg['extra6title'],
-	"USERS_PROFILE_EXTRA7_TITLE" => $cfg['extra7title'],
-	"USERS_PROFILE_EXTRA8_TITLE" => $cfg['extra8title'],
-	"USERS_PROFILE_EXTRA9_TITLE" => $cfg['extra9title'],
-	"USERS_PROFILE_TEXT" => "<div><textarea name=\"rusertext\" rows=\"8\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($urr['user_text'], ENT_QUOTES)."</textarea></div>",
-	"USERS_PROFILE_TEXTBOXER" => "<div><textarea name=\"rusertext\" rows=\"8\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($urr['user_text'])."</textarea></div>",
+	"USERS_PROFILE_TEXT" => sed_textarea("rusertext", $urr['user_text'], 8, $cfg['textarea_default_width']),
 	"USERS_PROFILE_EMAIL" => $profile_form_email,
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
-	"USERS_PROFILE_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".$urr['user_website']."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_PROFILE_WEBSITE" => sed_textbox('ruserwebsite', $urr['user_website'], 56, 128),
 	"USERS_PROFILE_SKIN" => $profile_form_skins,
 	"USERS_PROFILE_LANG" => $profile_form_langs,
-	"USERS_PROFILE_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_PROFILE_SKYPE" => "<input type=\"text\" class=\"text\" name=\"ruserskype\" value=\"".sed_cc($urr['user_skype'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_PROFILE_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($urr['user_irc'])."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_PROFILE_SKYPE" => sed_textbox('ruserskype', $urr['user_skype'], 32, 64),
 	"USERS_PROFILE_GENDER" => $profile_form_gender,
 	"USERS_PROFILE_BIRTHDATE" => $profile_form_birthdate,
 	"USERS_PROFILE_TIMEZONE" => $profile_form_timezone,
-	"USERS_PROFILE_LOCATION" => "<input type=\"text\" class=\"text\" name=\"ruserlocation\" value=\"".sed_cc($urr['user_location'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_PROFILE_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"ruseroccupation\" value=\"".sed_cc($urr['user_occupation'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_PROFILE_LOCATION" => sed_textbox('ruserlocation', $urr['user_location'], 32, 64),
+	"USERS_PROFILE_OCCUPATION" => sed_textbox('ruseroccupation', $urr['user_occupation'], 32, 64),
 	"USERS_PROFILE_REGDATE" => sed_build_date($cfg['dateformat'], $urr['user_regdate'])." ".$usr['timetext'],
 	"USERS_PROFILE_LASTLOG" => sed_build_date($cfg['dateformat'], $urr['user_lastlog'])." ".$usr['timetext'],
 	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_PROFILE_ADMINRIGHTS" => '',
-	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
-	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
-		));
+	"USERS_PROFILE_NEWPASS1" => sed_textbox("rnewpass1", "", 16, 32, "password", false, "password"),
+	"USERS_PROFILE_NEWPASS2" => sed_textbox("rnewpass2", "", 16, 32, "password", false, "password")
+));
+
+
+// Extra fields 
+if(count($extrafields) > 0) 
+{ 
+	$extra_array = sed_build_extrafields('user', 'USERS_PROFILE', $extrafields, $urr, 'ruser');
+} 
+
+$t->assign($extra_array); 
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');

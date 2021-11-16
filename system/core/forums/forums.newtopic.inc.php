@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=forums.php
-Version=177
-Updated=2015-feb-06
+Version=178
+Updated=2021-jun-17
 Type=Core
 Author=Neocrome
 Description=Forums
@@ -47,8 +47,6 @@ if ($row = sed_sql_fetchassoc($sql))
 	$fs_desc = $row['fs_desc'];
 	$fs_autoprune = $row['fs_autoprune'];
 	$fs_allowusertext = $row['fs_allowusertext'];
-	$fs_allowbbcodes = $row['fs_allowbbcodes'];
-	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
 	$fs_countposts = $row['fs_countposts'];
 
@@ -132,7 +130,6 @@ if ($a=='newtopic')
 				fp_creation,
 				fp_updated,
 				fp_text,
-				fp_text_ishtml,
 				fp_posterip)
 				VALUES
 				(".(int)$q.",
@@ -141,7 +138,7 @@ if ($a=='newtopic')
 				'".sed_sql_prep($usr['name'])."',
 				".(int)$sys['now_offset'].",
 				".(int)$sys['now_offset'].",
-				'".sed_sql_prep($newmsg)."',".(int)$ishtml.",
+				'".sed_sql_prep($newmsg)."',
 				'".$usr['ip']."')");
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
@@ -172,16 +169,6 @@ if ($a=='newtopic')
 		}	
 	}
 
-// -----------
-if ($cfg['textmode']=='bbcode')
-    {
-    $smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? " &nbsp; ".sed_build_smilies('newtopic', 'newmsg', $L['Smilies'])." &nbsp; " : '';
-    $bbcodes = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_bbcodes('newtopic', 'newmsg', $L['BBcodes']): '';
-    } 
-else { $bbcodes = ''; $smilies = ''; } 
-// -----------
-
-
 $pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
@@ -189,6 +176,12 @@ $post_main = "<div id=\"nt\"><textarea name=\"newmsg\" rows=\"".$cfg['textarea_d
 
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums", "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("forums")] = $L['Forums'];
+sed_build_forums_bc($s, $fs_title, $fs_category);
+$urlpaths[sed_url("forums", "m=newtopic&s=".$s)] = $L['for_newtopic'];
 
 $sys['sublocation'] = $fs_title;
 $out['subtitle'] = $L['Forums'];
@@ -220,27 +213,26 @@ if (!empty($error_string))
 $t->assign(array(
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle,
 	"FORUMS_NEWTOPIC_SHORTTITLE" => $L['for_newtopic'],	
-	"FORUMS_NEWTOPIC_SUBTITLE" => sed_bbcode($fs_desc),
+	"FORUMS_NEWTOPIC_SUBTITLE" => sed_parse($fs_desc),
+	"FORUMS_NEWTOPIC_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s),
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_NEWTOPIC_TEXT" => $post_main.$bbcodes." ".$smilies." ".$pfs.$poll_form,
+	"FORUMS_NEWTOPIC_TEXT" => $post_main." ".$pfs.$poll_form,
 	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
-	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main.$bbcodes." ".$smilies." ".$pfs.$poll_form,
-	"FORUMS_NEWTOPIC_SMILIES" => $smilies,
-	"FORUMS_NEWTOPIC_BBCODES" => $bbcodes,
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 	"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
-		));
+));
 
 if ($fs_allowprvtopics)
 	{
-	$checked = ($newprvtopic) ? "checked=\"checked\"" : '';
-	$prvtopic = "<input type=\"checkbox\" class=\"checkbox\" name=\"newprvtopic\" $checked />";
+
+	$prvtopic = sed_checkbox('newprvtopic', '', $newprvtopic);
 
 	$t->assign(array(
 		"FORUMS_NEWTOPIC_ISPRIVATE" => $prvtopic
-			));
+	));
+			
 	$t->parse("MAIN.PRIVATE");
 	}
 

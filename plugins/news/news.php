@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/news/news.php
-Version=177
+Version=178
 Updated=2012-may-23
 Type=Plugin
 Author=Neocrome
@@ -69,17 +69,17 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	
   /* ======= Pagination Sed 173 ======== */
 	
-  $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages 
-  WHERE page_state=0 AND page_cat NOT LIKE 'system'
-	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."' 
-	AND page_cat IN ('".implode("','", $catsub)."')");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages 
+		WHERE page_state=0 AND page_cat NOT LIKE 'system'
+		AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."' 
+		AND page_cat IN ('".implode("','", $catsub)."')");
 	
 	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
 	$totalpages = ceil($totallines / $cfg['plugin']['news']['maxpages']);
 	$currentpage= ceil($d / $cfg['plugin']['news']['maxpages'])+1;
   
-  $pagination = sed_pagination(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages']);
-  list($pageprev, $pagenext) = sed_pagination_pn(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages'], TRUE);
+	$pagination = sed_pagination(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages']);
+	list($pageprev, $pagenext) = sed_pagination_pn(sed_url("index", "c=".$c), $d, $totallines, $cfg['plugin']['news']['maxpages'], TRUE);
 
 	$news = new XTemplate(sed_skinfile('news'));  
 
@@ -116,24 +116,21 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 					
 		$jj++;
 		
-    $sys['catcode'] = $pag['page_cat']; //new in v175
+		$sys['catcode'] = $pag['page_cat']; //new in v175
     
-    $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
+		$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
 		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']) : sed_url("page", "al=".$pag['page_alias']);
-		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
-
-		//$item_code = 'p'.$pag['page_id'];
-		//list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments($item_code, $pag['page_pageurl'], FALSE);
+		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";;
 
 		$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
     
-    $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
-    
-    $pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
-    $pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
-    
+		$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+
+		$pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
+		$pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
+
 		$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
-    $pag['page_comments_url'] = "<a href=\"".$pag['page_pageurlcom']."\">(".$pag['page_comcount'].")</a>";
+		$pag['page_comments_url'] = "<a href=\"".$pag['page_pageurlcom']."\">(".$pag['page_comcount'].")</a>";
 		
 		$news-> assign(array(
 			"PAGE_ROW_URL" => $pag['page_pageurl'],
@@ -161,27 +158,40 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_COUNT" => $pag['page_count'],
 			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
 			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
-      "PAGE_ROW_COMMENTS_URL" => $pag['page_comments_url'],
+			"PAGE_ROW_COMMENTS_URL" => $pag['page_comments_url'],
 			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
-				));
+		));
 				
-			// ---------- Extra fields - getting
-			if(count($extrafields) > 0) 
-				{ 
-				$extra_array = sed_build_extrafields_data('page', 'PAGE_ROW', $extrafields, $pag);
-				} 
-			
-			$news->assign($extra_array); 
-			// ----------------------									
-				
-		$ishtml_page = ($pag['page_type']==1 || $pag['page_text_ishtml']);				
-		$pag['page_text'] = sed_parse($pag['page_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $ishtml_page);
-		if (!$pag['page_text_ishtml'] && $cfg['textmode']=='html')
+		if (!empty($pag['page_thumb']))
+			{	
+			$first_thumb_array = rtrim($pag['page_thumb']); 
+			if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+				{
+				$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+				}		
+			$first_thumb_array = explode(";", $first_thumb_array);
+			if (count($first_thumb_array) > 0)
+				{
+				$news->assign("PAGE_ROW_THUMB", $first_thumb_array[0]);  
+				$news->parse("NEWS.PAGE_ROW.PAGE_ROW_THUMB");	
+				}		
+			}
+		else 
 			{
-			 $sql2 = sed_sql_query("UPDATE $db_pages SET page_text_ishtml=1, page_type=1, page_text='".sed_sql_prep($pag['page_text'])."', 
-									page_text2='".sed_sql_prep($pag['page_text2'])."' WHERE page_id=".$pag['page_id']);
-			}										
+			$news->assign("PAGE_ROW_THUMB", sed_cc($pag['page_thumb']));
+			}			
+				
+		// ---------- Extra fields - getting
+		if(count($extrafields) > 0) 
+			{ 
+			$extra_array = sed_build_extrafields_data('page', 'PAGE_ROW', $extrafields, $pag);
+			} 
+		
+		$news->assign($extra_array); 
+		// ----------------------									
+								
+		$pag['page_text'] = sed_parse($pag['page_text']);										
 		$pag['page_text'] = sed_cutreadmore($pag['page_text'], $pag['page_pageurl']);
 
 		$news->assign("PAGE_ROW_TEXT", $pag['page_text']);

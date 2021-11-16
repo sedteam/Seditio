@@ -4,10 +4,10 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-http://www.seditio.org
+https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.en.lang.php
-Version=177
+Version=178
 Updated=2006-jun-05
 Type=Plugin.standalone
 Author=Neocrome
