@@ -26,6 +26,7 @@ $usr = array();
 /* ======== Urltranslation rules ========= */
 
 require('system/config.urltranslation.php');
+require('system/config.extensions.php');
 require('system/functions.image.php');
 
 /* ======== Xtemplate class ========= */
@@ -126,6 +127,22 @@ if (!function_exists('set_magic_quotes_runtime'))
     function set_magic_quotes_runtime($new_setting) 
 		{
         return true;
+		}
+	}	
+	
+if ( !function_exists('sys_get_temp_dir')) 
+	{
+	function sys_get_temp_dir() 
+		{
+		if (!empty($_ENV['TMP'])) { return realpath($_ENV['TMP']); }
+		if (!empty($_ENV['TMPDIR'])) { return realpath( $_ENV['TMPDIR']); }
+		if (!empty($_ENV['TEMP'])) { return realpath( $_ENV['TEMP']); }
+		$tempfile = tempnam(__FILE__, '');
+		if (file_exists($tempfile)) {
+		  unlink($tempfile);
+		  return realpath(dirname($tempfile));
+		}
+		return null;
 		}
 	}	
 
@@ -3343,10 +3360,14 @@ function sed_newname($name, $underscore = TRUE)
 	
 	$newname = mb_substr($name, 0, mb_strrpos($name, "."));
 	$ext = mb_strtolower(mb_substr($name, mb_strrpos($name, ".")+1));
-	if($lang != 'en' && is_array($sed_translit))
-		{
-		$newname = strtr($newname, $sed_translit);
-		}
+
+	if (is_array($sed_translit)) {		
+        $newname = preg_replace("/[\s]+/ui", '-', $newname);
+        $newname = strtr($newname, $sed_translit);	
+		$newname = preg_replace("/[^a-zA-Z0-9\.\-\_]+/ui", '', $newname);		
+        $newname = mb_strtolower($newname);						
+	}
+	
 	if ($underscore) 
 		{ $newname = str_replace(' ', '_', $newname); }
 		
@@ -5344,7 +5365,7 @@ function sed_browser($url, $post = array(), $uagent = "Mozilla/4.0 (compatible; 
 /** 
  * CURL DOWNLOAD FILE 
  */
-function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)", $proxy = '', $ssl_verifypeer = false, $ssl_verifyhost = false) { 
+function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)", $proxy = '', $ssl_verifypeer = false, $ssl_verifyhost = false) { 	
 	$fp = fopen($path, 'w');
 	$ch = curl_init();   
 	curl_setopt($ch, CURLOPT_URL, $url);
@@ -5365,32 +5386,60 @@ function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; 
 }
 
 
-function sed_download_img($source_file, $dst_dir, $uid)
+function sed_download($url)
 {
-    $imgsize = getimagesize($source_file);
-    $width = $imgsize[0];
-    $height = $imgsize[1];
-    $mime = $imgsize['mime'];
-    switch ($mime) {
-        case 'image/png':
-            $ext = ".png";
-            break;
-            
-        case 'image/gif':
-            $ext = ".gif";
-            break;            
- 
-        case 'image/jpeg':
-            $ext = ".jpg";
-            break;
- 
-        default:
-            return false;
-            break;
-    }    
-    $dst_file = $uid.$ext;    
-    sed_getfile($source_file, $dst_dir.$dst_file); 
-    return $dst_file;       
+    global $sed_extensions;
+	
+	$f_extension_ok = 0;
+
+	$path      = parse_url($url, PHP_URL_PATH);       // get path from url
+	$f_extension = pathinfo($path, PATHINFO_EXTENSION); // get ext from path
+	$filename  = pathinfo($path, PATHINFO_FILENAME);  // get name from path
+
+	foreach ($sed_extensions as $k => $line)
+		{
+		if (mb_strtolower($f_extension) == $line[0])
+			{ $f_extension_ok = 1; }
+		}
+	
+	if ($f_extension_ok) {
+		
+		// build temp file
+		$tmp_file = tempnam(sys_get_temp_dir(), 'tmp');
+		
+		// open temp file
+		$fp = fopen($tmp_file, 'w');
+		
+		$ch = curl_init();  
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); 
+		curl_setopt($ch, CURLOPT_USERAGENT, $uagent);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl_verifypeer);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $ssl_verifyhost);
+		if (!empty($proxy))
+			{
+			curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+			curl_setopt($ch, CURLOPT_PROXY, "$proxy"); 
+			}
+		curl_setopt($ch, CURLOPT_FILE, $fp);
+		curl_exec($ch);
+		curl_close($ch);
+		
+		// close temp file
+		fclose($fp);
+		
+		$u_size = filesize($tmp_file);		
+		$result = pathinfo($path);		
+		$result['tmp_name'] = $tmp_file;
+		$result['type'] = $f_extension;
+		$result['name'] = $filename;
+		$result['size'] = filesize($tmp_file);	
+		
+		return $result;			
+	} 
+	
+	return FALSE;	
 }
 
 function sed_is_bot()
