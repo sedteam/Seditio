@@ -77,7 +77,6 @@ switch($mn)
     			structure_title='".sed_sql_prep($rtitle)."',
     			structure_desc='".sed_sql_prep($rdesc)."',
     			structure_text='".sed_sql_prep($rstext)."',
-    			structure_text_ishtml=".(int)$ishtml.",
     			structure_icon='".sed_sql_prep($ricon)."',
     			structure_allowcomments='".sed_sql_prep($rallowcomments)."',
     			structure_allowratings='".sed_sql_prep($rallowratings)."',
@@ -160,11 +159,11 @@ switch($mn)
 		$t->assign(array(   	
 			"STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=page&mn=structure&n=options&a=update&id=".$structure_id),
 			"STRUCTURE_UPDATE_CODE" => $structure_code,
-			"STRUCTURE_UPDATE_PATH" => "<input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$structure_path."\" size=\"16\" maxlength=\"16\" />",
-			"STRUCTURE_UPDATE_TITLE" => "<input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$structure_title."\" size=\"64\" maxlength=\"32\" />",
-			"STRUCTURE_UPDATE_DESC" => "<input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$structure_desc."\" size=\"64\" maxlength=\"255\" />",
-			"STRUCTURE_UPDATE_ICON" => "<input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$structure_icon."\" size=\"64\" maxlength=\"128\" />",
-			"STRUCTURE_UPDATE_TEXT" => "<textarea name=\"rstext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($structure_text, ENT_QUOTES)."</textarea>",
+			"STRUCTURE_UPDATE_PATH" => sed_textbox('rpath', $structure_path, 16, 16),
+			"STRUCTURE_UPDATE_TITLE" => sed_textbox('rtitle', $structure_title, 48, 64),
+			"STRUCTURE_UPDATE_DESC" => sed_textbox('rdesc', $structure_desc, 64, 255),
+			"STRUCTURE_UPDATE_ICON" => sed_textbox('ricon', $structure_icon, 64, 128),
+			"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
 			"STRUCTURE_UPDATE_GROUP" => $st_group,
 			"STRUCTURE_UPDATE_TPL" => $st_tpl,
 			"STRUCTURE_UPDATE_ALLOWCOMMENTS" => $form_allowcomments,
@@ -275,12 +274,12 @@ switch($mn)
 			$t->assign(array( 
 				"PAGE_STRUCTURE_SEND" => sed_url("admin", "m=page&mn=structure&a=update"),
 				"PAGE_STRUCTURE_ADD_SEND" => sed_url("admin", "m=page&mn=structure&a=add"),
-				"PAGE_STRUCTURE_ADD_CODE" => "<input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"48\" maxlength=\"255\" />", 
-				"PAGE_STRUCTURE_ADD_PATH" => "<input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"255\" />",
-				"PAGE_STRUCTURE_ADD_TITLE" => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"64\" />",
-				"PAGE_STRUCTURE_ADD_DESC" => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" />",
-				"PAGE_STRUCTURE_ADD_ICON" => "<input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" />",
-				"PAGE_STRUCTURE_ADD_GROUP" => "<input type=\"checkbox\" class=\"checkbox\" name=\"ngroup\" />"
+				"PAGE_STRUCTURE_ADD_CODE" => sed_textbox('ncode', $ncode, 48, 255), 
+				"PAGE_STRUCTURE_ADD_PATH" => sed_textbox('npath', $npath, 16, 16),
+				"PAGE_STRUCTURE_ADD_TITLE" => sed_textbox('ntitle', $ntitle, 48, 64),
+				"PAGE_STRUCTURE_ADD_DESC" => sed_textbox('ndesc', $ndesc, 64, 255),
+				"PAGE_STRUCTURE_ADD_ICON" => sed_textbox('nicon', $nicon, 64, 128),
+				"PAGE_STRUCTURE_ADD_GROUP" => sed_checkbox('ngroup')
 			));
 
 			$t -> parse("ADMIN_PAGE.PAGE_STRUCTURE"); 		
