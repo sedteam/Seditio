@@ -72,7 +72,7 @@ $disp_header .= '.coltop		{ text-align:center; font-size:95%;  background-color:
 $disp_header .= '.desc 		{ font-size:90%; padding:3px; color:#646464; }';
 $disp_header .= '-->';
 $disp_header .= '</style>';
-$disp_header .= '<link rel="stylesheet" type="text/css" href="skins/sympfy/css/sympfy.css" />';
+$disp_header .= '<link rel="stylesheet" type="text/css" href="system/install/install.css" />';
 $disp_header .= '<title>'.$L['install_title'].'</title>';
 $disp_header .= '</head>';
 $disp_header .= '<body>';

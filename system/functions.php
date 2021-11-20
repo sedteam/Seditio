@@ -26,7 +26,6 @@ $usr = array();
 /* ======== Urltranslation rules ========= */
 
 require('system/config.urltranslation.php');
-require('system/config.extensions.php');
 require('system/functions.image.php');
 
 /* ======== Xtemplate class ========= */
@@ -76,7 +75,7 @@ $cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'informati
 
 /* ======== Names of the SQL tables ========= */
 
-$sed_dbnames = array ('auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'extra_fields', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'online', 'pages', 'parser', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
+$sed_dbnames = array ('auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'extra_fields', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'parser', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
 
 foreach($sed_dbnames as $k => $i)
 	{
@@ -127,22 +126,6 @@ if (!function_exists('set_magic_quotes_runtime'))
     function set_magic_quotes_runtime($new_setting) 
 		{
         return true;
-		}
-	}	
-	
-if ( !function_exists('sys_get_temp_dir')) 
-	{
-	function sys_get_temp_dir() 
-		{
-		if (!empty($_ENV['TMP'])) { return realpath($_ENV['TMP']); }
-		if (!empty($_ENV['TMPDIR'])) { return realpath( $_ENV['TMPDIR']); }
-		if (!empty($_ENV['TEMP'])) { return realpath( $_ENV['TEMP']); }
-		$tempfile = tempnam(__FILE__, '');
-		if (file_exists($tempfile)) {
-		  unlink($tempfile);
-		  return realpath(dirname($tempfile));
-		}
-		return null;
 		}
 	}	
 
@@ -3360,14 +3343,10 @@ function sed_newname($name, $underscore = TRUE)
 	
 	$newname = mb_substr($name, 0, mb_strrpos($name, "."));
 	$ext = mb_strtolower(mb_substr($name, mb_strrpos($name, ".")+1));
-
-	if (is_array($sed_translit)) {		
-        $newname = preg_replace("/[\s]+/ui", '-', $newname);
-        $newname = strtr($newname, $sed_translit);	
-		$newname = preg_replace("/[^a-zA-Z0-9\.\-\_]+/ui", '', $newname);		
-        $newname = mb_strtolower($newname);						
-	}
-	
+	if($lang != 'en' && is_array($sed_translit))
+		{
+		$newname = strtr($newname, $sed_translit);
+		}
 	if ($underscore) 
 		{ $newname = str_replace(' ', '_', $newname); }
 		
@@ -5365,7 +5344,7 @@ function sed_browser($url, $post = array(), $uagent = "Mozilla/4.0 (compatible; 
 /** 
  * CURL DOWNLOAD FILE 
  */
-function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)", $proxy = '', $ssl_verifypeer = false, $ssl_verifyhost = false) { 	
+function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)", $proxy = '', $ssl_verifypeer = false, $ssl_verifyhost = false) { 
 	$fp = fopen($path, 'w');
 	$ch = curl_init();   
 	curl_setopt($ch, CURLOPT_URL, $url);
@@ -5386,60 +5365,32 @@ function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; 
 }
 
 
-function sed_download($url)
+function sed_download_img($source_file, $dst_dir, $uid)
 {
-    global $sed_extensions;
-	
-	$f_extension_ok = 0;
-
-	$path      = parse_url($url, PHP_URL_PATH);       // get path from url
-	$f_extension = pathinfo($path, PATHINFO_EXTENSION); // get ext from path
-	$filename  = pathinfo($path, PATHINFO_FILENAME);  // get name from path
-
-	foreach ($sed_extensions as $k => $line)
-		{
-		if (mb_strtolower($f_extension) == $line[0])
-			{ $f_extension_ok = 1; }
-		}
-	
-	if ($f_extension_ok) {
-		
-		// build temp file
-		$tmp_file = tempnam(sys_get_temp_dir(), 'tmp');
-		
-		// open temp file
-		$fp = fopen($tmp_file, 'w');
-		
-		$ch = curl_init();  
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); 
-		curl_setopt($ch, CURLOPT_USERAGENT, $uagent);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl_verifypeer);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $ssl_verifyhost);
-		if (!empty($proxy))
-			{
-			curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-			curl_setopt($ch, CURLOPT_PROXY, "$proxy"); 
-			}
-		curl_setopt($ch, CURLOPT_FILE, $fp);
-		curl_exec($ch);
-		curl_close($ch);
-		
-		// close temp file
-		fclose($fp);
-		
-		$u_size = filesize($tmp_file);		
-		$result = pathinfo($path);		
-		$result['tmp_name'] = $tmp_file;
-		$result['type'] = $f_extension;
-		$result['name'] = $filename;
-		$result['size'] = filesize($tmp_file);	
-		
-		return $result;			
-	} 
-	
-	return FALSE;	
+    $imgsize = getimagesize($source_file);
+    $width = $imgsize[0];
+    $height = $imgsize[1];
+    $mime = $imgsize['mime'];
+    switch ($mime) {
+        case 'image/png':
+            $ext = ".png";
+            break;
+            
+        case 'image/gif':
+            $ext = ".gif";
+            break;            
+ 
+        case 'image/jpeg':
+            $ext = ".jpg";
+            break;
+ 
+        default:
+            return false;
+            break;
+    }    
+    $dst_file = $uid.$ext;    
+    sed_getfile($source_file, $dst_dir.$dst_file); 
+    return $dst_file;       
 }
 
 function sed_is_bot()
@@ -5748,6 +5699,44 @@ function sed_autogen_avatar($uid)
 	}
 	
 	return $gen_avatar;
+}
+
+function sed_menu_tree( $menus, $parent_id, $only_parent = false, $class = "" )
+{
+	if ( is_array( $menus ) && isset( $menus[$parent_id] ) )
+		{
+		$tree = "<ul class=\"".$class."\">";
+		if ( $only_parent == false )
+			{
+			foreach ( $menus[$parent_id] as $cat ) {
+				$tree .= "<li><a href=\"".$cat['menu_url']."\" data-mid=\"".$cat['menu_id']."\">".$cat['menu_title']."</a>";
+				$tree .=  sed_menu_tree($menus, $cat['menu_id']);
+				$tree .= "</li>";
+				}
+			}
+		elseif ( $only_parent ) {
+			$cat = $menus[$parent_id];
+			$tree = "<a href=\"".$cat['menu_url']."\" data-mid=\"".$cat['menu_id']."\">".$cat['menu_title']."</a>";
+			return $tree;
+			}
+		$tree .= "</ul>";
+		}
+	else {
+		return null;
+		}
+	return $tree;
+}
+
+function sed_menu_options($array, $parent = 0, $indent = "&nbsp; &nbsp; &nbsp;") 
+{
+	$return = array();
+	foreach($array as $key => $val) {
+	  if ($val['menu_pid'] == $parent) {
+		$return['x'.$val['menu_id']] = $indent.$val['menu_title'];
+		$return = array_merge($return, sed_menu_options($array, $val['menu_id'], $indent."&nbsp; &nbsp; &nbsp;"));
+	  }
+	}
+	return $return;
 }
 
 ?>

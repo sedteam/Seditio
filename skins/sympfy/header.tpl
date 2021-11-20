@@ -47,28 +47,10 @@
 				</div>
 
 				<div class="menu-col">
-					<div class="menu-wrapper">
-						<ul id="menu">
-							<li class="menu-item">
-							  <a href="/">Home</a>
-							</li>
-							<li class="menu-item menu-item-has-children">
-								<a href="/articles/">Articles</a>
-								<ul class="sub-menu">					
-									<li class="menu-item"><a href="/articles/sample1/">Sample subcategory 1</a></li>				              	
-									<li class="menu-item"><a href="/articles/sample2/">Sample subcategory 2</a></li>								
-								</ul>
-							</li>								
-							<li class="menu-item">
-							  <a href="/gallery/">Galleries</a>
-							</li>
-							<li class="menu-item">
-							  <a href="/forums/">Forums</a>
-							</li>	
-							<li class="menu-item">
-							  <a href="/plug/contact">Contacts</a>
-							</li>								
-						</ul>
+					<div class="menu-wrapper">						
+						<div class="menu">
+							{PHP.sed_menu.1.childrens}
+						</div>						
 					</div>
 				</div>
 				

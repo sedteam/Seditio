@@ -486,6 +486,16 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   PRIMARY KEY (user_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
+
+$sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."menu (
+  menu_id int(11) NOT NULL,
+  menu_pid int(11) NOT NULL DEFAULT '0',
+  menu_title varchar(255) NOT NULL DEFAULT '',
+  menu_url varchar(255) NOT NULL DEFAULT '',
+  menu_position int(11) NOT NULL DEFAULT '0',
+  menu_visible tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', '', 1 ,'title.asc', 1, 1, '');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', '',  0 ,'title.asc', 1, 1, '');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', '',  0 ,'title.asc', 1, 1, '');");
@@ -536,7 +546,8 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (11, 'ratings',
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (12, 'users', 'Users', '100', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (13, 'trash', 'Trash Can', '110', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (14, 'gallery', 'Gallery', '150', 1, 0);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (15, 'dic', 'Directories', '150', 1, 0);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (15, 'dic', 'Directories', '177', 1, 0);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (16, 'menu', 'Menu manager', '178', 1, 0);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (1, 'guests', 0, 0, 0, 'Guests', '', '', 'darkmagenta', 0, 0, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 'white', 0, 0, 1);");
@@ -660,6 +671,20 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (98, 3, 'dic', 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (99, 4, 'dic', 'a', 3, 128, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (100, 5, 'dic', 'a', 255, 255, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (101, 6, 'dic', 'a', 131, 0, 1);");
+
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (102, 1, 'menu', 'a', 1, 254, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (103, 2, 'menu', 'a', 1, 254, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (104, 3, 'menu', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (105, 4, 'menu', 'a', 3, 128, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (106, 5, 'menu', 'a', 255, 255, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (107, 6, 'menu', 'a', 131, 0, 1);");
+
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(1, 0, 'Menu', '', 1, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(2, 1, 'Home', '/', 2, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(3, 1, 'Forums', '/forums/', 3, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(4, 1, 'Articles', '/articles/', 4, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(5, 1, 'Galleries', '/gallery/', 5, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(6, 1, 'Contact', '/plug/contact', 6, 1);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
 (1, 0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"https://seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"https://seditio.org/forums.php\">discussion forums</a>.', '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '');");

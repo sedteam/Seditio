@@ -639,6 +639,26 @@ if (!$sed_dic && (sed_stat_get("version") >= 177))
 		}
 	sed_cache_store('sed_dic',$sed_dic,3600);
 	}
+	
+/* ======== Menus ======== */
+
+if (!$sed_menu && (sed_stat_get("version") >= 177))
+	{	
+	$sql = sed_sql_query("SELECT * FROM sed_menu WHERE 1 ORDER BY menu_position ASC");
+	while ($row = sed_sql_fetchassoc($sql))
+		{				
+			$menu_tree[$row['menu_pid']][$row['menu_id']] = $row;
+			$menu_row[$row['menu_id']] = $row;					
+		}
+		
+	foreach ($menu_row as $k => $v)
+	{
+		$sed_menu[$k]['childrens'] = sed_menu_tree($menu_tree, $k);
+		$sed_menu[$k]['parent'] = sed_menu_tree($menu_row, $k, true);
+	}	
+			
+	sed_cache_store('sed_menu', $sed_menu, 3600);
+	}
 
 /* ======== Smilies ======== */
 

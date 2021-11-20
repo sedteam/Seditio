@@ -109,7 +109,7 @@ ul {
 	max-height: 58px;
 }
 
-#header.header-sticky .menu-col ul#menu .sub-menu {
+#header.header-sticky .menu-col .menu ul>li>ul {
     padding-top: 40px;
 }
 
@@ -176,7 +176,7 @@ ul {
 	font-size:1em;
 }
 
-.menu-col .menu-wrapper ul#menu {
+.menu-col .menu-wrapper .menu>ul {
 	margin:0;
 	padding:0;
 	float: right;
@@ -188,7 +188,7 @@ ul {
 	font-weight:500;
 }
 
-.menu-col .menu-wrapper ul#menu li {
+.menu-col .menu-wrapper .menu>ul li {
     position: relative;
     display: table-cell;
 	display: -webkit-box;
@@ -202,17 +202,17 @@ ul {
 	text-align:left;
 }
 
-.menu-col .menu-wrapper ul#menu li a {
+.menu-col .menu-wrapper .menu>ul li a {
 	color:#313139;
 	cursor:pointer;
 	text-decoration:none;
 }
 
-.menu-col .menu-wrapper ul#menu li a:hover {
+.menu-col .menu-wrapper .menu>ul li a:hover {
 	color: #7CD1ED;
 }
 
-.menu-col .menu-wrapper ul#menu .sub-menu {
+.menu-col .menu-wrapper .menu>ul>li>ul {
     display:none;
 	position: absolute;
     top: 100%;
@@ -233,13 +233,13 @@ ul {
     transition: all .5s;	
 }
 
-.menu-col .menu-wrapper ul#menu .sub-menu li {
+.menu-col .menu-wrapper .menu>ul>li>ul li {
 	display:block;
 	text-align:left;
 	font-size:0.9em;
 }
 
-.menu-col .menu-wrapper ul#menu .sub-menu a {
+.menu-col .menu-wrapper .menu>ul>li>ul a {
     display: block;
     line-height: 20px;
     padding: 5px 0;

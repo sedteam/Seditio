@@ -42,6 +42,7 @@ $L['core_ratings'] = "Ratings";
 $L['core_trash'] = "Trash can";
 $L['core_users'] = "Users";
 $L['core_meta'] = "HTML Meta";
+$L['core_menu'] = "Menu manager"; // New in v178
 
 /* ====== Upgrade ====== */
 
@@ -359,6 +360,18 @@ $L['adm_dic_extra_type'] = "Data type of field";
 $L['adm_dic_extra_size'] = "Length of field";
 
 $L['adm_dic_comma_separat'] = "(values comma separated)";
+
+/* ====== Menu manager ====== */
+
+$L['adm_menuitems'] = "Menu items";
+$L['adm_additem'] = "Add item";
+$L['adm_position'] = "Position";
+$L['adm_confirm_delete'] = "Confirm delete?";
+$L['adm_addmenuitem'] = "Add menu item";
+$L['adm_editmenuitem'] = "Edit menu item";
+$L['adm_parentitem'] = "Parent item";
+$L['adm_url'] = "URL";
+$L['adm_activity'] = "Active?";
 
 /* ====== PFS ====== */
 

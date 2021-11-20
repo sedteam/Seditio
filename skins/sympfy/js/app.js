@@ -11,7 +11,7 @@
 	seditio.navTrigger 				= $('.nav-trigger');
 	seditio.mobileNav 				= $('.mobile-menu');
 	seditio.jsMenu 					= $('.js-menu');
-	seditio.desctopNav 				= $('.menu-wrapper #menu');
+	seditio.desctopNav 				= $('.menu-wrapper .menu>ul');
 	seditio.SliderTriggleDown      	= $('.slick-down');
 	
 	// Top slider Triggle Down Click
@@ -69,7 +69,7 @@
 		
 		// it's mobile device
 		if ((seditio.winWidth + seditio.scrollbar) <= 992) {		  		
-			if ($(".mobile-menu *").is("#menu") == false) {            				
+			if ($(".mobile-menu *").is("ul") == false) {            				
 				seditio.desctopNav.clone().appendTo(seditio.jsMenu);  // clone and append menu			
 				var slinky = $(seditio.jsMenu).slinky({
 					title: true
@@ -187,7 +187,7 @@
     }); 	
 	
 	/* Menu sliding */
-	$('.menu-wrapper #menu li').hover(
+	$('.menu-wrapper .menu ul li').hover(
 		function() {
 		  $('ul', this).eq(0).stop().slideDown(200);
 		},

@@ -1,0 +1,358 @@
+/* = CSS Reset
+-----------------------------------------------------------------------------*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+tt, var, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	margin:20px 0px 20px 40px;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* = Main Style
+-----------------------------------------------------------------------------*/
+
+body {
+	width: 100%;
+}
+
+#wrapper {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+/* = Typography
+-----------------------------------------------------------------------------*/
+body {
+  background: #ffffff;
+  color: #333333;
+  font-size: 0.85em;
+  line-height: 1.65em;
+  font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+}
+
+a {
+  color: #336699;
+}
+
+a:focus, a:hover {
+  color: #ef6465;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #303030;
+  font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 0.85em;
+  margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+h1 { font-size: 24px; }
+h2 { font-size: 22px; }
+h3 { font-size: 20px; }
+h4 { font-size: 18px; }
+h5 { font-size: 16px; }
+h6 { font-size: 14px; }
+
+p {
+	margin: 0 0 10px;
+}
+
+blockquote {
+  margin-bottom: 1.65em;
+  position: relative;
+  color: #777777;
+  padding-left: 1.65em;
+  margin-left: 1.65em;
+  border-left: 1px solid #ddd;
+}
+
+blockquote p {
+  margin-bottom: .5em;
+}
+
+/* = Inputs, Select, Buttons
+-----------------------------------------------------------------------------*/
+
+.btn, .submit {
+  text-decoration: none;
+  color: #000;
+  border-radius: 2px;
+  font-family: 'PT Sans', Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  border: 1px solid #cccccc;
+  border-bottom-color: #b3b3b3;
+  padding: 6px 10px;
+  font-weight: 500;
+  font-size: 1.1em;
+  background-color: #f1f1f1;
+  background-image: -moz-linear-gradient(top, #fcfcfc, #e0e0e0);
+  background-image: -ms-linear-gradient(top, #fcfcfc, #e0e0e0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fcfcfc), to(#e0e0e0));
+  background-image: -webkit-linear-gradient(top, #fcfcfc, #e0e0e0);
+  background-image: -o-linear-gradient(top, #fcfcfc, #e0e0e0);
+  background-image: linear-gradient(top, #fcfcfc, #e0e0e0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#e0e0e0', GradientType=0);
+  text-shadow: 0 1px 0 #ffffff;
+  box-shadow: none;
+}
+
+.btn:hover, .submit:hover {
+  color: #000;
+  background: #e0e0e0;
+}
+
+.btn-adm {
+	font-size: .9em;
+	line-height: 1;
+	padding: .2em 1em .2em 1em;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+select,
+select[multiple="multiple"] { 
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	padding: 6px 5px;
+	margin-bottom: 0 !important;
+	border: 1px solid #aaa;
+	border-radius: 2px;
+	background-color: #fff;
+	background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(20%, #ffffff), color-stop(50%, #f6f6f6), color-stop(52%, #eeeeee), color-stop(100%, #f4f4f4));
+	background: -webkit-linear-gradient(#ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+	background: -moz-linear-gradient(#ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+	background: -o-linear-gradient(#ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+	background: linear-gradient(#ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+	background-clip: padding-box;
+	box-shadow: 0 0 3px white inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+	color: #444;
+	text-decoration: none;
+	white-space: nowrap;  
+}
+
+select {
+  padding: 5px 2px;
+}
+
+textarea {
+  line-height: 1.4em;
+  vertical-align: top;
+}
+
+select {
+  margin-bottom: 0 !important;
+}
+
+.disp {
+	padding: 12px;
+	margin: 0;
+}
+
+.block {
+	padding: 8px;
+	margin: 8px;
+	background-color: #F6F6F6;
+}
+
+.clear {
+	clear:both;
+}
+
+.error {
+	padding: 48px;
+	margin: 0;
+	color: #CC1212;
+	font-size: 120%;
+	text-align: center;
+}
+
+.codetitle {
+	font-size: 10px;
+	color: #59739B;
+	padding: 2px;
+	margin-top: 5px;
+}
+
+.code {
+	font-size: 11px;
+	color: #59739B;
+	background-color: #EFF0C2;
+	padding: 2px;
+	margin-bottom: 5px;
+	font-family: monospace;
+}
+
+.valid {
+	height: 48px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.download {
+	font-size: 110%;
+	text-align: center;
+	background-color: #E8E8E8;
+	padding: 16px;
+	margin-top: 16px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;	
+}
+
+.coltop {
+	font-weight: normal;
+	color: #f6f6f6;
+	text-align: center;
+	color: rgba(255,255,255,0.9);
+	background-color: #303030!important; 
+}
+
+.coltop a {
+	color: #f6f6f6;
+}
+
+.cattop {
+	background-color: #e8e7e7!important; 
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.odd { background-color: #f8f8f8;  }
+.even { background-color: #f2f2f2;  }
+.gradi {
+	background: -moz-linear-gradient(left,  rgba(242,242,242,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(242,242,242,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(242,242,242,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+	border-right:1px solid #f4f4f4; 
+}
+
+.centerall {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.desc {
+	font-size: 90%;
+	padding: 3px;
+	color: #646464;
+	font-style:italic;
+}
+
+.spoiler {
+	padding: 8px;
+	margin: 8px;
+	border: 1px dashed #CCCCCC;
+	background-color: #DBE5E9;
+}
+
+.signature {
+	color: #979797;
+	font-size: 90%;
+	max-height: 96px;
+	overflow: auto;
+	margin-top: 16px;
+}
+
+.signature a {
+	color: #000000;
+}
+
+.centered {
+	text-align:center;
+}
+
+.help {
+	font-style:italic;
+	margin:10px;
+}
+
+.fhead {
+	font-size: 140%;
+	margin: 0;
+	letter-spacing: -1px;
+	font-weight: normal;
+	background-color: #FFCC00;
+}
+
+.fblock {
+	background-color: #FF0000;
+}
+
+table {
+	margin-bottom: 1.5em;
+}
+
+tfoot th,
+tfoot td {
+  background-color: #f2f2f2;
+}
+th,
+td {
+  border-bottom: 1px solid #eeeeee;
+  padding: 0.5em 0.8em;
+}
+table caption {
+  text-transform: uppercase;
+  padding: 0 1em;
+  color: #999999;
+  font-size: 0.85em;
+}
+
+table.flat {
+	width: 100%;
+}
+
+table.flat th, table.flat td {
+	border:0;
+}
+
+table.main {
+	width: 100%;
+}
+
+table.cells {
+	width: 100%;
+}
+
+table.cells td {
+vertical-align: middle;
+}
+
+table.list {
+	width: 100%;
+}

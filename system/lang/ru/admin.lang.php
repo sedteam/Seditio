@@ -42,6 +42,7 @@ $L['core_ratings'] = "Рейтинги";
 $L['core_trash'] = "Корзина";
 $L['core_users'] = "Пользователи";
 $L['core_meta'] = "HTML Meta";
+$L['core_menu'] = "Менеджер меню"; // New in v178
 
 /* ====== Upgrade ====== */
 
@@ -361,6 +362,17 @@ $L['adm_dic_extra_size'] = "Длина поля";
 
 $L['adm_dic_comma_separat'] = "(значения, разделенные через запятую)";
 
+/* ====== Menu manager ====== */
+
+$L['adm_menuitems'] = "Пункты меню";
+$L['adm_additem'] = "Добавить пункт";
+$L['adm_position'] = "Позиция";
+$L['adm_confirm_delete'] = "Вы подтверждаете удаление?";
+$L['adm_addmenuitem'] = "Добавление пункта меню";
+$L['adm_editmenuitem'] = "Редактирование пункта меню";
+$L['adm_parentitem'] = "Родительский пункт";
+$L['adm_url'] = "URL адрес";
+$L['adm_activity'] = "Активен?";
 
 /* ====== PFS ====== */
 
