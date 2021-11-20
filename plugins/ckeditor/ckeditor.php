@@ -64,7 +64,7 @@ if ($usr['maingrp'] > 3) {
     var textareas = document.getElementsByTagName('textarea');
   	for (var i = 0; i < textareas.length; i++) { 
       if (CkTextareas[textareas[i].getAttribute('data-editor')] != undefined) {
-		CKEDITOR.timestamp='ABCD';
+		CKEDITOR.timestamp='ABCDFGDD';
 		CKEDITOR.config.customConfig = '".$ck_config."';
         CKEDITOR.config.baseHref = '".$sys['abs_url']."';
         CKEDITOR.replace(textareas[i], {toolbar: textareas[i].getAttribute('data-editor'),  skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 

@@ -98,7 +98,7 @@ if (!empty($u_name))
 	
 	if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'].$u_name))
 		{
-			$u_name = $usr['id']."-".time()."-".sed_unique(3).".".$f_extension;
+			$u_name = $usr['id']."-".time().sed_unique(3)."-".$u_name;
 		}
 
 	
@@ -111,15 +111,12 @@ if (!empty($u_name))
 		{
 		foreach ($sed_extensions as $k => $line)
 			{
-			if (mb_strtolower($f_extension) == $line[0])
-				{ $f_extension_ok = 1; }
+			if (mb_strtolower($f_extension) == $line[0]) { $f_extension_ok = 1; }
 			}
 		}
-
-	
+		
 	if ( $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024)
 		{
-
 		if (!file_exists($cfg['pfs_dir'].$u_name))
 			{
 			
@@ -225,16 +222,17 @@ if (!empty($u_name))
 		);
 
 	}
-//}
 
-unlink($u_tmp_name);
-
+if ($upload_mode == "CURL") @unlink($u_tmp_name);
+/*///////////
 if ($_GET['fl'] == 'filebrowser') {
 	$funcNum = $_GET['CKEditorFuncNum'] ;
 	echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction($funcNum, '".$result_upload['url']."', '".$result_upload['error']['message']."');</script>";
 	}
 else {   
 	echo json_encode($result_upload);    
-}
+}*/
+
+echo json_encode($result_upload);  
 
 ?>
