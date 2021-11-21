@@ -41,6 +41,11 @@
     	<tr>
 			<td colspan="2">{PHP.L.Text} :<br />{STRUCTURE_UPDATE_TEXT}</td>
 		</tr>
+		
+    	<tr>
+			<td>{PHP.L.Thumbnail} :</td>
+			<td>{STRUCTURE_UPDATE_THUMB}</td>
+		</tr>		
     	
     	<tr>
 			<td>{PHP.L.Group} :</td>

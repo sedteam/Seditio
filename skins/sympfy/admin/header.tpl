@@ -5,13 +5,11 @@
 {HEADER_METAS}
 {HEADER_COMPOPUP}
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
-<!-- Main Stylesheet -->
-<link rel="stylesheet" href="skins/{PHP.skin}/admin/style.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="skins/{PHP.skin}/admin/css/font-awesome.css" type="text/css" media="screen" />		
-<!-- jQuery -->
-<script type="text/javascript" src="skins/{PHP.skin}/admin/scripts/jquery-1.3.2.min.js"></script>		
-<!-- jQuery Configuration -->
+<link href="skins/{PHP.skin}/admin/style.css" type="text/css" rel="stylesheet" />	
+<link href="skins/{PHP.skin}/admin/css/font-awesome.css" type="text/css" rel="stylesheet" />	
+<script type="text/javascript" src="skins/{PHP.skin}/admin/scripts/jquery.min.js"></script>		
 <script type="text/javascript" src="skins/{PHP.skin}/admin/scripts/simpla.jquery.configuration.js"></script>
+{HEADER_UPLOADER}
 </head>
 <body>
 	<div id="body-wrapper"><!-- Wrapper for the radial gradient background --> 

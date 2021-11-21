@@ -33,8 +33,8 @@ global $usr;
 if ($usr['id'] > 0)
 	{      
 	$out['uploader_header'] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/uploader/css/uploader.css\"/>";    
-	$out['uploader_footer'] = "<script src=\"plugins/uploader/js/jquery-ui.min.js\" type=\"text/javascript\"></script>";
-	$out['uploader_footer'] .= "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
+	//$out['uploader_footer'] = "<script src=\"plugins/uploader/js/jquery-ui.min.js\" type=\"text/javascript\"></script>";
+	$out['uploader_footer'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
 	$t->assign("HEADER_UPLOADER", $out['uploader_header']);
   }
 

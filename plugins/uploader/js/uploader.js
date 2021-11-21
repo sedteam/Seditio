@@ -88,16 +88,16 @@
 		}
 		
 		$(holdername).on("click", ".picture_insert", function() {
-       if (CKEDITOR.instances['rpagetext'])
-       {
-          var html = '<img src=\"datas/users/'+$(this).parent().attr('filename')+'\" alt=\"\" />';
-          CKEDITOR.instances['rpagetext'].insertHtml(html);
-       }
-       if (CKEDITOR.instances['newpagetext'])
-       {
-          var html = '<img src=\"datas/users/'+$(this).parent().attr('filename')+'\" alt=\"\" />';
-          CKEDITOR.instances['newpagetext'].insertHtml(html);          
-       }
+		if (CKEDITOR.instances['rpagetext'])
+		{
+		  var html = '<img src=\"datas/users/'+$(this).parent().attr('filename')+'\" alt=\"\" />';
+		  CKEDITOR.instances['rpagetext'].insertHtml(html);
+		}
+		if (CKEDITOR.instances['newpagetext'])
+		{
+		  var html = '<img src=\"datas/users/'+$(this).parent().attr('filename')+'\" alt=\"\" />';
+		  CKEDITOR.instances['newpagetext'].insertHtml(html);          
+		}
     });
       
     $(holdername).on("click", ".picture_delete", function() {

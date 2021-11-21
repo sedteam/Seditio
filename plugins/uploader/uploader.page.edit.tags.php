@@ -77,6 +77,7 @@ $uploader-> assign(array(
 $uploader->parse("UPLOADER");
 
 $t->assign("PAGEEDIT_FORM_".mb_strtoupper($extraslot), "<div id=\"uploader\"><div id=\"imageuploader\" sed_uploader=\"on\"></div></div>"); 
+
 $out['uploader_footer'] .= $uploader->text("UPLOADER"); //add footer.tpl {PHP.out.uploader_footer}
 
 ?>
