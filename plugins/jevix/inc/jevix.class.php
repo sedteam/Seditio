@@ -25,6 +25,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   		$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));    	
   		// Establish the resolved parametres tags. Also it is possible to establish admissible values of these parametres.
   		$jevix->cfgAllowTagParams('p', array('style'));
+		$jevix->cfgAllowTagParams('i', array('class'));
   		$jevix->cfgAllowTagParams('span', array('style')); 
   		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));  
   		$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));    
@@ -77,7 +78,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   		$jevix->cfgSetTagChilds('object', 'param', false, true);
   		$jevix->cfgSetTagChilds('object', 'embed', false, false);    
   		// Establish tags which can be empty
-  		$jevix->cfgSetTagIsEmpty(array('param','embed','a','iframe'));			
+  		$jevix->cfgSetTagIsEmpty(array('param','embed','a','i','iframe'));			
   		// Establish attributes tags which will be automatically added
   		$jevix->cfgSetTagParamDefault('embed', 'wmode',	'opaque',	true);			
   		// Establish autoreplacement
@@ -100,6 +101,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   		$jevix->cfgSetTagPreformatted(array('pre','code')); 
   		$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));      
   		$jevix->cfgAllowTagParams('p', array('style'));
+		$jevix->cfgAllowTagParams('i', array('class'));
   		$jevix->cfgAllowTagParams('span', array('style')); 
   		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));  
   		$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));    
@@ -131,7 +133,11 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   				'text-align'        =>  array('left', 'center', 'right', 'justify')        
   			)
   		); 
-  		$jevix->cfgSetTagParamsRequired('img', 'src');
+  		
+		// Establish tags which can be empty
+  		$jevix->cfgSetTagIsEmpty(array('a','i'));		
+		
+		$jevix->cfgSetTagParamsRequired('img', 'src');
   		$jevix->cfgSetTagParamsRequired('a', 'href');    		
   		$jevix->cfgSetTagChilds('ul', array('li'), false, true);      
   		$jevix->cfgSetTagChilds('ol', array('li'), false, true);			
@@ -144,11 +150,12 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
     /* -- Micro settings - default -- */
     default:
 
-      $jevix->cfgAllowTags(array('p','a','i','b','u','s','em','strong','br','strike'));
-  		$jevix->cfgSetTagShort(array('br'));
-  		$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
-  		$jevix->cfgSetTagParamsRequired('a', 'href');    	
-  		$jevix->cfgSetTagIsEmpty(array('a'));
+	$jevix->cfgAllowTags(array('p','a','i','b','u','s','em','strong','br','strike'));
+	$jevix->cfgSetTagShort(array('br'));
+	$jevix->cfgAllowTagParams('i', array('class'));
+	$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
+	$jevix->cfgSetTagParamsRequired('a', 'href');    	
+	$jevix->cfgSetTagIsEmpty(array('a','i'));
 
     break;
     /* ---- */    
