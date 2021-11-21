@@ -53,12 +53,20 @@ switch($mn)
     	{
     	if ($a=='update')
     		{
+				
+			/* === Hook === */
+			$extp = sed_getextplugins('admin.page.structure.edit.first');
+			if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */ 				
+				
     		$rpath = sed_import('rpath','P','TXT');
     		$rtitle = sed_import('rtitle','P','TXT');
     		$rtplmode = sed_import('rtplmode','P','INT');
     		$rdesc = sed_import('rdesc','P','TXT');
 			$rstext = sed_import('rstext','P','HTM'); //New v175
     		$ricon = sed_import('ricon','P','TXT');
+			$rthumb = sed_import('rthumb','P','TXT'); // New v178
     		$rgroup = sed_import('rgroup','P','BOL');
     		
     		$rallowcomments = sed_import('rallowcomments', 'P', 'BOL');  //New v173
@@ -78,6 +86,7 @@ switch($mn)
     			structure_desc='".sed_sql_prep($rdesc)."',
     			structure_text='".sed_sql_prep($rstext)."',
     			structure_icon='".sed_sql_prep($ricon)."',
+				structure_thumb='".sed_sql_prep($rthumb)."',
     			structure_allowcomments='".sed_sql_prep($rallowcomments)."',
     			structure_allowratings='".sed_sql_prep($rallowratings)."',
     			structure_group='".$rgroup."'
@@ -112,6 +121,7 @@ switch($mn)
         $structure_desc = $row['structure_desc'];
         $structure_text = $row['structure_text'];  //New v175
         $structure_icon = $row['structure_icon'];
+		$structure_thumb = $row['structure_thumb']; //New v 178
         $structure_group = $row['structure_group'];
         
         $structure_allowcomments = $row['structure_allowcomments'];
@@ -119,8 +129,7 @@ switch($mn)
         
         $form_allowcomments = ($structure_allowcomments) ? "<input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"0\" checked=\"checked\" />".$L['No'];
         $form_allowratings = ($structure_allowratings) ? "<input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"0\" checked=\"checked\" />".$L['No'];
-    
-    
+
         if (empty($row['structure_tpl']))
           {
           $check1 = " checked=\"checked\"";
@@ -163,12 +172,19 @@ switch($mn)
 			"STRUCTURE_UPDATE_TITLE" => sed_textbox('rtitle', $structure_title, 48, 64),
 			"STRUCTURE_UPDATE_DESC" => sed_textbox('rdesc', $structure_desc, 64, 255),
 			"STRUCTURE_UPDATE_ICON" => sed_textbox('ricon', $structure_icon, 64, 128),
+			"STRUCTURE_UPDATE_THUMB" => sed_textbox('rthumb', $structure_thumb, 64, 255),
 			"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
 			"STRUCTURE_UPDATE_GROUP" => $st_group,
 			"STRUCTURE_UPDATE_TPL" => $st_tpl,
 			"STRUCTURE_UPDATE_ALLOWCOMMENTS" => $form_allowcomments,
 			"STRUCTURE_UPDATE_ALLOWRATINGS" => $form_allowratings
 		));
+		
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.structure.edit.tags');
+		if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */		
     	
     	$t -> parse("ADMIN_PAGE.STRUCTURE_UPDATE");
     	
@@ -193,7 +209,7 @@ switch($mn)
     		}
     	elseif ($a=='add')
     		{
-    		$g = array ('ncode','npath', 'ntitle', 'ndesc', 'nicon', 'ngroup');
+    		$g = array ('ncode','npath', 'ntitle', 'ndesc', 'nicon', 'nthumb', 'ngroup');
     		foreach($g as $k => $x) $$x = $_POST[$x];
     		$group = (isset($group)) ? 1 : 0;
     		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
@@ -226,6 +242,7 @@ switch($mn)
     		$structure_title = $row['structure_title'];
     		$structure_desc = $row['structure_desc'];
     		$structure_icon = $row['structure_icon'];
+			$structure_thumb = $row['structure_thumb'];
     		$structure_group = $row['structure_group'];
     		$pathfieldlen = (mb_strpos($structure_path, ".")==0) ? 3 : 9;
     		$pathfieldimg = (mb_strpos($structure_path, ".")==0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
@@ -279,6 +296,7 @@ switch($mn)
 				"PAGE_STRUCTURE_ADD_TITLE" => sed_textbox('ntitle', $ntitle, 48, 64),
 				"PAGE_STRUCTURE_ADD_DESC" => sed_textbox('ndesc', $ndesc, 64, 255),
 				"PAGE_STRUCTURE_ADD_ICON" => sed_textbox('nicon', $nicon, 64, 128),
+				"PAGE_STRUCTURE_ADD_THUMB" => sed_textbox('nthumb', $nicon, 64, 255),
 				"PAGE_STRUCTURE_ADD_GROUP" => sed_checkbox('ngroup')
 			));
 
