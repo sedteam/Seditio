@@ -486,14 +486,15 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."users (
   PRIMARY KEY (user_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
-
 $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."menu (
-  menu_id int(11) NOT NULL,
+  menu_id int(11) unsigned NOT NULL auto_increment,
   menu_pid int(11) NOT NULL DEFAULT '0',
   menu_title varchar(255) NOT NULL DEFAULT '',
   menu_url varchar(255) NOT NULL DEFAULT '',
   menu_position int(11) NOT NULL DEFAULT '0',
-  menu_visible tinyint(1) NOT NULL DEFAULT '1'
+  menu_visible tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (menu_id),
+  KEY menu_pid (menu_pid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."structure VALUES (1, 'articles', '1', '', 'Articles', '', '', '', 1 ,'title.asc', 1, 1, '');");

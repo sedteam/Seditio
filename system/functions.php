@@ -3092,6 +3092,7 @@ function sed_load_structure()
 			'desc' => $row['structure_desc'],
 			'icon' => $row['structure_icon'],
 			'iconsrc' => $row['structure_icon_src'],
+			'thumb' => $row['structure_thumb'],
 			'group' => $row['structure_group'],
 			'allowcomments' => $row['structure_allowcomments'],
 			'allowratings' => $row['structure_allowratings'],
@@ -5708,15 +5709,15 @@ function sed_menu_tree( $menus, $parent_id, $only_parent = false, $class = "" )
 		$tree = "<ul class=\"".$class."\">";
 		if ( $only_parent == false )
 			{
-			foreach ( $menus[$parent_id] as $cat ) {
-				$tree .= "<li><a href=\"".$cat['menu_url']."\" data-mid=\"".$cat['menu_id']."\">".$cat['menu_title']."</a>";
-				$tree .=  sed_menu_tree($menus, $cat['menu_id']);
+			foreach ( $menus[$parent_id] as $item ) {
+				$tree .= "<li><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
+				$tree .=  sed_menu_tree($menus, $item['menu_id']);
 				$tree .= "</li>";
 				}
 			}
 		elseif ( $only_parent ) {
-			$cat = $menus[$parent_id];
-			$tree = "<a href=\"".$cat['menu_url']."\" data-mid=\"".$cat['menu_id']."\">".$cat['menu_title']."</a>";
+			$item = $menus[$parent_id];
+			$tree = (!empty($item['menu_url'])) ? "<a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>" : "<span data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</span>";
 			return $tree;
 			}
 		$tree .= "</ul>";
