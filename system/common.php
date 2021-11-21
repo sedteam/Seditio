@@ -603,26 +603,26 @@ if (!$sed_dic && (sed_stat_get("version") >= 177))
 				{ $vartype = (!empty($row['dic_extra_type'])) ? $dic_var_type[$row['dic_extra_type']] : 'TXT'; }
 			
 			$sed_dic[$row['dic_code']] = array (
-				'id' => $row['dic_id'],
-				'title' => $row['dic_title'],
-				'code' => $row['dic_code'],
-				'type' => $dic_type[$row['dic_type']],
-				'vartype' => $vartype,
-				'values' => $row['dic_values'],
-				'parent' => $row['dic_parent'],
-				'mera' => $row['dic_mera'],
-				'form_title' => $row['dic_form_title'],
-				'form_desc' => $row['dic_form_desc'],
-				'form_size' => $row['dic_form_size'],
-				'form_maxsize' => $row['dic_form_maxsize'],
-				'form_cols' => $row['dic_form_cols'],
-				'form_rows' => $row['dic_form_rows'],
-				'extra_location' => $row['dic_extra_location'],
-				'extra_type' => $row['dic_extra_type'],
-				'extra_size' => $row['dic_extra_size'],       
-				'terms' => array(),
-				'term_default' => ''
-			);
+			'id' => $row['dic_id'],
+			'title' => $row['dic_title'],
+			'code' => $row['dic_code'],
+			'type' => $dic_type[$row['dic_type']],
+			'vartype' => $vartype,
+			'values' => $row['dic_values'],
+			'parent' => $row['dic_parent'],
+			'mera' => $row['dic_mera'],
+			'form_title' => $row['dic_form_title'],
+			'form_desc' => $row['dic_form_desc'],
+			'form_size' => $row['dic_form_size'],
+			'form_maxsize' => $row['dic_form_maxsize'],
+			'form_cols' => $row['dic_form_cols'],
+			'form_rows' => $row['dic_form_rows'],
+			'extra_location' => $row['dic_extra_location'],
+			'extra_type' => $row['dic_extra_type'],
+			'extra_size' => $row['dic_extra_size'],       
+			'terms' => '',
+			'term_default' => ''
+					);
 			$sed_dicid_arr[$row['dic_id']] = $row['dic_code']; 		
 			}
 		// Load terms
