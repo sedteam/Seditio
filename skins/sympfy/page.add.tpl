@@ -84,7 +84,12 @@
 							<li class="form-row">
 								<div class="form-label"><label>{PHP.skinlang.pageadd.Thumbs}</label></div>
 								<div class="form-field">{PAGEADD_FORM_THUMB}</div>
-							</li> 			
+							</li> 
+
+							<li class="form-row">
+								<div class="form-label"><label>{PAGEADD_FORM_SLIDER_TITLE}</label></div>
+								<div class="form-field">{PAGEADD_FORM_SLIDER}</div>
+							</li> 								
 
 						</ul>
 								

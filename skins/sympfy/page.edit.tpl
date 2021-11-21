@@ -74,7 +74,12 @@
 							<li class="form-row">
 								<div class="form-label"><label>{PHP.skinlang.pageedit.Thumbs}</label></div>
 								<div class="form-field">{PAGEEDIT_FORM_THUMB}</div>
-							</li> 				
+							</li> 	
+
+							<li class="form-row">
+								<div class="form-label"><label>{PAGEEDIT_FORM_SLIDER_TITLE}</label></div>
+								<div class="form-field">{PAGEEDIT_FORM_SLIDER}</div>
+							</li> 							
 						
 							<li class="form-row">
 								<div class="form-label"><label>{PHP.skinlang.pageedit.Pageid}</label></div>

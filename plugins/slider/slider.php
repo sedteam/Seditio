@@ -48,80 +48,84 @@ $sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, 
 					FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 					WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' AND p.page_slider = 1 
 					ORDER BY p.page_date DESC LIMIT $sliderlimit");
-
-while ($row = sed_sql_fetchassoc($sql))
+					
+if (sed_sql_numrows($sql) > 0)
 	{
-	if (sed_auth('page', $row['page_cat'], 'R'))
-		{			
-		$sys['catcode'] = $row['page_cat']; //new in v175
-		$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
-		$row['page_pageurlcom'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'].$pcomments) : sed_url("page", "al=".$row['page_alias'].$pcomments);
-		
-		$t-> assign(array(
-			"SLIDER_ROW_URL" => $row['page_pageurl'],
-			"SLIDER_ROW_ID" => $row['page_id'],
-			"SLIDER_ROW_CAT" => $row['page_cat'],
-			"SLIDER_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
-			"SLIDER_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
-			"SLIDER_ROW_SHORTTITLE" => sed_cutstring($row['page_title'], 50),
-			"SLIDER_ROW_TITLE" => $row['page_title'],	
-			"SLIDER_ROW_TEXT" => $row['page_text'],					
-			"SLIDER_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date']),
-			"SLIDER_ROW_AUTHOR" => sed_cc($row['user_name']),
-			"SLIDER_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
-			"SLIDER_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
-			"SLIDER_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
-			"SLIDER_ROW_COMMENTS_COUNT" => $row['page_comcount'],				
-			"SLIDER_ROW_AVATAR" => sed_build_userimage($row['user_avatar'])
-		));
-		
-		// ------- thumb
+	while ($row = sed_sql_fetchassoc($sql))
+		{
+		if (sed_auth('page', $row['page_cat'], 'R'))
+			{			
+			$sys['catcode'] = $row['page_cat']; //new in v175
+			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
+			$row['page_pageurlcom'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'].$pcomments) : sed_url("page", "al=".$row['page_alias'].$pcomments);
 			
-		$row['page_first_thumb'] = "";
-		if (!empty($row['page_thumb']))
-			{	
-			$first_thumb_array = rtrim($row['page_thumb']); 
-			if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+			$t-> assign(array(
+				"SLIDER_ROW_URL" => $row['page_pageurl'],
+				"SLIDER_ROW_ID" => $row['page_id'],
+				"SLIDER_ROW_CAT" => $row['page_cat'],
+				"SLIDER_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
+				"SLIDER_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
+				"SLIDER_ROW_SHORTTITLE" => sed_cutstring($row['page_title'], 50),
+				"SLIDER_ROW_TITLE" => $row['page_title'],	
+				"SLIDER_ROW_TEXT" => $row['page_text'],					
+				"SLIDER_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date']),
+				"SLIDER_ROW_AUTHOR" => sed_cc($row['user_name']),
+				"SLIDER_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
+				"SLIDER_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
+				"SLIDER_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
+				"SLIDER_ROW_COMMENTS_COUNT" => $row['page_comcount'],				
+				"SLIDER_ROW_AVATAR" => sed_build_userimage($row['user_avatar'])
+			));
+			
+			// ------- thumb
+				
+			$row['page_first_thumb'] = "";
+			if (!empty($row['page_thumb']))
+				{	
+				$first_thumb_array = rtrim($row['page_thumb']); 
+				if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+					{
+					$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+					}		
+				$first_thumb_array = explode(";", $first_thumb_array);
+				if (count($first_thumb_array) > 0)
+					{
+					$row['page_first_thumb'] = $first_thumb_array[0];
+					$t->assign("SLIDER_ROW_THUMB", $first_thumb_array[0]);  
+					$t->parse("MAIN.SLIDER.SLIDER_ROW.SLIDER_ROW_THUMB");	
+					}		
+				}
+			else 
 				{
-				$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
-				}		
-			$first_thumb_array = explode(";", $first_thumb_array);
-			if (count($first_thumb_array) > 0)
-				{
-				$row['page_first_thumb'] = $first_thumb_array[0];
-				$t->assign("SLIDER_ROW_THUMB", $first_thumb_array[0]);  
-				$t->parse("MAIN.SLIDER.SLIDER_ROW.SLIDER_ROW_THUMB");	
-				}		
-			}
-		else 
-			{
-			$row['page_first_thumb'] = sed_cc($row['page_thumb']); 
-			$t->assign("SLIDER_ROW_THUMB", sed_cc($row['page_thumb']));
-			}	
+				$row['page_first_thumb'] = sed_cc($row['page_thumb']); 
+				$t->assign("SLIDER_ROW_THUMB", sed_cc($row['page_thumb']));
+				}	
 
-		// -------		
+			// -------		
+			
+			$t->parse("MAIN.SLIDER.SLIDER_ROW");
+
+			/* old result view use mask */
+			$slider .= sprintf($mask,
+				"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
+				"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
+				sed_cc(sed_cutstring(stripslashes($row['page_title']), 50)),
+				strip_tags($row['page_desc']),
+				$row['page_first_thumb'],
+				sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date'])
+			);
+
+			}			
+		}
 		
-		$t->parse("MAIN.SLIDER.SLIDER_ROW");
+	$t->parse("MAIN.SLIDER");	
 
-		/* old result view use mask */
-		$slider .= sprintf($mask,
-			"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-			"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
-			sed_cc(sed_cutstring(stripslashes($row['page_title']), 50)),
-			strip_tags($row['page_desc']),
-			$row['page_first_thumb'],
-			sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date'])
-		);
+	$slider .= "</div>";
 
-		}			
+	$t-> assign(array(
+		"PLUGIN_SLIDER" => $slider 
+	));
+
 	}
-	
-$t->parse("MAIN.SLIDER");	
-
-$slider .= "</div>";
-
-$t-> assign(array(
-	"PLUGIN_SLIDER" => $slider 
-));
 
 ?>

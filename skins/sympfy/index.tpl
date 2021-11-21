@@ -1,63 +1,34 @@
 <!-- BEGIN: MAIN -->
 
+<!-- BEGIN: SLIDER -->
+
 <section id="slider-section">
 
 	<div id="slider">
 	
-		<div class="slide-item" style="background-image: url(img/slide1.jpg);">			
-			<div class="slide-body">
+		<div class="slide-item" style="background-image:url({SLIDER_ROW_THUMB|crop_image(%s, 1920, 1080)})">		
+			<div class="slide-body" data-cat="{SLIDER_ROW_CAT}" data-page="{SLIDER_ROW_ID}">
 				<div class="slider-container">
 					
 					<div class="slider-content">
 						<div class="slider-info">
-							<div class="slider-category"><a href="/">Новости</a></div>
-							<div class="slider-date">20.04.2020</div>
+							<div class="slider-category">{SLIDER_ROW_CATPATH}</div>
+							<div class="slider-date">{SLIDER_ROW_DATE}</div>
 						</div>
 						<div class="slider-title">
-							<h2><a href="">Оказывается, поведение пауков изучено еще не полностью</a></h2>
+							<h2><a href="{SLIDER_ROW_URL}">{SLIDER_ROW_TITLE}</a></h2>
 						</div>
 						<div class="slider-desc">
-							<p>Как известно, представители рода Черных вдов отличаются своим уникальным 
-							поведением, которое предвещает так называемый половой каннибализм: после 
-							копуляции самка поедает самца. Североамериканские пауки Latrodectus geometricus 
-							не стали исключением.</p>
+							<p>{SLIDER_ROW_DESC|strip_tags}</p>
 						</div>
 						<div class="slider-info">
-							<div class="slider-author"><a href="/"><img class="slider-author-avatar" src="portfolio/1.jpg" /><span>Admin</span></a></div>
-							<div class="slider-comments"><i class="ic-message-circle"></i><a href="/">0</a></div>
+							<div class="slider-author"><a href="{SLIDER_ROW_USERURL}">{SLIDER_ROW_AVATAR}<span>{SLIDER_ROW_AUTHOR}</span></a></div>
+							<div class="slider-comments"><i class="ic-message-circle"></i><a href="{SLIDER_ROW_COMMENTS_URL}">{SLIDER_ROW_COMMENTS_COUNT}</a></div>
 						</div>
 					</div>												
 					
 				</div>	
 			</div>	
-		</div>
-		
-		<div class="slide-item" style="background-image: url(img/slide2.jpg);">			
-			<div class="slide-body">
-				<div class="slider-container">
-
-					<div class="slider-content">
-						<div class="slider-info">
-							<div class="slider-category"><a href="/">Новости</a></div>
-							<div class="slider-date">20.04.2020</div>
-						</div>
-						<div class="slider-title">
-							<h2><a href="">Дельфины устанавливают между собой график охоты</a></h2>
-						</div>
-						<div class="slider-desc">
-							<p>Как известно, представители рода Черных вдов отличаются своим уникальным 
-							поведением, которое предвещает так называемый половой каннибализм: после 
-							копуляции самка поедает самца. Североамериканские пауки Latrodectus geometricus 
-							не стали исключением.</p>
-						</div>
-						<div class="slider-info">
-							<div class="slider-author"><a href="/"><img class="slider-author-avatar" src="portfolio/1.jpg" /><span>Admin</span></a></div>
-							<div class="slider-comments"><i class="ic-message-circle"></i><a href="/">0</a></div>
-						</div>
-					</div>	
-
-				</div>	
-			</div>					
 		</div>
 		
 	</div>
@@ -66,6 +37,8 @@
 	</div>
 
 </section>
+
+<!-- END: SLIDER -->
 
 <main id="home">
 	
