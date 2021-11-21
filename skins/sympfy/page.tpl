@@ -79,7 +79,7 @@
 					<!-- BEGIN: SIMILARPAGES -->
 					
 					<div class="sidebar-title">
-						<h3>Ещё из раздела</h3>
+						<h3>Recent Items</h3>
 					</div>
 					
 					<div class="sidebar-body">	
