@@ -29,7 +29,7 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-$sliderlimit = (int)$cfg['plugin']['similarpages']['maxslides'];
+$sliderlimit = (int)$cfg['plugin']['slider']['maxslides'];
 
 $cfg['plu_mask_slider'] = empty($cfg['plu_mask_slider']) ? "<div class=\"slide-item\" style=\"background-image: url(datas/users/%5\$s);\"></div>" : $cfg['plu_mask_slider'];
 // %1\$s = Link to the category
@@ -43,7 +43,7 @@ $slider = "<div id=\"slider\">";
 
 $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
 
-$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, 
+$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_text, p.page_thumb, 
 					p.page_ownerid, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
 					FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 					WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' AND p.page_slider = 1 
@@ -64,7 +64,8 @@ while ($row = sed_sql_fetchassoc($sql))
 			"SLIDER_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
 			"SLIDER_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
 			"SLIDER_ROW_SHORTTITLE" => sed_cutstring($row['page_title'], 50),
-			"SLIDER_ROW_TITLE" => $row['page_title'],			
+			"SLIDER_ROW_TITLE" => $row['page_title'],	
+			"SLIDER_ROW_TEXT" => $row['page_text'],					
 			"SLIDER_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date']),
 			"SLIDER_ROW_AUTHOR" => sed_cc($row['user_name']),
 			"SLIDER_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
