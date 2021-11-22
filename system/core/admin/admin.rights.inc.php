@@ -99,7 +99,7 @@ $jj=1;
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rights.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql1 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
@@ -276,7 +276,7 @@ $t -> parse("ADMIN_RIGHTS.RIGHTS_GROUP");
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rights.end');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $adminhelp = $legend;

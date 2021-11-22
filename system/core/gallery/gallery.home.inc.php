@@ -23,7 +23,7 @@ sed_block($usr['auth_read']);
 /* === Hook === */
 $extp = sed_getextplugins('gallery.home.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_type='2' AND pff_sample='0'");
@@ -81,11 +81,11 @@ $out['subtitle'] = sed_title('gallerytitle', $title_tags, $title_data);
 /* === Hook === */
 $extp = sed_getextplugins('gallery.home.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/".$skin."/gallery.home.tpl");
 
 $t-> assign(array(
@@ -172,7 +172,7 @@ $t-> assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('gallery.home.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN.GALLERIES");
@@ -180,7 +180,7 @@ $t->parse("MAIN.GALLERIES");
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 
 ?>

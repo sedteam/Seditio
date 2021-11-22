@@ -17,6 +17,6 @@ Description=Pages
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
-require('system/core/page/page.edit.inc.php');
+require(SED_ROOT . '/system/core/page/page.edit.inc.php');
 
 ?>

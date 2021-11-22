@@ -43,7 +43,7 @@ if ($a=='update')
 	/* === Hook === */
 	$extp = sed_getextplugins('page.edit.update.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
@@ -189,7 +189,7 @@ if ($a=='update')
 			/* === Hook === */
 			$extp = sed_getextplugins('page.edit.update.done');
 			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
 			$sys['catcode'] = $rpagecat; //new in v175
@@ -218,7 +218,7 @@ sed_block($usr['isadmin']);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $page_form_delete =  sed_radiobox("rpagedelete", $yesno_arr, 0);
@@ -251,7 +251,7 @@ $urlpaths[sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")] = $L['Edit'];
 $extp = sed_getextplugins('page.edit.main');
 if (is_array($extp))
 	{ 
-  foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+  foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (defined('SED_ADMIN'))
@@ -260,7 +260,7 @@ if (defined('SED_ADMIN'))
 	}
 else
 	{
-	require("system/header.php");
+	require(SED_ROOT . "/system/header.php");
 	$mskin = sed_skinfile(array('page', 'edit', $sed_cat[$pag['page_cat']]['tpl']));
 	}
 
@@ -332,7 +332,7 @@ $t->assign(array(
 $extp = sed_getextplugins('page.edit.tags');
 
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (defined('SED_ADMIN'))
@@ -344,7 +344,7 @@ else
 	{
 	$t->parse("MAIN");
 	$t->out("MAIN");
-	require("system/footer.php");
+	require(SED_ROOT . "/system/footer.php");
 	}
 
 ?>

@@ -35,7 +35,7 @@ if ($cfg['disablereg'])
 /* === Hook === */
 $extp = sed_getextplugins('users.register.first');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -52,7 +52,7 @@ if ($a=='add')
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.register.add.first');
 	if (is_array($extp))
-		{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach ($extp as $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
@@ -194,7 +194,7 @@ if ($a=='add')
 		/* === Hook for the plugins === */
 		$extp = sed_getextplugins('users.register.add.done');
 		if (is_array($extp))
-			{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach ($extp as $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
@@ -276,10 +276,10 @@ $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 /* === Hook === */
 $extp = sed_getextplugins('users.register.main');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/".$skin."/users.register.tpl");
 
 // ---------- Breadcrumbs
@@ -324,12 +324,12 @@ $t->assign($extra_array);
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

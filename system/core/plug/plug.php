@@ -23,16 +23,16 @@ $z = 'plug';
 
 if(!empty($_GET['ajx'])) { define('SED_DISABLE_XFORM', true); } 
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/functions.php');
+require(SED_ROOT . '/datas/config.php');
+require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_plug']);
 
 switch($m)
 	{
 	default:
-	require('system/core/plug/plug.inc.php');
+	require(SED_ROOT . '/system/core/plug/plug.inc.php');
 	break;
 	}
 

@@ -20,7 +20,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 /* === Hook === */
 $extp = sed_getextplugins('footer.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } } 
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } } 
 /* ===== */
 
 $out['bottomline'] = ($cfg['keepcrbottom']) ? $out['copyright'] : '';
@@ -62,7 +62,7 @@ if (!$cfg['disablewhosonline'])
 /* === Hook === */
 $extp = sed_getextplugins('footer.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($cfg['enablecustomhf'])
@@ -83,7 +83,7 @@ $t->assign(array (
 /* === Hook === */
 $extp = sed_getextplugins('footer.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */ 
 
 $i = explode(' ', microtime());

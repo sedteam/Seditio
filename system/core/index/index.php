@@ -21,7 +21,7 @@ define('SED_INDEX', TRUE);
 $location = 'Home';
 $z = 'index';
 
-require('system/functions.php');
+require(SED_ROOT . '/system/functions.php');
 @include('datas/config.php');
 
 if (empty($cfg['mysqlhost']) && empty($cfg['mysqldb']))
@@ -30,7 +30,7 @@ if (empty($cfg['mysqlhost']) && empty($cfg['mysqldb']))
 	exit;
 	}
 
-require('system/common.php');
-require('system/core/index/index.inc.php');
+require(SED_ROOT . '/system/common.php');
+require(SED_ROOT . '/system/core/index/index.inc.php');
 
 ?>

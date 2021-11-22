@@ -21,14 +21,14 @@ define('SED_MESSAGE', TRUE);
 $location = 'Messages';
 $z = 'message';
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/functions.php');
+require(SED_ROOT . '/datas/config.php');
+require(SED_ROOT . '/system/common.php');
 
 switch($m)
 	{
 	default:
-	require('system/core/message/message.inc.php');
+	require(SED_ROOT . '/system/core/message/message.inc.php');
 	break;
 	}
 

@@ -15,8 +15,9 @@ Description=SEF Url's loader
 ==================== */
 
 define('SED_CODE', TRUE);
+define('SED_ROOT', dirname(__FILE__));
 
-require('system/config.urlrewrite.php');
+require(SED_ROOT . '/system/config.urlrewrite.php');
 
 $request_uri = $_SERVER['REQUEST_URI'];
 
@@ -59,7 +60,7 @@ foreach($sed_urlrewrite as $val)
       $pos = mb_strpos($url, ".php");
       $incl = mb_substr($url, 0, $pos+4);   
      
-      include_once($incl);
+      include_once(SED_ROOT . '/' . $incl);
       die();
     }
 }
@@ -73,7 +74,7 @@ $pos = mb_strpos($incl_php, ".php");
 if ($pos > 0) {
 	$incl = mb_substr($incl_php, 0, $pos);  
 	if (in_array($incl, $system_core)) {
-		$system_incl_dir = ($incl == "install") ? "system/install/" : "system/core/".$incl."/";
+		$system_incl_dir = ($incl == "install") ? SED_ROOT . "/system/install/" : SED_ROOT . "/system/core/".$incl."/";
 		include_once($system_incl_dir.$incl_php);
 		die();
 	}

@@ -34,7 +34,7 @@ sed_die(empty($s));
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
@@ -68,7 +68,7 @@ if ($a=='newtopic')
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.newtopic.newtopic.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$newtopictitle = sed_import('newtopictitle','P','TXT', 128);
@@ -160,7 +160,7 @@ if ($a=='newtopic')
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.newtopic.newtopic.done');
 			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
 			sed_shield_update(45, "New topic");
@@ -196,10 +196,10 @@ $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 $mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
 $t = new XTemplate($mskin);
@@ -239,12 +239,12 @@ if ($fs_allowprvtopics)
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

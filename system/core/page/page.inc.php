@@ -32,7 +32,7 @@ $ratings = sed_import('ratings','G','BOL');
 /* === Hook === */
 $extp = sed_getextplugins('page.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (!empty($al))
@@ -50,7 +50,7 @@ $pag = sed_sql_fetchassoc($sql);
 /* === Hook === */
 $extp = sed_getextplugins('page.fetch');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sys['catcode'] = $pag['page_cat']; //new in v175
@@ -86,9 +86,9 @@ elseif (preg_match("#{plugin:([a-z0-9]+)}#", $pag['page_text'], $find_out))
 	{
 	define('SED_PLUG', TRUE);
 	$plug = $find_out[1];
-	$path_plug = 'plugins/'.$plug.'/'.$plug.'.php';
-	$path_lang_def = "plugins/$plug/lang/$plug.en.lang.php";
-	$path_lang_alt = "plugins/$plug/lang/$plug.$lang.lang.php";
+	$path_plug = SED_ROOT . 'plugins/'.$plug.'/'.$plug.'.php';
+	$path_lang_def = SED_ROOT . "plugins/$plug/lang/$plug.en.lang.php";
+	$path_lang_alt = SED_ROOT . "plugins/$plug/lang/$plug.$lang.lang.php";
 	if (file_exists($path_lang_alt)) 
 		{ require($path_lang_alt); }
 	elseif (file_exists($path_lang_def)) 
@@ -217,7 +217,7 @@ $urlpaths[$pag['page_pageurl']] = $pag['page_title'];
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($m == 'print') {
@@ -225,7 +225,7 @@ if ($m == 'print') {
 	$mskin = sed_skinfile(array('print.page', $sed_cat[$pag['page_cat']]['tpl'])); 
 }
 else {
-	require("system/header.php");
+	require(SED_ROOT . "/system/header.php");
 	$mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));  
 }
 
@@ -350,7 +350,7 @@ if($pag['page_file'])
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
@@ -362,7 +362,7 @@ if ($m == 'print') {
 	sed_sql_close($connection_id);
 }
 else {
-	require("system/footer.php");
+	require(SED_ROOT . "/system/footer.php");
 }
 
 

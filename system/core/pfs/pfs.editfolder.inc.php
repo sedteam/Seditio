@@ -152,7 +152,7 @@ if ($standalone)
 	/* === New Hook Sed 175 === */
 	$extp = sed_getextplugins('pfs.stndl');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ================================ */	
 
 	$mskin = sed_skinfile(array('pfs', 'standalone'));
@@ -179,7 +179,7 @@ if ($standalone)
 	}
 else
 	{
-	require("system/header.php");
+	require(SED_ROOT . "/system/header.php");
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 	
@@ -193,6 +193,6 @@ else
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require("system/footer.php");
+	require(SED_ROOT . "/system/footer.php");
 	}
 ?>

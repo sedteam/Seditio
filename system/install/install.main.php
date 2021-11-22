@@ -30,7 +30,7 @@ require ('system/install/lang/'.$langinstall.'/install.'.$langinstall.'.lang.php
 /* === === === */
 
 
-require('system/install/install.setup.php');
+require(SED_ROOT . '/system/install/install.setup.php');
 
 @set_magic_quotes_runtime(0);
 
@@ -130,7 +130,7 @@ switch($m)
 
 		$res .= $L['install_creating_mysql']."<br />";
     
-		require('system/database.'.$cfg['sqldb'].'.php');
+		require(SED_ROOT . '/system/database.'.$cfg['sqldb'].'.php');
 		$connection_id = sed_sql_connect($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb);
 		$cfg['mysqldb'] = $sqldbprefix;
 		sed_sql_set_charset($connection_id, 'utf8');

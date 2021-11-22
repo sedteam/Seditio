@@ -39,7 +39,7 @@ $sys['sublocation'] = $L['Home'];
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($n=='markall' && $usr['id']>0)
@@ -112,10 +112,10 @@ $out['canonical_url'] = $sys['abs_url'].sed_url("forums");
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 $mskin = "skins/".$skin."/forums.sections.tpl";
 $t = new XTemplate($mskin);
@@ -313,7 +313,7 @@ foreach ($sect_arr as $fsec_key => $fsec)
 
 			/* === Hook - Part2 : Include === */
 			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
 			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
@@ -327,12 +327,12 @@ foreach ($sect_arr as $fsec_key => $fsec)
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

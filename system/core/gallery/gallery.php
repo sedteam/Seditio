@@ -21,10 +21,10 @@ define('SED_GALLERY', TRUE);
 $location = 'Gallery';
 $z = 'gallery';
 
-require('system/functions.php');
-require('system/config.extensions.php');
-require('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/functions.php');
+require(SED_ROOT . '/system/config.extensions.php');
+require(SED_ROOT . '/datas/config.php');
+require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_gallery']);
 $gd_supported_sql = "('".implode("','", $cfg['gd_supported'])."')";
@@ -46,15 +46,15 @@ if ($id>0)
 switch($m)
 	{
   case 'details':
-	require('system/core/gallery/gallery.details.inc.php');
+	require(SED_ROOT . '/system/core/gallery/gallery.details.inc.php');
 	break;
 
 	case 'browse':
-	require('system/core/gallery/gallery.browse.inc.php');
+	require(SED_ROOT . '/system/core/gallery/gallery.browse.inc.php');
 	break;
 
 	default:
-	require('system/core/gallery/gallery.home.inc.php');
+	require(SED_ROOT . '/system/core/gallery/gallery.home.inc.php');
 	break;
 	}
 

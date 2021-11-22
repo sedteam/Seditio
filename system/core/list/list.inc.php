@@ -62,7 +62,7 @@ else
 /* === Hook === */
 $extp = sed_getextplugins('list.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (empty($s))
@@ -148,7 +148,7 @@ if ($c != 'all')
 	/* === Hook === */
 	$extp = sed_getextplugins('list.fetch');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
   			
 	$list_text = sed_parse($row2['structure_text']);
@@ -203,10 +203,10 @@ sed_build_list_bc($c);
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 if ($sed_cat[$c]['group'])
 	{ $mskin = sed_skinfile(array('list', 'group', $sed_cat[$c]['tpl'])); }
@@ -339,7 +339,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extpf))
-		{ foreach($extpf as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extpf as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$jj++;
@@ -437,7 +437,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.LIST_ROW");
@@ -447,12 +447,12 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 /* === Hook === */
 $extp = sed_getextplugins('list.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

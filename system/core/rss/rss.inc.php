@@ -69,7 +69,7 @@ $rss_description = $cfg['subtitle'];
 /* === Hook === */
 $extp = sed_getextplugins('rss.create');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 switch ($m)
@@ -255,7 +255,7 @@ $out .= "</rss>";
 /* === Hook === */
 $extp = sed_getextplugins('rss.output');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($usr['id'] == 0 && $i > 0)

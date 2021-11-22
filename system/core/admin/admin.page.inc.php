@@ -57,7 +57,7 @@ switch($mn)
 			/* === Hook === */
 			$extp = sed_getextplugins('admin.page.structure.edit.first');
 			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */ 				
 				
     		$rpath = sed_import('rpath','P','TXT');
@@ -183,7 +183,7 @@ switch($mn)
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.page.structure.edit.tags');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */		
     	
     	$t -> parse("ADMIN_PAGE.STRUCTURE_UPDATE");

@@ -27,7 +27,7 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-require('system/config.extensions.php');
+require(SED_ROOT . '/system/config.extensions.php');
 
 $url = sed_import('url', 'G', 'TXT');
 
@@ -191,7 +191,7 @@ if (!empty($u_name))
 			/* === Hook === */
 			$extp = sed_getextplugins('pfs.upload.done');
 			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */			
 
 			if (in_array($f_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir'].$u_name))

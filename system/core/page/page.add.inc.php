@@ -30,7 +30,7 @@ sed_block($usr['auth_write']);
 /* === Hook === */
 $extp = sed_getextplugins('page.add.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -46,7 +46,7 @@ if ($a=='add')
 	/* === Hook === */
 	$extp = sed_getextplugins('page.add.add.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
@@ -173,7 +173,7 @@ if ($a=='add')
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_shield_update(30, "New page");
@@ -197,7 +197,7 @@ if (($a=='clone') && ($id > 0))
 	/* === Hook === */
 	$extp = sed_getextplugins('page.add.clone');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 	
 	$newpagecat = $row1['page_cat'];
@@ -267,7 +267,7 @@ $urlpaths[sed_url("page", "m=add&c=".$c)] = $L['Add'];
 /* === Hook === */
 $extp = sed_getextplugins('page.add.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (defined('SED_ADMIN'))
@@ -276,7 +276,7 @@ if (defined('SED_ADMIN'))
 	}
 else 
 	{
-	require("system/header.php");
+	require(SED_ROOT . "/system/header.php");
 	$mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));	
 	}
 
@@ -333,7 +333,7 @@ $t->assign($extra_array);
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (defined('SED_ADMIN'))
@@ -345,6 +345,6 @@ else
 	{
 	$t->parse("MAIN");
 	$t->out("MAIN");
-	require("system/footer.php");
+	require(SED_ROOT . "/system/footer.php");
 	}
 ?>

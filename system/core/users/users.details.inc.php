@@ -30,7 +30,7 @@ sed_block($usr['auth_read']);
 /* === Hook === */
 $extp = sed_getextplugins('users.details.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (empty($id) && $usr['id']>0)
@@ -60,10 +60,10 @@ $urlpaths[sed_url("users", "m=details&id=".$urr['user_id'])] = sed_cc($urr['user
 /* === Hook === */
 $extp = sed_getextplugins('users.details.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
@@ -125,7 +125,7 @@ $t->assign($extra_array);
 /* === Hook === */
 $extp = sed_getextplugins('users.details.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($usr['isadmin'])
@@ -140,6 +140,6 @@ if ($usr['isadmin'])
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

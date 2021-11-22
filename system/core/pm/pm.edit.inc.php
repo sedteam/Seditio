@@ -39,7 +39,7 @@ sed_check_xg();
 /* === Hook === */
 $extp = sed_getextplugins('pm.edit.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id='$id' AND pm_state<3");

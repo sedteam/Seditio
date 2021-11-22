@@ -23,7 +23,7 @@ sed_block($usr['auth_read']);
 /* === Hook === */
 $extp = sed_getextplugins('gallery.browse.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql_pff = sed_sql_query("SELECT f.*, u.user_name FROM $db_pfs_folders f
@@ -57,10 +57,10 @@ $out['subtitle'] = sed_title('gallerytitle', $title_tags, $title_data);
 /* === Hook === */
 $extp = sed_getextplugins('gallery.browse.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/".$skin."/gallery.browse.tpl");
 
 $t-> assign(array(
@@ -175,13 +175,13 @@ while ($pfs = sed_sql_fetchassoc($sql))
 /* === Hook === */
 $extp = sed_getextplugins('gallery.browse.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 
 ?>

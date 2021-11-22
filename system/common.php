@@ -31,7 +31,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */
 
-require('system/database.'.$cfg['sqldb'].'.php');
+require(SED_ROOT.'/system/database.'.$cfg['sqldb'].'.php');
 $connection_id = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 sed_sql_set_charset($connection_id, 'utf8');
@@ -45,7 +45,7 @@ $sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, confi
 if (sed_sql_numrows($sql_config)<100)
 	{
 	define('SED_ADMIN',TRUE);
-	require_once('system/functions.admin.php');
+	require_once(SED_ROOT.'/system/functions.admin.php');
 	unset($query);
 
 	foreach($cfgmap as $i => $line)
@@ -334,7 +334,7 @@ if (defined('SED_PLUG') && !empty($_GET['e']))
   {
   $extp = sed_getextplugins('common.plug.'.$_GET['e']);
   if (is_array($extp))
-	 { foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	 { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
   }
 
 /* ======== Hooks for plugins (admin tools) ======== */
@@ -343,7 +343,7 @@ if (defined('SED_ADMIN') && $m=='tools' && !empty($_GET['p']))
   {
   $extp = sed_getextplugins('common.tool.'.$_GET['p']);
   if (is_array($extp))
-	 { foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	 { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
    }
 
 /* ======== Anti-XSS protection ======== */
@@ -355,7 +355,7 @@ $xk = sed_check_xp();
 
 $extp = sed_getextplugins('common');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 
 /* ======== Gzip and output filtering ======== */
@@ -455,12 +455,12 @@ if (!$cfg['disablehitstats'])
 
 /* ======== Language ======== */
 
-$mlang = 'system/lang/'.$usr['lang'].'/main.lang.php';
+$mlang = SED_ROOT.'/system/lang/'.$usr['lang'].'/main.lang.php';
 
 if (!file_exists($mlang))
 	{
 	$usr['lang'] = $cfg['defaultlang'];
-	$mlang = 'system/lang/'.$usr['lang'].'/main.lang.php';
+	$mlang = SED_ROOT.'/system/lang/'.$usr['lang'].'/main.lang.php';
 
 	if (!file_exists($mlang))
 		{ sed_diefatal('Main language file not found.'); }
@@ -480,27 +480,27 @@ $out['copyright'] = "<a href=\"https://seditio.org\">".$L['foo_poweredby']." Sed
 
 $usr['skin_raw'] = $usr['skin'];
 
-if (@file_exists('skins/'.$usr['skin'].'.'.$usr['lang'].'/header.tpl'))
+if (@file_exists(SED_ROOT.'/skins/'.$usr['skin'].'.'.$usr['lang'].'/header.tpl'))
 	{ $usr['skin'] = $usr['skin'].'.'.$usr['lang']; }
 
-$mskin = 'skins/'.$usr['skin'].'/header.tpl';
+$mskin = SED_ROOT.'/skins/'.$usr['skin'].'/header.tpl';
 
 if (!file_exists($mskin))
 	{
 	$out['notices'] .= $L['com_skinfail'].'<br />';
 	$usr['skin'] = $cfg['defaultskin'];
-	$mskin = 'skins/'.$usr['skin'].'/header.tpl';
+	$mskin = SED_ROOT.'/skins/'.$usr['skin'].'/header.tpl';
 
 	if (!file_exists($mskin))
 		{ sed_diefatal('Default skin not found.'); }
 	}
 
-$usr['skin_lang'] = 'skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
+$usr['skin_lang'] = SED_ROOT.'/skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 
 if (@file_exists($usr['skin_lang']))
 	{ require($usr['skin_lang']); }
 
-require('skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
+require(SED_ROOT.'/skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
 $skin = $usr['skin'];
 
@@ -690,7 +690,7 @@ if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel'] && !defined(
 
 $extp = sed_getextplugins('global');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 /* ======== 301 Redirect to SEF URL's ======== */
 

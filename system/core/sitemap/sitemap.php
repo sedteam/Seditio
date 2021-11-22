@@ -21,9 +21,9 @@ define('SED_RSS', TRUE);
 $location = 'Sitemap';
 $z = 'sitemap';
 
-require('system/functions.php');
+require(SED_ROOT . '/system/functions.php');
 @include('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/common.php');
 
 $smcfg['pages']['changefreq']  = "daily"; // (always/hourly/daily/weekly/monthly/yearly/never)
 $smcfg['pages']['priority']    = "0.8";   // (default: 0.5)

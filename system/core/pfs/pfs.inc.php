@@ -97,7 +97,7 @@ if ($userid!=$usr['id'])
 /* === Hook === */
 $extp = sed_getextplugins('pfs.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
@@ -118,7 +118,7 @@ if ($a=='upload')
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.upload.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if ($folder_id!=0)
@@ -190,7 +190,7 @@ if ($a=='upload')
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.moved');
 					if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
 					if ($nresize && in_array($f_extension, $cfg['gd_supported']) && $cfg['gallery_imgmaxwidth']>0)
@@ -235,7 +235,7 @@ if ($a=='upload')
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.done');
 					if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
 					if (in_array($f_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir'].$u_name))
@@ -483,7 +483,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$stndl_icons_disp = "";
 	$extp = sed_getextplugins('pfs.stndl.icons');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* =============================== */		
 
 	$list_files .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more)."\" title=\"".$L['Delete']."\">".$out['img_delete']."</a></td>";
@@ -692,7 +692,7 @@ if ($standalone)
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.stndl');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ====== */		
 
 	$mskin = sed_skinfile(array('pfs', 'standalone'));
@@ -731,7 +731,7 @@ else
 		}
 	else
 		{
-		require("system/header.php");
+		require(SED_ROOT . "/system/header.php");
 		$t = new XTemplate(sed_skinfile("pfs"));
 		}
 
@@ -748,7 +748,7 @@ else
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if (defined('SED_ADMIN'))
@@ -760,7 +760,7 @@ else
 		{
 		$t->parse("MAIN");
 		$t->out("MAIN");
-		require("system/footer.php");
+		require(SED_ROOT . "/system/footer.php");
 		}
 	}
 ?>

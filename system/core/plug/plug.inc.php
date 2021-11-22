@@ -57,7 +57,7 @@ if (!empty($p))
 		}
 
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 	}
 elseif (!empty($e))
@@ -115,7 +115,7 @@ elseif (!empty($e))
 
 	/* ============= */
 
-	require("system/header.php");
+	require(SED_ROOT . "/system/header.php");
 
 	$t = new XTemplate($path_skin);
 
@@ -137,7 +137,7 @@ elseif (!empty($e))
 		}
 
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 	if ($autoassigntags)
 		{
@@ -160,7 +160,7 @@ elseif (!empty($e))
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require("system/footer.php");
+	require(SED_ROOT . "/system/footer.php");
 	}
 
 elseif (!empty($o))
@@ -194,7 +194,7 @@ elseif (!empty($o))
 	$t = new XTemplate($mskin);
 
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 	$t->assign(array(
 		"POPUP_HEADER1" => $popup_header1,
@@ -294,7 +294,7 @@ elseif (!empty($ajx))
     } 
 
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 } 
 	
 else

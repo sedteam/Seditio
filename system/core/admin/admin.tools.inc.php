@@ -77,7 +77,7 @@ if (!empty($p))
 		{
 		foreach($extp as $k => $pl)
 			{
-			include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 
 			$t-> assign(array(	
 				"TOOL_BODY" => $plugin_body

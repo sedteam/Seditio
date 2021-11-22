@@ -39,11 +39,11 @@ $enabled[1] = $L['Enabled'];
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 $sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
 $sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].".$s";
-$sys['inc'] = 'system/core/admin/'.$sys['inc'].'.inc.php';
+$sys['inc'] = SED_ROOT . '/system/core/admin/'.$sys['inc'].'.inc.php';
 
 if (!file_exists($sys['inc']))
 	{ sed_die(); }
@@ -184,7 +184,7 @@ $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('admintitle', $title_tags, $title_data);
 /**/
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 $t = new XTemplate(sed_skinfile("admin", true));
 
@@ -206,7 +206,7 @@ $t->parse("MAIN.ADMIN_USER");
     
 if (!empty($msg) || !empty($adminwarnings)) 
   {
-  require("system/lang/$lang/message.lang.php");
+  require(SED_ROOT . "/system/lang/$lang/message.lang.php");
   	
   $msg_type = (array_key_exists($msg, $cfg['msgtype'])) ? $cfg['msgtype_name'][$cfg['msgtype'][$msg]] : $cfg['msgtype_name']['i'];	
 
@@ -222,12 +222,12 @@ if (!empty($msg) || !empty($adminwarnings))
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

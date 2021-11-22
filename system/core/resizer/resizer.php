@@ -21,9 +21,9 @@ define('SED_RESIZER', TRUE);
 $location = 'Resizer';
 $z = 'resizer';
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/functions.php');
+require(SED_ROOT . '/datas/config.php');
+require(SED_ROOT . '/system/common.php');
 
 $filename = $_GET['file'];
 	

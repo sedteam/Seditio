@@ -31,7 +31,7 @@ sed_block($usr['auth_write']);
 /* === Hook === */
 $extp = sed_getextplugins('profile.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -133,7 +133,7 @@ switch ($a)
 	/* === Hook === */
 	$extp = sed_getextplugins('profile.update.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$uav_tmp_name = $_FILES['userfile']['tmp_name'];
@@ -175,7 +175,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.avatar');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$uav_size = filesize($avatarpath);
@@ -214,7 +214,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.photo');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$uph_size = filesize($photopath);
@@ -247,7 +247,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.signature');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$usig_size = filesize($signaturepath);
@@ -364,7 +364,7 @@ switch ($a)
 		/* === Hook === */
 		$extp = sed_getextplugins('profile.update.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_redirect(sed_url("message", "msg=113", "", true));
@@ -442,10 +442,10 @@ $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 /* === Hook === */
 $extp = sed_getextplugins('profile.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 $mskin = sed_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
@@ -511,12 +511,12 @@ $t->assign($extra_array);
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

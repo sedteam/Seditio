@@ -21,10 +21,10 @@ define('SED_RSS', TRUE);
 $location = 'Rss';
 $z = 'rss';
 
-require('system/functions.php');
+require(SED_ROOT . '/system/functions.php');
 @include('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/common.php');
 
-require('system/core/rss/rss.inc.php');
+require(SED_ROOT . '/system/core/rss/rss.inc.php');
 
 ?>

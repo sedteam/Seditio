@@ -60,7 +60,7 @@ $sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
 /* === Hook === */
 $extp = sed_getextplugins('users.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $forbid_sort = array('password','salt','secret','passtype','sid','lostpass');
@@ -210,10 +210,10 @@ $urlpaths[sed_url("users")] = $L['Users'];
 /* === Hook === */
 $extp = sed_getextplugins('users.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require(SED_ROOT . "/system/header.php");
 
 $t = new XTemplate($localskin);
 
@@ -330,7 +330,7 @@ while ($urr = sed_sql_fetchassoc($sql) AND $jj < $cfg['maxusersperpage'])
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.USERS_ROW");
@@ -339,12 +339,12 @@ while ($urr = sed_sql_fetchassoc($sql) AND $jj < $cfg['maxusersperpage'])
 /* === Hook === */
 $extp = sed_getextplugins('users.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require(SED_ROOT . "/system/footer.php");
 
 ?>

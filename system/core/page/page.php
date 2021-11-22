@@ -22,24 +22,24 @@ define('SED_PAGE', TRUE);
 $location = 'Pages';
 $z = 'page';
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require(SED_ROOT . '/system/functions.php');
+require(SED_ROOT . '/datas/config.php');
+require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_page']);
 
 switch($m)
 	{
 	case 'add':
-	require('system/core/page/page.add.inc.php');
+	require(SED_ROOT . '/system/core/page/page.add.inc.php');
 	break;
 
 	case 'edit':
-	require('system/core/page/page.edit.inc.php');
+	require(SED_ROOT . '/system/core/page/page.edit.inc.php');
 	break;
 
 	default:
-	require('system/core/page/page.inc.php');
+	require(SED_ROOT . '/system/core/page/page.inc.php');
 	break;
 	}
 

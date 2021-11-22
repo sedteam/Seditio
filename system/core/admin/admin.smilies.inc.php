@@ -26,7 +26,7 @@ $extp = sed_getextplugins('admin.smilies.first');
 
 if (is_array($extp))
 	{ 
-  foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+  foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=smilies"), $L['Smilies']);
@@ -59,7 +59,7 @@ elseif ($a=='add')
 	/* === Hook for the plugins === */
   $extp = sed_getextplugins('admin.smilies.added');
   if (is_array($extp))
-	 { foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }  
+	 { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }  
   
 	sed_cache_clear('sed_smilies');
 	sed_redirect(sed_url("admin", "m=smilies", "", true));
@@ -74,7 +74,7 @@ elseif ($a=='delete')
   	/* === Hook for the plugins === */
   $extp = sed_getextplugins('admin.smilies.deleted');
   if (is_array($extp))
-	 { foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	 { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
   
 	sed_cache_clear('sed_smilies');
 	sed_redirect(sed_url("admin", "m=smilies", "", true));
