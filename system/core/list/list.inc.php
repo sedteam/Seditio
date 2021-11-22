@@ -235,6 +235,7 @@ if ($usr['auth_write'] && $c!='all')
 	}
 
 $t->assign(array(
+	"LIST_ID" => $sed_cat[$c]['id'],
 	"LIST_PAGETITLE" => $catpath,
 	"LIST_SHORTTITLE" => $sed_cat[$c]['title'],
 	"LIST_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
