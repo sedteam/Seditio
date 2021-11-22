@@ -3083,6 +3083,7 @@ function sed_load_structure()
 		$parent_tpl = $row['structure_tpl'];
 
 		$res[$row['structure_code']] = array (
+			'id' => $row['structure_id'],
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
 			'spath' => $spath, //new sed175

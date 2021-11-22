@@ -27,7 +27,7 @@
       		}      
       	});
 
-  		$("div").find(".uploadButton").after("<div class=\"multibox uploadButton\" onclick=\"javascript:sedjs.pfs('{UPLOADER_PRELOAD_USERID}','{UPLOADER_PRELOAD_ACTION}','{UPLOADER_PRELOAD_EXTRA}',{UPLOADER_PRELOAD_ISMODAL});\">\
+  		$("div").find(".uploadButton").after("<div class=\"multibox uploadButton uploadPfs\" onclick=\"javascript:sedjs.pfs('{UPLOADER_PRELOAD_USERID}','{UPLOADER_PRELOAD_ACTION}','{UPLOADER_PRELOAD_EXTRA}',{UPLOADER_PRELOAD_ISMODAL});\">\
         <img src=\"/plugins/uploader/images/add.png\"/><br /><br />\
         {PHP.L.upl_choose_from_pfs}</div>");     
 

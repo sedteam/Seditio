@@ -34,7 +34,7 @@ $extraslot = 'rthumb';
 $use_sortable = ($cfg['plugin']['uploader']['use_sortable'] == "yes") ? 'true' : 'false';
 $use_dragndrop = ($cfg['plugin']['uploader']['use_dragndrop'] == "yes") ? 'true' : 'false';
 $use_rotation = ($cfg['plugin']['uploader']['use_rotation'] == "yes") ? 'true' : 'false';
-$maximum_uploads = $cfg['plugin']['uploader']['maximum_uploads'];
+//$maximum_uploads = $cfg['plugin']['uploader']['maximum_uploads'];
 
 $uploader = new XTemplate('plugins/uploader/uploader.tpl');
 
@@ -62,7 +62,7 @@ $uploader-> assign(array(
     "UPLOADER_PRELOAD_USE_SORTABLE" => $use_sortable,
     "UPLOADER_PRELOAD_USE_DRAGNDROP" => $use_dragndrop,
     "UPLOADER_PRELOAD_USE_ROTATION" => $use_rotation,
-    "UPLOADER_PRELOAD_MAXIMUM_UPLOADS" => $maximum_uploads,      
+    "UPLOADER_PRELOAD_MAXIMUM_UPLOADS" => 1,      
     "UPLOADER_PRELOAD_USERID" => $usr['id'],
     "UPLOADER_PRELOAD_ACTION" => 'savestructure',
     "UPLOADER_PRELOAD_EXTRA" => $extraslot,

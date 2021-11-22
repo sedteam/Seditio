@@ -30,7 +30,7 @@
 			
 		var holdername = this;
 		
-		if($(this).attr('sed_uploader') == 'on') {
+		if ($(this).attr('sed_uploader') == 'on') {
 			var imageHolderId = '#'+$(this).attr('id');
 			holdername = $(this).replaceWith(getHtml($(this).attr('id'), settings.sed_uploader_add_image, settings.sed_uploader_add_label, settings.sed_uploader_path));
 			holdername = $("body").find(imageHolderId);
@@ -39,6 +39,12 @@
 		jQuery.data(holdername, 'already_uploaded', 1);
 		jQuery.data(holdername, 'count', 0);
 		jQuery.data(holdername, 'counter', 0);
+				
+		if (settings.sed_uploader_attach_images.length == parseInt(settings.sed_uploader_maximum_uploads)) {
+			$(holdername).parent().find('.uploadButton').hide();
+			$(holdername).parent().find('.uploadPfs').hide();
+			jQuery.data(holdername, 'already_uploaded', 2);			
+		}
 		
 		if (settings.sed_uploader_use_sortable)
 			{

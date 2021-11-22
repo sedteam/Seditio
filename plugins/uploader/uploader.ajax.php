@@ -90,6 +90,7 @@ elseif ($upl_rotate)
 	exit;
 }
 
+/*
 if ($buildfilename == 'timestamp')
   {
     $filename = time().'_'.strtolower($upl_filename);
@@ -102,8 +103,18 @@ else
     $filename = preg_replace("#\\s+#", "_", $filename);
     $filename = sed_newname($filename);
     $filename= $usr['id']."-page_".$upl_pid.$filename;
-    /* ------- */ 
   }  
+  
+*/
+  
+$filename = sed_newname($usr['id']."-".$upl_filename, TRUE);
+
+if ($cfg['pfs_filemask'])
+	{
+		$filename = $usr['id']."-".time().sed_unique(3)."-".$filename;
+	}  
+  
+  
 
 $allow_extension = array('gif','png','jpg','jpeg','bmp');
 $extension_arr = explode(".", $filename);
