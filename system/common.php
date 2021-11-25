@@ -149,7 +149,10 @@ if ($cfg['cache'])
 	if ($sql)
 		{
 		while ($row = sed_sql_fetchassoc($sql))
-			{ $$row['c_name'] = unserialize($row['c_value']); }
+			{ 
+			$newvar = $row['c_name']; //fix 178 php7.1
+			$$newvar = unserialize($row['c_value']); 
+			}
 		}
 	}
 
