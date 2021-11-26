@@ -53,7 +53,7 @@ function sed_selectbox_lang_install($check, $name)
 	sort($langlist);
 
 	$result = "<select name=\"$name\" size=\"1\">";
-	while(list($i,$x) = each($langlist))
+	foreach ($langlist as $i => $x)
 		{
 		$selected = ($x==$check) ? "selected=\"selected\"" : '';
 		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];

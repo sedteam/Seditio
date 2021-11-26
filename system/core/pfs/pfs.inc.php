@@ -68,7 +68,7 @@ if (!empty($c1) || !empty($c2))
 	$more = "c1=".$c1."&c2=".$c2."&".$more;
 	$standalone = TRUE;
 	}
-
+	
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 	{

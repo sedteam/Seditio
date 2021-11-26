@@ -23,11 +23,12 @@ $plu = array();
 $sys = array();
 $usr = array();
 
+require(SED_ROOT.'/system/config.extensions.php');
+
 /* ======== Urltranslation rules ========= */
-
 require(SED_ROOT.'/system/config.urltranslation.php');
-require(SED_ROOT.'/system/functions.image.php');
 
+require(SED_ROOT.'/system/functions.image.php');
 /* ======== Xtemplate class ========= */
 
 require(SED_ROOT.'/system/templates.php');
@@ -3911,7 +3912,7 @@ function sed_selectbox_lang($check, $name)
 	sort($langlist);
 
 	$result = "<select name=\"$name\" size=\"1\">";
-	while(list($i,$x) = each($langlist))
+	foreach ($langlist as $i => $x)
 		{
 		$selected = ($x == $check) ? "selected=\"selected\"" : '';
 		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
@@ -3964,7 +3965,7 @@ function sed_selectbox_skin($check, $name)
 	sort($skinlist);
 
 	$result = "<select name=\"$name\" size=\"1\">";
-	while(list($i,$x) = each($skinlist))
+	foreach ($skinlist as $i => $x)
 		{
 		$selected = ($x==$check) ? "selected=\"selected\"" : '';
 		$skininfo = "skins/".$x."/".$x.".php";
@@ -4000,13 +4001,12 @@ function sed_radiobox_skin($check, $name)
 	closedir($handle);
 	sort($skinlist);
 
-	while(list($i,$x) = each($skinlist))
+	foreach ($skinlist as $i => $x)
 		{
 		$checked = ($x == $check) ? "checked=\"checked\"" : '';
 		$skininfo = "skins/".$x."/".$x.".php";
 		$info = sed_infoget($skininfo);
 		$result .= (!empty($info['Error'])) ? $x." (".$info['Error'].")" : "<table class=\"flat\"><tr><td><img src=\"skins/$x/$x.png\" alt=\"$name\" /></td><td style=\"vertical-align:top;\"><input type=\"radio\" name=\"$name\" value=\"$x\" $checked> <strong>".$info['Name']."</strong><br />&nbsp;<br />Version : ".$info['Version']."<br />Updated : ".$info['Updated']."<br />Author : ".$info['Author']."</td></tr></table>";
-
 		}
 
 	return($result);
@@ -4290,7 +4290,8 @@ function sed_shield_update($shield_add, $shield_newaction)
 function sed_skinfile($base, $adminskin = false)
 	{
 	global $usr, $cfg;
-	$base_depth = count($base);
+	$base_depth = is_array($base) ? count($base) : 1;
+	
   
 	$tpl_path = 'skins/'.$usr['skin'].'/'.$base.'.tpl';
 	$tpl_admin_path = 'skins/'.$usr['skin'].'/admin/'.$base.'.tpl';  
@@ -4834,6 +4835,7 @@ function sed_extrafield_add($sql_table, $name, $type, $size)
 
 	$fieldsres = sed_sql_query("SELECT dic_code FROM $db_dic WHERE dic_extra_location = '$sql_table'"); 
 
+	$extrafieldsnames = array();
 	while ($row = sed_sql_fetchassoc($fieldsres)) 
 		{ 
 		$extrafieldsnames[] = $row['dic_code']; 

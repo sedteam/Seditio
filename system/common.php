@@ -17,15 +17,15 @@ Description=Common
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-if (get_magic_quotes_gpc()) //New in 175
-{ 
-    function sed_disable_mqgpc(&$value) 
-    { 
-        $value = stripslashes($value); 
-    } 
-    $gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST); 
-    array_walk_recursive($gpc, 'sed_disable_mqgpc'); 
-} 
+if (!function_exists('get_magic_quotes_gpc'))
+{
+	function get_magic_quotes_gpc(&$value) 
+	{ 
+		$value = stripslashes($value); 
+	} 
+	$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST); 
+	array_walk_recursive($gpc, 'get_magic_quotes_gpc');  
+}
 
 error_reporting(E_ALL ^ E_NOTICE);  
 
@@ -219,7 +219,7 @@ $usr['name'] = '';
 $usr['level'] = 0;
 $usr['lastvisit'] = 30000000000;
 $usr['lastlog'] = 0;
-$usr['timezone'] = $cfg['defaulttimezone'];
+$usr['timezone'] = empty($cfg['defaulttimezone']) ? 0 : $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 

@@ -524,9 +524,9 @@ function sed_plugin_install($pl)
 	{
   global $db_plugins, $db_config, $db_auth, $db_users, $sed_groups, $usr, $cfg;
 
-  $sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
+	$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 	$res = "<h3>Installing : plugins/".$pl."</h3>";
-  $res .= "<strong>Deleting old installation of this plugin...</strong> ";
+	$res .= "<strong>Deleting old installation of this plugin...</strong> ";
 	$res .= "Found:".sed_sql_affectedrows()."<br />";
 
 	$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' and config_cat='$pl'");
@@ -556,7 +556,7 @@ function sed_plugin_install($pl)
 		closedir($handle);
 
 		$res .= "<strong>Installing the parts...</strong><br />";
-		while( list($i,$x) = each($parts) )
+		foreach ($parts as $i => $x)
 			{
 			$res .= "- Part ".$x." ...";
 			$extplugin_file = "plugins/".$pl."/".$x;

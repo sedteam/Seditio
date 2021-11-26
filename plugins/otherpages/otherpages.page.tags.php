@@ -75,7 +75,7 @@ function sed_get_otherpages($pid, $cat, $limit)
 				if (!empty($row['page_thumb']))
 					{	
 					$first_thumb_array = rtrim($row['page_thumb']); 
-					if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+					if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
 						{
 						$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
 						}		

@@ -409,7 +409,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 	if (!empty($pag['page_thumb']))
 		{	
 		$first_thumb_array = rtrim($pag['page_thumb']); 
-		if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') 
+		if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
 			{
 			$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
 			}		
