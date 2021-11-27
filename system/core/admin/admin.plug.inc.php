@@ -316,7 +316,7 @@ switch ($a)
 		"PLUG_LISTING_COUNT" => $cnt_extp
 	)); 
 
-	while( list($i,$x) = each($extplugins) )
+	foreach ($extplugins as $i => $x)
 		{
 		$extplugin_info = "plugins/".$x."/".$x.".setup.php";
 		if (file_exists($extplugin_info))
