@@ -412,6 +412,7 @@ $result[] = array ('forums', '12', 'antibumpforums', 3, '0', '');
 $result[] = array ('page', '01', 'disable_page', 3, '0', '');
 $result[] = array ('page', '03', 'showpagesubcatgroup', 3, '0', '');
 $result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
+$result[] = array ('page', '06', 'genseourls', 3, '1', '');   // New in v178
 $result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
 $result[] = array ('pfs', '02', 'pfs_filemask', 3, '0', '');
 // $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');

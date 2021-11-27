@@ -151,6 +151,7 @@ $L['cfg_ph_maxx'] = array("Фото, макс. ширина", "По умолча
 $L['cfg_ph_maxy'] = array("Фото, макс. высота", "По умолчанию: 96 пикселей");
 $L['cfg_maxrowsperpage'] = array("Максимальное кол-во строк в списках", "");
 $L['cfg_showpagesubcatgroup'] = array("Отображать в группах страницы из подразделов", "");   //New Sed171
+$L['cfg_genseourls'] = array("Генерировать SEO url (авто page alias)? ", "");   //New Sed178
 $L['cfg_showcommentsonpage'] = array("Отображать комментарии на страницах", "По умолчанию показывать комментарии на странице");   //New Sed171
 $L['cfg_maxcommentsperpage'] = array("Максимум комментариев на страницу", "");  //New Sed173
 $L['cfg_commentsorder'] = array("Сортировка комментариев", "ASC - новые снизу, DESC - новые сверху");  //New Sed173

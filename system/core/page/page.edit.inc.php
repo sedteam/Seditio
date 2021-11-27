@@ -142,6 +142,8 @@ if ($a=='update')
 			$rpagestate = (($rpagepublish == "OK") && $usr['isadmin']) ? 0 : $rpagestate; //Unvalidation
 			$rpagestate = (($rpagepublish == "NO") && $usr['isadmin']) ? 1 : $rpagestate; //Validation
 
+			$rpagealias = (empty($rpagealias) && $cfg['genseourls']) ? sed_translit_seourl($rpagetitle) : $rpagealias;
+			
 			if (!empty($rpagealias))
 				{       
 				$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($rpagealias)."' AND page_id!='".$id."'");

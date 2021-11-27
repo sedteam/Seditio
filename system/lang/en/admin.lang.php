@@ -151,6 +151,7 @@ $L['cfg_ph_maxx'] = array("Photo, maximum width", "Default: 96 pixels");
 $L['cfg_ph_maxy'] = array("Photo, maximum height", "Default: 96 pixels");
 $L['cfg_maxrowsperpage'] = array("Maximum lines in lists", "");
 $L['cfg_showpagesubcatgroup'] = array("Show in groups pages from the subsections", "");   //New Sed171
+$L['cfg_genseourls'] = array("Generate SEO url (auto gen* page alias)? ", "");   //New Sed178
 $L['cfg_maxcommentsperpage'] = array("Maximum comments per page", "");  //New Sed173
 $L['cfg_commentsorder'] = array("Sorting order for comments", "ASC - new bottom, DESC - newest on top");  //New Sed173
 $L['cfg_maxtimeallowcomedit'] = array("The time allowed to edit comments", "In minutes, if 0 - editing is prohibited");  //New Sed173

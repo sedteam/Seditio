@@ -4781,7 +4781,8 @@ function sed_xp()
 function sed_extrafield_get($sql_table) 
 { 
     global $sed_dic, $cfg;
-    if (!empty($sed_dic))
+    $res = array();
+	if (!empty($sed_dic))
     {
     foreach ($sed_dic as $key => $row)
     {
@@ -5681,7 +5682,7 @@ function sed_autogen_avatar($uid)
 	global $usr, $cfg, $db_pfs, $db_users;
 	
 	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$uid' LIMIT 1");
-	sed_die(sed_sql_numrows($sql) == 0);
+	if (sed_sql_numrows($sql) == 0) return FALSE;
 	
 	$urr = sed_sql_fetchassoc($sql);
 	
@@ -5741,6 +5742,21 @@ function sed_menu_options($array, $parent = 0, $indent = "&nbsp; &nbsp; &nbsp;")
 	  }
 	}
 	return $return;
+}
+
+function sed_translit_seourl($value)
+{
+	global $sed_translit;
+ 
+	$value = mb_strtolower($value);
+	$value = strtr($value, $sed_translit);
+	$value = mb_ereg_replace('[^-_0-9a-z]', '-', $value);
+	$value = mb_ereg_replace('[-]+', '-', $value);
+	$value = trim($value, '-');	
+	$value = rtrim($value, '-');	
+	$value = str_replace('-.', '.', $value);
+	 
+	return $value;
 }
 
 ?>

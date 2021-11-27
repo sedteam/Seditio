@@ -103,6 +103,8 @@ if ($a=='add')
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 
+	$newpagealias = (empty($newpagealias) && $cfg['genseourls']) ? sed_translit_seourl($newpagetitle) : $newpagealias;
+	
 	if (empty($error_string))
 		{
 		if (!empty($newpagealias))
