@@ -190,7 +190,7 @@ function sed_get_latesttopics($limit, $mask)
 				{ $parentcat = FALSE; }
 
 			/*Autogen avatar from first letter*/			
-			if (empty($row['user_avatar']) && $row['user_id']>0) {  sed_autogen_avatar($row['user_avatar']); }
+			if (empty($row['user_avatar']) && $row['user_id']>0) {  sed_autogen_avatar($row['user_id']); }
 			
 			$t-> assign(array(
 				"LATEST_TOPICS_ROW_ID" => $row['page_id'],
