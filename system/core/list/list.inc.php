@@ -305,7 +305,7 @@ $mtch = $sed_cat[$c]['path'].".";
 $mtchlen = mb_strlen($mtch);
 $mtchlvl = mb_substr_count($mtch,".");
 
-while (list($i,$x) = each($sed_cat) )
+foreach ($sed_cat as $i => $x)	
 	{
 	if (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
 		{
