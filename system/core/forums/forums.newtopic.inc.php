@@ -172,7 +172,6 @@ if ($a=='newtopic')
 $pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
-$post_main = "<div id=\"nt\"><textarea name=\"newmsg\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($newmsg, ENT_QUOTES)."</textarea></div>";
 
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums", "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
@@ -216,10 +215,10 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_parse($fs_desc),
 	"FORUMS_NEWTOPIC_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s),
-	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_NEWTOPIC_TEXT" => $post_main." ".$pfs.$poll_form,
-	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
+	"FORUMS_NEWTOPIC_TITLE" => sed_textbox('newtopictitle', $newtopictitle, 56, 64),
+	"FORUMS_NEWTOPIC_DESC" => sed_textbox('newtopicdesc', $newtopicdesc, 56, 64),
+	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic')." ".$pfs.$poll_form,
+	"FORUMS_NEWTOPIC_TEXTONLY" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic'),
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 	"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
 ));

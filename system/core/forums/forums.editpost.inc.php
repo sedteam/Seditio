@@ -145,7 +145,6 @@ if ($row = sed_sql_fetchassoc($sql))
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rmsg", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rmsg');
-$editpost_text = "<div id=\"ep\"><textarea name=\"rmsg\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($fp_text, ENT_QUOTES)."</textarea></div>";
 
 $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
@@ -190,10 +189,10 @@ $t->assign(array(
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".sed_build_date($cfg['dateformat'], $fp_updated)." ".$usr['timetext'],
 	"FORUMS_EDITPOST_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_EDITPOST_SEND" => sed_url("forums","m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
-	"FORUMS_EDITPOST_TEXT" => $editpost_text." ".$pfs,
-	"FORUMS_EDITPOST_TEXTONLY" => $editpost_text,
-	"FORUMS_EDITPOST_TITLE" => " <input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".$ft_title."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_EDITPOST_DESC" => "<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".$ft_desc."\" size=\"56\" maxlength=\"64\" />",
+	"FORUMS_EDITPOST_TEXT" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic')." ".$pfs,
+	"FORUMS_EDITPOST_TEXTONLY" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic'),
+	"FORUMS_EDITPOST_TITLE" => sed_textbox('rtopictitle', $ft_title, 56, 64),
+	"FORUMS_EDITPOST_DESC" => sed_textbox('rtopicdesc', $ft_desc, 56, 64),
 	"FORUMS_EDITPOST_MYPFS" => $pfs
 ));
 

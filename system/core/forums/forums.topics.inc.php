@@ -362,7 +362,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_TITLE_REPLIES" => "<a href=\"".sed_url("forums", "m=topics&s=".$s."&o=postcount&w=".rev($w))."\">".$L['Replies']." ".cursort($o=='postcount', $w)."</a>",
 	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"".sed_url("forums", "m=topics&s=".$s."&o=creationdate&w=".rev($w))."\">".$L['Started']." ".cursort($o=='creationdate', $w)."</a>",
 	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"".sed_url("forums", "m=topics&s=".$s."&o=updated&w=".rev($w))."\">".$L['Lastpost']." ".cursort($o=='updated', $w)."</a>"
-		));
+	));
 
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('forums.topics.loop');
@@ -374,8 +374,8 @@ $extp = sed_getextplugins('forums.topics.loop');
 $catnum = 1;
 
 $sql2 = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
-        						   WHERE s.fs_parentcat=".$s." AND n.fn_code=s.fs_category
-        						   ORDER BY fn_path ASC, fs_order ASC");    
+					   WHERE s.fs_parentcat=".$s." AND n.fn_code=s.fs_category
+					   ORDER BY fn_path ASC, fs_order ASC");    
 
 while ($fsn = sed_sql_fetchassoc($sql2))
 	{
