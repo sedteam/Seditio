@@ -189,7 +189,7 @@ while ($row = sed_sql_fetchassoc($sql))
 
 		usort($plugins, "cmp");
 
-		while (list($i,$x) = each($plugins))
+		foreach ($plugins as $i => $x)
 			{
 			$extplugin_info = "plugins/".$x[0]."/".$x[0].".setup.php";
 

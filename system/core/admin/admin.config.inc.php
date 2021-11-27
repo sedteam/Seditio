@@ -164,7 +164,7 @@ switch ($n)
 				{
 				reset($cfg_params[$config_name]);
 				$config_field = "<select name=\"$config_name\" size=\"1\">";
-				while( list($i,$x) = each($cfg_params[$config_name]) )
+				foreach ($cfg_params[$config_name] as $i => $x)
 					{
 					$x = trim($x);
 					$selected = ($x == $config_value) ? "selected=\"selected\"" : '';

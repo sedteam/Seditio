@@ -90,7 +90,7 @@ if ($sys['user_istopadmin'])
 	$forcesql = $L['upg_force'];
 	$forcesql .= "<select name=\"forcesql\" size=\"1\">";
 
-	while( list($i,$x) = each($cfg['versions_list']) )
+	foreach ($cfg['versions_list'] as $i => $x)
 		{
 		$selected = ($x==$cfg['sqlversion']) ? "selected=\"selected\"" : '';
 		$forcesql .= "<option value=\"$x\" $selected>".$x."</option>";
