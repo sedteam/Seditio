@@ -57,15 +57,15 @@ function crop_image($filename, $width = 0, $height = 0, $set_watermark = false)
     }
 
 /**
- * Создание превью изображения
- * @param  $filename файл с изображением (без пути к файлу)
- * @return string имя файла превью
- */
+  * Create preview images
+  * @param $ filename image file (without file path)
+  * @return string preview file name
+  */
 function resize($filename)
 {        
 	global $cfg;
 	
-	// Пути к папкам с картинками
+	// Picture folder paths
 	$originals_dir = $cfg['pfs_dir'];
 	$preview_dir = $cfg['res_dir'];	
 	
@@ -122,7 +122,7 @@ function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_
 	if ($width > 0 || $height > 0) {
 		$resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext;
 	} else {
-		// TODO fix этот вариант сейчас не работает
+		// TODO fix this option does not work now
 		$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext;
 	}
 
@@ -136,35 +136,35 @@ function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_
 function get_resize_params($filename)
 {
 	
-	// Определаяем параметры ресайза
+	// Determining the resize parameters
 	if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)$/', $filename, $matches)) {
 		return false;
 	}
 
-	$file = $matches[1];                    // имя запрашиваемого файла
-	$type = $matches[2];                    // ресайз или кроп
-	$width = $matches[3];                   // ширина будущего изображения
-	$height = $matches[4];                  // высота будущего изображения
-	$set_watermark = $matches[5] == 'w';    // ставить ли водяной знак
-	$ext = $matches[6];                     // расширение файла
+	$file = $matches[1];                    // the name of the requested file
+	$type = $matches[2];                    // resize or crop
+	$width = $matches[3];                   // width of the future image
+	$height = $matches[4];                  // height of the future image
+	$set_watermark = $matches[5] == 'w';    // whether to put a watermark
+	$ext = $matches[6];                     // file extension
 
 	return array($file . '.' . $ext, $type, $width, $height, $set_watermark);
 }
 
 /**
- * Создание превью средствами gd
- *
- * @param string $src_file исходный файл
- * @param string $dst_file файл с результатом
- * @param string $type
- * @param int $max_w максимальная ширина
- * @param int $max_h максимальная высота
- * @param null $watermark
- * @param int $watermark_offset_x
- * @param int $watermark_offset_y
- * @param int $watermark_opacity
- * @return bool
- */
+* Create previews using gd
+*
+* @param string $src_file source file
+* @param string $dst_file result file
+* @param string $type
+* @param int $max_w maximum width
+* @param int $max_h maximum height
+* @param null $watermark
+* @param int $watermark_offset_x
+* @param int $watermark_offset_y
+* @param int $watermark_opacity
+* @return bool
+*/
 function image_constrain_gd(
 	$src_file,
 	$dst_file,
@@ -179,10 +179,10 @@ function image_constrain_gd(
 	
 	global $cfg;
 	
-	// todo вынести в настройки
+	// todo put into settings
 	$quality = $cfg['quality'];
 
-	// Параметры исходного изображения
+	// Source image parameters
 	list($src_w, $src_h, $src_type) = array_values(getimagesize($src_file));
 	$src_type = image_type_to_mime_type($src_type);
 
@@ -197,16 +197,16 @@ function image_constrain_gd(
 		}
 	}
 
-	// Нужно ли обрезать?
+	// Do I need to crop?
 	if (!$watermark && ($src_w <= $max_w) && ($src_h <= $max_h) && $type == 'resize') {
-		// Нет - просто скопируем файл
+		// No - just copy the file
 		if (!copy($src_file, $dst_file)) {
 			return false;
 		}
 		return true;
 	}
 
-	// Читаем изображение
+	// Reading the image
 	switch ($src_type) {
 		case 'image/jpeg':
 			$src_img = imageCreateFromJpeg($src_file);
@@ -226,7 +226,7 @@ function image_constrain_gd(
 		return false;
 	}
 
-	// Размеры превью при пропорциональном уменьшении
+	// Preview sizes at proportional reduction
 	@list($dst_w, $dst_h) = calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type);
 
 	$src_colors = imagecolorstotal($src_img);
@@ -321,7 +321,7 @@ function image_constrain_gd(
 		$quality = 10 - $quality;
 	}
 
-	// Сохраняем изображение
+	// Save the image
 	switch ($src_type) {
 		case 'image/jpeg':
 			return imageJpeg($dst_img, $dst_file, $quality);
@@ -336,20 +336,20 @@ function image_constrain_gd(
 }
 
 /**
- * Создание превью средствами imagick
- *
- * @param resource $src_file исходный файл
- * @param resource $dst_file файл с результатом
- * @param string $type
- * @param int $max_w максимальная ширина
- * @param int $max_h максимальная высота
- * @param null $watermark
- * @param int $watermark_offset_x
- * @param int $watermark_offset_y
- * @param int $watermark_opacity
- * @param float $sharpen
- * @return bool
- */
+* Creation of previews by means of imagick
+*
+* @param resource $src_file source file
+* @param resource $dst_file result file
+* @param string $type
+* @param int $max_w maximum width
+* @param int $max_h maximum height
+* @param null $watermark
+* @param int $watermark_offset_x
+* @param int $watermark_offset_y
+* @param int $watermark_opacity
+* @param float$ sharpen
+* @return bool
+*/
 function image_constrain_imagick(
 	$src_file,
 	$dst_file,
@@ -366,7 +366,7 @@ function image_constrain_imagick(
 	
 	$thumb = new Imagick();
 
-	// Читаем изображение
+	// Reading the image
 	if (!$thumb->readImage($src_file)) {
 		return false;
 	}
@@ -378,23 +378,23 @@ function image_constrain_imagick(
 		}
 	}
 
-	// Размеры исходного изображения
+	// Dimensions of the original image
 	$src_w = $thumb->getImageWidth();
 	$src_h = $thumb->getImageHeight();
 
-	// Нужно ли обрезать?
+	// Do I need to crop cut?
 	if (!$watermark && ($src_w <= $max_w) && ($src_h <= $max_h)) {
-		// Нет - просто скопируем файл
+		// No - just copy the file
 		if (!copy($src_file, $dst_file)) {
 			return false;
 		}
 		return true;
 	}
 
-	// Размеры превью при пропорциональном уменьшении
+	// Preview sizes at proportional reduction
 	list($dst_w, $dst_h) = calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type);
 
-	// Уменьшаем
+	// Reducing
 	if ($type == 'crop') {
 		$x0 = ($dst_w - $max_w) / 2;
 		$y0 = ($dst_h - $max_h) / 2;
@@ -407,7 +407,7 @@ function image_constrain_imagick(
 	}
 	$watermark_x = null;
 	$watermark_y = null;
-	// Устанавливаем водяной знак
+	// Installing the watermark
 	if ($watermark && is_readable($watermark)) {
 		$overlay = new Imagick($watermark);
 		//$overlay->setImageOpacity($watermark_opacity);
@@ -423,15 +423,15 @@ function image_constrain_imagick(
 	}
 
 
-	// Анимированные gif требуют прохода по фреймам
+	// Animated gifs require frame traversal
 	foreach ($thumb as $frame) {
-		// Уменьшаем
+		// Reducing
 		$frame->thumbnailImage($dst_w, $dst_h);
 
 		/* Set the virtual canvas to correct size */
 		$frame->setImagePage($dst_w, $dst_h, 0, 0);
 
-		// Наводим резкость
+		// Sharpening
 		if ($sharpen > 0) {
 			$thumb->adaptiveSharpenImage($sharpen, $sharpen);
 		}
@@ -443,19 +443,19 @@ function image_constrain_imagick(
 		}
 	}
 
-	// Убираем комменты и т.п. из картинки
+	// We remove comments, etc. from picture
 	$thumb->stripImage();
 
-	// TODO вынести в настройки
+	// TODO put into settings
 	$quality = $cfg['quality'];
 	$thumb->setImageCompressionQuality($quality);
 
-	// Записываем картинку
+	// We record a picture
 	if (!$thumb->writeImages($dst_file, true)) {
 		return false;
 	}
 
-	// Уборка
+	// Cleaning
 	$thumb->destroy();
 	if (isset($overlay) && is_object($overlay)) {
 		$overlay->destroy();
@@ -465,15 +465,15 @@ function image_constrain_imagick(
 }
 
 /**
- * Вычисляет размеры изображения, до которых нужно его пропорционально уменьшить, чтобы вписать в квадрат $max_w x $max_h
- *
- * @param int $src_w ширина исходного изображения
- * @param int $src_h высота исходного изображения
- * @param int $max_w максимальная ширина
- * @param int $max_h максимальная высота
- * @param string $type
- * @return array|bool
- */
+* Calculates the size of the image to which you need to proportionally reduce it to fit into the square $max_w x $max_h
+*
+* @param int $src_w source image width
+* @param int $src_h source image height
+* @param int $max_w maximum width
+* @param int $max_h maximum height
+* @param string $type
+* @return array | bool
+*/
 function calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 'resize')
 {
 	if ($src_w == 0 || $src_h == 0) {
