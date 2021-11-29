@@ -718,6 +718,7 @@ $L['captcha_error_incorrect'] = "Incorrect captcha!";
 $L['captcha_error_hacker_go_home'] = "Hacker, go away!";
 
 $sed_translit = array(
+	//cyr
 	'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Ѓ' => 'G',
 	'Ґ' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'YO', 'Є' => 'YE',
 	'Ж' => 'ZH', 'З' => 'Z', 'Ѕ' => 'Z', 'И' => 'I', 'Й' => 'J',
@@ -735,22 +736,22 @@ $sed_translit = array(
 	'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't',
 	'у' => 'u', 'ў' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'ts',
 	'ч' => 'ch', 'џ' => 'dh', 'ш' => 'sh', 'щ' => 'shh', 'ъ' => '',
-	'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya'
+	'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
+	//turk
+	'Ç' => 'c', 'Ş' => 's', 'Ğ' => 'g', 'Ü' => 'u', 'İ' => 'i', 
+	'Ö' => 'o', 'ç' => 'c', 'ş' => 's', 'ğ' => 'g', 'ü' => 'u', 
+	'ö' => 'o', 'ı' => 'i', '+' => 'plus', '#' => 'sharp'
 );
 
-$sed_months_list = array (
-   ".01." => "January",
-   ".02." => "February",
-   ".03." => "March",
-   ".04." => "April",
-   ".05." => "May",
-   ".06." => "June",
-   ".07." => "July",
-   ".08." => "August",
-   ".09." => "September",
-   ".10." => "October",
-   ".11." => "November",
-   ".12." => "December"
+$sed_months_list = array(
+	1 => 'january', 2 => 'february', 3 => 'march', 4 => 'april',
+	5 => 'may', 6 => 'june', 7 => 'july', 8 => 'august',
+	9 => 'september', 10 => 'october', 11 => 'november', 12 => 'december'
+);
+
+$sed_daysweek_list = array(
+   'sunday', 'monday', 'tuesday', 'wednesday',
+   'thursday', 'friday', 'saturday'
 );
 
 ?>

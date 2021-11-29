@@ -28,9 +28,10 @@ require(SED_ROOT.'/system/config.extensions.php');
 /* ======== Urltranslation rules ========= */
 require(SED_ROOT.'/system/config.urltranslation.php');
 
+/* ======== Image functions ========= */
 require(SED_ROOT.'/system/functions.image.php');
-/* ======== Xtemplate class ========= */
 
+/* ======== Xtemplate class ========= */
 require(SED_ROOT.'/system/templates.php');
 
 /* ======== Pre-sets ========= */
@@ -5560,15 +5561,13 @@ function sed_generate_field_code()
         return $captcha_field;
     }
 
-function sed_translate_date($_timestampDate)
+function sed_translate_date($timestampDate)
 	{	
-		global $sed_months_list;
-		
-		$currentDate = date("d.m.Y", $_timestampDate);
-		$_monthsList = $sed_months_list;	 
-		$_mD = date(".m.", $_timestampDate);
-		$currentDate = str_replace($_mD, " ".$_monthsList[$_mD]." ", $currentDate);	
-		return $currentDate;	
+		global $sed_months_list;		
+		$tday = date("d", $timestampDate);
+		$tmonths = $sed_months_list[(date('n', $timestampDate))];
+		$tyear = date("Y", $timestampDate);		
+		return $tday." ".$tmonths." ".$tyear;
 	}
 	
 /**
@@ -5583,8 +5582,7 @@ function sed_letterAvatar($text, $uid, $fontSize, $imgWidth, $imgHeight)
 		/* settings */
 		$font = $cfg['font_dir'].'/calibri.ttf'; /*define font*/
 
-		// Split words and get first letter of each word 
-		// Example - Kannan m -> KM
+		// Split words and get first letter of each word. Example - Kannan m -> KM
 		$words = explode(" ", $text);
 		$text = "";
 		
@@ -5595,14 +5593,12 @@ function sed_letterAvatar($text, $uid, $fontSize, $imgWidth, $imgHeight)
 		// File name and extension
 		$fileName = $uid.'-avatar.jpg';
 
-		// Text color
-		// Default - White
+		// Default text color - White
 		$textColor = '#FFF';
 
 		// Convert hex code to RGB
 		$textColor = sed_hexToRGB($textColor);	
 
-		// check letter avatar already exist
 		// if exist return the image
 
 		if (file_exists($cfg['av_dir'].$fileName))
