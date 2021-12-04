@@ -92,7 +92,7 @@ switch ($a)
 			"PLUG_DETAILS_UNPAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=".$info['Code']."&b=unpause&".sed_xg())		
 		));
 		
-		while( list($i,$x) = each($parts) )
+		foreach ($parts as $i => $x)
 			{
 			$extplugin_file = "plugins/".$pl."/".$x;
 			$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');

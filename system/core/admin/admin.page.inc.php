@@ -370,7 +370,7 @@ switch($mn)
     	reset($options_way);
     
     	$form_sort = "<select name=\"s[".$structure_id."][order]\" size=\"1\">";
-    	while( list($i,$x) = each($options_sort) )
+    	foreach( $options_sort as $i => $x )
     		{
     		$selected = ($i==$sort) ? 'selected="selected"' : '';
     		$form_sort .= "<option value=\"$i\" $selected>".$x."</option>";
@@ -378,7 +378,7 @@ switch($mn)
     	$form_sort .= "</select> ";
     
     	$form_way = "<select name=\"s[".$structure_id."][way]\" size=\"1\">";
-    	while( list($i,$x) = each($options_way) )
+    	foreach( $options_way as $i => $x )
     		{
     		$selected = ($i==$way) ? 'selected="selected"' : '';
     		$form_way .= "<option value=\"$i\" $selected>".$x."</option>";
