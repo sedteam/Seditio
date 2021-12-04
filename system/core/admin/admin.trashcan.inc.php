@@ -21,8 +21,8 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin',
 sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=trashcan"), $L['Trashcan']);
+
 $adminhelp = $L['adm_help_trashcan'];
-$adminmain = "<h2><img src=\"system/img/admin/trash.png\" alt=\"\" /> ".$L['Trashcan']."</h2>";
 
 $id = sed_import('id','G','INT');
 
@@ -46,16 +46,8 @@ elseif ($a=='restore')
 $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE 1 ORDER by tr_id DESC");
-
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=trash")."\">".$L['Configuration']."</a></li><li>";
-$adminmain .= $L['Wipeall'].": [<a href=\"".sed_url("admin", "m=trashcan&a=wipeall&".sed_xg())."\">x</a>]</li></ul>";
-$adminmain .= "<table class=\"cells striped\"><tr>";
-$adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Date']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Type']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Title']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:96px;\">".$L['adm_setby']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:156px;\">".$L['Wipe']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:56px;\">".$L['Restore']."</td></tr>";
+	
+$t = new XTemplate(sed_skinfile('admin.trashcan', true)); 
 
 $ii = 0;
 
@@ -99,18 +91,28 @@ while ($row = sed_sql_fetchassoc($sql))
 		break;
 		}
 
-	$adminmain .= "<tr>";
-	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['tr_date'])."</td>";
-	$adminmain .= "<td><img src=\"system/img/admin/".$icon."\" alt=\"".$typestr."\" /> ".$typestr."</td>";
-	$adminmain .= "<td>".sed_cc($row['tr_title'])."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= ($row['tr_trashedby']==0) ? $L['System'] : sed_build_user($row['tr_trashedby'], sed_cc($row['user_name']));
-	$adminmain .= "</td><td style=\"text-align:center;\">";
-	$adminmain .= "[<a href=\"".sed_url("admin", "m=trashcan&a=wipe&id=".$row['tr_id']."&".sed_xg())."\">-</a>]</td>";
-	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= "[<a href=\"".sed_url("admin", "m=trashcan&a=restore&id=".$row['tr_id']."&".sed_xg())."\">+</a>]</td></tr>";
+	$t->assign(array(
+		"TRASHCAN_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['tr_date']),	
+		"TRASHCAN_LIST_TYPE" => "<img src=\"system/img/admin/".$icon."\" alt=\"".$typestr."\" /> ".$typestr,
+		"TRASHCAN_LIST_TITLE" => sed_cc($row['tr_title']),
+		"TRASHCAN_LIST_TRASHEDBY" => ($row['tr_trashedby']==0) ? $L['System'] : sed_build_user($row['tr_trashedby'], sed_cc($row['user_name'])),
+		"TRASHCAN_LIST_WIPE_URL" => sed_url("admin", "m=trashcan&a=wipe&id=".$row['tr_id']."&".sed_xg()),
+		"TRASHCAN_LIST_RESTORE_URL" => sed_url("admin", "m=trashcan&a=restore&id=".$row['tr_id']."&".sed_xg())
+	));
+	
+	$t -> parse("ADMIN_TRASHCAN.TRASHCAN_LIST");
+	
 	$ii++;
 	}
-$adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$ii."</td></tr></table>";
+	
+$t->assign(array(
+	"TRASHCAN_CONFIGURATION_URL" => sed_url("admin", "m=config&n=edit&o=core&p=trash"),
+	"TRASHCAN_WIPEALL_URL" => sed_url("admin", "m=trashcan&a=wipeall&".sed_xg()),
+	"TRASHCAN_TOTAL" => $ii
+));	
+	
+$t -> parse("ADMIN_TRASHCAN");
+
+$adminmain .= $t -> text("ADMIN_TRASHCAN"); 
 
 ?>
