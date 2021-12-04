@@ -4,19 +4,9 @@ RewriteEngine On
 
 #RewriteBase /
 
-## -- Redirect from http to https
-#RewriteCond %{HTTP:X-Forwarded-Proto} !https
-#RewriteCond %{HTTPS} off
-#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
 
-#RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-#RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
- 
-## --
-RewriteCond %{REQUEST_FILENAME} -d [OR] 
-RewriteCond %{REQUEST_FILENAME} -f [OR] 
-RewriteCond %{REQUEST_FILENAME} -l 
-#RewriteRule ^(datas.*) index.php
-RewriteRule ^(.*)$ - [NC,L] 
-RewriteRule ^(.*)$ index.php [QSA,L]   
 </IfModule>
