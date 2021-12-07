@@ -84,7 +84,7 @@ if ($a=='send')
 	}
 elseif ($a=='done')
 	{
-	$message = "<div class=\"error\">".$L['plu_sent']."</div>";
+	$message = $L['plu_sent'];
 	unset($sender_email, $sender_name, $sender_subject, $sender_message, $sender_recip);
 	}
 

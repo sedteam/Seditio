@@ -4,11 +4,11 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 http://www.neocrome.net
-https://seditio.org
+http://www.seditio.org
 [BEGIN_SED]
 File=plugins/smtp/smtp.setup.php
 Version=178
-Updated=2017-dec-09
+Updated=2021-dec-06
 Type=Plugin
 Author=Amro
 Description=
@@ -16,10 +16,10 @@ Description=
 
 [BEGIN_SED_EXTPLUGIN]
 Code=smtp
-Name=SMTP Sender 1.0
+Name=SMTP Sender 2.0
 Description=SMTP mail sender for Seditio 17x
 Version=178
-Date=2017-dec-09
+Date=2021-dec-06
 Author=Amro
 Copyright=Amro
 Notes=
@@ -32,11 +32,14 @@ Lock_members=W12345A
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 smtp_active=01:select:yes,no:no:Enable SMTP mail sender
-smtp_host=02:string::mail.domain.com:SMTP host
-smtp_port=03:string::25:SMTP port
-smtp_login=04:string::noreply@domain.com:SMTP login
-smtp_pass=05:string::your pass:SMTP password
-smtp_from=06:string::noreply@domain.com:SMTP sender email
+smtp_host=02:string::smtp.test.ru:SMTP host
+smtp_port=03:string::465:SMTP port
+smtp_login=04:string::noreply@test.ru:SMTP login
+smtp_pass=05:string::ZdvXSikP:SMTP password
+smtp_from=06:string::noreply@test.ru:SMTP sender email
+smtp_from_title=07:string::RobotMail:Mail From title
+smtp_ssl=08:select:yes,no:yes:Use SSL?
+smtp_debug=09:select:yes,no:yes:Use Debug with log file?
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */
