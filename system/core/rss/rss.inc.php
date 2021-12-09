@@ -98,12 +98,7 @@ switch ($m)
 				{
 				$items[$i]['title'] = $L['rss_commentauthor']." ".$cfg['separator']." ".sed_cc($row1['com_author']);
 
-				$row1['com_text'] = sed_parse($row1['com_text'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $row1['com_text_ishtml']);
-				
-				if (!$row1['com_text_ishtml'] && $cfg['textmode']=='html')
-					{
-					$sql2 = sed_sql_query("UPDATE $db_com SET com_text_ishtml=1, com_text='".sed_sql_prep($row1['com_text'])."' WHERE com_id=".$row1['com_id']); 
-					}
+				$row1['com_text'] = sed_parse($row1['com_text']);
 
 				$items[$i]['description'] = $row1['com_text'];
 
@@ -127,7 +122,7 @@ switch ($m)
 
 	$rss_title = $L['rss_lastforums']." ".$cfg['separator']." ".$cfg['maintitle'];
 
-	$sql = sed_sql_query("SELECT p.fp_id, p.fp_text, p.fp_postername, p.fp_sectionid, p.fp_creation, p.fp_text_ishtml, t.ft_title, t.ft_desc, s.fs_title, s.fs_desc, s.fs_allowbbcodes, s.fs_allowsmilies   
+	$sql = sed_sql_query("SELECT p.fp_id, p.fp_text, p.fp_postername, p.fp_sectionid, p.fp_creation, t.ft_title, t.ft_desc, s.fs_title, s.fs_desc, s.fs_allowbbcodes, s.fs_allowsmilies   
 		FROM $db_forum_posts AS p JOIN $db_forum_topics AS t ON p.fp_topicid = t.ft_id JOIN $db_forum_sections AS s ON t.ft_sectionid=s.fs_id
 		WHERE t.ft_movedto=0 AND t.ft_mode=0 ".$where." ORDER BY p.fp_creation DESC LIMIT ".$cfg['rss_maxitems']);
 
@@ -187,7 +182,7 @@ switch ($m)
 			{ $catsub[] = $k; }
 		}
 
-	$sql = sed_sql_query("SELECT page_id, page_alias, page_type, page_title, page_text, page_text2, page_cat, page_date, page_text_ishtml FROM $db_pages 
+	$sql = sed_sql_query("SELECT page_id, page_alias, page_title, page_text, page_text2, page_cat, page_date FROM $db_pages 
 	WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') 
 	ORDER by page_date DESC LIMIT ".$cfg['rss_maxitems']);
 
@@ -202,14 +197,7 @@ switch ($m)
 
 		$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'], "", false, false) : sed_url("page", "al=".$row['page_alias'], "", false, false);
 
-		$ishtml_page = ($row['page_type']==1 || $row['page_text_ishtml']);
-
-		$row['page_text'] = sed_parse($row['page_text'], $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1, $ishtml_page);
-
-		if (!$row['page_text_ishtml'] && $cfg['textmode']=='html')
-			{
-			$sql2 = sed_sql_query("UPDATE $db_pages SET page_text_ishtml=1, page_type=1, page_text='".sed_sql_prep($row['page_text'])."', page_text2='".sed_sql_prep($row['page_text2'])."' WHERE page_id=".$row['page_id']);
-			}
+		$row['page_text'] = sed_parse($row['page_text']);
 
 		$row['page_text'] = sed_cutreadmore($row['page_text'], $row['page_pageurl']);
 
