@@ -63,7 +63,7 @@ else
 
 	$plugin_body .= "<form id=\"massmovetopics\" action=\"".sed_url("admin", "m=tools&p=massmovetopics&a=move")."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells striped\"><tr><td style=\"width:33%;\">";
-  $plugin_body .= "Move all the topics and posts from the section :</td><td>".$select_source."</td></tr><tr><td>";
+	$plugin_body .= "Move all the topics and posts from the section :</td><td>".$select_source."</td></tr><tr><td>";
 	$plugin_body .= "... to the section :</td><td>".$select_target."</td></tr></table>";
 	$plugin_body .= "<input type=\"submit\" class=\"submit btn\" value=\"".$L['Move']."\" />";
 	$plugin_body .= "</form>";

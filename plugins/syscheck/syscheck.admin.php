@@ -202,74 +202,71 @@ $color[0] = "#bc6262";
 $color[1] = "#62bc6a";
 
 foreach ($systemfiles as $file)
+	{
+	if (mb_substr($file,0, 1)=="*")
 		{
-
-		if (mb_substr($file,0, 1)=="*")
-		  {
-      $adminmain .= "</table><h4>".mb_substr($file,1, 255)." :</h4>";
-      $adminmain .= $table_header;;
-      }
-    else
-      {
-    $adminmain .= "<tr>";
-		$adminmain .= "<td>".$file."</td>";
+		$plugin_body .= "</table><h4>".mb_substr($file,1, 255)." :</h4>";
+		$plugin_body .= $table_header;;
+		}
+	else
+		{
+		$plugin_body .= "<tr>";
+		$plugin_body .= "<td>".$file."</td>";
 
 		if (file_exists($file))
 			{
 			$info = sed_infoget($file);
 			if (!empty($info['Error']))
-			  {
-        $adminmain .= "<td colspan=\"4\">".$info['Error']."</td>";
-        }
-      else
-        {
-        $bgcolor = ($info['Version']==$cfg['version']) ? $color[1] : $color[0];
-        $adminmain .= "<td>".$info['Type']."</td>";
-        $adminmain .= "<td>".$info['Description']."</td>";
-        $adminmain .= "<td style=\"background-color:".$bgcolor."!important; text-align:center;\">".$info['Version']."</td>";
-        $adminmain .= "<td style=\"text-align:center;\">".$info['Updated']."</td>";
-        }
+				{
+				$plugin_body .= "<td colspan=\"4\">".$info['Error']."</td>";
+				}
+			else
+				{
+				$bgcolor = ($info['Version']==$cfg['version']) ? $color[1] : $color[0];
+				$plugin_body .= "<td>".$info['Type']."</td>";
+				$plugin_body .= "<td>".$info['Description']."</td>";
+				$plugin_body .= "<td style=\"background-color:".$bgcolor."!important; text-align:center;\">".$info['Version']."</td>";
+				$plugin_body .= "<td style=\"text-align:center;\">".$info['Updated']."</td>";
+				}
 			}
 		else
 			{
-      $adminmain .= "<td colspan=\"4\">File not found !</td>";
-      }
-		$adminmain .= "</tr>";
-		  }
-		}
+			$plugin_body .= "<td colspan=\"4\">File not found !</td>";
+			}
+		$plugin_body .= "</tr>";
+	  }
+	}
 
-$adminmain .= "</table>";
+$plugin_body .= "</table>";
 
-$adminmain .= "<h4>Skin files (templates) :</h4>";
+$plugin_body .= "<h4>Skin files (templates) :</h4>";
 
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr>";
-$adminmain .= "<td class=\"coltop\" style=\"width:40%;\">Skin file</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:30%;\">Size (Bytes)</td>";
-$adminmain .= "</tr>";
+$plugin_body .= "<table class=\"cells striped\">";
+$plugin_body .= "<tr>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:40%;\">Skin file</td>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Size (Bytes)</td>";
+$plugin_body .= "</tr>";
 
 foreach ($skinfiles as $file)
 	{
 	$file = "skins/".$skin."/".$file;
-    $adminmain .= "<tr>";
-	$adminmain .= "<td>".$file."</td>";
+    $plugin_body .= "<tr>";
+	$plugin_body .= "<td>".$file."</td>";
 
 	if (file_exists($file))
        {
-       $adminmain .= "<td style=\"background-color:".$color[1]."!important; text-align:center;\">Present</td>";
-		$adminmain .= "<td style=\"text-align:right;\">".@filesize($file)."</td>";
+		$plugin_body .= "<td style=\"background-color:".$color[1]."!important; text-align:center;\">Present</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">".@filesize($file)."</td>";
        }
     else
        {
-       $adminmain .= "<td style=\"background-color:".$color[0]."!important; text-align:center;\">Missing !</td>";
-       $adminmain .= "<td style=\"text-align:right;\">0</td>";
+       $plugin_body .= "<td style=\"background-color:".$color[0]."!important; text-align:center;\">Missing !</td>";
+       $plugin_body .= "<td style=\"text-align:right;\">0</td>";
        }
-	$adminmain .= "</tr>";
+	$plugin_body .= "</tr>";
 	}
 
-$adminmain .= "</table>";
-
-
+$plugin_body .= "</table>";
 
 ?>
