@@ -369,9 +369,9 @@ function sed_build_catpath($cat, $mask)
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
 		{ 
-      if ($x != 'system') 
-        { $tmp[]= sprintf($mask, sed_url("list", "c=".$x), $sed_cat[$x]['title']); } 
-    }
+		if ($x != 'system') 
+			{ $tmp[]= sprintf($mask, sed_url("list", "c=".$x), $sed_cat[$x]['title']); } 
+		}
 
 	$result = is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : ''; 
 	return ($result);
@@ -389,41 +389,41 @@ function sed_build_catpath($cat, $mask)
 function sed_build_comments($code, $url, $display, $allow = TRUE)
 	{
 	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $skin, $flocation;
-	
+
 	$flocation = 'Comments';
-	
+
 	$n = sed_import('n', 'G', 'ALP');
 	$a = sed_import('a', 'G', 'ALP');
 	$b = sed_import('b', 'G', 'INT');
 	$quote = sed_import('quote','G','INT');
 	//$cm = sed_import('cm', 'G', 'INT');  
 	$d = sed_import('d', 'G', 'INT');
-	
+
 	$wd = (is_null($d) && empty($b)) ? TRUE : FALSE;
   
-  //fix for sed_url()
-  if (is_array($url)) 
-    { 
-    $url_part = $url['part']; 
-    $url_params = $url['params']; 
-    }
-  else
-    {
-    $url = str_replace('&amp;', '&', $url);  
-    $url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
-    $url_params = mb_substr($url, mb_strpos($url, '?')+1, mb_strlen($url));
-    }
-  //--------
+	//fix for sed_url()
+	if (is_array($url)) 
+		{ 
+		$url_part = $url['part']; 
+		$url_params = $url['params']; 
+		}
+	else
+		{
+		$url = str_replace('&amp;', '&', $url);  
+		$url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
+		$url_params = mb_substr($url, mb_strpos($url, '?')+1, mb_strlen($url));
+		}
+	//--------
 	$lurl = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
-  //-------- 
+	//-------- 
   
-  if (!empty($b))
-	{
+	if (!empty($b))
+		{
 		$before_after = ($cfg['commentsorder'] == "DESC") ? ">" : "<";		
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code' AND com_id ".$before_after." '$b'");
 		$com_before_after = sed_sql_result($sql,0,"COUNT(*)");
 		$d = $cfg['maxcommentsperpage'] * floor($com_before_after / $cfg['maxcommentsperpage']);
-	}	
+		}	
 
 	$d = empty($d) ? 0 : (int)$d;
 
@@ -488,96 +488,97 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				{      
 				sed_block($usr['allow_edit_com']);
 				if ((sed_sql_numrows($sql)>0) && ($usr['isowner_com'] || $usr['isadmin_com']))
+					{
+					if ($cfg['trash_comment'])
+						{ sed_trash_put('comment', $L['Comment']." #".$b." (".$row['com_author'].")", $b, $row); }
+
+					$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$b'");
+
+					if (mb_substr($row['com_code'], 0, 1) == 'p')
 						{
-						if ($cfg['trash_comment'])
-							{ sed_trash_put('comment', $L['Comment']." #".$b." (".$row['com_author'].")", $b, $row); }
-
-						$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$b'");
-
-						if (mb_substr($row['com_code'], 0, 1) == 'p')
-							{
-							$page_id = mb_substr($row['com_code'], 1, 10);
-							$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=".sed_get_comcount($row['com_code'])." WHERE page_id=".$page_id);
-							}
-						$com_grp = ($usr['isadmin']) ? "adm" : "usr";	
-						sed_log("Deleted comment #".$b." in '".$code."'", $com_grp);
+						$page_id = mb_substr($row['com_code'], 1, 10);
+						$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=".sed_get_comcount($row['com_code'])." WHERE page_id=".$page_id);
 						}
-					sed_redirect(sed_url($url_part, $url_params.$lurl, "", true));
-					exit;
+					$com_grp = ($usr['isadmin']) ? "adm" : "usr";	
+					sed_log("Deleted comment #".$b." in '".$code."'", $com_grp);
+					}
+				sed_redirect(sed_url($url_part, $url_params.$lurl, "", true));
+				exit;
 				}
 			}
-    if ($a == "edit")
-		{	          
-		$sql1 = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$b' LIMIT 1"); 		
-		sed_die(sed_sql_numrows($sql1) == 0);	
+			
+		if ($a == "edit")
+			{	          
+			$sql1 = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$b' LIMIT 1"); 		
+			sed_die(sed_sql_numrows($sql1) == 0);	
 
-		$row = sed_sql_fetchassoc($sql1);
+			$row = sed_sql_fetchassoc($sql1);
 
-		$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
-		$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);         
-		$usr['allow_edit_com'] = ($usr['isadmin'] || $usr['isowner_com']);   
-      
-		if (!$usr['allow_edit_com']) { $error_string .= $L['com_commenteditallowtime']."<br />"; }
+			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
+			$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);         
+			$usr['allow_edit_com'] = ($usr['isadmin'] || $usr['isowner_com']);   
+		  
+			if (!$usr['allow_edit_com']) { $error_string .= $L['com_commenteditallowtime']."<br />"; }
 
-		if ($n=='update')
-  			{
+			if ($n=='update')
+				{
 				sed_check_xg();    	
 				sed_shield_protect(); 
-        
-  			$rtext = sed_import('rtext','P','HTM');
-  
-  			/* == Hook for the plugins == */
-  			$extp = sed_getextplugins('comments.edit.update.first');
-  			if (is_array($extp))
-  				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-  			/* ===== */
-  
-  			$error_string .= (mb_strlen($rtext) < 2) ? $L['com_commenttooshort']."<br />" : '';
-  			$error_string .= (mb_strlen($rtext) > $cfg['maxcommentlenght']) ? $L['com_commenttoolong']."<br />" : '';
-  
-  			if (empty($error_string))
-  				{
-				sed_block($usr['allow_edit_com']);	
-				$sql3 = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($rtext)."' WHERE com_id='$b'"); 
-  
-  				/* == Hook for the plugins == */
-  					$extp = sed_getextplugins('comments.edit.update.done');
-  				if (is_array($extp))
-  					{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-  				/* ===== */
-				
-				unset($rtext);
-						
-  				$com_grp = ($usr['isadmin']) ? "adm" : "usr";	
-  				sed_log("Edited comment #".$b." in '".$code."'", $com_grp);          
-				sed_redirect(sed_url($url_part, $url_params.$lurl."&b=".$b, "#c".$b, true));
-  				exit;
-  				}
-        }
+			
+				$rtext = sed_import('rtext','P','HTM');
+	  
+				/* == Hook for the plugins == */
+				$extp = sed_getextplugins('comments.edit.update.first');
+				if (is_array($extp))
+					{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				/* ===== */
+	  
+				$error_string .= (mb_strlen($rtext) < 2) ? $L['com_commenttooshort']."<br />" : '';
+				$error_string .= (mb_strlen($rtext) > $cfg['maxcommentlenght']) ? $L['com_commenttoolong']."<br />" : '';
+	  
+				if (empty($error_string))
+					{
+					sed_block($usr['allow_edit_com']);	
+					$sql3 = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($rtext)."' WHERE com_id='$b'"); 
+	  
+					/* == Hook for the plugins == */
+						$extp = sed_getextplugins('comments.edit.update.done');
+					if (is_array($extp))
+						{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					/* ===== */
+					
+					unset($rtext);
+							
+					$com_grp = ($usr['isadmin']) ? "adm" : "usr";	
+					sed_log("Edited comment #".$b." in '".$code."'", $com_grp);          
+					sed_redirect(sed_url($url_part, $url_params.$lurl."&b=".$b, "#c".$b, true));
+					exit;
+					}
+				}
 
-        $t = new XTemplate(sed_skinfile('comments'));
-        
-    		/* == Hook for the plugins == */
-    			$extp = sed_getextplugins('comments.main');
-    		if (is_array($extp))
-    			{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-    		/* ===== */
-        
-      	if (!empty($error_string))
-      		{
-        		$t->assign("COMMENTS_ERROR_BODY",$error_string);
-        		$t->parse("COMMENTS.COMMENTS_ERROR");
-      		}
-        
-      	if ($usr['allow_edit_com'])
-    			{
+			$t = new XTemplate(sed_skinfile('comments'));
+			
+			/* == Hook for the plugins == */
+			$extp = sed_getextplugins('comments.main');
+			if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
+			
+			if (!empty($error_string))
+				{
+				$t->assign("COMMENTS_ERROR_BODY",$error_string);
+				$t->parse("COMMENTS.COMMENTS_ERROR");
+				}
+			
+			if ($usr['allow_edit_com'])
+				{
 				if ($usr['auth_write_com'])
 					{  			
 					$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "editcomment", "rtext", $L['Mypfs']) : '';
 					$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editcomment", "rtext", $L['SFS']) : '';					
 					$post_main = sed_textarea('rtext', $row['com_text'], 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
 					}
-        
+		
 				$t->assign(array(
 					"COMMENTS_EDIT_CODE" => $code,
 					"COMMENTS_EDIT_FORM_ID" => $row['com_id'],
@@ -588,7 +589,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					"COMMENTS_EDIT_FORM_TEXT" => $post_main,
 					"COMMENTS_EDIT_FORM_MYPFS" => $pfs
 				));
-      
+	  
 				if ($usr['auth_write_com'])
 					{
 
@@ -601,149 +602,150 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$t->parse("COMMENTS.COMMENTS_EDITCOMMENT");
 					} 
 				}  
-      }
-    else	
-      {
-      $error_string .= ($n=='added') ? $L['com_commentadded']."<br />" : '';
-  
-  		$t = new XTemplate(sed_skinfile('comments'));
-  
-  		/* == Hook for the plugins == */
-  			$extp = sed_getextplugins('comments.main');
-  		if (is_array($extp))
-  			{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-  		/* ===== */
-  		      
-    	if (!empty($error_string))
-    		{
-      		$t->assign("COMMENTS_ERROR_BODY",$error_string);
-      		$t->parse("COMMENTS.COMMENTS_ERROR");
-    		}
-
-		if ($usr['auth_write_com'] && $allow)
-  			{  
-			if ($quote>0)
-				{
-				$sqlq = sed_sql_query("SELECT com_id, com_author, com_text FROM $db_com WHERE com_id = '$quote' LIMIT 1");
-				if ($rowq = sed_sql_fetchassoc($sqlq))
-					{ 
-					$rtext = "<blockquote><a href=\"".sed_url($url_part, $url_params.$lurl, "#".$rowq['com_id'])."\">#".$rowq['com_id']."</a> <strong>".$rowq['com_author']." :</strong><br />".sed_cc($rowq['com_text'], ENT_QUOTES)."</blockquote><br />";
-					}
-				}  			
-  	
-  			$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
-  			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
-  			$post_main = sed_textarea('rtext', $rtext, 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
-  			}
-  
-		$t->assign(array(
-			"COMMENTS_CODE" => $code,
-			"COMMENTS_FORM_SEND" => sed_url($url_part, $url_params.$lurl."&n=send"),
-			"COMMENTS_FORM_AUTHOR" => $usr['name'],
-			"COMMENTS_FORM_AUTHORID" => $usr['id'],
-			"COMMENTS_FORM_TEXT" => $post_main,
-			"COMMENTS_FORM_MYPFS" => $pfs
-		));
-  
-  		if ($usr['auth_write_com'] && $allow)
-  			{
-  
-  			/* == Hook for the plugins == */
-  			$extp = sed_getextplugins('comments.newcomment.tags');
-  			if (is_array($extp))
-  				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-  			/* ===== */
-  
-  			$t->parse("COMMENTS.COMMENTS_NEWCOMMENT");
-  			}
-     
-		/* ===== */
-		
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com AS c
-				LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-				WHERE com_code='$code'");
-				
-		$totallines = sed_sql_result($sql, 0, "COUNT(*)");
-		$totalpages = ceil($totallines / $cfg['maxcommentsperpage']);
-			
-		if (($totalpages > 1) && $wd && ($cfg['commentsorder'] != "DESC")) { $d = ($totalpages-1)*$cfg['maxcommentsperpage']; }
-		
-		$currentpage= ceil($d / $cfg['maxcommentsperpage'])+1;  
-     
-		$pagination = sed_pagination(sed_url($url_part, $url_params.$lurl), $d, $totallines, $cfg['maxcommentsperpage']);		
-		list($pageprev, $pagenext) = sed_pagination_pn(sed_url($url_part, $url_params.$lurl), $d, $totallines, $cfg['maxcommentsperpage'], TRUE);
-		
-		/* ===== */
-		
-		$sql = sed_sql_query("SELECT c.*, u.user_id, u.user_avatar, u.user_maingrp FROM $db_com AS c
-				LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-				WHERE com_code='$code' ORDER BY com_id ".$cfg['commentsorder']." LIMIT $d, ".$cfg['maxcommentsperpage']);  
-
-		if (sed_sql_numrows($sql)>0)
+			}
+		else	
 			{
-			$i = 0;
-
-			/* === Hook - Part1 : Set === */
-			$extp = sed_getextplugins('comments.loop');
+			$error_string .= ($n=='added') ? $L['com_commentadded']."<br />" : '';
+	  
+			$t = new XTemplate(sed_skinfile('comments'));
+	  
+			/* == Hook for the plugins == */
+				$extp = sed_getextplugins('comments.main');
+			if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
-
-			while ($row = sed_sql_fetchassoc($sql))
+				  
+			if (!empty($error_string))
 				{
-				$row['com_text'] = sed_parse($row['com_text']);				  
-				$i++;
-				$com_author = sed_cc($row['com_author']);
-				$com_text = "<div id=\"blkcom_".$row['com_id']."\" >".$row['com_text']."</div>";
-        
-				$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
-				$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
-				$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60);        
-				$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? " - ".sed_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']).$L['com_gup'] : '';
-		
-				$com_quote = ($usr['id'] > 0) ? "<a href=\"".sed_url($url_part, $url_params.$lurl."&quote=".$row['com_id']."&".sed_xg())."#nc"."\" class=\"btn btn-adm\">".$L['Quote']."</a>&nbsp;" : "";
-				
-				$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ? "<a href=\"".sed_url($url_part, $url_params.$lurl."&a=edit&b=".$row['com_id']."&".sed_xg(), "#c".$row['com_id'])."\" title=\"".$L['Edit'].$allowed_time."\" class=\"btn btn-adm\">".$L['Edit']."</a>&nbsp;<a href=\"".sed_url($url_part, $url_params.$lurl."&n=delete&b=".$row['com_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Delete']."</a>&nbsp;".$L['Ip'].":".sed_build_ipsearch($row['com_authorip']) : '' ;
-				
-				$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author ;				
-				
-				$t-> assign(array(
-					"COMMENTS_ROW_ID" => $row['com_id'],
-					"COMMENTS_ROW_ORDER" => $i+$d,
-					"COMMENTS_ROW_URL" => sed_url($url_part, $url_params.$lurl."&b=".$row['com_id'], "#c".$row['com_id']),
-					"COMMENTS_ROW_AUTHOR" => $com_authorlink,
-					"COMMENTS_ROW_AUTHORID" => $row['com_authorid'],
-					"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
-					"COMMENTS_ROW_TEXT" => $com_text,
-					"COMMENTS_ROW_DATE" => sed_build_date($cfg['dateformat'], $row['com_date']),
-					"COMMENTS_ROW_ODDEVEN" => sed_build_oddeven($i),
-					"COMMENTS_ROW_ADMIN" => $com_quote.$com_admin
-						));
+				$t->assign("COMMENTS_ERROR_BODY",$error_string);
+				$t->parse("COMMENTS.COMMENTS_ERROR");
+				}
 
-				/* === Hook - Part2 : Include === */
+			if ($usr['auth_write_com'] && $allow)
+				{  
+				if ($quote>0)
+					{
+					$sqlq = sed_sql_query("SELECT com_id, com_author, com_text FROM $db_com WHERE com_id = '$quote' LIMIT 1");
+					if ($rowq = sed_sql_fetchassoc($sqlq))
+						{ 
+						$rtext = "<blockquote><a href=\"".sed_url($url_part, $url_params.$lurl, "#".$rowq['com_id'])."\">#".$rowq['com_id']."</a> <strong>".$rowq['com_author']." :</strong><br />".$rowq['com_text']."</blockquote><br />";
+						}
+					}  			
+		
+				$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
+				$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
+				$post_main = sed_textarea('rtext', $rtext, 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
+				}
+	  
+			$t->assign(array(
+				"COMMENTS_CODE" => $code,
+				"COMMENTS_FORM_SEND" => sed_url($url_part, $url_params.$lurl."&n=send"),
+				"COMMENTS_FORM_AUTHOR" => $usr['name'],
+				"COMMENTS_FORM_AUTHORID" => $usr['id'],
+				"COMMENTS_FORM_TEXT" => $post_main,
+				"COMMENTS_FORM_MYPFS" => $pfs
+			));
+	  
+			if ($usr['auth_write_com'] && $allow)
+				{
+	  
+				/* == Hook for the plugins == */
+				$extp = sed_getextplugins('comments.newcomment.tags');
 				if (is_array($extp))
 					{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
-
-				$t->parse("COMMENTS.COMMENTS_ROW");
+	  
+				$t->parse("COMMENTS.COMMENTS_NEWCOMMENT");
 				}
-      }
-		elseif ($allow)
-			{
-			$t-> assign(array(
-				"COMMENTS_EMPTYTEXT" => $L['com_nocommentsyet']
-					));
-			$t->parse("COMMENTS.COMMENTS_EMPTY");
-			}
+		 
+			/* ===== */
 			
-    /* ==== sed 173 */
-    if (!$allow) 
-      {      
-			$t-> assign(array(
-				"COMMENTS_DISABLETEXT" => $L['com_disable']
+			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com AS c
+					LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
+					WHERE com_code='$code'");
+					
+			$totallines = sed_sql_result($sql, 0, "COUNT(*)");
+			$totalpages = ceil($totallines / $cfg['maxcommentsperpage']);
+				
+			if (($totalpages > 1) && $wd && ($cfg['commentsorder'] != "DESC")) { $d = ($totalpages-1)*$cfg['maxcommentsperpage']; }
+			
+			$currentpage= ceil($d / $cfg['maxcommentsperpage'])+1;  
+		 
+			$pagination = sed_pagination(sed_url($url_part, $url_params.$lurl), $d, $totallines, $cfg['maxcommentsperpage']);		
+			list($pageprev, $pagenext) = sed_pagination_pn(sed_url($url_part, $url_params.$lurl), $d, $totallines, $cfg['maxcommentsperpage'], TRUE);
+			
+			/* ===== */
+			
+			$sql = sed_sql_query("SELECT c.*, u.user_id, u.user_avatar, u.user_maingrp FROM $db_com AS c
+					LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
+					WHERE com_code='$code' ORDER BY com_id ".$cfg['commentsorder']." LIMIT $d, ".$cfg['maxcommentsperpage']);  
+
+			if (sed_sql_numrows($sql)>0)
+				{
+				$i = 0;
+
+				/* === Hook - Part1 : Set === */
+				$extp = sed_getextplugins('comments.loop');
+				/* ===== */
+
+				while ($row = sed_sql_fetchassoc($sql))
+					{
+					$row['com_text'] = sed_parse($row['com_text']);				  
+					$i++;
+					$com_author = sed_cc($row['com_author']);
+					$com_text = "<div id=\"blkcom_".$row['com_id']."\" >".$row['com_text']."</div>";
+			
+					$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
+					$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
+					$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60);        
+					$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? " - ".sed_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']).$L['com_gup'] : '';
+			
+					$com_quote = ($usr['id'] > 0) ? "<a href=\"".sed_url($url_part, $url_params.$lurl."&quote=".$row['com_id']."&".sed_xg())."#nc"."\" class=\"btn btn-adm\">".$L['Quote']."</a>&nbsp;" : "";
+					
+					$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ? "<a href=\"".sed_url($url_part, $url_params.$lurl."&a=edit&b=".$row['com_id']."&".sed_xg(), "#c".$row['com_id'])."\" title=\"".$L['Edit'].$allowed_time."\" class=\"btn btn-adm\">".$L['Edit']."</a>&nbsp;<a href=\"".sed_url($url_part, $url_params.$lurl."&n=delete&b=".$row['com_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Delete']."</a>&nbsp;".$L['Ip'].":".sed_build_ipsearch($row['com_authorip']) : '' ;
+					
+					$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author ;				
+					
+					$t-> assign(array(
+						"COMMENTS_ROW_ID" => $row['com_id'],
+						"COMMENTS_ROW_ORDER" => $i+$d,
+						"COMMENTS_ROW_URL" => sed_url($url_part, $url_params.$lurl."&b=".$row['com_id'], "#c".$row['com_id']),
+						"COMMENTS_ROW_AUTHOR" => $com_authorlink,
+						"COMMENTS_ROW_AUTHORID" => $row['com_authorid'],
+						"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
+						"COMMENTS_ROW_TEXT" => $com_text,
+						"COMMENTS_ROW_DATE" => sed_build_date($cfg['dateformat'], $row['com_date']),
+						"COMMENTS_ROW_ODDEVEN" => sed_build_oddeven($i),
+						"COMMENTS_ROW_ADMIN" => $com_quote.$com_admin
 					));
-			$t->parse("COMMENTS.COMMENTS_DISABLE");      
-      }
-    /* ===           */			
-     }
+
+					/* === Hook - Part2 : Include === */
+					if (is_array($extp))
+						{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					/* ===== */
+
+					$t->parse("COMMENTS.COMMENTS_ROW");
+					}
+				}
+			elseif ($allow)
+				{
+				$t-> assign(array(
+					"COMMENTS_EMPTYTEXT" => $L['com_nocommentsyet']
+						));
+				$t->parse("COMMENTS.COMMENTS_EMPTY");
+				}
+				
+			/* === sed 173 */
+			if (!$allow) 
+				{      
+				$t-> assign(array(
+					"COMMENTS_DISABLETEXT" => $L['com_disable']
+				));
+				$t->parse("COMMENTS.COMMENTS_DISABLE");      
+				}
+			/* === */			
+			}
+		
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('comments.tags');
 		if (is_array($extp))
@@ -751,14 +753,14 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		/* ===== */
 
 		/* ====== Pagination Sed 173 ======= */
-    $t-> assign(array(		
-		"COMMENTS_PAGINATION" => $pagination,
-		"COMMENTS_PAGEPREV" => $pageprev,
-		"COMMENTS_PAGENEXT" => $pagenext
-		  ));
+		$t-> assign(array(		
+			"COMMENTS_PAGINATION" => $pagination,
+			"COMMENTS_PAGEPREV" => $pageprev,
+			"COMMENTS_PAGENEXT" => $pagenext
+		));
 		/* ============== */
         
-    $t->parse("COMMENTS");
+		$t->parse("COMMENTS");
 		$res_display = $t->text("COMMENTS");
 		}
 	else
@@ -1140,17 +1142,17 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	if ($cfg['disable_ratings'] || !$usr['auth_read_rat'])
 		{ return (array('','')); }
   
-  if (is_array($url)) //fix for sed_url()
-    { 
-    $url_part = $url['part']; 
-    $url_params = $url['params']; 
-    }
-  else
-    {
-    $url = str_replace('&amp;', '&', $url);  
-    $url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
-    $url_params = mb_substr($url, mb_strpos($url, '?')+1, mb_strlen($url));
-    }
+	if (is_array($url)) //fix for sed_url()
+		{ 
+		$url_part = $url['part']; 
+		$url_params = $url['params']; 
+		}
+	else
+		{
+		$url = str_replace('&amp;', '&', $url);  
+		$url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
+		$url_params = mb_substr($url, mb_strpos($url, '?')+1, mb_strlen($url));
+		}
   
 	//----------------
     
@@ -1241,17 +1243,17 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		}
 
 	$res = "<div class=\"rating-box\" id=\"rat-".$code."\"><ul class=\"rating s".$rating_cntround."\">\n";
-  for($i = 1; $i <= 10; $i++) 
-    {
+	for($i = 1; $i <= 10; $i++) 
+		{
 		$onclick = "javascript:sedjs.ajax.bind({'url': '".sed_url($url_part, $url_params."&ratings=1&display=1&ina=send&ajax=1&newrate=".$i."&".sed_xg())."', 'format':  'text', 'method':  'POST', 'update':  'rat-".$code."', 'loading': 'rat-".$code."'});";
 		$res .= "<li class=\"s".$i."\"><a href=\"javascript:void(0);\" onClick=\"".$onclick."\" title=\"".$i." - ".$L['rat_choice'.$i]."\">".$i." - ".$L['rat_choice'.$i]."</a></li>\n";
-	}	
+		}	
 	$res .= "</ul></div>";
 	
 	if (($usr['id'] == 0) || ($alr_rated > 0) || !$cfg['ajax'])  
 		{
 		$res = "<a href=\"".sed_url($url_part, $url_params."&ratings=1")."\"><img src=\"skins/".$usr['skin']."/img/system/vote".$rating_cntround.".gif\" alt=\"\" /></a>";
-	  }
+		}
 	
 	sed_ajax_flush($res, $ajax);  // AJAX Output
 
@@ -1262,9 +1264,9 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		
 	$votedcasted = ($ina == 'added') ? 1 : 0;
 
-  for($i = 1; $i <= 10; $i++) 
-    {	
-		$rate_form .= "<input type=\"radio\" class=\"radio\" name=\"newrate\" value=\"".$i."\" /><img src=\"skins/".$usr['skin']."/img/system/vote".$i.".gif\" alt=\"\" /> ".$i." - ".$L['rat_choice'.$i]."<br />";
+	for($i = 1; $i <= 10; $i++) 
+		{	
+		$rate_form .= "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"newrate_".$i."\" name=\"newrate\" value=\"".$i."\"><label for=\"newrate_".$i."\"></label></span><img src=\"skins/".$usr['skin']."/img/system/vote".$i.".gif\" alt=\"\" /> ".$i." - ".$L['rat_choice'.$i]."<br />";
 		}
 	
 	if ($usr['id'] > 0)
@@ -1322,28 +1324,28 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		"RATINGS_AVERAGEIMG" => $rating_averageimg,
 		"RATINGS_VOTERS" => $rating_voters,
 		"RATINGS_SINCE" => $rating_since
-			));
+	));
 	
 	
 	if ($usr['id']>0 && $votedcasted && $allow)
 		{
 		$t->assign(array(
 			"RATINGS_EXTRATEXT" => $L['rat_votecasted'],
-				));
+		));
 		$t->parse("RATINGS.RATINGS_EXTRA");
 		}
 	elseif ($usr['id']>0 && $alreadyvoted && $allow)
 		{
 		$t->assign(array(
 			"RATINGS_EXTRATEXT" => $rating_uservote,
-				));
+		));
 		$t->parse("RATINGS.RATINGS_EXTRA");
 		}
 	elseif ($usr['id']==0 && $allow)
 		{
 		$t->assign(array(
 			"RATINGS_EXTRATEXT" => $L['rat_registeredonly'],
-				));
+		));
 		$t->parse("RATINGS.RATINGS_EXTRA");
 		}
 	
@@ -1353,7 +1355,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 			"RATINGS_NEWRATE_FORM_SEND" => sed_url($url_part, $url_params."&ratings=1&ina=send"),
 			"RATINGS_NEWRATE_FORM_VOTER" => $usr['name'],
 			"RATINGS_NEWRATE_FORM_RATE" => $rate_form
-				));
+		));
 		$t->parse("RATINGS.RATINGS_NEWRATE");
 		}
 		
@@ -1362,7 +1364,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	  {      
 		$t-> assign(array(
 			"RATINGS_DISABLETEXT" => $L['rat_disable']
-				));
+		));
 		$t->parse("RATINGS.RATINGS_DISABLE");      
 	  }
 	/* ===   	

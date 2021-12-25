@@ -130,7 +130,7 @@ switch($m)
 		$cfg_size = filesize($cfg['config_file']);
 		$res .= "Size of the file : ".$cfg_size." bytes.<br />";
 		$res .= "<span class=\"yes\">".$L['install_looks_chmod']."</span>";
-		@chmod($cfg['config_file'] ,0444);
+		@chmod($cfg['config_file'], 0444);
 
 		// ---------------------------------------
 
@@ -231,9 +231,9 @@ switch($m)
 
 		$res .= "<span class=\"yes\">".$L['install_done']."</span>";
 
-    $res .= "<form name=\"install\" action=\"".sed_url("install", "m=plugins")."\" method=\"post\">";
-    $res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_toplugins']."\">";
-    $res .= "</form>";
+		$res .= "<form name=\"install\" action=\"".sed_url("install", "m=plugins")."\" method=\"post\">";
+		$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_toplugins']."\">";
+		$res .= "</form>";
 
 		}
 	else
@@ -246,18 +246,18 @@ switch($m)
 // -----------------------------------------------
 
 	case 'plugins':
-  
-  $step = 4;
-  
-  $res .= "<h3>".$L['install_plugins']." :</h3>";
-  $res .= $L['install_optional_plugins'];
-  $res .= "<form name=\"install\" action=\"".sed_url("install", "m=plinst")."\" method=\"post\">";
-  $res .= "<table class=\"cells striped\">";
-  $res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">".$L['install_plugins']."</td>";
-  $res .= "<td style=\"width:10%;\" class=\"coltop\">".$L['install_install']."</td>";
-  $res .= "</tr>";  
 
-  $handle=opendir("plugins");
+	$step = 4;
+
+	$res .= "<h3>".$L['install_plugins']." :</h3>";
+	$res .= $L['install_optional_plugins'];
+	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=plinst")."\" method=\"post\">";
+	$res .= "<table class=\"cells striped\">";
+	$res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">".$L['install_plugins']."</td>";
+	$res .= "<td style=\"width:10%;\" class=\"coltop\">".$L['install_install']."</td>";
+	$res .= "</tr>";  
+
+	$handle=opendir("plugins");
 	while ($f = readdir($handle))
 		{
 		if (!is_file($f) && $f!='.' && $f!='..' && $f!='code')
@@ -266,22 +266,22 @@ switch($m)
 	closedir($handle);
 	sort($plugins);
   
-  foreach($plugins as $k => $v)
-	 {
-	$extplugin_info = "plugins/".$v."/".$v.".setup.php";
-	$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-	$checked = ($info['Installer_skip']==1) ? '' : "checked=\"checked\"";
-	$disabled = '';
-       
-	$disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
-	
-	$res .= "<tr><td style=\"width:6%; text-align:center;\">";
-    $res .= sed_plugin_icon($v);  
-    $res .= "</td><td><strong>".$info['Name']."</strong><br /><spab class=\"desc\">".$info['Description']."</span></td>";
-    $res .= "<td style=\"width:6%; text-align:center;\">";
-  	$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"pl[]\" value=\"".$v."\" ".$checked." ".$disabled." />";
-    $res .= "</td></tr>";
-    }
+	foreach($plugins as $k => $v)
+	{
+		$extplugin_info = "plugins/".$v."/".$v.".setup.php";
+		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+		$checked = ($info['Installer_skip']==1) ? '' : "checked=\"checked\"";
+		$disabled = '';
+
+		$disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
+
+		$res .= "<tr><td style=\"width:6%; text-align:center;\">";
+		$res .= sed_plugin_icon($v);  
+		$res .= "</td><td><strong>".$info['Name']."</strong><br /><spab class=\"desc\">".$info['Description']."</span></td>";
+		$res .= "<td style=\"width:6%; text-align:center;\">";
+		$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"pl[]\" value=\"".$v."\" ".$checked." ".$disabled." />";
+		$res .= "</td></tr>";
+	}
   
 	$res .= "</table>";  
 	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_now']."\">";
@@ -293,47 +293,46 @@ switch($m)
 
 	case 'plinst':
 
-  $step = 5;
+	$step = 5;
 
-  $pl = sed_import('pl', 'P', 'ARR');
-  $res .= "<h3>".$L['install_installing_plugins']."</h3>";
-  $j = 0;
-  unset($log);
+	$pl = sed_import('pl', 'P', 'ARR');
+	$res .= "<h3>".$L['install_installing_plugins']."</h3>";
+	$j = 0;
+	unset($log);
 
-  if (!$sed_groups )
-	{
-	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
-
-	if (sed_sql_numrows($sql)>0)
+	if (!$sed_groups )
 		{
-		while ($row = sed_sql_fetchassoc($sql))
+		$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
+		if (sed_sql_numrows($sql)>0)
 			{
-			$sed_groups[$row['grp_id']] = array (
-					'id' => $row['grp_id'],
-					'alias' => $row['grp_alias'],
-					'level' => $row['grp_level'],
-					'disabled' => $row['grp_disabled'],
-					'hidden' => $row['grp_hidden'],
-					'state' => $row['grp_state'],
-					'title' => sed_cc($row['grp_title']),
-					'desc' => sed_cc($row['grp_desc']),
-					'icon' => $row['grp_icon'],
-					'pfs_maxfile' => $row['grp_pfs_maxfile'],
-					'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
-					'ownerid' => $row['grp_ownerid']
-					);
+			while ($row = sed_sql_fetchassoc($sql))
+				{
+				$sed_groups[$row['grp_id']] = array (
+						'id' => $row['grp_id'],
+						'alias' => $row['grp_alias'],
+						'level' => $row['grp_level'],
+						'disabled' => $row['grp_disabled'],
+						'hidden' => $row['grp_hidden'],
+						'state' => $row['grp_state'],
+						'title' => sed_cc($row['grp_title']),
+						'desc' => sed_cc($row['grp_desc']),
+						'icon' => $row['grp_icon'],
+						'pfs_maxfile' => $row['grp_pfs_maxfile'],
+						'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
+						'ownerid' => $row['grp_ownerid']
+				);
+				}
 			}
 		}
-  }
   
-  foreach($pl as $k => $v)
+	foreach($pl as $k => $v)
 	{
 		$j++;
 		$extplugin_info = "plugins/".$v."/".$v.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 		$res .= "- Installing : ".$info['Name']."<br />";
 		$log .= sed_plugin_install($v);
-    }
+	}
 
 	$res .= "<br />".$j." ".$L['install_installed_plugins'];
 	$res .= "<a onclick=\"return toggleblock('logf')\" href=\"#\">".$L['install_display_log']."</a>).<br />";
@@ -373,8 +372,6 @@ switch($m)
 	case 'param':
 
 	$step = 2;
-
-
 
 	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=config")."\" method=\"post\">";
 
@@ -500,21 +497,21 @@ switch($m)
 
 	break;
 	
-  default:
+	default:
   
-  $step = 0;
-  
-  $res .= "<h3>".$L['install_language installation']."</h3>";
-	
+	$step = 0;
+
+	$res .= "<h3>".$L['install_language installation']."</h3>";
+
 	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=onestep")."\" method=\"post\">";
-  $res .= "<table style=\"width:100%;\" class=\"cells\">";	
+	$res .= "<table style=\"width:100%;\" class=\"cells\">";	
 
 	$res .= "<tr><td style=\"width:196px;\">".$L['install_select_language installation']."</td><td>";
 	$res .= sed_selectbox_lang_install('', 'langinstall')."</td></tr>";
 
 	$res .= "</table>";
-	
-	
+
+
 	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_nextstep']."\">";
 	$res .= "</form>";
   
