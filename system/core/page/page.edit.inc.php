@@ -197,9 +197,11 @@ if ($a=='update')
 			$sys['catcode'] = $rpagecat; //new in v175
       
 			sed_log("Edited page #".$id,'adm');
+						
+			$url_redir = (empty($rpagealias)) ? sed_url("page", "id=".$id, "", true) : sed_url("page", "al=".$rpagealias, "", true);
 			
 			if (defined('SED_ADMIN')) { sed_redirect(sed_url("admin", "m=page&s=manager&c=".$rpagecat."&msg=917", "", true)); }
-			else { sed_redirect(sed_url("page", "id=".$id, "", true)); }
+			else { sed_redirect($url_redir); }			
 			
 			exit;
 			}

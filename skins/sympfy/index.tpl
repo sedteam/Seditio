@@ -40,7 +40,7 @@
 
 <!-- END: SLIDER -->
 
-<main id="home">
+<main id="home" class="{SLIDER_NOACTIVE}">
 	
 	<div class="container">
 	

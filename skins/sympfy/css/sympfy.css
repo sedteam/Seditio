@@ -759,8 +759,8 @@ ul {
 	padding:40px 0;
 }
 
-#home-noslider {
-	padding:160px 0 40px 0;
+.home-noslider {
+	padding:160px 0 40px 0!important;
 }
 
 #list {
@@ -1097,6 +1097,28 @@ ul.inline-menu li.active a {
 
 .sidebar-title {
 	padding-bottom:15px;
+}
+
+/*-----------------------------------------*/
+/***** COMMENTS, RATINGS AND OTHER BOX *****/
+/*-----------------------------------------*/
+
+.page-comments {
+    margin-top: 24px;
+}
+
+.page-ratings {
+    margin-top: 24px;	
+}
+
+.box-title {
+	padding-bottom:15px;
+}
+
+.box-title h3 {
+	margin: 0;
+    font-size: 1.5em;
+    font-weight: 500;
 }
 
 /*-----------------------------------------*/

@@ -127,5 +127,11 @@ if (sed_sql_numrows($sql) > 0)
 	));
 
 	}
+else {
+	$t-> assign(array(
+		"SLIDER_NOACTIVE" => "home-noslider" 
+	));	
+}
+
 
 ?>

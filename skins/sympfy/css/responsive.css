@@ -105,8 +105,9 @@
 	#page,
 	#system,
 	#plugins,
-	#forums	{
-		padding-top: 104px;
+	#forums,
+	.home-noslider {
+		padding-top: 104px!important;
 	}	
 
 	.post-sidebar-small-item .post-title h3 {

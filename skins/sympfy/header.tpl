@@ -4,6 +4,7 @@
 		<title>{HEADER_TITLE}</title>
 		{HEADER_METAS}
 		{HEADER_COMPOPUP}
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="skins/{PHP.skin}/css/framework.css" type="text/css" rel="stylesheet" />
 		<link href="skins/{PHP.skin}/css/fonts.css" type="text/css" rel="stylesheet" />
 		<link href="skins/{PHP.skin}/css/plugins.css" type="text/css" rel="stylesheet" />

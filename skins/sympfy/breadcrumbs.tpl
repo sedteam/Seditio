@@ -8,7 +8,7 @@
 				<meta itemprop="position" content="{BREADCRUMB_POSITION}">
 			</a>
 		</li>
-		<!-- END: BREADCRUMBS_LIST -->				
+		<!-- END: BREADCRUMBS_LIST -->
 	</ol>
 </div>
 <!-- END: BREADCRUMBS -->

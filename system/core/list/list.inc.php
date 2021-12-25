@@ -48,6 +48,11 @@ if (count($extrafields) > 0)
 
 $sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
 
+if (!array_key_exists($c, $sed_cat) && !($c=='all'))
+  {
+    sed_die();
+  }
+
 if ($c=='all' || $c=='system')
 	{
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');

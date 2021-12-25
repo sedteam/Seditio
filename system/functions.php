@@ -574,8 +574,8 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				if ($usr['auth_write_com'])
 					{  			
 					$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "editcomment", "rtext", $L['Mypfs']) : '';
-					$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editcomment", "rtext", $L['SFS']) : '';
-					$post_main = "<textarea name=\"rtext\" rows=\"6\" cols=\"".$cfg['textarea_default_width']."\">".sed_cc($row['com_text'], ENT_QUOTES)."</textarea> ".$pfs;
+					$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editcomment", "rtext", $L['SFS']) : '';					
+					$post_main = sed_textarea('rtext', $row['com_text'], 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
 					}
         
 				$t->assign(array(
@@ -633,7 +633,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
   	
   			$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
   			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
-  			$post_main = "<textarea name=\"rtext\" rows=\"6\" cols=\"".$cfg['textarea_default_width']."\">".$rtext."</textarea> ".$pfs;
+  			$post_main = sed_textarea('rtext', $rtext, 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
   			}
   
 		$t->assign(array(

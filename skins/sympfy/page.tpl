@@ -63,9 +63,23 @@
 					
 				</div>	
 				
-				<div class="comments"> 
+				<div class="page-comments"> 
 				
+					<div class="box-title">
+						<h3>{PHP.skinlang.page.Comments} <span class="comments-amount">{PAGE_COMMENTS}</span></h3>
+					</div>
 					
+					{PAGE_COMMENTS_DISPLAY}				
+				
+				</div>
+				
+				<div class="page-ratings"> 
+				
+					<div class="box-title">
+						<h3>{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</h3>
+					</div>
+					
+					{PAGE_RATINGS_DISPLAY}
 				
 				</div>
 
