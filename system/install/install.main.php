@@ -25,7 +25,7 @@ if (!empty($langinstall)) { $_SESSION['ilang'] = $langinstall;
 } elseif (isset($_SESSION['ilang'])) { $langinstall = $_SESSION['ilang'];
 } else { $langinstall = "en"; }
 
-require ('system/install/lang/'.$langinstall.'/install.'.$langinstall.'.lang.php');
+require(SED_ROOT . '/system/install/lang/'.$langinstall.'/install.'.$langinstall.'.lang.php');
 
 /* === === === */
 
@@ -39,11 +39,19 @@ mb_internal_encoding('UTF-8');
 unset($res, $cfg_data, $step);
 $m = sed_import('m','G','ALP',8);
 
+$sys['secure'] = sed_is_ssl();
+$sys['scheme'] = $sys['secure'] ? 'https' : 'http';
+$sys['host'] = $_SERVER['HTTP_HOST'];
+$sys['dir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : "/"; 
+if ($sys['dir_uri'][mb_strlen($sys['dir_uri']) - 1] != '/') { $sys['dir_uri'] .= '/'; }   
+$sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['dir_uri'];
+
 // ------------------------------------
 
 $disp_header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
 $disp_header .= '<html xmlns="http://www.w3.org/1999/xhtml">';
 $disp_header .= '<head>';
+$disp_header .= '<base href="'.$sys['abs_url'].'" />';
 $disp_header .= '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />';
 $disp_header .= '<meta name="description" content="'.$L['install_title'].'" />';
 $disp_header .= "<script type=\"text/javascript\">  <!--
@@ -105,7 +113,7 @@ switch($m)
 	$defaultskin = sed_import('defaultskin','P','TXT',32);
 	$defaultlang = sed_import('defaultlang','P','ALP',2);
 
-	require ('system/install/install.config.php');
+	require(SED_ROOT . '/system/install/install.config.php');
 
 	$cfg_isup = TRUE;
 
@@ -134,7 +142,7 @@ switch($m)
 		$connection_id = sed_sql_connect($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb);
 		$cfg['mysqldb'] = $sqldbprefix;
 		sed_sql_set_charset($connection_id, 'utf8');
-		require ('system/install/install.database.php');
+		require(SED_ROOT . '/system/install/install.database.php');
 
 		define('SED_ADMIN',TRUE);
 		unset($query);
@@ -223,7 +231,7 @@ switch($m)
 
 		$res .= "<span class=\"yes\">".$L['install_done']."</span>";
 
-    $res .= "<form name=\"install\" action=\"install.php?m=plugins\" method=\"post\">";
+    $res .= "<form name=\"install\" action=\"".sed_url("install", "m=plugins")."\" method=\"post\">";
     $res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_toplugins']."\">";
     $res .= "</form>";
 
@@ -243,7 +251,7 @@ switch($m)
   
   $res .= "<h3>".$L['install_plugins']." :</h3>";
   $res .= $L['install_optional_plugins'];
-  $res .= "<form name=\"install\" action=\"install.php?m=plinst\" method=\"post\">";
+  $res .= "<form name=\"install\" action=\"".sed_url("install", "m=plinst")."\" method=\"post\">";
   $res .= "<table class=\"cells striped\">";
   $res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">".$L['install_plugins']."</td>";
   $res .= "<td style=\"width:10%;\" class=\"coltop\">".$L['install_install']."</td>";
@@ -334,7 +342,7 @@ switch($m)
 
 	sed_stat_create('installed', 1);
 
-	$res .= "<form name=\"install\" action=\"install.php?m=home\" method=\"post\">";
+	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=home")."\" method=\"post\">";
 	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_contine_homepage']."\">";
 	$res .= "</form>";
   
@@ -368,7 +376,7 @@ switch($m)
 
 
 
-	$res .= "<form name=\"install\" action=\"install.php?m=config\" method=\"post\">";
+	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=config")."\" method=\"post\">";
 
 	$res .= "<h3>".$L['install_database_setup']."</h3>";
 
@@ -480,13 +488,13 @@ switch($m)
 	$res .= (extension_loaded('mysqli')) ? '<span class="yes">'.$L['install_available'].'</span>' : '<span class="no">'.$L['install_missing'].'</span>';
 	$res .= "</td></tr>";
 
-	$res .= "<tr><td colspan=\"2\" style=\"padding-top:16px; text-align:center;\">[ <a href=\"install.php\">".$L['install_refresh']."</a> ]</td></tr>";
+	$res .= "<tr><td colspan=\"2\" style=\"padding-top:16px; text-align:center;\">[ <a href=\"".sed_url("install")."\">".$L['install_refresh']."</a> ]</td></tr>";
 	$res .= "</table>";
 
 	$res .= "</td></tr>";
 	$res .= "</table>";
 
-	$res .= "<form name=\"install\" action=\"install.php?m=param\" method=\"post\">";
+	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=param")."\" method=\"post\">";
 	$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"".$L['install_nextstep']."\">";
 	$res .= "</form>";
 
@@ -498,7 +506,7 @@ switch($m)
   
   $res .= "<h3>".$L['install_language installation']."</h3>";
 	
-	$res .= "<form name=\"install\" action=\"install.php?m=onestep\" method=\"post\">";
+	$res .= "<form name=\"install\" action=\"".sed_url("install", "m=onestep")."\" method=\"post\">";
   $res .= "<table style=\"width:100%;\" class=\"cells\">";	
 
 	$res .= "<tr><td style=\"width:196px;\">".$L['install_select_language installation']."</td><td>";

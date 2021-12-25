@@ -21,6 +21,12 @@ $sed_urlrewrite = array(
          'cond' => '#^/datas/resized/(.+)#',
          'rule' => 'system/core/resizer/resizer.php?file=$1'
     ),
+	
+    /*  Installation rewriting */
+    array(
+         'cond' => '#^/install(/?)$#',
+         'rule' => 'system/install/install.php'
+    ),	
 
     /*  Captcha rewriting */
     array(

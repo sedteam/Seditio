@@ -22,11 +22,11 @@ $location = 'Home';
 $z = 'index';
 
 require(SED_ROOT . '/system/functions.php');
-@include('datas/config.php');
+@include(SED_ROOT . '/datas/config.php');
 
 if (empty($cfg['mysqlhost']) && empty($cfg['mysqldb']))
 	{
-	header("Location: install.php");
+	sed_redirect(sed_url("install", "", "", true));
 	exit;
 	}
 

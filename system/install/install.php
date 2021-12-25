@@ -25,7 +25,7 @@ $z = 'install';
 error_reporting(E_ALL ^ E_NOTICE);
 require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/system/functions.admin.php');
-@include('datas/config.php');
+@include(SED_ROOT . '/datas/config.php');
 
 if (!empty($cfg['mysqlhost']) || !empty($cfg['mysqldb']))
 	{
@@ -35,11 +35,13 @@ if (!empty($cfg['mysqlhost']) || !empty($cfg['mysqldb']))
 	
 	if (sed_stat_get('installed')==5)
 		{
-		header("Location: index.php");
+		sed_redirect(sed_url("index", "", "", true));
 		exit;
 		}
 	}
 
-require('install.main.php');
+$cfg['sefurls'] = TRUE;
+
+require(SED_ROOT . '/system/install/install.main.php');
 
 ?>

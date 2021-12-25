@@ -14,6 +14,15 @@ Description=Url translation config
 [END_SED]
 ==================== */
 
+/*  Installation translation */
+
+$sed_urltrans['install'] = array(
+    array( 
+          'params' => '', 
+          'rewrite' => 'install'
+    )
+);
+
 /*  RSS translation */                                               
 
 $sed_urltrans['rss'] = array(
