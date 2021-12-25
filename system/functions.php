@@ -1266,7 +1266,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 
 	for($i = 1; $i <= 10; $i++) 
 		{	
-		$rate_form .= "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"newrate_".$i."\" name=\"newrate\" value=\"".$i."\"><label for=\"newrate_".$i."\"></label></span><img src=\"skins/".$usr['skin']."/img/system/vote".$i.".gif\" alt=\"\" /> ".$i." - ".$L['rat_choice'.$i]."<br />";
+		$rate_form .= sed_radio_item("newrate", $i, "<img src=\"skins/".$usr['skin']."/img/system/vote".$i.".gif\" alt=\"\" /> ".$i." - ".$L['rat_choice'.$i], $i)."<br />";
 		}
 	
 	if ($usr['id'] > 0)
@@ -2901,13 +2901,32 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 	}
   
 /** 
+ * Creating input field radio item
+ * 
+ * @param string $name Name input tag 
+ * @param string $value Value input tag
+ * @param string $title Title for radio item 
+ * @param string $id Title for radio item 
+ * @param bool $checked Checked flag 
+ * @return string 
+ */ 
+
+function sed_radio_item($name, $value, $title = '', $id = '', $checked = false)
+	{	
+	$id = (empty($id)) ? $name : $name."_".$id;
+	$checked = ($checked) ? " checked" : "";		
+	$result = "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"".$id."\" name=\"".$name."\" value=\"".$value."\"".$checked." /><label for=\"".$id."\">".$title."</label></span>";
+	return($result);
+	}	
+
+/** 
  * Creating input field radio
  * 
  * @param string $name Name input tag 
  * @param array $data Value input tag
  * @param bool $check Checked flag  
  * @return string 
- */ 
+ */ 	
 
 function sed_radiobox($name, $data, $check_data = '')
 	{
@@ -2920,15 +2939,8 @@ function sed_radiobox($name, $data, $check_data = '')
 	
 	foreach ($data as $key => $v) 
 		{
-		$jj++;
-		if ($key == $check_data) 
-			{
-			$result .= '<span class="radio-item"><input type="radio" class="radio" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key. '" checked /><label for="'.$name."_".$jj.'">'.$v.'</label></span>';
-			} 
-		else 
-			{
-			$result .= '<span class="radio-item"><input type="radio" class="radio" id="'.$name."_".$jj.'" name="'.$name.'" value="'.$key.'"  /><label for="'.$name."_".$jj.'">'.$v.'</label></span>';
-			}
+		$jj++;		
+		$result .= ($key == $check_data) ? sed_radio_item($name, $key, $v, $jj, true) : sed_radio_item($name, $key, $v, $jj, false);
 		}
 		
 	return($result);
