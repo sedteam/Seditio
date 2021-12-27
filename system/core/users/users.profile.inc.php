@@ -386,7 +386,8 @@ $profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
-while( list($i,$x) = each($timezonelist) )
+
+foreach($timezonelist as $i => $x)
 	{
 	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
 	$profile_form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
@@ -478,7 +479,7 @@ $t->assign(array(
 	"USERS_PROFILE_AVATAR" => $profile_form_avatar,
 	"USERS_PROFILE_PHOTO" => $profile_form_photo,
 	"USERS_PROFILE_SIGNATURE" => $profile_form_signature,
-	"USERS_PROFILE_TEXT" => sed_textarea("rusertext", $urr['user_text'], 8, $cfg['textarea_default_width']),
+	"USERS_PROFILE_TEXT" => sed_textarea("rusertext", $urr['user_text'], 8, $cfg['textarea_default_width'], 'Micro'),
 	"USERS_PROFILE_EMAIL" => $profile_form_email,
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
