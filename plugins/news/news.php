@@ -130,7 +130,6 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 		$pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
 
 		$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
-		$pag['page_comments_url'] = "<a href=\"".$pag['page_pageurlcom']."\">(".$pag['page_comcount'].")</a>";
 		
 		$news-> assign(array(
 			"PAGE_ROW_URL" => $pag['page_pageurl'],
@@ -140,6 +139,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_CAT" => $pag['page_cat'],
 			"PAGE_ROW_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
 			"PAGE_ROW_CATPATH" => $catpath,
+			"PAGE_ROW_CATURL" => sed_url("list", "c=".$pag['page_cat']),
 			"PAGE_ROW_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
 			"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 			"PAGE_ROW_KEY" => sed_cc($pag['page_key']),
@@ -149,16 +149,18 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_EXTRA4" => sed_cc($pag['page_extra4']),
 			"PAGE_ROW_EXTRA5" => sed_cc($pag['page_extra5']),
 			"PAGE_ROW_DESC" => sed_cc($pag['page_desc']),
-			"PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
+			"PAGE_ROW_AUTHOR" => (!empty($pag['page_author'])) ? sed_cc($pag['page_author']) : sed_cc($pag['user_name']),
 			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
 			"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar']),
+			"PAGE_ROW_USERURL" => sed_url("users", "m=details&id=".$pag['page_ownerid']),
 			"PAGE_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $pag['page_date']),
 			"PAGE_ROW_FILEURL" => $pag['page_url'],
 			"PAGE_ROW_SIZE" => $pag['page_size'],
 			"PAGE_ROW_COUNT" => $pag['page_count'],
 			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
 			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
-			"PAGE_ROW_COMMENTS_URL" => $pag['page_comments_url'],
+			"PAGE_ROW_COMMENTS_URL" => $pag['page_pageurlcom'],
+			"PAGE_ROW_COMMENTS_COUNT" => $pag['page_comcount'],				
 			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 		));
@@ -179,7 +181,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			}
 		else 
 			{
-			$news->assign("PAGE_ROW_THUMB", sed_cc($pag['page_thumb']));
+			$news->assign("PAGE_ROW_THUMB", "noimg.jpg");
 			}			
 				
 		// ---------- Extra fields - getting
