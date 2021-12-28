@@ -109,88 +109,87 @@ else
   
 $filename = sed_newname($usr['id']."-".$upl_filename, TRUE);
 
-if ($cfg['pfs_filemask'])
+if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'].$filename))
 	{
-		$filename = $usr['id']."-".time().sed_unique(3)."-".$filename;
+		$filename = sed_newname($usr['id']."-".time().sed_unique(3)."-".$upl_filename, TRUE);
 	}  
   
-  
-
 $allow_extension = array('gif','png','jpg','jpeg','bmp');
 $extension_arr = explode(".", $filename);
 $f_extension = end($extension_arr); 
 
 if (in_array($f_extension, $allow_extension) == FALSE)  { exit; }  
-  
-$bytes = file_put_contents($cfg['pfs_dir'].$filename, file_get_contents('php://input'));
+ 
+if (!file_exists($cfg['pfs_dir'].$filename))
+	{
+	$bytes = file_put_contents($cfg['pfs_dir'].$filename, file_get_contents('php://input'));
+	$imgsize = @getimagesize($cfg['pfs_dir'].$filename);
 
-$imgsize = @getimagesize($cfg['pfs_dir'].$filename);
-
-if(!isset($imgsize) || !isset($imgsize['mime']) || !in_array($imgsize['mime'], array('image/jpeg', 'image/png', 'image/gif')))
-{
-	unlink($cfg['pfs_dir'].$filename);
-	exit;
-}
-else {
-
-	$u_size = filesize($cfg['pfs_dir'].$filename);
-	
-	$u_sqlname = $filename;
-	$u_title = $filename;
-
-	$folder_title = $L[date('F')]." ".date('Y'); 
-
-	$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid = '".$usr['id']."' AND pff_title = '".$folder_title."' LIMIT 1");
-	if (sed_sql_numrows($sql) > 0) 
-		{ 
-		$folderid = sed_sql_result($sql, 0, "pff_id"); 
+	if(!isset($imgsize) || !isset($imgsize['mime']) || !in_array($imgsize['mime'], array('image/jpeg', 'image/png', 'image/gif')))
+		{
+		unlink($cfg['pfs_dir'].$filename);
+		exit;
 		}
 	else 
 		{
-		$sql = sed_sql_query("INSERT INTO $db_pfs_folders
-			(pff_userid,
-			pff_title,
-			pff_date,
-			pff_updated,
-			pff_desc,
-			pff_type,
-			pff_count)
+		$u_size = filesize($cfg['pfs_dir'].$filename);
+		
+		$u_sqlname = $filename;
+		$u_title = $filename;
+
+		$folder_title = $L[date('F')]." ".date('Y'); 
+
+		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid = '".$usr['id']."' AND pff_title = '".$folder_title."' LIMIT 1");
+		if (sed_sql_numrows($sql) > 0) 
+			{ 
+			$folderid = sed_sql_result($sql, 0, "pff_id"); 
+			}
+		else 
+			{
+			$sql = sed_sql_query("INSERT INTO $db_pfs_folders
+				(pff_userid,
+				pff_title,
+				pff_date,
+				pff_updated,
+				pff_desc,
+				pff_type,
+				pff_count)
+			VALUES
+				(".(int)$usr['id'].",
+				'".sed_sql_prep($folder_title)."',
+				".(int)$sys['now'].",
+				".(int)$sys['now'].",
+				'',  
+				0,
+				0)");	
+			$folderid = sed_sql_insertid();
+			}
+
+		$sql = sed_sql_query("INSERT INTO $db_pfs
+			(pfs_userid,
+			pfs_date,
+			pfs_file,
+			pfs_extension,
+			pfs_folderid,
+			pfs_title,
+			pfs_desc,
+			pfs_size,
+			pfs_count)
 		VALUES
 			(".(int)$usr['id'].",
-			'".sed_sql_prep($folder_title)."',
-			".(int)$sys['now'].",
-			".(int)$sys['now'].",
-			'',  
-			0,
-			0)");	
-		$folderid = sed_sql_insertid();
+			".(int)$sys['now_offset'].",
+			'".sed_sql_prep($u_sqlname)."',
+			'".sed_sql_prep($f_extension)."',
+			".(int)$folderid.",
+			'".sed_sql_prep($u_title)."',
+			'".sed_sql_prep($desc)."',
+			".(int)$u_size.",
+			0) ");
+
+		$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
+		sed_sm_createthumb($cfg['pfs_dir'].$filename, $cfg['th_dir'].$filename, $cfg['th_x'], $cfg['th_y'], $cfg['th_jpeg_quality'], "resize", TRUE);
 		}
-
-	$sql = sed_sql_query("INSERT INTO $db_pfs
-		(pfs_userid,
-		pfs_date,
-		pfs_file,
-		pfs_extension,
-		pfs_folderid,
-		pfs_title,
-		pfs_desc,
-		pfs_size,
-		pfs_count)
-	VALUES
-		(".(int)$usr['id'].",
-		".(int)$sys['now_offset'].",
-		'".sed_sql_prep($u_sqlname)."',
-		'".sed_sql_prep($f_extension)."',
-		".(int)$folderid.",
-		'".sed_sql_prep($u_title)."',
-		'".sed_sql_prep($desc)."',
-		".(int)$u_size.",
-		0) ");
-
-	$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
-
-	sed_sm_createthumb($cfg['pfs_dir'].$filename, $cfg['th_dir'].$filename, $cfg['th_x'], $cfg['th_y'], $cfg['th_jpeg_quality'], "resize", TRUE);
-}
+	}
 
 echo $filename;
 

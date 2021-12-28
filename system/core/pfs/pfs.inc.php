@@ -276,7 +276,13 @@ elseif ($a=='delete')
 			{
 			@unlink($ff);
 			if (file_exists($cfg['th_dir'].$pfs_file))
-				{ @unlink($cfg['th_dir'].$pfs_file); }
+				{ 
+				@unlink($cfg['th_dir'].$pfs_file); 
+				}			
+			//resizer unlink 			
+			$pfs_filename = substr($pfs_file, 0, strrpos($pfs_file, "."));			
+			array_map("unlink", glob($cfg['res_dir'].$pfs_filename.".crop*x*"));
+			array_map("unlink", glob($cfg['res_dir'].$pfs_filename.".resize*x*"));			
 			}
 		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
 		sed_redirect(sed_url("pfs", "f=".$f."&o=".$o."&".$more, "", true));
