@@ -2030,7 +2030,7 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
  * @param string $degree_lvl Degree level 
  */	 
 		
-function sed_rotateimage($image_source, $degree_lvl)
+function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
 {
 	global $cfg;
 	
@@ -2054,8 +2054,8 @@ function sed_rotateimage($image_source, $degree_lvl)
 			break;
 		}
 	
-	$transColor = imagecolorallocatealpha($source, 255, 255, 255, 270);
-	$rotated_image = imagerotate($source, -90*$degree_lvl, $transColor);
+	$transColor = imagecolorallocatealpha($source, 255, 255, 255, 0);
+	$rotated_image = imagerotate($source, -90*$degree_lvl, 0);
 	
 	imagealphablending($rotated_image, false); //Set the blending mode for an image  	
 	imagesavealpha($rotated_image, true); //Set the flag to save full alpha channel information	
