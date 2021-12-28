@@ -152,9 +152,9 @@ if ($a=='upload')
 			$f_extension = mb_substr($u_name, $dotpos, 5);
 			$f_extension_ok = 0;
       
-			if ($cfg['pfs_filemask'])
+			if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'].$userid."-".$u_name))
 				{
-					$u_name = $userid."-".time()."-".sed_unique(3).".".$f_extension;
+					$u_name = sed_newname($userid."-".time().sed_unique(3)."-".$u_name, TRUE);
 				}
 				else
 				{
