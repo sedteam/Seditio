@@ -3361,7 +3361,7 @@ function sed_newname($name, $underscore = TRUE)
 	
 	$newname = mb_substr($name, 0, mb_strrpos($name, "."));
 	$ext = mb_strtolower(mb_substr($name, mb_strrpos($name, ".")+1));
-	if($lang != 'en' && is_array($sed_translit))
+	if(is_array($sed_translit))
 		{
 		$newname = strtr($newname, $sed_translit);
 		}
