@@ -15,17 +15,19 @@ Description=Image Functions
 [END_SED]
 ==================== */
 
+if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
 $cfg['allowed_extentions'] = array('png', 'gif', 'jpg', 'jpeg', 'ico');
 
-$cfg['pfs_dir'] = $_SERVER["DOCUMENT_ROOT"].'/datas/users/';
-$cfg['res_dir'] = $_SERVER["DOCUMENT_ROOT"].'/datas/resized/';
+$cfg['pfs_dir'] = SED_ROOT.'/datas/users/';
+$cfg['res_dir'] = SED_ROOT.'/datas/resized/';
 
 $cfg['watermark_offset_x'] = 0;
 $cfg['watermark_offset_y'] = 0;
 $cfg['images_sharpen'] = 0;
 $cfg['watermark_transparency'] = 0;
 $cfg['use_imagick'] = true;
-$cfg['quality'] = 70;
+$cfg['quality'] = 85;
 
 function resize_image($filename, $width = 0, $height = 0, $set_watermark = false)
     {
@@ -180,7 +182,7 @@ function image_constrain_gd(
 	global $cfg;
 	
 	// todo put into settings
-	$quality = $cfg['quality'];
+	$quality = (!empty($cfg['th_jpeg_quality'])) ? $cfg['th_jpeg_quality'] : $cfg['quality'];
 
 	// Source image parameters
 	list($src_w, $src_h, $src_type) = array_values(getimagesize($src_file));
@@ -280,6 +282,9 @@ function image_constrain_gd(
 		$y0 = ($dst_h - $max_h) / 2;
 		$_dst_img = imagecreatetruecolor($max_w, $max_h);
 
+		imagealphablending($_dst_img, false); //Set the blending mode for an image  	
+		imagesavealpha($_dst_img, true); //Set the flag to save full alpha channel information  
+		
 		imagecopy(
 			$_dst_img,
 			$dst_img,
@@ -308,7 +313,6 @@ function image_constrain_gd(
 		//imagecopymerge($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity*100);
 		imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity * 100);
 	}
-
 
 	// recalculate quality value for png image
 	if ('image/png' === $src_type) {
