@@ -10,20 +10,24 @@ supplied by the community, or easily making one's own by creating a template, an
 
 To install Seditio you need the following server software pre-installed:
 
-<p>WWW Server (Apache, nginx, etc)<br />
-PHP 5.4.0 or higher<br />
-MySQL 5.0.7 or higher</p>
+<ul>
+<li>WWW Server (Apache, nginx, etc)</li>
+<li>PHP 5.4.0 or higher</li>
+<li>MySQL 5.0.7 or higher</li>
+</ul>
 
 <h2>Server configuration</h2>
 
 <p>You MUST ensure that PHP has been compiled with support for:</p>
 
-<p>GD<br />
-Hash<br />
-Mbstring<br />
-MySQL<br />
-PCRE<br />
-Sessions</p>
+<ul>
+<li>GD</li>
+<li>Hash</li>
+<li>Mbstring</li>
+<li>MySQL</li>
+<li>PCRE</li>
+<li>Sessions</li>
+</ul>
 
 <h2>Installation</h2>
 
@@ -31,13 +35,15 @@ Sessions</p>
 
 <p>2. Make the following directory and all their subdirectories writable too with CHMOD 777 or CHMOD 775:</p>
 
-<p>/datas/avatars<br />
-/datas/defaultav<br />
-/datas/photos<br />
-/datas/thumbs<br />
-/datas/resized<br />
-/datas/signatures<br />
-/datas/users</p>
+<ul>
+<li>/datas/avatars</li>
+<li>/datas/defaultav</li>
+<li>/datas/photos</li>
+<li>/datas/thumbs</li>
+<li>/datas/resized</li>
+<li>/datas/signatures</li>
+<li>/datas/users</li>
+</ul>
 
 <p>3. Arrive at <strong>http://your_site/install</strong></p>
 
