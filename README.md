@@ -45,8 +45,8 @@ Sessions</p>
 
 <h2>Copyright</h2>
 
-<p>Copyright (c) 2010-2022, Seditio Team<br />
-Copyright (c) 2001-2008, Neocrome</p>
+<p>Copyright (c) 2011-2022, Seditio Team<br />
+Copyright (c) 2001-2011, Neocrome</p>
 
 <p>All rights reserved.</p>
 
