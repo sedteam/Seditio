@@ -8,7 +8,7 @@ CKEDITOR.editorConfig = function( config )
 	if ( isIE ) {
 		config.extraPlugins = 'more';
 	} else {
-		config.extraPlugins = 'more,uploadimage,uploadwidget,layoutmanager,pasteUploadImage';
+		config.extraPlugins = 'more,uploadimage,uploadwidget,layoutmanager';
 	}
 	
 	config.uploadUrl = 'plug.php?ajx=ckeditor';
