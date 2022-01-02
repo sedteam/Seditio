@@ -17,36 +17,45 @@
 		</div>
 
 		<div class="section-body">
-		 
-			<!-- BEGIN: USERS -->
-
-			<a href="{GALLERY_HOME_USERS_ROW_URL}">{GALLERY_HOME_USERS_ROW_AUTHOR} ({GALLERY_HOME_USERS_ROW_COUNT})</a>
-
-			<!-- END: USERS -->
 
 			<!-- BEGIN: GALLERIES -->
 
-			<table class="flat">
+			<div class="row row-flex">
 
 				<!-- BEGIN: ROW -->
 
-				{GALLERY_HOME_GALLERIES_ROW_COND1}
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">	
 
-				<td style="text-align:center; vertical-align:top; padding:8px;">
-					<a href="{GALLERY_HOME_GALLERIES_ROW_URL}"><img src="{GALLERY_HOME_GALLERIES_ROW_SAMPLE}" alt="" /><br />
-				<strong>{GALLERY_HOME_GALLERIES_ROW_SHORTTITLE}</a></strong><br />
-			
-			  By {GALLERY_HOME_GALLERIES_ROW_USER}, 
-			  {GALLERY_HOME_GALLERIES_ROW_COUNT} photos<br />
-			  Updated {GALLERY_HOME_GALLERIES_ROW_UPDATED}
-			
-				</td>
+					<div class="gallery-item">
+					
+						<figure class="gallery-container">	  
+							<a class="gallery-img-link" href="{GALLERY_HOME_GALLERIES_ROW_URL}">
+								<img class="gallery-img" src="{GALLERY_HOME_GALLERIES_ROW_THUMB|crop_image(%s, 800, 600)}" />
+							</a>
+							<figcaption class="gallery-content">
+								<div class="gallery-info">
+									<div class="gallery-date">{GALLERY_HOME_GALLERIES_ROW_UPDATED}</div>
+								</div>							
+								<div class="gallery-title">
+									<h3><a href="{GALLERY_HOME_GALLERIES_ROW_URL}">{GALLERY_HOME_GALLERIES_ROW_SHORTTITLE}</a></h3>
+								</div>
+								<div class="gallery-desc">
+									<p>{GALLERY_HOME_GALLERIES_ROW_DESC|strip_tags}</p>
+								</div>
+								<div class="gallery-info">
+									<div class="gallery-author"><a href="{GALLERY_HOME_GALLERIES_ROW_USERURL}">{GALLERY_HOME_GALLERIES_ROW_AVATAR}<span>{GALLERY_HOME_GALLERIES_ROW_OWNER}</span></a></div>
+									<div class="gallery-count"><i class="ic-info"></i> {GALLERY_HOME_GALLERIES_ROW_COUNT} photos</div>
+								</div>
+							</figcaption>
+						</figure>
+					
+					</div>
+				
+				</div>
 
-				{GALLERY_HOME_GALLERIES_ROW_COND2}
+				<!-- END: ROW -->
 
-			<!-- END: ROW -->
-
-			</table>
+			</div>
 
 			<!-- END: GALLERIES -->
 

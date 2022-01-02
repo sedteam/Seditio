@@ -884,20 +884,23 @@ ul.inline-menu li.active a {
 	
 }
 
-.post-container {
+.post-container,
+.gallery-container {
 	width: 100%;
 	height:100%;
 	overflow: hidden;
 	position:relative;
 }
 
-.post-img-link {
+.post-img-link,
+.gallery-img-link {
     position: relative;
     display: block;
     overflow: hidden;
 }
 
-.post-container img.post-img {
+.post-container img.post-img,
+.gallery-container img.gallery-img  {
 	width: 100%;
 	height: 100%;
 	-o-object-fit: cover;
@@ -911,13 +914,16 @@ ul.inline-menu li.active a {
 	transition-duration: 0.5s;	
 }
 
-.post-container img.post-img:hover {
+.post-container img.post-img:hover,
+.gallery-container img.gallery-img:hover {
 	transform: scale(1.2);
 }
 
-.post-content {}
+.post-content,
+.gallery-content {}
 
-.post-info {
+.post-info,
+.gallery-info {
 	display:table;
 }
 
@@ -933,7 +939,8 @@ ul.inline-menu li.active a {
 	color: #b50c0c;
 }
 
-.post-date {
+.post-date,
+.gallery-date {
 	display:table-cell;
 	vertical-align:bottom;
 	padding:15px 0;
@@ -951,25 +958,30 @@ ul.inline-menu li.active a {
 	font-weight: 300;
 }
 
-.post-title {
+.post-title,
+.gallery-title {
 	padding-bottom:15px;
 }
 
-.post-title h3 {
+.post-title h3,
+.gallery-title h3 {
 	font-size: 1.4em;
     font-weight: 600;
     margin: 0;
 }
 
-.post-title a {
+.post-title a,
+.gallery-title a {
 	color: #010101;
 }
 
-.post-desc {
+.post-desc,
+.gallery-desc {
 	padding-bottom:15px;
 }
 
-.post-desc p {
+.post-desc p,
+.gallery-desc p {
 	margin:0;
 	padding:0;
 }
@@ -980,13 +992,15 @@ ul.inline-menu li.active a {
 	padding:15px 15px 15px 0;
 }
 
-.post-author {	
+.post-author,
+.gallery-author {	
 	display:table-cell;
 	vertical-align:middle;
 	padding-right:15px;
 }
 
-.post-author-avatar {
+.post-author-avatar,
+.gallery-author-avatar {
 	width:24px;
 	height:24px;
 	border-radius:100%;
@@ -994,30 +1008,35 @@ ul.inline-menu li.active a {
     display: inline-block!important;
 }
 
-.post-author a {
+.post-author a,
+.gallery-author a {
 	text-decoration:underline;
 	color:#010101;
 	font-size:0.9em;
 }
 
-.post-author a:hover {
+.post-author a:hover,
+.gallery-author a:hover {
 	text-decoration: none;
 }
 
-.post-comments {
+.post-comments,
+.gallery-count {
 	display:table-cell;
 	vertical-align:middle;
 	color:#90a4ae;
 }
 
-.post-comments a {
+.post-comments a,
+.gallery-count a {
 	color:#90a4ae;
 	padding-left:4px;
 	font-size:0.9em;
 	text-decoration:underline;
 }
 
-.post-comments a:hover {
+.post-comments a:hover,
+.gallery-count a:hover {
 	text-decoration: none;
 }
 
