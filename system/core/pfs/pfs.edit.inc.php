@@ -116,7 +116,6 @@ if ($a=='update' && !empty($id))
 
 	$sql = sed_sql_query("UPDATE $db_pfs SET
 		pfs_desc='".sed_sql_prep($rdesc)."',
-		pfs_desc_ishtml='".$ishtml."',
 		pfs_title='".sed_sql_prep($rtitle)."',
 		pfs_folderid='$folderid'
 		WHERE pfs_userid='$userid' AND pfs_id='$id'");
@@ -133,7 +132,7 @@ $body .= "<tr><td>".$L['Folder']." : </td><td>".sed_selectbox_folders($userid, "
 $body .= "<tr><td>".$L['URL']." : </td><td><a href=\"".$ff."\">".$ff."</a></td></tr>";
 $body .= "<tr><td>".$L['Size']." : </td><td>".$pfs_size." ".$L['kb']."</td></tr>";
 $body .= "<tr><td>".$L['Title']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pfs_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br /><textarea name=\"rdesc\" rows=\"8\" cols=\"56\">".sed_cc($pfs_desc, ENT_QUOTES)."</textarea></td></tr>";
+$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br />".sed_textarea('rdesc', $pfs_desc, 8, 56, 'Micro')."</td></tr>";
 $body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 $body .= "</form></table>";
 

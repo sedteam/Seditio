@@ -137,7 +137,7 @@ $rtype_arr = ($usr['auth_write_gal']) ? array(0 => $L['Private'], 1 => $L['Publi
 $body .= sed_radiobox("rtype", $rtype_arr, $row['pff_type']);
 
 $body .= "</td></tr>";
-$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br /><textarea name=\"rdesc\" rows=\"8\" cols=\"56\">".sed_cc($pff_desc, ENT_QUOTES)."</textarea></td></tr>";
+$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br />".sed_textarea('rdesc', $pff_desc, 8, 56, 'Micro')."</td></tr>";
 $body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
 $body .= "</form></table>";
 

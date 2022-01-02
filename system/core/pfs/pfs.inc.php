@@ -421,7 +421,7 @@ else
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fcount."</td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fsize." ".$L['kb']."</td>";
 		$list_folders .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row1['pff_updated'])."</td>";	
-  	$list_folders .= "<td style=\"text-align:right;\">".$pff_count."</td>";
+		$list_folders .= "<td style=\"text-align:right;\">".$pff_count."</td>";
 		$list_folders .= "</tr>";
 		}
 	}
