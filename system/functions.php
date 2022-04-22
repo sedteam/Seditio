@@ -4798,16 +4798,17 @@ function sed_extrafield_get($sql_table)
     global $sed_dic, $cfg;
     $res = array();
 	if (!empty($sed_dic))
-    {
-    foreach ($sed_dic as $key => $row)
-    {
-        if ($row['extra_location'] == $sql_table)
-        {
-           $res[$key] = $row;
-        }
-    }
-    return $res;   
-    }
+		{
+		foreach ($sed_dic as $key => $row)
+			{
+			if ($row['extra_location'] == $sql_table)
+				{
+				$res[$key] = $row;
+				}
+			}
+		  
+		}
+	return $res; 
 } 
 
 /** 
