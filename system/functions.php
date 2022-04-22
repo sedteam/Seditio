@@ -5595,7 +5595,7 @@ function sed_letterAvatar($text, $uid, $fontSize, $imgWidth, $imgHeight)
 		global $cfg, $usr;
 		
 		/* settings */
-		$font = $cfg['font_dir'].'/calibri.ttf'; /*define font*/
+		$font = SED_ROOT . "/". $cfg['font_dir'].'calibri.ttf'; /*define font*/
 
 		// Split words and get first letter of each word. Example - Kannan m -> KM
 		$words = explode(" ", $text);

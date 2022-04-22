@@ -247,7 +247,15 @@ if ($a=='update')
 				sed_mail($urr['user_email'], $rsubject, $rbody);
 				}
 			}
-
+			
+		// autogeneration avatar from letter sed v178
+		if (empty($ruseravatar))
+			{
+			sed_autogen_avatar($id);
+			}
+		
+		exit;
+		
 		/* === Hook === */
 		$extp = sed_getextplugins('users.edit.update.done');
 		if (is_array($extp))
