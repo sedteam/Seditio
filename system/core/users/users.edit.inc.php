@@ -254,8 +254,6 @@ if ($a=='update')
 			sed_autogen_avatar($id);
 			}
 		
-		exit;
-		
 		/* === Hook === */
 		$extp = sed_getextplugins('users.edit.update.done');
 		if (is_array($extp))
