@@ -6,6 +6,8 @@
 
 	<div id="slider">
 	
+		<!-- BEGIN: SLIDER_ROW -->
+		
 		<div class="slide-item" style="background-image:url({SLIDER_ROW_THUMB|crop_image(%s, 1920, 1080)})">		
 			<div class="slide-body" data-cat="{SLIDER_ROW_CAT}" data-page="{SLIDER_ROW_ID}">
 				<div class="slider-container">
@@ -30,6 +32,8 @@
 				</div>	
 			</div>	
 		</div>
+		
+		<!-- END: SLIDER_ROW -->
 		
 	</div>
 	<div class="home-slider-arrows">
