@@ -43,12 +43,12 @@ $slider = "<div id=\"slider\">";
 
 $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
 
-$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_text, p.page_thumb, 
+$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_desc, p.page_date, p.page_text, p.page_thumb, 
 					p.page_ownerid, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
 					FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 					WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' AND p.page_slider = 1 
 					ORDER BY p.page_date DESC LIMIT $sliderlimit");
-					
+	
 if (sed_sql_numrows($sql) > 0)
 	{
 	while ($row = sed_sql_fetchassoc($sql))
@@ -57,7 +57,7 @@ if (sed_sql_numrows($sql) > 0)
 			{			
 			$sys['catcode'] = $row['page_cat']; //new in v175
 			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
-			$row['page_pageurlcom'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'].$pcomments) : sed_url("page", "al=".$row['page_alias'].$pcomments);
+			$row['page_pageurlcom'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'].$pcomments) : sed_url("page", "al=".$row['page_alias'].$pcomments);		
 			
 			$t-> assign(array(
 				"SLIDER_ROW_URL" => $row['page_pageurl'],
@@ -67,6 +67,7 @@ if (sed_sql_numrows($sql) > 0)
 				"SLIDER_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
 				"SLIDER_ROW_SHORTTITLE" => sed_cutstring($row['page_title'], 50),
 				"SLIDER_ROW_TITLE" => $row['page_title'],	
+				"SLIDER_ROW_DESC" => $row['page_desc'],		
 				"SLIDER_ROW_TEXT" => $row['page_text'],					
 				"SLIDER_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date']),
 				"SLIDER_ROW_AUTHOR" => sed_cc($row['user_name']),
