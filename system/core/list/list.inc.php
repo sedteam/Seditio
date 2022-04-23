@@ -32,6 +32,9 @@ $number_of_extrafields = count($extrafields);
 
 $filter_vars = array();
 $filter_sql = array();
+$filter_urlspar = array();
+$filter_urlparams = "";
+
 $sql_where = "";
 
 if (count($extrafields) > 0)
@@ -39,14 +42,18 @@ if (count($extrafields) > 0)
 	foreach ($extrafields as $key => $val)
 	{
 		if (in_array($val['vartype'], array('INT', 'BOL'))) 
-		  { 
-		  $filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
-		  if (!empty($filter_vars['filter_'.$key])) $filter_sql[] = " AND page_".$key." = '".$filter_vars['filter_'.$key]."'";
-		  }  
+			{ 
+			$filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
+			if (!empty($filter_vars['filter_'.$key])) 
+				{ 
+				$filter_sql[] = "page_".$key." = '".$filter_vars['filter_'.$key]."'"; 
+				$filter_urlspar['filter_'.$key] = $filter_vars['filter_'.$key];	
+				}
+			}  
 	}
 }
 
-$sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
+$sql_where = (count($filter_sql) > 0) ? " AND ".implode(' AND ', $filter_sql) : " ";
 
 if (!array_key_exists($c, $sed_cat) && !($c=='all'))
   {
@@ -173,11 +180,17 @@ if ($c=='all' || $c=='system')
 else
 	{ $catpath = sed_build_catpath($c, "<a href=\"%1\$s\">%2\$s</a>"); }
 
+if (count($filter_urlspar) > 0)
+	{
+		foreach($filter_urlspar as $fkey => $fval) { $filter_urlspar_arr[] = $fkey."=".$fval; }
+		$filter_urlparams = "&".implode('&', $filter_urlspar_arr);
+	}
+
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
 
-$pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p), $d, $totallines, $cfg['maxrowsperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+$pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p.$filter_urlparams), $d, $totallines, $cfg['maxrowsperpage']);
+list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p.$filter_urlparams), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
 //fix for sed_url()
 $url_list = array('part' => 'list', 'params' => "c=".$c);
@@ -266,30 +279,30 @@ if (!$sed_cat[$c]['group'])
 		"LIST_TOP_TOTALLINES" => $totallines,
 		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 		"LIST_TOP_TOTALPAGES" => $totalpages,
-		"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Title'],
-		"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Key'],
-		"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-		"LIST_TOP_EXTRA2" => "<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-		"LIST_TOP_EXTRA3" => "<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-		"LIST_TOP_EXTRA4" => "<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-		"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a>",
-		"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Date'],
-		"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Author'],
-		"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Owner'],
-		"LIST_TOP_COUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=count&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=count&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits'],
-		"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p)."\">$sed_img_down</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p)."\">$sed_img_up</a> ".$L['Hits']
+		"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Title'],
+		"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Key'],
+		"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA2" => "<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA3" => "<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA4" => "<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a>",
+		"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a>",
+		"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Date'],
+		"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Author'],
+		"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Owner'],
+		"LIST_TOP_COUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=count&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=count&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Hits'],
+		"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_down</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">$sed_img_up</a> ".$L['Hits']
 	));
 
 	// ----- Extra fields 
@@ -298,7 +311,7 @@ if (!$sed_cat[$c]['group'])
 		foreach($extrafields as $row) 
 			{ 
 			$extratitle = isset($L['page_'.$row['code'].'_title']) ? $L['page_'.$row['code'].'_title'] : $row['title']; 
-			$t->assign('LIST_TOP_'.strtoupper($row['code']), "<a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=asc&o=$o&p=$p")."\">$sed_img_down</a><a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=desc&o=$o&p=$p")."\">$sed_img_up</a> $extratitle"); 
+			$t->assign('LIST_TOP_'.strtoupper($row['code']), "<a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=asc&o=$o&p=$p".$filter_urlparams)."\">$sed_img_down</a><a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=desc&o=$o&p=$p".$filter_urlparams)."\">$sed_img_up</a> $extratitle"); 
 			} 
 		}
 	//--------------- 
