@@ -194,6 +194,9 @@ $url_page = array('part' => 'page', 'params' => $url_param);
 if ($allowcommentscat) { list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $url_page, $comments, $allowcommentspage); }
 if ($allowratingscat) { list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $url_page, $ratings, $allowratingspage); }
 
+$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+$pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
+
 $sys['sublocation'] = $sed_cat[$c]['title'];
 
 $out['subtitle'] = (empty($pag['page_seo_title'])) ? $pag['page_title'] : $pag['page_seo_title'];
@@ -254,8 +257,9 @@ $t->assign(array(
 	"PAGE_EXPIRE" => $pag['page_expire'],
 	"PAGE_COMMENTS" => $comments_link,
 	"PAGE_COMMENTS_DISPLAY" => $comments_display,
-	"PAGE_COMMENTS_COUNT" => $comments_count,
+	"PAGE_COMMENTS_COUNT" => $pag['page_comcount'],
 	"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
+	"PAGE_COMMENTS_URL" => $pag['page_pageurlcom'],
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
 ));

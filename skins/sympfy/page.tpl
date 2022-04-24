@@ -45,7 +45,7 @@
 					
 						<div class="post-info">
 							<div class="post-author">{PAGE_OWNER_AVATAR}{PAGE_OWNER}</div>
-							<div class="post-comments"><i class="ic-message-circle"></i><a href="{PAGE_COMURL}">{PAGE_COMCOUNT}</a></div>
+							<div class="post-comments"><i class="ic-message-circle"></i><a href="{PAGE_COMMENTS_URL}">{PAGE_COMMENTS_COUNT}</a></div>
 						</div>					
 					
 					</div>
@@ -115,7 +115,7 @@
 										</div>
 										<div class="post-info">
 											<div class="post-author">{SIMILARPAGES_ROW_OWNER_AVATAR}{SIMILARPAGES_ROW_OWNER}</div>
-											<div class="post-comments"><i class="ic-message-circle"></i><a href="{SIMILARPAGES_ROW_COMURL}">{SIMILARPAGES_ROW_COMCOUNT}</a></div>									
+											<div class="post-comments"><i class="ic-message-circle"></i><a href="{SIMILARPAGES_ROW_COMMENTS_URL}">{SIMILARPAGES_ROW_COMMENTS_COUNT}</a></div>									
 										</div>
 									</figcaption>
 									
