@@ -88,12 +88,11 @@
 			<aside id="sidebar">
 			
 			
+				<!-- BEGIN: SIMILARPAGES -->
 				<div class="sidebar-box">
-				
-					<!-- BEGIN: SIMILARPAGES -->
-					
+
 					<div class="sidebar-title">
-						<h3>Recent Items</h3>
+						<h3>Ещё почитать</h3>
 					</div>
 					
 					<div class="sidebar-body">	
@@ -127,10 +126,9 @@
 						<!-- END: SIMILARPAGES_ROW -->
 						
 					</div>
-					
-					<!-- END: SIMILARPAGES -->					
-
-				</div>				
+															
+				</div>
+				<!-- END: SIMILARPAGES -->
 			
 				<div class="sidebar-box">
 				

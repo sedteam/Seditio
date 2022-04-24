@@ -71,6 +71,9 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
                         AGAINST ('".sed_sql_prep($pag['page_title'])."') > $sim_relevance 
                         ORDER BY p.page_date DESC LIMIT $sim_maxcount");
 
+	if (sed_sql_numrows($sql) > 0)
+	{
+	
 	while ($row = sed_sql_fetchassoc($sql))
 		{    
 		
@@ -133,6 +136,7 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 		}
 		
 	$t->parse("MAIN.SIMILARPAGES");
+	}
 
 	$res = (empty($res)) ? $plu_empty : $res;
 
