@@ -5717,16 +5717,19 @@ function sed_autogen_avatar($uid)
 	return $gen_avatar;
 }
 
-function sed_menu_tree( $menus, $parent_id, $only_parent = false, $class = "" )
+function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $class = "" )
 {
 	if ( is_array( $menus ) && isset( $menus[$parent_id] ) )
 		{
-		$tree = "<ul class=\"".$class."\">";
+		$class = (!empty($class)) ? " ".$class : "";
+		$tree = "<ul class=\"level-".$level.$class."\">";
 		if ( $only_parent == false )
 			{
-			foreach ( $menus[$parent_id] as $item ) {
-				$tree .= "<li><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
-				$tree .=  sed_menu_tree($menus, $item['menu_id']);
+			$level++;
+			foreach ($menus[$parent_id] as $item) {
+				$has_children = isset( $menus[$item['menu_id']] ) ? " class=\"has-children\"" : "";
+				$tree .= "<li".$has_children."><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
+				$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
 				$tree .= "</li>";
 				}
 			}

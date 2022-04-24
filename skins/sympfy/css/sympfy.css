@@ -218,11 +218,43 @@ ul {
     top: 100%;
 	width:200px;
     left: -20px;
-    padding: 60px 20px 10px 20px;
+    padding: 60px 0px 10px 0px;
     background-color: #fff;
 	z-index:100;
 	/*visibility: hidden;
     opacity: 0;*/
+}
+
+.menu-col .menu-wrapper .menu>ul>li>ul>li>ul {
+	display:none;
+	position: absolute;    
+	padding-top: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    padding: 10px 0px 10px 0px;
+    background-color: #fff;
+    left: 200px;
+    width: 200px;
+    top: -10px;
+    font-size: 1.1em;
+}
+
+.menu-col .menu-wrapper .menu ul>li ul li.has-children::before {
+    padding-right: 0.25em;
+    padding-left: 0.25em;
+    color: #d6d7d8;
+    font-family: 'Seditio' !important;
+	content: "\e92f";
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    position: absolute;
+    right: 6px;
+    top: calc(50% - 7px);   
 }
 
 .visib {
@@ -237,6 +269,8 @@ ul {
 	display:block;
 	text-align:left;
 	font-size:0.9em;
+	padding-left:20px;
+	padding-right:20px;
 }
 
 .menu-col .menu-wrapper .menu>ul>li>ul a {

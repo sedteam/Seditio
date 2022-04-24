@@ -657,7 +657,7 @@ if (!$sed_menu && (sed_stat_get("version") > 177))
 	foreach ($menu_row as $k => $v)
 	{
 		$sed_menu[$k]['childrens'] = sed_menu_tree($menu_tree, $k);
-		$sed_menu[$k]['parent'] = sed_menu_tree($menu_row, $k, true);
+		$sed_menu[$k]['parent'] = sed_menu_tree($menu_row, $k, 0, true);
 	}	
 			
 	sed_cache_store('sed_menu', $sed_menu, 3600);
