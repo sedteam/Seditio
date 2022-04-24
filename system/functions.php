@@ -3421,7 +3421,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 		{ return (""); }
 
 	$address = $url.((mb_strpos($url, '?') !== false) ? '&amp;' : '?').$characters.'=';
-  
+
 	$totalpages = ceil($entries / $perpage); 
 	$currentpage = floor($current / $perpage) + 1;
 	$each_side = 3;  
@@ -3429,42 +3429,42 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 	if ($cur_left < 1) $cur_left = 1; 
 	$cur_right = $currentpage + $each_side; 
 	if ($cur_right > $totalpages) $cur_right = $totalpages; 
-    
+
 	$i = 1;
-  $n = 0;
+	$n = 0;
   
-  while($i < $cur_left) 
-  { 
-      $k = ($i-1) * $perpage; 
-      $res .= sprintf($cfg['pagination'], "<a href=\"".$address.$k."\" class=\"page-link\">".($i)."</a>");
-      $i *= ($n % 2) ? 2 : 5; 
-      $n++;
-  }    
-  for($j = $cur_left; $j <= $cur_right; $j++) 
-    { 
-  		$k = ($j - 1) * $perpage;
-  		if (($j == $currentpage) && ($j != $totalpages)) 
-  			{ $res .= sprintf($cfg['pagination_cur'], ($j)); }
-  		elseif ($j != $totalpages)
-  			{ $res .= sprintf($cfg['pagination'], "<a href=\"".$address.$k."\" class=\"page-link\">".($j)."</a>"); }
-    }  
-  while($i <= $cur_right) 
-    { 
-        $i *= ($n % 2) ? 2 : 5; 
-        $n++; 
-    }    
-   while($i < $totalpages) 
-    { 
-        $k = ($i - 1) * $perpage; 
-        $res .= sprintf($cfg['pagination'], "<a href=\"".$address.$k."\" class=\"page-link\">".($i)."</a>");
-        $i *= ($n % 2) ? 5 : 2; 
-        $n++; 
-    }    
+	while($i < $cur_left) 
+		{ 
+		$k = ($i - 1) * $perpage; 
+		$res .= sprintf($cfg['pagination'], "<a href=\"".(($k == 0) ? $url : $address.$k)."\" class=\"page-link\">".($i)."</a>");
+		$i *= ($n % 2) ? 2 : 5; 
+		$n++;
+		}    
+	for($j = $cur_left; $j <= $cur_right; $j++) 
+		{ 
+		$k = ($j - 1) * $perpage;
+		if (($j == $currentpage) && ($j != $totalpages)) 
+			{ $res .= sprintf($cfg['pagination_cur'], ($j)); }
+		elseif ($j != $totalpages)
+			{ $res .= sprintf($cfg['pagination'], "<a href=\"".(($k == 0) ? $url : $address.$k)."\" class=\"page-link\">".($j)."</a>"); }
+		}  
+	while($i <= $cur_right) 
+		{ 
+		$i *= ($n % 2) ? 2 : 5; 
+		$n++; 
+		}    
+	while($i < $totalpages) 
+		{ 
+		$k = ($i - 1) * $perpage; 
+		$res .= sprintf($cfg['pagination'], "<a href=\"".(($k == 0) ? $url : $address.$k)."\" class=\"page-link\">".($i)."</a>");
+		$i *= ($n % 2) ? 5 : 2; 
+		$n++; 
+		}    
     $k = ($totalpages - 1) * $perpage;   
     if ($currentpage == $totalpages) 
   			{ $res .= sprintf($cfg['pagination_cur'], ($totalpages)); }
   	else
-  			{ $res .= sprintf($cfg['pagination'], "<a href=\"".$address.$k."\" class=\"page-link\">".($totalpages)."</a>"); }
+  			{ $res .= sprintf($cfg['pagination'], "<a href=\"".(($k == 0) ? $url : $address.$k)."\" class=\"page-link\">".($totalpages)."</a>"); }
 	return ($res);
 	}
 
@@ -3488,9 +3488,11 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
   if ($current > 0)
 		{
 		$prevpage = $current - $perpage;
-		if ($prevpage < 0)
-			{ $prevpage = 0; }
-		$res_l = "<a href=\"".$address.$prevpage."\" class=\"page-link page-prev\">".$cfg['pagination_arrowleft']." ".$L['Previous']."</a>";
+		if ($prevpage < 0 || $prevpage == 0) 
+			{ $address_prev = $url; } 
+		else  
+			{ $address_prev = $address.$prevpage; }	
+		$res_l = "<a href=\"".$address_prev."\" class=\"page-link page-prev\">".$cfg['pagination_arrowleft']." ".$L['Previous']."</a>";
 		}
 
 	if (($current + $perpage)<$entries)
