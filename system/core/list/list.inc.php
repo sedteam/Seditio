@@ -17,6 +17,9 @@ Description=Pages
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
+$available_sort = array('id', 'type', 'key', 'title', 'desc', 'text', 'author', 'owner', 'date', 'begin', 'expire', 'count', 'file', 'url', 'size', 'filecount');    
+$available_way = array('asc', 'desc');
+
 $id = sed_import('id','G','INT');
 $s = sed_import('s','G','ALP',13);  //v173
 $d = sed_import('d','G','INT');
@@ -77,7 +80,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if (empty($s))
+if (empty($s) || !in_array($s, $available_sort) || !in_array($w, $available_way))
 	{
 	$s = $sed_cat[$c]['order'];
 	$w = $sed_cat[$c]['way'];
@@ -86,6 +89,9 @@ if (empty($s))
 if (empty($s)) { $s = 'title'; }
 if (empty($w)) { $w = 'asc'; }
 if (empty($d)) { $d = '0'; }
+
+$pn_s = ($s == $sed_cat[$c]['order']) ? "" : $s;
+$pn_w = ($w == $sed_cat[$c]['way']) ? "" : $w;
 
 $cfg['maxrowsperpage'] = ($c=='all' || $c=='system') ? $cfg['maxrowsperpage']*2 : $cfg['maxrowsperpage'];
 
@@ -189,8 +195,8 @@ if (count($filter_urlspar) > 0)
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
 
-$pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p.$filter_urlparams), $d, $totallines, $cfg['maxrowsperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$s."&w=".$w."&o=".$o."&p=".$p.$filter_urlparams), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+$pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$pn_s."&w=".$pn_w."&o=".$o."&p=".$p.$filter_param_url), $d, $totallines, $cfg['maxrowsperpage']);
+list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$pn_s."&w=".$pn_w."&o=".$o."&p=".$p.$filter_param_url), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
 //fix for sed_url()
 $url_list = array('part' => 'list', 'params' => "c=".$c);
