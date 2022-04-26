@@ -438,6 +438,14 @@ table.cells tr:nth-child(even) {
 	padding: 0.5em 0.8em;
 }
 
+.odd {
+	background-color:#f3f3f3;	
+}
+
+.even {
+	background-color:#f9f9f9;	
+}
+
 .cattop-tr {
 	height:34px;
 }
@@ -666,6 +674,62 @@ ul.rating li.s8 a:hover { background-position:0 -288px; }
 ul.rating li.s9 a:hover { background-position:0 -304px; }
 ul.rating li.s10 a:hover{ background-position:0 -320px; }
 
+/* = Spoiler
+-----------------------------------------------------------------------------*/
+
+.spoiler-jump:focus,
+.spoiler-jump:active,
+.spoiler-jump:hover {
+    text-decoration: none;
+}
+
+.spoiler-jump {
+    border: none;
+    display: inline-block;
+    outline: none;
+    text-decoration: none;
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    right: 0;
+    text-decoration: none;
+    padding: 5px 5px;
+    width: 40px;
+    height: 40px;
+    color: #ffffff;
+    font-size: 1em;
+    line-height: 1em;
+    -webkit-transition: .2s ease-out;
+    -o-transition: .2s ease-out;
+    transition: .2s ease-out;
+    text-transform: uppercase;
+}
+
+.spoiler-jump:after {
+	font-family: 'Seditio' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 30px;
+	width: 30px;
+	display: block;
+	content: "\e946";
+	font-size: 30px;
+	color: #010101;
+	-webkit-transition: .2s ease-out;
+	-o-transition: .2s ease-out;
+	transition: .2s ease-out;
+}
+
+.active .spoiler-jump:after {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
 
 /* = Modal Windows
 -----------------------------------------------------------------------------*/
