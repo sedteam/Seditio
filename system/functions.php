@@ -1533,8 +1533,11 @@ function sed_build_user($id, $user, $group = '')  // Modify in v175
  */ 
 function sed_build_userimage($image)
 	{
+	global $cfg;
 	if (!empty($image))
-	      { $result = "<img src=\"".$image."\" alt=\"\" class=\"avatar post-author-avatar\" />"; }
+	    { $result = "<img src=\"".$image."\" alt=\"\" class=\"avatar post-author-avatar\" />"; }
+	else 
+		{ $result = "<img src=\"".$cfg['defav_dir']."default.png\" alt=\"\" class=\"avatar post-author-avatar\" />"; }
 	return($result);
 	}
 
