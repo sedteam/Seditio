@@ -40,7 +40,7 @@ $uploader = new XTemplate('plugins/uploader/uploader.tpl');
 
 $first_thumb_array = rtrim($row['structure_thumb']); 
 
-if ($first_thumb_array{mb_strlen($first_thumb_array) - 1} == ';') {
+if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') {
   $first_thumb_array = mb_substr($first_thumb_array, 0, -1);
 }
 
