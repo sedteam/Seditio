@@ -29,9 +29,7 @@
 					<!-- BEGIN: PAGE_THUMB -->
 					<div class="page-thumb">					
 						<figure class="post-container">	  
-							<a class="post-img-link" href="/">
-								<img class="post-img" src="{PAGE_THUMB|resize_image(%s, 1100, 800)}" alt="{PAGE_SHORTTITLE}" />
-							</a>
+							<img class="post-img" src="{PAGE_THUMB|crop_image(%s, 865, 600)}" alt="{PAGE_SHORTTITLE}" />
 						</figure>						
 					</div>
 					<!-- END: PAGE_THUMB -->
@@ -63,13 +61,15 @@
 					
 				</div>	
 				
-				<div class="page-comments"> 
+				<div class="page-comments spoiler-container {PAGE_COMMENTS_ISSHOW}"> 
 				
-					<div class="box-title">
-						<h3>{PHP.skinlang.page.Comments} <span class="comments-amount">{PAGE_COMMENTS}</span></h3>
+					<div class="comments-box-title">
+						<h3><a href="{PAGE_COMMENTS_URL}">{PHP.skinlang.page.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({PAGE_COMMENTS_COUNT})</span>{PAGE_COMMENTS_JUMP}</a></h3>						
 					</div>
 					
-					{PAGE_COMMENTS_DISPLAY}				
+					<div class="comments-box spoiler-body">
+						{PAGE_COMMENTS_DISPLAY}	
+					</div>
 				
 				</div>
 				

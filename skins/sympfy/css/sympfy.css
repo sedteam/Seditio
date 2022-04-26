@@ -851,12 +851,12 @@ ul {
 
 #sidebar {
 	display: block;
-	width: 25%;
+	width: 30%;
 }
 
 #primary {
 	display: block;
-	width: 75%;
+	width: 70%;
 }
 
 .section-menu {
@@ -1160,6 +1160,84 @@ ul.inline-menu li.active a {
     margin-top: 24px;
 }
 
+.comments-box-title .spoiler-jump {
+	top: 12px;
+    right: 8px;
+}
+
+.comments-box-title {
+	background: #e4e7e7;
+    padding: 20px;	
+	cursor: pointer;
+	margin-bottom: 1.3em;
+	position: relative;
+}
+
+.comments-box-title a {
+	color: #010101;
+	text-decoration: none;
+}
+
+.comments-box-title h3 {
+	margin: 0;
+    font-size: 1.3em;
+    font-weight: 600;	
+}
+
+.commentlist .comment {
+    margin-bottom: 1.3em;
+    padding: 20px;
+    position: relative;
+    list-style: none;
+}
+
+.commentlist .comment img.avatar {
+    border-radius: 50%;
+    height: auto;
+    float: left;
+    width: 52px;
+}
+
+.commentlist .comment .comments-header {
+	display: table;
+	width: 100%;
+	margin-bottom: 0.618em;
+}
+
+.commentlist .comment .comments-avatar {
+	width: 80px;
+	display:table-cell;
+	vertical-align: top;
+}
+
+.commentlist .comment .comment-head {
+	display: table-cell;
+	vertical-align: top;
+    margin-left: 10px;
+}
+
+.commentlist .comment .comment-head .name {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.commentlist .comment .comment-head .name a {
+    color: #010101;
+}
+
+.commentlist .comment .comment-head span {
+    display: block;
+}
+
+.commentlist .comment .comment-head .edit {
+   
+}
+
+.commentlist .comment .comment-container .comment-entry {
+    clear: both;
+    margin-left: 80px;
+}
+
 .page-ratings {
     margin-top: 24px;	
 }
@@ -1395,9 +1473,76 @@ a.alfabeta:hover {
 /***** PAGE *****/
 /*-------------------------*/
 
+/*-------------------------*/
+/***** PAGE *****/
+/*-------------------------*/
+
 .page-text {
     font-size: 1.1em;
     padding: 20px 0 10px 0;
+}
+
+.page-text table td img {
+	margin: 0px;
+}
+
+.page-text table td {
+	border: 1px solid #e8e4e3;
+	padding: 1em;
+	vertical-align: top;
+	text-align: left;
+}
+
+.page-text table {
+	margin: 0 5px 15px 5px;
+}
+
+.page-text table[align="center"] {
+    margin: 0 auto 15px auto;
+}
+
+.page-text ul,
+.page-textol {
+	margin: 0 0 20px 20px;
+}
+
+.page-text ul li {
+	list-style: disc;
+	margin: 10px 0;
+}
+
+.page-text ol li {
+	list-style: decimal;
+	margin: 10px 0;
+}
+
+.page-text blockquote {
+	color: #999999;
+	font-style: italic;
+	margin: 0.5em 0 1em;
+	padding: 0.25em 50px;
+	line-height: 1.45;
+	position: relative;
+}
+
+.page-text blockquote:before {
+	display: block;
+	content: "\201C";
+	font-size: 80px;
+	position: absolute;
+	left: -10px;
+	top: -20px;
+	color: #cccccc;
+}
+
+.page-text blockquote cite {
+	color: #333333;
+	display: block;
+	margin-top: 10px;
+}
+
+.page-text blockquote cite:before {
+	content: "\2014 \2009";
 }
 
 #page .section-title h2, 
@@ -1427,6 +1572,15 @@ a.alfabeta:hover {
     -moz-border-radius: 5px;
     word-wrap: break-word;
 }
+
+.page-text img {
+	max-width:100%;
+	height: auto !important;
+}
+
+.page-text table {
+    width: auto !important;
+} 
 
 /*-------------------------*/
 /***** FORUMS *****/

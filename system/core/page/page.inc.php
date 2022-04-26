@@ -257,6 +257,8 @@ $t->assign(array(
 	"PAGE_EXPIRE" => $pag['page_expire'],
 	"PAGE_COMMENTS" => $comments_link,
 	"PAGE_COMMENTS_DISPLAY" => $comments_display,
+	"PAGE_COMMENTS_ISSHOW" => ($cfg['showcommentsonpage'] || $comments) ? " active" : "",
+	"PAGE_COMMENTS_JUMP" => ($cfg['showcommentsonpage'] || $comments ) ? "<span class=\"spoiler-jump\"></span>" : "",
 	"PAGE_COMMENTS_COUNT" => $pag['page_comcount'],
 	"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
 	"PAGE_COMMENTS_URL" => $pag['page_pageurlcom'],

@@ -26,6 +26,7 @@ $skinlang['comments']['Send'] = "Send";
 $skinlang['comments']['Postedby'] = "Posted by";
 $skinlang['comments']['Commentedit'] = "Edit comment";   //New v173
 $skinlang['comments']['Update'] = "Update";  //New v173
+$skinlang['comments']['Newcomment'] = "New comment";  //New v178
 
 //forums.editpost.tpl
 $skinlang['forumseditpost']['Update'] = "Update";

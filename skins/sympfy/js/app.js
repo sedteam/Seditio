@@ -1,8 +1,9 @@
+var seditio 				  	= [];
+
 (function ()
 {
 	var t;  
-	var seditio 				  	= [];
-	
+		
 	seditio.win                     = $(window);
 	seditio.winHeight 			  	= $(window).height();
 	seditio.winWidth 			  	= $(window).width();
@@ -40,6 +41,13 @@
 		}
 		return 0;
 	};	
+	
+	seditio.ScrollTo  = function(anch) {					
+		var position = $("#" + anch).offset().top - 100;		
+		$('html, body').animate({
+			scrollTop: position
+		  }, 1000, 'linear');
+	};
 
 	seditio.scrollbar				= seditio.getScrollbar();
 
@@ -196,6 +204,15 @@
 		}
 	); 
 	
+	
+	$('.spoiler-jump').click(function(e){ // при клике по заголовку спойлера		
+		e.preventDefault();
+		$(this).closest('.spoiler-container').toggleClass('active');		
+		if ($(this).closest('.spoiler-container').hasClass('active'))
+			{ $(this).closest('.spoiler-container').find('.spoiler-body').slideDown(300); }
+		else 
+			{ $(this).closest('.spoiler-container').find('.spoiler-body').slideUp(300);	}
+	});	
 	
 	$('input, textarea').placeholder();
 	$(".phone_field").mask("+7 (999) 999-99-99",{completed:function(){ok=1}});  

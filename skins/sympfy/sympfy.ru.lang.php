@@ -26,6 +26,7 @@ $skinlang['comments']['Send'] = "Отправить";
 $skinlang['comments']['Postedby'] = "Разместил";
 $skinlang['comments']['Commentedit'] = "Редактирование комментария";   //New v173
 $skinlang['comments']['Update'] = "Обновить";  //New v173
+$skinlang['comments']['Newcomment'] = "Написать комментарий";  //New v178
 
 //forums.editpost.tpl
 $skinlang['forumseditpost']['Update'] = "Обновить";
