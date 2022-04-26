@@ -72,71 +72,72 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
                         ORDER BY p.page_date DESC LIMIT $sim_maxcount");
 
 	if (sed_sql_numrows($sql) > 0)
-	{
-	
-	while ($row = sed_sql_fetchassoc($sql))
-		{    
-		
-		if (sed_auth('page', $row['page_cat'], 'R'))
-			{
-			$sys['catcode'] = $row['page_cat']; //new in v175
-			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
-			$row['page_pageurlcom'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'].$pcomments) : sed_url("page", "al=".$row['page_alias'].$pcomments);
+		{	
+		$jj = 0;
+		while ($row = sed_sql_fetchassoc($sql))
+			{    
 			
-			$t-> assign(array(
-				"SIMILARPAGES_ROW_URL" => $row['page_pageurl'],
-				"SIMILARPAGES_ROW_ID" => $row['page_id'],
-				"SIMILARPAGES_ROW_CAT" => $row['page_cat'],
-				"SIMILARPAGES_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
-				"SIMILARPAGES_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
-				"SIMILARPAGES_ROW_SHORTTITLE" => sed_cutstring($row['page_title'], 50),
-				"SIMILARPAGES_ROW_TITLE" => $row['page_title'],			
-				"SIMILARPAGES_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date']),
-				"SIMILARPAGES_ROW_AUTHOR" => sed_cc($row['user_name']),
-				"SIMILARPAGES_ROW_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
-				"SIMILARPAGES_ROW_OWNER_AVATAR" => sed_build_userimage($row['user_avatar']),				
-				"SIMILARPAGES_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
-				"SIMILARPAGES_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
-				"SIMILARPAGES_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
-				"SIMILARPAGES_ROW_COMMENTS_COUNT" => $row['page_comcount']
-			));
-			
-			// ------- thumb
-			
-			if (!empty($row['page_thumb']))
-				{	
-				$first_thumb_array = rtrim($row['page_thumb']); 
-				if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
-					{
-					$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
-					}		
-				$first_thumb_array = explode(";", $first_thumb_array);
-				if (count($first_thumb_array) > 0)
-					{
-					$t->assign("SIMILARPAGES_ROW_THUMB", $first_thumb_array[0]);  
-					$t->parse("MAIN.SIMILARPAGES.SIMILARPAGES_ROW.SIMILARPAGES_ROW_THUMB");	
-					}		
-				}
-			else 
+			if (sed_auth('page', $row['page_cat'], 'R'))
 				{
-				$t->assign("SIMILARPAGES_ROW_THUMB", sed_cc($row['page_thumb']));
-				}	
+				$jj++;
+				$sys['catcode'] = $row['page_cat']; //new in v175
+				$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
+				$row['page_pageurlcom'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'].$pcomments) : sed_url("page", "al=".$row['page_alias'].$pcomments);
+				
+				$t-> assign(array(
+					"SIMILARPAGES_ROW_URL" => $row['page_pageurl'],
+					"SIMILARPAGES_ROW_ID" => $row['page_id'],
+					"SIMILARPAGES_ROW_CAT" => $row['page_cat'],
+					"SIMILARPAGES_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
+					"SIMILARPAGES_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
+					"SIMILARPAGES_ROW_SHORTTITLE" => sed_cutstring($row['page_title'], 50),
+					"SIMILARPAGES_ROW_TITLE" => $row['page_title'],			
+					"SIMILARPAGES_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date']),
+					"SIMILARPAGES_ROW_AUTHOR" => sed_cc($row['user_name']),
+					"SIMILARPAGES_ROW_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
+					"SIMILARPAGES_ROW_OWNER_AVATAR" => sed_build_userimage($row['user_avatar']),				
+					"SIMILARPAGES_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
+					"SIMILARPAGES_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
+					"SIMILARPAGES_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
+					"SIMILARPAGES_ROW_COMMENTS_COUNT" => $row['page_comcount']
+				));
+				
+				// ------- thumb
+				
+				if (!empty($row['page_thumb']))
+					{	
+					$first_thumb_array = rtrim($row['page_thumb']); 
+					if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
+						{
+						$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+						}		
+					$first_thumb_array = explode(";", $first_thumb_array);
+					if (count($first_thumb_array) > 0)
+						{
+						$t->assign("SIMILARPAGES_ROW_THUMB", $first_thumb_array[0]);  
+						$t->parse("MAIN.SIMILARPAGES.SIMILARPAGES_ROW.SIMILARPAGES_ROW_THUMB");	
+						}		
+					}
+				else 
+					{
+					$t->assign("SIMILARPAGES_ROW_THUMB", sed_cc($row['page_thumb']));
+					}	
 
-			// -------
-			
-			$t->parse("MAIN.SIMILARPAGES.SIMILARPAGES_ROW");
+				// -------
+				
+				$t->parse("MAIN.SIMILARPAGES.SIMILARPAGES_ROW");
 
-			/* old result view use mask */
-			$res .= sprintf($mask,
-				"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-				"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
-				date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
-				);
+				/* old result view use mask */
+				$res .= sprintf($mask,
+					"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
+					"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
+					date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
+					);
+				}
 			}
+			
+		if ($jj > 0) $t->parse("MAIN.SIMILARPAGES");
 		}
-		
-	$t->parse("MAIN.SIMILARPAGES");
-	}
 
 	$res = (empty($res)) ? $plu_empty : $res;
 
