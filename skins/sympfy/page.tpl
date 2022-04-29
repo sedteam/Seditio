@@ -10,7 +10,10 @@
 
 			<h1>{PAGE_SHORTTITLE}</h1>
 			
-			<div class="page-date"><i class="ic-clock"></i> {PAGE_DATE}</div>
+			<div class="page-info">
+				<div class="page-date"><i class="ic-clock"></i> {PAGE_DATE}</div>
+				<div class="page-rating"><a href="{PAGE_RATINGS_URL}"><i class="ic-star-full"></i> {PAGE_RATINGS_COUNT}</a></div>
+			</div>
 			
 		</div>
 		
@@ -61,6 +64,68 @@
 					
 				</div>	
 				
+				<!-- BEGIN: OTHER_PAGES -->
+				<div class="page-other">
+
+					<div class="box-title">
+						<h3>{PHP.skinlang.page.Otherpages}</h3><div class="similar-arrows"></div>
+					</div>
+					
+					<div class="page-other-body">	
+
+						<div class="row row-flex similar-slider">
+						
+						<!-- BEGIN: OTHER_PAGES_ROW -->
+
+						<div class="col-xs-12 col-sm-6 col-md-4 similar-item">
+				
+							<div class="post-item">  
+								<figure class="post-container">	  
+									<!-- BEGIN: OTHER_PAGES_ROW_THUMB -->
+										<a class="post-img-link" href="{OTHER_PAGES_ROW_URL}" data-page="{OTHER_PAGES_ROW_ID}" data-cat="{OTHER_PAGES_ROW_CAT}">
+											<img class="post-img" src="{OTHER_PAGES_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{OTHER_PAGES_ROW_TITLE}" />
+										</a>
+									<!-- END: OTHER_PAGES_ROW_THUMB -->
+									<figcaption class="post-content">
+										<div class="post-info">
+											<div class="post-category"><a href="{OTHER_PAGES_ROW_CATURL}">{OTHER_PAGES_ROW_CATTITLE}</a></div>
+											<div class="post-date">{OTHER_PAGES_ROW_DATE}</div>
+										</div>
+										<div class="post-title">
+											<h3><a href="{OTHER_PAGES_ROW_URL}">{OTHER_PAGES_ROW_TITLE}</a></h3>
+										</div>
+										<div class="post-desc">
+											<p>{OTHER_PAGES_ROW_DESC|strip_tags}</p>
+										</div>
+										<div class="post-info">
+											<div class="post-author"><a href="{OTHER_PAGES_ROW_USERURL}">{OTHER_PAGES_ROW_AVATAR}<span>{OTHER_PAGES_ROW_AUTHOR}</span></a></div>
+											<div class="post-comments"><i class="ic-message-circle"></i><a href="{OTHER_PAGES_ROW_URL}">{OTHER_PAGES_ROW_COMMENTS_COUNT}</a></div>
+										</div>
+									</figcaption>
+								</figure>
+							</div>					
+			
+						</div>
+						
+						<!-- END: OTHER_PAGES_ROW -->
+						
+						</div>
+						
+					</div>
+															
+				</div>
+				<!-- END: OTHER_PAGES -->					
+				
+				<div class="page-ratings"> 
+				
+					<div class="ratings-box-title">
+						<h3>{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</h3>
+					</div>
+					
+					{PAGE_RATINGS_DISPLAY}
+				
+				</div>
+				
 				<div class="page-comments spoiler-container {PAGE_COMMENTS_ISSHOW}"> 
 				
 					<div class="comments-box-title">
@@ -70,16 +135,6 @@
 					<div class="comments-box spoiler-body">
 						{PAGE_COMMENTS_DISPLAY}	
 					</div>
-				
-				</div>
-				
-				<div class="page-ratings"> 
-				
-					<div class="box-title">
-						<h3>{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</h3>
-					</div>
-					
-					{PAGE_RATINGS_DISPLAY}
 				
 				</div>
 
@@ -92,7 +147,7 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>Ещё почитать</h3>
+						<h3>{PHP.skinlang.page.Similarpages}</h3>
 					</div>
 					
 					<div class="sidebar-body">	

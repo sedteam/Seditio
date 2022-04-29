@@ -174,6 +174,8 @@ $skinlang['page']['Filesize'] = "Размер:";
 $skinlang['page']['Membersrating'] = "Рейтинг:";
 $skinlang['page']['Download'] = "Загрузить:";
 $skinlang['page']['Hits'] = "Просмотров:";
+$skinlang['page']['Otherpages'] = "Ещё в разделе";
+$skinlang['page']['Similarpages'] = "Ещё почитать";
 
 //pfs.tpl
 $skinlang['pfs']['Insertasthumbnail'] = "Вставить как эскиз";

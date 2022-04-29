@@ -1074,6 +1074,29 @@ ul.inline-menu li.active a {
 	text-decoration: none;
 }
 
+.page-other {
+	padding-top: 30px;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+    margin-top: 25px;
+    padding-bottom: 25px;
+}
+
+.page-other .similar-arrows {
+    width: 45px;
+    position: absolute;
+    float: none;
+    top: 0;
+    right: 0;
+    margin-top: 20px;
+}
+
+.page-other .post-title h3 {
+    font-size: 1.15em;
+    font-weight: 500;
+    margin: 0;
+}
+
 
 @media (min-width: 1200px) {
 
@@ -1238,12 +1261,32 @@ ul.inline-menu li.active a {
     margin-left: 80px;
 }
 
+.ratings-box-title {
+	padding: 20px;
+	cursor: pointer;
+	margin-bottom: 1.3em;
+	position: relative;
+	border-bottom: 1px solid #e4e7e7;
+}
+
+.ratings-box-title a {
+	color: #010101;
+	text-decoration: none;
+}
+
+.ratings-box-title h3 {
+	margin: 0;
+    font-size: 1.3em;
+    font-weight: 600;	
+}
+
 .page-ratings {
     margin-top: 24px;	
 }
 
 .box-title {
 	padding-bottom:15px;
+	position: relative;
 }
 
 .box-title h3 {
@@ -1556,6 +1599,20 @@ a.alfabeta:hover {
     color: #cccccc;
     font-size: 0.9em;
     font-weight: 300;
+	display:inline-block;
+}
+
+.page-rating {
+    padding: 0;
+    color: #cccccc;
+    font-size: 0.9em;
+    font-weight: 300;
+	display:inline-block;
+}
+
+.page-rating a {
+	color: #cccccc;
+	text-decoration: none;
 }
 
 .page-download {
