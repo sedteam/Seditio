@@ -93,6 +93,12 @@ $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."menu VALUES(6, 1, 'Contact', '/plug
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);  
 
+$adminmain .= "Adding the option to set a default country for the new members (Admin > Config > Users)<br />";
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('core', 'page', '06', 'genseourls', '3', '1', '', '')";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+$adminmain .= "-----------------------<br />";
+
 $adminmain .= "Changing the SQL version number to 178...<br />";      
 
 $sql = sed_sql_query("UPDATE ".$cfg['sqldbprefix']."stats SET stat_value=178 WHERE stat_name='version'");
