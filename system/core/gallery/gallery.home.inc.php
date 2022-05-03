@@ -85,7 +85,7 @@ $t = new XTemplate("skins/".$skin."/gallery.home.tpl");
 $t-> assign(array(
 	"GALLERY_HOME_TITLE" => $title,
 	"GALLERY_HOME_SUBTITLE" => $subtitle,
-	"GALLERY_HOME_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+	"GALLERY_HOME_BREADCRUMBS" => sed_breadcrumbs($urlpaths)
 ));
 
 $jj=0;

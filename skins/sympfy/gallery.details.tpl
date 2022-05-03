@@ -1,47 +1,86 @@
 <!-- BEGIN: MAIN -->
 
-<div id="title">
-  <h2>{GALLERY_DETAILS_TITLE}</h2>
-</div>
+<main id="page">
+	
+	<div class="container">
+	
+		<div class="section-title">
+		
+			{BREADCRUMBS}		
 
-<div id="subtitle">
-	{GALLERY_DETAILS_SUBTITLE}
-</div>
+			<h1>{GALLERY_DETAILS_TITLE}</h1>
+			
+			<div class="page-info">
+				<div class="page-date"><i class="ic-clock"></i> {GALLERY_DETAILS_DATE}</div>
+			</div>
+			
+			<div class="section-desc">
+				{GALLERY_DETAILS_SUBTITLE}
+			</div>
+			
+		</div>
+		
+		<!-- BEGIN: GALLERY_DETAILS_ADMIN -->
+		<div class="section-admin">
+			{GALLERY_DETAILS_ADMIN}
+		</div>
+		<!-- END: GALLERY_DETAILS_ADMIN -->		
 
-<div id="page">
+		<div class="section-body">
 
-<table class="flat">
+			<div class="row row-flex">
 
-	<tr>
-    <td style="width:50%; text-align:left; vertical-align:top;">
-    {GALLERY_DETAILS_IMG}
-    </td>
-    <td style="width:50%; text-align:left; vertical-align:top; padding:0 0 0 24px;">
-    
-    <div style="text-align:center;">
-   
-    <table class="flat">
-      <tr>
-        <td style="width:25%; text-align:center; vertical-align:top;">{GALLERY_DETAILS_PREV}</td>
-        <td style="width:25%; text-align:center; vertical-align:top;">{GALLERY_DETAILS_BACK}</td>
-        <td style="width:25%; text-align:center; vertical-align:top;">{GALLERY_DETAILS_ZOOM}</td>
-        <td style="width:25%; text-align:center; vertical-align:top;">{GALLERY_DETAILS_NEXT}</td>
-	     </tr>
-    </table>
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">	
 
-    
-    </div>
-    <div style="text-align:center; padding:16px;">{GALLERY_DETAILS_BROWSER}</div> 
-    {GALLERY_DETAILS_DESC} <br />&nbsp;<br />{GALLERY_DETAILS_ADMIN}
-    
-    </td>
-	</tr>
+					<div class="gallery-bigimg">
+					
+						<figure class="gallery-container">	  
+							<a class="gallery-img-link" href="{GALLERY_DETAILS_VIEWURL}">
+								<img class="gallery-img" src="{GALLERY_DETAILS_THUMB|resize_image(%s, 1200, 1200)}" />
+							</a>
+						</figure>
+					
+					</div>
+					
+					<div class="gallery-arrows">
+						<div class="gallery-arrows-col">{GALLERY_DETAILS_PREV}</div>
+						<div class="gallery-arrows-col">{GALLERY_DETAILS_BACK}</div>
+						<div class="gallery-arrows-col">{GALLERY_DETAILS_ZOOM}</div>
+						<div class="gallery-arrows-col">{GALLERY_DETAILS_NEXT}</div>
+					</div>
+					
+					<div class="gallery-browser">{GALLERY_DETAILS_BROWSER}</div>
+				
+				</div>
+				
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				
+					<!-- BEGIN: GALLERY_DETAILS_DESC -->
+					<div class="gallery-text">
+						{GALLERY_DETAILS_DESC}
+					</div>
+					<!-- END: GALLERY_DETAILS_DESC -->										
 
-</table>
+					<div class="page-comments spoiler-container {GALLERY_DETAILS_COMMENTS_ISSHOW}"> 
+					
+						<div class="comments-box-title">
+							<h3><a href="{GALLERY_DETAILS_COMMENTS_URL}">{PHP.skinlang.page.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({GALLERY_DETAILS_COMMENTS_COUNT})</span>{GALLERY_DETAILS_COMMENTS_JUMP}</a></h3>						
+						</div>
+						
+						<div class="comments-box spoiler-body">
+							{GALLERY_DETAILS_COMMENTS_DISPLAY}
+						</div>
+					
+					</div>				
+				
+				</div>
 
-<h4 style="margin-top:24px;">{PHP.skinlang.page.Comments} {GALLERY_DETAILS_COMMENTS}</h4>
-{GALLERY_DETAILS_COMMENTS_DISPLAY}
- 
-</div>
+			</div>
+
+		</div>
+		
+	</div>
+	
+</main>
 
 <!-- END: MAIN -->

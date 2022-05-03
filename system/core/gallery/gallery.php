@@ -27,6 +27,7 @@ require(SED_ROOT . '/datas/config.php');
 require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_gallery']);
+
 $gd_supported_sql = "('".implode("','", $cfg['gd_supported'])."')";
 
 sed_dieifdisabled($cfg['disable_gallery']);

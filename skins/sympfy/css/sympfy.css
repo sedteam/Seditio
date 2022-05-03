@@ -914,8 +914,17 @@ ul.inline-menu li.active a {
 	padding-bottom:24px;
 }
 
+
+/*-------------------------*/
+/***** POST & GALLERY ITEMS *****/
+/*-------------------------*/
+
 .post-item {
 	
+}
+
+.gallery-item {
+	margin-bottom:1.65em;
 }
 
 .post-container,
@@ -956,9 +965,25 @@ ul.inline-menu li.active a {
 .post-content,
 .gallery-content {}
 
-.post-info,
+.post-info {
+	display:table;
+}
+
 .gallery-info {
 	display:table;
+	width: 100%;
+}
+
+.gallery-arrows {
+	display: table;
+	width: 100%;
+}
+
+.gallery-arrows-col {
+	display: table-cell;
+	width: 25%;
+	text-align: center;
+	vertical-align: middle;
 }
 
 .post-category {
@@ -981,6 +1006,14 @@ ul.inline-menu li.active a {
 	color:#cccccc;
 	font-size:0.9em;
 	font-weight:300;
+}
+
+.gallery-admin {
+	display:table-cell;
+	vertical-align:bottom;
+	padding:15px 0;
+	color:#cccccc;
+	text-align: right;
 }
 
 .post-file {

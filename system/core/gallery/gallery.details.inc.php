@@ -86,20 +86,16 @@ if ($pfs['pfs_imgsize'][0]>$cfg['gallery_imgmaxwidth'])
     }
   }
 
-if ($usr['isadmin'])
-  {
-  $pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$pfs['pfs_userid'])."\">".$out['img_edit']."</a>";
-  $pfs['admin'] .= " &nbsp; <a href=\"".sed_url("pfs", "m=edit&a=potw&id=".$pfs['pfs_id'])."\">".$L['gal_setaspotw']."</a>";    // ????????????????????????????
-  }
-
 $item_code = 'g'.$pfs['pfs_id'];
 
 $url_gallery = array('part' => 'gallery', 'params' => "id=".$pfs['pfs_id']);
 
 list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $url_gallery, $comments);
+$pfs['pfs_urlcom'] = sed_url("gallery", "id=".$pfs['pfs_id']."&comments=1");
+
 $sql2 = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_id='".$id."' LIMIT 1");
 
-$title = "<a href=\"".sed_url("gallery")."\">".$L['gallery_home_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "f=".$pff['pff_id'])."\">".$pff['pff_title']."</a> ".$cfg['separator']." <a href=\"".sed_url("gallery", "id=".$id)."\">".$pfs['pfs_title']."</a>";
+$title = $pfs['pfs_title'];
 $subtitle = '';
 
 $out['subtitle'] = $pfs['pfs_title'];
@@ -107,6 +103,12 @@ $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('gallerytitle', $title_tags, $title_data);
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("gallery")] = $L['gallery_home_title'];
+$urlpaths[sed_url("gallery", "f=".$pff['pff_id'])] = $pff['pff_title'];
+$urlpaths[sed_url("gallery", "id=".$id)] = $pfs['pfs_title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.details.main');
@@ -117,50 +119,54 @@ if (is_array($extp))
 require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/".$skin."/gallery.details.tpl");
 
-$t-> assign(array(
-	"GALLERY_DETAILS_TITLE" => $title,
-	"GALLERY_DETAILS_SUBTITLE" => $subtitle
-		));
+$pfs['pfs_desc'] = sed_parse($pfs['pfs_desc']);
 
-
-  $pfs['pfs_desc'] = sed_parse($pfs['pfs_desc'], $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1, $pfs['pfs_desc_ishtml']);
-  if (!$pfs['pfs_desc_ishtml'] && $cfg['textmode'] == 'html')
-  	{
-  	$sql3 = sed_sql_query("UPDATE $db_pfs SET pfs_desc_ishtml=1, pfs_desc='".sed_sql_prep($pfs['pfs_desc'])."' WHERE pfs_id=".$pfs['pfs_id']); 
-  	}	
-
+if ($usr['isadmin'])
+	{
+	$pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$pfs['pfs_userid'])."\">".$out['img_edit']."</a>";
+	$pfs['admin'] .= " &nbsp; <a href=\"".sed_url("pfs", "a=setsample&id=".$pfs['pfs_id']."&f=".$pff['pff_id']."&".sed_xg())."\" title=\"".$L['pfs_setassample']."\">".$out['img_set']."</a>";  
+	
 	$t-> assign(array(
-      "GALLERY_DETAILS_ID" => $pfs['pfs_id'],
-      "GALLERY_DETAILS_VIEW_URL" => sed_url("gallery", "id=".$pfs['pfs_id']),
-      "GALLERY_DETAILS_VIEW_POPUP" => $pfs['popup'],
-      "GALLERY_DETAILS_FILE" => $pfs['pfs_file'],
-      "GALLERY_DETAILS_FULLFILE" => $pfs['pfs_fullfile'],
-      "GALLERY_DETAILS_THUMB" => "<img src=\"".$cfg['th_dir'].$pfs['pfs_file']."\" alt=\"\" />",
-      "GALLERY_DETAILS_IMG" => $pfs['pfs_img'],
-      "GALLERY_DETAILS_ICON" => $icon[$pfs['pfs_extension']],
-      "GALLERY_DETAILS_TITLE" => $title,
-      "GALLERY_DETAILS_SHORTTITLE" => sed_cc($pfs['pfs_title']),
-      "GALLERY_DETAILS_DESC" => $pfs['pfs_desc'],
-      "GALLERY_DETAILS_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
-      "GALLERY_DETAILS_DATE" => sed_build_date($cfg['dateformat'], $pfs['pfs_date']),
-      "GALLERY_DETAILS_SIZE" => $pfs['pfs_filesize'].$L['kb'],
-      "GALLERY_DETAILS_ROW_DIMX" => $pfs['pfs_imgsize'][0],
-      "GALLERY_DETAILS_ROW_DIMY" => $pfs['pfs_imgsize'][1],
-      "GALLERY_DETAILS_ROW_DIMXY" => $pfs['pfs_imgsize_xy'],
-      "GALLERY_DETAILS_COUNT" => $pfs['pfs_count'],
-      "GALLERY_DETAILS_BROWSER" => $browse_list,
-      "GALLERY_DETAILS_PREV" => $browse_prev,
-      "GALLERY_DETAILS_NEXT" => $browse_next,
-      "GALLERY_DETAILS_BACK" => $browse_back,
-      "GALLERY_DETAILS_ZOOM" => $browse_zoom,
-      "GALLERY_DETAILS_ADMIN" => $pfs['admin'],
-      "GALLERY_DETAILS_COMMENTS" => $comments_link,
-      "GALLERY_DETAILS_COMMENTS_DISPLAY" => $comments_display,
-      "GALLERY_DETAILS_COMMENTS_COUNT" => $comments_count,
-      "GALLERY_DETAILS_COND1" => $pfs['cond1'],
-      "GALLERY_DETAILS_COND2" => $pfs['cond2'],
-				));
+		"GALLERY_DETAILS_ADMIN" => $pfs['admin']
+	));	
+	$t->parse("MAIN.GALLERY_DETAILS_ADMIN");  
+	}
 
+$t-> assign(array(
+	"GALLERY_DETAILS_ID" => $pfs['pfs_id'],
+	"GALLERY_DETAILS_VIEWURL" => sed_url("gallery", "id=".$pfs['pfs_id']),
+	"GALLERY_DETAILS_VIEW_POPUP" => $pfs['popup'],
+	"GALLERY_DETAILS_FILE" => $pfs['pfs_file'],
+	"GALLERY_DETAILS_FULLFILE" => $pfs['pfs_fullfile'],
+	"GALLERY_DETAILS_THUMB" => $pfs['pfs_file'],
+	"GALLERY_DETAILS_IMG" => $pfs['pfs_img'],
+	"GALLERY_DETAILS_ICON" => $icon[$pfs['pfs_extension']],
+	"GALLERY_DETAILS_TITLE" => $title,
+	"GALLERY_DETAILS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+	"GALLERY_DETAILS_SUBTITLE" => $subtitle,
+	"GALLERY_DETAILS_SHORTTITLE" => sed_cc($pfs['pfs_title']),
+	"GALLERY_DETAILS_DESC" => $pfs['pfs_desc'],
+	"GALLERY_DETAILS_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
+	"GALLERY_DETAILS_DATE" => sed_build_date($cfg['dateformat'], $pfs['pfs_date']),
+	"GALLERY_DETAILS_SIZE" => $pfs['pfs_filesize'].$L['kb'],
+	"GALLERY_DETAILS_ROW_DIMX" => $pfs['pfs_imgsize'][0],
+	"GALLERY_DETAILS_ROW_DIMY" => $pfs['pfs_imgsize'][1],
+	"GALLERY_DETAILS_ROW_DIMXY" => $pfs['pfs_imgsize_xy'],
+	"GALLERY_DETAILS_COUNT" => $pfs['pfs_count'],
+	"GALLERY_DETAILS_BROWSER" => $browse_list,
+	"GALLERY_DETAILS_PREV" => $browse_prev,
+	"GALLERY_DETAILS_NEXT" => $browse_next,
+	"GALLERY_DETAILS_BACK" => $browse_back,
+	"GALLERY_DETAILS_ZOOM" => $browse_zoom,	
+	"GALLERY_DETAILS_COMMENTS" => $comments_link,
+	"GALLERY_DETAILS_COMMENTS_DISPLAY" => $comments_display,
+	"GALLERY_DETAILS_COMMENTS_ISSHOW" => ($comments) ? " active" : "",
+	"GALLERY_DETAILS_COMMENTS_JUMP" => ($comments ) ? "<span class=\"spoiler-jump\"></span>" : "",
+	"GALLERY_DETAILS_COMMENTS_COUNT" => $comments_count,
+	"GALLERY_DETAILS_COMMENTS_URL" => $pfs['pfs_urlcom']
+));
+
+if (!empty($pfs['pfs_desc'])) $t->parse("MAIN.GALLERY_DETAILS_DESC");
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.details.tags');

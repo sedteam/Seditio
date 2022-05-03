@@ -19,7 +19,7 @@
 		
 		<!-- BEGIN: PAGE_ADMIN -->
 		<div class="section-admin">
-			{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; {PAGE_ADMIN_CLONE} &nbsp; ({PAGE_ADMIN_COUNT})<br />
+			{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; {PAGE_ADMIN_CLONE} &nbsp; ({PAGE_ADMIN_COUNT})
 		</div>
 		<!-- END: PAGE_ADMIN -->		
 	
