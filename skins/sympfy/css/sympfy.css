@@ -914,7 +914,6 @@ ul.inline-menu li.active a {
 	padding-bottom:24px;
 }
 
-
 /*-------------------------*/
 /***** POST & GALLERY ITEMS *****/
 /*-------------------------*/
@@ -1129,7 +1128,6 @@ ul.inline-menu li.active a {
     font-weight: 500;
     margin: 0;
 }
-
 
 @media (min-width: 1200px) {
 
@@ -1675,6 +1673,72 @@ a.alfabeta:hover {
 /*-------------------------*/
 /***** FORUMS *****/
 /*-------------------------*/
+
+.forums-table h4 {
+	margin:0 0 10px 0;
+	font-weight: 500;
+}
+
+.forums-table .avatar {
+	width: 100px; 
+    height: 100px; 
+    border-radius: 0;
+    margin-right: 0!important;
+    display: inline-block!important;
+}
+
+.forums-table .table-td {
+	padding: 1em 0.8em;
+	vertical-align: middle;
+}
+
+.forums-table .table-td.forums-topics-info {
+	padding:0;
+}
+
+.forums-topics-viewers {
+	text-align: right;
+}
+
+.forums-post-table .table-td {
+	vertical-align: top;
+}
+
+.forums-post-message {
+	overflow-x:auto; 
+	overflow-y:visible; 
+	margin-bottom:8px;
+}
+
+.forums-table .cattop h4 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.4em;
+}
+
+.forums-table .cattop {
+    vertical-align: middle;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #fff;
+}
+
+.forums-main-table .cattop-tr {
+	height:34px;
+	position: relative;
+}
+
+.table-cells-subtable {
+	margin:0;
+	padding:0;
+}
+
+.even.forums-message-td {
+	background: #f3f3f3;
+}
+
+.odd.forums-message-td {
+	background: #f9f9f9;
+}
 
 ul.subforums-list {
     list-style: none;

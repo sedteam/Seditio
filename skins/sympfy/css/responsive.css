@@ -112,9 +112,201 @@
 
 	.post-sidebar-small-item .post-title h3 {
 		font-size: 1em;
+	}
+
+	.forums-topics-viewers {
+		display: none;
+	}
+	
+	.forums-main-table,
+	.forums-topics-table,
+	.forums-post-table	{
+		display: block;
+	}
+	
+	.table-cells-subtable {
+		margin:0;
+	}
+	
+	.forums-main-table .table-thead,
+	.forums-topics-table .table-thead,
+	.forums-post-table .table-thead	{
+		display: none;
+	}
+	
+	.forums-main-table .cattop-tr {
+		height: 34px;
+		position: relative;
+		width: 100%;
+		display: block;
 	}	
 	
+	.forums-post-table  .cattop-tr {
+		display: block;
+		height: auto;
+	}
 	
+	.forums-main-table  .table-tbody,
+	.forums-topics-table  .table-tbody,
+	.forums-post-table  .table-tbody	{
+		display: block;
+	}
+	
+	.forums-main-table  .table-tbody .table-tr,
+	.forums-topics-table  .table-tbody .table-tr,
+	.forums-post-table  .table-tbody .table-tr	{
+		display: block;
+		clear: both;
+	}
+	
+	.forums-main-table  .table-tbody .table-tr:before, 
+	.forums-main-table  .table-tbody .table-tr:after,
+	.forums-topics-table  .table-tbody .table-tr:before, 
+	.forums-topics-table  .table-tbody .table-tr:after,
+	.forums-post-table  .table-tbody .table-tr:before, 
+	.forums-post-table  .table-tbody .table-tr:after	{
+		content: " ";
+		display: block;
+	}	
+	
+	.forums-main-table  .table-tbody .table-tr:after,
+	.forums-topics-table  .table-tbody .table-tr:after,
+	.forums-post-table  .table-tbody .table-tr:after	{
+		clear: both;
+	}	
+	
+	.forums-main-table  .table-tbody .table-tr .table-td,
+	.forums-topics-table  .table-tbody .table-tr .table-td,
+	.forums-post-table  .table-tbody .table-tr .table-td	{
+		display: block;
+		clear: both;
+	}
+	
+	.forums-main-table  .table-cells-subtable,
+	.forums-topics-table  .table-cells-subtable	{
+		display: table;
+		margin: 0;
+	}	
+
+	.forums-main-table  .table-cells-subtable .table-tr,
+	.forums-topics-table  .table-cells-subtable .table-tr	{
+		display: table-row;
+	}
+
+	.forums-main-table  .table-cells-subtable .table-tr .table-td,
+	.forums-topics-table  .table-cells-subtable .table-tr .table-td	{
+		display: table-cell;
+	}
+
+	.forums-main-table .table-tbody .table-tr .forums-main-info,
+	.forums-topics-table .table-tbody .table-tr .forums-topics-info	{
+		padding: 0;
+	}
+	
+	.forums-main-table .table-tbody .table-tr .forums-lastpost {
+		width:82%;
+		float:left;
+		clear: none;
+		padding-top:0;
+		color: #afaaaa;
+	}
+	
+	.forums-topics-table .table-tbody .table-tr .forums-lastpost {
+		padding-top:0;
+		padding-left: 50px;
+		color: #afaaaa;
+	}
+	
+	.forums-main-table .table-tbody .table-tr .forums-topiccount {
+		display: none;
+	}
+	
+	.forums-main-table .table-tbody .table-tr .forums-postcount,
+	.forums-topics-table .table-tbody .table-tr .forums-postcount	{
+		display: none;
+	}
+	
+	.forums-main-table .table-tbody .table-tr .forums-viewcount,
+	.forums-topics-table .table-tbody .table-tr .forums-viewcount	{
+		display: none;
+	}
+	
+	.forums-topics-table .table-tbody .table-tr .forums-firstposter {
+		display: none;
+	}
+	
+	.forums-main-table .table-tbody .table-tr .forums-activity {
+		width:18%;
+		clear: none;
+		float: left;
+		padding-top:0;
+	}
+	
+	.forums-post-table .table-tbody .table-tr .forums-post-author {
+		padding-bottom:0;
+		border-bottom:0;
+		padding-top: 8px;
+	}
+	
+	.forums-post-table .table-tbody .table-tr .forums-post-date {
+		text-align:left!important;
+		padding-top:0;
+		border-top:0;
+		padding-bottom: 8px;
+		color: #afaaaa;
+		font-size:0.9em;
+	}
+	
+	
+	.forums-post-table .forums-post-infoposter {
+		display: table;
+		width:100%;
+	}
+
+	.forums-post-table .forums-post-avatar {
+		display:table-cell;
+		width:100px;
+		vertical-align:top;
+	}
+	
+	.forums-post-table .forums-post-avatar .avatar {
+		width:80px;
+		height:80px;
+	}
+
+	.forums-post-table .forums-post-userinfo {
+		display:table-cell;
+		vertical-align:top;
+	}
+	
+	.forums-post-table .forums-post-userinfo p {
+		margin: 0 0 0.2em 0;
+	}
+	
+	.forums-post-table .forums-post-message {
+		margin:0;
+	}
+	
+	.forums-post-table .forums-post-infoposter-td {
+		padding-bottom: 0;
+	}
+	
+	.odd.forums-message-td {
+		background: #f3f3f3;
+	}
+	.even.forums-message-td	{
+		background: #f9f9f9;
+	}
+	
+	.forums-post-message p:last-child {
+		padding-bottom:0;
+		margin-bottom:0;
+	}
+	
+	
+	.brnomobile {
+		display:none;
+	}
 }
 
 @media (max-width: 768px) {

@@ -41,22 +41,24 @@
 
 			<!-- END: FORUMS_POSTS_PAGINATION_TP -->
 
-			<div class="table-cells forums-table">
+			<div class="table-cells forums-table forums-post-table">
 
 				<div class="table-thead">
 					<div class="table-td coltop" style="width:160px;">{PHP.skinlang.forumspost.Author}</div>
 					<div class="table-td coltop">{PHP.skinlang.forumspost.Message}</div>
 				</div>
+				
+				<div class="table-tbody">
 
 				<!-- BEGIN: FORUMS_POSTS_ROW -->
 			  
 				<div class="table-tr cattop-tr">
 				
-					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} cattop">
-						<span style="font-size:120%;"><strong>{FORUMS_POSTS_ROW_POSTERNAME}</strong></span>
+					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} cattop forums-post-author">
+						<h4>{FORUMS_POSTS_ROW_POSTERNAME}</h4>
 					</div>
 				
-					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} cattop text-right">
+					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} cattop text-right forums-post-date">
 						#{FORUMS_POSTS_ROW_IDURL} {FORUMS_POSTS_ROW_CREATION} {FORUMS_POSTS_ROW_POSTERIP} {FORUMS_POSTS_ROW_ADMIN} {FORUMS_POSTS_ROW_RATE}
 					</div>
 				
@@ -64,21 +66,32 @@
 			  
 				<div class="table-tr">
 					
-					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} td-top">
-						{FORUMS_POSTS_ROW_AVATAR}
-						<p>
-							{FORUMS_POSTS_ROW_MAINGRP}<br />
-							{FORUMS_POSTS_ROW_COUNTRYFLAG} {FORUMS_POSTS_ROW_MAINGRPSTARS}<br />
-							<img src="skins/{PHP.skin}/img/online{FORUMS_POSTS_ROW_USERONLINE}.gif" alt="{PHP.skinlang.forumspost.Onlinestatus}">
-						</p>
-						<p>
-							{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.skinlang.forumspost.posts}<br />
-							{FORUMS_POSTS_ROW_WEBSITE}
-						</p>
+					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} td-top forums-post-infoposter-td">
+						
+						<div class="forums-post-infoposter">
+						
+							<div class="forums-post-avatar">
+								{FORUMS_POSTS_ROW_AVATAR}
+							</div>
+							<div class="forums-post-userinfo">
+								<p>
+									{FORUMS_POSTS_ROW_MAINGRP}<br />
+									{FORUMS_POSTS_ROW_COUNTRYFLAG} {FORUMS_POSTS_ROW_MAINGRPSTARS}<br />
+									<img src="skins/{PHP.skin}/img/online{FORUMS_POSTS_ROW_USERONLINE}.gif" alt="{PHP.skinlang.forumspost.Onlinestatus}">
+								</p>
+								<p>
+									{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.skinlang.forumspost.posts}<br />
+									{FORUMS_POSTS_ROW_WEBSITE}
+								</p>
+							</div>
+						
+						</div>
+						
+						
 					</div>
 
-					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} td-top">
-						<div style="overflow-x:auto; overflow-y:visible; margin-bottom:8px;">
+					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} td-top forums-message-td">
+						<div class="forums-post-message">
 							{FORUMS_POSTS_ROW_TEXT}
 							<div class="signature">{FORUMS_POSTS_ROW_USERTEXT}</div>
 						</div>  
@@ -89,6 +102,8 @@
 
 				<!-- END: FORUMS_POSTS_ROW -->
 
+				</div>
+				
 			</div>
 
 			<!-- BEGIN: FORUMS_POSTS_PAGINATION_BM -->

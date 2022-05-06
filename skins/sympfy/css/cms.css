@@ -446,20 +446,8 @@ table.cells tr:nth-child(even) {
 	background-color:#f9f9f9;	
 }
 
-.cattop-tr {
-	height:34px;
-}
-
 .cattop {
 	background: #dcdcdc;
-}
-
-.forums-table h4 {
-	margin:0 0 10px 0;
-}
-
-.forums-table .table-td {
-	padding: 1em 0.8em;
 }
 
 .centered {

@@ -23,10 +23,9 @@
 				</ul>
 			</nav>
 
-			<div class="table-cells forums-table">
+			<div class="table-cells forums-table forums-main-table">
 
-				<div class="table-thead">
-					<div class="table-td coltop"></div>
+				<div class="table-thead forums-table-head">
 					<div class="table-td coltop">{PHP.skinlang.forumssections.Sections}  &nbsp;  &nbsp; <a href="{FORUMS_SECTIONS_FOLDALL}">{PHP.skinlang.forumssections.FoldAll}</a> / <a href="{FORUMS_SECTIONS_UNFOLDALL}">{PHP.skinlang.forumssections.UnfoldAll}</a></div>
 					<div class="table-td coltop" style="width:250px;">{PHP.skinlang.forumssections.Lastpost}</div>
 					<div class="table-td coltop" style="width:48px;">{PHP.skinlang.forumssections.Topics}</div>
@@ -49,47 +48,60 @@
 
 				<div class="table-tr">
 				
-					<div class="table-td" style="width:32px;">
-						<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
-					</div>
-
-					<div class="table-td">
-						<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
-						<div class="desc">{FORUMS_SECTIONS_ROW_DESC}</div>
+					<div class="table-td forums-main-info">
+					
+						<div class="table-cells table-cells-subtable">
 						
-						<!-- BEGIN: FORUMS_SECTIONS_ROW_SUBFORUMS -->
-						<div class="subforums">
-							<ul class="subforums-list">	
-								<!-- BEGIN: FORUMS_SECTIONS_ROW_SUBFORUMS_LIST -->
-								<li><a href="{FORUMS_SECTIONS_ROW_SUBFORUMS_URL}">{FORUMS_SECTIONS_ROW_SUBFORUMS_TITLE}</a></li>	
-								<!-- END: FORUMS_SECTIONS_ROW_SUBFORUMS_LIST -->
-							</ul>    
+							<div class="table-tr">
+							
+								<div class="table-td" style="width:32px;">
+									<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
+								</div>
+
+								<div class="table-td">
+									<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
+									<div class="desc">{FORUMS_SECTIONS_ROW_DESC}</div>
+									
+									<!-- BEGIN: FORUMS_SECTIONS_ROW_SUBFORUMS -->
+									<div class="subforums">
+										<ul class="subforums-list">	
+											<!-- BEGIN: FORUMS_SECTIONS_ROW_SUBFORUMS_LIST -->
+											<li><a href="{FORUMS_SECTIONS_ROW_SUBFORUMS_URL}">{FORUMS_SECTIONS_ROW_SUBFORUMS_TITLE}</a></li>	
+											<!-- END: FORUMS_SECTIONS_ROW_SUBFORUMS_LIST -->
+										</ul>    
+									</div>
+									<!-- END: FORUMS_SECTIONS_ROW_SUBFORUMS -->	
+									
+								</div>
+							
+							</div>
+						
 						</div>
-						<!-- END: FORUMS_SECTIONS_ROW_SUBFORUMS -->	
-						
+					
 					</div>
+					
 
-					<div class="table-td">
+					<div class="table-td forums-lastpost">
 						{FORUMS_SECTIONS_ROW_LASTPOST}<br />
 						{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
 						{FORUMS_SECTIONS_ROW_TIMEAGO}
 					</div>
 
-					<div class="table-td">
+					<div class="table-td forums-topiccount">
 						{FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL}<br />
 						<span class="desc">({FORUMS_SECTIONS_ROW_TOPICCOUNT})</span>
 					</div>
 
-					<div class="table-td">
+					<div class="table-td forums-postcount">
 						{FORUMS_SECTIONS_ROW_POSTCOUNT_ALL}<br />
 						<span class="desc">({FORUMS_SECTIONS_ROW_POSTCOUNT})</span>
 					</div>
 
-					<div class="table-td">
+					<div class="table-td forums-viewcount">
 						{FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT}
 					</div>
 
-					<div class="table-td">
+					<div class="table-td forums-activity">
 						{FORUMS_SECTIONS_ROW_ACTIVITY}
 					</div>
 

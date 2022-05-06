@@ -19,20 +19,19 @@
 		<div class="section-body">
 
 			<div class="row">
-				<div class="col-sm-6 col-md-6 col-lg-6">
+				<div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
 					<a href="{FORUMS_TOPICS_NEWTOPICURL}" class="btn"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /> <span style="font-size:120%;">{PHP.L.for_newtopic}</span></a>
 				</div>  
-				<div class="col-sm-6 col-md-6 col-lg-6" style="text-align:right;">
+				<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 forums-topics-viewers">
 					{FORUMS_TOPICS_VIEWERS} {PHP.skinlang.forumstopics.Viewers} &nbsp; 	{FORUMS_TOPICS_JUMPBOX}	
 				</div>
 			</div> 
 
 			<!-- BEGIN: FORUMS_SECTIONS -->
 
-			<div class="table-cells forums-table">
+			<div class="table-cells forums-table forums-main-table">
 
 				<div class="table-thead">
-					<div class="table-td coltop"></div>
 					<div class="table-td coltop">{PHP.skinlang.forumssections.Subforums}</div>
 					<div class="table-td coltop" style="width:250px;">{PHP.skinlang.forumssections.Lastpost}</div>
 					<div class="table-td coltop" style="width:48px;">{PHP.skinlang.forumssections.Topics}</div>
@@ -46,27 +45,40 @@
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION -->
 
 				<div class="table-tr">
-					<div class="table-td" style="width:32px;">
-						<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
-					</div>
+					
+					<div class="table-td forums-main-info">
+					
+						<div class="table-cells table-cells-subtable">
+							
+							<div class="table-tr">
+							
+								<div class="table-td" style="width:32px;">
+									<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
+								</div>
 
-					<div class="table-td">
-						<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
-						<div class="desc">{FORUMS_SECTIONS_ROW_DESC}</div>
-					</div>
+								<div class="table-td">
+									<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
+									<div class="desc">{FORUMS_SECTIONS_ROW_DESC}</div>
+								</div>
 
-					<div class="table-td">
-						{FORUMS_SECTIONS_ROW_LASTPOST}<br />
-						{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
-						{FORUMS_SECTIONS_ROW_TIMEAGO}
-					</div>
+								<div class="table-td">
+									{FORUMS_SECTIONS_ROW_LASTPOST}<br />
+									{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
+									{FORUMS_SECTIONS_ROW_TIMEAGO}
+								</div>
+							
+							</div>
+							
+						</div>
+							
+					</div>		
 
-					<div class="table-td">
+					<div class="table-td forums-topiccount">
 						{FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL}<br />
 						<span class="desc">({FORUMS_SECTIONS_ROW_TOPICCOUNT})</span>
 					</div>
 
-					<div class="table-td">
+					<div class="table-td forums-postcount">
 						{FORUMS_SECTIONS_ROW_POSTCOUNT_ALL}<br />
 						<span class="desc">({FORUMS_SECTIONS_ROW_POSTCOUNT})</span>
 					</div>
@@ -96,13 +108,11 @@
 			
 			<!-- END: FORUMS_TOPICS_PAGINATION_TP -->
 
-			<div class="table-cells forums-table">
+			<div class="table-cells forums-table forums-topics-table">
 			  
 				<div class="table-thead">
 
-					<div class="table-td coltop"></div>
-					<div class="table-td coltop">{FORUMS_TOPICS_TITLE_TOPICS}</div>
-					<div class="table-td coltop" style="width:160px;">{FORUMS_TOPICS_TITLE_STARTED}</div>
+					<div class="table-td coltop">{FORUMS_TOPICS_TITLE_TOPICS} <div style="float:right; width:135px;">{FORUMS_TOPICS_TITLE_STARTED}</div></div>
 					<div class="table-td coltop" style="width:250px;">{FORUMS_TOPICS_TITLE_LASTPOST}</div>
 					<div class="table-td coltop" style="width:56px;">{FORUMS_TOPICS_TITLE_POSTS}</div>
 					<div class="table-td coltop" style="width:56px;">{FORUMS_TOPICS_TITLE_VIEWS}</div>
@@ -113,31 +123,43 @@
 				
 				<!-- BEGIN: FORUMS_TOPICS_ROW -->
 
-				<div class="table-tr">
-				
-					<div class="table-td centerall {FORUMS_TOPICS_ROW_ODDEVEN}" style="width:32px;"> 
-						{FORUMS_TOPICS_ROW_ICON}
-					</div>
+				<div class="table-tr">				
+						
+					<div class="table-td forums-topics-info {FORUMS_TOPICS_ROW_ODDEVEN}">				
 
-					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN}">
-						<strong><a href="{FORUMS_TOPICS_ROW_URL}">{FORUMS_TOPICS_ROW_TITLE}</a></strong><br />
-						<span class="desc">{FORUMS_TOPICS_ROW_DESC} &nbsp; {FORUMS_TOPICS_ROW_PAGES}</span>
-					</div>
+						<div class="table-cells table-cells-subtable">
 
-					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN}">
-						{FORUMS_TOPICS_ROW_CREATIONDATE}<br />{FORUMS_TOPICS_ROW_FIRSTPOSTER}
-					</div>
+							<div class="table-tr">
+							
+								<div class="table-td centerall" style="width:32px;"> 
+									{FORUMS_TOPICS_ROW_ICON}
+								</div>
 
-					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN}">
-						{FORUMS_TOPICS_ROW_UPDATED} {FORUMS_TOPICS_ROW_LASTPOSTER}<br />
+								<div class="table-td">
+									<strong><a href="{FORUMS_TOPICS_ROW_URL}">{FORUMS_TOPICS_ROW_TITLE}</a></strong>
+									<div class="desc">{FORUMS_TOPICS_ROW_DESC} {FORUMS_TOPICS_ROW_PAGES}</div>
+								</div>
+
+								<div class="table-td forums-firstposter" style="width:160px;">
+									{FORUMS_TOPICS_ROW_CREATIONDATE}<br />{FORUMS_TOPICS_ROW_FIRSTPOSTER}
+								</div>
+							
+							</div>
+							
+						</div>
+					
+					</div>	
+						
+					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN} forums-lastpost">
+						{FORUMS_TOPICS_ROW_UPDATED} {FORUMS_TOPICS_ROW_LASTPOSTER}<br class="brnomobile" />
 						{FORUMS_TOPICS_ROW_TIMEAGO}
 					</div>
 
-					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN}">
+					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN} forums-postcount">
 						{FORUMS_TOPICS_ROW_POSTCOUNT}
 					</div>
 
-					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN}">
+					<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN} forums-viewcount">
 						{FORUMS_TOPICS_ROW_VIEWCOUNT}
 					</div>
 
