@@ -12,8 +12,11 @@
 			
 			<div class="section-desc">
 				{FORUMS_POSTS_TOPICDESC}
-				{FORUMS_POSTS_SUBTITLE}
 			</div>
+			
+			<div class="section-subtitle">
+				{FORUMS_POSTS_SUBTITLE}
+			</div>			
 			
 		</div>
 

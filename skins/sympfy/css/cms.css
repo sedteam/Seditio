@@ -438,6 +438,12 @@ table.cells tr:nth-child(even) {
 	padding: 0.5em 0.8em;
 }
 
+.box {
+	border: 1px dotted #ccc;
+    padding: 15px;
+    background: #f3f3f3;
+}
+
 .odd {
 	background-color:#f3f3f3;	
 }

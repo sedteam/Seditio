@@ -257,19 +257,31 @@ $t->assign(array(
 	"PAGE_OWNER_AVATAR" => sed_build_userimage($pag['user_avatar']),
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
-	"PAGE_EXPIRE" => $pag['page_expire'],
-	"PAGE_COMMENTS" => $comments_link,
-	"PAGE_COMMENTS_DISPLAY" => $comments_display,
-	"PAGE_COMMENTS_ISSHOW" => ($cfg['showcommentsonpage'] || $comments) ? " active" : "",
-	"PAGE_COMMENTS_JUMP" => ($cfg['showcommentsonpage'] || $comments ) ? "<span class=\"spoiler-jump\"></span>" : "",
-	"PAGE_COMMENTS_COUNT" => $pag['page_comcount'],
-	"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
-	"PAGE_COMMENTS_URL" => $pag['page_pageurlcom'],
-	"PAGE_RATINGS_COUNT" => $pag['page_rating'],
-	"PAGE_RATINGS_URL" => $pag['page_pageurlrat'],
-	"PAGE_RATINGS" => $ratings_link,
-	"PAGE_RATINGS_DISPLAY" => $ratings_display
+	"PAGE_EXPIRE" => $pag['page_expire']
 ));
+
+if (!empty($comments_link)) {
+	$t->assign(array(
+		"PAGE_COMMENTS" => $comments_link,
+		"PAGE_COMMENTS_DISPLAY" => $comments_display,
+		"PAGE_COMMENTS_ISSHOW" => ($cfg['showcommentsonpage'] || $comments) ? " active" : "",
+		"PAGE_COMMENTS_JUMP" => ($cfg['showcommentsonpage'] || $comments ) ? "<span class=\"spoiler-jump\"></span>" : "",
+		"PAGE_COMMENTS_COUNT" => $pag['page_comcount'],
+		"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=".$pag['page_id']),
+		"PAGE_COMMENTS_URL" => $pag['page_pageurlcom']	
+	));	
+	$t->parse("MAIN.PAGE_COMMENTS");	
+}
+
+if (!empty($ratings_link)) {
+	$t->assign(array(	
+		"PAGE_RATINGS_COUNT" => $pag['page_rating'],
+		"PAGE_RATINGS_URL" => $pag['page_pageurlrat'],
+		"PAGE_RATINGS" => $ratings_link,
+		"PAGE_RATINGS_DISPLAY" => $ratings_display	
+	));	
+	$t->parse("MAIN.PAGE_RATINGS");
+}
 		
 // ---------- Extra fields - getting
 $extrafields = array(); 

@@ -116,6 +116,7 @@
 				</div>
 				<!-- END: OTHER_PAGES -->					
 				
+				<!-- BEGIN: PAGE_RATINGS -->
 				<div class="page-ratings"> 
 				
 					<div class="ratings-box-title">
@@ -125,7 +126,9 @@
 					{PAGE_RATINGS_DISPLAY}
 				
 				</div>
+				<!-- END: PAGE_RATINGS -->
 				
+				<!-- BEGIN: PAGE_COMMENTS -->
 				<div class="page-comments spoiler-container {PAGE_COMMENTS_ISSHOW}"> 
 				
 					<div class="comments-box-title">
@@ -137,7 +140,8 @@
 					</div>
 				
 				</div>
-
+				<!-- END: PAGE_COMMENTS -->
+				
 			</div>
 			
 			<aside id="sidebar">

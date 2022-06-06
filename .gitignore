@@ -215,3 +215,5 @@ pip-log.txt
 .mr.developer.cfg
 docs/upgrade/sed_parser.sql
 datas/config.php
+datas/avatars/1-avatar.jpg
+datas/resized/noimg.crop800x600.jpg
