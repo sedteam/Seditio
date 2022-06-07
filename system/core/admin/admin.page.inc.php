@@ -66,8 +66,13 @@ switch($mn)
     		$rdesc = sed_import('rdesc','P','TXT');
 			$rstext = sed_import('rstext','P','HTM'); //New v175
     		$ricon = sed_import('ricon','P','TXT');
-			$rthumb = sed_import('rthumb','P','TXT'); // New v178
     		$rgroup = sed_import('rgroup','P','BOL');
+			
+			$rthumb = sed_import('rthumb','P','TXT'); // New v178		
+			$rseotitle = sed_import('rseotitle','P','TXT');
+			$rseodesc = sed_import('rseodesc','P','TXT');
+			$rseokeywords = sed_import('rseokeywords','P','TXT');
+			$rseoh1 =  sed_import('rseoh1','P','TXT');
     		
     		$rallowcomments = sed_import('rallowcomments', 'P', 'BOL');  //New v173
     		$rallowratings = sed_import('rallowratings', 'P', 'BOL');  //New v173
@@ -80,17 +85,21 @@ switch($mn)
           { $rtpl = sed_import('rtplforced','P','ALS'); }
     
     		$sql = sed_sql_query("UPDATE $db_structure SET
-    			structure_path='".sed_sql_prep($rpath)."',
-    			structure_tpl='".sed_sql_prep($rtpl)."',
-    			structure_title='".sed_sql_prep($rtitle)."',
-    			structure_desc='".sed_sql_prep($rdesc)."',
-    			structure_text='".sed_sql_prep($rstext)."',
-    			structure_icon='".sed_sql_prep($ricon)."',
-				structure_thumb='".sed_sql_prep($rthumb)."',
-    			structure_allowcomments='".sed_sql_prep($rallowcomments)."',
-    			structure_allowratings='".sed_sql_prep($rallowratings)."',
-    			structure_group='".$rgroup."'
-    			WHERE structure_id='".$id."'");
+    			structure_path = '".sed_sql_prep($rpath)."',
+    			structure_tpl = '".sed_sql_prep($rtpl)."',
+    			structure_title = '".sed_sql_prep($rtitle)."',
+    			structure_desc = '".sed_sql_prep($rdesc)."',
+    			structure_text = '".sed_sql_prep($rstext)."',
+    			structure_icon = '".sed_sql_prep($ricon)."',
+				structure_thumb = '".sed_sql_prep($rthumb)."',
+				structure_seo_title = '".sed_sql_prep($rseotitle)."',
+				structure_seo_desc = '".sed_sql_prep($rseodesc)."',
+				structure_seo_keywords = '".sed_sql_prep($rseokeywords)."',
+				structure_seo_h1 = '".sed_sql_prep($rseoh1)."',
+    			structure_allowcomments = '".sed_sql_prep($rallowcomments)."',
+    			structure_allowratings = '".sed_sql_prep($rallowratings)."',
+    			structure_group = '".$rgroup."'
+    			WHERE structure_id = '".$id."'");
     
     		  sed_cache_clear('sed_cat');
     		  sed_redirect(sed_url("admin", "m=page&mn=structure&msg=917", "", true));
@@ -121,8 +130,13 @@ switch($mn)
         $structure_desc = $row['structure_desc'];
         $structure_text = $row['structure_text'];  //New v175
         $structure_icon = $row['structure_icon'];
-		$structure_thumb = $row['structure_thumb']; //New v 178
         $structure_group = $row['structure_group'];
+		
+		$structure_thumb = $row['structure_thumb']; //New v 178	
+		$structure_seo_title = $row['structure_seo_title']; 
+		$structure_seo_desc= $row['structure_seo_desc']; 
+		$structure_seo_keywords = $row['structure_seo_keywords'];
+		$structure_seo_h1 = $row['structure_seo_h1'];		
         
         $structure_allowcomments = $row['structure_allowcomments'];
         $structure_allowratings = $row['structure_allowratings'];
@@ -173,6 +187,10 @@ switch($mn)
 			"STRUCTURE_UPDATE_DESC" => sed_textbox('rdesc', $structure_desc, 64, 255),
 			"STRUCTURE_UPDATE_ICON" => sed_textbox('ricon', $structure_icon, 64, 128),
 			"STRUCTURE_UPDATE_THUMB" => sed_textbox('rthumb', $structure_thumb, 64, 255),
+			"STRUCTURE_UPDATE_SEOTITLE" => sed_textbox('rseotitle', $structure_seo_title, 64, 255),
+			"STRUCTURE_UPDATE_SEODESC" => sed_textbox('rseodesc', $structure_seo_desc, 64, 255),
+			"STRUCTURE_UPDATE_SEOKEYWORDS" => sed_textbox('rseokeywords', $structure_seo_keywords, 64, 255),
+			"STRUCTURE_UPDATE_SEOH1" => sed_textbox('rseoh1', $structure_seo_h1, 64, 255),
 			"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
 			"STRUCTURE_UPDATE_GROUP" => $st_group,
 			"STRUCTURE_UPDATE_TPL" => $st_tpl,
@@ -243,6 +261,10 @@ switch($mn)
     		$structure_desc = $row['structure_desc'];
     		$structure_icon = $row['structure_icon'];
 			$structure_thumb = $row['structure_thumb'];
+			$structure_seo_title = $row['structure_seo_title'];
+			$structure_seo_desc = $row['structure_seo_desc'];
+			$structure_seo_keywords = $row['structure_seo_keywords'];
+			$structure_seo_h1 = $row['structure_seo_h1'];
     		$structure_group = $row['structure_group'];
     		$pathfieldlen = (mb_strpos($structure_path, ".")==0) ? 3 : 9;
     		$pathfieldimg = (mb_strpos($structure_path, ".")==0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";

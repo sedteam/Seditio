@@ -3113,6 +3113,10 @@ function sed_load_structure()
 			'icon' => $row['structure_icon'],
 			'iconsrc' => $row['structure_icon_src'],
 			'thumb' => $row['structure_thumb'],
+			'seo_h1' => $row['structure_seo_h1'],
+			'seo_title' => $row['structure_seo_title'],
+			'seo_desc' => $row['structure_seo_desc'],
+			'seo_keywords' => $row['structure_seo_keywords'],
 			'group' => $row['structure_group'],
 			'allowcomments' => $row['structure_allowcomments'],
 			'allowratings' => $row['structure_allowratings'],
@@ -3169,7 +3173,7 @@ function sed_load_forum_structure()
 			'desc' => $row['fn_desc'],
 			'icon' => $row['fn_icon'],
 			'defstate' => $row['fn_defstate']
-				);
+			);
 		}
 
 	return($res);

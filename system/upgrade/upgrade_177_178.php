@@ -25,6 +25,26 @@ $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_thumb varch
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);   
 
+$adminmain .= "Adding the 'structure_seo_title' column to table structure...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_seo_title varchar(255) NOT NULL DEFAULT '' AFTER structure_thumb";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$adminmain .= "Adding the 'structure_seo_desc' column to table structure...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_seo_desc varchar(255) NOT NULL DEFAULT '' AFTER structure_seo_title";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$adminmain .= "Adding the 'structure_seo_keywords' column to table structure...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_seo_keywords varchar(255) NOT NULL DEFAULT '' AFTER structure_seo_desc";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$adminmain .= "Adding the 'structure_seo_h1' column to table structure...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_seo_h1 varchar(255) NOT NULL DEFAULT '' AFTER structure_seo_keywords";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
 $sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."core VALUES ('', 'menu', 'Menu manager', '150', 1, 0);";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr);  

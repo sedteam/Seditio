@@ -1,81 +1,118 @@
 <!-- BEGIN: ADMIN_PAGE -->
 
 	<!-- BEGIN: STRUCTURE_UPDATE -->
-	<div class="content-box">
 	
-	<div class="content-box-header">
-		<h3>{PHP.L.editdeleteentries}</h3>
-	</div>
-	
-	<div class="content-box-content">
+	<div class="content-box sedtabs">
+		<div class="content-box-header">					
+			<h3>{PHP.L.editdeleteentries}</h3>					
+			<ul class="content-box-tabs">
+				  <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Structure}</a></li>
+				  <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.Meta}</a></li>
+			</ul>					
+			<div class="clear"></div>					
+		</div>    
+
+		<div class="content-box-content">
+		
+		<form id="savestructure" action="{STRUCTURE_UPDATE_SEND}" method="post">
+		
+		<div class="tab-content default-tab" id="tab1">	
+		 
+			<table class="cells striped">
+				
+			<tr>
+				<td>{PHP.L.Code} :</td>
+				<td>{STRUCTURE_UPDATE_CODE}</td>
+			</tr>
 			
-    	<form id="savestructure" action="{STRUCTURE_UPDATE_SEND}" method="post">
-     
-    	<table class="cells striped">
+			<tr>
+				<td>{PHP.L.Path} :</td>
+				<td>{STRUCTURE_UPDATE_PATH}</td>
+			</tr>
 			
-    	<tr>
-			<td>{PHP.L.Code} :</td>
-			<td>{STRUCTURE_UPDATE_CODE}</td>
-		</tr>
-    	
-    	<tr>
-			<td>{PHP.L.Path} :</td>
-			<td>{STRUCTURE_UPDATE_PATH}</td>
-		</tr>
-    	
-    	<tr>
-			<td>{PHP.L.Title} :</td>
-			<td>{STRUCTURE_UPDATE_TITLE}</td>
-		</tr>
-    	
-    	<tr>
-			<td>{PHP.L.Description} :</td>
-			<td>{STRUCTURE_UPDATE_DESC}</td>
-		</tr>
-    	
-    	<tr>
-			<td>{PHP.L.Icon} :</td>
-			<td>{STRUCTURE_UPDATE_ICON}</td>
-		</tr>
-    	
-    	<tr>
-			<td colspan="2">{PHP.L.Text} :<br />{STRUCTURE_UPDATE_TEXT}</td>
-		</tr>
+			<tr>
+				<td>{PHP.L.Title} :</td>
+				<td>{STRUCTURE_UPDATE_TITLE}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.Description} :</td>
+				<td>{STRUCTURE_UPDATE_DESC}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.Icon} :</td>
+				<td>{STRUCTURE_UPDATE_ICON}</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">{PHP.L.Text} :<br />{STRUCTURE_UPDATE_TEXT}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.Thumbnail} :</td>
+				<td>{STRUCTURE_UPDATE_THUMB}</td>
+			</tr>		
+			
+			<tr>
+				<td>{PHP.L.Group} :</td>
+				<td>{STRUCTURE_UPDATE_GROUP}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.adm_tpl_mode} :</td>
+				<td>{STRUCTURE_UPDATE_TPL}</td>
+			</tr>
+			<tr>
+				<td>{PHP.L.adm_enablecomments} :</td>
+				<td>{STRUCTURE_UPDATE_ALLOWCOMMENTS}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.adm_enableratings} :</td>
+				<td>{STRUCTURE_UPDATE_ALLOWRATINGS}</td>
+			</tr>
+			
+			</table>
 		
-    	<tr>
-			<td>{PHP.L.Thumbnail} :</td>
-			<td>{STRUCTURE_UPDATE_THUMB}</td>
-		</tr>		
-    	
-    	<tr>
-			<td>{PHP.L.Group} :</td>
-			<td>{STRUCTURE_UPDATE_GROUP}</td>
-		</tr>
+		</div>
 		
-    	<tr>
-			<td>{PHP.L.adm_tpl_mode} :</td>
-			<td>{STRUCTURE_UPDATE_TPL}</td>
-		</tr>
-    	<tr>
-			<td>{PHP.L.adm_enablecomments} :</td>
-			<td>{STRUCTURE_UPDATE_ALLOWCOMMENTS}</td>
-		</tr>
-    	
-    	<tr>
-			<td>{PHP.L.adm_enableratings} :</td>
-			<td>{STRUCTURE_UPDATE_ALLOWRATINGS}</td>
-		</tr>
-    	
-    	<tr>
-			<td colspan="2"><input type="submit" class="submit btn" value="{PHP.L.Update}" /></td>
-		</tr>
-    	
-    	</table>
-    	
-    	</form>
+		<div class="tab-content" id="tab2">  	 
+      
+			<table class="cells striped">
+				
+			<tr>
+				<td>{PHP.L.Title} H1 :</td>
+				<td>{STRUCTURE_UPDATE_SEOH1}</td>
+			</tr>			
+			
+			<tr>
+				<td style="width:160px;">{PHP.L.mt_title} :</td>
+				<td>{STRUCTURE_UPDATE_SEOTITLE}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.mt_description} :</td>
+				<td>{STRUCTURE_UPDATE_SEODESC}</td>
+			</tr>
+			
+			<tr>
+				<td>{PHP.L.mt_keywords} :</td>
+				<td>{STRUCTURE_UPDATE_SEOKEYWORDS}</td>
+			</tr>
+			
+			</table>
+
+		</div>
 		
-	</div>
-	</div>		
+		<div style="text-align: center; padding:15px 0;">
+			<input type="submit" class="submit btn" value="{PHP.L.Update}" />
+		</div>
+		
+		</form>
+		
+		</div>
+	</div> 				
 	<!-- END: STRUCTURE_UPDATE -->
 	
 	<!-- BEGIN: PAGE_STRUCTURE -->
