@@ -243,6 +243,7 @@ $t->assign(array(
 	"PAGE_EXECUTE" => $pag['page_execute'],
 	"PAGE_TITLE" => $pag['page_fulltitle'],
 	"PAGE_SHORTTITLE" => $pag['page_title'],
+	"PAGE_SEOH1" => (empty($pag['page_seo_h1'])) ? $pag['page_title'] : $pag['page_seo_title'],
 	"PAGE_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PAGE_CAT" => $pag['page_cat'],
 	"PAGE_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],

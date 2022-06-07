@@ -100,6 +100,11 @@
 						<ul class="form responsive-form">
 
 							<li class="form-row">
+								<div class="form-label"><label>{PHP.L.mt_title} H1</label></div>
+								<div class="form-field">{PAGEEDIT_FORM_SEOH1}</div>
+							</li>							
+							
+							<li class="form-row">
 								<div class="form-label"><label>{PHP.L.mt_title}</label></div>
 								<div class="form-field">{PAGEEDIT_FORM_SEOTITLE}</div>
 							</li>
@@ -112,7 +117,7 @@
 							<li class="form-row">
 								<div class="form-label"><label>{PHP.L.mt_keywords}</label></div>
 								<div class="form-field">{PAGEEDIT_FORM_SEOKEYWORDS}</div>
-							</li>	
+							</li>								
 						
 						</ul>
 						

@@ -47,10 +47,8 @@ if ($a=='update')
 	/* ===== */
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
-	$rpagealias = sed_replacespace(sed_import('rpagealias','P','ALS')); //New in175
-  
-	$rpagethumb = sed_import('rpagethumb','P','TXT');       
-  
+	$rpagealias = sed_replacespace(sed_import('rpagealias','P','ALS')); //New in175  
+	$rpagethumb = sed_import('rpagethumb','P','TXT');        
 	$rpagetitle = sed_import('rpagetitle','P','TXT');
 	$rpagedesc = sed_import('rpagedesc','P','TXT');
 	$rpagetext = sed_import('rpagetext','P','HTM');
@@ -68,6 +66,7 @@ if ($a=='update')
 	$rpageseotitle = sed_import('rpageseotitle','P','TXT');
 	$rpageseodesc = sed_import('rpageseodesc','P','TXT');
 	$rpageseokeywords = sed_import('rpageseokeywords','P','TXT');
+	$rpageseoh1 = sed_import('rpageseoh1','P','TXT');
 	
 	$rpageallowcomments = sed_import('rpageallowcomments','P','BOL');
 	$rpageallowratings = sed_import('rpageallowratings','P','BOL');
@@ -185,6 +184,7 @@ if ($a=='update')
 				page_seo_title = '".sed_sql_prep($rpageseotitle)."',
 				page_seo_desc = '".sed_sql_prep($rpageseodesc)."',				
 				page_seo_keywords = '".sed_sql_prep($rpageseokeywords)."',
+				page_seo_h1 = '".sed_sql_prep($rpageseoh1)."',
 				page_thumb = '".sed_sql_prep($rpagethumb)."'".$ssql_extra."          				
 				WHERE page_id='$id'");
 
@@ -305,6 +305,7 @@ $t->assign(array(
 	"PAGEEDIT_FORM_SEOTITLE" => sed_textbox('rpageseotitle', $pag['page_seo_title']),
 	"PAGEEDIT_FORM_SEODESC" => sed_textbox('rpageseodesc', $pag['page_seo_desc']),
 	"PAGEEDIT_FORM_SEOKEYWORDS" => sed_textbox('rpageseokeywords', $pag['page_seo_keywords']),
+	"PAGEEDIT_FORM_SEOH1" => sed_textbox('rpageseoh1', $pag['page_seo_h1']),
 	"PAGEEDIT_FORM_AUTHOR" => sed_textbox('rpageauthor', $pag['page_author'], 24, 32),
 	"PAGEEDIT_FORM_OWNERID" => sed_textbox('rpageownerid', $pag['page_ownerid'], 24, 32),
 	"PAGEEDIT_FORM_DATE" => $pag['page_date']." ".$usr['timetext'],
@@ -322,7 +323,7 @@ $t->assign(array(
 	"PAGEEDIT_FORM_TEXT2" => sed_textarea('rpagetext2', $pag['page_text2'], $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
-		));
+));
 		
 	// Extra fields 
 	if(count($extrafields)>0) 

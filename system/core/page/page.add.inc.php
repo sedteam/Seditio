@@ -52,9 +52,7 @@ if ($a=='add')
 	$newpagecat = sed_import('newpagecat','P','TXT');
 	$newpagekey = sed_import('newpagekey','P','TXT');
 	$newpagealias = sed_replacespace(sed_import('newpagealias','P','ALS'));  //New in175
-
-	$newpagethumb = sed_import('newpagethumb','P','TXT');  
-      
+	$newpagethumb = sed_import('newpagethumb','P','TXT');       
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
 	$newpagetext = sed_import('newpagetext','P','HTM');
@@ -77,6 +75,7 @@ if ($a=='add')
 	$newpageseotitle = sed_import('newpageseotitle','P','TXT');
 	$newpageseodesc = sed_import('newpageseodesc','P','TXT');
 	$newpageseokeywords = sed_import('newpageseokeywords','P','TXT');
+	$newpageseoh1 = sed_import('newpageseoh1','P','TXT');
 		
 	$newpageallowcomments = sed_import('newpageallowcomments','P','BOL');
 	$newpageallowratings = sed_import('newpageallowratings','P','BOL');
@@ -146,6 +145,7 @@ if ($a=='add')
 			page_seo_title,
 			page_seo_desc,
 			page_seo_keywords,
+			page_seo_h1,
 			page_thumb".$ssql_extra_columns."
 			)
 			VALUES
@@ -169,7 +169,8 @@ if ($a=='add')
 			".(int)$newpageallowratings.",
 			'".sed_sql_prep($newpageseotitle)."',
 			'".sed_sql_prep($newpageseodesc)."',			
-			'".sed_sql_prep($newpageseokeywords)."',     
+			'".sed_sql_prep($newpageseokeywords)."',  
+			'".sed_sql_prep($newpageseoh1)."', 			
 			'".sed_sql_prep($newpagethumb)."'".$ssql_extra_values.")");
 
 		/* === Hook === */
@@ -204,10 +205,8 @@ if (($a=='clone') && ($id > 0))
 	
 	$newpagecat = $row1['page_cat'];
 	$newpagekey = $row1['page_key'];
-	$newpagealias = $row1['page_alias'];
-  
-	$newpagethumb = $row1['page_thumb'];    
-  
+	$newpagealias = $row1['page_alias'];  
+	$newpagethumb = $row1['page_thumb'];  
 	$newpagetitle = $row1['page_title'];
 	$newpagedesc = $row1['page_desc'];
 	$newpagetext = $row1['page_text'];
@@ -221,7 +220,7 @@ if (($a=='clone') && ($id > 0))
 	$newpageseotitle = $row1['page_seo_title'];
 	$newpageseodesc = $row1['page_seo_desc'];
 	$newpageseokeywords = $row1['page_seo_keywords'];
-	
+	$newpageseoh1 = $row1['page_seo_h1'];	
 
 	if(count($extrafields) > 0)
 		{ 
@@ -308,6 +307,7 @@ $t->assign(array(
 	"PAGEADD_FORM_SEOTITLE" => sed_textbox('newpageseotitle', $newpageseotitle),
 	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', $newpageseodesc),
 	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', $newpageseokeywords),
+	"PAGEADD_FORM_SEOH1" => sed_textbox('newpageseoh1', $newpageseoh1),
 	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', $newpagethumb),
 	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', $newpageauthor, 16, 24),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),
