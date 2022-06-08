@@ -141,29 +141,31 @@ switch($mn)
         $structure_allowcomments = $row['structure_allowcomments'];
         $structure_allowratings = $row['structure_allowratings'];
         
-        $form_allowcomments = ($structure_allowcomments) ? "<input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"0\" checked=\"checked\" />".$L['No'];
-        $form_allowratings = ($structure_allowratings) ? "<input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-        if (empty($row['structure_tpl']))
+		$form_allowcomments = sed_radiobox("rallowcomments", $yesno_arr, $structure_allowcomments); 
+		$form_allowratings = sed_radiobox("rallowratings", $yesno_arr, $structure_allowratings);	        		
+		
+		if (empty($row['structure_tpl']))
           {
-          $check1 = " checked=\"checked\"";
+		  $check_rtplmode = 1;
           }
         elseif ($row['structure_tpl']=='same_as_parent')
           {
           $structure_tpl_sym = "*";
-          $check3 = " checked=\"checked\"";
+		  $check_rtplmode = 3;
           }
         else
           {
           $structure_tpl_sym = "+";
-          $check2 = " checked=\"checked\"";
+		  $check_rtplmode = 2;
           }
     
     	$adminpath[] = array(sed_url("admin", "m=page&mn=structure&n=options&id=".$id), sed_cc($structure_title));
-    
-		$st_tpl = "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
-    	$st_tpl .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"2\" $check2 /> ".$L['adm_tpl_forced'];
-    	$st_tpl .=  " <select name=\"rtplforced\" size=\"1\">";    
+
+		$rtplmode_arr = array(1 => $L['adm_tpl_empty'], 3 => $L['adm_tpl_parent'], 2 => $L['adm_tpl_forced']);	
+		
+		$st_tpl .= sed_radiobox("rtplmode", $rtplmode_arr, $check_rtplmode);
+				
+		$st_tpl .=  " <select name=\"rtplforced\" size=\"1\">";    
     	foreach($sed_cat as $i => $x)
     		{
     		if ($i!='all')
@@ -173,11 +175,8 @@ switch($mn)
     			}
     		}
     	$st_tpl .= "</select><br/>";
-    	$st_tpl .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
 
-    	$checked = $structure_pages ? "checked=\"checked\"" : '';
-    	$checked = $structure_group ? "checked=\"checked\"" : '';
-    	$st_group = "<input type=\"checkbox\" class=\"checkbox\" name=\"rgroup\" $checked />";
+		$st_group = sed_checkbox("rgroup", "", $structure_group);
     	
 		$t->assign(array(   	
 			"STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=page&mn=structure&n=options&a=update&id=".$structure_id),

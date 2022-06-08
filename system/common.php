@@ -473,6 +473,7 @@ $lang = $usr['lang'];
 require($mlang);
 
 $yesno_arr = array(1 => $L['Yes'], 0 => $L['No']);
+$yesno_revers_arr = array(0 => $L['Yes'], 1 => $L['No']);
 
 /* ======== Who's online part 2 ======== */
 

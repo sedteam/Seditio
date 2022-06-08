@@ -92,7 +92,7 @@ if ($n=='edit')
 		sed_forum_resync($id);
 		}
 
-  $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
+	$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
 	sed_die(sed_sql_numrows($sql)==0);
 	$row = sed_sql_fetchassoc($sql);
 
@@ -111,21 +111,17 @@ if ($n=='edit')
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
 	$fs_countposts = $row['fs_countposts'];
 
-	$form_state = ($fs_state) ? "<input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-	$form_allowusertext = ($fs_allowusertext) ? "<input type=\"radio\" class=\"radio\" name=\"rallowusertext\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowusertext\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowusertext\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowusertext\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-	$form_allowbbcodes = ($fs_allowbbcodes) ? "<input type=\"radio\" class=\"radio\" name=\"rallowbbcodes\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowbbcodes\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowbbcodes\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowbbcodes\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-	$form_allowsmilies = ($fs_allowsmilies) ? "<input type=\"radio\" class=\"radio\" name=\"rallowsmilies\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowsmilies\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowsmilies\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowsmilies\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-	$form_allowprvtopics = ($fs_allowprvtopics) ? "<input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-	$form_countposts = ($fs_countposts) ? "<input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"0\" checked=\"checked\" />".$L['No'];
-
+	$form_state = sed_radiobox("rstate", $yesno_arr, $fs_state);
+	$form_allowusertext = sed_radiobox("rallowusertext", $yesno_arr, $fs_allowusertext);
+	$form_allowbbcodes = sed_radiobox("rallowbbcodes", $yesno_arr, $fs_allowbbcodes);
+	$form_allowsmilies = sed_radiobox("rallowsmilies", $yesno_arr, $fs_allowsmilies);
+	$form_allowprvtopics = sed_radiobox("rallowprvtopics", $yesno_arr, $fs_allowprvtopics);
+	$form_countposts = sed_radiobox("rcountposts", $yesno_arr, $fs_countposts);
+	
 	$adminpath[] = array(sed_url("admin", "m=forums&n=edit&id=".$id), sed_cc($fs_title));
   	
-	$form_parent_cat = "<select name=\"rparentcat\"><option value=\"0\">--</option>";	
+	$form_parent_cat = "<select name=\"rparentcat\"><option value=\"0\">--</option>";
+	
 	$sql = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections 
                         AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code = s.fs_category 
                         WHERE fs_id <> '$id' AND fs_parentcat < 1 AND fs_category = '".$fs_category."' 

@@ -44,7 +44,6 @@ if (sed_auth('admin', 'a', 'A'))
 	$t -> parse("ADMIN_USERS.USERS_BUTTONS");
 }
 
-
 switch($n)
 	{
 	case 'add':
@@ -146,11 +145,12 @@ switch($n)
 	$grpcolor .= "</select>";
 
 	if ($g > 5) {
-		$grpdisable = (!$row['grp_disabled']) ? "<input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"0\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"1\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"0\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rdisabled\" value=\"1\" checked=\"checked\" />".$L['No'];
-	} else { $grpdisable .= $L['Yes']; }
+		$grpdisable = sed_radiobox("rdisabled", $yesno_revers_arr, $row['grp_disabled']); 
+		} 
+	else { $grpdisable .= $L['Yes']; }
 	
-	if ($g != 4) {
-		$grphidden = ($row['grp_hidden']) ? "<input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rhidden\" value=\"0\" checked=\"checked\" />".$L['No'];
+	if ($g != 4) {		
+		$grphidden = sed_radiobox("rhidden", $yesno_arr, $row['grp_hidden']);
 		}
 	else
 		{ $grphidden = $L['No']; }
@@ -228,11 +228,8 @@ switch($n)
 			{ $grplevel .= "<option value=\"$i\" $selected>".$i."</option>"; }
 		$grplevel .= "</select>";		
 		
-		$grpdisable = "<input type=\"radio\" class=\"radio\" name=\"ndisabled\" value=\"0\" checked=\"checked\" /> ".$L['Yes'];
-		$grpdisable .= "<input type=\"radio\" class=\"radio\" name=\"ndisabled\" value=\"1\" /> ".$L['No'];
-
-		$grphidden = "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"1\" /> ".$L['Yes'];
-		$grphidden .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"0\" checked=\"checked\" /> ".$L['No'];	
+		$grpdisable = sed_radiobox("ndisabled", $yesno_revers_arr, 0);
+		$grphidden = sed_radiobox("nhidden", $yesno_arr, 0); 
 	
 		$t->assign(array(
 			"GROUP_ADD_SEND" => sed_url("admin", "m=users&n=add"),

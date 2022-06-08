@@ -87,12 +87,12 @@ if ($n=='options')
 	if ($row['fn_tpl']=='same_as_parent')
 		{
 		$fn_tpl_sym = "*";
-		$check3 = " checked=\"checked\"";
+		$check_tplmode = 3;
 		}
 	else
 		{
 		$fn_tpl_sym = "-";	
-		$check1 = " checked=\"checked\"";
+		$check_tplmode = 1;
 		}	
 
 	$adminpath[] = array (sed_url("admin", "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
@@ -104,17 +104,18 @@ if ($n=='options')
 	$fn_defstate .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
 	$fn_defstate .= "</select>";
 	
-	$fn_tplmode = "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
-	$fn_tplmode .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];	  
+	$tplmode_arr = array(1 => $L['adm_tpl_empty'], 3 => $L['adm_tpl_parent']);
+	
+	$fn_tplmode = sed_radiobox("rtplmode", $tplmode_arr, $check_tplmode); 	  
   
 	$t->assign(array(  
 		"FN_UPDATE_FORM_TITLE" => sed_cc($fn_title),
 		"FN_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&n=options&a=update&id=".$fn_id),
 		"FN_UPDATE_CODE" => $fn_code,
-		"FN_UPDATE_PATH" => "<input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$fn_path."\" size=\"16\" maxlength=\"16\" />",
-		"FN_UPDATE_TITLE" => "<input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$fn_title."\" size=\"64\" maxlength=\"32\" />",
-		"FN_UPDATE_DESC" => "<input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$fn_desc."\" size=\"64\" maxlength=\"255\" />",
-		"FN_UPDATE_ICON" => "<input type=\"text\" class=\"text\" name=\"ricon\" value=\"".$fn_icon."\" size=\"64\" maxlength=\"128\" />",
+		"FN_UPDATE_PATH" => sed_textbox('rpath', $fn_path, 16, 16),
+		"FN_UPDATE_TITLE" => sed_textbox('rtitle', $fn_title, 64, 255),
+		"FN_UPDATE_DESC" => sed_textbox('rdesc', $fn_desc, 64, 255),
+		"FN_UPDATE_ICON" => sed_textbox('ricon', $fn_icon, 64, 255),
 		"FN_UPDATE_DEFSTATE" => $fn_defstate,
 		"FN_UPDATE_TPLMODE" => $fn_tplmode
 	));
@@ -204,10 +205,10 @@ else
 		$t->assign(array( 
 			"STRUCTURE_LIST_DELETE" => ($sectioncount[$fn_code] > 0) ? '' : "<a href=\"".sed_url("admin", "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg())."\">".$out['img_delete']."</a>",
 			"STRUCTURE_LIST_CODE" => $fn_code,
-			"STRUCTURE_LIST_PATH" => $pathfieldimg."<input type=\"text\" class=\"text\" name=\"s[$fn_id][rpath]\" value=\"".$fn_path."\" size=\"$pathfieldlen\" maxlength=\"24\" />",
+			"STRUCTURE_LIST_PATH" => $pathfieldimg.sed_textbox("s[".$fn_id."][rpath]", $fn_path, $pathfieldlen, 24),
 			"STRUCTURE_LIST_DEFSTATE" => $fn_defstate,
 			"STRUCTURE_LIST_TPL" => $fn_tpl_sym,
-			"STRUCTURE_LIST_TITLE" => "<input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" />",
+			"STRUCTURE_LIST_TITLE" => sed_textbox("s[".$fn_id."][rtitle]", $fn_title, 24, 255),
 			"STRUCTURE_LIST_SECTIONCOUNT" => $sectioncount[$fn_code],
 			"STRUCTURE_LIST_OPEN_URL" => sed_url("forums", "c=".$fn_code),
 			"STRUCTURE_LIST_OPTIONS" => "<a href=\"".sed_url("admin", "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a>"
@@ -216,17 +217,18 @@ else
 		$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE.STRUCTURE_LIST"); 		
 		}
 
+	$fn_defstate = sed_radiobox("ndefstate", array(0 => $L['adm_defstate_0'], 1 => $L['adm_defstate_1']), 1); 	  
+	
 	$t->assign(array(
 		"FORUMS_STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&a=update"),
 		"FN_ADD_SEND" => sed_url("admin", "m=forums&s=structure&a=add"),
-		"FN_ADD_CODE" => "<input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" />",
-		"FN_ADD_PATH" => "<input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" />",
-		"FN_ADD_DEFSTATE" => "<input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"1\" checked=\"checked\" />".$L['adm_defstate_1']." <input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"0\" />".$L['adm_defstate_0'],
-		"FN_ADD_TITLE" => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"32\" />",
-		"FN_ADD_DESC" => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" />",
-		"FN_ADD_ICON" => "<input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" />"
-	));
-	
+		"FN_ADD_CODE" => sed_textbox('ncode', $ncode, 16, 16),
+		"FN_ADD_PATH" => sed_textbox('npath', $npath, 16, 16),
+		"FN_ADD_DEFSTATE" => $fn_defstate,
+		"FN_ADD_TITLE" => sed_textbox('ntitle', $ntitle, 64, 255),
+		"FN_ADD_DESC" => sed_textbox('ndesc', $ndesc, 64, 255),
+		"FN_ADD_ICON" => sed_textbox('nicon', $nicon, 64, 255)
+	));	
 	
 	$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE"); 
 	

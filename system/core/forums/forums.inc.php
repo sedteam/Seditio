@@ -149,7 +149,7 @@ while ($fsn = sed_sql_fetchassoc($sql)) //v178
 foreach ($sect_arr as $fsec_key => $fsec)
 	{
 	$cattitle = "<a href=\"javascript:sedjs.toggleblock('blk_".$fsec['fs_category']."')\">";
-	$cattitle .= sed_cc($sed_forums_str[$fsec['fs_category']]['tpath']);
+	$cattitle .= $sed_forums_str[$fsec['fs_category']]['tpath'];
 	$cattitle .= "</a>";
 
 	if ($c=='fold')

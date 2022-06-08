@@ -10,8 +10,13 @@
 			
 		</div> <!-- End #main-content -->
 		
-	</div></body>
- {PHP.out.uploader_footer_admin} 
+	</div>
+
+<script type="text/javascript" src="skins/{PHP.skin}/admin/js/jquery.min.js"></script>		
+<script type="text/javascript" src="skins/{PHP.skin}/admin/js/app.js"></script>	
+{PHP.out.uploader_footer_admin}	
+
+</body>
 </html>    
 
 <!-- END: FOOTER -->

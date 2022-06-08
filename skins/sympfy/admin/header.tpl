@@ -5,10 +5,8 @@
 {HEADER_METAS}
 {HEADER_COMPOPUP}
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
-<link href="skins/{PHP.skin}/admin/style.css" type="text/css" rel="stylesheet" />	
+<link href="skins/{PHP.skin}/admin/css/main.css" type="text/css" rel="stylesheet" />	
 <link href="skins/{PHP.skin}/admin/css/font-awesome.css" type="text/css" rel="stylesheet" />	
-<script type="text/javascript" src="skins/{PHP.skin}/admin/scripts/jquery.min.js"></script>		
-<script type="text/javascript" src="skins/{PHP.skin}/admin/scripts/simpla.jquery.configuration.js"></script>
 {HEADER_UPLOADER}
 </head>
 <body>
