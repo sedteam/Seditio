@@ -2997,8 +2997,8 @@ function sed_checkbox($name, $data = '', $check_data = FALSE)
 	if (empty($data))
     {
        $result = ($check_data) 
-          ? '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="'.$name.'" name="'.$name.'" checked /><label for="'.$name.'"></label></span>'
-          : '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="'.$name.'" name="'.$name.'" /><label for="'.$name.'"></label></span>';
+          ? '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="'.$name.'" name="'.$name.'" checked /><label for="'.$name.'">&nbsp;</label></span>'
+          : '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="'.$name.'" name="'.$name.'" /><label for="'.$name.'">&nbsp;</label></span>';
     }
   else
     {    
