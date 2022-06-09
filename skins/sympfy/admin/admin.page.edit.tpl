@@ -54,18 +54,19 @@
 					<td>{PAGEEDIT_FORM_ALIAS}</td>
 				</tr>
 			
-			  <!-- BEGIN: PAGEEDIT_PARSING -->
-			
-			  <tr>
-			    <td>{PHP.skinlang.pageedit.Parsing}</td>
-			    <td>{PAGEEDIT_FORM_TYPE}</td>
-			  </tr>   
-			  
-			  <!-- END: PAGEEDIT_PARSING -->
-			
 				<tr>
 					<td colspan="2">{PHP.skinlang.pageedit.Bodyofthepage}<br /><br />{PAGEEDIT_FORM_TEXT}</td>
 				</tr>
+				
+				<tr>
+					<td>{PHP.skinlang.pageedit.Thumbs}</td>
+					<td>{PAGEEDIT_FORM_THUMB}</td>
+				</tr> 
+
+				<tr>
+					<td>{PAGEEDIT_FORM_SLIDER_TITLE}</td>
+					<td>{PAGEEDIT_FORM_SLIDER}</td>
+				</tr> 				
 			
 				<tr>
 					<td>{PHP.skinlang.pageedit.Pageid}</td>
@@ -84,6 +85,11 @@
 			<div class="tab-content" id="tab2">
 			
 			<table class="cells striped" class="simple tableforms">
+			
+				<tr>
+					<td style="width:200px;">{PHP.L.mt_title} H1</td>
+					<td>{PAGEEDIT_FORM_SEOH1}</td>
+				</tr>			
 
 				<tr>
 					<td style="width:200px;">{PHP.L.mt_title}</td>

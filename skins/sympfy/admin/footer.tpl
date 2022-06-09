@@ -14,7 +14,10 @@
 
 <script type="text/javascript" src="skins/{PHP.skin}/admin/js/jquery.min.js"></script>		
 <script type="text/javascript" src="skins/{PHP.skin}/admin/js/app.js"></script>	
-{PHP.out.uploader_footer_admin}	
+
+<!-- BEGIN: USER -->
+{PHP.out.uploader_footer_admin}
+<!-- END: USER -->	
 
 </body>
 </html>    

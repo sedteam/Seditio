@@ -80,4 +80,7 @@ $t->assign("PAGEEDIT_FORM_".mb_strtoupper($extraslot), "<div id=\"uploader\"><di
 
 $out['uploader_footer'] .= $uploader->text("UPLOADER"); //add footer.tpl {PHP.out.uploader_footer}
 
+$out['uploader_footer_admin'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>"; 
+$out['uploader_footer_admin'] .= $uploader->text("UPLOADER"); //in footer
+
 ?>
