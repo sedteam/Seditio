@@ -23,8 +23,6 @@ $advanced = sed_import('advanced','G','BOL');
 
 $adminpath[] = array(sed_url("admin", "m=rights&g=".$g), $L['Rights']." : ".$sed_groups[$g]['title']);
 
-//$adminmain = "<h2><img src=\"system/img/admin/rights1.png\" alt=\"\" /> ".$L['Rights']." : ".$sed_groups[$g]['title']."</h2>";
-
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
@@ -148,7 +146,7 @@ if ($g > 5)
 	{
 	$t->assign(array(
 		"RIGHTS_COPYCOLUMN_COUNT" => ($advanced) ? 11 : 6,
-		"RIGHTS_COPYRIGHTSCONF" => "<input type=\"checkbox\" class=\"checkbox\" name=\"ncopyrightsconf\" />",
+		"RIGHTS_COPYRIGHTSCONF" => sed_checkbox("ncopyrightsconf"),
 		"RIGHTS_COPYRIGHTSFROM" => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g))
 	));
 	$t -> parse("ADMIN_RIGHTS.RIGHTS_COPY");
@@ -175,17 +173,16 @@ function sed_rights_parseline($row, $title, $link)
 		{
 		$state[$code] = (($row['auth_rights'] & $value) == $value) ? TRUE : FALSE;
 		$locked[$code] = (($row['auth_rights_lock'] & $value) == $value) ? TRUE : FALSE;
-		$checked[$code] = ($state[$code]) ? "checked=\"checked\"" : '';
-		$disabled[$code] = ($locked[$code]) ? "disabled=\"disabled\"" : '';
+		$checked[$code] = ($state[$code]) ? 1 : 0;
 
 		if ($locked[$code])
 			{
-			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]\" value=\"1\" />" : '';
-			$box[$code] .= ($checked[$code]) ? "<img src=\"system/img/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"system/img/admin/discheck0.gif\" alt=\"\" />";
+			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]\" value=\"".$checked[$code]."\" />" : '';
+			$box[$code] .= sed_checkbox("", $checked[$code], $state[$code], $locked[$code]);				
 			}
 		else
 			{
-			$box[$code] = "<input type=\"checkbox\" class=\"checkbox\" name=\"auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]\" ".$disabled[$code]." ".$checked[$code]." />";
+			$box[$code] = sed_checkbox("auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]", $checked[$code], $state[$code], $locked[$code]);	
 			}
 		
 		$t->assign(array(	

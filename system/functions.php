@@ -2992,17 +2992,19 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor")
  * @return string 
  */ 
 
-function sed_checkbox($name, $data = '', $check_data = FALSE)
+function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE)
 	{	
-	if (empty($data))
+	if (empty($data) || !is_array($data))
     {
-       $result = ($check_data) 
-          ? '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="'.$name.'" name="'.$name.'" checked /><label for="'.$name.'">&nbsp;</label></span>'
-          : '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="'.$name.'" name="'.$name.'" /><label for="'.$name.'">&nbsp;</label></span>';
+       $val = (empty($data)) ? "1" : "";
+	   
+	   $checked = ($check_data) ? " checked" : "";
+	   $disabled = ($disabled) ? " disabled" : "";	   
+	   $result = "<span class=\"checkbox-item\"><input type=\"checkbox\" class=\"checkbox\" id=\"".$name."\" name=\"".$name."\"".$checked.$disabled." value=\"".$val."\" /><label for=\"".$name."\">&nbsp;</label></span>";
     }
   else
     {    
-      if (!is_array($data)) $data = explode(',', $data); 		
+		if (!is_array($data)) $data = explode(',', $data); 		
     	if (!is_array($check_data)) $check_data = explode(',', $check_data);    	
     	$jj = 0;
     	foreach ($data as $key => $v) 

@@ -21,8 +21,6 @@ $ic = sed_import('ic','G','ALP');
 $io = sed_import('io','G','TXT');
 $advanced = sed_import('advanced','G','BOL');
 
-//$adminmain = "<h2><img src=\"system/img/admin/rights2.png\" alt=\"\" /> ".$L['Rights']."</h2>";
-
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
@@ -141,22 +139,18 @@ function sed_rights_parseline($row, $title, $link)
 		{
 		$state[$code] = (($row['auth_rights'] & $value) == $value) ? TRUE : FALSE;
 		$locked[$code] = (($row['auth_rights_lock'] & $value) == $value) ? TRUE : FALSE;
-		$checked[$code] = ($state[$code]) ? "checked=\"checked\"" : '';
-		$disabled[$code] = ($locked[$code]) ? "disabled=\"disabled\"" : '';
-
-		$box[$code] = "<input type=\"checkbox\" class=\"checkbox\" name=\"auth[".$row['auth_groupid']."][".$code."]\" ".$disabled[$code]." ".$checked[$code]." />";
-
+		$checked[$code] = ($state[$code]) ? 1 : 0;
 
 		if ($locked[$code])
 			{
-			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_groupid']."][".$code."]\" value=\"1\" />" : '';
-			$box[$code] .= ($checked[$code]) ? "<img src=\"system/img/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"system/img/admin/discheck0.gif\" alt=\"\" />";
+			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_groupid']."][".$code."]\" value=\"".$checked[$code]."\" />" : '';
+			$box[$code] .= sed_checkbox("", $checked[$code], $state[$code], $locked[$code]);				
 			}
 		else
 			{
-			$box[$code] = "<input type=\"checkbox\" class=\"checkbox\" name=\"auth[".$row['auth_groupid']."][".$code."]\" ".$disabled[$code]." ".$checked[$code]." />";
-			}
-		
+			$box[$code] = sed_checkbox("auth[".$row['auth_groupid']."][".$code."]", $checked[$code], $state[$code], $locked[$code]);	
+			}			
+					
 		$t->assign(array(	
 			"RIGHTS_OPTIONS" => $box[$code]
 		));
@@ -182,7 +176,6 @@ if ($advanced) { $t -> parse("ADMIN_RIGHTS.RIGHTSBYITEM.ADVANCED_RIGHTS"); }
 while ($row = sed_sql_fetcharray($sql))
 	{
 	$link = sed_url("admin", "m=rights&g=".$row['auth_groupid']);
-//	$title = $sed_groups[$row['auth_groupid']]['title'];
 	$title = sed_cc($row['grp_title']);
 	sed_rights_parseline($row, $title, $link);
 	}
