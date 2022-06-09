@@ -22,16 +22,23 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=ratings"), $L['Ratings']);
+
 $adminhelp = $L['adm_help_ratings'];
-$adminmain = "<h2><img src=\"system/img/admin/ratings.png\" alt=\"\" /> ".$L['Ratings']."</h2>";
+
+$t = new XTemplate(sed_skinfile('admin.ratings', true)); 
 
 $id = sed_import('id','G','TXT');
-$ii=0;
-$jj=0;
+$ii = 0;
+$jj = 0;
 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=ratings")."\">".$L['Configuration']."</a></li></ul>";
+if (sed_auth('admin', 'a', 'A'))
+	{
+	$t->assign("BUTTON_RATINGS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=core&p=ratings"));	
+	$t->parse("ADMIN_RATINGS.RATINGS_BUTTONS.RATINGS_BUTTONS_CONFIG");
+	$t->parse("ADMIN_RATINGS.RATINGS_BUTTONS");
+	}
 
-if ($a=='delete')
+if ($a == 'delete')
 	{
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id' ");
@@ -48,24 +55,19 @@ $totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_ratings"), 
 $pagination = sed_pagination(sed_url("admin", "m=ratings"), $d, $totallines, $cfg['maxrowsperpage']);
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=ratings"), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
-$adminmain .= "<div class=\"paging\">";
-$adminmain .= "<ul class=\"pagination\">";
-$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
-$adminmain .= $pagination;
-$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
+if (!empty($pagination))
+	{
+	$t->assign(array(
+		"RATINGS_PAGINATION" => $pagination,
+		"RATINGS_PAGEPREV" => $pagination_prev,
+		"RATINGS_PAGENEXT" => $pagination_next
+	));	
+	$t->parse("ADMIN_RATINGS.RATINGS_PAGINATION_TP");
+	$t->parse("ADMIN_RATINGS.RATINGS_PAGINATION_BM");		
+	}
 
 $sql = sed_sql_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 // [/Limit patch]
-
-$adminmain .= "<table class=\"cells striped\"><tr>";
-$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Date']." (GMT)</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Votes']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Rating']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:64px;\">".$L['Open']."</td></tr>";
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
@@ -87,25 +89,29 @@ while ($row = sed_sql_fetchassoc($sql))
 		break;
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=ratings&a=delete&id=".$row['rating_code']."&".sed_xg())."\">".$out['img_delete']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_code']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".sed_build_date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$votes."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_average']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$rat_url."\"><img src=\"system/img/admin/jumpto.png\" alt=\"\"></a></td></tr>";
+	$t -> assign(array( 
+		"RATINGS_LIST_DELETE_URL" => sed_url("admin", "m=ratings&a=delete&id=".$row['rating_code']."&".sed_xg()),
+		"RATINGS_LIST_CODE" => $row['rating_code'],
+		"RATINGS_LIST_CREATIONDATE" => sed_build_date($cfg['dateformat'], $row['rating_creationdate']),
+		"RATINGS_LIST_VOTES" => $votes,
+		"RATINGS_LIST_AVERAGE" => $row['rating_average'],
+		"RATINGS_LIST_URL" => $rat_url
+	));
+		
+	$t -> parse("ADMIN_RATINGS.RATINGS_LIST");
+	
 	$ii++;
 	$jj = $jj + $votes;
 	}
 
-$adminmain .= "<tr><td colspan=\"8\">".$L['adm_ratings_totalitems']." : ".$ii."<br />";
-$adminmain .= $L['adm_ratings_totalvotes']." : ".$jj."</td></tr></table>";
+$t->assign(array(
+	"ADMIN_RATINGS_TOTALITEMS" => $ii,
+	"ADMIN_RATINGS_TOTALVOTES" => $jj
+));	
 
-$adminmain .= "<div class=\"paging\">";
-$adminmain .= "<ul class=\"pagination\">";
-$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
-$adminmain .= $pagination;
-$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
+$t -> parse("ADMIN_RATINGS");
+
+$adminmain .= $t -> text("ADMIN_RATINGS"); 
+
 
 ?>
