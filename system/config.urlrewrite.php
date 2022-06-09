@@ -75,6 +75,10 @@ $sed_urlrewrite = array(
          'cond' => '#^/polls/([a-zA-Z0-9]+)(/?)$#',
          'rule' => 'system/core/polls/polls.php?id=$1'
     ),
+    array(
+         'cond' => '#^/polls(/?)$#',
+         'rule' => 'system/core/polls/polls.php'
+    ),	
     
     /*  Gallery rewriting */
     array(

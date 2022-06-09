@@ -3,40 +3,40 @@ var sedjs = {
 	-------------------------------------*/
 	popup : function(code,w,h,modal)
 		{ 
-		if (!modal) { window.open(sedjs.get_basehref()+'plug.php?o='+code,'','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width='+w+',height='+h+',left=32,top=16'); } 
-		else { sedjs.modal.open('popup', 'iframe', sedjs.get_basehref()+'plug.php?o='+code, "Popup", 'width='+w+'px,height='+h+'px,resize=1,scrolling=1,center=1', 'load');  }
+		if (!modal) { window.open(sedjs.get_basehref()+'plug?o='+code,'','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width='+w+',height='+h+',left=32,top=16'); } 
+		else { sedjs.modal.open('popup', 'iframe', sedjs.get_basehref()+'plug?o='+code, "Popup", 'width='+w+'px,height='+h+'px,resize=1,scrolling=1,center=1', 'load');  }
 		},
 		
 	/*= PFS
 	-------------------------------------*/
 	pfs : function(id,c1,c2,modal)
 		{	
-		if (!modal) { window.open(sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=990,height=600,left=32,top=16'); }
-		else { sedjs.modal.open("pfs", "iframe", sedjs.get_basehref()+'pfs.php?userid='+id+'&c1='+c1+'&c2='+c2, "PFS", "width=990px,height=600px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'pfs?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=990,height=600,left=32,top=16'); }
+		else { sedjs.modal.open("pfs", "iframe", sedjs.get_basehref()+'pfs?userid='+id+'&c1='+c1+'&c2='+c2, "PFS", "width=990px,height=600px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Help
 	-------------------------------------*/
 	help : function(rcode,c1,c2,modal)
 		{
-		if (!modal) { window.open(sedjs.get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16'); }
-		else { sedjs.modal.open("help", "iframe", sedjs.get_basehref()+'plug.php?h='+rcode+'&c1='+c1+'&c2='+c2, "Help", "width=500px,height=520px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'plug?h='+rcode+'&c1='+c1+'&c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16'); }
+		else { sedjs.modal.open("help", "iframe", sedjs.get_basehref()+'plug?h='+rcode+'&c1='+c1+'&c2='+c2, "Help", "width=500px,height=520px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Polls
 	-------------------------------------*/
 	polls : function(rcode,modal)
 		{  
-		if (!modal) { window.open(sedjs.get_basehref()+'polls.php?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }    
-		else { sedjs.modal.open("polls", "iframe", sedjs.get_basehref()+'polls.php?id='+rcode, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'polls?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }    
+		else { sedjs.modal.open("polls", "iframe", sedjs.get_basehref()+'polls?id='+rcode, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Poll vote
 	-------------------------------------*/
 	pollvote : function(rcode,rvote,modal)
 		{ 
-		if (!modal) { window.open(sedjs.get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
-		else {sedjs.modal.open("pollvote", "iframe", sedjs.get_basehref()+'polls.php?a=send&id='+rcode+'&vote='+rvote, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'polls?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
+		else {sedjs.modal.open("pollvote", "iframe", sedjs.get_basehref()+'polls?a=send&id='+rcode+'&vote='+rvote, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Picture show 
@@ -46,7 +46,7 @@ var sedjs = {
 		  if (!modal) { 
 				var ptop=(window.screen.height-200)/2;
 			  var pleft=(window.screen.width-200)/2;
-			  window.open(sedjs.get_basehref()+'pfs.php?m=view&v='+url,'Picture','toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left='+pleft+',top='+ptop+'');
+			  window.open(sedjs.get_basehref()+'pfs?m=view&v='+url,'Picture','toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left='+pleft+',top='+ptop+'');
 			} else {
 			  var imglink = 'datas/users/'+url;
 			  var randid = imglink.replace(/[^a-z0-9]/gi,'');
