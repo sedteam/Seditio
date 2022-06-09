@@ -22,8 +22,8 @@ sed_block($usr['auth_read']);
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=referers"), $L['Referers']);
+
 $adminhelp = $L['adm_help_referers'];
-$adminmain = "<h2><img src=\"system/img/admin/info.png\" alt=\"\" /> ".$L['Referers']."</h2>";
 
 $d = sed_import('d', 'G', 'INT');
 if(empty($d)) { $d = 0; }
@@ -31,28 +31,41 @@ if(empty($d)) { $d = 0; }
 if ($a=='prune' && $usr['isadmin'])
 	{ 
 	sed_check_xg();
-	$sql = sed_sql_query("TRUNCATE $db_referers"); }
+	$sql = sed_sql_query("TRUNCATE $db_referers"); 
+	}
 elseif ($a=='prunelowhits' && $usr['isadmin'])
 	{ 
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6"); }
+	$sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6"); 
+	}
 
 $totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_referers"), 0, 0);
 $pagination = sed_pagination(sed_url("admin", "m=referers"), $d, $totallines, 100);
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=referers"), $d, $totallines, 100, TRUE);
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, 100");
-$adminmain .= ($usr['isadmin']) ? "<ul class=\"arrow_list\"><li>".$L['adm_purgeall']." : [<a href=\"".sed_url("admin", "m=referers&a=prune&".sed_xg())."\">x</a>]</li><li>".$L['adm_ref_lowhits']." : [<a href=\"".sed_url("admin", "m=referers&a=prunelowhits&".sed_xg())."\">x</a>]</li></ul>" : '';
 
-$adminmain .= "<div class=\"paging\">";
-$adminmain .= "<ul class=\"pagination\">";
-$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
-$adminmain .= $pagination;
-$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
+$t = new XTemplate(sed_skinfile('admin.referers', true)); 
 
-$adminmain .= "<table class=\"cells striped\"><tr><td class=\"coltop\">".$L['Referer']."</td><td class=\"coltop\">".$L['Hits']."</td></tr>";
+if ($usr['isadmin'])
+{
+	$t->assign(array(
+		"REFERERS_PURGEALL_URL" => sed_url("admin", "m=referers&a=prune&".sed_xg()),
+		"REFERERS_PURGE_LOWHITS_URL" => sed_url("admin", "m=referers&a=prunelowhits&".sed_xg())
+	));
+	$t->parse("ADMIN_REFERERS.REFERERS_PURGE");	
+}
+
+if (!empty($pagination))
+	{
+	$t->assign(array(
+		"REFERERS_PAGINATION" => $pagination,
+		"REFERERS_PAGEPREV" => $pagination_prev,
+		"REFERERS_PAGENEXT" => $pagination_next
+	));	
+	$t->parse("ADMIN_REFERERS.REFERERS_PAGINATION_TP");
+	$t->parse("ADMIN_REFERERS.REFERERS_PAGINATION_BM");		
+	}
 
 if (sed_sql_numrows($sql)>0)
 	{
@@ -64,27 +77,26 @@ if (sed_sql_numrows($sql)>0)
 
 	foreach($referers as $referer => $url)
 		{
-		$referer = htmlspecialchars($referer);
-		$adminmain .= "<tr><td colspan=\"2\"><a href=http://".$referer.">".$referer."</a></td></tr>";
+		$referer = htmlspecialchars($referer);		
+		$t->assign("REFERER_GROUP_URL", $referer);		
 		foreach ($url as $uri=>$count)
 			{
-			$uri1 = sed_cutstring($uri, 48);
-			$adminmain .= "<tr><td>&nbsp; &nbsp; <a href=\"".htmlspecialchars($uri)."\">".htmlspecialchars($uri1)."</a></td>";
-			$adminmain .= "<td style=\"text-align:right;\">".$count."</td></tr>";
+			$uri1 = sed_cutstring($uri, 48);			
+			$t->assign(array(
+				"REFERER_URL" => htmlspecialchars($uri),
+				"REFERER_TITLE" => htmlspecialchars($uri1),
+				"REFERER_COUNT" => $count	
+			));
+			$t->parse("ADMIN_REFERERS.REFERERS_LIST.REFERERS_LIST_ITEM");
 			}
+		$t->parse("ADMIN_REFERERS.REFERERS_LIST");
 		}
 	}
 else
-	{ $adminmain .= "<tr><td colspan=\"2\">".$L['None']."</td></tr>"; }
+	{ $t->parse("ADMIN_REFERERS.REFERERS_NONE"); }
 
-$adminmain .= "</table>";
+$t -> parse("ADMIN_REFERERS");
 
-$adminmain .= "<div class=\"paging\">";
-$adminmain .= "<ul class=\"pagination\">";
-$adminmain .= "<li class=\"prev\">".$pagination_prev."</li>";
-$adminmain .= $pagination;
-$adminmain .= "<li class=\"next\">".$pagination_next."</li>";
-$adminmain .= "</ul>";
-$adminmain .= "</div>";
+$adminmain .= $t -> text("ADMIN_REFERERS"); 
 
 ?>

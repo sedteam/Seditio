@@ -28,7 +28,7 @@ $upg_file = "system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".p
 
 if ($cfg['version'] <= $cfg['sqlversion'] || !file_exists($upg_file))
 	{
-  sed_redirect(sed_url("admin", "", "", true));
+	sed_redirect(sed_url("admin", "", "", true));
 	exit;
   }
 
