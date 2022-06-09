@@ -22,15 +22,12 @@ sed_block($usr['isadmin']);
                       
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.smilies.first');
- 
 
 if (is_array($extp))
-	{ 
-  foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=smilies"), $L['Smilies']);
-$adminmain = "<h2><img src=\"system/img/admin/smilies.png\" alt=\"\" /> ".$L['Smilies']."</h2>";
 
 if ($a=='update')
 	{
@@ -57,9 +54,9 @@ elseif ($a=='add')
 	$sql = sed_sql_query("INSERT INTO $db_smilies (smilie_code, smilie_image, smilie_text, smilie_order) VALUES ('$nsmiliecode', '$nsmilieimage', '$nsmilietext', ".(int)$nsmilieorder.")");
   
 	/* === Hook for the plugins === */
-  $extp = sed_getextplugins('admin.smilies.added');
-  if (is_array($extp))
-	 { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }  
+	$extp = sed_getextplugins('admin.smilies.added');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }  
   
 	sed_cache_clear('sed_smilies');
 	sed_redirect(sed_url("admin", "m=smilies", "", true));
@@ -71,10 +68,10 @@ elseif ($a=='delete')
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_smilies WHERE smilie_id='$id'");
   
-  	/* === Hook for the plugins === */
-  $extp = sed_getextplugins('admin.smilies.deleted');
-  if (is_array($extp))
-	 { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* === Hook for the plugins === */
+	$extp = sed_getextplugins('admin.smilies.deleted');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
   
 	sed_cache_clear('sed_smilies');
 	sed_redirect(sed_url("admin", "m=smilies", "", true));
@@ -83,17 +80,7 @@ elseif ($a=='delete')
 
 $sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
 
-$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<form id=\"savesmilies\" action=\"".sed_url("admin", "m=smilies&a=update")."\" method=\"post\">";
-$adminmain .= "<table class=\"cells striped\"><tr>";
-$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Preview']."</td>";
-$adminmain .= "<td class=\"coltop\" style=\"width:64px;\">".$L['Size']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['ImageURL']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Text']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Order']."</td>";
-$adminmain .= "</tr>";
+$t = new XTemplate(sed_skinfile('admin.smilies', true)); 
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
@@ -111,25 +98,41 @@ while ($row = sed_sql_fetchassoc($sql))
 		$row['smilie_preview'] = "?";
 		$row['smilie_size'] = "?";
 		}
-
-	$adminmain .= "<tr><td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=smilies&a=delete&id=".$row['smilie_id']."&".sed_xg())."\">".$out['img_delete']."</a>";
-	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_preview']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_size']."</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][code]\" value=\"".$row['smilie_code']."\" size=\"10\" maxlength=\"16\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][image]\" value=\"".$row['smilie_image']."\" size=\"32\" maxlength=\"128\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][text]\" value=\"".$row['smilie_text']."\" size=\"12\" maxlength=\"64\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][order]\" value=\"".$row['smilie_order']."\" size=\"5\" maxlength=\"5\" /></td></tr>";
+		
+	$t -> assign(array( 
+		"SMILIE_LIST_DELETE_URL" => sed_url("admin", "m=smilies&a=delete&id=".$row['smilie_id']."&".sed_xg()),
+		"SMILIE_LIST_ID" => $row['smilie_id'],
+		"SMILIE_LIST_PREVIEW" => $row['smilie_preview'],
+		"SMILIE_LIST_SIZE" => $row['smilie_size'],
+		"SMILIE_LIST_CODE" => sed_textbox("s[".$row['smilie_id']."][code]", $row['smilie_code'], 10, 16),
+		"SMILIE_LIST_IMAGE" => sed_textbox("s[".$row['smilie_id']."][image]", $row['smilie_image'], 32, 128),
+		"SMILIE_LIST_TEXT" => sed_textbox("s[".$row['smilie_id']."][text]", $row['smilie_text'], 12, 64),
+		"SMILIE_LIST_ORDER" => sed_textbox("s[".$row['smilie_id']."][order]", $row['smilie_order'], 5, 5)
+	));
+	
+	$t -> parse("ADMIN_SMILIES.SMILIES_LIST.SMILIES_LIST_ITEM"); 			
 	}
+	
+$t->assign(array(   	
+	"SMILIES_UPDATE_SEND" => sed_url("admin", "m=smilies&a=update")
+));	
+	
+$t -> parse("ADMIN_SMILIES.SMILIES_LIST");	
 
-$adminmain .= "<tr><td colspan=\"7\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-$adminmain .= "</table></form>";
+$t -> assign(array( 
+	"SMILIE_ADD_SEND" => sed_url("admin", "m=smilies&a=add"),
+	"SMILIE_ADD_CODE" => sed_textbox("nsmiliecode", $nsmiliecode, 10, 16),
+	"SMILIE_ADD_IMAGEURL" => sed_textbox("nsmilieimage", $nsmilieimage, 32, 128),
+	"SMILIE_ADD_TEXT" => sed_textbox("nsmilietext", $nsmilietext, 12, 64),
+	"SMILIE_ADD_ORDER" => sed_textbox("nsmilieorder", $nsmilieorder, 5, 5)
+));
 
-$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addsmilie\" action=\"".sed_url("admin", "m=smilies&a=add")."\" method=\"post\">";
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td>".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmiliecode\" value=\"\" size=\"40\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
-$adminmain .= "<tr><td>".$L['ImageURL']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmilieimage\" value=\"system/smilies/.gif\" size=\"40\" maxlength=\"128\" /> ".$L['adm_required']."</td></tr>";
-$adminmain .= "<tr><td>".$L['Text']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmilietext\" value=\"\" size=\"40\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
-$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Add']."\"/></td></tr></table></form>";
+$t -> parse("ADMIN_SMILIES.ADD_SMILIE");	
+
+$t -> parse("ADMIN_SMILIES");  
+
+$adminmain .= $t -> text("ADMIN_SMILIES");
+  
+$adminhelp = $L['adm_help_page'];
 
 ?>
