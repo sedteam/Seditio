@@ -22,19 +22,28 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=pm"), $L['Private_Messages']);
-$adminhelp = $L['adm_help_pm'];
-$adminmain = "<h2><img src=\"system/img/admin/pm.png\" alt=\"\" /> ".$L['Private_Messages']."</h2>";
 
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=pm")."\">".$L['Configuration']."</a></li></ul>";
+$adminhelp = $L['adm_help_pm'];
+
+$t = new XTemplate(sed_skinfile('admin.pm', true)); 
+
+if (sed_auth('admin', 'a', 'A'))
+	{
+	$t->assign("BUTTON_PM_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=core&p=pm"));	
+	$t -> parse("ADMIN_PM.PM_BUTTONS.PM_BUTTONS_CONFIG");
+	$t -> parse("ADMIN_PM.PM_BUTTONS");
+	}
 
 $totalpmdb = sed_sql_rowcount($db_pm);
 $totalpmsent = sed_stat_get('totalpms');
 
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<tr><td colspan=\"2\" class=\"coltop\">".$L['Statistics']."</td></tr>";
-$adminmain .= "<tr><td>".$L['adm_pm_totaldb']."</td><td style=\"text-align:center;\">".$totalpmdb."</td></tr>";
-$adminmain .= "<tr><td>".$L['adm_pm_totalsent']."</td><td style=\"text-align:center;\">".$totalpmsent."</td></tr>";
+$t->assign(array(
+	"PM_TOTALMP_DB" => $totalpmdb,
+	"PM_TOTALMP_SEND" => $totalpmsent
+));	
 
-$adminmain .= "</table>";
+$t -> parse("ADMIN_PM");
+
+$adminmain .= $t -> text("ADMIN_PM"); 
 
 ?>
