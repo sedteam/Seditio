@@ -24,13 +24,17 @@ $id = sed_import('id','G','INT');
 
 $adminpath[] = array (sed_url("admin", "m=forums"), $L['Forums']);
 
+$t = new XTemplate(sed_skinfile('admin.forums', true));  
 
-/*$adminmain = "<h2><img src=\"system/img/admin/forums.png\" alt=\"\" /> ".$L['Forums']."</h2>"; */
+if (sed_auth('admin', 'a', 'A'))
+	{
+	$t->assign("BUTTON_FORUMS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=core&p=forums"));	
+	$t->parse("ADMIN_FORUMS.FORUMS_BUTTONS.FORUMS_BUTTONS_CONFIG");
+	$t->assign("BUTTON_FORUMS_STRUCTURE_URL", sed_url("admin", "m=forums&s=structure"));	
+	$t->parse("ADMIN_FORUMS.FORUMS_BUTTONS.FORUMS_BUTTONS_STRUCTURE");
+	}
 
-/*
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=forums")."\">".$L['Configuration']."</a></li><li>";
-$adminmain .= sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'));
-$adminmain .= "</li></ul>";  */
+$t -> parse("ADMIN_FORUMS.FORUMS_BUTTONS");
 
 if ($n=='edit')
 	{
@@ -137,8 +141,6 @@ if ($n=='edit')
 	$form_parent_cat .= "</select>";
 	
   if (file_exists($fs_icon)) { $fs_icon_img = " <img src=\"".$fs_icon."\" alt=\"\" />"; }
-
-  $t = new XTemplate(sed_skinfile('admin.forums', true)); 
   
   if ($usr['isadmin'])
     {   
@@ -254,8 +256,6 @@ else
 
 	$prev_cat = '';
 	$line = 1;
-  
-  $t = new XTemplate(sed_skinfile('admin.forums', true));   
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{

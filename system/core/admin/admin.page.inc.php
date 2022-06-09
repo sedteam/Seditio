@@ -24,8 +24,6 @@ $mn = sed_import('mn', 'G', 'TXT');
 
 $adminpath[] = array (sed_url("admin", "m=page"), $L['Pages']);
 
-//$adminmain = "<h2><img src=\"system/img/admin/pages.png\" alt=\"\" /> ".$L['Pages']."</h2>";
-
 $totaldbpages = sed_sql_rowcount($db_pages);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = sed_sql_result($sql,0,'COUNT(*)');
@@ -38,7 +36,7 @@ $t = new XTemplate(sed_skinfile('admin.page', true));
 
 switch($mn)
 	{
-  case 'structure':
+	case 'structure':
   
     // ============= Structure ==============================
     
@@ -46,8 +44,6 @@ switch($mn)
     sed_block($usr['isadmin']);
     
     $adminpath[] = array (sed_url("admin", "m=page&mn=structure"), $L['Structure']);
-
-   // $adminmain .= "<h4>".$L['Structure']."</h4>";
     
     if ($n=='options')
     	{
@@ -77,12 +73,12 @@ switch($mn)
     		$rallowcomments = sed_import('rallowcomments', 'P', 'BOL');  //New v173
     		$rallowratings = sed_import('rallowratings', 'P', 'BOL');  //New v173
     		
-        if ($rtplmode==1)
-    		  { $rtpl = ''; }
-        elseif ($rtplmode==3)
-          { $rtpl = 'same_as_parent'; }
-        else
-          { $rtpl = sed_import('rtplforced','P','ALS'); }
+			if ($rtplmode==1)
+				  { $rtpl = ''; }
+			elseif ($rtplmode==3)
+			  { $rtpl = 'same_as_parent'; }
+			else
+			  { $rtpl = sed_import('rtplforced','P','ALS'); }
     
     		$sql = sed_sql_query("UPDATE $db_structure SET
     			structure_path = '".sed_sql_prep($rpath)."',
@@ -297,7 +293,7 @@ switch($mn)
 				"STRUCTURE_LIST_DELETE" => ($pagecount[$structure_code] > 0) ? '' : "<a href=\"".sed_url("admin", "m=page&mn=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">".$out['img_delete']."</a>",
 				"STRUCTURE_LIST_CODE" => $structure_code,
 				"STRUCTURE_LIST_TITLE" => "<a href=\"".sed_url("admin", "m=page&mn=structure&n=options&id=".$structure_id."&".sed_xg())."\">".sed_cc($structure_title)."</a>",
-				"STRUCTURE_LIST_PATH" => $pathfieldimg."<input type=\"text\" class=\"text\" name=\"s[$structure_id][rpath]\" value=\"".$structure_path."\" size=\"$pathfieldlen\" maxlength=\"24\" />",
+				"STRUCTURE_LIST_PATH" => $pathfieldimg.sed_textbox("s[".$structure_id."][rpath]", $structure_path, $pathfieldlen, 24),
 				"STRUCTURE_LIST_TPL" => $st_tpl,
 				"STRUCTURE_LIST_GROUP" => $st_group,
 				"STRUCTURE_LIST_PAGECOUNT" => $pagecount[$structure_code],

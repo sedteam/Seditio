@@ -4,15 +4,19 @@
 
 	<ul class="shortcut-buttons-set">
 		
+		<!-- BEGIN: USERS_BUTTONS_CONFIG -->
 		<li><a class="shortcut-button" href="{BUTTON_USERS_CONFIG_URL}"><span>
 			<i class="fa fa-3x fa-cog"></i><br />
 			{PHP.L.Configuration} <br />"{PHP.L.Users}"
 		</span></a></li>
+		<!-- END: USERS_BUTTONS_CONFIG -->
 		
+		<!-- BEGIN: USERS_BUTTONS_BANLIST -->
 		<li><a class="shortcut-button" href="{BUTTON_USERS_BANLIST_URL}"><span>
 			<i class="fa fa-3x fa-ban"></i><br />
 			{PHP.L.Banlist}
 		</span></a></li>
+		<!-- END: USERS_BUTTONS_BANLIST -->
 		
 	</ul>
 

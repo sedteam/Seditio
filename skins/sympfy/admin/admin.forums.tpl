@@ -1,5 +1,29 @@
 <!-- BEGIN: ADMIN_FORUMS -->
 
+<!-- BEGIN: FORUMS_BUTTONS -->
+
+	<ul class="shortcut-buttons-set">
+		
+		<!-- BEGIN: FORUMS_BUTTONS_CONFIG -->
+		<li><a class="shortcut-button" href="{BUTTON_FORUMS_CONFIG_URL}"><span>
+			<i class="fa fa-3x fa-cog"></i><br />
+			{PHP.L.Configuration} <br />"{PHP.L.Forums}"
+		</span></a></li>
+		<!-- END: FORUMS_BUTTONS_CONFIG -->
+		
+		<!-- BEGIN: FORUMS_BUTTONS_STRUCTURE -->
+		<li><a class="shortcut-button" href="{BUTTON_FORUMS_STRUCTURE_URL}"><span>
+			<i class="fa fa-3x fa-cubes"></i><br />
+			{PHP.L.adm_forum_structure}
+		</span></a></li>
+		<!-- END: FORUMS_BUTTONS_STRUCTURE -->
+		
+	</ul>
+
+	<div class="clear"></div>
+	
+<!-- END: USERS_BUTTONS -->
+
 <div class="content-box">
 
 <!-- BEGIN: FS_UPDATE -->

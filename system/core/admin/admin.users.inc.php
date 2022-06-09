@@ -23,26 +23,22 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['isadmin']);
 
 $adminpath[] = array(sed_url("admin", "m=users"), $L['Users']);
-//$adminmain = "<h2><img src=\"system/img/admin/users.png\" alt=\"\" /> ".$L['Users']."</h2>";
-/*
-$adminmain .= "<ul class=\"arrow_list\">";
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=config&n=edit&o=core&p=users"), $L['Configuration'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url("admin", "m=banlist"), $L['Banlist'], sed_auth('users', 'a', 'A'))."</li>";
-$adminmain .= "</ul>";
-*/
 
 $t = new XTemplate(sed_skinfile('admin.users', true)); 
 
-
 if (sed_auth('admin', 'a', 'A'))
-{
-	$t->assign(array(
-		"BUTTON_USERS_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=users"),
-		"BUTTON_USERS_BANLIST_URL" => sed_url("admin", "m=banlist"), $L['Banlist'] 
-	));	
+	{
+	$t->assign("BUTTON_USERS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=core&p=users"));	
+	$t -> parse("ADMIN_USERS.USERS_BUTTONS.USERS_BUTTONS_CONFIG");
+	}
 
-	$t -> parse("ADMIN_USERS.USERS_BUTTONS");
-}
+if (sed_auth('users', 'a', 'A'))
+	{
+	$t->assign("BUTTON_USERS_BANLIST_URL", sed_url("admin", "m=banlist"));	
+	$t->parse("ADMIN_USERS.USERS_BUTTONS.USERS_BUTTONS_BANLIST");
+	}
+
+$t -> parse("ADMIN_USERS.USERS_BUTTONS");
 
 switch($n)
 	{

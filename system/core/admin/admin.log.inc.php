@@ -23,8 +23,6 @@ sed_block($usr['auth_read']);
 $adminpath[] = array (sed_url("admin", "m=log"), $L['Log']);
 $adminhelp = $L['adm_help_log'];
 
-//$adminmain = "<h2><img src=\"system/img/admin/log.png\" alt=\"\" /> ".$L['Log']."</h2>";
-
 $log_groups = array (
 	'all' => $L['All'],
 	'def' => $L['Default'],
