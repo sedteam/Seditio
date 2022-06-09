@@ -135,7 +135,7 @@ ul {
     display: table-cell;
     vertical-align: middle;
 	text-align: right;
-	padding: 24px 0;
+	padding: 24px 0 24px 50px;
 }
 
 #header.header-sticky .menu-col {

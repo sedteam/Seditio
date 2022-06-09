@@ -92,24 +92,42 @@ $adminmain .= "<table class=\"cells striped\">";
 
 $adminmain .= "<thead><tr><th colspan=\"2\" class=\"coltop\">".$L['plu_pastdays']."</th></tr></thead>";
 
-$adminmain .= "<tr><td><a href=\"".sed_url("users", "f=all&s=regdate&w=desc")."\">".$L['plu_newusers']."</a></td>";
-$adminmain .= "<td style=\"text-align:center; width:20%;\">".$newusers ."</td></tr>";
-$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=page")."\">".$L['plu_newpages']."</a></td>";
-$adminmain .= "<td style=\"text-align:center;\">".$newpages ."</td></tr>";
-$adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newtopics']."</a></td>";
-$adminmain .= "<td style=\"text-align:center;\">".$newtopics ."</td></tr>";
-$adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newposts']."</a></td>";
-$adminmain .= "<td style=\"text-align:center;\">".$newposts ."</td></tr>";
-$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=comments")."\">".$L['plu_newcomments']."</a></td>";
-$adminmain .= "<td style=\"text-align:center;\">".$newcomments ."</td></tr>";
-$adminmain .= "<tr><td>".$L['plu_newpms']."</td>";
-$adminmain .= "<td style=\"text-align:center;\">".$newpms ."</td></tr>";
+if (!$cfg['disablereg'])	
+	{
+	$adminmain .= "<tr><td><a href=\"".sed_url("users", "f=all&s=regdate&w=desc")."\">".$L['plu_newusers']."</a></td>";
+	$adminmain .= "<td style=\"text-align:center; width:20%;\">".$newusers ."</td></tr>";
+	}
+	
+if (!$cfg['disable_page'])
+	{
+	$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=page")."\">".$L['plu_newpages']."</a></td>";
+	$adminmain .= "<td style=\"text-align:center;\">".$newpages ."</td></tr>";
+	}
+	
+if (!$cfg['disable_forums'])
+	{	
+	$adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newtopics']."</a></td>";
+	$adminmain .= "<td style=\"text-align:center;\">".$newtopics ."</td></tr>";	
+	$adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newposts']."</a></td>";
+	$adminmain .= "<td style=\"text-align:center;\">".$newposts ."</td></tr>";
+	}
+	
+if (!$cfg['disable_comments'])	
+	{
+	$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=comments")."\">".$L['plu_newcomments']."</a></td>";
+	$adminmain .= "<td style=\"text-align:center;\">".$newcomments ."</td></tr>";
+	}
+	
+if (!$cfg['disable_pm'])	
+	{
+	$adminmain .= "<tr><td>".$L['plu_newpms']."</td>";
+	$adminmain .= "<td style=\"text-align:center;\">".$newpms ."</td></tr>";
+	}
+
 $adminmain .= "</table><br />";
 
 $adminmain .= "<table class=\"cells striped\">";
-
 $adminmain .= "<thead><tr><th colspan=\"2\" class=\"coltop\">".$L['plu_db']."</th></tr></thead>";
-
 $adminmain .= "<tr><td>".$L['plu_db_rows']."</td>";
 $adminmain .= "<td style=\"text-align:center; width:20%;\">".$total_rows."</td></tr>";
 $adminmain .= "<tr><td>".$L['plu_db_indexsize']."</td>";
@@ -120,24 +138,22 @@ $adminmain .= "<tr><td>".$L['plu_db_totalsize']."</td>";
 $adminmain .= "<td style=\"text-align:center;\">".number_format(($total_length/1024),1,'.',' ')."</td></tr>";
 $adminmain .= "</table><br />";
 
-$adminmain .= "<table class=\"cells striped\">";
-
-$adminmain .= "<thead><tr><th colspan=\"4\" class=\"coltop\">".$L['plu_hitsmonth']."</th></tr></thead>";
-
-foreach ($hits_d as $day => $hits)
-	{
-	$percentbar = floor(($hits / $hits_d_max) * 100);
-	$adminmain .= "<tr><td style=\"width:90px;\">".$day."</td>";
-	$adminmain .= "<td style=\"text-align:right; width:138px;\">".$hits." ".$L['Hits']."</td>";
-	$adminmain .= "<td style=\"text-align:right; width:40px;\">$percentbar%</td><td>";
-	$adminmain .= "<div style=\"width:100%;\"><div class=\"bar_back\">";
-	$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
-	}
-
-$adminmain .= "<tr><td colspan=\"4\"><a href=\"".sed_url("admin", "m=hits")."\">".$L['More']."</a></td></tr>";
-$adminmain .= "</table>";
-
-$adminmain .= "</td></tr></table>";
+if (!$cfg['disablehitstats'])
+{
+	$adminmain .= "<table class=\"cells striped\">";
+	$adminmain .= "<thead><tr><th colspan=\"4\" class=\"coltop\">".$L['plu_hitsmonth']."</th></tr></thead>";
+	foreach ($hits_d as $day => $hits)
+		{
+		$percentbar = floor(($hits / $hits_d_max) * 100);
+		$adminmain .= "<tr><td style=\"width:90px;\">".$day."</td>";
+		$adminmain .= "<td style=\"text-align:right; width:138px;\">".$hits." ".$L['Hits']."</td>";
+		$adminmain .= "<td style=\"text-align:right; width:40px;\">$percentbar%</td><td>";
+		$adminmain .= "<div style=\"width:100%;\"><div class=\"bar_back\">";
+		$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
+		}
+	$adminmain .= "<tr><td colspan=\"4\"><a href=\"".sed_url("admin", "m=hits")."\">".$L['More']."</a></td></tr>";
+	$adminmain .= "</table>";
+}
 
 $adminmain .= "</div></div>";
 
