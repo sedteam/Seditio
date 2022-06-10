@@ -5474,7 +5474,7 @@ function sed_captcha_image($code)
             imageline($image, rand(0, 150), rand(1, 70), rand(20, 150), rand(1, 70), $color);
         }
 
-        $font_arr = array_values(array_diff(scandir($cfg['font_dir']), array('.', '..')));
+        $font_arr = array_values(array_diff(scandir(SED_ROOT . "/". $cfg['font_dir']), array('.', '..')));
         $font_size = rand(20, 30);
         $x = rand(0, 10);
 
@@ -5485,7 +5485,7 @@ function sed_captcha_image($code)
             $color = imagecolorallocate($image, rand(0, 200), 0, rand(0, 200));
             $current_font = rand(0, sizeof($font_arr) - 1);
 
-            imagettftext($image, $font_size, rand(-10, 10), $x, rand(50, 55), $color, $cfg['font_dir'] . $font_arr[$current_font], $letter);
+            imagettftext($image, $font_size, rand(-10, 10), $x, rand(50, 55), $color, SED_ROOT . "/". $cfg['font_dir'] . $font_arr[$current_font], $letter);
         }
 
         $pixels = rand(2000, 4000);
@@ -5514,7 +5514,7 @@ function sed_captcha_image($code)
 	
 function sed_session_write($code)
     {      
-        $_SESSION['captcha_value'] = md5(md5($code));
+		$_SESSION['captcha_value'] = md5(md5($code));
         $_SESSION['answer_time'] = strtotime(date('d-m-Y H:i:s'));
     }
 	
@@ -5570,9 +5570,8 @@ function sed_verify_code()
 	
 function sed_error_msg($message)
     {
-        global $error_string;
 		$_SESSION[$_SERVER['REMOTE_ADDR']]++;
-        $error_string .= $message."<br />";
+        return($message);
     }
 
 function sed_session_field_write($code)

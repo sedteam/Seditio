@@ -55,6 +55,7 @@ $L['Bump'] = "Bump";
 $L['Byfirstletter'] = "By first letter";
 $L['bytes'] = "bytes";
 $L['Cancel'] = "Cancel";
+$L['Captcha'] = "Captcha";
 $L['Category'] = "Category";
 $L['Categories'] = "Categories";
 $L['Clearstatus'] = "Clear status";

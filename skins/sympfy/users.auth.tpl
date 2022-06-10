@@ -20,6 +20,12 @@
 
 			<div class="auth-form">
 			
+				<!-- BEGIN: USERS_AUTH_ERROR -->
+				<div class="error">
+					{USERS_AUTH_ERROR_BODY}
+				</div>
+				<!-- END: USERS_AUTH_ERROR -->
+			
 				<form name="login" action="{USERS_AUTH_SEND}" method="post">
 
 					<ul class="form">
@@ -37,7 +43,17 @@
 						<li class="form-row">
 							<div class="form-label">{PHP.skinlang.usersauth.Rememberme}</div>
 							<div class="form-field">{PHP.out.guest_cookiettl}<span class="require"></span></div>
-						</li>  
+						</li> 
+
+						<!-- BEGIN: USERS_AUTH_VERIFY -->
+						<li class="form-row">
+							<div class="form-label"><label>{PHP.L.Captcha}: </label></div>
+							<div class="form-field">
+								<div>{USERS_AUTH_VERIFYIMG}</div> 
+								<div>{USERS_AUTH_VERIFYINPUT}</div>
+							</div>
+						</li>					
+						<!-- END: USERS_AUTH_VERIFY -->						
 
 						<li class="form-row">
 							<div class="form-field-100 text-center">

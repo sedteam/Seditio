@@ -54,7 +54,17 @@
 						<div class="form-label"><label>{PHP.skinlang.usersregister.Country}</label></div>
 						<div class="form-field">{USERS_REGISTER_COUNTRY}</div>
 					</li>
-
+					
+					<!-- BEGIN: USERS_REGISTER_VERIFY -->
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Captcha}: </label></div>
+						<div class="form-field">
+							<div>{USERS_REGISTER_VERIFYIMG}</div> 
+							<div>{USERS_REGISTER_VERIFYINPUT}</div>
+						</div>
+					</li>					
+					<!-- END: USERS_REGISTER_VERIFY -->
+					
 					<li class="form-row">
 						<div class="form-field-100 text-center"><div class="descr">{PHP.skinlang.usersregister.Formhint}</div></div>
 					</li>

@@ -25,7 +25,6 @@ if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel'])
   exit; 
   } 
 
-
 if ($cfg['disablereg'])
 	{
 	sed_redirect(sed_url("message", "msg=117", "", true));
@@ -260,7 +259,7 @@ $rcountry = (empty($rcountry)) ? $cfg['defaultcountry'] : $rcountry;
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $form_timezone ="<input type=\"hidden\" name=\"rtimezone_p\" value=\"1\" /><select name=\"rtimezone\" size=\"1\">";
-while( list($i,$x) = each($timezonelist) )
+foreach ($timezonelist as $i => $x)
 	{
 	$selected = ($x==$rtimezone) ? "selected=\"selected\"" : '';
 	$form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
