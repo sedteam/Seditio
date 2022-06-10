@@ -1106,6 +1106,53 @@ ul.inline-menu li.active a {
 	text-decoration: none;
 }
 
+/*-------------------------*/
+/***** NEWS *****/
+/*-------------------------*/
+
+.news-item {
+	margin-bottom: 25px;
+	border: 1px solid #ececec;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+.news-item .post-title h2 {
+	margin: 0 0 0 0;
+}
+
+.news-item .post-info {
+	width:100%;
+	margin-top: 25px;
+}
+
+.news-item .post-author,
+.news-item .post-comments {
+	padding: 10px;
+}
+
+.news-item .post-comments {
+	width: 50px;
+}
+
+.news-item .readmore {
+	margin-top:35px;
+}
+
+.news-item .readmore a {
+	padding:10px 20px;
+	border:1px solid #90a4ae;
+	border-radius: 3px;
+}
+
+.news-item .readmore a:hover {
+	text-decoration: none;
+}
+
+/*-------------------------*/
+/***** OTHER_PAGE *****/
+/*-------------------------*/
+
 .page-other {
 	padding-top: 30px;
     border-top: 1px solid #ececec;
