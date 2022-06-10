@@ -6,9 +6,9 @@ Copyright Neocrome & Seditio Team
 http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
-File=upgrade_177_178.php
+File=upgrade_175_178.php
 Version=178
-Updated=2013-jun-25
+Updated=2022-jun-16
 Type=Core.upgrade
 Author=Neocrome & Seditio Team
 Description=Database upgrade
@@ -19,6 +19,93 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
 $adminmain .= "Clearing the internal SQL cache...<br />";
 $sql = sed_sql_query("TRUNCATE TABLE ".$cfg['sqldbprefix']."cache");
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."core VALUES ('', 'dic', 'Directories', '150', 1, 0);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."auth VALUES ('', 1, 'dic', 'a', 1, 254, 1);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."auth VALUES ('', 2, 'dic', 'a', 1, 254, 1);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."auth VALUES ('', 3, 'dic', 'a', 0, 255, 1);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."auth VALUES ('', 4, 'dic', 'a', 3, 128, 1);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."auth VALUES ('', 5, 'dic', 'a', 255, 255, 1);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
+
+$sqlqr = "INSERT INTO ".$cfg['sqldbprefix']."auth VALUES ('', 6, 'dic', 'a', 131, 0, 1);";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "CREATE TABLE ".$cfg['sqldbprefix']."dic (
+	dic_id mediumint(8) NOT NULL auto_increment,
+	dic_title varchar(255) NOT NULL default '',
+	dic_code varchar(255) NOT NULL default '',
+	dic_type tinyint(1) default '0',
+	dic_values text NOT NULL,
+	dic_parent mediumint(8) NOT NULL default '0',
+	dic_mera varchar(16) NOT NULL default '',
+	dic_form_title varchar(255) NOT NULL default '', 
+	dic_form_desc varchar(255) NOT NULL default '',
+	dic_form_size smallint(5) NOT NULL default '0',
+	dic_form_maxsize smallint(5) NOT NULL default '0',
+	dic_form_cols smallint(5) NOT NULL default '0',
+	dic_form_rows smallint(5) NOT NULL default '0',
+	dic_extra_location varchar(40) NOT NULL default '',
+	dic_extra_type varchar(20) NOT NULL default '',
+	dic_extra_size smallint(5) NOT NULL default '0',
+	KEY dic_code (dic_code), 
+	KEY dic_parent (dic_parent),
+	PRIMARY KEY  (dic_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$sqlqr = "CREATE TABLE ".$cfg['sqldbprefix']."dic_items (
+  ditem_id mediumint(8) NOT NULL auto_increment,
+  ditem_dicid mediumint(8) NOT NULL default '0',
+  ditem_title varchar(255) NOT NULL default '',
+  ditem_code varchar(255) NOT NULL default '',
+  ditem_children mediumint(8) NOT NULL DEFAULT '0',
+  ditem_defval tinyint(1) default '0',
+  KEY ditem_dicid (ditem_dicid), 
+  PRIMARY KEY  (ditem_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"; 
+
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$adminmain .= "Adding the 'page_price' column to table pages...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."pages ADD page_price varchar(11) NOT NULL DEFAULT '0' AFTER page_seo_keywords";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$adminmain .= "Adding the 'page_thumb' column to table pages...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."pages ADD page_thumb varchar(255) NOT NULL DEFAULT '' AFTER page_price";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$adminmain .= "Adding the 'user_firstname' column to table users...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."users ADD user_firstname varchar(100) NOT NULL DEFAULT '' AFTER user_name";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);
+
+$adminmain .= "Adding the 'user_lastname' column to table users...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."users ADD user_lastname varchar(100) NOT NULL DEFAULT '' AFTER user_firstname";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr);  
 
 $adminmain .= "Adding the 'structure_thumb' column to table structure...<br />";
 $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."structure ADD structure_thumb varchar(255) NOT NULL DEFAULT '' AFTER structure_allowratings";
@@ -121,7 +208,7 @@ $sql = sed_sql_query($sqlqr);
 $adminmain .= "Adding the 'page_seo_h1' column to table pages...<br />";
 $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."pages ADD page_seo_h1 varchar(255) NOT NULL DEFAULT '' AFTER page_seo_keywords";
 $adminmain .= sed_cc($sqlqr)."<br />";
-$sql = sed_sql_query($sqlqr); 
+$sql = sed_sql_query($sqlqr);
 
 $adminmain .= "-----------------------<br />";
 

@@ -24,7 +24,7 @@ sed_block($usr['isadmin']);
 $adminpath[] = array (sed_url("admin", "m=upgrade"), $L['upg_upgrade']);
 
 $cfg['sqlversion'] = sed_stat_get('version');
-$upg_file = "system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".php";
+$upg_file = SED_ROOT."/system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".php";
 
 if ($cfg['version'] <= $cfg['sqlversion'] || !file_exists($upg_file))
 	{

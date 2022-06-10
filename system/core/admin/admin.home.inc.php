@@ -64,7 +64,7 @@ if ($sys['user_istopadmin'])
 	if ($cfg['version'] > $cfg['sqlversion'])
 		{
 		$upgstat .=  $L['upg_codeisnewer'];
-		$upg_file = "system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".php";
+		$upg_file = SED_ROOT."/system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".php";
 		$status_ok = FALSE;
 
 		if (file_exists($upg_file))
