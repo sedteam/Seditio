@@ -24,6 +24,7 @@ Order=10
 
 ==================== */
 
-$error_string .= sed_verify_code()."<br />";
+$verify = sed_verify_code();
+$error_string .= (!empty($verify)) ? $verify."<br />" : "";
 
 ?>
