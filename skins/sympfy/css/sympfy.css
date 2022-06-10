@@ -859,6 +859,10 @@ ul {
 	width: 70%;
 }
 
+/*-------------------------*/
+/***** INLINE MENU *****/
+/*-------------------------*/
+
 .section-menu {
 	padding-bottom:25px;
 }
@@ -908,6 +912,56 @@ ul.inline-menu li.active a {
 	border: 1px solid #c1c9d8;
 	background: #ccd5e8;
 	border-radius: 3px;
+}
+
+/*-------------------------*/
+/***** CATEGORY MENU *****/
+/*-------------------------*/
+
+.section-category-menu {
+	
+}
+
+ul.category-menu {
+	margin:0;
+	padding:0;
+	list-style:none;	
+}
+
+ul.category-menu li {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #f2f2f2;
+    margin: 0 0 10px 0;
+    font-size: 1.3em;
+    font-weight: 500;
+    border-radius: 3px;
+}
+
+ul.category-menu li a {
+	display: block;
+}
+
+ul.category-menu li a span {
+    position: relative;
+    top: -1px;
+    right: 0px;
+    background: #b1afaf;
+    border-radius: 100%;
+    width: 27px;
+    height: 27px;
+    line-height: 28px;
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+    display: inline-block;
+    margin-left: 0px;
+    float: right;
+}
+
+ul.category-menu li a:hover span {
+    background: #ccd5e8;
 }
 
 .post-col {
@@ -1591,11 +1645,7 @@ a.alfabeta:hover {
 }
 
 /*-------------------------*/
-/***** PAGE *****/
-/*-------------------------*/
-
-/*-------------------------*/
-/***** PAGE *****/
+/***** PAGE & OTHER TEXT *****/
 /*-------------------------*/
 
 .page-text {
@@ -1603,10 +1653,17 @@ a.alfabeta:hover {
     padding: 20px 0 10px 0;
 }
 
+.forum-text {
+    font-size: 1.1em;
+	line-height: 1.45em;
+}
+
+.forum-text table td img,
 .page-text table td img {
 	margin: 0px;
 }
 
+.forum-text table td,
 .page-text table td {
 	border: 1px solid #e8e4e3;
 	padding: 1em;
@@ -1614,29 +1671,36 @@ a.alfabeta:hover {
 	text-align: left;
 }
 
+.forum-text table
 .page-text table {
 	margin: 0 5px 15px 5px;
+	width: auto !important;
 }
 
+.forum-text table[align="center"],
 .page-text table[align="center"] {
     margin: 0 auto 15px auto;
 }
 
+.forum-text ul,
 .page-text ul,
 .page-textol {
 	margin: 0 0 20px 20px;
 }
 
+.forum-text ul li,
 .page-text ul li {
 	list-style: disc;
 	margin: 10px 0;
 }
 
+.forum-text ol li,
 .page-text ol li {
 	list-style: decimal;
 	margin: 10px 0;
 }
 
+.forum-text blockquote,
 .page-text blockquote {
 	color: #999999;
 	font-style: italic;
@@ -1646,6 +1710,7 @@ a.alfabeta:hover {
 	position: relative;
 }
 
+.forum-text blockquote:before,
 .page-text blockquote:before {
 	display: block;
 	content: "\201C";
@@ -1656,14 +1721,22 @@ a.alfabeta:hover {
 	color: #cccccc;
 }
 
+.forum-text blockquote cite,
 .page-text blockquote cite {
 	color: #333333;
 	display: block;
 	margin-top: 10px;
 }
 
+.forum-text blockquote cite:before,
 .page-text blockquote cite:before {
 	content: "\2014 \2009";
+}
+
+.forum-text img, 
+.page-text img {
+	max-width:100%;
+	height: auto !important;
 }
 
 #page .section-title h2, 
@@ -1707,15 +1780,6 @@ a.alfabeta:hover {
     -moz-border-radius: 5px;
     word-wrap: break-word;
 }
-
-.page-text img {
-	max-width:100%;
-	height: auto !important;
-}
-
-.page-text table {
-    width: auto !important;
-} 
 
 /*-------------------------*/
 /***** FORUMS *****/

@@ -94,7 +94,7 @@
 					</div>
 
 					<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} td-top forums-message-td">
-						<div class="forums-post-message">
+						<div class="forums-post-message forum-text">
 							{FORUMS_POSTS_ROW_TEXT}
 							<div class="signature">{FORUMS_POSTS_ROW_USERTEXT}</div>
 						</div>  

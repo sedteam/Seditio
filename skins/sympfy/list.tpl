@@ -36,7 +36,15 @@
 		
 			<div id="primary">
 			
-				{LIST_CATTEXT}
+				<!-- BEGIN: LIST_CATTEXT -->
+				
+				<div class="page-text">
+				
+					{LIST_CATTEXT}
+				
+				</div>
+				
+				<!-- END: LIST_CATTEXT -->
 			
 				<div class="row row-flex">
 

@@ -278,6 +278,10 @@ $t->assign(array(
 	"LIST_EXTRATEXT" => $extratext
 ));
 
+if (!empty($list_text)) {
+	$t->parse("MAIN.LIST_CATTEXT");	
+}
+
 if (!$sed_cat[$c]['group'])
 	{
 	$t->assign(array(
@@ -446,7 +450,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 		}
 	else 
 		{
-		$t->assign("LIST_ROW_THUMB", sed_cc($pag['page_thumb']));
+		$t->assign("LIST_ROW_THUMB", "noimg.jpg");
 		}	
 			
 	// ---------- Extra fields - getting

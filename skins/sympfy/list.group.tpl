@@ -22,21 +22,29 @@
 			{LIST_SUBMITNEWPAGE}
 		</div>
 		
-		<!-- END: LIST_AUTHUSER -->	
-		
-		<div class="section-menu">
-			<ul class="inline-menu">				
-			<!-- BEGIN: LIST_ROWCAT -->			
-				<li><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>  			
-			<!-- END: LIST_ROWCAT -->				
-			</ul>				
-		</div>
+		<!-- END: LIST_AUTHUSER -->
 	
 		<div id="primary-container">
 		
 			<div id="primary">
 			
-				{LIST_CATTEXT}
+				<div class="section-category-menu">
+					<ul class="category-menu">				
+					<!-- BEGIN: LIST_ROWCAT -->			
+						<li><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>  			
+					<!-- END: LIST_ROWCAT -->				
+					</ul>				
+				</div>				
+			
+				<!-- BEGIN: LIST_CATTEXT -->
+				
+				<div class="page-text">
+				
+					{LIST_CATTEXT}
+				
+				</div>
+				
+				<!-- END: LIST_CATTEXT -->
 			
 				<div class="row row-flex">
 
