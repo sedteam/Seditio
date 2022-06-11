@@ -4630,7 +4630,8 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
                 } 
             } 
         } 
-    }    
+    }   
+
   if(preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER)) 
     { 
       foreach($matches as $m) 
@@ -4651,7 +4652,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
     }
 	if(!empty($args)) 
     { 
-      $qs = '?'; 
+      $qs = ($cfg['sefurls']) ? '?' : '&'; 
       $sep_len = mb_strlen($sep); 
       foreach($args as $key => $val) 
       { 
@@ -4665,8 +4666,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
     }
 		
   $url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&amp;', $url);
-  $path = ($header || ($cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';
-      
+  $path = ($header || ($cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';	  
   return($path.$url.$anchor);
 }
 
@@ -5727,7 +5727,7 @@ function sed_autogen_avatar($uid)
 	return $gen_avatar;
 }
 
-function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $class = "" )
+function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $only_childrensonlevel = false, $class = "" )
 {
 	if ( is_array( $menus ) && isset( $menus[$parent_id] ) )
 		{
@@ -5737,10 +5737,17 @@ function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $c
 			{
 			$level++;
 			foreach ($menus[$parent_id] as $item) {
-				$has_children = isset( $menus[$item['menu_id']] ) ? " class=\"has-children\"" : "";
-				$tree .= "<li".$has_children."><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
-				$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
-				$tree .= "</li>";
+				if ($only_childrensonlevel)
+					{
+					$tree .= "<li><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a></li>";
+					}
+				else 
+					{
+					$has_children = isset( $menus[$item['menu_id']] ) ? " class=\"has-children\"" : "";
+					$tree .= "<li".$has_children."><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
+					$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
+					$tree .= "</li>";
+					}
 				}
 			}
 		elseif ( $only_parent ) {

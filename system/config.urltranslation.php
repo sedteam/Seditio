@@ -361,7 +361,7 @@ $sed_urltrans['index'] = array(
 $sed_urltrans['*'] = array(
     array( 
           'params' => '*', 
-          'rewrite' => '{sed_get_section()}.php'
+          'rewrite' => 'index.php?module={sed_get_section()}'
     )
 );
 

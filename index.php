@@ -65,25 +65,19 @@ foreach($sed_urlrewrite as $val)
     }
 }
 
-/**/
-/* For old urls */
-$incl_php = str_replace("/", "", $request_uri);
-$system_core = array("install", "admin", "captcha", "resizer", "forums", "gallery", "index", "list", "message", "page", "pfs", "plug", "pm", "polls", "rss", "sitemap", "users", "view");
-$pos = mb_strpos($incl_php, ".php");
+$module = $_GET['module'];
 
-if ($pos > 0) {
-	$incl = mb_substr($incl_php, 0, $pos);  
-	if (in_array($incl, $system_core)) {
-		$system_incl_dir = ($incl == "install") ? SED_ROOT . "/system/install/" : SED_ROOT . "/system/core/".$incl."/";
-		include_once($system_incl_dir.$incl_php);
+if (!empty($module))
+{
+	$system_core = array("install", "admin", "captcha", "resizer", "forums", "gallery", "index", "list", "message", "page", "pfs", "plug", "pm", "polls", "rss", "sitemap", "users", "view");
+	if (in_array($module, $system_core)) {
+		$system_incl_dir = ($module == "install") ? SED_ROOT . "/system/install/" : SED_ROOT . "/system/core/".$module."/";
+		include_once($system_incl_dir.$module.".php");
 		die();
 	}
 }
 
-/**/
-
 header("HTTP/1.1 404 Not Found");
-//header("Location: ".$subdir_uri."/message/404");
 exit; 
    
 ?>
