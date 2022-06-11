@@ -24,12 +24,12 @@
 						<div class="footer-menu-table">
 							<div class="footer-menu-table-col">								
 								<div class="footer-menu">
-									{PHP.sed_menu.1.childrens}
+									{PHP.sed_menu.1.childrensonlevel}
 								</div>
 							</div>
 							<div class="footer-menu-table-col">								
 								<div class="footer-menu">
-									{PHP.sed_menu.8.childrens}
+									{PHP.sed_menu.4.childrens}
 								</div>									
 							</div>
 						</div>

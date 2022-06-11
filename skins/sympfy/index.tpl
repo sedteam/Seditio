@@ -54,7 +54,7 @@
 		
 		<div class="section-menu">
 			<div class="inline-menu">
-				{PHP.sed_menu.8.childrens}
+				{PHP.sed_menu.4.childrens}
 			</div>
 		</div>
 	
