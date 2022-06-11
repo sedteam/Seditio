@@ -83,7 +83,7 @@ switch($ic)
 	break;
 
 	case 'plug':
-	$extplugin_info = "plugins/".$io."/".$io.".setup.php";
+	$extplugin_info = SED_ROOT . "/plugins/".$io."/".$io.".setup.php";
 	$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 	$title = " : ".$info['Name'];
   

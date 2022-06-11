@@ -26,7 +26,7 @@ require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/system/functions.admin.php');
 require(SED_ROOT . '/datas/config.php');
 require(SED_ROOT . '/system/common.php');
-require("system/lang/".$usr['lang']."/admin.lang.php");
-require("system/core/admin/admin.inc.php");
+require(SED_ROOT . "/system/lang/".$usr['lang']."/admin.lang.php");
+require(SED_ROOT . "/system/core/admin/admin.inc.php");
 
 ?>

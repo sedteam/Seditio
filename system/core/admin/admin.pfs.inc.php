@@ -25,10 +25,6 @@ $adminpath[] = array (sed_url("admin", "m=pfs"), $L['PFS']);
 
 $adminhelp = $L['adm_help_pfs'];
 
-/* $adminmain = "<h2><img src=\"system/img/admin/pfs.png\" alt=\"\" /> ".$L['PFS']."</h2>";
-$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".."\">".$L['Configuration']."</a></li>";
-$adminmain .= "<li><a href=\"".."\">".$L['SFS']."</a></li></ul>"; */
-
 $t = new XTemplate(sed_skinfile('admin.pfs', true)); 
 
 $t -> assign(array( 

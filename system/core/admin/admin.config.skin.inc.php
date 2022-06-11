@@ -40,9 +40,9 @@ sort($skinlist);
 
 $t = new XTemplate(sed_skinfile('admin.config.skin', true)); 
 
-while(list($i,$x) = each($skinlist))
+foreach ($skinlist as $i => $x)
 	{
-	$skininfo = "skins/".$x."/".$x.".php";
+	$skininfo = SED_ROOT."/skins/".$x."/".$x.".php";
 	$info = sed_infoget($skininfo);	 	
 	$skin_name = (!empty($info['Error'])) ? $x." (".$info['Error'].")" : $info['Name'];	   	
 	$skin_desc = $L['Version']." : ".$info['Version']."<br />";

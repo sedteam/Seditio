@@ -2134,7 +2134,7 @@ function sed_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	$skin = $cfg['defaultskin'];
     $mskin = "skins/".$cfg['defaultskin']."/service.message.tpl";    
  
-    require("system/lang/$lang/message.lang.php");
+    require(SED_ROOT."/system/lang/$lang/message.lang.php");
 
     // Determine response header 
     static $msg_status = array( 
@@ -3994,7 +3994,7 @@ function sed_selectbox_skin($check, $name)
 	foreach ($skinlist as $i => $x)
 		{
 		$selected = ($x==$check) ? "selected=\"selected\"" : '';
-		$skininfo = "skins/".$x."/".$x.".php";
+		$skininfo = SED_ROOT."/skins/".$x."/".$x.".php";
 		if (file_exists($skininfo))
 			{
 			$info = sed_infoget($skininfo);
@@ -4030,7 +4030,7 @@ function sed_radiobox_skin($check, $name)
 	foreach ($skinlist as $i => $x)
 		{
 		$checked = ($x == $check) ? "checked=\"checked\"" : '';
-		$skininfo = "skins/".$x."/".$x.".php";
+		$skininfo = SED_ROOT."/skins/".$x."/".$x.".php";
 		$info = sed_infoget($skininfo);
 		$result .= (!empty($info['Error'])) ? $x." (".$info['Error'].")" : "<table class=\"flat\"><tr><td><img src=\"skins/$x/$x.png\" alt=\"$name\" /></td><td style=\"vertical-align:top;\"><input type=\"radio\" name=\"$name\" value=\"$x\" $checked> <strong>".$info['Name']."</strong><br />&nbsp;<br />Version : ".$info['Version']."<br />Updated : ".$info['Updated']."<br />Author : ".$info['Author']."</td></tr></table>";
 		}
@@ -4624,7 +4624,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
                     } 
                 } 
               if($matched)
-    			      { 
+    			{ 
                   $url = $rule['rewrite']; 
                   break; 
                 } 

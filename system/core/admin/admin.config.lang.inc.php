@@ -31,7 +31,7 @@ $t = new XTemplate(sed_skinfile('admin.config.lang', true));
 
 while(list($i,$x) = each($langlist))
 	{
-	$info = sed_infoget("system/lang/$x/main.lang.php");		
+	$info = sed_infoget(SED_ROOT . "system/lang/$x/main.lang.php");		
 	$lang_name = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
 	$lang_code = $x;
 	$lang_desc = $L['Version']." : ".$info['Version']."<br />";

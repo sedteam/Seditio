@@ -38,7 +38,7 @@ if (empty($a) && empty($n) && empty($o))
   
 if ($o == 'plug' && !empty($p))  //New in v173
   {
-    $plug_langfile = "plugins/".$p."/lang/".$p.".".$usr['lang'].".lang.php";
+    $plug_langfile = SED_ROOT."/plugins/".$p."/lang/".$p.".".$usr['lang'].".lang.php";
     if (@file_exists($plug_langfile)) { require($plug_langfile); }
   } 
 
@@ -89,7 +89,7 @@ switch ($n)
 	elseif ($a=='reset' && $o=='plug' && !empty($v) &&  !empty($p))
 		{
 		sed_check_xg();
-		$extplugin_info = "plugins/".$p."/".$p.".setup.php";
+		$extplugin_info = SED_ROOT."/plugins/".$p."/".$p.".setup.php";
     
 		if (file_exists($extplugin_info))
 		  { 
@@ -124,7 +124,7 @@ switch ($n)
     }
 	else
 		{
-		$extplugin_info = "plugins/".$p."/".$p.".setup.php";
+		$extplugin_info = SED_ROOT."/plugins/".$p."/".$p.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 		$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L['Plugin'].' : '.$info['Name'].' ('.$p.')');
 		$adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';
@@ -152,7 +152,7 @@ switch ($n)
 		if ($config_type == 7) { continue; } //Hidden config New v173
 
 		if ($config_type == 1)
-			{ $config_field = "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"32\" maxlength=\"255\" />"; }
+			{ $config_field = sed_textbox($config_name, $config_value, 32, 255); }
 		elseif ($config_type == 2)
 			{
 			if ($o=='plug' && !empty($row['config_default']))
@@ -178,7 +178,7 @@ switch ($n)
 				}
 			else
 				{
-				$config_field = "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"8\" maxlength=\"11\" />";
+				$config_field = sed_textbox($config_name, $config_value, 8, 11);
 				}
 			}
 		elseif ($config_type == 3)
@@ -189,8 +189,8 @@ switch ($n)
 			{
 			$varname = "sed_select_".$config_name;
 			$config_field = "<select name=\"".$config_name."\" size=\"1\">";
-			reset($$varname);
-			while ( list($i,$x) = each($$varname) )
+			reset($$varname);			
+			foreach ($$varname as $i => $x)
 				{
 				$selected = ($config_value==$x[0]) ? "selected=\"selected\"" : '';
 				$config_field .= "<option value=\"".$x[0]."\" $selected>".$x[1]."</option>";
@@ -199,7 +199,7 @@ switch ($n)
 			}
 		else
 			{
-			$config_field = "<textarea name=\"$config_name\" rows=\"5\" cols=\"56\" class=\"noeditor\">".$config_value."</textarea>";
+			$config_field = "<textarea name=\"$config_name\" rows=\"5\" cols=\"76\" class=\"noeditor\">".$config_value."</textarea>";
 			}
 
 		$config_reset_url = ($o=='core') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '';
@@ -234,7 +234,8 @@ switch ($n)
 
 	$adminmain = $t -> text("ADMIN_CONFIG");   	 
   
-	$sys['inc_cfg_options'] = 'system/core/admin/admin.config.'.$p.'.inc.php';
+	$sys['inc_cfg_options'] = SED_ROOT.'/system/core/admin/admin.config.'.$p.'.inc.php';
+	
 	if (file_exists($sys['inc_cfg_options'])) { require($sys['inc_cfg_options']); }
 
 	break;

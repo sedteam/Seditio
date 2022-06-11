@@ -24,8 +24,6 @@ $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=hits"), $L['Hits']);
 $adminhelp = $L['adm_help_hits'];
 
-//$adminmain = "<h2><img src=\"system/img/admin/statistics.png\" alt=\"\" /> ".$L['Hits']."</h2>";
-
 $f = sed_import('f','G','ALP',10);
 $v = sed_import('v','G','TXT',8);
 

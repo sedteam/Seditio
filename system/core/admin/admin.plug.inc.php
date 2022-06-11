@@ -42,15 +42,15 @@ switch ($a)
 	case 'details' :
 	/* =============== */
 
-	$extplugin_info = "plugins/".$pl."/".$pl.".setup.php";
+	$extplugin_info = SED_ROOT . "/plugins/".$pl."/".$pl.".setup.php";
 
 	if (file_exists($extplugin_info))
 		{
-		$extplugin_info = "plugins/".$pl."/".$pl.".setup.php";
+		$extplugin_info = SED_ROOT . "/plugins/".$pl."/".$pl.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 		$adminpath[] = array (sed_url("admin", "m=plug&a=details&pl=".$pl), $info['Name']." ($pl)");
 
-		$handle=opendir("plugins/".$pl);
+		$handle = opendir(SED_ROOT . "/plugins/".$pl);
 		$setupfile = $pl.".setup.php";
 		while ($f = readdir($handle))
 			{
@@ -94,7 +94,7 @@ switch ($a)
 		
 		foreach ($parts as $i => $x)
 			{
-			$extplugin_file = "plugins/".$pl."/".$x;
+			$extplugin_file = SED_ROOT . "/plugins/".$pl."/".$x;
 			$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 			if (!empty($info_file['Error']))
@@ -153,7 +153,7 @@ switch ($a)
 				
 				if (empty($info_file['Tags']))
 					{
-					$listtags = $L['None'];
+					$listtags = $L['None']."<br />";
 					}
 				else
 					{
@@ -291,7 +291,7 @@ switch ($a)
 	while ($row = sed_sql_fetchassoc($sql))
 		{ $cfgentries[$row['config_cat']] = $row['COUNT(*)']; }
 
-	$handle=opendir("plugins");
+	$handle = opendir(SED_ROOT . "/plugins");
 	while ($f = readdir($handle))
 		{
 		if (!is_file($f) && $f!='.' && $f!='..' && $f!='code')
@@ -318,7 +318,7 @@ switch ($a)
 
 	foreach ($extplugins as $i => $x)
 		{
-		$extplugin_info = "plugins/".$x."/".$x.".setup.php";
+		$extplugin_info = SED_ROOT . "/plugins/".$x."/".$x.".setup.php";
 		if (file_exists($extplugin_info))
 			{
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
@@ -422,7 +422,7 @@ switch ($a)
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{
-		$extplugin_file = "plugins/".$row['pl_code']."/".$row['pl_file'].".php";
+		$extplugin_file = SED_ROOT . "/plugins/".$row['pl_code']."/".$row['pl_file'].".php";
 		$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 		$t->assign(array(		
