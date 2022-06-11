@@ -233,10 +233,10 @@ $t->assign(array(
 	"PMSEND_ARCHIVES" => "<a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a>:".$totalarchives,
 	"PMSEND_SENTBOX" => "<a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PMSEND_FORM_SEND" => sed_url("pm", "m=send&a=send&to=".$to),
-	"PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".$newpmtitle."\" size=\"64\" maxlength=\"64\" />",
-	"PMSEND_FORM_TEXT" =>  "<div><textarea name=\"newpmtext\" rows=\"".$cfg['textarea_default_height']."\" cols=\"".$cfg['textarea_default_width']."\">".$newpmtext."</textarea></div> ".$pfs,
+	"PMSEND_FORM_TITLE" => sed_textbox('newpmtitle', $newpmtitle, 64, 64),
+	"PMSEND_FORM_TEXT" =>  sed_textarea('newpmtext', $newpmtext, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic').$pfs,
 	"PMSEND_FORM_MYPFS" => $pfs,
-	"PMSEND_FORM_TOUSER" => "<div><textarea name=\"newpmrecipient\" rows=\"3\" cols=\"".$cfg['textarea_default_width']."\" class=\"noeditor\">".$touser."</textarea></div>"
+	"PMSEND_FORM_TOUSER" => sed_textarea('newpmrecipient', $touser, 2, $cfg['textarea_default_width'])
 ));
 
 /* === Hook === */

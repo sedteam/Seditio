@@ -224,7 +224,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 			{
 			$pm_editbox = "<h4>".$L['Edit']." :</h4>";
 			$pm_editbox .= "<form id=\"newlink\" action=\"".sed_url("pm", "m=edit&a=update&".sed_xg()."&id=".$id)."\" method=\"post\">";
-			$pm_editbox .= "<textarea name=\"newpmtext\" rows=\"8\" cols=\"56\">".$row['pm_text']."</textarea>";
+			$pm_editbox .= sed_textarea('newpmtext', $row['pm_text'], 8, 56, 'Basic');			
 			$pm_editbox .= "<br />&nbsp;<br /><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></form>";
 			}
 		}
