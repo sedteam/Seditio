@@ -3,12 +3,11 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=plugins/skineditor/skineditor.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Plugin
 Author=Neocrome
 Description=

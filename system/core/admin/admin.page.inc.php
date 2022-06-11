@@ -3,7 +3,6 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=admin.page.inc.php

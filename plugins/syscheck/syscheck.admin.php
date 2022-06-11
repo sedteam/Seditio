@@ -3,12 +3,11 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Plugin
 Author=Neocrome
 Description=
@@ -27,21 +26,26 @@ Order=10
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
 
-$systemfiles[] = '*Root launchers';
+$systemfiles[] = '*Core Router Launchers';
 
-$systemfiles[] = 'admin.php';
-$systemfiles[] = 'forums.php';
-$systemfiles[] = 'gallery.php';
-$systemfiles[] = 'index.php';
-$systemfiles[] = 'list.php';
-$systemfiles[] = 'message.php';
-$systemfiles[] = 'page.php';
-$systemfiles[] = 'pfs.php';
-$systemfiles[] = 'plug.php';
-$systemfiles[] = 'pm.php';
-$systemfiles[] = 'polls.php';
-$systemfiles[] = 'users.php';
-$systemfiles[] = 'view.php';
+$systemfiles[] = 'system/core/admin/admin.php';
+$systemfiles[] = 'system/core/forums/forums.php';
+$systemfiles[] = 'system/core/gallery/gallery.php';
+$systemfiles[] = 'system/core/index/index.php';
+$systemfiles[] = 'system/core/list/list.php';
+$systemfiles[] = 'system/core/message/message.php';
+$systemfiles[] = 'system/core/page/page.php';
+$systemfiles[] = 'system/core/pfs/pfs.php';
+$systemfiles[] = 'system/core/plug/plug.php';
+$systemfiles[] = 'system/core/pm/pm.php';
+$systemfiles[] = 'system/core/polls/polls.php';
+$systemfiles[] = 'system/core/users/users.php';
+$systemfiles[] = 'system/core/view/view.php';
+
+$systemfiles[] = 'system/core/captcha/captcha.php';
+$systemfiles[] = 'system/core/resizer/resizer.php';
+$systemfiles[] = 'system/core/sitemap/sitemap.php';
+$systemfiles[] = 'system/core/rss/rss.php';
 
 $systemfiles[] = '*Configuration and directory blockers';
 
@@ -132,11 +136,10 @@ $systemfiles[] = 'system/core/view/view.inc.php';
 
 $systemfiles[] = '*Installation and upgrade';
 
-$systemfiles[] = 'install.php';
+$systemfiles[] = 'system/install/install.php';
 $systemfiles[] = 'system/install/install.config.php';
 $systemfiles[] = 'system/install/install.database.php';
 $systemfiles[] = 'system/install/install.main.php';
-$systemfiles[] = 'system/install/install.parser.sql';
 $systemfiles[] = 'system/install/install.setup.php';
 $systemfiles[] = 'system/upgrade/upgrade_125_130.php';
 $systemfiles[] = 'system/upgrade/upgrade_126_130.php';
@@ -155,7 +158,6 @@ $systemfiles[] = '*Default skin files';
 $systemfiles[] = 'skins/'.$cfg['defaultskin'].'/'.$cfg['defaultskin'].'.'.$cfg['defaultlang'].'.lang.php';
 $systemfiles[] = 'skins/'.$cfg['defaultskin'].'/'.$cfg['defaultskin'].'.php';
 
-$skinfiles[] = 'admin.tpl';
 $skinfiles[] = 'comments.tpl';
 $skinfiles[] = 'footer.tpl';
 $skinfiles[] = 'forums.editpost.tpl';

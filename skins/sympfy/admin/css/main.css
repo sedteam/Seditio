@@ -1279,7 +1279,7 @@ ul.breadcrumbs {
 	display: inline-block;
 	position: relative;
 	border: 1px solid #ccc;
-	background: #e5e5e5 url(img/bg-content-box.gif) top left repeat-x;
+	background: #e5e5e5 url(../img/bg-content-box.gif) top left repeat-x;
 	-webkit-transition: opacity 1s;
 	-moz-transition: opacity 1s;
 	-o-transition: opacity 1s;

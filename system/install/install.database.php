@@ -3,12 +3,11 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=install.database.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Core.install
 Author=Neocrome
 Description=Database builder
@@ -695,16 +694,14 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(3, 1, 'Forums',
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(4, 1, 'Articles', '/articles/', 4, 0);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(5, 1, 'Galleries', '/gallery/', 5, 0);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(6, 1, 'Contact', '/plug/contact', 6, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(7, 0, 'Menu Articles', '', 2, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(8, 7, 'Articles', '/articles/', 1, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(9, 8, 'Sample category 1', '/articles/sample1/', 1, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(10, 8, 'Sample category 2', '/articles/sample2/', 2, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(9, 4, 'Sample category 1', '/articles/sample1/', 1, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(10, 4, 'Sample category 2', '/articles/sample2/', 2, 1);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls VALUES(1, 0, 0, 1654936152, 'Looking forward to a new version of Seditio?');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls_options VALUES(1, 1, 'Yes', 0);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls_options VALUES(2, 1, 'No', 0);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."pages VALUES
-(1, 0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"admin.php\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"https://seditio.org/list.php?c=docs\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"https://seditio.org/forums.php\">discussion forums</a>.', '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '', '');");
+(1, 0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"/admin/\">Administration panel</a>, tab <a href=\"admin.php?m=config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"https://seditio.org/doc/\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"https://seditio.org/forums/\">discussion forums</a>.', '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '', '');");
 
 ?>

@@ -3,7 +3,6 @@
 /*  ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 -----------------------
 Seditio language pack
@@ -13,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Lang
 Author=Neocrome
 Description=Language main
@@ -739,9 +738,9 @@ $sed_translit = array(
 	'ч' => 'ch', 'џ' => 'dh', 'ш' => 'sh', 'щ' => 'shh', 'ъ' => '',
 	'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
 	//turk
-	'Ç' => 'c', 'Ş' => 's', 'Ğ' => 'g', 'Ü' => 'u', 'İ' => 'i', 
-	'Ö' => 'o', 'ç' => 'c', 'ş' => 's', 'ğ' => 'g', 'ü' => 'u', 
-	'ö' => 'o', 'ı' => 'i', '+' => 'plus', '#' => 'sharp'
+	'C' => 'c', 'S' => 's', 'G' => 'g', 'U' => 'u', 'I' => 'i', 
+	'O' => 'o', 'c' => 'c', 's' => 's', 'g' => 'g', 'u' => 'u', 
+	'o' => 'o', '?' => 'i', '+' => 'plus', '#' => 'sharp'
 );
 
 $sed_months_list = array(

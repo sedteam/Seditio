@@ -4,7 +4,7 @@
 [BEGIN_SED]
 File=plugins/search/lang/search.en.lang.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=
 Author=Neocrome
 Description=

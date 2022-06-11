@@ -3,7 +3,6 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 -----------------------
 Seditio language pack
@@ -13,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/message.lang.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Lang
 Author=Neocrome
 Description=Language messages

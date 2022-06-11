@@ -3,12 +3,11 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=skins/sympfy/sympfy.php
 Version=178
-Updated=2021-jun-16
+Updated=2022-jun-12
 Type=Skin
 Name=Sympfy
 Author=Amro

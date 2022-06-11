@@ -3,12 +3,11 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=view.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Core
 Author=Neocrome / Enhancements by Dimitar Hubenov (dux) - 2006-may-10
 Description=HTML/TXT viewer

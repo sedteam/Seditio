@@ -3,12 +3,11 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
-http://www.neocrome.net
 https://seditio.org
 [BEGIN_SED]
 File=upgrade_125_130.php
 Version=178
-Updated=2021-jun-17
+Updated=2022-jun-12
 Type=Core.upgrade
 Author=Neocrome
 Description=Database upgrade
