@@ -867,22 +867,22 @@ ul {
 	padding-bottom:25px;
 }
 
-ul.inline-menu {
+.inline-menu ul {
 	margin:0;
 	padding:0;
 }
 
-ul.inline-menu li {
+.inline-menu ul li {
     display: inline-block;
     padding: 7px 0;
 	margin-right: 3px;
 }
 
-ul.inline-menu li:last-child {
+.inline-menu ul li:last-child {
 	margin-right: 0;
 }
 
-ul.inline-menu li a {
+.inline-menu ul li a {
 	color: #010101;
 	background: #f2f2f2;
 	border:1px solid #f2f2f2;
@@ -891,7 +891,7 @@ ul.inline-menu li a {
 	border-radius:3px;
 }
 
-ul.inline-menu li a span {
+.inline-menu ul li a span {
     position: relative;
     top: -1px;
     right: 0px;
@@ -907,7 +907,7 @@ ul.inline-menu li a span {
     margin-left: 0px;
 }
 
-ul.inline-menu li.active a {
+.inline-menu ul li.active a {
 	color: #333;
 	border: 1px solid #c1c9d8;
 	background: #ccd5e8;
@@ -922,13 +922,13 @@ ul.inline-menu li.active a {
 	
 }
 
-ul.category-menu {
+.category-menu ul {
 	margin:0;
 	padding:0;
 	list-style:none;	
 }
 
-ul.category-menu li {
+.category-menu ul li {
     display: block;
     width: 100%;
     padding: 10px;
@@ -939,11 +939,11 @@ ul.category-menu li {
     border-radius: 3px;
 }
 
-ul.category-menu li a {
+.category-menu ul li a {
 	display: block;
 }
 
-ul.category-menu li a span {
+.category-menu ul li a span {
     position: relative;
     top: -1px;
     right: 0px;
@@ -960,7 +960,7 @@ ul.category-menu li a span {
     float: right;
 }
 
-ul.category-menu li a:hover span {
+.category-menu ul li a:hover span {
     background: #ccd5e8;
 }
 
@@ -1968,25 +1968,24 @@ ul.subforums-list li::before {
 	background: #2e2e33;
 }
 
-.footer-menu,
+.footer-menu ul,
 .footer-auth {
 	list-style: none;
 	padding: 0;
 	margin:0;
 }
 
-.footer-menu {
+.footer-menu ul {
 	margin-left:15px;
 }
 
-.footer-menu li,
+.footer-menu ul li,
 .footer-auth li {
 	padding:3px 0;
 	position: relative;
 }
 
-
-.footer-menu li::before {
+.footer-menu ul li::before {
 	font-family: 'Seditio' !important;
     speak: none;
     font-style: normal;
@@ -2004,7 +2003,6 @@ ul.subforums-list li::before {
     position: absolute;
     left: -15px;
 }
-
 
 .footer-menu a,
 .footer-auth a {
@@ -2043,5 +2041,8 @@ ul.subforums-list li::before {
 	text-align:right;
 }
 
-
+.footer-stat {
+	font-size: 0.8em;
+    color: #7d7d81;
+}
 

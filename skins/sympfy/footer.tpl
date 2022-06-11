@@ -23,22 +23,14 @@
 					<div class="footer-menu-col">	
 						<div class="footer-menu-table">
 							<div class="footer-menu-table-col">								
-								<ul class="footer-menu">
-									<li><a href="/">Home</a></li>
-									<li><a href="/news/">News</a></li>						
-									<li><a href="/articles/">Articles</a></li>
-									<li><a href="/forums/">Forums</a></li>
-									<li><a href="/plug/contact">Contacts</a></li>
-								</ul>							
+								<div class="footer-menu">
+									{PHP.sed_menu.1.childrens}
+								</div>
 							</div>
 							<div class="footer-menu-table-col">								
-								<ul class="footer-menu">
-									<li><a href="/">Home</a></li>
-									<li><a href="/news/">News</a></li>						
-									<li><a href="/articles/">Articles</a></li>
-									<li><a href="/forums/">Forums</a></li>
-									<li><a href="/plug/contact">Contacts</a></li>
-								</ul>											
+								<div class="footer-menu">
+									{PHP.sed_menu.8.childrens}
+								</div>									
 							</div>
 						</div>
 					</div>	
@@ -85,10 +77,12 @@
 						<p>{FOOTER_BOTTOMLINE} {FOOTER_CREATIONTIME}</p>
 					</div>
 					<div class="footer-bottom-dev">
-						<p><a href="http://www.neocrome.net" target="_blank" rel="nofollow" title="Seditio by Neocrome">Merci, Olivier!</a></p>
+						<p><a href="https://seditio.org" target="_blank" title="CMS Seditio">Merci, Olivier!</a></p>
 					</div>
 				</div>
-				{FOOTER_SQLSTATISTICS}
+				<div class="footer-stat">
+					{FOOTER_CREATIONTIME}<br />{FOOTER_SQLSTATISTICS}
+				</div>
 			</div>
 		
 		{FOOTER_DEVMODE}

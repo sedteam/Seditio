@@ -53,11 +53,9 @@
 		</div>
 		
 		<div class="section-menu">
-			<ul class="inline-menu">
-				<li class="active"><a href="">News category</a></li>         		
-				<li><a href="">News category 1</a></li>          		
-				<li><a href="">News category 2</a></li>         		        		
-			</ul>				
+			<div class="inline-menu">
+				{PHP.sed_menu.8.childrens}
+			</div>
 		</div>
 	
 		<div id="primary-container">
@@ -77,11 +75,13 @@
 					</div>
 					
 					<div class="sidebar-menu">
-						<ul class="inline-menu tabs-nav">
-							<li class="active"><a href="#tab-1">{PHP.skinlang.index.Lastcomments}</a></li>         		
-							<li><a href="#tab-2">{PHP.skinlang.index.Lasttopics}</a></li> 
-							<li><a href="#tab-3">{PHP.skinlang.index.Lastpages}</a></li> 							
-						</ul>				
+						<div class="inline-menu">
+							<ul class="tabs-nav">
+								<li class="active"><a href="#tab-1">{PHP.skinlang.index.Lastcomments}</a></li>         		
+								<li><a href="#tab-2">{PHP.skinlang.index.Lasttopics}</a></li> 
+								<li><a href="#tab-3">{PHP.skinlang.index.Lastpages}</a></li> 							
+							</ul>
+						</div>			
 					</div>					
 					
 					<div id="tab-1" class="tab" style="display: block;">

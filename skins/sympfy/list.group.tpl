@@ -29,11 +29,13 @@
 			<div id="primary">
 			
 				<div class="section-category-menu">
-					<ul class="category-menu">				
-					<!-- BEGIN: LIST_ROWCAT -->			
-						<li><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>  			
-					<!-- END: LIST_ROWCAT -->				
-					</ul>				
+					<div class="category-menu">
+						<ul>				
+						<!-- BEGIN: LIST_ROWCAT -->			
+							<li><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>  			
+						<!-- END: LIST_ROWCAT -->				
+						</ul>
+					</div>
 				</div>				
 			
 				<!-- BEGIN: LIST_CATTEXT -->
@@ -114,11 +116,13 @@
 					</div>
 					
 					<div class="sidebar-menu">
-						<ul class="inline-menu tabs-nav">
-							<li class="active"><a href="#tab-1">{PHP.skinlang.index.Lastcomments}</a></li>         		
-							<li><a href="#tab-2">{PHP.skinlang.index.Lasttopics}</a></li> 
-							<li><a href="#tab-3">{PHP.skinlang.index.Lastpages}</a></li> 							
-						</ul>				
+						<div class="inline-menu">
+							<ul class="tabs-nav">
+								<li class="active"><a href="#tab-1">{PHP.skinlang.index.Lastcomments}</a></li>         		
+								<li><a href="#tab-2">{PHP.skinlang.index.Lasttopics}</a></li> 
+								<li><a href="#tab-3">{PHP.skinlang.index.Lastpages}</a></li> 							
+							</ul>
+						</div>	
 					</div>					
 					
 					<div id="tab-1" class="tab" style="display: block;">
