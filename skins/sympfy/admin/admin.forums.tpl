@@ -6,15 +6,15 @@
 		
 		<!-- BEGIN: FORUMS_BUTTONS_CONFIG -->
 		<li><a class="shortcut-button" href="{BUTTON_FORUMS_CONFIG_URL}"><span>
-			<i class="fa fa-3x fa-cog"></i><br />
-			{PHP.L.Configuration} <br />"{PHP.L.Forums}"
+			<i class="ic-settings ic-3x"></i><br />
+			{PHP.L.Configuration}"
 		</span></a></li>
 		<!-- END: FORUMS_BUTTONS_CONFIG -->
 		
 		<!-- BEGIN: FORUMS_BUTTONS_STRUCTURE -->
 		<li><a class="shortcut-button" href="{BUTTON_FORUMS_STRUCTURE_URL}"><span>
-			<i class="fa fa-3x fa-cubes"></i><br />
-			{PHP.L.adm_forum_structure}
+			<i class="ic-manual-gearbox ic-3x"></i><br />
+			{PHP.L.Structure}
 		</span></a></li>
 		<!-- END: FORUMS_BUTTONS_STRUCTURE -->
 		
@@ -176,8 +176,8 @@
 		<td style="text-align:right;">{FS_LIST_TOPICCOUNT}</td>
 		<td style="text-align:right;">{FS_LIST_POSTCONT}</td>
 		<td style="text-align:right;">{FS_LIST_VIEWCOUNT}</td>
-		<td style="text-align:center;"><a href="{FS_LIST_RIGHTS_URL}"><img src="system/img/admin/rights2.png" alt=""></a></td>
-		<td style="text-align:center;"><a href="{FS_LIST_OPEN_URL}"><img src="system/img/admin/jumpto.png" alt=""></a></a></td>
+		<td style="text-align:center;"><a href="{FS_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a></td>
+		<td style="text-align:center;"><a href="{FS_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></</a></td>
 		</tr>
 
 	<!-- END: FS_LIST -->

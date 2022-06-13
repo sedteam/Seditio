@@ -150,14 +150,18 @@
     	<!-- BEGIN: STRUCTURE_LIST -->
     	
 		<tr>
-			<td style="text-align:center;">{STRUCTURE_LIST_DELETE}</td>
+			<td style="text-align:center;">
+				<!-- BEGIN: STRUCTURE_LIST_DELETE -->
+					<a href="{STRUCTURE_LIST_DELETE_URL}"><i class="ic-trash"></i></a>
+				<!-- END: STRUCTURE_LIST_DELETE -->
+			</td>
 			<td>{STRUCTURE_LIST_CODE}</td>
 			<td>{STRUCTURE_LIST_TITLE}</td>
 			<td>{STRUCTURE_LIST_PATH}</td>
 			<td>{STRUCTURE_LIST_TPL}</td>    
 			<td style="text-align:center;">{STRUCTURE_LIST_GROUP}</td>          
-			<td style="text-align:right;">{STRUCTURE_LIST_PAGECOUNT} <a href="{STRUCTURE_LIST_OPEN_URL}" class="btn btn-small"><i class="fa fa-arrow-right"></i></a></td>
-			<td style="text-align:center;"><a href="{STRUCTURE_LIST_RIGHTS_URL}" class="btn btn-small"><i class="fa fa-unlock-alt"></i></a></td>
+			<td style="text-align:right;">{STRUCTURE_LIST_PAGECOUNT} <a href="{STRUCTURE_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a></td>
+			<td style="text-align:center;"><a href="{STRUCTURE_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a></td>
 		</tr>
     	
 		<!-- END: STRUCTURE_LIST -->

@@ -43,14 +43,14 @@
 			<td style="width:32px;">#{PAGE_ID}</td>
 			<td><a href="{PAGE_URL}">{PAGE_TITLE}</a></td>
 			<td style="width:80px; text-align:center;">{PAGE_DATE}</td>
-			<td style="width:180px; text-align:center;"><i class="fa fa-user"></i> {PAGE_OWNER}</td>						
+			<td style="width:180px; text-align:center;"><i class="ic-user"></i> {PAGE_OWNER}</td>						
 			<td style="width:30px; text-align:center;">
  				<!-- BEGIN: PAGE_VALIDATE -->
-					<i class="fa fa-eye-slash" title="{PHP.L.Validate}"></i>  
+					<i class="ic-eye-off" title="{PHP.L.Validate}"></i>  
 				<!-- END: PAGE_VALIDATE -->
 
 				<!-- BEGIN: PAGE_UNVALIDATE -->
-					<i class="fa fa-eye" title="{PHP.L.Putinvalidationqueue}"></i>        
+					<i class="ic-eye" title="{PHP.L.Putinvalidationqueue}"></i>        
 				<!-- END: PAGE_UNVALIDATE -->     
 			</td>
 			<td style="text-align:center; width:110px;">
@@ -58,16 +58,16 @@
 			<!-- BEGIN: ADMIN_ACTIONS -->			
 			
 				<!-- BEGIN: PAGE_VALIDATE -->
-					<a href="{PAGE_VALIDATE_URL}" title="{PHP.L.Validate}" class="btn btn-small"><i class="fa fa-eye-slash"></i></a>  
+					<a href="{PAGE_VALIDATE_URL}" title="{PHP.L.Validate}" class="btn btn-small"><i class="ic-eye-off"></i></a>  
 				<!-- END: PAGE_VALIDATE -->
 
 				<!-- BEGIN: PAGE_UNVALIDATE -->
-					<a href="{PAGE_UNVALIDATE_URL}" title="{PHP.L.Putinvalidationqueue}" class="btn btn-small"><i class="fa fa-eye"></i></a>        
+					<a href="{PAGE_UNVALIDATE_URL}" title="{PHP.L.Putinvalidationqueue}" class="btn btn-small"><i class="ic-eye"></i></a>        
 				<!-- END: PAGE_UNVALIDATE --> 
 		
-				<a href="{PAGE_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="fa fa-pencil"></i></a> 
-				<a href="{PAGE_CLONE_URL}" title="{PHP.L.Clone}" class="btn btn-small"><i class="fa fa-files-o"></i></a>
-				<a href="{PAGE_DELETE_URL}" title="{PHP.L.Delete}" onclick="return sedjs.confirmact('Вы подтверждаете удаление?');" class="btn btn-small"><i class="fa fa-trash"></i></a>
+				<a href="{PAGE_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="ic-edit"></i></a> 
+				<a href="{PAGE_CLONE_URL}" title="{PHP.L.Clone}" class="btn btn-small"><i class="ic-copy"></i></a>
+				<a href="{PAGE_DELETE_URL}" title="{PHP.L.Delete}" onclick="return sedjs.confirmact('Вы подтверждаете удаление?');" class="btn btn-small"><i class="ic-trash"></i></a>
 			
 			<!-- END: ADMIN_ACTIONS -->  
 			

@@ -21,13 +21,13 @@
 	<!-- BEGIN: MODULES_LIST -->
 	<tr>
 		<td>		
-			<a href="{MODULES_LIST_URL}"><span class="icon"><i class="fa fa-lg fa-{MODULES_LIST_CODE}"></i></span> {MODULES_LIST_TITLE}</a>		
+			<a href="{MODULES_LIST_URL}"><span class="icon"><i class="ic-{MODULES_LIST_CODE}"></i></span> {MODULES_LIST_TITLE}</a>		
 		</td>
 
 		<td style="text-align:center;">
 		
 			<!-- BEGIN: MODULES_LIST_RIGHTS -->
-			<a href="{MODULES_LIST_RIGHTS_URL}"><i class="fa fa-lg fa-lock"></i></a>
+			<a href="{MODULES_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a>
 			<!-- END: MODULES_LIST_RIGHTS -->
 		
 		</td>
@@ -35,7 +35,7 @@
 		<td style="text-align:center;">	
 		
 			<!-- BEGIN: MODULES_LIST_CONFIG -->
-			<a href="{MODULES_LIST_CONFIG_URL}"><i class="fa fa-lg fa-cog"></i></a>
+			<a href="{MODULES_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
 			<!-- END: MODULES_LIST_CONFIG -->
 		
 		</td>		
@@ -44,31 +44,31 @@
 	
 	<!-- BEGIN: MODULES_LIST_BANLIST -->
 	<tr> 
-		<td colspan="3"><a href="{MODULES_LIST_BANLIST_URL}"><span class="icon"><i class="fa fa-lg fa-ban"></i></span> {PHP.L.Banlist}</a></td> 
+		<td colspan="3"><a href="{MODULES_LIST_BANLIST_URL}"><span class="icon"><i class="ic-banlist"></i></span> {PHP.L.Banlist}</a></td> 
 	</tr> 
 	<!-- END: MODULES_LIST_BANLIST -->
 	
 	<!-- BEGIN: MODULES_LIST_CACHE -->
 	<tr>
-		<td colspan="3"><a href="{MODULES_LIST_CACHE_URL}"><span class="icon"><i class="fa fa-lg fa-cache"></i></span> {PHP.L.adm_internalcache}</a></td>
+		<td colspan="3"><a href="{MODULES_LIST_CACHE_URL}"><span class="icon"><i class="ic-cache"></i></span> {PHP.L.adm_internalcache}</a></td>
 	</tr>
 	<!-- END: MODULES_LIST_CACHE -->
 
 	<!-- BEGIN: MODULES_LIST_SMILIES -->
 	<tr>
-		<td colspan="3"><a href="{MODULES_LIST_SMILIES_URL}"><span class="icon"><i class="fa fa-lg fa-smilies"></i></span> {PHP.L.Smilies}</a></td>
+		<td colspan="3"><a href="{MODULES_LIST_SMILIES_URL}"><span class="icon"><i class="ic-smilies"></i></span> {PHP.L.Smilies}</a></td>
 	</tr>
 	<!-- END: MODULES_LIST_SMILIES -->
 
 	<!-- BEGIN: MODULES_LIST_HITS -->
 	<tr>
-		<td colspan="3"><a href="{MODULES_LIST_HITS_URL}"><span class="icon"><i class="fa fa-lg fa-pie-chart"></i></span> {PHP.L.Hits}</a></td>
+		<td colspan="3"><a href="{MODULES_LIST_HITS_URL}"><span class="icon"><i class="ic-hits"></i></span> {PHP.L.Hits}</a></td>
 	</tr>
 	<!-- END: MODULES_LIST_HITS -->
 
 	<!-- BEGIN: MODULES_LIST_REFERERS -->
 	<tr>
-		<td colspan="3"><a href="{MODULES_LIST_REFERERS_URL}"><span class="icon"><i class="fa fa-lg fa-ship"></i></span> {PHP.L.Referers}</a></td>
+		<td colspan="3"><a href="{MODULES_LIST_REFERERS_URL}"><span class="icon"><i class="ic-referers"></i></span> {PHP.L.Referers}</a></td>
 	</tr>
 	<!-- END: MODULES_LIST_REFERERS -->
 
@@ -93,11 +93,11 @@
 		
 			<!-- BEGIN: TOOLS_LIST -->
 			<tr>
-				<td><a href="{TOOLS_LIST_URL}"><span class="icon"><i class="fa fa-lg fa-plug"></i></span> {TOOLS_LIST_TITLE}</a></td>
+				<td><a href="{TOOLS_LIST_URL}"><span class="icon"><i class="ic-plug"></i></span> {TOOLS_LIST_TITLE}</a></td>
 				<td style="width:96px; text-align:center;">
 				
 				<!-- BEGIN: TOOLS_LIST_CONFIG -->
-				<a href="{TOOLS_LIST_CONFIG_URL}"><i class="fa fa-lg fa-cog"></i></a>
+				<a href="{TOOLS_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
 				<!-- END: TOOLS_LIST_CONFIG -->
 								
 				</td>
@@ -117,7 +117,7 @@
 <div class="content-box">
 	
 	<div class="content-box-header">					
-		<h3><i class="fa fa-plug"></i> {TOOL_TITLE}</h3>			
+		<h3><i class="ic-codesandbox"></i> {TOOL_TITLE}</h3>			
 		<div class="clear"></div>					
 	</div> 
 	   

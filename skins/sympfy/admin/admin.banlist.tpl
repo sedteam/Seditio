@@ -22,7 +22,7 @@
 			
 			<form id="savebanlist_{BANLIST_EDIT_ID}" action="{BANLIST_EDIT_SEND_URL}" method="post">
 			<tr>
-				<td style="text-align:center;"><a href="{BANLIST_EDIT_DELETE_URL}" class="btn btn-small"><i class="fa fa-trash"></i></a></td>
+				<td style="text-align:center;"><a href="{BANLIST_EDIT_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a></td>
 				<td style="text-align:center;">{BANLIST_EDIT_EXPIRE}</td>
 				<td>{BANLIST_EDIT_IP}</td>
 				<td>{BANLIST_EDIT_EMAIL_MASK}</td>

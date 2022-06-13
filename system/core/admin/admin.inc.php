@@ -189,7 +189,7 @@ $t = new XTemplate(sed_skinfile("admin", true));
 
 $t->assign(array(
 	"ADMIN_TITLE" => sed_build_adminsection($adminpath),
-	"ADMIN_BREADCRUMBS" => sed_build_adminsection($adminpath, 'breadcrumbs', '<i class="fa fa-lg fa-home"></i> '),
+	"ADMIN_BREADCRUMBS" => sed_build_adminsection($adminpath, 'breadcrumbs', '<i class="ic-home-2"></i> '),
 	"ADMIN_SUBTITLE" => $adminsubtitle,
 	"ADMIN_MENU" => $adminmenu,
 	"ADMIN_URL" => sed_url('admin'),

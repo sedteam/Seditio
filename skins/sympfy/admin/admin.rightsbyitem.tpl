@@ -42,8 +42,8 @@
 
 	<!-- BEGIN: RIGHTS_LIST -->
 	<tr>
-		<td style="padding:1px;"><a href="{RIGHTS_LIST_URL}"><span class="icon"><i class="fa fa-lg fa-user"></i></span> {RIGHTS_LIST_TITLE}</a></td>
-		<td style="text-align:center; padding:2px;"><a href="{RIGHTS_LIST_RIGHTBYITEM_URL}"><i class="fa fa-lg fa-lock"></i></a></td>
+		<td style="padding:1px;"><a href="{RIGHTS_LIST_URL}"><span class="icon"><i class="ic-user"></i></span> {RIGHTS_LIST_TITLE}</a></td>
+		<td style="text-align:center; padding:2px;"><a href="{RIGHTS_LIST_RIGHTBYITEM_URL}"><i class="ic-lock"></i></a></td>
 		
 		<!-- BEGIN: RIGHTS_LIST_OPTIONS -->
 		<td style="text-align:center; padding:2px;">
@@ -52,7 +52,7 @@
 		<!-- END: RIGHTS_LIST_OPTIONS -->
 			
 		<td style="text-align:center; padding:2px;">{RIGHTS_LIST_SETBYUSER}</td>
-		<td style="text-align:center; padding:2px;"><a href="{RIGHTS_LIST_OPEN_URL}"><i class="fa fa-lg fa-chevron-right"></i></a></td>
+		<td style="text-align:center; padding:2px;"><a href="{RIGHTS_LIST_OPEN_URL}" class="btn btn-small circle-btn"><i class="ic-chevron-right"></i></a></td>
 	</tr>
 	<!-- END: RIGHTS_LIST -->
 	

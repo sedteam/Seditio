@@ -6,14 +6,14 @@
 		
 		<!-- BEGIN: USERS_BUTTONS_CONFIG -->
 		<li><a class="shortcut-button" href="{BUTTON_USERS_CONFIG_URL}"><span>
-			<i class="fa fa-3x fa-cog"></i><br />
-			{PHP.L.Configuration} <br />"{PHP.L.Users}"
+			<i class="ic-settings ic-3x"></i><br />
+			{PHP.L.Configuration}
 		</span></a></li>
 		<!-- END: USERS_BUTTONS_CONFIG -->
 		
 		<!-- BEGIN: USERS_BUTTONS_BANLIST -->
 		<li><a class="shortcut-button" href="{BUTTON_USERS_BANLIST_URL}"><span>
-			<i class="fa fa-3x fa-ban"></i><br />
+			<i class="ic-banlist ic-3x"></i><br />
 			{PHP.L.Banlist}
 		</span></a></li>
 		<!-- END: USERS_BUTTONS_BANLIST -->
@@ -127,12 +127,12 @@
 	<!-- BEGIN: GROUP_LIST -->
 			<tr>
 				<td style="text-align:center;">{GROUP_LIST_ID}</td>
-				<td><a href="{GROUP_LIST_URL}"><span class="icon"><i class="fa fa-lg fa-user"></i></span> {GROUP_LIST_TITLE}</a></td>
+				<td><a href="{GROUP_LIST_URL}"><span class="icon"><i class="ic-user"></i></span> {GROUP_LIST_TITLE}</a></td>
 				<td style="text-align:center;">{GROUP_LIST_GRP_COUNT}</td>
 				<td style="text-align:center;">{GROUP_LIST_MAINGRP_COUNT}</td>
 				<td style="text-align:center;">{GROUP_LIST_DISABLE}</td>
 				<td style="text-align:center;">{GROUP_LIST_COUNT}</td>
-				<td style="text-align:center;"><a href="{GROUP_LIST_RIGHT_URL}"><i class="fa fa-lg fa-lock"></i></a></td>
+				<td style="text-align:center;"><a href="{GROUP_LIST_RIGHT_URL}"><i class="ic-lock"></i></a></td>
 			</tr>
 	<!-- END: GROUP_LIST -->
 

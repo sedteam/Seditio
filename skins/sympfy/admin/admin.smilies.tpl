@@ -31,7 +31,7 @@
 		<tbody>
 		<!-- BEGIN: SMILIES_LIST_ITEM -->	
 		<tr>
-			<td><a href="{SMILIE_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="fa fa-trash"></i></a></td>
+			<td><a href="{SMILIE_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a></td>
 			<td>{SMILIE_LIST_PREVIEW}</td>
 			<td>{SMILIE_LIST_SIZE}</td>	
 			<td>{SMILIE_LIST_CODE}</td>			

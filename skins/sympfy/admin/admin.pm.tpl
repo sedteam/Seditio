@@ -6,7 +6,7 @@
 		
 		<!-- BEGIN: PM_BUTTONS_CONFIG -->
 		<li><a class="shortcut-button" href="{BUTTON_PM_CONFIG_URL}"><span>
-			<i class="fa fa-3x fa-cog"></i><br />
+			<i class="ic-settings ic-3x"></i><br />
 			{PHP.L.Configuration}
 		</span></a></li>
 		<!-- END: PM_BUTTONS_CONFIG -->

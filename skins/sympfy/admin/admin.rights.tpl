@@ -53,8 +53,8 @@
 
 	<!-- BEGIN: RIGHTS_LIST -->
 	<tr>
-		<td><a href="{RIGHTS_LIST_URL}"><span class="icon"><i class="fa fa-lg fa-{RIGHTS_LIST_CODE}"></i></span> {RIGHTS_LIST_TITLE}</a></td>
-		<td style="text-align:center;"><a href="{RIGHTS_LIST_RIGHTBYITEM_URL}"><i class="fa fa-lg fa-lock"></i></a></td>
+		<td><a href="{RIGHTS_LIST_URL}"><span class="icon"><i class="ic-{RIGHTS_LIST_CODE}"></i></span> {RIGHTS_LIST_TITLE}</a></td>
+		<td style="text-align:center;"><a href="{RIGHTS_LIST_RIGHTBYITEM_URL}"><i class="ic-lock"></i></a></td>
 		
 		<!-- BEGIN: RIGHTS_LIST_OPTIONS -->
 		<td style="text-align:center;">

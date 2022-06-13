@@ -36,11 +36,11 @@
 			<td style="text-align:center;">
       
       <!-- BEGIN: ADMIN_DELETE -->
-      <a href="{DIC_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="fa fa-trash"></i></a>
+      <a href="{DIC_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a>
       <!-- END: ADMIN_DELETE -->
       
       <!-- BEGIN: ADMIN_ACTIONS -->
-      <a href="{DIC_LIST_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="fa fa-pencil"></i></a>
+      <a href="{DIC_LIST_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="ic-edit"></i></a>
       <!-- END: ADMIN_ACTIONS -->      
       
       </td>
@@ -252,12 +252,12 @@
 			<td style="width:150px; text-align:center">{TERM_LIST_CHILDRENDIC}</td>
 			<td style="width:50px; text-align:center">
 			<!-- BEGIN: TERM_DEFAULT -->
-			  <i class="fa fa-check"></i>
+			  <i class="ic-check"></i>
 			<!-- END: TERM_DEFAULT -->
 			</td>
 			<td style="text-align:center;">
-				<a href="{TERM_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="fa fa-trash"></i></a>
-				<a href="{TERM_LIST_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="fa fa-pencil"></i></a>
+				<a href="{TERM_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a>
+				<a href="{TERM_LIST_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="ic-edit"></i></a>
 			</td>
 		</tr>	
 

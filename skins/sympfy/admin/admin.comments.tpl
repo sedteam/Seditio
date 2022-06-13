@@ -36,13 +36,13 @@
 			<!-- BEGIN: COMMENTS_LIST -->
 
 			<tr>
-				<td style="text-align:center;"><a href="{COMMENTS_LIST_DELETE_URL}" class="btn btn-small"><i class="fa fa-trash"></i></a></td>
+				<td style="text-align:center;"><a href="{COMMENTS_LIST_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a></td>
 				<td style="text-align:center;">{COMMENTS_LIST_ID}</td>
 				<td style="text-align:center;">{COMMENTS_LIST_CODE}</td>
 				<td>{COMMENTS_LIST_AUTHOR}</td>
 				<td style="text-align:center;">{COMMENTS_LIST_DATE}</td>
 				<td>{COMMENTS_LIST_TEXT}</td>
-				<td style="text-align:center;"><a href="{COMMENTS_LIST_OPEN_URL}" class="btn btn-small"><i class="fa fa-arrow-right"></i></a></td>
+				<td style="text-align:center;"><a href="{COMMENTS_LIST_OPEN_URL}" class="btn btn-small"><i class="ic-arrow-right"></i></a></td>
 			</tr>
 
 			<!-- END: COMMENTS_LIST -->

@@ -6,7 +6,7 @@
 		
 		<!-- BEGIN: RATINGS_BUTTONS_CONFIG -->
 		<li><a class="shortcut-button" href="{BUTTON_RATINGS_CONFIG_URL}"><span>
-			<i class="fa fa-3x fa-cog"></i><br />
+			<i class="ic-settings ic-3x"></i><br />
 			{PHP.L.Configuration}
 		</span></a></li>
 		<!-- END: RATINGS_BUTTONS_CONFIG -->
@@ -53,7 +53,7 @@
 				<!-- BEGIN: RATINGS_LIST -->
 				
 				<tr>
-					<td style="text-align:center;"><a href="{RATINGS_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="fa fa-trash"></i></a></td>
+					<td style="text-align:center;"><a href="{RATINGS_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a></td>
 					<td style="text-align:center;">{RATINGS_LIST_CODE}</td>
 					<td style="text-align:center;">{RATINGS_LIST_CREATIONDATE}</td>
 					<td style="text-align:center;">{RATINGS_LIST_VOTES}</td>

@@ -16,7 +16,7 @@ Description=Administration panel
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-$handle = opendir("system/lang/");
+$handle = opendir(SED_ROOT . "/system/lang/");
 
 while ($f = readdir($handle))
 	{
@@ -28,7 +28,7 @@ sort($langlist);
 
 $t = new XTemplate(sed_skinfile('admin.config.lang', true)); 
 
-while(list($i,$x) = each($langlist))
+foreach ($langlist as $i => $x)
 	{
 	$info = sed_infoget(SED_ROOT . "system/lang/$x/main.lang.php");		
 	$lang_name = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];

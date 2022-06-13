@@ -32,13 +32,13 @@
 		<!-- BEGIN: POLLS_LIST -->
 
 		<tr>
-			<td style="text-align:center;"><a href="{POLLS_LIST_DELETE_URL}" title="{PHP.L.Delete}"><i class="fa fa-lg fa-trash"></i></a></td>
-			<td style="text-align:center;"><a href="{POLLS_LIST_RESET_URL}" title="{PHP.L.Reset}"><i class="fa fa-lg fa-eraser"></i></a></td>
-			<td style="text-align:center;"><a href="{POLLS_LIST_BUMP_URL}" title="{PHP.L.Bump}"><i class="fa fa-lg fa-thumbs-up"></i></a></td>
+			<td style="text-align:center;"><a href="{POLLS_LIST_DELETE_URL}" title="{PHP.L.Delete}"><i class="ic-trash"></i></a></td>
+			<td style="text-align:center;"><a href="{POLLS_LIST_RESET_URL}" title="{PHP.L.Reset}"><i class="ic-refresh"></i></a></td>
+			<td style="text-align:center;"><a href="{POLLS_LIST_BUMP_URL}" title="{PHP.L.Bump}"><i class="ic-thumb-up"></i></a></td>
 			<td style="text-align:center;">{POLLS_LIST_DATE}</td>
 			<td style="text-align:left;"><a href="{POLLS_LIST_OPTIONS_URL}">{POLLS_LIST_POLLTEXT}</a></td>
 			<td style="text-align:center;">{POLLS_LIST_TOTALVOTES}</td>
-			<td style="text-align:center;"><a href="{POLLS_LIST_OPEN_URL}"><i class="fa fa-lg fa-arrow-right"></i></a></td>
+			<td style="text-align:center;"><a href="{POLLS_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a></td>
 		</tr>
 		
 		<!-- END: POLLS_LIST -->
@@ -101,7 +101,7 @@
 		</thead>
 		<tr>
 			<td>{POLL_EDIT_TEXT}</td>
-			<td style="text-align:center;"><a href="javascript:sedjs.polls('{POLL_EDIT_ID}')"><i class="fa fa-lg fa-arrow-right"></i></a></td>
+			<td style="text-align:center;"><a href="javascript:sedjs.polls('{POLL_EDIT_ID}')"><i class="ic-arrow-right"></i></a></td>
 			<td style="text-align:center;"><input type="submit" class="submit btn" value="{PHP.L.Update}"></td>
 		</tr>
 		<tr>
@@ -135,7 +135,7 @@
  		<form id="savepollopt" action="{POLL_EDIT_OPTIONS_SEND}" method="post">
 		
 		<tr>
-			<td style="width:20px;"><a href="{POLL_EDIT_OPTIONS_DELETE_URL}" title="{PHP.L.Delete}"><i class="fa fa-lg fa-trash"></i></a></td>
+			<td style="width:20px;"><a href="{POLL_EDIT_OPTIONS_DELETE_URL}" title="{PHP.L.Delete}"><i class="ic-trash"></i></a></td>
 			<td style="width:30px;">{POLL_EDIT_OPTIONS_ID}</td>
 			<td>{POLL_EDIT_OPTIONS_TEXT}</td>
 			<td><input type="submit" class="submit btn" value="{PHP.L.Update}"></td>

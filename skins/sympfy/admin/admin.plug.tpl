@@ -28,13 +28,15 @@
 				<td>{PHP.L.Date}:</td>
 				<td>{PLUG_DETAILS_DATE}</td>
 			</tr>
+			<!-- BEGIN: PLUG_DETAILS_CONFIG -->
 			<tr>
 				<td>{PHP.L.Configuration}:</td>
-				<td>{PLUG_DETAILS_CONFIG}</td>
+				<td><a href="{PLUG_DETAILS_CONFIG_URL}"><i class="ic-settings"></i></a></td>
 			</tr>
+			<!-- END: PLUG_DETAILS_CONFIG -->
 			<tr>
 				<td>{PHP.L.Rights}:</td>
-				<td><a href="{PLUG_DETAILS_RIGHTS_URL}"><i class="fa fa-lg fa-cog"></i></a></td>
+				<td><a href="{PLUG_DETAILS_RIGHTS_URL}"><i class="ic-lock"></i></a></td>
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_defauth_guests}:</td>
@@ -230,7 +232,7 @@
 	<!-- END: PLUG_LIST_ERROR-->
 	
 		<tr>
-			<td><a href="{PLUG_LIST_DETAILS_URL}"><span class="icon"><i class="fa fa-lg fa-{PLUG_LIST_CODE}"></i></span> {PLUG_LIST_NAME}</a></td>
+			<td><a href="{PLUG_LIST_DETAILS_URL}"><span class="icon"><i class="ic-plug ic-{PLUG_LIST_CODE}"></i></span> {PLUG_LIST_NAME}</a></td>
 			<td>{PLUG_LIST_CODE}</td>
 			<td style="text-align:center;">{PLUG_LIST_VERSION}</td>
 			<td style="text-align:center;">{PLUG_LIST_STATUS} {PLUG_LIST_PARTS_COUNT}</td>
@@ -238,17 +240,17 @@
 				
 				<!-- BEGIN: PLUG_LIST_CONFIG-->
 			
-				<a href="{PLUG_LIST_CONFIG_URL}"><i class="fa fa-lg fa-cog"></i></a>
+				<a href="{PLUG_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
 			
 				<!-- END: PLUG_LIST_CONFIG-->
 			
 			</td>
-			<td style="text-align:center;"><a href="{PLUG_LIST_RIGHTS_URL}"><i class="fa fa-lg fa-lock"></i></a></td>
+			<td style="text-align:center;"><a href="{PLUG_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a></td>
 			<td style="text-align:center;">
 				
 				<!-- BEGIN: PLUG_LIST_OPEN-->			
 				
-				<a href="{PLUG_LIST_OPEN_URL}"><i class="fa fa-arrow-right"></i></a>
+				<a href="{PLUG_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a>
 			
 				<!-- END: PLUG_LIST_OPEN-->
 			

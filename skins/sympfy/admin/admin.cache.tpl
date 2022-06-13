@@ -26,7 +26,7 @@
 
 			<!-- BEGIN: CACHE_LIST -->
 			<tr>
-				<td style="text-align:center;"><a href="{CACHE_LIST_DELETE_URL}" class="btn btn-small"><i class="fa fa-trash"></i></a></td>
+				<td style="text-align:center;"><a href="{CACHE_LIST_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a></td>
 				<td>{CACHE_LIST_NAME}</td>
 				<td style="text-align:right;">{CACHE_LIST_EXPIRE}</td>
 				<td style="text-align:right;">{CACHE_LIST_SIZE}</td>

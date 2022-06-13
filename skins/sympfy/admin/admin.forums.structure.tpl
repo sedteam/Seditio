@@ -103,7 +103,7 @@
 			<td style="text-align:center;">{STRUCTURE_LIST_DEFSTATE}</td>
 			<td style="text-align:center;">{STRUCTURE_LIST_TPL}</td>
 			<td>{STRUCTURE_LIST_TITLE}</td>
-			<td style="text-align:right;">{STRUCTURE_LIST_SECTIONCOUNT}	<a href="{STRUCTURE_LIST_OPEN_URL}"><img src="system/img/admin/jumpto.png" alt="" /></a></td>
+			<td style="text-align:right;">{STRUCTURE_LIST_SECTIONCOUNT}	<a href="{STRUCTURE_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a></td>
 			<td style="text-align:center;">{STRUCTURE_LIST_OPTIONS}</a></td>
 		</tr>	
 		

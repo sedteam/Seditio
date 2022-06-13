@@ -5,7 +5,7 @@
 	<ul class="shortcut-buttons-set">
 		
 		<li><a class="shortcut-button" href="{BUTTON_PFS_CONFIG_URL}"><span>
-			<i class="fa fa-3x fa-cog"></i><br />
+			<i class="ic-settings ic-3x"></i><br />
 			{PHP.L.Configuration} <br />"{PHP.L.core_pfs}"
 		</span></a></li>
 		

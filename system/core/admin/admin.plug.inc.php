@@ -63,20 +63,23 @@ switch ($a)
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
 		$totalconfig = sed_sql_result($sql, 0, "COUNT(*)");
 
-		$info['Config'] = ($totalconfig>0) ? "<a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$pl)."\"><img src=\"system/img/admin/config.png\" alt=\"\" /> (".$totalconfig.")</a>": $L['None'];
-
 		$info['Auth_members'] = sed_auth_getvalue($info['Auth_members']);
 		$info['Lock_members'] = sed_auth_getvalue($info['Lock_members']);
 		$info['Auth_guests'] = sed_auth_getvalue($info['Auth_guests']);
 		$info['Lock_guests'] = sed_auth_getvalue($info['Lock_guests']);
+		
+		if ($totalconfig > 0)
+			{
+			$t->assign("PLUG_DETAILS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=plug&p=".$pl)); 
+			$t -> parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_CONFIG");
+			}
 		
 		$t->assign(array(   		
 			"PLUG_DETAILS_NAME" => $info['Name'],
 			"PLUG_DETAILS_CODE" => $info['Code'],
 			"PLUG_DETAILS_DESC" => $info['Description'],
 			"PLUG_DETAILS_VERSION" => $info['Version'],
-			"PLUG_DETAILS_DATE" => $info['Date'],
-			"PLUG_DETAILS_CONFIG" => $info['Config'],
+			"PLUG_DETAILS_DATE" => $info['Date'],			
 			"PLUG_DETAILS_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=plug&io=".$info['Code']),
 			"PLUG_DETAILS_DEFAUTH_GUESTS" => sed_build_admrights($info['Auth_guests']),
 			"PLUG_DETAILS_DEFLOCK_GUESTS" => sed_build_admrights($info['Lock_guests']),

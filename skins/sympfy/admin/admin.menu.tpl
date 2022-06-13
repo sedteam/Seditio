@@ -35,8 +35,8 @@
 			<td><a href="{MENU_URL}">{MENU_URL}</a></td>	
 			<td>{MENU_POSITION}</td>			
 			<td style="text-align:center;">     
-				<a href="{MENU_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="fa fa-trash"></i></a>
-				<a href="{MENU_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="fa fa-pencil"></i></a>          
+				<a href="{MENU_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a>
+				<a href="{MENU_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="ic-edit"></i></a>          
 			</td>
 		</tr>			
 		<!-- END: MENU_LIST_ITEM -->		

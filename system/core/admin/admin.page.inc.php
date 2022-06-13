@@ -288,8 +288,12 @@ switch($mn)
     			}
     		$st_group .=  "</select>";    
         		
-			$t->assign(array(     		
-				"STRUCTURE_LIST_DELETE" => ($pagecount[$structure_code] > 0) ? '' : "<a href=\"".sed_url("admin", "m=page&mn=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">".$out['img_delete']."</a>",
+			if (!$pagecount[$structure_code] > 0) {
+				$t->assign("STRUCTURE_LIST_DELETE_URL", sed_url("admin", "m=page&mn=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg()));
+				$t -> parse("ADMIN_PAGE.PAGE_STRUCTURE.STRUCTURE_LIST.STRUCTURE_LIST_DELETE"); 
+			}
+			
+			$t->assign(array(
 				"STRUCTURE_LIST_CODE" => $structure_code,
 				"STRUCTURE_LIST_TITLE" => "<a href=\"".sed_url("admin", "m=page&mn=structure&n=options&id=".$structure_id."&".sed_xg())."\">".sed_cc($structure_title)."</a>",
 				"STRUCTURE_LIST_PATH" => $pathfieldimg.sed_textbox("s[".$structure_id."][rpath]", $structure_path, $pathfieldlen, 24),
