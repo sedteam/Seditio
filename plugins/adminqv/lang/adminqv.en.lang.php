@@ -34,6 +34,7 @@ $L['plu_db_rows'] = "SQL database, number of rows";
 $L['plu_db_indexsize'] = "SQL database, index size (KB)";
 $L['plu_db_datassize'] = "SQL database, datas size (KB)";
 $L['plu_db_totalsize'] = "SQL database, total size (KB)";
+$L['plu_db_fragmented'] = "SQL database, fragmented data size (KB)";
 
 $L['plu_hitsmonth'] = "Hits for the past 15 days";
 

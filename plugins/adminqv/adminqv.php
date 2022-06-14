@@ -26,7 +26,7 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-require ('plugins/adminqv/lang/adminqv.'.$usr['lang'].'.lang.php');
+require_once(SED_ROOT . '/plugins/adminqv/lang/adminqv.'.$usr['lang'].'.lang.php');
 
 $timeback = $sys['now_offset'] - (7 * 86400); // 7 days
 $timeback_stats = 15; // 15 days
@@ -77,83 +77,93 @@ foreach ($tables as $i => $dat)
 	$total_length += $table_length;
 	$total_rows += $dat['Rows'];
 	$total_index_length += $dat['Index_length'];
+	$total_fragmented += $dat['Data_free'];
 	$total_data_length += $dat['Data_length'];
 	}
-
-$adminmain .= "<div class=\"content-box\">
-<div class=\"content-box-header\">					
-					<h3>".$L['plu_title']."</h3>					
-				</div>";
-
-$adminmain .= "<div class=\"content-box-content\">";
-
-$adminmain .= "<table class=\"cells striped\">";
-
-$adminmain .= "<thead><tr><th colspan=\"2\" class=\"coltop\">".$L['plu_pastdays']."</th></tr></thead>";
+	
+$qv = new XTemplate(SED_ROOT . '/plugins/adminqv/adminqv.tpl');	
 
 if (!$cfg['disablereg'])	
 	{
-	$adminmain .= "<tr><td><a href=\"".sed_url("users", "f=all&s=regdate&w=desc")."\">".$L['plu_newusers']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center; width:20%;\">".$newusers ."</td></tr>";
+	
+	$qv-> assign(array(		
+		"QV_NEWUSERS" => $newusers,
+		"QV_NEWUSERS_URL" => sed_url("users", "f=all&s=regdate&w=desc")
+	));
+	$qv->parse("ADMIN_QV.ADMIN_QV_NEWUSERS");
+	
 	}
 	
 if (!$cfg['disable_page'])
 	{
-	$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=page")."\">".$L['plu_newpages']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$newpages ."</td></tr>";
+	
+	$qv-> assign(array(		
+		"QV_NEWPAGES" => $newpages,
+		"QV_NEWPAGES_URL" => sed_url("admin", "m=page")
+	));
+	$qv->parse("ADMIN_QV.ADMIN_QV_NEWPAGES");	
+	
 	}
 	
 if (!$cfg['disable_forums'])
 	{	
-	$adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newtopics']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$newtopics ."</td></tr>";	
-	$adminmain .= "<tr><td><a href=\"".sed_url("forums")."\">".$L['plu_newposts']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$newposts ."</td></tr>";
+
+	$qv-> assign(array(		
+		"QV_NEWTOPICS" => $newtopics,
+		"QV_NEWPOSTS" => $newposts,		
+		"QV_NEWFORUMS_URL" => sed_url("forums")
+	));
+	$qv->parse("ADMIN_QV.ADMIN_QV_NEWONFORUMS");		
+	
 	}
 	
 if (!$cfg['disable_comments'])	
 	{
-	$adminmain .= "<tr><td><a href=\"".sed_url("admin", "m=comments")."\">".$L['plu_newcomments']."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$newcomments ."</td></tr>";
+		
+	$qv-> assign(array(		
+		"QV_NEWCOMMENTS" => $newcomments,
+		"QV_NEWCOMMENTS_URL" => sed_url("admin", "m=page")
+	));
+	$qv->parse("ADMIN_QV.ADMIN_QV_NEWCOMMENTS");	
+	
 	}
 	
 if (!$cfg['disable_pm'])	
 	{
-	$adminmain .= "<tr><td>".$L['plu_newpms']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$newpms ."</td></tr>";
+		
+	$qv-> assign(array(		
+		"QV_NEWPMS" => $newcomments
+	));
+	$qv->parse("ADMIN_QV.ADMIN_QV_NEWPMS");	
+	
 	}
 
-$adminmain .= "</table><br />";
-
-$adminmain .= "<table class=\"cells striped\">";
-$adminmain .= "<thead><tr><th colspan=\"2\" class=\"coltop\">".$L['plu_db']."</th></tr></thead>";
-$adminmain .= "<tr><td>".$L['plu_db_rows']."</td>";
-$adminmain .= "<td style=\"text-align:center; width:20%;\">".$total_rows."</td></tr>";
-$adminmain .= "<tr><td>".$L['plu_db_indexsize']."</td>";
-$adminmain .= "<td style=\"text-align:center;\">".number_format(($total_index_length/1024),1,'.',' ')."</td></tr>";
-$adminmain .= "<tr><td>".$L['plu_db_datassize']."</td>";
-$adminmain .= "<td style=\"text-align:center;\">".number_format(($total_data_length/1024),1,'.',' ')."</td></tr>";
-$adminmain .= "<tr><td>".$L['plu_db_totalsize']."</td>";
-$adminmain .= "<td style=\"text-align:center;\">".number_format(($total_length/1024),1,'.',' ')."</td></tr>";
-$adminmain .= "</table><br />";
+	$qv-> assign(array(		
+		"QV_DB_ROWS" => $total_rows,
+		"QV_DB_INDEXSIZE" => number_format(($total_index_length/1024),1,'.',' '),
+		"QV_DB_DATASSIZE" => number_format(($total_data_length/1024),1,'.',' '),
+		"QV_DB_TOTALSIZE" => number_format(($total_length/1024),1,'.',' '),
+		"QV_DB_TOTALFRAGMENTED" => number_format(($total_fragmented/1024),1,'.',' ')
+	));
+	
+	$qv->parse("ADMIN_QV.ADMIN_QV_DB");	
 
 if (!$cfg['disablehitstats'])
 {
-	$adminmain .= "<table class=\"cells striped\">";
-	$adminmain .= "<thead><tr><th colspan=\"4\" class=\"coltop\">".$L['plu_hitsmonth']."</th></tr></thead>";
 	foreach ($hits_d as $day => $hits)
 		{
-		$percentbar = floor(($hits / $hits_d_max) * 100);
-		$adminmain .= "<tr><td style=\"width:90px;\">".$day."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:138px;\">".$hits." ".$L['Hits']."</td>";
-		$adminmain .= "<td style=\"text-align:right; width:40px;\">$percentbar%</td><td>";
-		$adminmain .= "<div style=\"width:100%;\"><div class=\"bar_back\">";
-		$adminmain .= "<div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td></tr>";
+		$qv-> assign(array(		
+			"QV_HITS_PERCENTBAR" => floor(($hits / $hits_d_max) * 100),
+			"QV_HITS_DAY" => $day,
+			"QV_HITS_COUNT" => $hits,
+			"QV_HITS_URL" => sed_url("admin", "m=hits")
+		));	
+		$qv->parse("ADMIN_QV.ADMIN_QV_HITS.ADMIN_QV_HITS_DAYLIST");	
 		}
-	$adminmain .= "<tr><td colspan=\"4\"><a href=\"".sed_url("admin", "m=hits")."\">".$L['More']."</a></td></tr>";
-	$adminmain .= "</table>";
+	$qv->parse("ADMIN_QV.ADMIN_QV_HITS");	
 }
 
-$adminmain .= "</div></div>";
+$qv -> parse("ADMIN_QV");  
+$adminmain .= $qv -> text("ADMIN_QV");
 
 ?>

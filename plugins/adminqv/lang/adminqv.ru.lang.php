@@ -34,6 +34,7 @@ $L['plu_db_rows'] = "БД SQL, число строк";
 $L['plu_db_indexsize'] = "БД SQL, размер индекса (KB)";
 $L['plu_db_datassize'] = "БД SQL, размер данных (KB)";
 $L['plu_db_totalsize'] = "БД SQL, общий размер (KB)";
+$L['plu_db_fragmented'] = "БД SQL, фрагментировано (KB)";
 
 $L['plu_hitsmonth'] = "Просмотры за последние 7 дней";
 
