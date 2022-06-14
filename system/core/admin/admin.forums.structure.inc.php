@@ -201,8 +201,12 @@ else
 		$fn_defstate .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
 		$fn_defstate .= "</select>";
 
-		$t->assign(array( 
-			"STRUCTURE_LIST_DELETE" => ($sectioncount[$fn_code] > 0) ? '' : "<a href=\"".sed_url("admin", "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg())."\">".$out['img_delete']."</a>",
+		if (!$sectioncount[$fn_code] > 0) {
+			$t->assign("STRUCTURE_LIST_DELETE_URL", sed_url("admin", "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg()));
+			$t->parse("ADMIN_FORUMS.FORUMS_STRUCTURE.STRUCTURE_LIST.STRUCTURE_LIST_DELETE"); 					
+		}
+		
+		$t->assign(array(
 			"STRUCTURE_LIST_CODE" => $fn_code,
 			"STRUCTURE_LIST_PATH" => $pathfieldimg.sed_textbox("s[".$fn_id."][rpath]", $fn_path, $pathfieldlen, 24),
 			"STRUCTURE_LIST_DEFSTATE" => $fn_defstate,
@@ -210,7 +214,7 @@ else
 			"STRUCTURE_LIST_TITLE" => sed_textbox("s[".$fn_id."][rtitle]", $fn_title, 24, 255),
 			"STRUCTURE_LIST_SECTIONCOUNT" => $sectioncount[$fn_code],
 			"STRUCTURE_LIST_OPEN_URL" => sed_url("forums", "c=".$fn_code),
-			"STRUCTURE_LIST_OPTIONS" => "<a href=\"".sed_url("admin", "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a>"
+			"STRUCTURE_LIST_OPTIONS_URL" => sed_url("admin", "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())
 		));
 		
 		$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE.STRUCTURE_LIST"); 		

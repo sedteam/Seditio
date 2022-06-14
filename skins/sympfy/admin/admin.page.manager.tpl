@@ -42,7 +42,7 @@
 		<tr>
 			<td style="width:32px;">#{PAGE_ID}</td>
 			<td><a href="{PAGE_URL}">{PAGE_TITLE}</a></td>
-			<td style="width:80px; text-align:center;">{PAGE_DATE}</td>
+			<td style="width:100px; text-align:center;">{PAGE_DATE}</td>
 			<td style="width:180px; text-align:center;"><i class="ic-user"></i> {PAGE_OWNER}</td>						
 			<td style="width:30px; text-align:center;">
  				<!-- BEGIN: PAGE_VALIDATE -->
@@ -53,7 +53,7 @@
 					<i class="ic-eye" title="{PHP.L.Putinvalidationqueue}"></i>        
 				<!-- END: PAGE_UNVALIDATE -->     
 			</td>
-			<td style="text-align:center; width:110px;">
+			<td style="text-align:center; width:132px;">
 			
 			<!-- BEGIN: ADMIN_ACTIONS -->			
 			

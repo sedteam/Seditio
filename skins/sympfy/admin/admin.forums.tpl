@@ -7,7 +7,7 @@
 		<!-- BEGIN: FORUMS_BUTTONS_CONFIG -->
 		<li><a class="shortcut-button" href="{BUTTON_FORUMS_CONFIG_URL}"><span>
 			<i class="ic-settings ic-3x"></i><br />
-			{PHP.L.Configuration}"
+			{PHP.L.Configuration}
 		</span></a></li>
 		<!-- END: FORUMS_BUTTONS_CONFIG -->
 		

@@ -5,6 +5,7 @@
 {HEADER_METAS}
 {HEADER_COMPOPUP}
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
+<link href="skins/{PHP.skin}/admin/css/framework.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/admin/css/main.css" type="text/css" rel="stylesheet" />	
 <link href="skins/{PHP.skin}/admin/css/fonts.css" type="text/css" rel="stylesheet" />	
 {HEADER_UPLOADER}

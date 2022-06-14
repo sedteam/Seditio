@@ -4318,8 +4318,8 @@ function sed_skinfile($base, $adminskin = false)
 	$base_depth = is_array($base) ? count($base) : 1;
 	
   
-	$tpl_path = 'skins/'.$usr['skin'].'/'.$base.'.tpl';
-	$tpl_admin_path = 'skins/'.$usr['skin'].'/admin/'.$base.'.tpl';  
+	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base.'.tpl';
+	$tpl_admin_path = SED_ROOT . '/skins/'.$usr['skin'].'/admin/'.$base.'.tpl';  
 	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
 
 	if ($base_depth == 1) 
@@ -4330,15 +4330,15 @@ function sed_skinfile($base, $adminskin = false)
 	for($i = $base_depth; $i > 1; $i--)
 		{
 		$levels = array_slice($base, 0, $i);
-		$skinfile = 'skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
-		$skinfile_admin = 'skins/'.$usr['skin'].'/admin/'.implode('.', $levels).'.tpl';		
+		$skinfile = SED_ROOT . '/skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
+		$skinfile_admin = SED_ROOT . '/skins/'.$usr['skin'].'/admin/'.implode('.', $levels).'.tpl';		
 		$skinfile_admin = (file_exists($skinfile_admin)) ? $skinfile_admin : $skinfile;
 		$skinfile = ($adminskin) ? $skinfile_admin : $skinfile;
 		if(file_exists($skinfile)) { return($skinfile); }
 		}
 
-	$tpl_path = 'skins/'.$usr['skin'].'/'.$base[0].'.tpl';
-	$tpl_admin_path = 'skins/'.$usr['skin'].'/admin/'.$base[0].'.tpl';  
+	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base[0].'.tpl';
+	$tpl_admin_path = SED_ROOT . '/skins/'.$usr['skin'].'/admin/'.$base[0].'.tpl';  
 	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
   
 	return ($adminskin) ? $tpl_admin_path : $tpl_path;

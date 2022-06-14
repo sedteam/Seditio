@@ -97,14 +97,18 @@
 		<!-- BEGIN: STRUCTURE_LIST -->
 		
 		<tr>
-			<td style="text-align:center;">{STRUCTURE_LIST_DELETE}</td>
+			<td style="text-align:center;">
+				<!-- BEGIN: STRUCTURE_LIST_DELETE -->
+					<a href="{STRUCTURE_LIST_DELETE_URL}"><i class="ic-trash"></i></a>
+				<!-- END: STRUCTURE_LIST_DELETE -->
+			</td>			
 			<td>{STRUCTURE_LIST_CODE}</td>
 			<td>{STRUCTURE_LIST_PATH}</td>
 			<td style="text-align:center;">{STRUCTURE_LIST_DEFSTATE}</td>
 			<td style="text-align:center;">{STRUCTURE_LIST_TPL}</td>
 			<td>{STRUCTURE_LIST_TITLE}</td>
 			<td style="text-align:right;">{STRUCTURE_LIST_SECTIONCOUNT}	<a href="{STRUCTURE_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a></td>
-			<td style="text-align:center;">{STRUCTURE_LIST_OPTIONS}</a></td>
+			<td style="text-align:center;"><a href="{STRUCTURE_LIST_OPTIONS_URL}"><i class="ic-settings"></i></a></a></td>
 		</tr>	
 		
 		<!-- END: STRUCTURE_LIST -->
