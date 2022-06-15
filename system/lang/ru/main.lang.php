@@ -62,6 +62,7 @@ $L['Close'] = "Закрыть";
 $L['Clone'] = "Клонировать"; // New in v175
 $L['Code'] = "Код";
 $L['Configuration'] = "Настройки";
+$L['Configname'] = "Имя конфига";
 $L['Comment'] = "Комментарий";
 $L['Comments'] = "Комментарии";
 $L['Confirm'] = "Подтвердить";

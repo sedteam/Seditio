@@ -1400,3 +1400,88 @@ blockquote cite {
 blockquote cite:before {
 	content: "\2014 \2009";
 }
+
+/*-------------------------*/
+/***** RESPONSIVE TABLE *****/
+/*-------------------------*/
+
+
+.table {
+	display: table;
+	width: 100%;
+	border: 1px solid #ddd;
+}
+
+.table-row {
+	display: table-row;
+	position: relative;
+}
+
+.table-head {
+	font-weight: bold;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
+    color: #000;
+    background: #e5e5e5 url(../img/bg-content-box.gif) top left repeat-x;
+    text-align: center;
+    line-height: 1.3em;
+    vertical-align: middle;
+	display: table-header-group;
+}
+
+.table-th {
+	display: table-cell;
+	padding: 10px;
+    vertical-align: middle;
+	position: relative;
+}
+
+.table-td {
+	display: table-cell;
+	padding: 12px 10px;
+    line-height: 1.35em;
+    vertical-align: middle;
+	position: relative;
+}
+
+.table-colspan-100 {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    vertical-align: middle;
+    padding: 10px;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.table-row:nth-child(odd) {
+    
+}
+
+.table-row:nth-child(even) {
+    background: #f3f3f3;
+}
+
+.table-foot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+
+.table-body {
+	display: table-row-group;
+}
+
+.table-btn {
+	padding: 15px;
+}
+
+.config-field textarea {
+	width:100%;
+}
+
+.coltop {
+	font-weight: bold;
+}

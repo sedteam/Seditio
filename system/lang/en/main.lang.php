@@ -62,6 +62,7 @@ $L['Close'] = "Close";
 $L['Clone'] = "Clone"; // New in v175
 $L['Code'] = "Code";
 $L['Configuration'] = "Configuration";
+$L['Configname'] = "Config name";
 $L['Comment'] = "Comment";
 $L['Comments'] = "Comments";
 $L['Confirm'] = "Confirm";
