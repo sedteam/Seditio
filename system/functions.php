@@ -66,6 +66,7 @@ $cfg['sqldbprefix'] = 'sed_';
 $cfg['version'] = '178';
 $cfg['versions_list'] = array (120, 121, 125, 126, 130, 150, 159, 160, 161, 162, 170, 171, 172, 173, 175, 177, 178);
 $cfg['group_colors'] = array ('red', 'yellow', 'black', 'blue', 'white', 'green', 'gray', 'navy', 'darkmagenta', 'pink', 'cadetblue', 'linen', 'deepskyblue', 'inherit');
+$cfg['separator_symbol'] = "&raquo;";
 
 /* Message type:  attention => a, error => e, success => s, information => i */
 $cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e', 
@@ -3089,7 +3090,7 @@ function sed_load_structure()
 			$path1 = mb_substr($row['structure_path'],0,($path2));
 			$spath = $path[$path1]; //new sed175
 			$path[$row['structure_path']] = $path[$path1].'.'.$row['structure_code'];
-			$tpath[$row['structure_path']] = $tpath[$path1].' '.$cfg['separator'].' '.$row['structure_title'];
+			$tpath[$row['structure_path']] = $tpath[$path1].' '.$cfg['separator_symbol'].' '.$row['structure_title'];
 			$row['structure_tpl'] = ($row['structure_tpl']=='same_as_parent') ? $parent_tpl : $row['structure_tpl'];
 			}
 		else

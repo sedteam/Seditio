@@ -243,7 +243,7 @@ switch($mn)
     
     	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
     
-    	$skinpath = "skins/".$skin."/";
+    	$skinpath = SED_ROOT . "/skins/".$skin."/";
     
     	while ($row = sed_sql_fetchassoc($sql))
     		{
@@ -269,9 +269,9 @@ switch($mn)
     		elseif ($row['structure_tpl']=='same_as_parent')
     			{ $structure_tpl_sym = $L['adm_tpl_parent']; }
     		else
-    			{ $structure_tpl_sym = $L['adm_tpl_forced']." : ".$sed_cat[$row['structure_tpl']]['tpath']; }
+    			{ $structure_tpl_sym = $L['adm_tpl_forced'].": <strong>".$sed_cat[$row['structure_tpl']]['tpath']."</strong>"; }
     
-    		$st_tpl = $structure_tpl_sym." / ";
+    		$st_tpl = $structure_tpl_sym.": ";
     		$st_tpl .= "<span class=\"desc\">".str_replace($skinpath, '', sed_skinfile(array('page', $sed_cat[$row['structure_code']]['tpl'])));   
     		$st_tpl .= "+";    
     		if ($sed_cat[$row['structure_code']]['group'])
