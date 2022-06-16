@@ -3,7 +3,7 @@
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
-  font-family: "Proxima", Arial, Tahoma;
+  font-family: Arial, Tahoma;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   font-weight: normal;
@@ -15,6 +15,7 @@ html.disable-scrolling {
 body {
   margin: 0;
   font-size:15px;
+  color: #212121;
 }
 article,
 aside,

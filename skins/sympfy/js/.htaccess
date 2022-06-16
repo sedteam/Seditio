@@ -1,7 +1,0 @@
-<IfModule mod_rewrite.c>
-RewriteEngine On
-
-RewriteRule ^main.css?$	css.php  [L,QSA]
-RewriteRule ^apps.js?$	js.php  [L,QSA]
-
-</IfModule>
