@@ -75,41 +75,22 @@ body {
 -----------------------------------------------------------------------------*/
 
 h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+	line-height: 1.15em;
+	margin: 0.6em 0;
 	color: #303030;
 	font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
-	font-weight: bold;
-	font-size: 0.85em;
 }
 
-h2 {
-	font-size: 26px;
-	padding: 0 0 10px 0;
-}
+h1 { font-size: 3em; }
+h2 { font-size: 2.5em; }
+h3 { font-size: 2em; }
+h4 { font-size: 1.5em; }
+h5 { font-size: 1em; }
 
-h3 {
-	font-size: 17px;
-	padding: 0 0 10px 0;
-}
-
-h4 {
-	font-size: 16px;
-	padding: 0 0 5px 0;
-}
-
-h5 {
-	font-size: 14px;
-	padding: 0 0 5px 0;
-}
-
-h6 {
-	font-size: 12px;
-	padding: 0 0 5px 0;
-}
-
-p {
-	margin: 0 0 10px;
-	padding: 5px 0 10px 0;
-	line-height: 1.6em;
+p { 
+	line-height: 1.45em;
+    margin: 0 0 0.6em 0;
 }
 
 a {
@@ -694,39 +675,6 @@ ul.shortcut-buttons-set li {
 	margin: 0 15px 0 0;
 	padding: 0 !important;
 	background: 0;
-}
-
-/* = Forms 
------------------------------------------------------------------------------*/
-
-form label {
-	display: inline-block;
-	padding: 0 0 10px;
-}
-
-form fieldset legend {
-	font-weight: bold;
-	margin-bottom: 10px;
-	padding-top: 10px;
-}
-
-form p small {
-	font-size: 0.75em;
-	color: #777;
-}
-
-small-input {
-	width: 25% !important;
-}
-
-medium-input {
-	width: 50% !important;
-}
-
-large-input {
-	width: 97.5% !important;
-	font-size: 16px !important;
-	padding: 8px !important;
 }
 
 /* = Notifications

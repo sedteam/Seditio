@@ -1273,7 +1273,7 @@ input[type="radio"] {
 }
 .radio + label {
 	position: relative;
-	padding: 0 0 0 24px;
+	padding: 3px 0 0 24px;
 	margin-right: 10px;
 	cursor: pointer;
 }
@@ -1409,7 +1409,7 @@ blockquote cite:before {
 .table {
 	display: table;
 	width: 100%;
-	border: 1px solid #ddd;
+	border: 1px solid #f3f3f3;
 }
 
 .table-row {
@@ -1420,7 +1420,7 @@ blockquote cite:before {
 .table-head {
 	font-weight: bold;
     font-size: 13px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #f3f3f3;
     color: #000;
     background: #e5e5e5 url(../img/bg-content-box.gif) top left repeat-x;
     text-align: center;
@@ -1484,4 +1484,108 @@ blockquote cite:before {
 
 .coltop {
 	font-weight: bold;
+}
+
+/*-------------------------*/
+/***** RESPONSIVE FORMS *****/
+/*-------------------------*/
+
+
+.form {
+  display:block;
+  margin:0!important;
+  padding:0!important;
+  border: 1px solid #f3f3f3;
+}
+
+.form img { margin:0; }
+
+.form .form-row {
+	display: block;
+	display: flex;
+	width: 100%;
+	position: relative;
+	clear: both;
+	align-content: center;
+	flex-direction: row;
+	align-items: center;
+	line-height: 1.35em;
+}
+
+.form .form-row:nth-child(odd) {
+     background: #f3f3f3;
+}
+
+.form .form-row:nth-child(even) {
+   
+}
+
+.form .form-row:after, 
+.form .form-row:before {
+  content: " ";
+  display: table;
+  clear:both;
+}
+
+.form-field {
+	margin-bottom:0;
+} 
+
+.form .form-field {
+  display:block;
+  padding: 15px 12px;
+  float:left; 
+  width:70%;
+}
+
+.form .form-field-2col {
+  display:block;
+  float:left; 
+  width:50%;
+  padding-right:10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form .form-field > span {
+  padding: 6px 0;
+}
+
+.form .form-field-help
+{
+	color: #929191;
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+.form .form-field-100 {
+	display:block;
+	padding: 12px 0;
+	width:100%;
+}
+
+.form .form-label {
+	display: block;
+	padding: 15px 12px;
+	color: #7d7878;
+	font-weight: 300; 
+	float: left;
+	width: 30%;
+	max-width:200px;
+}
+
+.form .form-label > label {
+     font-weight: 300; 
+	 padding:0;
+}
+
+.form .form-legend {
+  font-size: 0.95em;
+  color: #8e8f90;
+}
+
+.form-btn {
+	padding: 15px;
 }
