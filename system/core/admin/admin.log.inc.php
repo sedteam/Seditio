@@ -19,7 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
 
-$adminpath[] = array (sed_url("admin", "m=log"), $L['Log']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=log")] =  $L['Log'];
+
+$admintitle = $L['Log'];
+
 $adminhelp = $L['adm_help_log'];
 
 $log_groups = array (
@@ -97,6 +102,8 @@ $t->assign(array(
 	"ADMIN_LOG_FILTER" => $group_select,
 	"ADMIN_LOG_CLEAR" => $clear_all
 ));	
+
+$t->assign("ADMIN_LOG_TITLE", $admintitle);
 
 $t -> parse("ADMIN_LOG");
 

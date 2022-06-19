@@ -22,9 +22,11 @@ sed_block($usr['isadmin']);
 $mn = sed_import('mn', 'G', 'TXT');
 $mid = sed_import('mid', 'G', 'INT');
 
-$db_menu = 'sed_menu';
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=menu")] =  $L['core_menu'];
 
-$adminpath[] = array (sed_url("admin", "m=menu"), $L['core_menu']);
+$admintitle = $L['core_menu'];
 
 $adminhelp = $L['adm_help_menu'];
 
@@ -234,8 +236,10 @@ switch($mn)
 		break;	
 	}		
 
+$t->assign("ADMIN_MENU_TITLE", $admintitle);	
 
-$t -> parse("ADMIN_MENU");  
+$t -> parse("ADMIN_MENU"); 
+ 
 $adminmain .= $t -> text("ADMIN_MENU");
 
 ?>

@@ -24,10 +24,14 @@ $wm = sed_import('wm','G','ALP',4);
 $id = sed_import('id','G','INT');
 $a = sed_import('a','G','TXT');
 
-$adminpath[] = array (sed_url("admin", "m=page"), $L['Pages']);
-$adminpath[] = array (sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=page")] =  $L['Pages'];
+$urlpaths[sed_url("admin", "m=page&s=manager")] =  $L['adm_pagemanager'];
 
-if ($a=='delete')
+$admintitle = $L['adm_pagemanager'];
+
+if ($a == 'delete')
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 
@@ -158,6 +162,8 @@ $t -> assign(array(
 	"PAGE_MANAGER_CATEGORY" => sed_selectbox_categories($c, "rpagecat", TRUE, $redirecturl, $additional),
 	"PAGE_MANAGER_COUNT" => $totallines
 ));
+
+$t->assign("ADMIN_PAGE_MANAGER_TITLE", $admintitle);  
 
 $t -> parse("ADMIN_PAGE_MANAGER");  
 $adminmain .= $t -> text("ADMIN_PAGE_MANAGER");

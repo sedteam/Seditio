@@ -19,7 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+
+$admintitle = $L['adm_manage'];
+
 $adminhelp = $L['adm_help_tools'];
 
 $p = sed_import('p','G','ALP');
@@ -28,8 +33,8 @@ $t = new XTemplate(sed_skinfile('admin.tools', true));
 
 if (!empty($p))
 	{
-	$path_lang_def	= "plugins/$p/lang/$p.en.lang.php";
-	$path_lang_alt	= "plugins/$p/lang/$p.$lang.lang.php";
+	$path_lang_def	= SED_ROOT . "/plugins/$p/lang/$p.en.lang.php";
+	$path_lang_alt	= SED_ROOT . "/plugins/$p/lang/$p.$lang.lang.php";
 
 	if (@file_exists($path_lang_alt))
 		{ require($path_lang_alt); }
@@ -53,7 +58,7 @@ if (!empty($p))
 		exit;
 		}
 
-	$extplugin_info = "plugins/".$p."/".$p.".setup.php";
+	$extplugin_info = SED_ROOT . "/plugins/".$p."/".$p.".setup.php";
 
 	if (file_exists($extplugin_info))
 		{
@@ -65,7 +70,7 @@ if (!empty($p))
 		exit;
 		}
 
-	$adminpath[] = array (sed_url("admin", "m=tools&p=".$p), $info['Name']);
+	$urlpaths[sed_url("admin", "m=tools&p=".$p)] = $info['Name'];
 
 	$t-> assign(array(	
 		"TOOL_TITLE" => $info['Name'],
@@ -190,7 +195,7 @@ while ($row = sed_sql_fetchassoc($sql))
 
 		foreach ($plugins as $i => $x)
 			{
-			$extplugin_info = "plugins/".$x[0]."/".$x[0].".setup.php";
+			$extplugin_info = SED_ROOT . "/plugins/".$x[0]."/".$x[0].".setup.php";
 
 			if (file_exists($extplugin_info))
 				{
@@ -198,7 +203,7 @@ while ($row = sed_sql_fetchassoc($sql))
 				}
 			else
 				{
-				include ("system/lang/".$usr['lang']."/message.lang.php");
+				include (SED_ROOT . "/system/lang/".$usr['lang']."/message.lang.php");
 				$info['Name'] = $x[0]." : ".$L['msg907_1'];
 				}
 			
@@ -224,7 +229,10 @@ while ($row = sed_sql_fetchassoc($sql))
 		$adminmain = $L['adm_listisempty'];
 		}
 		
+	$t->assign("ADMIN_TOOLS_TITLE", $admintitle);
+	
 	$t->parse("ADMIN_TOOLS");
+	
 	$adminmain .= $t -> text("ADMIN_TOOLS");		
 	}
 		

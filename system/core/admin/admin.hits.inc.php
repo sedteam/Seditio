@@ -19,8 +19,13 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=hits"), $L['Hits']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=hits")] =  $L['Hits'];
+
+$admintitle = $L['Hits'];
+
 $adminhelp = $L['adm_help_hits'];
 
 $f = sed_import('f','G','ALP',10);
@@ -139,6 +144,8 @@ else
 	$t -> parse("ADMIN_HITS.DEFAULT");
 
 	}
+	
+$t->assign("ADMIN_HITS_TITLE", $admintitle);  	
 
 $t -> parse("ADMIN_HITS"); 
 

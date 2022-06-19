@@ -21,7 +21,12 @@ $g = sed_import('g','G','INT');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array(sed_url("admin", "m=users"), $L['Users']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=users")] =  $L['Users'];
+
+$admintitle = $L['Users'];
+
 
 $t = new XTemplate(sed_skinfile('admin.users', true)); 
 
@@ -120,8 +125,9 @@ switch($n)
 	$row['grp_desc'] = sed_cc($row['grp_desc']);
 	$row['grp_icon'] = sed_cc($row['grp_icon']);
 	$row['grp_alias'] = sed_cc($row['grp_alias']);
-
-	$adminpath[] = array(sed_url("admin", "m=users&n=edit&g=".$g), $row['grp_title']);
+	
+	$urlpaths[sed_url("admin", "m=users&n=edit&g=".$g)] =  $row['grp_title'];
+	$admintitle = $row['grp_title'];
   
 	if ($g>5 && $row['grp_memberscount']==0) 
 		{
@@ -245,6 +251,8 @@ switch($n)
 
 	break;
 	}
+
+$t->assign("ADMIN_USERS_TITLE", $admintitle); 	
 
 $t -> parse("ADMIN_USERS");  
 $adminmain .= $t -> text("ADMIN_USERS");

@@ -23,7 +23,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 
 body {
-	line-height: 1;
+	line-height: 1.3em;
 	color: black;
 	background: white;
 }
@@ -365,13 +365,69 @@ a.remove-link:hover {
 	margin: 0 0 15px 0;
 }
 
+/* = Top Bar Menu
+-----------------------------------------------------------------------------*/
+
+.topbar-menu {
+	display: table;
+	width:100%;
+	border-bottom:1px solid #dddddd;
+	background:#ffffff;
+}
+
+.topbar-menu-left {
+	display: table-cell;
+	text-align: left;
+	vertical-align: middle;
+	padding-left: 20px;
+}
+
+.topbar-menu-right {
+	display: table-cell;
+	text-align: right;
+	vertical-align: middle;
+	padding-right: 20px;
+}
+
+.topbar-menu-right ul {
+	list-style: none;
+	float: right;
+	margin: 0;
+}
+
+.topbar-menu-right ul li {
+	margin-bottom: 0;
+	float: left;
+	margin-left: .2em;
+}
+
+.topbar-menu a {
+	margin-bottom: 0;
+	color: #333333;
+	text-decoration: none;
+	padding: 8px 10px;
+	display: inline-block;
+}
+
+.topbar-menu a:hover {
+	color: #010101;
+	text-decoration: none;
+	background-color: #f0f0f0;
+}
+
+
 /* = Layout
 -----------------------------------------------------------------------------*/
 
 #main-content {
-	margin: 0 30px 0 260px;
-	padding: 10px 0 0 0;
+    margin: 0 0px 0 230px;
+    padding: 0px 0 0 0;
 }
+
+#main {
+	padding: 30px;
+}
+
 
 .column-left {
 	width: 49%;
@@ -389,10 +445,10 @@ a.remove-link:hover {
 }
 
 #footer {
-	border-top: 1px solid #ccc;
-	margin: 40px 0 0 0;
-	padding: 20px 0;
-	font-size: 12px;
+    border-top: 1px solid #ccc;
+    margin: 0px 0 0 0;
+    padding: 20px 30px;
+    font-size: 14px;
 }
 
 /* = Lists
@@ -535,6 +591,7 @@ ul.content-box-tabs {
 	position:  absolute;
 	padding: 11px 15px 0 0 !important;
 	margin: 0 !important;
+	line-height:1;
 	right:0;
 }
 
@@ -1072,13 +1129,18 @@ ul.content-box-tabs li a.current {
 	margin-bottom: 5px;
 }
 
-ul.breadcrumbs {
+#main-content .breadcrumbs ol {
 	margin: 0;
 	padding: 0;
 }
 
+.breadcrumbs {
+	margin-bottom: 15px;
+}
+
 .breadcrumbs li {
 	display: inline-block;
+	list-style: none;
 	position: relative;
 	border: 1px solid #ccc;
 	background: #e5e5e5 url(../img/bg-content-box.gif) top left repeat-x;
@@ -1120,14 +1182,10 @@ ul.breadcrumbs {
 	z-index: 7;
 }
 
-.breadcrumbs li i {
-	line-height:0!important;
-}
-
 .breadcrumbs a {
 	display: inline-block;
 	position: relative;
-	padding: 12px 28px;
+	padding: 6px 28px;
 	margin: 0;
 	color: #333;
 	text-decoration: none;
@@ -1161,7 +1219,7 @@ ul.breadcrumbs {
 	content: "";
 	position: absolute;
 	right: -8px;
-	top: 10px;
+	top: 11px;
 	width: 15px;
 	height: 15px;
 	background: #e5e5e5 url(../img/bg-content-box.gif) top left repeat-x;

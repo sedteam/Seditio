@@ -16,11 +16,15 @@ Description=Rights
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
-
 $g = sed_import('g','G','INT');
 $advanced = sed_import('advanced','G','BOL');
 
-$adminpath[] = array(sed_url("admin", "m=rights&g=".$g), $L['Rights']." : ".$sed_groups[$g]['title']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=users")] =  $L['Users'];
+$urlpaths[sed_url("admin", "m=rights&g=".$g)] =  $L['Rights']." : ".$sed_groups[$g]['title'];
+
+$admintitle = $L['Rights']." : ".$sed_groups[$g]['title'];
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
@@ -276,6 +280,8 @@ if (is_array($extp))
 /* ===== */
 
 $adminhelp = $legend;
+
+$t->assign("ADMIN_RIGHTS_TITLE", $admintitle); 
 
 $t -> parse("ADMIN_RIGHTS");  
 $adminmain .= $t -> text("ADMIN_RIGHTS");

@@ -19,7 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=trashcan"), $L['Trashcan']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=trashcan")] =  $L['Trashcan'];
+
+$admintitle = $L['Trashcan'];
 
 $adminhelp = $L['adm_help_trashcan'];
 
@@ -109,6 +114,8 @@ $t->assign(array(
 	"TRASHCAN_WIPEALL_URL" => sed_url("admin", "m=trashcan&a=wipeall&".sed_xg()),
 	"TRASHCAN_TOTAL" => $ii
 ));	
+
+$t->assign("ADMIN_TRASHCAN_TITLE", $admintitle); 
 	
 $t -> parse("ADMIN_TRASHCAN");
 

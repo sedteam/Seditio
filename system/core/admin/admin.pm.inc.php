@@ -19,8 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pm', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=pm"), $L['Private_Messages']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=pm")] =  $L['Private_Messages'];
+
+$admintitle = $L['Private_Messages'];
 
 $adminhelp = $L['adm_help_pm'];
 
@@ -40,6 +44,8 @@ $t->assign(array(
 	"PM_TOTALMP_DB" => $totalpmdb,
 	"PM_TOTALMP_SEND" => $totalpmsent
 ));	
+
+$t->assign("ADMIN_PM_TITLE", $admintitle);
 
 $t -> parse("ADMIN_PM");
 

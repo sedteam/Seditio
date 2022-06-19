@@ -30,12 +30,13 @@ $L['adm_code']['index'] = $L['Home'];
 $L['adm_code']['message'] = $L['Messages'];
 $L['adm_code']['page'] = $L['Pages'];
 $L['adm_code']['pfs'] = $L['PFS'];
-$L['adm_code']['plug'] = $L['Plugin'];
+$L['adm_code']['plug'] = $L['Plugins'];
 $L['adm_code']['pm'] = $L['Private_Messages'];
 $L['adm_code']['polls'] = $L['Polls'];
 $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 $L['adm_code']['dic'] = $L['core_dic'];
+$L['adm_code']['menu'] = $L['core_menu'];
 
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem', true)); 
 
@@ -74,22 +75,25 @@ switch($ic)
 	{
 	case 'page':
 	$title = " : ".$sed_cat[$io]['title'];
+	$rurl = sed_url('admin', 'm=page&mn=structure');
 	break;
 
 	case 'forums':
 	$forum = sed_forum_info($io);
 	$title = " : ".sed_cc($forum['fs_title'])." (#".$io.")";
-	break;
+	$rurl = sed_url('admin', 'm=forums');
+	break;	
 
 	case 'plug':
 	$extplugin_info = SED_ROOT . "/plugins/".$io."/".$io.".setup.php";
 	$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-	$title = " : ".$info['Name'];
-  
+	$title = " : ".$info['Name']; 
+	$rurl = sed_url('admin', 'm=plug');
 	break;
 
 	default:
 	$title = ($io=='a') ? '' : $io;
+	$rurl = sed_url('admin', 'm=tools');
 	break;
 	}
 
@@ -99,7 +103,12 @@ if (is_array($extp))
    { foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$adminpath[] = array(sed_url("admin", "m=rightsbyitem&ic=".$ic."&io=".$io), $L['Rights']." / ".$L['adm_code'][$ic].$title);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[$rurl] =  $L['adm_code'][$ic];
+$urlpaths[sed_url("admin", "m=rightsbyitem&ic=".$ic."&io=".$io)] =  $L['Rights']." / ".$L['adm_code'][$ic].$title;
+
+$admintitle = $L['Rights']." / ".$L['adm_code'][$ic].$title;
 
 $legend = "<img src=\"system/img/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
 $legend .= "<img src=\"system/img/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
@@ -182,6 +191,8 @@ while ($row = sed_sql_fetcharray($sql))
 $t -> parse("ADMIN_RIGHTS.RIGHTSBYITEM");
 
 $adminhelp = $legend;
+
+$t->assign("ADMIN_RIGHTS_TITLE", $admintitle); 	
 
 $t -> parse("ADMIN_RIGHTS");  
 $adminmain .= $t -> text("ADMIN_RIGHTS");

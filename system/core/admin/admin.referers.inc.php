@@ -19,8 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=referers"), $L['Referers']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=referers")] =  $L['Referers'];
+
+$admintitle = $L['Referers'];
 
 $adminhelp = $L['adm_help_referers'];
 
@@ -93,6 +97,8 @@ if (sed_sql_numrows($sql)>0)
 	}
 else
 	{ $t->parse("ADMIN_REFERERS.REFERERS_NONE"); }
+
+$t->assign("ADMIN_REFERERS_TITLE", $admintitle); 
 
 $t -> parse("ADMIN_REFERERS");
 

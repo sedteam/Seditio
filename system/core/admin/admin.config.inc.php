@@ -19,7 +19,11 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=config"), $L['Configuration']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=config")] = $L['Configuration'];
+
+$admintitle = $L['Configuration'];
 
 $sed_select_charset = sed_loadcharsets();
 $sed_select_doctypeid = sed_loaddoctypes();
@@ -116,8 +120,10 @@ switch ($n)
 		{ $cfg_params[$line[2]] = $line[5]; }
 
 	if ($o=='core')
-		{ 
-			$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L["core_".$p]); 
+		{ 			
+			$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $L["core_".$p];
+			$admintitle = $L["core_".$p];
+			
 			$adminhelpconfig = $L["adm_help_config_$p"]; 
 			$adminlegend = $L["core_".$p];
     }
@@ -125,7 +131,10 @@ switch ($n)
 		{
 		$extplugin_info = SED_ROOT."/plugins/".$p."/".$p.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-		$adminpath[] = array (sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p), $L['Plugin'].' : '.$info['Name'].' ('.$p.')');
+
+		$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $L["core_".$p];
+		$admintitle = $info['Name'].' ('.$p.')';
+		
 		$adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';
 		}
 
@@ -228,6 +237,8 @@ switch ($n)
 		"ADMIN_CONFIG_FORM_SEND" => sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=update&".sed_xg()),
 		"ADMIN_CONFIG_ADMINLEGEND" => $adminlegend
 	)); 
+	
+	$t->assign("ADMIN_CONFIG_TITLE", $admintitle);	
 		
 	$t -> parse("ADMIN_CONFIG");
 

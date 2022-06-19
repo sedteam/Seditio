@@ -19,7 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('dic', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=dic"), $L['core_dic']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=dic")] =  $L['core_dic'];
+
+$admintitle = $L['core_dic'];
 
 $adminhelp = $L['adm_help_dic'];
 
@@ -111,7 +116,8 @@ switch($mn)
 		$t -> parse("ADMIN_DIC.DIC_TERMS.TERMS_LIST");		
 		}
   
-	$adminpath[] = array (sed_url("admin", "m=dic&mn=dicitem&did=".$did), $drow['dic_title']);
+	$urlpaths[sed_url("admin", "m=dic&mn=dicitem&did=".$did)] = $drow['dic_title'];
+	$admintitle = $drow['dic_title'];
   
 	$t -> assign(array(
 		"TERM_ADD_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=add&did='.$did),
@@ -208,9 +214,10 @@ switch($mn)
 			}
 		sed_redirect(sed_url("admin", "m=dic&mn=extra&did=".$did, "", true));	            
 		} 
-
-    $adminpath[] = array (sed_url("admin", "m=dic&mn=dicitem&did=".$did), $row['dic_title']);
-    $adminpath[] = array (sed_url("admin", "m=dic&mn=extra&did=".$did), $L['adm_dic_extra']);
+	
+	$urlpaths[sed_url("admin", "m=dic&mn=dicitem&did=".$did)] = $row['dic_title'];
+	$urlpaths[sed_url("admin", "m=dic&mn=extra&did=".$did)] = $L['adm_dic_extra'];
+	$admintitle = $L['adm_dic_extra'];
     
     $location_arr = array('pages' => 'Pages', 'users' => 'Users', 'com' => 'Comments', 'forum_topics' => 'Forum topics');
   	$type_arr = array('varchar' => 'VARCHAR', 'text' => 'TEXT', 'int' => 'INTEGER', 'tinyint' => 'TINY INTEGER', 'boolean' => 'BOOLEAN');
@@ -418,7 +425,10 @@ switch($mn)
 	break;
 	}		
 
-$t -> parse("ADMIN_DIC");  
+$t->assign("ADMIN_DIC_TITLE", $admintitle);
+
+$t -> parse("ADMIN_DIC"); 
+ 
 $adminmain .= $t -> text("ADMIN_DIC");
 
 ?>

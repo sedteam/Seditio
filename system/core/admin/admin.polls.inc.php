@@ -22,13 +22,14 @@ sed_block($usr['isadmin']);
 $id = sed_import('id','G','TXT');
 $po = sed_import('po','G','TXT');
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=polls"), $L['Polls']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=polls")] =  $L['Polls'];
+
+$admintitle = $L['Polls'];
+
 $adminhelp = $L['adm_help_polls'];
-
-//$adminmain = "<h2><img src=\"system/img/admin/polls.png\" alt=\"\" /> ".$L['Polls']."</h2>";
-
-//$adminmain .= "<ul class=\"arrow_list\"><li><a href=\"".sed_url("admin", "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']."</a></li></ul>";
 
 $t = new XTemplate(sed_skinfile('admin.polls', true)); 
 
@@ -62,7 +63,8 @@ if ($n=='options')
 
 	$row = sed_sql_fetchassoc($sql);
 
-	$adminpath[] = array (sed_url("admin", "m=polls&n=options&id=".$id), $L['Options']." (#$id)");
+	$urlpaths[sed_url("admin", "m=polls&n=options&id=".$id)] =  $L['Options']." (#$id)";
+	$admintitle = $L['Options']." (#$id)";
 	
 	$t->assign(array(
 		"POLL_EDIT_ID" => $row["poll_id"],
@@ -175,7 +177,10 @@ else
 	$t -> parse("ADMIN_POLLS.POLLS");  	
 	}
 
+$t->assign("ADMIN_POLLS_TITLE", $admintitle);
+
 $t -> parse("ADMIN_POLLS");  
+
 $adminmain .= $t -> text("ADMIN_POLLS");
 
 ?>

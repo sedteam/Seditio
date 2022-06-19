@@ -25,8 +25,12 @@ $extp = sed_getextplugins('admin.smilies.first');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=smilies"), $L['Smilies']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=smilies")] =  $L['Smilies'];
+
+$admintitle = $L['Smilies'];
 
 if ($a=='update')
 	{
@@ -126,7 +130,9 @@ $t -> assign(array(
 	"SMILIE_ADD_ORDER" => sed_textbox("nsmilieorder", $nsmilieorder, 5, 5)
 ));
 
-$t -> parse("ADMIN_SMILIES.ADD_SMILIE");	
+$t -> parse("ADMIN_SMILIES.ADD_SMILIE");
+
+$t->assign("ADMIN_SMILIES_TITLE", $admintitle); 	
 
 $t -> parse("ADMIN_SMILIES");  
 

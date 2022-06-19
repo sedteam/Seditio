@@ -16,11 +16,14 @@ Description=Users
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
-
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=upgrade"), $L['upg_upgrade']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=upgrade")] =  $L['upg_upgrade'];
+
+$admintitle = $L['upg_upgrade'];
 
 $cfg['sqlversion'] = sed_stat_get('version');
 $upg_file = SED_ROOT."/system/upgrade/upgrade_".$cfg['sqlversion']."_".$cfg['version'].".php";

@@ -26,7 +26,7 @@ if ($setskin == "update")
 	sed_redirect(sed_url("admin", "m=config&n=edit&o=core&p=skin", "", true));
 }
 
-$handle = opendir("skins/");
+$handle = opendir(SED_ROOT . "/skins/");
 
 while ($f = readdir($handle))
 	{

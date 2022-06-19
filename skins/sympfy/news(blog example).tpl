@@ -19,7 +19,7 @@
 		<div class="post-date">{PAGE_ROW_DATE}</div>
 		
 		<div class="post-title">
-			<h2><a href="{PAGE_ROW_URL}">{PAGE_ROW_SHORTTITLE}</a></h2>
+			<h2><a href="{PAGE_ROW_URL}" data-page="{PAGE_ROW_ID}" data-cat="{PAGE_ROW_CAT}">{PAGE_ROW_SHORTTITLE}</a></h2>
 		</div>
 		
 		<div class="post-text page-text"> 

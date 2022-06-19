@@ -19,8 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=cache"), $L['adm_internalcache']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] = $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=cache")] = $L['adm_internalcache'];
+
+$admintitle = $L['adm_internalcache'];
 
 if ($a == 'purge')
 	{
@@ -62,6 +66,8 @@ $t->assign(array(
 	"CACHE_SHOWALL_URL" => sed_url("admin", "m=cache&a=showall"),
 	"CACHE_SIZE" => $cachesize
 ));
+
+$t->assign("ADMIN_CACHE_TITLE", $admintitle);
 
 $t -> parse("ADMIN_CACHE");
 

@@ -21,7 +21,11 @@ sed_block($usr['isadmin']);
 
 $id = sed_import('id','G','INT');
 
-$adminpath[] = array (sed_url("admin", "m=forums"), $L['Forums']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=forums")] =  $L['Forums'];
+
+$admintitle = $L['Forums'];
 
 $t = new XTemplate(sed_skinfile('admin.forums', true));  
 
@@ -121,7 +125,8 @@ if ($n=='edit')
 	$form_allowprvtopics = sed_radiobox("rallowprvtopics", $yesno_arr, $fs_allowprvtopics);
 	$form_countposts = sed_radiobox("rcountposts", $yesno_arr, $fs_countposts);
 	
-	$adminpath[] = array(sed_url("admin", "m=forums&n=edit&id=".$id), sed_cc($fs_title));
+	$urlpaths[sed_url("admin", "m=forums&n=edit&id=".$id)] = sed_cc($fs_title);	
+	$admintitle = sed_cc($fs_title);
   	
 	$form_parent_cat = "<select name=\"rparentcat\"><option value=\"0\">--</option>";
 	
@@ -307,7 +312,10 @@ else
     $t -> parse("ADMIN_FORUMS.FS_CAT");	
   }
   
-$t -> parse("ADMIN_FORUMS");  
+$t->assign("ADMIN_FORUMS_TITLE", $admintitle);
+  
+$t -> parse("ADMIN_FORUMS"); 
+ 
 $adminmain .= $t -> text("ADMIN_FORUMS");
  
 ?>

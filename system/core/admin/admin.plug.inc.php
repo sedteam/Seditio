@@ -19,7 +19,10 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=plug"), $L['Plugins']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=plug")] = $L['Plugins'];
+$admintitle = $L['Plugins'];
 
 $pl = sed_import('pl','G','ALP');
 $part = sed_import('part','G','ALP');
@@ -47,7 +50,9 @@ switch ($a)
 		{
 		$extplugin_info = SED_ROOT . "/plugins/".$pl."/".$pl.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-		$adminpath[] = array (sed_url("admin", "m=plug&a=details&pl=".$pl), $info['Name']." ($pl)");
+		
+		$urlpaths[sed_url("admin", "m=plug&a=details&pl=".$pl)] = $info['Name']." ($pl)";
+		$admintitle = $info['Name']." ($pl)";
 
 		$handle = opendir(SED_ROOT . "/plugins/".$pl);
 		$setupfile = $pl.".setup.php";
@@ -426,12 +431,14 @@ switch ($a)
 		{
 		$extplugin_file = SED_ROOT . "/plugins/".$row['pl_code']."/".$row['pl_file'].".php";
 		$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
+		
+		$extplugin_file_path = str_replace(SED_ROOT, "", $extplugin_file);
 
 		$t->assign(array(		
 			"HOOK_LIST_HOOK" => $row['pl_hook'],
 			"HOOK_LIST_PLUG_TITLE" => $row['pl_title'],
 			"HOOK_LIST_PLUG_CODE" => $row['pl_code'],
-			"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">".$extplugin_file."</span>" : "<a href=\"".sed_url("admin", "m=plug&a=delhook&id=".$row['pl_id']."&".sed_xg(), "#hooks")."\">".$out['img_delete']."</a> <span style=\"color:#AC5866; font-weight:bold;\">".$L['adm_missing']." : ".$extplugin_file."</span>",
+			"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">".$extplugin_file_path."</span>" : "<a href=\"".sed_url("admin", "m=plug&a=delhook&id=".$row['pl_id']."&".sed_xg(), "#hooks")."\">".$out['img_delete']."</a> <span style=\"color:#AC5866; font-weight:bold;\">".$L['adm_missing']." : ".$extplugin_file_path."</span>",
 			"HOOK_LIST_ORDER" => $row['pl_order'],
 			"HOOK_LIST_STATUS" => $sed_yesno[$row['pl_active']]
 		));
@@ -442,7 +449,9 @@ switch ($a)
 	$t -> parse("ADMIN_PLUG.PLUG_LISTING");
 
 	break;
-	}  
+	} 
+
+$t->assign("ADMIN_PLUG_TITLE", $admintitle);	
 	
 $t -> parse("ADMIN_PLUG");  
 

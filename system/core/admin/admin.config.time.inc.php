@@ -28,6 +28,7 @@ $t = new XTemplate(sed_skinfile('admin.config.time', true));
 	));
 		 
 $t -> parse("ADMIN_CONFIG_TIME");
+
 $adminmain .= $t -> text("ADMIN_CONFIG_TIME");  
 
 ?>

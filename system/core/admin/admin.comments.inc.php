@@ -21,6 +21,14 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
 $adminpath[] = array (sed_url("admin", "m=comments"), $L['Comments']);
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] = $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=comments")] = $L['Comments'];
+
+$admintitle = $L['Comments'];
+
 $adminhelp = $L['adm_help_comments'];
 
 if ($a == 'delete')
@@ -100,6 +108,8 @@ while ($row = sed_sql_fetchassoc($sql))
 	$t -> assign(array( 
 		"COMMENTS_TOTAL" => $ii
 	));	
+	
+$t->assign("ADMIN_COMMENTS_TITLE", $admintitle);
 	
 $t -> parse("ADMIN_COMMENTS");
 

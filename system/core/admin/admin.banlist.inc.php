@@ -19,8 +19,12 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=users"), $L['Users']);
-$adminpath[] = array (sed_url("admin", "m=banlist"), $L['Banlist']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=users")] = $L['Users'];
+$urlpaths[sed_url("admin", "m=banlist")] = $L['Banlist'];
+$admintitle = $L['Banlist'];
+
 $adminhelp = $L['adm_help_banlist'];
 
 if ($a=='update')
@@ -102,6 +106,8 @@ while ($row = sed_sql_fetchassoc($sql))
 		"BANLIST_ADD_EMAIL_MASK" => sed_textbox('nbanlistemail', $nbanlistemail, 24, 64),
 		"BANLIST_ADD_REASON" => sed_textbox('nbanlistreason', $nbanlistreason, 48, 64)
 	));
+	
+$t->assign("ADMIN_BANLIST_TITLE", $admintitle);	
 
 $t -> parse("ADMIN_BANLIST");
 

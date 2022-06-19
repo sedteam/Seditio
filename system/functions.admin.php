@@ -118,6 +118,39 @@ function sed_build_adminsection($adminpath, $breadcrumbsclass = "", $homeicon = 
 	$bread .= "</ul>";
 	return((!empty($breadcrumbsclass)) ? $bread : $result);
 	}
+	
+function sed_admin_breadcrumbs($urlpaths, $startpos = 1, $home = true, $part = "MAIN")
+	{
+		global $L, $t;
+		
+		if (is_array($urlpaths))  
+			{ $isarray = true; } 
+		else 
+			{ $urlpaths = explode(',', $urlpaths); }
+		 
+		$urlpathadmhome = array();
+		$urlpathadmhome[sed_url("admin")] = $L['Adminpanel'];		
+		$urlpaths = ($home) ? array_merge($urlpathadmhome, $urlpaths) : $urlpaths;
+		
+		$b = new XTemplate(sed_skinfile('admin.breadcrumbs', true));
+		
+		foreach ($urlpaths as $url => $title) 
+			{						
+			$b-> assign(array( 
+			  "BREADCRUMB_URL" => $url,
+			  "BREADCRUMB_TITLE" => $title,
+			  "BREADCRUMB_POSITION" => $startpos
+			));  
+			$startpos++;	  
+			$b->parse("BREADCRUMBS.BREADCRUMBS_LIST");
+			}
+			
+		$b->parse("BREADCRUMBS");
+		$breadcrumbs = $b->text("BREADCRUMBS");
+		$t->assign("BREADCRUMBS", $breadcrumbs);
+		
+		return $breadcrumbs;		
+	}
 		
 
 /** 

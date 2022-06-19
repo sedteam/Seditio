@@ -64,10 +64,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if ($cfg['enablecustomhf'])
-	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location)), $adminskin); }
-else
-	{ $mskin = sed_skinfile('footer', $adminskin); }
+$mskin = sed_skinfile('admin.footer', true);
 	
 $t = new XTemplate($mskin);
 
@@ -190,9 +187,6 @@ if ($usr['id'] > 0)
 	{ $t->parse("FOOTER.USER"); }
 else
 	{ $t->parse("FOOTER.GUEST"); }
-
-if (sed_auth('admin', 'a', 'A')) 
-	{ $t->parse("FOOTER.ADMIN"); }
 
 $t->parse("FOOTER");
 $t->out("FOOTER");

@@ -21,8 +21,11 @@ sed_block($usr['isadmin']);
 
 $id = sed_import('id','G','INT');
 
-$adminpath[] = array (sed_url("admin", "m=forums"), $L['Forums']);
-$adminpath[] = array (sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=forums")] = $L['Forums'];
+$urlpaths[sed_url("admin", "m=forums&s=structure")] = $L['adm_forum_structure'];
+$admintitle = $L['adm_forum_structure'];
 
 $adminhelp = $L['adm_help_forum_structure'];
 
@@ -94,7 +97,8 @@ if ($n=='options')
 		$check_tplmode = 1;
 		}	
 
-	$adminpath[] = array (sed_url("admin", "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
+	$urlpaths[sed_url("admin", "m=forums&s=structure&n=options&id=".$id)] = sed_cc($fn_title);
+	$admintitle = sed_cc($fn_title);
     
 	$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 	$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
@@ -237,7 +241,10 @@ else
 	
 	}
 	
+$t->assign("ADMIN_FORUMS_TITLE", $admintitle);
+	
 $t -> parse("ADMIN_FORUMS");  
+
 $adminmain .= $t -> text("ADMIN_FORUMS");
 
 ?>

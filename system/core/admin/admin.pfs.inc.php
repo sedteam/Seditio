@@ -19,8 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=pfs"), $L['PFS']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=pfs")] =  $L['PFS'];
+
+$admintitle = $L['PFS'];
 
 $adminhelp = $L['adm_help_pfs'];
 
@@ -54,6 +58,8 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$t -> parse("ADMIN_PFS.PFS_LIST");
 	}
+	
+$t->assign("ADMIN_PFS_TITLE", $admintitle);	
 
 $t -> parse("ADMIN_PFS");
 

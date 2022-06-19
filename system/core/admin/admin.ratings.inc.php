@@ -19,8 +19,12 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('ratings', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array (sed_url("admin", "m=ratings"), $L['Ratings']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=ratings")] =  $L['Ratings'];
+
+$admintitle = $L['Ratings'];
 
 $adminhelp = $L['adm_help_ratings'];
 
@@ -107,6 +111,8 @@ $t->assign(array(
 	"ADMIN_RATINGS_TOTALITEMS" => $ii,
 	"ADMIN_RATINGS_TOTALVOTES" => $jj
 ));	
+
+$t->assign("ADMIN_RATINGS_TITLE", $admintitle);
 
 $t -> parse("ADMIN_RATINGS");
 

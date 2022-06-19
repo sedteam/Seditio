@@ -21,7 +21,10 @@ sed_block($usr['isadmin']);
 
 $mn = sed_import('mn', 'G', 'TXT');
 
-$adminpath[] = array (sed_url("admin", "m=page"), $L['Pages']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=page")] = $L['Pages'];
+$admintitle = $L['Pages'];
 
 $totaldbpages = sed_sql_rowcount($db_pages);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
@@ -41,8 +44,9 @@ switch($mn)
     
     list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
     sed_block($usr['isadmin']);
-    
-    $adminpath[] = array (sed_url("admin", "m=page&mn=structure"), $L['Structure']);
+    	
+	$urlpaths[sed_url("admin", "m=page&mn=structure")] = $L['Structure'];
+	$admintitle = $L['Structure'];
     
     if ($n=='options')
     	{
@@ -331,8 +335,9 @@ switch($mn)
     
     list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
     sed_block($usr['isadmin']);
-    
-    $adminpath[] = array (sed_url("admin", "m=page&mn=catorder"), $L['adm_sortingorder']);
+	
+	$urlpaths[sed_url("admin", "m=page&mn=catorder")] = $L['adm_sortingorder'];
+	$admintitle = $L['adm_sortingorder'];
     
     $options_sort = array(
     	'id' => $L['Id'],
@@ -495,6 +500,8 @@ switch($mn)
   
   break;
   }
+  
+$t->assign("ADMIN_PAGE_TITLE", $admintitle);  
 
 $t -> parse("ADMIN_PAGE");  
 

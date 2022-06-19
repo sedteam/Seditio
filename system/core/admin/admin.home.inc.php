@@ -16,7 +16,10 @@ Description=Administration panel
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-$adminpath[] = array (sed_url("admin", "m=home"), $L['Home']);
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=home")] = $L['Home'];
+$admintitle = $L['Home'];
 
 $pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
 $pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
@@ -114,6 +117,8 @@ if ($sys['user_istopadmin'])
 		"INFOS_OS" => (function_exists('php_uname')) ? @php_uname() : '',
 		"INFOS_MYSQL" => sed_sql_result($mysql_ver, 0, "mysql_version")
 	));
+	
+	$t->assign("ADMIN_HOME_TITLE", $admintitle);	
 
 $t -> parse("ADMIN_HOME");  
 $adminmain .= $t -> text("ADMIN_HOME");
@@ -133,7 +138,5 @@ if ($cfg['trash_prunedelay'] > 0)
 	if ($deleted>0)
 		{ sed_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm'); }
 	}
-	
-
 
 ?>

@@ -104,8 +104,11 @@
 		L.pageeditcategory = "{PHP.skinlang.admintooltip.pageeditcategory}";
 		L.pageeditoption = "{PHP.skinlang.admintooltip.pageeditoption}";	
 	</script>
+	<!-- END: USER -->
+	
+	<!-- BEGIN: ADMIN -->
 	<script src="skins/{PHP.skin}/js/admintooltip.js"></script>
-	<!-- END: USER -->	
+	<!-- END: ADMIN -->
 
 </body>
 
