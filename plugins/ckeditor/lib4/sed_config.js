@@ -6,9 +6,9 @@ CKEDITOR.editorConfig = function( config )
 	var isIE = /MSIE|Trident/.test(ua);
 
 	if ( isIE ) {
-		config.extraPlugins = 'more';
+		config.extraPlugins = 'more,syntaxhighlight';
 	} else {
-		config.extraPlugins = 'more,uploadimage,uploadwidget,layoutmanager';
+		config.extraPlugins = 'more,uploadimage,uploadwidget,layoutmanager,syntaxhighlight';
 	}
 	
 	config.uploadUrl = 'plug.php?ajx=ckeditor';
@@ -18,7 +18,7 @@ CKEDITOR.editorConfig = function( config )
 	config.pasteUploadImageUrlApi = 'plug.php?ajx=ckeditor';
 	config.filebrowserImageUploadUrl = 'plug.php?ajx=ckeditor';
 	
-	config.contentsCss = ['/plugins/ckeditor/lib4/ckeditor.css?v=10'];
+	config.contentsCss = ['/plugins/ckeditor/lib4/ckeditor.css?v=1'];
 	
 	config.layoutmanager_loadbootstrap = false;
 
