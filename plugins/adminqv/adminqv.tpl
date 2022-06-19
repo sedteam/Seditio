@@ -1,19 +1,18 @@
 <!-- BEGIN: ADMIN_QV -->
-
-<div class="content-box">
-	<div class="content-box-header">
-		<h3>{PHP.L.plu_title}</h3>
-	</div>
-	<div class="content-box-content">
 		
-		<div class="row row-flex">
+<div class="row row-flex">
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	
+		<div class="content-box">
+		
+			<div class="content-box-header">
+				<h3>{PHP.L.plu_pastdays}</h3>
+			</div>
 			
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-mb24">
-		
+			<div class="content-box-content content-table">			
+	
 				<table class="cells striped">
-					<thead>
-						<tr><th colspan="2" class="coltop">{PHP.L.plu_pastdays}</th></tr>
-					</thead>
 					<tbody>
 						<!-- BEGIN: ADMIN_QV_NEWUSERS -->
 						<tr>
@@ -53,16 +52,23 @@
 				</table>
 				
 			</div>
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-mb24">
+		
+		</div>
+		
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 	
+		<div class="content-box">
+		
+			<div class="content-box-header">
+				<h3>{PHP.L.plu_db}</h3>
+			</div>
+			
+			<div class="content-box-content content-table">			
+
 				<!-- BEGIN: ADMIN_QV_DB -->		
 
 				<table class="cells striped">
-					<thead>
-						<tr>
-							<th colspan="2" class="coltop">{PHP.L.plu_db}</th>
-						</tr>
-					</thead>
 					<tbody>
 						<tr>
 							<td>{PHP.L.plu_db_rows}</td>
@@ -87,19 +93,27 @@
 					</tbody>
 				</table>
 				
-				<!-- END: ADMIN_QV_DB -->	
-			
+				<!-- END: ADMIN_QV_DB -->
+
 			</div>
-		
+
 		</div>
-		
-		<!-- BEGIN: ADMIN_QV_HITS -->
-		<table class="cells striped">
-		<thead>
-			<tr>
-				<th colspan="4" class="coltop">{PHP.L.plu_hitsmonth}</th>
-			</tr>
-		</thead>	
+	
+	</div>
+
+</div>
+
+<!-- BEGIN: ADMIN_QV_HITS -->
+
+<div class="content-box">
+
+	<div class="content-box-header">
+		<h3>{PHP.L.plu_hitsmonth}</h3>
+	</div>
+	
+	<div class="content-box-content content-table">			
+
+		<table class="cells striped">	
 		<!-- BEGIN: ADMIN_QV_HITS_DAYLIST -->	
 			<tr>
 				<td style="width:90px;">{QV_HITS_DAY}</td>
@@ -115,9 +129,9 @@
 		</tr>
 		</table>
 		<!-- END: ADMIN_QV_HITS -->
-
+		
 	</div>
+
 </div>
-			
-			
+					
 <!-- END: ADMIN_QV -->

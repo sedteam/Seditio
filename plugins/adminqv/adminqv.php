@@ -52,10 +52,10 @@ $newpms = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
 while ($row = sed_sql_fetchassoc($sql))
 	{
-	$y = mb_substr($row['stat_name'], 0, 4);
-	$m = mb_substr($row['stat_name'], 5, 2);
-	$d = mb_substr($row['stat_name'], 8, 2);
-	$dat = @date('d D', mktime(0,0,0,$m,$d,$y));
+	$ty = mb_substr($row['stat_name'], 0, 4);
+	$tm = mb_substr($row['stat_name'], 5, 2);
+	$td = mb_substr($row['stat_name'], 8, 2);
+	$dat = @date('d D', mktime(0,0,0,$tm,$td,$ty));
 	$hits_d[$dat] = $row['stat_value'];
 	}
 
