@@ -1250,3 +1250,32 @@ hr {
     display: flex;
     flex-flow: row wrap;
 }
+
+blockquote {
+	color: #999999;
+	font-style: italic;
+	margin: 0.5em 0 1em;
+	padding: 0.25em 50px;
+	line-height: 1.45;
+	position: relative;
+}
+
+blockquote:before {
+	display: block;
+	content: "\201C";
+	font-size: 80px;
+	position: absolute;
+	left: -10px;
+	top: -20px;
+	color: #cccccc;
+}
+
+blockquote cite {
+	color: #333333;
+	display: block;
+	margin-top: 10px;
+}
+
+blockquote cite:before {
+	content: "\2014 \2009";
+}
