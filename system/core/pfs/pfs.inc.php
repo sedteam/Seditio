@@ -361,7 +361,7 @@ if ($f>0)
 		$pff_count = $row1['pff_count'];
 		$pff_sample = $row1['pff_sample'];
 
-		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
+		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_date DESC");
 		$title .= " ".$cfg['separator']." <a href=\"".sed_url("pfs", "f=".$pff_id."&".$more)."\">".$pff_title."</a>";
 		$shorttitle = $pff_title;
 		$urlpaths[sed_url("pfs", "f=".$pff_id."&".$more)] = $pff_title; 
@@ -372,7 +372,7 @@ if ($f>0)
 	}
 else
 	{
-	$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
+	$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_date DESC");
 	$sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_type DESC, pff_title ASC");
 	$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
 	$sql3 = sed_sql_query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
