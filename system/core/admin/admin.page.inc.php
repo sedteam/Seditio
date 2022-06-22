@@ -176,6 +176,9 @@ switch($mn)
     	$st_tpl .= "</select><br/>";
 
 		$st_group = sed_checkbox("rgroup", "", $structure_group);
+		
+		$pfs = sed_build_pfs($usr['id'], 'savestructure', 'rstext',$L['Mypfs']);
+		$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'savestructure', 'rstext', $L['SFS']) : '';		
     	
 		$t->assign(array(   	
 			"STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=page&mn=structure&n=options&a=update&id=".$structure_id),
@@ -189,11 +192,12 @@ switch($mn)
 			"STRUCTURE_UPDATE_SEODESC" => sed_textbox('rseodesc', $structure_seo_desc, 64, 255),
 			"STRUCTURE_UPDATE_SEOKEYWORDS" => sed_textbox('rseokeywords', $structure_seo_keywords, 64, 255),
 			"STRUCTURE_UPDATE_SEOH1" => sed_textbox('rseoh1', $structure_seo_h1, 64, 255),
-			"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
+			"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended')." ".$pfs,
 			"STRUCTURE_UPDATE_GROUP" => $st_group,
 			"STRUCTURE_UPDATE_TPL" => $st_tpl,
 			"STRUCTURE_UPDATE_ALLOWCOMMENTS" => $form_allowcomments,
-			"STRUCTURE_UPDATE_ALLOWRATINGS" => $form_allowratings
+			"STRUCTURE_UPDATE_ALLOWRATINGS" => $form_allowratings,
+			"STRUCTURE_UPDATE_MYPFS" => $pfs
 		));
 		
 		/* === Hook === */

@@ -104,6 +104,11 @@
 		  var html = '<img src=\"datas/users/'+$(this).parent().attr('filename')+'\" alt=\"\" />';
 		  CKEDITOR.instances['newpagetext'].insertHtml(html);          
 		}
+		if (CKEDITOR.instances['rstext'])
+		{
+		  var html = '<img src=\"datas/users/'+$(this).parent().attr('filename')+'\" alt=\"\" />';
+		  CKEDITOR.instances['rstext'].insertHtml(html);          
+		}		
     });
       
     $(holdername).on("click", ".picture_delete", function() {
