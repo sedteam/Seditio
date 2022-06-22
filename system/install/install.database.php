@@ -428,7 +428,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."structure (
   structure_text text,
   structure_icon varchar(128) NOT NULL default '',
   structure_group tinyint(1) NOT NULL default '0',
-  structure_order varchar(16) NOT NULL default 'title.asc',
+  structure_order varchar(16) NOT NULL default 'date.desc',
   structure_allowcomments tinyint(1) NOT NULL default '1',
   structure_allowratings tinyint(1) NOT NULL default '1',
   structure_thumb varchar(255) NOT NULL default '',

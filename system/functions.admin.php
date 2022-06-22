@@ -812,7 +812,8 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
 		if (sed_sql_numrows($sql)==0)
 			{
-			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.")");
+			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order) 
+					VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.", 'date.desc')");
 
 			foreach($sed_groups as $k => $v)
 				{
