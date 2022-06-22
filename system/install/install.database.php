@@ -562,8 +562,8 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (1, 'guests',
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 'white', 0, 0, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (3, 'banned', 1, 0, 0, 'Banned', '', '', 'gray', 0, 0, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (4, 'members', 1, 0, 0, 'Members', '', '', 'black', 0, 0, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (5, 'administrators', 99, 0, 0, 'Administrators', '', '', 'red', 256, 1024, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (6, 'moderators', 50, 0, 0, 'Moderators', '', '', 'green', 256, 1024, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (5, 'administrators', 99, 0, 0, 'Administrators', '', '', 'red', 10240, 1048576, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."groups VALUES (6, 'moderators', 50, 0, 0, 'Moderators', '', '', 'green', 5120, 512000, 1);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (1, 1, 'admin', 'a', 0, 255, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (2, 2, 'admin', 'a', 0, 255, 1);");
