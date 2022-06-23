@@ -6,24 +6,27 @@
 	{HEADER_COMPOPUP}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
-	<link href="skins/{PHP.skin}/admin/css/fonts.css" type="text/css" rel="stylesheet" />
-	<link href="skins/{PHP.skin}/admin/css/framework.css" type="text/css" rel="stylesheet" />
-	<link href="skins/{PHP.skin}/admin/css/main.css" type="text/css" rel="stylesheet" />	
+	<link href="system/adminskin/{PHP.cfg.adminskin}/css/fonts.css" type="text/css" rel="stylesheet" />
+	<link href="system/adminskin/{PHP.cfg.adminskin}/css/framework.css" type="text/css" rel="stylesheet" />
+	<link href="system/adminskin/{PHP.cfg.adminskin}/css/main.css" type="text/css" rel="stylesheet" />	
+	<link href="system/adminskin/{PHP.cfg.adminskin}/css/responsive.css" type="text/css" rel="stylesheet" />	
 	{HEADER_UPLOADER}
 </head>
 <body>
 
 <div id="body-wrapper">
+
+	<div id="primary-container">
+
+		<aside id="sidebar">
 		
-		<div id="sidebar">
-			
-			<div id="sidebar-wrapper"><!-- Sidebar with logo and menu -->
+			<div id="sidebar-wrapper">
 							  
-				<div id="logo"><a href="{ADMIN_URL}"><img src="skins/{PHP.skin}/admin/img/logo.png" /></a></div>
-						  
+				<div id="logo"><a href="{HEADER_ADMIN_URL}">{HEADER_USER_AVATAR}</a></div>
+			  
 				<!-- BEGIN: HEADER_ADMIN_USER -->
-				<div id="profile-links" style="margin-top:30px;">
-					{PHP.L.Hi}, <span class="user-login">{HEADER_USER_NAME}</span><br /><a href="/" title="{PHP.L.Gotosite}">{PHP.L.Gotosite}</a> | {HEADER_USER_LOGINOUT}
+				<div id="profile-links">
+					{PHP.L.Hi}, <span class="user-login">{HEADER_USER_NAME}</span>
 				</div>        
 				<!-- END: HEADER_ADMIN_USER -->  
 
@@ -119,34 +122,42 @@
 
 			</div>	
 		
-		</div>
+		</aside>
 
-		<div id="main-content"> <!-- Main Content Section with everything -->
+		<div id="primary">	
 
 			<div class="topbar-menu">
+			
+				<div class="topbar-trigger">
+					<button class="nav-trigger"><span></span></button>
+				</div>
 				
 				<div class="topbar-menu-left">
 					<a href="/" title="{PHP.L.Gotosite}"><i class="ic-external-link"></i> {PHP.L.Gotosite}</a>
 				</div>
 				
 				<div class="topbar-menu-right">
-			
-				<!-- BEGIN: HEADER_USER_MENU -->
-
-				<ul> 
-					<li>{HEADER_USERLIST}</li>
-					<li>{HEADER_USER_PROFILE}</li>
-					<li>{HEADER_USER_PFS}</li>
-					<li>{HEADER_USER_PMREMINDER}</li>
-					<li>{HEADER_USER_LOGINOUT}</li>
-				</ul>
+									
+					<div class="dropdown-menu">
 				
-				<!-- END: HEADER_USER_MENU -->
+					<button class="dropdown-btn"><i class="ic-directions"></i> {PHP.L.Mainmenu}</button>
+				
+					<!-- BEGIN: HEADER_USER_MENU -->
+
+					<ul> 
+						<li>{HEADER_USERLIST}</li>
+						<li>{HEADER_USER_PROFILE}</li>
+						<li>{HEADER_USER_PFS}</li>
+						<li>{HEADER_USER_PMREMINDER}</li>
+						<li>{HEADER_USER_LOGINOUT}</li>
+					</ul>
+					
+					<!-- END: HEADER_USER_MENU -->
+					
+					</div>
 				
 				</div>
 			
-			</div> 	
-
-			
+			</div> 		
 
 <!-- END: HEADER -->

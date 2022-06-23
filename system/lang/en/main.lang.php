@@ -160,6 +160,7 @@ $L['Logout'] = "Logout";
 $L['Main'] = "Main";
 $L['Maingroup'] = "Main group";
 $L['Maintenance'] = "Maintenance Mode"; //New in v175
+$L['Mainmenu'] = "Main menu";
 $L['Makesticky'] = "Sticky";
 $L['Menu'] = "Menu";
 $L['Menus'] = "Menus";

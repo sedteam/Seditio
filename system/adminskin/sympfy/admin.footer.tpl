@@ -15,8 +15,9 @@
 		
 {FOOTER_DEVMODE}
 
-<script src="skins/{PHP.skin}/admin/js/jquery.min.js"></script>		
-<script src="skins/{PHP.skin}/admin/js/app.js"></script>	
+<script src="system/adminskin/{PHP.cfg.adminskin}/js/jquery.min.js"></script>	
+<script src="system/adminskin/{PHP.cfg.adminskin}/js/jquery.plugins.js"></script>		
+<script src="system/adminskin/{PHP.cfg.adminskin}/js/app.js"></script>	
 
 <!-- BEGIN: USER -->
 {PHP.out.uploader_footer_admin}

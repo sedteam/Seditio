@@ -68,6 +68,8 @@ $cfg['versions_list'] = array (120, 121, 125, 126, 130, 150, 159, 160, 161, 162,
 $cfg['group_colors'] = array ('red', 'yellow', 'black', 'blue', 'white', 'green', 'gray', 'navy', 'darkmagenta', 'pink', 'cadetblue', 'linen', 'deepskyblue', 'inherit');
 $cfg['separator_symbol'] = "&raquo;";
 
+$cfg['adminskin'] = "simple";
+
 /* Message type:  attention => a, error => e, success => s, information => i */
 $cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e', 
 '152' => 'e', '153' => 'e', '157' => 'a', '300' => 's', '400' => 'e', '401' => 'e', '403' => 'e', '404' => 'e', '500' => 'e', '502' => 's', '602' => 'a', 
@@ -4320,7 +4322,7 @@ function sed_skinfile($base, $adminskin = false)
 	
   
 	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base.'.tpl';
-	$tpl_admin_path = SED_ROOT . '/skins/'.$usr['skin'].'/admin/'.$base.'.tpl';  
+	$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base.'.tpl';  
 	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
 
 	if ($base_depth == 1) 
@@ -4332,14 +4334,14 @@ function sed_skinfile($base, $adminskin = false)
 		{
 		$levels = array_slice($base, 0, $i);
 		$skinfile = SED_ROOT . '/skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
-		$skinfile_admin = SED_ROOT . '/skins/'.$usr['skin'].'/admin/'.implode('.', $levels).'.tpl';		
+		$skinfile_admin = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.implode('.', $levels).'.tpl';		
 		$skinfile_admin = (file_exists($skinfile_admin)) ? $skinfile_admin : $skinfile;
 		$skinfile = ($adminskin) ? $skinfile_admin : $skinfile;
 		if(file_exists($skinfile)) { return($skinfile); }
 		}
 
 	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base[0].'.tpl';
-	$tpl_admin_path = SED_ROOT . '/skins/'.$usr['skin'].'/admin/'.$base[0].'.tpl';  
+	$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base[0].'.tpl';  
 	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
   
 	return ($adminskin) ? $tpl_admin_path : $tpl_path;
