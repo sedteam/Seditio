@@ -28,4 +28,10 @@ Lock_guests=12345A
 Auth_members=RW
 Lock_members=12345A
 [END_SED_EXTPLUGIN]
+
+[BEGIN_SED_EXTPLUGIN_CONFIG]
+captcha_auth=01:select:yes,no:yes:Enable captcha on login?
+captcha_register=02:select:yes,no:yes:Enable captcha on registration?
+[END_SED_EXTPLUGIN_CONFIG]
+
 ==================== */

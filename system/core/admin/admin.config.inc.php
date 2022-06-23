@@ -132,7 +132,7 @@ switch ($n)
 		$extplugin_info = SED_ROOT."/plugins/".$p."/".$p.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 
-		$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $L["core_".$p];
+		$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $info['Name'].' ('.$p.')';
 		$admintitle = $info['Name'].' ('.$p.')';
 		
 		$adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';

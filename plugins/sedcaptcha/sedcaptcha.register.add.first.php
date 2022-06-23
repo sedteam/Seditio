@@ -24,7 +24,13 @@ Order=10
 
 ==================== */
 
-$verify = sed_verify_code();
-$error_string .= (!empty($verify)) ? $verify."<br />" : "";
+$captcha_register = $cfg['plugin']['sedcaptcha']['captcha_register'];
+
+if ($captcha_register == "yes") {
+
+	$verify = sed_verify_code();
+	$error_string .= (!empty($verify)) ? $verify."<br />" : "";
+	
+}
 
 ?>

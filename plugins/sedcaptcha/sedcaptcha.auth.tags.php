@@ -26,26 +26,32 @@ Order=10
 
 if (!defined('SED_CODE')) { die("Wrong URL."); }
 
-require_once("plugins/sedcaptcha/lang/sedcaptcha.".$usr['lang'].".lang.php");
+$captcha_auth = $cfg['plugin']['sedcaptcha']['captcha_auth'];
 
-$verifyimg = "<img src=\"/captcha/\" id=\"cha\" /><br />";
+if ($captcha_auth == "yes") {
 
-$verifyimg .= "<a href=\"".sed_url("users", "m=auth", "#change")."\" id=\"change-image\" style=\"font-size:10px;\" name=\"change-image\">".$L['plu_scaptcha_noties']."</a>";
-$verifyimg .= "<script>
-	document.getElementById('change-image').addEventListener('click', function(event) { 
-		event.preventDefault(); 
-		document.getElementById('cha').src='/captcha/?'+Math.random();  
-		document.getElementById('captcha-form').focus(); 
-	});
-</script>";
-$verifyinput = "<input type=\"text\" name=\"".sed_generate_field_code()."\" id=\"captcha-form\" />";
+	require_once("plugins/sedcaptcha/lang/sedcaptcha.".$usr['lang'].".lang.php");
 
-$t->assign(array(
-    "USERS_AUTH_VERIFYIMG" => $verifyimg,
-    "USERS_AUTH_VERIFYINPUT" => $verifyinput
-));
+	$verifyimg = "<img src=\"/captcha/\" id=\"cha\" /><br />";
 
-$t->parse("MAIN.USERS_AUTH_VERIFY");
+	$verifyimg .= "<a href=\"".sed_url("users", "m=auth", "#change")."\" id=\"change-image\" style=\"font-size:10px;\" name=\"change-image\">".$L['plu_scaptcha_noties']."</a>";
+	$verifyimg .= "<script>
+		document.getElementById('change-image').addEventListener('click', function(event) { 
+			event.preventDefault(); 
+			document.getElementById('cha').src='/captcha/?'+Math.random();  
+			document.getElementById('captcha-form').focus(); 
+		});
+	</script>";
+	$verifyinput = "<input type=\"text\" name=\"".sed_generate_field_code()."\" id=\"captcha-form\" />";
+
+	$t->assign(array(
+		"USERS_AUTH_VERIFYIMG" => $verifyimg,
+		"USERS_AUTH_VERIFYINPUT" => $verifyinput
+	));
+
+	$t->parse("MAIN.USERS_AUTH_VERIFY");
+
+}
 	
 
 ?>
