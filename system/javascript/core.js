@@ -111,7 +111,11 @@ var sedjs = {
 	  var w = function(id){ var d; return (d=document.getElementById(id))&&[d]||gc(id); },
 	  bind = function(f){ var self=this; return function(){ return f.apply(self, arguments); }; },
 	  map = function(f,e,a) { for(var i=0; i<e.length; i++) f.apply(e[i],a||[]); },
-	  add = function(c) { this.className += c; },
+	  add = function(c) { 
+		this.className += c; 
+		var tabtitle = this.getAttribute('data-tabtitle'); 
+		if (tabtitle && document.getElementsByClassName('tab-title') != null)  { document.getElementsByClassName('tab-title')[0].innerText = tabtitle; } 
+	  },
 	  remove = function(c) { this.className = this.className.replace(new RegExp("(^|\\s)" + c + "(\\s|$)",'g'),''); } ,
 	  hide = function() { this.style.display="none"; },
 	  show = function() { this.style.display="block"; };	

@@ -10,46 +10,58 @@
 				<h3>{PHP.L.plu_pastdays}</h3>
 			</div>
 			
-			<div class="content-box-content content-table">			
-	
-				<table class="cells striped">
-					<tbody>
+			<div class="content-box-content content-table">	
+
+				<div class="table cells striped">
+					
+					<div class="table-body">
+
 						<!-- BEGIN: ADMIN_QV_NEWUSERS -->
-						<tr>
-							<td><a href="{QV_NEWUSERS_URL}">{PHP.L.plu_newusers}</a></td>
-							<td style="text-align:center; width:20%;">{QV_NEWUSERS}</td>
-						</tr>
+						<div class="table-row">
+							<div class="table-td text-left">
+								<a href="{QV_NEWUSERS_URL}">{PHP.L.plu_newusers}</a>
+							</div>
+							<div class="table-td text-center">			
+								{QV_NEWUSERS}
+							</div>
+						</div>
 						<!-- END: ADMIN_QV_NEWUSERS -->
+						
 						<!-- BEGIN: ADMIN_QV_NEWPAGES -->
-						<tr>
-							<td><a href="{QV_NEWPAGES_URL}">{PHP.L.plu_newpages}</a></td>
-							<td style="text-align:center;">{QV_NEWPAGES}</td>
-						</tr>
+						<div class="table-row">
+							<div class="table-td"><a href="{QV_NEWPAGES_URL}">{PHP.L.plu_newpages}</a></div>
+							<div class="table-td text-center">{QV_NEWPAGES}</div>
+						</div>
 						<!-- END: ADMIN_QV_NEWPAGES -->
+						
 						<!-- BEGIN: ADMIN_QV_NEWONFORUMS -->
-						<tr>
-							<td><a href="{QV_NEWFORUMS_URL}">{PHP.L.plu_newtopics}</a></td>
-							<td style="text-align:center;">{QV_NEWTOPICS}</td>
-						</tr>
-						<tr>
-							<td><a href="{QV_NEWFORUMS_URL}">{PHP.L.plu_newposts}</a></td>
-							<td style="text-align:center;">{QV_NEWPOSTS}</td>
-						</tr>
+						<div class="table-row">
+							<div class="table-td"><a href="{QV_NEWFORUMS_URL}">{PHP.L.plu_newtopics}</a></div>
+							<div class="table-td text-center">{QV_NEWTOPICS}</div>
+						</div>
+						<div class="table-row">
+							<div class="table-td"><a href="{QV_NEWFORUMS_URL}">{PHP.L.plu_newposts}</a></div>
+							<div class="table-td text-center">{QV_NEWPOSTS}</div>
+						</div>
 						<!-- END: ADMIN_QV_NEWONFORUMS -->
+						
 						<!-- BEGIN: ADMIN_QV_NEWCOMMENTS -->
-						<tr>
-							<td><a href="{QV_NEWCOMMENTS_URL}">{PHP.L.plu_newcomments}</a></td>
-							<td style="text-align:center;">{QV_NEWCOMMENTS}</td>
-						</tr>
+						<div class="table-row">
+							<div class="table-td"><a href="{QV_NEWCOMMENTS_URL}">{PHP.L.plu_newcomments}</a></div>
+							<div class="table-td text-center">{QV_NEWCOMMENTS}</div>
+						</div>
 						<!-- END: ADMIN_QV_NEWCOMMENTS -->
+						
 						<!-- BEGIN: ADMIN_QV_NEWPM -->
-						<tr>
-							<td>{PHP.L.plu_newpms}</td>
-							<td style="text-align:center;">{QV_NEWPMS}</td>
-						</tr>
+						<div class="table-row">
+							<div class="table-td">{PHP.L.plu_newpms}</div>
+							<div class="table-td text-center">{QV_NEWPMS}</div>
+						</div>
 						<!-- END: ADMIN_QV_NEWPM -->
-					</tbody>
-				</table>
+						
+					</div>
+					
+				</div>
 				
 			</div>
 		
@@ -68,30 +80,38 @@
 
 				<!-- BEGIN: ADMIN_QV_DB -->		
 
-				<table class="cells striped">
-					<tbody>
-						<tr>
-							<td>{PHP.L.plu_db_rows}</td>
-							<td style="text-align:center; width:20%;">{QV_DB_ROWS}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.plu_db_indexsize}</td>
-							<td style="text-align:center;">{QV_DB_INDEXSIZE}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.plu_db_datassize}</td>
-							<td style="text-align:center;">{QV_DB_DATASSIZE}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.plu_db_totalsize}</td>
-							<td style="text-align:center;">{QV_DB_TOTALSIZE}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.plu_db_fragmented}</td>
-							<td style="text-align:center;">{QV_DB_TOTALFRAGMENTED}</td>
-						</tr>						
-					</tbody>
-				</table>
+				<div class="table cells striped">
+				
+					<div class="table-body">
+					
+						<div class="table-row">
+							<div class="table-td">{PHP.L.plu_db_rows}</div>
+							<div class="table-td text-center">{QV_DB_ROWS}</div>
+						</div>
+						
+						<div class="table-row">
+							<div class="table-td">{PHP.L.plu_db_indexsize}</div>
+							<div class="table-td text-center">{QV_DB_INDEXSIZE}</div>
+						</div>
+						
+						<div class="table-row">
+							<div class="table-td">{PHP.L.plu_db_datassize}</div>
+							<div class="table-td text-center">{QV_DB_DATASSIZE}</div>
+						</div>
+						
+						<div class="table-row">
+							<div class="table-td">{PHP.L.plu_db_totalsize}</div>
+							<div class="table-td text-center">{QV_DB_TOTALSIZE}</div>
+						</div>
+						
+						<div class="table-row">
+							<div class="table-td">{PHP.L.plu_db_fragmented}</div>
+							<div class="table-td text-center">{QV_DB_TOTALFRAGMENTED}</div>
+						</div>	
+						
+					</div>
+					
+				</div>
 				
 				<!-- END: ADMIN_QV_DB -->
 
@@ -113,21 +133,25 @@
 	
 	<div class="content-box-content content-table">			
 
-		<table class="cells striped">	
+		<div class="table cells striped resp-table">
+		
 		<!-- BEGIN: ADMIN_QV_HITS_DAYLIST -->	
-			<tr>
-				<td style="width:90px;">{QV_HITS_DAY}</td>
-				<td style="text-align:right; width:138px;">{QV_HITS_COUNT} {PHP.L.Hits}</td>
-				<td style="text-align:right; width:40px;">{QV_HITS_PERCENTBAR}%</td>
-				<td>
+			<div class="table-row resp-table-row">
+				<div class="table-td resp-table-td aqv-day" style="width:90px;">{QV_HITS_DAY}</div>
+				<div class="table-td resp-table-td text-right aqv-count" style="width:138px;">{QV_HITS_COUNT} {PHP.L.Hits}</div>
+				<div class="table-td resp-table-td text-right aqv-hits" style="width:40px;">{QV_HITS_PERCENTBAR}%</div>
+				<div class="table-td resp-table-td aqv-graph">
 					<div style="width:100%;"><div class="bar_back"><div class="bar_front" style="width:{QV_HITS_PERCENTBAR}%;"></div></div></div>
-				</td>
-			</tr>
-		<!-- END: ADMIN_QV_HITS_DAYLIST -->			
-		<tr>
-			<td colspan="4"><a href="{QV_HITS_URL}">{PHP.L.More}</a></td>
-		</tr>
-		</table>
+				</div>
+			</div>
+		<!-- END: ADMIN_QV_HITS_DAYLIST -->	
+
+		</div>
+		
+		<div class="table-btn text-center">
+			<a href="{QV_HITS_URL}" class="btn">{PHP.L.More}</a>
+		</div>
+		
 		<!-- END: ADMIN_QV_HITS -->
 		
 	</div>

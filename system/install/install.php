@@ -32,7 +32,7 @@ if (!empty($cfg['mysqlhost']) || !empty($cfg['mysqldb']))
 	$connection_id = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 	sed_sql_set_charset($connection_id, 'utf8');
 	
-	if (sed_stat_get('installed')==5)
+	if (sed_stat_get('installed') == 1)
 		{
 		sed_redirect(sed_url("index", "", "", true));
 		exit;
