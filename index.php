@@ -65,7 +65,7 @@ foreach($sed_urlrewrite as $val)
     }
 }
 
-$module = $_GET['module'];
+$module = @$_GET['module'];
 
 if (!empty($module))
 {

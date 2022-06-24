@@ -163,7 +163,7 @@ if (!$cfg['disablehitstats'])
 	$qv->parse("ADMIN_QV.ADMIN_QV_HITS");	
 }
 
-$qv -> parse("ADMIN_QV");  
-$adminmain .= $qv -> text("ADMIN_QV");
-
+$qv->parse("ADMIN_QV"); 
+$t->assign("ADMIN_QV", $qv->text("ADMIN_QV"));
+ 
 ?>

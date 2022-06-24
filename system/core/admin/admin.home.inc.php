@@ -118,17 +118,17 @@ if ($sys['user_istopadmin'])
 		"INFOS_MYSQL" => sed_sql_result($mysql_ver, 0, "mysql_version")
 	));
 	
-	$t->assign("ADMIN_HOME_TITLE", $admintitle);	
-
-$t -> parse("ADMIN_HOME");  
-$adminmain .= $t -> text("ADMIN_HOME");
-
-// --------------------------
+	$t->assign("ADMIN_HOME_TITLE", $admintitle);
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.home', 'R');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }	
+
+$t -> parse("ADMIN_HOME");  
+$adminmain .= $t -> text("ADMIN_HOME");
+
+
 
 if ($cfg['trash_prunedelay'] > 0)
 	{

@@ -1247,3 +1247,12 @@ ul.content-box-tabs li a.current {
 	color: #000;
 	text-decoration: underline;
 }
+
+.rss-title { }
+.rss-date { }
+.rss-desc {
+	font-size: 0.9em;
+    line-height: 1.35em;
+    padding-top: 5px;
+    color: #979191;
+}

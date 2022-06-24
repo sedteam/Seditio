@@ -871,7 +871,6 @@ ul.content-box-tabs li a.current,
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
-	overflow: hidden;
 }
 
 .content-box-header {
@@ -1304,5 +1303,11 @@ ul.content-box-tabs li a.current {
   text-decoration:underline;
 }  
 
-
-
+.rss-title { }
+.rss-date { }
+.rss-desc {
+	font-size: 0.9em;
+    line-height: 1.35em;
+    padding-top: 5px;
+    color: #979191;
+}
