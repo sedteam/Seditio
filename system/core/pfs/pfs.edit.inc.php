@@ -9,7 +9,7 @@ File=pfs.edit.inc.php
 Version=178
 Updated=2022-jun-12
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=PFS
 [END_SED]
 ==================== */

@@ -9,7 +9,7 @@ File=plugins/whosonline/whosonline.php
 Version=178
 Updated=2007-mar-03
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 

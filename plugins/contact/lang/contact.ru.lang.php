@@ -9,7 +9,7 @@ File=plugins/contact/lang/contact.ru.lang.php
 Version=178
 Updated=2012-may-16
 Type=
-Author=Neocrome
+Author=Seditio Team
 Description=Перевод на могучий - Антонио [antony.ldu.ru]
 [END_SED]
 ==================== */

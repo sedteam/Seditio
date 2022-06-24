@@ -9,7 +9,7 @@ File=datas/resized/index.php
 Version=178
 Updated=2021-feb-06
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=Directory blocker
 [END_SED]
 ==================== */

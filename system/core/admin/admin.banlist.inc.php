@@ -9,7 +9,7 @@ File=admin.banlist.inc.php
 Version=178
 Updated=2022-jun-12
 Type=Core.admin
-Author=Neocrome
+Author=Seditio Team
 Description=Banlist
 [END_SED]
 ==================== */

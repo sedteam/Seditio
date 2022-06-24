@@ -9,7 +9,7 @@ File=admin.inc.php
 Version=178
 Updated=2022-jun-12
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=Administration panel
 [END_SED]
 ==================== */
@@ -67,8 +67,6 @@ $out['subtitle'] = sed_title('admintitle', $title_tags, $title_data);
 /**/
 
 require(SED_ROOT . "/system/core/admin/admin.header.php");
-
-
 
 $t = new XTemplate(sed_skinfile("admin", true));
 

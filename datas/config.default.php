@@ -9,7 +9,7 @@ File=datas/config.php
 Version=178
 Updated=2022-jun-12
 Type=Config
-Author=Neocrome
+Author=Seditio Team
 Description=Configuration
 [END_SED]
 ==================== */

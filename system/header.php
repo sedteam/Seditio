@@ -9,7 +9,7 @@ File=system/header.php
 Version=178
 Updated=2022-jun-12
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=Global header
 [END_SED]
 ==================== */

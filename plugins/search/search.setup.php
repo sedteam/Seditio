@@ -6,7 +6,7 @@ File=plugins/search/search.setup.php
 Version=178
 Date=2010-feb-05
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -16,7 +16,7 @@ Name=Search
 Description=Search for words in pages and forums
 Version=178
 Date=2008-jun-04
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

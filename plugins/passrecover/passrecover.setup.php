@@ -9,7 +9,7 @@ File=plugins/passrecover/passrecover.setup.php
 Version=178
 Updated=2022-jun-12
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -19,7 +19,7 @@ Name=Password recovery
 Description=Sends emails to users so they can recover their lost passwords
 Version=178
 Date=2012-okt-04
-Author=Neocrome & Seditio Team
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

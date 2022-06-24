@@ -6,7 +6,7 @@ File=plugins/search/lang/search.ru.lang.php
 Version=178
 Updated=2012-may-16
 Type=
-Author=Neocrome, Translated by Amro - http://seditio.org
+Author=Seditio Team, Translated by Amro - http://seditio.org
 Description=
 [END_SED]
 ==================== */

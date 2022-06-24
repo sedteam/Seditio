@@ -10,7 +10,7 @@ File=plugins/ckeditor/ckeditor.install.php
 Version=178
 Updated=2012-feb-23
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 

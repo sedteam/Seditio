@@ -10,7 +10,7 @@ File=plugins/adminqv/adminqv.setup.php
 Version=178
 Updated=2022-jun-12
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -20,7 +20,7 @@ Name=Admin QuickView
 Description=Various statistics and informations for the home page of the administration panel
 Version=178
 Date=2010-feb-05
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

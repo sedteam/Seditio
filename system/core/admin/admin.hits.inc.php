@@ -9,7 +9,7 @@ File=admin.statistics.hits.inc.php
 Version=178
 Updated=2012-may-31
 Type=Core.admin
-Author=Neocrome
+Author=Seditio Team
 Description=Administration panel
 [END_SED]
 ==================== */

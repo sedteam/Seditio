@@ -9,7 +9,7 @@ File=plugins/statistics/statistics.setup.php
 Version=178
 Updated=2022-jun-12
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -19,7 +19,7 @@ Name=Statistics
 Description=All kind of statistics about the site
 Version=100
 Date=2006-mar-10
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

@@ -9,7 +9,7 @@ File=admin.forums.inc.php
 Version=178
 Updated=2022-jun-12
 Type=Core.admin
-Author=Neocrome
+Author=Seditio Team
 Description=Forums & categories
 [END_SED]
 ==================== */

@@ -9,7 +9,7 @@ File=install.php
 Version=178
 Updated=2012-may-17
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=Seditio auto-installation
 [END_SED]
 ==================== */

@@ -14,7 +14,7 @@ File=system/lang/ru/main.lang.php
 Version=178
 Updated=2012-май-16
 Type=Lang
-Author=Neocrome
+Author=Seditio Team
 Description=Language main
 [END_SED]
 ==================== */

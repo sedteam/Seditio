@@ -9,7 +9,7 @@ File=plug.php
 Version=178
 Updated=2022-jun-12
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=Plugin loader
 [END_SED]
 ==================== */

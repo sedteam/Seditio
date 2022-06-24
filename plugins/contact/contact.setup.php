@@ -9,7 +9,7 @@ File=plugins/contact/contact.setup.php
 Version=150
 Updated=2022-jun-12
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -19,7 +19,7 @@ Name=Contact
 Description=Web based email form
 Version=178
 Date=2010-feb-05
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

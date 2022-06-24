@@ -7,9 +7,9 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.page.inc.php
 Version=178
-Updated=2012-may-31
+Updated=2022-jun-12
 Type=Core.admin
-Author=Neocrome
+Author=Seditio Team
 Description=Administration panel
 [END_SED]
 ==================== */

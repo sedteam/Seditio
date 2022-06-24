@@ -9,7 +9,7 @@ File=plugins/passrecover/lang/passrecover.ru.lang.php
 Version=178
 Updated=2012-may-16
 Type=Plugin.standalone
-Author=Neocrome (Translated by Antar)
+Author=Seditio Team (Translated by Antar)
 Description=Небольшие правки от Антонио (antony.ldu.ru)
 [END_SED]
 ==================== */

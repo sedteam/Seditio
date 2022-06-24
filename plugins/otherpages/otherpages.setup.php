@@ -10,7 +10,7 @@ File=plugins/otherpages/otherpages.setup.php
 Version=178
 Updated=2021-jul-08
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -20,7 +20,7 @@ Name=Other pages
 Description=Display other pages in category
 Version=178
 Updated=2021-jul-08
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

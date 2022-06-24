@@ -10,7 +10,7 @@ File=plugins/ipsearch/ipsearch.setup.php
 Version=178
 Updated=2006-jul-13
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -20,7 +20,7 @@ Name=IP search
 Description=Search for an IP in the user database.
 Version=1.1
 Date=2006-jul-13
-Author=Neocrome
+Author=Seditio Team
 Icon=forums
 Copyright=
 Notes=

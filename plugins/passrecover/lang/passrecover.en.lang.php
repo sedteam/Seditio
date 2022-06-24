@@ -9,7 +9,7 @@ File=plugins/passrecover/lang/passrecover.en.lang.php
 Version=178
 Updated=2006-jun-05
 Type=Plugin.standalone
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

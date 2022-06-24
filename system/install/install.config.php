@@ -9,7 +9,7 @@ File=install.config.php
 Version=178
 Updated=2022-jun-12
 Type=Core.install
-Author=Neocrome
+Author=Seditio Team
 Description=Configuration builder
 [END_SED]
 ==================== */
@@ -25,7 +25,7 @@ $cfg_data .= "File=datas/config.php\n";
 $cfg_data .= "Version=".$cfg['version']."\n";
 $cfg_data .= "Updated=".mb_strtolower(@date('Y-M-d'))."\n";
 $cfg_data .= "Type=Config\n";
-$cfg_data .= "Author=Neocrome\n";
+$cfg_data .= "Author=Seditio Team\n";
 $cfg_data .= "Description=Configuration file (Gen.:".@date('Y-M-d H:i:s').")\n";
 $cfg_data .= "[END_SED]\n";
 $cfg_data .= "==================== */\n";

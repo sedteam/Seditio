@@ -10,7 +10,7 @@ File=plugins/uploader/lang/uploader.ru.lang.php
 Version=178
 Updated=2021-jun-23
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

@@ -10,7 +10,7 @@ File=plugins/otherpages/otherpages.page.tags.php
 Version=178
 Updated=2013-jul-08
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 

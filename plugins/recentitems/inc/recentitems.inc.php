@@ -10,7 +10,7 @@ File=plugins/recentitems/inc/recentitems.inc.php
 Version=178
 Updated=2012-oct-18
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 

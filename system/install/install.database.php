@@ -9,7 +9,7 @@ File=install.database.php
 Version=178
 Updated=2022-jun-12
 Type=Core.install
-Author=Neocrome
+Author=Seditio Team
 Description=Database builder
 [END_SED]
 ==================== */

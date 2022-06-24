@@ -10,7 +10,7 @@ File=plugins/adminqv/lang/adminqv.ru.lang.php
 Version=178
 Updated=2012-may-16
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

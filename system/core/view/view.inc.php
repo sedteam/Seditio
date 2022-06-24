@@ -9,7 +9,7 @@ File=view.php
 Version=178
 Updated=2022-jun-12
 Type=Core
-Author=Neocrome / Enhancements by Dimitar Hubenov (dux) - 2006-may-10
+Author=Seditio Team
 Description=HTML/TXT viewer
 [END_SED]
 ==================== */

@@ -15,7 +15,7 @@ File=system/lang/ru/message.lang.php
 Version=178
 Updated=2012-may-16
 Type=Lang
-Author=Neocrome
+Author=Seditio Team
 Description=Language messages
 [END_SED]
 ==================== */

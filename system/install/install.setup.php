@@ -9,7 +9,7 @@ File=install.setup.php
 Version=178
 Updated=2022-jun-12
 Type=Core.install
-Author=Neocrome
+Author=Seditio Team
 Description=Install setup
 [END_SED]
 ==================== */

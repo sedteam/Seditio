@@ -10,7 +10,7 @@ File=plugins/cleaner/cleaner.setup.php
 Version=178
 Updated=2006-sep-07
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -20,7 +20,7 @@ Name=Cleaner
 Description=Will clean various things...
 Version=1.1
 Date=2010-feb-05
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=Set a delay to 0 (zero) in the configuration panel to disable a cleaning.
 SQL=

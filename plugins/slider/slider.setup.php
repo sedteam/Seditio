@@ -10,7 +10,7 @@ File=plugins/slider/slider.setup.php
 Version=178
 Updated=2013-jul-08
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -20,7 +20,7 @@ Name=Slider
 Description=Slider displayed on the home page
 Version=178
 Updated=2013-jul-08
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

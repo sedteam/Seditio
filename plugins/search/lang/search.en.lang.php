@@ -6,7 +6,7 @@ File=plugins/search/lang/search.en.lang.php
 Version=178
 Updated=2022-jun-12
 Type=
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

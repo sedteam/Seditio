@@ -9,7 +9,7 @@ File=system/functions.php
 Version=178
 Updated=2022-jun-12
 Type=Core
-Author=Neocrome & Seditio Team
+Author=Seditio Team
 Description=Functions
 [END_SED]
 ==================== */
@@ -162,6 +162,41 @@ function sed_ajax_flush($res, $ajax)
 	  exit; 		
 		}
 	}
+	
+/**
+ * Generation avatar from first username letter
+ *
+ * @param int $uid
+ * @return array status result
+ */
+function sed_autogen_avatar($uid)
+{
+	global $usr, $cfg, $db_pfs, $db_users;
+	
+	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$uid' LIMIT 1");
+	if (sed_sql_numrows($sql) == 0) return FALSE;
+	
+	$urr = sed_sql_fetchassoc($sql);
+	
+	$gen_avatar = sed_gen_letteravatar($urr['user_name'], $uid, (int)$cfg['av_maxy']/2, $cfg['av_maxx'], $cfg['av_maxy']);
+
+	if ($gen_avatar['status']) 
+	{
+		$avatarpath = $gen_avatar['imagepath'];
+		$avatar = $gen_avatar['image'];		
+		
+		$dotpos = mb_strrpos($avatar,".")+1;
+		$f_extension = mb_strtolower(mb_substr($avatar, $dotpos, 5));
+		
+		$uav_size = filesize($avatarpath);
+		$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='".$urr['user_id']."'");
+		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
+		$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$urr['user_id'].", '$avatar', '$f_extension', -1, '', ".(int)$uav_size.", 0)");
+		@chmod($avatarpath, 0666);
+	}
+	
+	return $gen_avatar;
+}
 
 /**
  * Returns specific access permissions
@@ -2377,6 +2412,64 @@ function sed_forum_sectionsetlast($id)
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
 	return;
 	}
+	
+/**
+ * Function to generate letter avatar
+ *
+ * @param Text, Font Size, Image width and height
+ * @return Image Url
+ */		
+function sed_gen_letteravatar($text, $uid, $fontSize, $imgWidth, $imgHeight)
+	{
+		global $cfg, $usr;
+		
+		/* settings */
+		$font = SED_ROOT . "/". $cfg['font_dir'].'calibri.ttf'; /*define font*/
+
+		// Split words and get first letter of each word. Example - Kannan m -> KM
+		$words = explode(" ", $text);
+		$text = "";
+		
+		foreach ($words as $w) {
+		  $text .= mb_substr($w, 0, 1);
+		}
+
+		// File name and extension
+		$fileName = $uid.'-avatar.jpg';
+
+		// Default text color - White
+		$textColor = '#FFF';
+
+		// Convert hex code to RGB
+		$textColor = sed_hextorgb($textColor);	
+
+		// if exist return the image
+
+		if (file_exists($cfg['av_dir'].$fileName))
+		{
+			return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'].$fileName);
+		}
+		
+		$im = imagecreatetruecolor($imgWidth, $imgHeight);	
+		$textColor = imagecolorallocate($im, $textColor['r'],$textColor['g'],$textColor['b']);	
+		
+		// Random background Colors
+		$colorCode = array("#56aad8", "#61c4a8", "#d3ab92","#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50", "#f1c40f", "#e67e22", "#e74c3c", "#f39c12", "#d35400", "#c0392b", "#7f8c8d");
+		$backgroundColor = sed_hextorgb($colorCode[rand(0, count($colorCode)-1)]);
+		$backgroundColor = imagecolorallocate($im, $backgroundColor['r'],$backgroundColor['g'],$backgroundColor['b']);
+		
+		imagefill($im, 0, 0, $backgroundColor);	
+		list($x, $y) = sed_image_ttf_center($im, $text, $font, $fontSize);	
+		imagettftext($im, $fontSize, 0, $x, $y, $textColor, $font, $text);	
+		
+		if (imagejpeg($im, $cfg['av_dir'].$fileName, 90)) {
+			/*save image as JPG*/
+			imagedestroy($im);	
+			return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'].$fileName);			
+		} else {
+			return array('status' => FALSE);	
+		}	
+	}
 
 /** 
  * Returns a list of plugins registered for a hook 
@@ -2460,6 +2553,30 @@ function sed_hash($data, $type = 1, $salt = '')
 	return $res;
 }
 
+/**
+ * Convert hex value to rgb array
+ *
+ * @param Color
+ * @return hex value 
+ */
+function sed_hextorgb($colour)
+	{
+		if ( $colour[0] == '#' ) {
+			$colour = substr( $colour, 1 );
+		}
+		if ( strlen( $colour ) == 6 ) {
+				list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
+		} elseif ( strlen( $colour ) == 3 ) {
+				list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
+		} else {
+				return false;
+		}
+		$r = hexdec( $r );
+		$g = hexdec( $g );
+		$b = hexdec( $b );
+		return array( 'r' => $r, 'g' => $g, 'b' => $b );
+	}
+
 /** 
  * Generation meta tags, base href & favicon link 
  * 
@@ -2496,6 +2613,24 @@ function sed_html($text) {
 	To implement the changes [spoiler] [/spoiler] [hidden] [/hidden] and etc.
   ===== */
   return $text;
+}
+
+/**
+ * Get center position on image
+ *
+ * @param image,text,font,size,angle
+ * @return position 
+ */
+function sed_image_ttf_center($image, $text, $font, $size, $angle = 8) 
+{
+	$xi = imagesx($image);
+	$yi = imagesy($image);
+	$box = imagettfbbox($size, $angle, $font, $text);
+	$xr = abs(max($box[2], $box[4]))+5;
+	$yr = abs(max($box[5], $box[7]));
+	$x = intval(($xi - $xr) / 2);
+	$y = intval(($yi + $yr) / 2);
+	return array($x, $y);	
 }
 
 /** 
@@ -2915,7 +3050,6 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  * @param bool $checked Checked flag 
  * @return string 
  */ 
-
 function sed_radio_item($name, $value, $title = '', $id = '', $checked = false)
 	{	
 	$id = (empty($id)) ? $name : $name."_".$id;
@@ -2950,6 +3084,28 @@ function sed_radiobox($name, $data, $check_data = '')
 		
 	return($result);
 	}
+	
+/** 
+ * Translit seo url
+ * 
+ * @param string $value Text for url value
+ * @return string 
+ */ 	
+function sed_translit_seourl($value)
+{
+	global $sed_translit;
+ 
+	$value = mb_strtolower($value);
+	$value = strtr($value, $sed_translit);
+	$value = mb_ereg_replace('[^-_0-9a-z]', '-', $value);
+	$value = mb_ereg_replace('[-]+', '-', $value);
+	$value = trim($value, '-');	
+	$value = rtrim($value, '-');	
+	$value = str_replace('-.', '.', $value);
+	 
+	return $value;
+}	
+	
 
 /** 
  * Creating input field text
@@ -3285,6 +3441,64 @@ function sed_mail($fmail, $subject, $body, $headers='', $param='', $content='pla
 			} 
   	} 
   }
+  
+/** 
+ * Menu tree generation
+ * 
+ * @return string
+ */ 
+function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $only_childrensonlevel = false, $class = "" )
+{
+	if ( is_array( $menus ) && isset( $menus[$parent_id] ) )
+		{
+		$class = (!empty($class)) ? " ".$class : "";
+		$tree = "<ul class=\"level-".$level.$class."\">";
+		if ( $only_parent == false )
+			{
+			$level++;
+			foreach ($menus[$parent_id] as $item) {
+				if ($only_childrensonlevel)
+					{
+					$tree .= "<li><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a></li>";
+					}
+				else 
+					{
+					$has_children = isset( $menus[$item['menu_id']] ) ? " class=\"has-children\"" : "";
+					$tree .= "<li".$has_children."><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
+					$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
+					$tree .= "</li>";
+					}
+				}
+			}
+		elseif ( $only_parent ) {
+			$item = $menus[$parent_id];
+			$tree = (!empty($item['menu_url'])) ? "<a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>" : "<span data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</span>";
+			return $tree;
+			}
+		$tree .= "</ul>";
+		}
+	else {
+		return null;
+		}
+	return $tree;
+}
+
+/** 
+ * Menu array options generate
+ * 
+ * @return array
+ */ 
+function sed_menu_options($array, $parent = 0, $indent = "&nbsp; &nbsp; &nbsp;") 
+{
+	$return = array();
+	foreach($array as $key => $val) {
+	  if ($val['menu_pid'] == $parent) {
+		$return['x'.$val['menu_id']] = $indent.$val['menu_title'];
+		$return = array_merge($return, sed_menu_options($array, $val['menu_id'], $indent."&nbsp; &nbsp; &nbsp;"));
+	  }
+	}
+	return $return;
+}  
 
 /** 
  * Creates UNIX timestamp out of a date 
@@ -5520,6 +5734,8 @@ function sed_session_write($code)
         $_SESSION['answer_time'] = strtotime(date('d-m-Y H:i:s'));
     }
 	
+	
+	
 function sed_generate_code()
     {
         $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -5596,200 +5812,5 @@ function sed_translate_date($timestampDate)
 		$tyear = date("Y", $timestampDate);		
 		return $tday." ".$tmonths." ".$tyear;
 	}
-	
-/**
- * Function to generate letter avatar
- * @param Text, Font Size, Image width and height
- * @return Image Url
- */		
-function sed_letterAvatar($text, $uid, $fontSize, $imgWidth, $imgHeight)
-	{
-		global $cfg, $usr;
-		
-		/* settings */
-		$font = SED_ROOT . "/". $cfg['font_dir'].'calibri.ttf'; /*define font*/
-
-		// Split words and get first letter of each word. Example - Kannan m -> KM
-		$words = explode(" ", $text);
-		$text = "";
-		
-		foreach ($words as $w) {
-		  $text .= mb_substr($w, 0, 1);
-		}
-
-		// File name and extension
-		$fileName = $uid.'-avatar.jpg';
-
-		// Default text color - White
-		$textColor = '#FFF';
-
-		// Convert hex code to RGB
-		$textColor = sed_hexToRGB($textColor);	
-
-		// if exist return the image
-
-		if (file_exists($cfg['av_dir'].$fileName))
-		{
-			return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'].$fileName);
-		}
-		
-		$im = imagecreatetruecolor($imgWidth, $imgHeight);	
-		$textColor = imagecolorallocate($im, $textColor['r'],$textColor['g'],$textColor['b']);	
-		
-		// Random background Colors
-		$colorCode = array("#56aad8", "#61c4a8", "#d3ab92","#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50", "#f1c40f", "#e67e22", "#e74c3c", "#f39c12", "#d35400", "#c0392b", "#7f8c8d");
-		$backgroundColor = sed_hexToRGB($colorCode[rand(0, count($colorCode)-1)]);
-		$backgroundColor = imagecolorallocate($im, $backgroundColor['r'],$backgroundColor['g'],$backgroundColor['b']);
-		
-		imagefill($im, 0, 0, $backgroundColor);	
-		list($x, $y) = sed_ImageTTFCenter($im, $text, $font, $fontSize);	
-		imagettftext($im, $fontSize, 0, $x, $y, $textColor, $font, $text);	
-		
-		if (imagejpeg($im, $cfg['av_dir'].$fileName, 90)) {
-			/*save image as JPG*/
-			imagedestroy($im);	
-			return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'].$fileName);			
-		} else {
-			return array('status' => FALSE);	
-		}	
-	}
-	
-/**
-* function to convert hex value to rgb array
-* @param Color
-* @return hex value 
-*/
-function sed_hexToRGB($colour)
-	{
-		if ( $colour[0] == '#' ) {
-				$colour = substr( $colour, 1 );
-		}
-		if ( strlen( $colour ) == 6 ) {
-				list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
-		} elseif ( strlen( $colour ) == 3 ) {
-				list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
-		} else {
-				return false;
-		}
-		$r = hexdec( $r );
-		$g = hexdec( $g );
-		$b = hexdec( $b );
-		return array( 'r' => $r, 'g' => $g, 'b' => $b );
-	}		
-		
-/**
-* function to get center position on image
-* @param image,text,font,size,angle
-* @return position 
-*/
-function sed_ImageTTFCenter($image, $text, $font, $size, $angle = 8) 
-{
-	$xi = imagesx($image);
-	$yi = imagesy($image);
-	$box = imagettfbbox($size, $angle, $font, $text);
-	$xr = abs(max($box[2], $box[4]))+5;
-	$yr = abs(max($box[5], $box[7]));
-	$x = intval(($xi - $xr) / 2);
-	$y = intval(($yi + $yr) / 2);
-	return array($x, $y);	
-}
-
-/**
-* Generation avatar from first username letter
-* @param int $uid
-* @return array status result
-*/
-
-function sed_autogen_avatar($uid)
-{
-	global $usr, $cfg, $db_pfs, $db_users;
-	
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$uid' LIMIT 1");
-	if (sed_sql_numrows($sql) == 0) return FALSE;
-	
-	$urr = sed_sql_fetchassoc($sql);
-	
-	$gen_avatar = sed_letterAvatar($urr['user_name'], $uid, (int)$cfg['av_maxy']/2, $cfg['av_maxx'], $cfg['av_maxy']);
-
-	if ($gen_avatar['status']) 
-	{
-		$avatarpath = $gen_avatar['imagepath'];
-		$avatar = $gen_avatar['image'];		
-		
-		$dotpos = mb_strrpos($avatar,".")+1;
-		$f_extension = mb_strtolower(mb_substr($avatar, $dotpos, 5));
-		
-		$uav_size = filesize($avatarpath);
-		$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='".$urr['user_id']."'");
-		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
-		$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$urr['user_id'].", '$avatar', '$f_extension', -1, '', ".(int)$uav_size.", 0)");
-		@chmod($avatarpath, 0666);
-	}
-	
-	return $gen_avatar;
-}
-
-function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $only_childrensonlevel = false, $class = "" )
-{
-	if ( is_array( $menus ) && isset( $menus[$parent_id] ) )
-		{
-		$class = (!empty($class)) ? " ".$class : "";
-		$tree = "<ul class=\"level-".$level.$class."\">";
-		if ( $only_parent == false )
-			{
-			$level++;
-			foreach ($menus[$parent_id] as $item) {
-				if ($only_childrensonlevel)
-					{
-					$tree .= "<li><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a></li>";
-					}
-				else 
-					{
-					$has_children = isset( $menus[$item['menu_id']] ) ? " class=\"has-children\"" : "";
-					$tree .= "<li".$has_children."><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>";
-					$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
-					$tree .= "</li>";
-					}
-				}
-			}
-		elseif ( $only_parent ) {
-			$item = $menus[$parent_id];
-			$tree = (!empty($item['menu_url'])) ? "<a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>" : "<span data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</span>";
-			return $tree;
-			}
-		$tree .= "</ul>";
-		}
-	else {
-		return null;
-		}
-	return $tree;
-}
-
-function sed_menu_options($array, $parent = 0, $indent = "&nbsp; &nbsp; &nbsp;") 
-{
-	$return = array();
-	foreach($array as $key => $val) {
-	  if ($val['menu_pid'] == $parent) {
-		$return['x'.$val['menu_id']] = $indent.$val['menu_title'];
-		$return = array_merge($return, sed_menu_options($array, $val['menu_id'], $indent."&nbsp; &nbsp; &nbsp;"));
-	  }
-	}
-	return $return;
-}
-
-function sed_translit_seourl($value)
-{
-	global $sed_translit;
- 
-	$value = mb_strtolower($value);
-	$value = strtr($value, $sed_translit);
-	$value = mb_ereg_replace('[^-_0-9a-z]', '-', $value);
-	$value = mb_ereg_replace('[-]+', '-', $value);
-	$value = trim($value, '-');	
-	$value = rtrim($value, '-');	
-	$value = str_replace('-.', '.', $value);
-	 
-	return $value;
-}
 
 ?>

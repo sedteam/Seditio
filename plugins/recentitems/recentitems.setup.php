@@ -10,7 +10,7 @@ File=plugins/recentitems/recentitems.setup.php
 Version=178
 Updated=2013-jul-08
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 
@@ -20,7 +20,7 @@ Name=Recent items
 Description=Recent pages, polls, commments and topics in forums, displayed on the home page
 Version=178
 Updated=2013-jul-08
-Author=Neocrome
+Author=Seditio Team
 Copyright=
 Notes=
 SQL=

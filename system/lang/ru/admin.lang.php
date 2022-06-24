@@ -14,7 +14,7 @@ File=system/lang/ru/admin.lang.php
 Version=178
 Updated=2012-may-20
 Type=Lang
-Author=Neocrome
+Author=Seditio Team
 Description=Admin panel
 [END_SED]
 ==================== */

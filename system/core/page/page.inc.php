@@ -9,7 +9,7 @@ File=page.inc.php
 Version=178
 Updated=2013-nov-24
 Type=Core
-Author=Neocrome
+Author=Seditio Team
 Description=Pages
 [END_SED]
 ==================== */

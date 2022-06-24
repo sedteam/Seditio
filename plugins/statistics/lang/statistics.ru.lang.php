@@ -10,7 +10,7 @@ File=plugins/statistics/lang/statistics.ru.lang.php
 Version=170
 Updated=2012-may-16
 Type=
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

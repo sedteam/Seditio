@@ -9,7 +9,7 @@ File=upgrade_172_173.php
 Version=178
 Updated=2012-oct-23
 Type=Core.upgrade
-Author=Neocrome & Seditio Team
+Author=Seditio Team
 Description=Database upgrade
 [END_SED]
 ==================== */

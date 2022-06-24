@@ -10,7 +10,7 @@ File=plugins/cleaner/cleaner.php
 Version=178
 Updated=2006-sep-07
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 

@@ -10,7 +10,7 @@ File=plugins/ckeditor/lang/ckeditor.ru.lang.php
 Version=178
 Updated=2012-оct-19
 Type=Plugin
-Author=Neocrome
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

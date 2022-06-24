@@ -9,7 +9,7 @@ File=admin.page.manager.php
 Version=178
 Updated=2015-may-24
 Type=Core.admin
-Author=Neocrome
+Author=Seditio Team
 Description=Pages
 [END_SED]
 ==================== */
