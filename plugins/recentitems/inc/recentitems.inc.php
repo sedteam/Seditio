@@ -320,7 +320,7 @@ function sed_get_latestpolls($limit, $mask)
 			$res .= "<input type=\"hidden\" name=\"a\" value=\"send\">\n";
 			if ($cfg['ajax']) 
 				{					
-				$onclick = "javascript:sedjs.ajax.bind({'url': 'index.php?ajax=1&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx', 'loading': 'pollajx', 'formid':  'pollajx_".$poll_id."'});";					
+				$onclick = "javascript:sedjs.ajax.bind({'url': '?ajax=1&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx', 'loading': 'pollajx', 'formid':  'pollajx_".$poll_id."'});";					
 				$res .= "<div style=\"text-align:center;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
 				}
 			else 
