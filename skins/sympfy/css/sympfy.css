@@ -245,7 +245,7 @@ ul {
     padding-left: 0.25em;
     color: #d6d7d8;
     font-family: 'Seditio' !important;
-	content: "\e92f";
+	content: "\ea61";
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -317,7 +317,8 @@ ul {
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
-	content: "\e92f";
+	content: "\ea61";
+	vertical-align: middle;
 }
   
 .breadcrumbs ol > li:first-child {
@@ -1316,7 +1317,7 @@ ul {
 }
 
 .comments-box-title .spoiler-jump {
-	top: 12px;
+	top: 10px;
     right: 8px;
 }
 
@@ -1544,7 +1545,7 @@ a.alfabeta:hover {
 
 .similar-arrows .slick-next:before, 
 .similar-arrows [dir='rtl'] .slick-next:before {
-    content: "\e92f";
+    content: "\ea61";
     font-size: 16px;
 }
 

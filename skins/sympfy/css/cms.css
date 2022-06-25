@@ -709,7 +709,12 @@ ul.rating li.s10 a:hover{ background-position:0 -320px; }
 	line-height: 30px;
 	width: 30px;
 	display: block;
-	content: "\e946";
+	content: "\eb55";
+	-webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 	font-size: 30px;
 	color: #010101;
 	-webkit-transition: .2s ease-out;
@@ -718,11 +723,11 @@ ul.rating li.s10 a:hover{ background-position:0 -320px; }
 }
 
 .active .spoiler-jump:after {
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+    -webkit-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0);
 }
 
 /* = Modal Windows
