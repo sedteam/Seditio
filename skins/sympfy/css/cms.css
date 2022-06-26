@@ -420,6 +420,7 @@ table.cells tr:nth-child(even) {
 	display: table-cell;	
 	vertical-align: middle;
 	padding: 0.5em 0.8em;
+	line-height: 1.35em;
 }
 
 .td-top {

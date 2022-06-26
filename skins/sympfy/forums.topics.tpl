@@ -33,7 +33,7 @@
 
 				<div class="table-thead">
 					<div class="table-td coltop">{PHP.skinlang.forumssections.Subforums}</div>
-					<div class="table-td coltop" style="width:250px;">{PHP.skinlang.forumssections.Lastpost}</div>
+					<div class="table-td coltop">{PHP.skinlang.forumssections.Lastpost}</div>
 					<div class="table-td coltop" style="width:48px;">{PHP.skinlang.forumssections.Topics}</div>
 					<div class="table-td coltop" style="width:48px;">{PHP.skinlang.forumssections.Posts}</div>
 				</div>
@@ -61,17 +61,17 @@
 									<div class="desc">{FORUMS_SECTIONS_ROW_DESC}</div>
 								</div>
 
-								<div class="table-td">
-									{FORUMS_SECTIONS_ROW_LASTPOST}<br />
-									{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
-									{FORUMS_SECTIONS_ROW_TIMEAGO}
-								</div>
-							
 							</div>
 							
 						</div>
 							
-					</div>		
+					</div>	
+
+					<div class="table-td">
+						{FORUMS_SECTIONS_ROW_LASTPOST}<br />
+						{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
+						{FORUMS_SECTIONS_ROW_TIMEAGO}
+					</div>					
 
 					<div class="table-td forums-topiccount">
 						{FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL}<br />

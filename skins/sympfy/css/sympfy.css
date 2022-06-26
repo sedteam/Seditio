@@ -568,6 +568,14 @@ ul {
 	text-decoration:none;
 }
 
+.socialmedia li a i,
+.socialmedia li a span {
+	vertical-align: bottom;
+	margin-top: 5px;
+	line-height: 1em;
+	display: inline-block;
+}
+
 .socialmedia li a:hover,
 .socialmedia li a:active {
 	color: #7CD1ED;
