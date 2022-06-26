@@ -4,32 +4,47 @@
 	<div class="content-box-header">
 		<h3>{PHP.L.Default} {PHP.L.core_skin}</h3>
 	</div>
-	<div class="content-box-content">
+	<div class="content-box-content content-table">
+	
+		<div class="table cells striped resp-table">
+			
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left" style="width:200px">{PHP.L.core_skin}</div>
+					<div class="table-th coltop text-left" style="width:200px;">{PHP.L.Preview}</div>
+					<div class="table-th coltop">&nbsp;</div>
+					<div class="table-th coltop text-center" style="width:85px;">{PHP.L.Default}</div>
+					<div class="table-th coltop text-center" style="width:85px;">{PHP.L.Set}</div>
+				</div>
+			</div>
+			
+			<div class="table-body resp-table-body">
 
-		<table class="cells striped">
-			<thead>
-			<tr>
-				<th class="coltop">{PHP.L.core_skin}</th>
-				<th class="coltop" width="200">{PHP.L.Preview}</th>
-				<th class="coltop">&nbsp;</th>
-				<th class="coltop">{PHP.L.Default}</th>
-				<th class="coltop">{PHP.L.Set}</th>
-			</tr>
-			</thead>
+				<!-- BEGIN: SKIN_LIST -->
 
-		<!-- BEGIN: SKIN_LIST -->
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td skin-title">
+							<strong>{SKIN_LIST_NAME}</strong>
+						</div>
+						<div class="table-td text-left resp-table-td skin-preview">
+							{SKIN_LIST_PREVIEW}
+						</div>
+						<div class="table-td text-left resp-table-td skin-desc">
+							{SKIN_LIST_DESC}
+						</div>
+						<div class="table-td text-center resp-table-td skin-default">
+							{SKIN_LIST_DEFAULT}
+						</div>
+						<div class="table-td text-center resp-table-td skin-set">
+							{SKIN_LIST_SET}
+						</div>
+					</div>
 
-			<tr>
-				<td style="width:20%;"><strong>{SKIN_LIST_NAME}</strong></td>
-				<td>{SKIN_LIST_PREVIEW}</td>
-				<td style="width:30%;">{SKIN_LIST_DESC}</td>
-				<td style="text-align:center; vertical-align:middle; width:10%;">{SKIN_LIST_DEFAULT}</td>
-				<td style="text-align:center; vertical-align:middle; width:10%;">{SKIN_LIST_SET}</td>
-			</tr>
+				<!-- END: SKIN_LIST -->
 
-		<!-- END: SKIN_LIST -->
-
-		</table>
+			</div>
+		
+		</div>
 
 	</div>
 </div>

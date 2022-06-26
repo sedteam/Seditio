@@ -6,6 +6,10 @@
 
 <div class="content-box">
 	
+	<div class="content-box-header">
+		<h3>{PHP.L.Configuration} {ADMIN_CONFIG_TITLE}</h3>
+	</div>	
+	
 	<div class="content-box-content content-table">
 	
 	<form id="saveconfig" action="{ADMIN_CONFIG_FORM_SEND}" method="post">

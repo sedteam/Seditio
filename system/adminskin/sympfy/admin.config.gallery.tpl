@@ -4,7 +4,7 @@
 	<div class="content-box-header">
 		<h3>{PHP.L.adm_gd}</h3>
 	</div>
-	<div class="content-box-content">
+	<div class="content-box-content content-table">
 				
 		<!-- BEGIN: NO_GD -->
 		
@@ -14,20 +14,24 @@
 		
 		<!-- BEGIN: GD_INFO -->
 		
-		<table class="cells striped">
+		<div class="table cells striped">
 			
-		<!-- BEGIN: GD_SETTINGS_LIST -->
-				
-			<tr>
-				
-				<td>{GD_SETTING_NAME}</td>
-				<td>{GD_SETTING_VALUE}</td>
+			<div class="table-body">					
 			
-			</tr>	
-				
-		<!-- END: GD_SETTINGS_LIST -->
+				<!-- BEGIN: GD_SETTINGS_LIST -->
+						
+					<div class="table-row">
+						
+						<div class="table-td">{GD_SETTING_NAME}</div>
+						<div class="table-td">{GD_SETTING_VALUE}</div>
+					
+					</div>	
+						
+				<!-- END: GD_SETTINGS_LIST -->
 		
-		</table>	
+			</div>
+		
+		</div>	
 		
 		<!-- END: GD_INFO -->
 	
