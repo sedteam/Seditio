@@ -145,7 +145,7 @@ switch ($n)
 		$config_owner = $row['config_owner'];
 		$config_cat = $row['config_cat'];
 		$config_name = $row['config_name'];
-		$config_value = sed_cc($row['config_value']);
+		$config_value = $row['config_value'];
 		$config_default = $row['config_default'];
 		$config_type = $row['config_type'];		
     

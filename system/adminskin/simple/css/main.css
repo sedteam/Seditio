@@ -69,6 +69,7 @@ body {
 
 #body-wrapper {
 	background: url(../img/bg-radial-gradient.gif) fixed 230px top no-repeat;
+	min-width: 800px;
 }                
 
 /* = Elements styling

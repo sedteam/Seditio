@@ -12,7 +12,7 @@ Localization done by : Antar, Antony & Amro
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
 Version=178
-Updated=2012-май-16
+Updated=2022-jun-12
 Type=Lang
 Author=Seditio Team
 Description=Language main
