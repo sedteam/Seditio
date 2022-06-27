@@ -35,12 +35,10 @@
 			
 				<div class="content-box-header">					
 					<h3 class="tab-title">{PHP.L.Pages}</h3>					
-					<ul class="content-box-tabs">
-					
+					<ul class="content-box-tabs">					
 						 <!-- BEGIN: ADMIN_RSS_NEWS_TAB -->
 						 <li><a href="{PHP.sys.request_uri}#tab1" data-tabtitle="{ADMIN_RSS_NEWS_TAB_TITLE}">{ADMIN_RSS_NEWS_TAB_TITLE}</a></li>
-						 <!-- END: ADMIN_RSS_NEWS_TAB -->
-						 
+						 <!-- END: ADMIN_RSS_NEWS_TAB -->						 
 						 <li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.adm_infos}">{PHP.L.adm_infos}</a></li>
 						 <li><a href="{PHP.sys.request_uri}#tab3" data-tabtitle="{PHP.L.upg_upgrade}">{PHP.L.upg_upgrade}</a></li>						  
 					</ul>									
