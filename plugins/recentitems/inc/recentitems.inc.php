@@ -166,10 +166,10 @@ function sed_get_latesttopics($limit, $mask)
 			$forum_parentcat[$fsn_sub['fs_id']] = $fsn_sub;
 		}	
 	
-	$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id, s.fs_title, 
-		s.fs_category, s.fs_parentcat, s.fs_lt_id, s.fs_lt_title, s.fs_lt_date, s.fs_lt_posterid, s.fs_lt_postername, u.user_id, u.user_avatar, u.user_maingrp 
-		FROM $db_forum_topics t, $db_forum_sections s 
-		LEFT JOIN $db_users AS u ON u.user_id = s.fs_lt_posterid  
+	$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, t.ft_lastposterid, t.ft_lastpostername, 
+		s.fs_id, s.fs_title, s.fs_category, s.fs_parentcat, s.fs_lt_id, s.fs_lt_title, s.fs_lt_date, u.user_id, u.user_avatar, u.user_maingrp 
+		FROM $db_forum_sections s, $db_forum_topics t 
+		LEFT JOIN $db_users AS u ON u.user_id = t.ft_lastposterid 
 		WHERE t.ft_sectionid=s.fs_id
 		AND t.ft_movedto=0 AND t.ft_mode=0
 		ORDER by t.ft_updated DESC LIMIT $limit");
@@ -191,6 +191,8 @@ function sed_get_latesttopics($limit, $mask)
 			/*Autogen avatar from first letter*/			
 			if (empty($row['user_avatar']) && $row['user_id']>0) {  sed_autogen_avatar($row['user_id']); }
 			
+			//print_r($row);
+			
 			$t-> assign(array(
 				"LATEST_TOPICS_ROW_ID" => $row['page_id'],
 				"LATEST_TOPICS_ROW_FORUMPATH" => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],30), sed_cutstring($row['fs_category'], 30), TRUE, $parentcat),
@@ -198,9 +200,9 @@ function sed_get_latesttopics($limit, $mask)
 				"LATEST_TOPICS_ROW_SHORTTITLE" => sed_cutstring($row['ft_title'], 50),
 				"LATEST_TOPICS_ROW_TITLE" => $row['ft_title'],			
 				"LATEST_TOPICS_ROW_DATE" => sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated'], $cfg['plu_mask_topics_date']),
-				"LATEST_TOPICS_ROW_AUTHOR" => sed_cc($row['fs_lt_postername']),
-				"LATEST_TOPICS_ROW_USERURL" => sed_url("users", "m=details&id=".$row['fs_lt_posterid']),
-				"LATEST_TOPICS_ROW_USER" => sed_build_user($row['fs_lt_posterid'], sed_cc($row['fs_lt_postername']), $row['user_maingrp']),
+				"LATEST_TOPICS_ROW_AUTHOR" => sed_cc($row['ft_lastpostername']),
+				"LATEST_TOPICS_ROW_USERURL" => sed_url("users", "m=details&id=".$row['ft_lastposterid']),
+				"LATEST_TOPICS_ROW_USER" => sed_build_user($row['ft_lastposterid'], sed_cc($row['ft_lastpostername']), $row['user_maingrp']),
 				"LATEST_TOPICS_ROW_TOPIC_COUNT" => $row['ft_postcount']-1,				
 				"LATEST_TOPICS_ROW_AVATAR" => sed_build_userimage($row['user_avatar'])
 			));
