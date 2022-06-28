@@ -4,7 +4,6 @@
 	<span><i class="ic-referers"></i></span><h2>{ADMIN_REFERERS_TITLE}</h2>
 </div>
 
-
 <div class="content-box">
 
 	<div class="content-box-content">
@@ -30,42 +29,58 @@
 
 		<!-- END: REFERERS_PAGINATION_TP -->
 
-		<table class="cells striped">
+		<div class="table cells striped resp-table">
 			
-			<thead>
-				<tr>
-					<th class="coltop">{PHP.L.Referer}</th>
-					<th class="coltop" style="width:50px;">{PHP.L.Hits}</th>
-				</tr>
-			</thead>
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left">{PHP.L.Referer}</div>
+					<div class="table-th coltop text-left" style="width:50px">{PHP.L.Hits}</div>
+				</div>
+			</div>	
+	
+			<div class="table-body resp-table-body">
 			
-			<!-- BEGIN: REFERERS_LIST -->
+				<!-- BEGIN: REFERERS_LIST -->
+				
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td referers-title">
+						<a href="http://{REFERER_GROUP_URL}">{REFERER_GROUP_URL}</a>
+					</div>
+					<div class="table-td text-left resp-table-td referers-code">
+						
+					</div>
+				</div>
+				
+				<!-- BEGIN: REFERERS_LIST_ITEM -->
+				
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td referers-title">
+						<a href="http://{REFERER_URL}">{REFERER_TITLE}</a>
+					</div>
+					<div class="table-td text-left resp-table-td referers-code">
+						{REFERER_COUNT}
+					</div>
+				</div>					
+				
+				<!-- END: REFERERS_LIST_ITEM -->
+				
+				<!-- END: REFERERS_LIST -->
+				
+				<!-- BEGIN: REFERERS_NONE -->
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td referers-title">
+						<div class="desc">{PHP.L.None}</div>
+					</div>
+					<div class="table-td text-left resp-table-td referers-code">
+						
+					</div>
+				</div>
+				<!-- END: REFERERS_NONE -->					
+				
+			</div>
 			
-			<tr>
-				<td colspan="2"><a href="http://{REFERER_GROUP_URL}">{REFERER_GROUP_URL}</a></td>
-			</tr>
-			
-			<!-- BEGIN: REFERERS_LIST_ITEM -->
-			
-			<tr>
-				<td><a href="http://{REFERER_URL}">{REFERER_TITLE}</a></td>
-				<td>{REFERER_COUNT}</td>
-			</tr>			
-			
-			<!-- END: REFERERS_LIST_ITEM -->
-			
-			<!-- END: REFERERS_LIST -->
-			
-			<!-- BEGIN: REFERERS_NONE -->
-			
-			<tr>
-				<td colspan="2">{PHP.L.None}</td>
-			</tr>
-			
-			<!-- END: REFERERS_NONE -->			
-			
-		</table>
-		
+		</div>
+	
 		<!-- BEGIN: REFERERS_PAGINATION_BM -->
 		
 		<div class="paging">
@@ -79,6 +94,7 @@
 		<!-- END: REFERERS_PAGINATION_BM -->
 					
 	</div>
+	
 </div>	
 
 <!-- END: ADMIN_REFERERS -->

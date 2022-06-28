@@ -135,17 +135,21 @@
 
 		<div class="table cells striped resp-table">
 		
-		<!-- BEGIN: ADMIN_QV_HITS_DAYLIST -->	
-			<div class="table-row resp-table-row">
-				<div class="table-td resp-table-td aqv-day" style="width:90px;">{QV_HITS_DAY}</div>
-				<div class="table-td resp-table-td text-right aqv-count" style="width:138px;">{QV_HITS_COUNT} {PHP.L.Hits}</div>
-				<div class="table-td resp-table-td text-right aqv-hits" style="width:40px;">{QV_HITS_PERCENTBAR}%</div>
-				<div class="table-td resp-table-td aqv-graph">
-					<div style="width:100%;"><div class="bar_back"><div class="bar_front" style="width:{QV_HITS_PERCENTBAR}%;"></div></div></div>
+			<div class="table-body resp-table-body">
+			
+			<!-- BEGIN: ADMIN_QV_HITS_DAYLIST -->	
+				<div class="table-row resp-table-row">
+					<div class="table-td resp-table-td aqv-day" style="width:90px;">{QV_HITS_DAY}</div>
+					<div class="table-td resp-table-td text-right aqv-count" style="width:138px;">{QV_HITS_COUNT} {PHP.L.Hits}</div>
+					<div class="table-td resp-table-td text-right aqv-hits" style="width:40px;">{QV_HITS_PERCENTBAR}%</div>
+					<div class="table-td resp-table-td aqv-graph">
+						<div style="width:100%;"><div class="bar_back"><div class="bar_front" style="width:{QV_HITS_PERCENTBAR}%;"></div></div></div>
+					</div>
 				</div>
-			</div>
-		<!-- END: ADMIN_QV_HITS_DAYLIST -->	
+			<!-- END: ADMIN_QV_HITS_DAYLIST -->	
 
+			</div>
+		
 		</div>
 		
 		<div class="table-btn text-center">
@@ -155,7 +159,7 @@
 		<!-- END: ADMIN_QV_HITS -->
 		
 	</div>
-
+	
 </div>
 					
 <!-- END: ADMIN_QV -->

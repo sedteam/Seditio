@@ -7,40 +7,62 @@
 <div class="content-box">
 
 	<div class="content-box-content"> 
+	
+		<ul class="arrow_list">
+			<li><a href="{CACHE_REFRESH_URL}">{PHP.L.Refresh}</a></li>
+			<li><a href="{CACHE_PURGE_URL}">{PHP.L.adm_purgeall}</a></li>
+			<li><a href="{CACHE_SHOWALL_URL}">{PHP.L.adm_showall}</a></li>
+		</ul>
 
-		<p>
-			<a href="{CACHE_REFRESH_URL}">{PHP.L.Refresh}</a> | 
-			<a href="{CACHE_PURGE_URL}">{PHP.L.adm_purgeall}</a> | 
-			<a href="{CACHE_SHOWALL_URL}">{PHP.L.adm_showall}</a>
-		</p>
-
-		<table class="cells striped">
-
-			<thead>
-				<th class="coltop">{PHP.L.Delete}</th>
-				<th class="coltop">{PHP.L.Item}</th>
-				<th class="coltop">{PHP.L.Expire}</th>
-				<th class="coltop">{PHP.L.Size}</th>
-				<th class="coltop">{PHP.L.Value}</th>
-			</thead>
+		<div class="table cells striped resp-table">
+			
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">					
+					<div class="table-th coltop text-left">{PHP.L.Item}</div>
+					<div class="table-th coltop text-left">{PHP.L.Expire}</div>
+					<div class="table-th coltop text-left">{PHP.L.Size}</div>
+					<div class="table-th coltop text-left">{PHP.L.Value}</div>
+					<div class="table-th coltop text-center">{PHP.L.Delete}</div>
+				</div>
+			</div>	
+	
+			<div class="table-body resp-table-body">
 
 			<!-- BEGIN: CACHE_LIST -->
-			<tr>
-				<td style="text-align:center;"><a href="{CACHE_LIST_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a></td>
-				<td>{CACHE_LIST_NAME}</td>
-				<td style="text-align:right;">{CACHE_LIST_EXPIRE}</td>
-				<td style="text-align:right;">{CACHE_LIST_SIZE}</td>
-				<td>{CACHE_LIST_VALUE}</td>
-			</tr>
+			
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td cache-title" data-label="{PHP.L.Item}">
+						{CACHE_LIST_NAME}
+					</div>
+					<div class="table-td text-left resp-table-td cache-expire" data-label="{PHP.L.Expire}">
+						{CACHE_LIST_EXPIRE}
+					</div>
+					<div class="table-td text-left resp-table-td cache-size" data-label="{PHP.L.Size}">
+						{CACHE_LIST_SIZE}
+					</div>	
+					<div class="table-td text-left resp-table-td cache-value" data-label="{PHP.L.Value}">
+						{CACHE_LIST_VALUE}
+					</div>
+					<div class="table-td text-center resp-table-td cache-delete" style="width:50px;">
+						<a href="{CACHE_LIST_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a>
+					</div>					
+				</div>			
+			
 			<!-- END: CACHE_LIST -->
+			
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td cache-delete"></div>
+					<div class="table-td text-left resp-table-td cache-title"></div>
+					<div class="table-td text-left resp-table-td cache-expire"></div>
+					<div class="table-td text-left resp-table-td cache-size" data-label="All {PHP.L.Size}">
+						{CACHE_SIZE}
+					</div>	
+					<div class="table-td text-left resp-table-td cache-value"></div>					
+				</div>				
 			 
-			<tr>
-				<td colspan="3">&nbsp;</td>
-				<td style="text-align:right;">{CACHE_SIZE}</td>
-				<td>&nbsp;</td>
-			</tr>
+			</div>
 
-		</table>
+		</div>
 
 	</div>
 	

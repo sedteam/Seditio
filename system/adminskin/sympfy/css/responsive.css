@@ -136,6 +136,7 @@
 		display: block;
 		width: 100%;
 		clear: both;
+		padding: 10px 0;
 	}
 	
 	.resp-table-row:before,
@@ -150,8 +151,23 @@
 
 	.resp-table-td {
 		display: block;
+		padding: 5px 10px;
 	}
-
+	
+	.resp-table-td::before {
+		content: attr(data-label);
+		clear: both;
+		display: block;
+		color: #ccc;
+	}	
+	
+	.cache-delete {	
+		width: 50px;
+		top: 0;
+		right: 0;
+		position: absolute;
+	}
+	
 	.table-head-config {
 		display: block;
 	}

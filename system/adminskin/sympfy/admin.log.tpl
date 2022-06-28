@@ -10,46 +10,51 @@
 			<form>{ADMIN_LOG_FILTER} {ADMIN_LOG_CLEAR}</form>				
 		</div>
 	</div>
-	<div class="content-box-content">
-  
-		<!-- BEGIN: LOG_PAGINATION_TP -->
+	<div class="content-box-content content-table">
 		
-		<div class="paging">
-			<ul class="pagination">
-			  <li class="prev">{LOG_PAGEPREV}</li>
-			  {LOG_PAGINATION}
-			  <li class="next">{LOG_PAGENEXT}</li>
-			</ul>
-		</div>
-
-		<!-- END: LOG_PAGINATION_TP -->
-
-		<table class="cells striped">
-			<thead>
-				<tr>
-					<th class="coltop">#</th>
-					<th class="coltop" style="width:150px;">{PHP.L.Date} (GMT)</th>
-					<th class="coltop">{PHP.L.Ip}</th>
-					<th class="coltop">{PHP.L.User}</th>
-					<th class="coltop">{PHP.L.Group}</th>
-					<th class="coltop">{PHP.L.Log}</th>
-				</tr>
-			</thead>
+		<div class="table cells striped resp-table">
+			
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left" style="width:10px">#</div>
+					<div class="table-th coltop text-left" style="width:150px">{PHP.L.Date} (GMT)</div>
+					<div class="table-th coltop text-left">{PHP.L.Ip}</div>
+					<div class="table-th coltop text-left">{PHP.L.User}</div>
+					<div class="table-th coltop text-left">{PHP.L.Group}</div>
+					<div class="table-th coltop text-left">{PHP.L.Log}</div>
+				</div>
+			</div>	
+	
+			<div class="table-body resp-table-body">
 			
 			<!-- BEGIN: LOG_LIST -->
-			
-			<tr>
-				<td>{LOG_LIST_ID}</td>
-				<td>{LOG_LIST_DATE}</td>
-				<td>{LOG_LIST_IP}</td>
-				<td>{LOG_LIST_USER}</td>
-				<td>{LOG_LIST_GROUP}</td>
-				<td class="desc"><div style="word-break: break-all;">{LOG_LIST_DESC}</div></td>
-			</tr>			
+		
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td log-id" data-label="#">
+						{LOG_LIST_ID}
+					</div>
+					<div class="table-td text-left resp-table-td log-date" data-label="{PHP.L.Date} (GMT)">
+						{LOG_LIST_DATE}
+					</div>
+					<div class="table-td text-left resp-table-td log-ip" data-label="{PHP.L.Ip}">
+						{LOG_LIST_IP}
+					</div>
+					<div class="table-td text-left resp-table-td log-user" data-label="{PHP.L.User}">
+						{LOG_LIST_USER}
+					</div>
+					<div class="table-td text-left resp-table-td log-group" data-label="{PHP.L.Group}">
+						{LOG_LIST_GROUP}
+					</div>					
+					<div class="table-td text-left resp-table-td log-desc" data-label="{PHP.L.Log}">
+						<div class="desc">{LOG_LIST_DESC}</div>
+					</div>
+				</div>				
 			
 			<!-- END: LOG_LIST -->
 			
-		</table>
+			</div>
+			
+		</div>
 		
 		<!-- BEGIN: LOG_PAGINATION_BM -->
 		
