@@ -8,62 +8,68 @@
 
 	<div class="content-box-content">  
 
-
 	<form id="saverights" action="{RIGHTS_UPDATE_SEND}" method="post">
 
 	<!-- BEGIN: RIGHTSBYITEM -->
 
-	<table class="cells striped" style="margin-bottom:15px;">
-
-	<thead>
-		
-	<tr>	
-		<th class="coltop">{PHP.L.Groups}</th>
-		<th class="coltop" style="width:128px; text-align:center;">{PHP.L.adm_rightspergroup}</th>
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_r.gif" alt="" /></th>
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_w.gif" alt="" /></th>
-		
-		<!-- BEGIN: ADVANCED_RIGHTS -->
-
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_1.gif" alt="" /></th>
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_2.gif" alt="" /></th>
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_3.gif" alt="" /></th>
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_4.gif" alt="" /></th>
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_5.gif" alt="" /></th>
-
-		<!-- END: ADVANCED_RIGHTS -->
-
-		<th style="width:24px;" class="coltop"><img src="system/img/admin/auth_a.gif" alt="" /></th>
-		<th class="coltop" style="width:80px; text-align:center;">{PHP.L.adm_setby}</th>
-		<th class="coltop" style="width:64px;">{PHP.L.Open}</th>
-	</tr>
-	
-	</thead>
-
-	<!-- BEGIN: RIGHTS_LIST -->
-	<tr>
-		<td style="padding:1px;"><a href="{RIGHTS_LIST_URL}"><span class="icon"><i class="ic-user"></i></span> {RIGHTS_LIST_TITLE}</a></td>
-		<td style="text-align:center; padding:2px;"><a href="{RIGHTS_LIST_RIGHTBYITEM_URL}"><i class="ic-lock"></i></a></td>
-		
-		<!-- BEGIN: RIGHTS_LIST_OPTIONS -->
-		<td style="text-align:center; padding:2px;">
-				{RIGHTS_OPTIONS}
-		</td>	
-		<!-- END: RIGHTS_LIST_OPTIONS -->
+		<div class="table cells striped resp-table">
 			
-		<td style="text-align:center; padding:2px;">{RIGHTS_LIST_SETBYUSER}</td>
-		<td style="text-align:center; padding:2px;"><a href="{RIGHTS_LIST_OPEN_URL}" class="btn btn-small circle-btn"><i class="ic-chevron-right"></i></a></td>
-	</tr>
-	<!-- END: RIGHTS_LIST -->
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">					
+					<div class="table-th coltop text-left">{PHP.L.Groups}</div>
+					<div class="table-th coltop text-center" style="width:128px;">{PHP.L.adm_rightspergroup}</div>
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_r.gif" alt="" /></div>
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_w.gif" alt="" /></div>
+					
+					<!-- BEGIN: ADVANCED_RIGHTS -->
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_1.gif" alt="" /></div>
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_2.gif" alt="" /></div>
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_3.gif" alt="" /></div>
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_4.gif" alt="" /></div>
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_5.gif" alt="" /></div>
+					<!-- END: ADVANCED_RIGHTS -->
+					
+					<div class="table-th coltop text-left" style="width:24px;"><img src="system/img/admin/auth_a.gif" alt="" /></div>
+					<div class="table-th coltop text-left" style="width:80px;">{PHP.L.adm_setby}</div>
+					<div class="table-th coltop text-center" style="width:64px;">{PHP.L.Open}</div>									
+				</div>
+			</div>	
+			
+			<div class="table-body resp-table-body">
+
+				<!-- BEGIN: RIGHTS_LIST -->
+				<div class="table-row resp-table-row">
+					
+					<div class="table-td text-left resp-table-td rights-grouptitle">
+						<a href="{RIGHTS_LIST_URL}"><span class="icon"><i class="ic-user"></i></span> {RIGHTS_LIST_TITLE}</a>
+					</div>
+					<div class="table-td text-center resp-table-td rights-per-group" data-label="{PHP.L.adm_rightspergroup}">
+						<a href="{RIGHTS_LIST_RIGHTBYITEM_URL}"><i class="ic-lock"></i></a>
+					</div>
+					
+					<!-- BEGIN: RIGHTS_LIST_OPTIONS -->
+					<div class="table-td text-left resp-table-td rights-options" data-afterlabel="{RIGHTS_OPTIONS_CODE}">
+							{RIGHTS_OPTIONS}
+					</div>	
+					<!-- END: RIGHTS_LIST_OPTIONS -->
+						
+					<div class="table-td text-left resp-table-td rights-user" data-label="{PHP.L.adm_setby}">
+						{RIGHTS_LIST_SETBYUSER}
+					</div>
+					<div class="table-td text-center resp-table-td rights-url">
+						<a href="{RIGHTS_LIST_OPEN_URL}" class="btn btn-small circle-btn"><i class="ic-chevron-right"></i></a>
+					</div>
+				</div>
+				<!-- END: RIGHTS_LIST -->
+
+			</div>
+			
+		</div>
+		
+		<div class="table-btn text-center">
+			<button type="submit" class="submit btn">{PHP.L.Update}</button>
+		</div>		
 	
-	<tr>
-		<td colspan="{RIGHTS_UPDATECOLUMN_COUNT}" style="text-align:center;">
-			<input type="submit" class="submit btn" value="{PHP.L.Update}" />
-		</td>
-	</tr>
-
-
-	</table>
 	<!-- END: RIGHTSBYITEM -->
 	
 	</form>

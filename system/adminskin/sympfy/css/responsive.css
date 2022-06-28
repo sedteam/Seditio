@@ -161,6 +161,13 @@
 		color: #ccc;
 	}	
 	
+	.resp-table-td::after {
+		content: attr(data-afterlabel);
+		clear: both;
+		display: inline-block;
+		color: #ccc;
+	}		
+	
 	.cache-delete {	
 		width: 50px;
 		top: 0;
@@ -233,6 +240,14 @@
 	
 	.aqv-graph .bar_back { 
 		margin: 0;
+	}
+	
+	.rights-per-group {
+		text-align: left!important;
+	}
+	
+	.rights-grouptitle {
+		text-align: center!important;
 	}
 	
 }
