@@ -8,7 +8,7 @@ https://seditio.org
 File=admin.home.inc.php
 Version=178
 Updated=2022-jun-12
-Type=Core
+Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
 [END_SED]

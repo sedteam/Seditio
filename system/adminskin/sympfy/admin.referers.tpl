@@ -43,8 +43,8 @@
 				<!-- BEGIN: REFERERS_LIST -->
 				
 				<div class="table-row resp-table-row">
-					<div class="table-td text-left resp-table-td referers-title">
-						<a href="http://{REFERER_GROUP_URL}">{REFERER_GROUP_URL}</a>
+					<div class="table-td text-left resp-table-td referers-title" data-label="{PHP.L.Referer}">
+						<a href="http://{REFERER_GROUP_URL}"><strong>{REFERER_GROUP_URL}</strong></a>
 					</div>
 					<div class="table-td text-left resp-table-td referers-code">
 						
@@ -54,10 +54,10 @@
 				<!-- BEGIN: REFERERS_LIST_ITEM -->
 				
 				<div class="table-row resp-table-row">
-					<div class="table-td text-left resp-table-td referers-title">
+					<div class="table-td text-left resp-table-td referers-title" data-label="{PHP.L.Referer}">
 						<a href="http://{REFERER_URL}">{REFERER_TITLE}</a>
 					</div>
-					<div class="table-td text-left resp-table-td referers-code">
+					<div class="table-td text-left resp-table-td referers-code" data-label="{PHP.L.Hits}">
 						{REFERER_COUNT}
 					</div>
 				</div>					

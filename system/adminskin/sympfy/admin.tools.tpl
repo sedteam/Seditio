@@ -11,76 +11,86 @@
 		<div class="content-box">
 			
 			<div class="content-box-header">					
-				<h3>{PHP.L.Modules}</h3>			
-				<div class="clear"></div>					
+				<h3>{PHP.L.Modules}</h3>					
 			</div> 
 			   
 			<div class="content-box-content content-table">  
-		  
-			<table class="cells striped">
-			<thead>
-				<tr>
-					<th class="coltop">{PHP.L.Modules}</th>
-					<th class="coltop" style="width:80px;">{PHP.L.Rights}</th>
-					<th class="coltop" style="width:128px;">{PHP.L.Configuration}</th>
-				</tr>
-			</thead>
-
-			<!-- BEGIN: MODULES_LIST -->
-			<tr>
-				<td>		
-					<a href="{MODULES_LIST_URL}"><span class="icon"><i class="ic-{MODULES_LIST_CODE}"></i></span> {MODULES_LIST_TITLE}</a>		
-				</td>
-
-				<td style="text-align:center;">
-				
-					<!-- BEGIN: MODULES_LIST_RIGHTS -->
-					<a href="{MODULES_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a>
-					<!-- END: MODULES_LIST_RIGHTS -->
-				
-				</td>
-
-				<td style="text-align:center;">	
-				
-					<!-- BEGIN: MODULES_LIST_CONFIG -->
-					<a href="{MODULES_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
-					<!-- END: MODULES_LIST_CONFIG -->
-				
-				</td>		
-			</tr>
-			<!-- END: MODULES_LIST -->
+						
+				<div class="table cells striped">
+					
+					<div class="table-head">
+						<div class="table-row modules-row">					
+							<div class="table-th coltop text-left">{PHP.L.Modules}</div>
+							<div class="table-th coltop text-center" style="width:80px;">{PHP.L.Rights}</div>
+							<div class="table-th coltop text-center" style="width:128px;">{PHP.L.Configuration}</div>						
+						</div>
+					</div>			
 			
-			<!-- BEGIN: MODULES_LIST_BANLIST -->
-			<tr> 
-				<td colspan="3"><a href="{MODULES_LIST_BANLIST_URL}"><span class="icon"><i class="ic-banlist"></i></span> {PHP.L.Banlist}</a></td> 
-			</tr> 
-			<!-- END: MODULES_LIST_BANLIST -->
-			
-			<!-- BEGIN: MODULES_LIST_CACHE -->
-			<tr>
-				<td colspan="3"><a href="{MODULES_LIST_CACHE_URL}"><span class="icon"><i class="ic-cache"></i></span> {PHP.L.adm_internalcache}</a></td>
-			</tr>
-			<!-- END: MODULES_LIST_CACHE -->
+					<div class="table-body">			
+				
+						<!-- BEGIN: MODULES_LIST -->
+						<div class="table-row">
+							<div class="table-td text-left">		
+								<a href="{MODULES_LIST_URL}"><span class="icon"><i class="ic-{MODULES_LIST_CODE}"></i></span> {MODULES_LIST_TITLE}</a>		
+							</div>
 
-			<!-- BEGIN: MODULES_LIST_SMILIES -->
-			<tr>
-				<td colspan="3"><a href="{MODULES_LIST_SMILIES_URL}"><span class="icon"><i class="ic-smilies"></i></span> {PHP.L.Smilies}</a></td>
-			</tr>
-			<!-- END: MODULES_LIST_SMILIES -->
+							<div class="table-td text-center">						
+								<!-- BEGIN: MODULES_LIST_RIGHTS -->
+								<a href="{MODULES_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a>
+								<!-- END: MODULES_LIST_RIGHTS -->						
+							</div>
 
-			<!-- BEGIN: MODULES_LIST_HITS -->
-			<tr>
-				<td colspan="3"><a href="{MODULES_LIST_HITS_URL}"><span class="icon"><i class="ic-hits"></i></span> {PHP.L.Hits}</a></td>
-			</tr>
-			<!-- END: MODULES_LIST_HITS -->
+							<div class="table-td text-center">							
+								<!-- BEGIN: MODULES_LIST_CONFIG -->
+								<a href="{MODULES_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
+								<!-- END: MODULES_LIST_CONFIG -->						
+							</div>		
+						</div>
+						<!-- END: MODULES_LIST -->
+						
+						<!-- BEGIN: MODULES_LIST_BANLIST -->
+						<div class="table-row"> 
+							<div class="table-td text-left"><a href="{MODULES_LIST_BANLIST_URL}"><span class="icon"><i class="ic-banlist"></i></span> {PHP.L.Banlist}</a></div> 
+							<div class="table-td text-center"></div>
+							<div class="table-td text-center"></div>
+						</div> 
+						<!-- END: MODULES_LIST_BANLIST -->
+						
+						<!-- BEGIN: MODULES_LIST_CACHE -->
+						<div class="table-row">
+							<div class="table-td text-left"><a href="{MODULES_LIST_CACHE_URL}"><span class="icon"><i class="ic-cache"></i></span> {PHP.L.adm_internalcache}</a></div>
+							<div class="table-td text-center"></div>
+							<div class="table-td text-center"></div>
+						</div>
+						<!-- END: MODULES_LIST_CACHE -->
 
-			<!-- BEGIN: MODULES_LIST_REFERERS -->
-			<tr>
-				<td colspan="3"><a href="{MODULES_LIST_REFERERS_URL}"><span class="icon"><i class="ic-referers"></i></span> {PHP.L.Referers}</a></td>
-			</tr>
-			<!-- END: MODULES_LIST_REFERERS -->
+						<!-- BEGIN: MODULES_LIST_SMILIES -->
+						<div class="table-row">
+							<div class="table-td text-left"><a href="{MODULES_LIST_SMILIES_URL}"><span class="icon"><i class="ic-smilies"></i></span> {PHP.L.Smilies}</a></div>
+							<div class="table-td text-center"></div>
+							<div class="table-td text-center"></div>
+						</div>
+						<!-- END: MODULES_LIST_SMILIES -->
 
-			</table>
+						<!-- BEGIN: MODULES_LIST_HITS -->
+						<div class="table-row">
+							<div class="table-td text-left"><a href="{MODULES_LIST_HITS_URL}"><span class="icon"><i class="ic-hits"></i></span> {PHP.L.Hits}</a></div>
+							<div class="table-td text-center"></div>
+							<div class="table-td text-center"></div>
+						</div>
+						<!-- END: MODULES_LIST_HITS -->
+
+						<!-- BEGIN: MODULES_LIST_REFERERS -->
+						<div class="table-row">
+							<div class="table-td text-left"><a href="{MODULES_LIST_REFERERS_URL}"><span class="icon"><i class="ic-referers"></i></span> {PHP.L.Referers}</a></div>
+							<div class="table-td text-center"></div>
+							<div class="table-td text-center"></div>
+						</div>
+						<!-- END: MODULES_LIST_REFERERS -->
+
+					</div>
+					
+				</div>
 
 			</div>
 			
@@ -99,24 +109,36 @@
 			
 			<div class="content-box-content content-table">  
 
-				<table class="cells striped">
-				<thead><tr><th style="text-align:center;" class="coltop">{PHP.L.Tools} ({PHP.L.Plugins})</th>
-				<th style="text-align:center;" class="coltop">{PHP.L.Configuration}</th></tr></thead>
+				<div class="table cells striped">
+					
+					<div class="table-head">
+						<div class="table-row modules-row">					
+							<div class="table-th coltop text-left">{PHP.L.Tools} ({PHP.L.Plugins})</div>
+							<div class="table-th coltop text-center" style="width:128px;">{PHP.L.Configuration}</div>						
+						</div>
+					</div>
 				
-					<!-- BEGIN: TOOLS_LIST -->
-					<tr>
-						<td><a href="{TOOLS_LIST_URL}"><span class="icon"><i class="ic-plug"></i></span> {TOOLS_LIST_TITLE}</a></td>
-						<td style="width:96px; text-align:center;">
+					<div class="table-body">
+					
+						<!-- BEGIN: TOOLS_LIST -->
+						<div class="table-row">
 						
-						<!-- BEGIN: TOOLS_LIST_CONFIG -->
-						<a href="{TOOLS_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
-						<!-- END: TOOLS_LIST_CONFIG -->
-										
-						</td>
-					</tr>
-					<!-- END: TOOLS_LIST -->
+							<div class="table-td text-left">
+								<a href="{TOOLS_LIST_URL}"><span class="icon"><i class="ic-plug"></i></span> {TOOLS_LIST_TITLE}</a>
+							</div>
+							
+							<div class="table-td text-center">							
+								<!-- BEGIN: TOOLS_LIST_CONFIG -->
+								<a href="{TOOLS_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
+								<!-- END: TOOLS_LIST_CONFIG -->											
+							</div>
+							
+						</div>
+						<!-- END: TOOLS_LIST -->
+					
+					</div>
 
-				</table>	
+				</div>	
 				
 			</div>
 			

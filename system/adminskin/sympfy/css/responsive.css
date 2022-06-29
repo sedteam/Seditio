@@ -250,6 +250,18 @@
 		text-align: center!important;
 	}
 	
+	.dic-actions,
+	.smilies-action,
+	.menu-action {
+		position: absolute;
+		right:0;
+		top: 10px;
+	}
+	
+	.modules-row {
+		display: none!important;
+	}
+	
 }
 
 @media (max-width: 500px) {
@@ -261,5 +273,9 @@
 	ul.content-box-tabs li a {
 		padding: 10px 12px;
 	}
+	.content-box-header-right .btn {
+		padding: 9px 18px;
+	}
+	
 }
 

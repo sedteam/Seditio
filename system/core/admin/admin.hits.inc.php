@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.statistics.hits.inc.php
 Version=178
-Updated=2012-may-31
+Updated=2022-jun-12
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel

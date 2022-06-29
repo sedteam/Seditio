@@ -92,7 +92,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		$row['smilie_preview'] = "<img src=\"".$row['smilie_image']."\" alt=\"".$row['smilie_text']."\" />";
 		$row['smilie_img'] = @getimagesize($row['smilie_image']);
 		if ($row['smilie_img'])
-			{ $row['smilie_size'] = $row['smilie_img'][0]."x".$row['smilie_img'][1]." &nbsp;"; }
+			{ $row['smilie_size'] = $row['smilie_img'][0]."x".$row['smilie_img'][1]; }
 		else
 			{ $row['smilie_size'] = "?"; }
 		}

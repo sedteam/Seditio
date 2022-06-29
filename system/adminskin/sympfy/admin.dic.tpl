@@ -38,19 +38,19 @@
 					
 					<div class="table-row resp-table-row">
 					
-						<div class="table-td text-left resp-table-td dic-id">
+						<div class="table-td text-left resp-table-td dic-id" data-label="{PHP.L.Id}">
 							{DIC_LIST_ID}
 						</div>
 						
-						<div class="table-td text-left resp-table-td dic-title">
+						<div class="table-td text-left resp-table-td dic-title" data-label="{PHP.L.Title}">
 							<a href="{DIC_LIST_URL}">{DIC_LIST_TITLE}</a>
 						</div>	
 						
-						<div class="table-td text-left resp-table-td dic-code">
+						<div class="table-td text-left resp-table-td dic-code" data-label="{PHP.L.adm_dic_code}">
 							{DIC_LIST_CODE}
 						</div>
 						
-						<div class="table-td text-left resp-table-td dic-type">
+						<div class="table-td text-left resp-table-td dic-type" data-label="{PHP.L.Type}">
 							{DIC_LIST_TYPE}
 						</div>
 						
@@ -190,7 +190,7 @@
 				
 				</div>
 				
-				<div class="table-btn text-left">
+				<div class="table-btn text-center">
 					<button type="submit" class="submit btn">{PHP.L.Add}</button>
 				</div>	
 			
@@ -329,7 +329,7 @@
 			
 			</div>
 			
-			<div class="table-btn text-left">
+			<div class="table-btn text-center">
 				<button type="submit" class="submit btn">{PHP.L.Update}</button>
 			</div>	
 
@@ -378,29 +378,29 @@
 
 					<div class="table-row resp-table-row">
 						
-						<div class="table-td text-center resp-table-td">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.Id}">
 							{TERM_LIST_ID}
 						</div>
 						
-						<div class="table-td text-left resp-table-td">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_dic_term_title}">
 							{TERM_LIST_TITLE}
 						</div>	
 						
-						<div class="table-td text-center resp-table-td">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_dic_term_value}">
 							{TERM_LIST_CODE}
 						</div>
 						
-						<div class="table-td text-center resp-table-td">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_dic_children}">
 							{TERM_LIST_CHILDRENDIC}
 						</div>
 						
-						<div class="table-td text-center resp-table-td">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_dic_term_defval}">
 							<!-- BEGIN: TERM_DEFAULT -->
 								<i class="ic-check"></i>
 							<!-- END: TERM_DEFAULT -->
 						</div>
 						
-						<div class="table-td text-center resp-table-td">
+						<div class="table-td text-left resp-table-td dic-actions">
 							<a href="{TERM_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a>
 							<a href="{TERM_LIST_EDIT_URL}" title="{PHP.L.Edit}" class="btn btn-small"><i class="ic-edit"></i></a>
 						</div>
@@ -464,7 +464,7 @@
 				
 				</div>
 				
-				<div class="table-btn text-left">
+				<div class="table-btn text-center">
 					<button type="submit" class="submit btn">{PHP.L.Update}</button>
 				</div>
 			
@@ -538,7 +538,7 @@
 
 			</div>
 			
-			<div class="table-btn text-left">
+			<div class="table-btn text-center">
 				<button type="submit" class="submit btn">{PHP.L.Update}</button>
 			</div>
 
@@ -623,7 +623,7 @@
 			
 			</div>
 			
-			<div class="table-btn text-left">
+			<div class="table-btn text-center">
 				<button type="submit" class="submit btn">{DIC_EXTRA_SUBMIT_NAME}</button>
 			</div>
 		
