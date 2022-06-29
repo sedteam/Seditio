@@ -1,14 +1,8 @@
 (function ($) {
-
-	$(document).on('click', '.openTools', function() {
-	  $(this).closest('.admTools').toggleClass('open');
-	});	  
-	
 	tooltip = $("<div class='adm-tooltip'></div>").appendTo($('body'));    
 	$(document).on('mouseleave', '.adm-tooltip', function(){tooltipcanclose=true;setTimeout("close_tooltip();", 300);});
 	$(document).on('mouseover', '.adm-tooltip', function(){tooltipcanclose=false;});
-	$('[data-page], [data-category], [data-config]').on('mouseover', show_tooltip);
-	
+	$('[data-page], [data-category], [data-config]').on('mouseover', show_tooltip);	
 })(jQuery);
 
 function show_tooltip()

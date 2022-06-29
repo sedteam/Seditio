@@ -204,8 +204,8 @@ var seditio 				  	= [];
 		}
 	); 
 	
-	
-	$('.spoiler-jump').click(function(e){ // при клике по заголовку спойлера		
+	/* click on spoiler header */		
+	$('.spoiler-jump').click(function(e){ 
 		e.preventDefault();
 		$(this).closest('.spoiler-container').toggleClass('active');		
 		if ($(this).closest('.spoiler-container').hasClass('active'))
@@ -227,6 +227,10 @@ var seditio 				  	= [];
 		  }
 	});
 	
+	/* user menu */
+	$('.openTools').on('click', function () {
+	  $(this).closest('.admTools').toggleClass('open');
+	});	 
 	
   },
   $(document).ready(t)

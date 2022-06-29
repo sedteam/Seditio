@@ -9,6 +9,10 @@ html {
 body {
 	color: #555;
 	background: #ecedf0;
+	background: -moz-linear-gradient(120deg, rgba(236,237,240,1) 0%, rgba(255,255,255,0) 100%);
+	background: -webkit-linear-gradient(120deg, rgba(236,237,240,1) 0%, rgba(255,255,255,0) 100%);
+	background: linear-gradient(120deg, rgba(236,237,240,1) 0%, rgba(255,255,255,0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ecedf0",endColorstr="#ffffff",GradientType=1);
 	font-size: 0.85em;
 	font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
 	height:100%;
@@ -251,6 +255,11 @@ a.remove-link:hover {
 
 #sidebar #sidebar-wrapper {
 	margin: 0;
+	background: rgb(0,0,0);
+	background: -moz-linear-gradient(120deg, rgba(0,0,0,0.40379901960784315) 0%, rgba(255,255,255,0) 100%);
+	background: -webkit-linear-gradient(120deg, rgba(0,0,0,0.40379901960784315) 0%, rgba(255,255,255,0) 100%);
+	background: linear-gradient(120deg, rgba(0,0,0,0.40379901960784315) 0%, rgba(255,255,255,0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#ffffff",GradientType=1);
 }
 
 #sidebar a,
