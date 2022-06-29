@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/uploader/uploader.ajax.php
 Version=178
-Updated=2021-jun-23
+Updated=2022-jun-29
 Type=Plugin
 Author=Amro
 Description=
@@ -106,7 +106,22 @@ else
   }  
   
 */
-  
+
+$sql_total = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='".$usr['id']."'");
+$pfs_totalsize = sed_sql_result($sql_total, 0, "SUM(pfs_size)");
+
+$user_info = sed_userinfo($usr['id']);
+$maingroup = ($usr['id'] == 0) ? 5 : $user_info['user_maingrp'];
+
+$sql = sed_sql_query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
+if ($row = sed_sql_fetchassoc($sql))
+	{
+	$maxfile = $row['grp_pfs_maxfile'];
+	$maxtotal = $row['grp_pfs_maxtotal'];
+	}
+else
+	{ exit; }
+
 $filename = sed_newname($usr['id']."-".$upl_filename, TRUE);
 
 if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'].$filename))
@@ -118,17 +133,24 @@ $allow_extension = array('gif','png','jpg','jpeg','bmp');
 $extension_arr = explode(".", $filename);
 $f_extension = end($extension_arr); 
 
-if (in_array($f_extension, $allow_extension) == FALSE)  { exit; }  
- 
-if (!file_exists($cfg['pfs_dir'].$filename))
+if (in_array($f_extension, $allow_extension) == FALSE)  
 	{
-	$bytes = file_put_contents($cfg['pfs_dir'].$filename, file_get_contents('php://input'));
+		$disp_errors = "Bad file extension";
+	}	 
+elseif (!file_exists($cfg['pfs_dir'].$filename))
+	{
+	$u_size = file_put_contents($cfg['pfs_dir'].$filename, file_get_contents('php://input'));
 	$imgsize = @getimagesize($cfg['pfs_dir'].$filename);
 
 	if(!isset($imgsize) || !isset($imgsize['mime']) || !in_array($imgsize['mime'], array('image/jpeg', 'image/png', 'image/gif')))
 		{
+		$disp_errors = "File is not image!";
 		unlink($cfg['pfs_dir'].$filename);
-		exit;
+		}
+	elseif ((($pfs_totalsize + $u_size) > $maxtotal * 1024) || ($u_size > ($maxfile * 1024)))
+		{
+		$disp_errors = $L['pfs_filetoobigorext'];
+		unlink($cfg['pfs_dir'].$filename);		
 		}
 	else 
 		{
@@ -190,7 +212,17 @@ if (!file_exists($cfg['pfs_dir'].$filename))
 		sed_sm_createthumb($cfg['pfs_dir'].$filename, $cfg['th_dir'].$filename, $cfg['th_x'], $cfg['th_y'], $cfg['th_jpeg_quality'], "resize", TRUE);
 		}
 	}
+else {
+	$disp_errors = $L['pfs_fileexists'];
+}
 
-echo $filename;
+$res = new stdClass;
+$res->filename = $filename;
+$res->error = $disp_errors;
+header("Content-type: application/json; charset=UTF-8");
+header("Cache-Control: must-revalidate");
+header("Pragma: no-cache");
+header("Expires: -1");		
+print json_encode($res);
 
 ?>

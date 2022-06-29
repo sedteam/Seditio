@@ -130,3 +130,8 @@
 #uploader .DragAndDropHover {
 	border: 2px dashed #777 !important;
 }
+
+#uploader .upl_errors {
+	color: #ff3b00;
+    font-size: 0.85em;
+}

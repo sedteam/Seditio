@@ -120,7 +120,9 @@
 			});			
 			
 			$(this).parent().fadeOut("slow", function() {
+				
 				$(this).remove();
+				$(holdername).parent().find('.upl_errors').text("");
 				
 				if(jQuery.data(holdername, "already_uploaded")-1 > 0) {
 					changeMain(holdername, settings);
@@ -152,7 +154,7 @@
 			});	
 		});
 		
-		if(settings.sed_uploader_use_dragndrop)
+		if (settings.sed_uploader_use_dragndrop)
 		{
 			var holder = document.getElementById($(holdername).attr("id")+"DDArea");
 			holder.ondragover = function () { $(".uploadButton").addClass("DragAndDropHover"); return false; };
@@ -168,7 +170,7 @@
     };
 
 	function changeMain(holder, settings) {
-		if(settings.sed_uploader_use_main) 
+		if (settings.sed_uploader_use_main) 
 		{
 			$(holder).find(".multibox").removeClass("main");
 			$(holder).find(".multibox").first().addClass("main");
@@ -217,25 +219,32 @@
 		{
 			var rotation_html = "";
 			if (xhr.readyState == 4) 
-			{
-				if(settings.sed_uploader_use_rotation == true) {
-					rotation_html = "<div class='rotate_picture' degree-lvl='1'>"+settings.sed_uploader_file_rotation_label+"</div>";
-				}
-				$(clone).html("<div class='picture_insert'></div><div class='picture_delete'>"+settings.sed_uploader_file_delete_label+"</div>"+rotation_html+"<img src='"+settings.sed_uploader_thumbnail_path+"/"+xhr.responseText+"' alt='' onerror=this.src='"+settings.sed_uploader_path+"/images/no-image.jpg' class='picture_uploaded'/> <input type='hidden' value='"+xhr.responseText+"' name='"+settings.sed_uploader_field_name+"[]' />");
-				$(clone).attr('id', xhr.responseText);
-				$(clone).attr('filename', xhr.responseText);
-				jQuery.data(holder, "counter", jQuery.data(holder, "counter")+1);
-				if(jQuery.data(holder, "count") == jQuery.data(holder, "counter")) 
-				{
-					if (typeof settings.sed_uploader_finished == 'function') { 
-						settings.sed_uploader_finished();
+			{				
+				var response = JSON.parse(xhr.responseText);
+				if (response.error == "" || response.error == null)
+				{					
+					if (settings.sed_uploader_use_rotation == true) {
+						rotation_html = "<div class='rotate_picture' degree-lvl='1'>"+settings.sed_uploader_file_rotation_label+"</div>";
 					}
-					changeMain(holder, settings);
-					jQuery.data(holder, "counter", 0);
-					if(settings.sed_uploader_hide_in_progress == true) {
-						jQuery.data(holder, 'currently_uploading', 0);
-						$(holder).parent().find('.uploadButton').show();
-					}
+					$(clone).html("<div class='picture_insert'></div><div class='picture_delete'>"+settings.sed_uploader_file_delete_label+"</div>"+rotation_html+"<img src='"+settings.sed_uploader_thumbnail_path+"/"+response.filename+"' alt='' onerror=this.src='"+settings.sed_uploader_path+"/images/no-image.jpg' class='picture_uploaded'/> <input type='hidden' value='"+response.filename+"' name='"+settings.sed_uploader_field_name+"[]' />");
+					$(clone).attr('id', response.filename);
+					$(clone).attr('filename', response.filename);
+					jQuery.data(holder, "counter", jQuery.data(holder, "counter")+1);
+					if(jQuery.data(holder, "count") == jQuery.data(holder, "counter")) 
+						{
+							if (typeof settings.sed_uploader_finished == 'function') { 
+								settings.sed_uploader_finished();
+							}
+							changeMain(holder, settings);
+							jQuery.data(holder, "counter", 0);
+							if (settings.sed_uploader_hide_in_progress == true) {
+								jQuery.data(holder, 'currently_uploading', 0);
+								$(holder).parent().find('.uploadButton').show();
+							}
+						}
+				} else {
+					$(clone).remove();
+					$(holder).parent().find(".upl_errors").text(response.error);
 				}
 			}
 		}
@@ -261,6 +270,7 @@ function getHtml(name, add_image, add_label, path)
 			<br/><br/>'+add_label+'\
 			</div>\
 			<input type="file" class="'+name+'Input sed_uploaderFileInput" accept="image/*" multiple/>\
-			<div class="clear"> </div>\
+			<div class="clear"></div>\
+			<div class="upl_errors"></div>\
 		</div>';
 }
