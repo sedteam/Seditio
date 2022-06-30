@@ -858,7 +858,27 @@ var sedjs = {
 	   str = str.replace( new RegExp( "[^"+slash+"0-9a-z_\\-]+", "g"), "");
 
 	   to.value = str;
+	},
+	
+	/*= Auto set file title from file name without extension
+	-------------------------------------*/		
+	autofiletitle : function() 
+	{
+		var fileUpload = document.getElementsByClassName('file');
+		for (var i = 0; i < fileUpload.length; i++) {
+			fileUpload[i].onchange = function () {
+				var filename = this.value;	
+				var inputFileTitleName = this.name.replace('userfile', 'ntitle');
+				var k = filename.split('\\').pop().split('/').pop();
+				var a = k.split(".");
+				if (a.length === 1 || (a[0] === "" && a.length === 2)) {
+					return "";
+				}
+				document.getElementsByName(inputFileTitleName)[0].value = a[0];  	
+			}
+		}
 	}
+	
 }
 
 function addLoadEvent(funct) {
@@ -875,6 +895,7 @@ function addLoadEvent(funct) {
 
 onloadfunct = function(){ 
 	sedjs.sedtabs();
+	sedjs.autofiletitle();
 //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
 	sedjs.getrel("sedthumb");
 	var cookie = sedjs.readCookie("style");  
