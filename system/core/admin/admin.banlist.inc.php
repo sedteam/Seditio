@@ -85,8 +85,8 @@ while ($row = sed_sql_fetchassoc($sql))
 		"BANLIST_EDIT_DELETE_URL" => sed_url("admin", "m=banlist&a=delete&id=".$banlist_id."&".sed_xg()),
 		"BANLIST_EDIT_EXPIRE" => ($banlist_expire > 0) ? date($cfg['dateformat'], $banlist_expire)." GMT" : $L['adm_neverexpire'], 
 		"BANLIST_EDIT_IP" => sed_textbox('rbanlistip', $banlist_ip, 14, 16),
-		"BANLIST_EDIT_EMAIL_MASK" => sed_textbox('rbanlistemail', $banlist_email, 10, 64),
-		"BANLIST_EDIT_REASON" => sed_textbox('rbanlistreason', $banlist_reason, 18, 64)
+		"BANLIST_EDIT_EMAIL_MASK" => sed_textbox('rbanlistemail', $banlist_email, 24, 64),
+		"BANLIST_EDIT_REASON" => sed_textbox('rbanlistreason', $banlist_reason, 48, 64)
 	));
 
 	$t -> parse("ADMIN_BANLIST.BANLIST_EDIT_LIST");

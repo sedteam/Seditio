@@ -23,36 +23,64 @@
 		</div>
 
 		<!-- END: COMMENTS_PAGINATION_TP -->
+		
+		<div class="table cells striped resp-table">
+			
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-center" style="width:20px">{PHP.L.Delete}</div>
+					<div class="table-th coltop text-left" style="width:20px">#</div>			
+					<div class="table-th coltop text-left" style="width:40px">{PHP.L.Code}</div>
+					<div class="table-th coltop text-left">{PHP.L.Author}</div>
+					<div class="table-th coltop text-left" style="width:128px;">{PHP.L.Date}</div>
+					<div class="table-th coltop text-left">{PHP.L.Comment}</div>
+					<div class="table-th coltop text-center" style="width:20px">{PHP.L.Open}</div>					
+				</div>
+			</div>
+				
+			<div class="table-body resp-table-body">		
 
-		<table class="cells striped">
-			<tr>
-				<th style="width:40px;" class="coltop">{PHP.L.Delete}</th>
-				<th style="width:40px;" class="coltop">#</th>
-				<th style="width:40px;" class="coltop">{PHP.L.Code}</th>
-				<th class="coltop">{PHP.L.Author}</th>
-				<th style="width:128px;" class="coltop">{PHP.L.Date}</th>
-				<th class="coltop">{PHP.L.Comment}</th>
-				<th style="width:64px;" class="coltop">{PHP.L.Open}</th>
-			</tr>
+				<!-- BEGIN: COMMENTS_LIST -->
 
-			<!-- BEGIN: COMMENTS_LIST -->
+				<div class="table-row resp-table-row">
+				
+					<div class="table-td text-center resp-table-td banlist-action">
+						<a href="{COMMENTS_LIST_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a>
+					</div>
+					
+					<div class="table-td text-left resp-table-td banlist-until" data-label="#">
+						{COMMENTS_LIST_ID}
+					</div>
 
-			<tr>
-				<td style="text-align:center;"><a href="{COMMENTS_LIST_DELETE_URL}" class="btn btn-small"><i class="ic-trash"></i></a></td>
-				<td style="text-align:center;">{COMMENTS_LIST_ID}</td>
-				<td style="text-align:center;">{COMMENTS_LIST_CODE}</td>
-				<td>{COMMENTS_LIST_AUTHOR}</td>
-				<td style="text-align:center;">{COMMENTS_LIST_DATE}</td>
-				<td>{COMMENTS_LIST_TEXT}</td>
-				<td style="text-align:center;"><a href="{COMMENTS_LIST_OPEN_URL}" class="btn btn-small"><i class="ic-arrow-right"></i></a></td>
-			</tr>
+					<div class="table-td text-left resp-table-td banlist-until" data-label="{PHP.L.Code}">
+						{COMMENTS_LIST_CODE}
+					</div>
 
-			<!-- END: COMMENTS_LIST -->
+					<div class="table-td text-left resp-table-td banlist-until" data-label="{PHP.L.Author}">
+						{COMMENTS_LIST_AUTHOR}
+					</div>
 
-			<tr>
-				<td colspan="7">{PHP.L.Total} : {COMMENTS_TOTAL}</td>
-			</tr>
-		</table>
+					<div class="table-td text-left resp-table-td banlist-until" data-label="{PHP.L.Date}">
+						{COMMENTS_LIST_DATE}
+					</div>
+					
+					<div class="table-td text-left resp-table-td banlist-until" data-label="{PHP.L.Comment}">
+						{COMMENTS_LIST_TEXT}
+					</div>
+					
+					<div class="table-td text-left resp-table-td banlist-until">
+						<a href="{COMMENTS_LIST_OPEN_URL}" class="btn btn-small"><i class="ic-arrow-right"></i></a>
+					</div>					
+				
+				</div>
+
+				<!-- END: COMMENTS_LIST -->
+			
+			</div>
+			
+		</div>
+
+		<div style="padding:10px 10px;">{PHP.L.Total} : {COMMENTS_TOTAL}</div>
 
 		<!-- BEGIN: COMMENTS_PAGINATION_BM -->
 		

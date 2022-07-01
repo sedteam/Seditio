@@ -252,10 +252,12 @@
 	
 	.dic-actions,
 	.smilies-action,
-	.menu-action {
+	.menu-action,
+	.banlist-action	{
 		position: absolute;
 		right:0;
 		top: 10px;
+		z-index: 10;
 	}
 	
 	.modules-row {
