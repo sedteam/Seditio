@@ -14,64 +14,122 @@
     	<div class="clear"></div>					
     </div> 
     
-    <div class="content-box-content">
-
-		<table class="cells striped">
-			<tr>
-				<td style="width:33%;">{PHP.L.Code}:</td>
-				<td>{PLUG_DETAILS_CODE}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Description}:</td>
-				<td>{PLUG_DETAILS_DESC}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Version}:</td>
-				<td>{PLUG_DETAILS_VERSION}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Date}:</td>
-				<td>{PLUG_DETAILS_DATE}</td>
-			</tr>
-			<!-- BEGIN: PLUG_DETAILS_CONFIG -->
-			<tr>
-				<td>{PHP.L.Configuration}:</td>
-				<td><a href="{PLUG_DETAILS_CONFIG_URL}"><i class="ic-settings"></i></a></td>
-			</tr>
-			<!-- END: PLUG_DETAILS_CONFIG -->
-			<tr>
-				<td>{PHP.L.Rights}:</td>
-				<td><a href="{PLUG_DETAILS_RIGHTS_URL}"><i class="ic-lock"></i></a></td>
-			</tr>
-			<tr>
-				<td>{PHP.L.adm_defauth_guests}:</td>
-				<td>{PLUG_DETAILS_DEFAUTH_GUESTS}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.adm_deflock_guests}:</td>
-				<td>{PLUG_DETAILS_DEFLOCK_GUESTS}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.adm_defauth_members}:</td>
-				<td>{PLUG_DETAILS_DEFAUTH_MEMBERS}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.adm_deflock_members}:</td>
-				<td>{PLUG_DETAILS_DEFLOCK_MEMBERS}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Author}:</td>
-				<td>{PLUG_DETAILS_AUTHOR}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Copyright}:</td>
-				<td>{PLUG_DETAILS_COPYRIGHT}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Notes}:</td>
-				<td>{PLUG_DETAILS_NOTES}</td>
-			</tr>
-		</table>
+    <div class="content-box-content content-table">
+	
+		<div class="table cells striped resp-table">
+		
+			<div class="table-body resp-table-body">
+			
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title" style="width:33%;">
+						{PHP.L.Code} :
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_CODE}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Description}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_DESC}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Version}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_VERSION}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Date}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_DATE}
+					</div>
+				</div>
+				<!-- BEGIN: PLUG_DETAILS_CONFIG -->
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Configuration}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						<a href="{PLUG_DETAILS_CONFIG_URL}"><i class="ic-settings"></i></a>
+					</div>
+				</div>
+				<!-- END: PLUG_DETAILS_CONFIG -->
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Rights}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						<a href="{PLUG_DETAILS_RIGHTS_URL}"><i class="ic-lock"></i></a>
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.adm_defauth_guests}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_DEFAUTH_GUESTS}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.adm_deflock_guests}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_DEFLOCK_GUESTS}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.adm_defauth_members}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_DEFAUTH_MEMBERS}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.adm_deflock_members}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_DEFLOCK_MEMBERS}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Author}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_AUTHOR}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Copyright}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_COPYRIGHT}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.Notes}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_NOTES}
+					</div>
+				</div>
+				
+			</div>	
+			
+		</div>
     
 	</div>
 
@@ -84,26 +142,48 @@
 		<div class="clear"></div>					
 	</div> 
 
-    <div class="content-box-content">
+    <div class="content-box-content content-table">
 
-		<table class="cells striped">
-			<tr>
-				<td style="width:33%;"><a href="{PLUG_DETAILS_INSTALL_URL}" title="{PHP.L.adm_opt_installall}"><img src="system/img/admin/play.png" alt="" /> {PHP.L.adm_opt_installall}</a></td>
-				<td>{PHP.L.adm_opt_installall_explain}</td>
-			</tr>
-			<tr>
-				<td><a href="{PLUG_DETAILS_UNINSTALL_URL}" title="{PHP.L.adm_opt_uninstallall}"><img src="system/img/admin/stop.png" alt="" /> {PHP.L.adm_opt_uninstallall}</a></td>
-				<td>{PHP.L.adm_opt_uninstallall_explain}</td>
-			</tr>
-			<tr>
-				<td><a href="{PLUG_DETAILS_PAUSE_URL}" title="{PHP.L.adm_opt_pauseall}"><img src="system/img/admin/pause.png" alt="" /> {PHP.L.adm_opt_pauseall}</a></td>
-				<td>{PHP.L.adm_opt_pauseall_explain}</td>
-			</tr>
-			<tr>
-				<td><a href="{PLUG_DETAILS_UNPAUSE_URL}" title="{PHP.L.adm_opt_unpauseall}"><img src="system/img/admin/forward.png" alt="" /> {PHP.L.adm_opt_unpauseall}</a></td>
-				<td>{PHP.L.adm_opt_unpauseall_explain}</td>
-			</tr>
-		</table>
+		<div class="table cells striped resp-table">
+		
+			<div class="table-body resp-table-body">
+			
+				<div class="table-row resp-table-row">				
+					<div class="table-td text-left resp-table-td" style="width:33%;">
+						<a href="{PLUG_DETAILS_INSTALL_URL}" title="{PHP.L.adm_opt_installall}"><img src="system/img/admin/play.png" alt="" /> {PHP.L.adm_opt_installall}</a>
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PHP.L.adm_opt_installall_explain}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td">
+						<a href="{PLUG_DETAILS_UNINSTALL_URL}" title="{PHP.L.adm_opt_uninstallall}"><img src="system/img/admin/stop.png" alt="" /> {PHP.L.adm_opt_uninstallall}</a>
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PHP.L.adm_opt_uninstallall_explain}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td">
+						<a href="{PLUG_DETAILS_PAUSE_URL}" title="{PHP.L.adm_opt_pauseall}"><img src="system/img/admin/pause.png" alt="" /> {PHP.L.adm_opt_pauseall}</a>
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PHP.L.adm_opt_pauseall_explain}
+					</div>
+				</div>
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td">
+						<a href="{PLUG_DETAILS_UNPAUSE_URL}" title="{PHP.L.adm_opt_unpauseall}"><img src="system/img/admin/forward.png" alt="" /> {PHP.L.adm_opt_unpauseall}</a>
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PHP.L.adm_opt_unpauseall_explain}
+					</div>
+				</div>
+			
+			</div>
+			
+		</div>
     
 	</div>
 
@@ -116,51 +196,63 @@
 		<div class="clear"></div>					
 	</div> 
     
-    <div class="content-box-content">    
+    <div class="content-box-content content-table">    
 
-		<table class="cells striped">
-
-			<thead>
-			<tr>
-				<th class="coltop" colspan="2">{PHP.L.adm_part}</th>
-				<th class="coltop">{PHP.L.File}</th>
-				<th class="coltop">{PHP.L.Hooks}</th>
-				<th class="coltop">{PHP.L.Order}</th>
-				<th class="coltop">{PHP.L.Status}</th>
-				<th class="coltop">{PHP.L.Action}</th>
-			</tr>
-			</thead>
-
-			<!-- BEGIN: PLUG_PARTS_LIST -->
-	
-			<!-- BEGIN: PLUG_PARTS_ERROR -->
-		
-			<tr>
-				<td style="width:32px;">#{PARTS_LIST_NUMBER}</td>
-				<td>-</td>
-				<td>{PARTS_LIST_FILE}</td>				
-				<td colspan="4">{PARTS_LIST_ERROR}</td>
-			</tr>
-		
-			<!-- END: PLUG_PARTS_ERROR -->
-
-			<!-- BEGIN: PLUG_PARTS -->
-		
-			<tr>
-				<td style="width:32px;">#{PARTS_LIST_NUMBER}</td>
-				<td>{PARTS_LIST_PART}</td>
-				<td>{PARTS_LIST_FILE}.php</td>
-				<td>{PARTS_LIST_HOOKS}</td>				
-				<td style="text-align:center;">{PARTS_LIST_ORDER}</td>				
-				<td style="text-align:center;">{PARTS_LIST_STATUS}</td>
-				<td style="text-align:center;">{PARTS_LIST_ACTION}</td>
-			</tr>
+			<div class="table cells striped resp-table">
+			
+				<div class="table-head resp-table-head">
+					<div class="table-row resp-table-row">
+						<div class="table-th coltop text-left" style="width:20px">#</div>	
+						<div class="table-th coltop text-left" style="width:100px">{PHP.L.Part}</div>		
+						<div class="table-th coltop text-left">{PHP.L.File}</div>
+						<div class="table-th coltop text-left">{PHP.L.Hooks}</div>
+						<div class="table-th coltop text-left">{PHP.L.Order}</div>
+						<div class="table-th coltop text-left">{PHP.L.Status}</div>
+						<div class="table-th coltop text-left">{PHP.L.Action}</div>
+					</div>
+				</div>
 				
-			<!-- END: PLUG_PARTS -->
-				
-			<!-- END: PLUG_PARTS_LIST -->
+				<div class="table-body resp-table-body">
 
-		</table>
+				<!-- BEGIN: PLUG_PARTS_LIST -->
+		
+				<!-- BEGIN: PLUG_PARTS_ERROR -->
+			
+				<div class="table-row resp-table-row">
+					
+					<div class="table-td text-left resp-table-td plug-part" data-label="#">{PARTS_LIST_NUMBER}</div>
+					<div class="table-td text-left resp-table-td plug-part" data-label="{PHP.L.Part}">-</div>
+					<div class="table-td text-left resp-table-td plug-file" data-label="{PHP.L.File}">{PARTS_LIST_FILE}</div>
+					<div class="table-td text-left resp-table-td plug-hooks" data-label="">-</div>
+					<div class="table-td text-left resp-table-td plug-order" data-label="">-</div>
+					<div class="table-td text-left resp-table-td plug-error" data-label="">{PARTS_LIST_ERROR}</div>
+					<div class="table-td text-left resp-table-td plug-action" data-label=""></div>
+
+				</div>
+			
+				<!-- END: PLUG_PARTS_ERROR -->
+
+				<!-- BEGIN: PLUG_PARTS -->
+			
+				<div class="table-row resp-table-row">
+					
+					<div class="table-td text-left resp-table-td plug-part" data-label="#">#{PARTS_LIST_NUMBER}</div>
+					<div class="table-td text-left resp-table-td plug-part" data-label="{PHP.L.Part}">{PARTS_LIST_PART}</div>
+					<div class="table-td text-left resp-table-td plug-file" data-label="{PHP.L.File}">{PARTS_LIST_FILE}.php</div>
+					<div class="table-td text-left resp-table-td plug-hooks" data-label="{PHP.L.Hooks}">{PARTS_LIST_HOOKS}</div>
+					<div class="table-td text-left resp-table-td plug-order" data-label="{PHP.L.Order}">{PARTS_LIST_ORDER}</div>
+					<div class="table-td text-left resp-table-td plug-status" data-label="{PHP.L.Status}">{PARTS_LIST_STATUS}</div>
+					<div class="table-td text-left resp-table-td plug-action">{PARTS_LIST_ACTION}</div>
+
+				</div>				
+				
+				<!-- END: PLUG_PARTS -->
+					
+				<!-- END: PLUG_PARTS_LIST -->
+				
+			</div>
+
+		</div>
     
 	</div>
 
@@ -173,28 +265,33 @@
     	<div class="clear"></div>					
     </div>
     
-    <div class="content-box-content">     
+    <div class="content-box-content content-table">     
 
-		<table class="cells striped">
+		<div class="table cells striped resp-table">
+		
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left" style="width:20px">#</div>
+					<div class="table-th coltop text-left" style="width:100px">{PHP.L.Part}</div>		
+					<div class="table-th coltop text-left">{PHP.L.Files} / {PHP.L.Tags}</div>
+				</div>
+			</div>
 			
-			<thead>
-			<tr>
-				<th class="coltop" colspan="2">{PHP.L.Part}</th>
-				<th class="coltop">{PHP.L.Files} / {PHP.L.Tags}</th>
-			</tr>
-			</thead>
+			<div class="table-body resp-table-body">
+						
+				<!-- BEGIN: TAGS_LIST -->
+				
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td plug-part" data-label="#">#{TAGS_LIST_NUMBER}</div>
+					<div class="table-td text-left resp-table-td plug-part" data-label="{PHP.L.Part}">{TAGS_LIST_PART}</div>
+					<div class="table-td text-left resp-table-td plug-part" data-label="{PHP.L.Files} / {PHP.L.Tags}">{TAGS_LIST_BODY}</div>
+				</div>	
+				
+				<!-- END: TAGS_LIST -->
+				
+			</div>
 			
-			<!-- BEGIN: TAGS_LIST -->
-			
-			<tr>
-				<td style="width:32px;">#{TAGS_LIST_NUMBER}</td>
-				<td>{TAGS_LIST_PART}</td>
-				<td>{TAGS_LIST_BODY}</td>
-			</tr>	
-			
-			<!-- END: TAGS_LIST -->
-			
-		</table>
+		</div>
     
     </div>
 
@@ -209,62 +306,69 @@
   	<div class="clear"></div>					
   </div>    
     
-  <div class="content-box-content">  
-
-	<table class="cells striped">
+  <div class="content-box-content content-table">  
+  
+	<div class="table cells striped resp-table">
 	
-		<thead>
-		<tr>
-			<th class="coltop">{PHP.L.Plugins} {PHP.L.adm_clicktoedit}</th>
-			<th class="coltop">{PHP.L.Code}</th>
-			<th class="coltop">{PHP.L.Version}</th>
-			<th class="coltop">{PHP.L.Status} ({PHP.L.Parts})</th>
-			<th class="coltop">{PHP.L.Configuration}</th>
-			<th class="coltop" style="width:50px;">{PHP.L.Rights}</th>
-			<th class="coltop" style="width:50px;">{PHP.L.Open}</th>
-		</tr>
-		</thead>
+		<div class="table-head resp-table-head">
+			<div class="table-row resp-table-row">
+				<div class="table-th coltop text-left">{PHP.L.Plugins} {PHP.L.adm_clicktoedit}</div>	
+				<div class="table-th coltop text-left">{PHP.L.Code}</div>		
+				<div class="table-th coltop text-left">{PHP.L.Version}</div>
+				<div class="table-th coltop text-left">{PHP.L.Status} ({PHP.L.Parts})</div>
+				<div class="table-th coltop text-center" style="width:50px;">{PHP.L.Configuration}</div>
+				<div class="table-th coltop text-center" style="width:50px;">{PHP.L.Rights}</div>
+				<div class="table-th coltop text-center" style="width:50px;">{PHP.L.Open}</div>
+			</div>
+		</div>
+		
+		<div class="table-body resp-table-body">  
 	
-	<!-- BEGIN: PLUG_LIST-->
-	
-	<!-- BEGIN: PLUG_LIST_ERROR-->
-
-		<tr>
-			<td>{PLUG_LIST_CODE}</td>
-			<td colspan="7">{PLUG_LIST_ERROR}</td>
-		</tr>
-
-	<!-- END: PLUG_LIST_ERROR-->
-	
-		<tr>
-			<td><a href="{PLUG_LIST_DETAILS_URL}"><span class="icon"><i class="ic-plug ic-{PLUG_LIST_CODE}"></i></span> {PLUG_LIST_NAME}</a></td>
-			<td>{PLUG_LIST_CODE}</td>
-			<td style="text-align:center;">{PLUG_LIST_VERSION}</td>
-			<td style="text-align:center;">{PLUG_LIST_STATUS} {PLUG_LIST_PARTS_COUNT}</td>
-			<td style="text-align:center;">
+		<!-- BEGIN: PLUG_LIST-->
+		
+		<!-- BEGIN: PLUG_LIST_ERROR-->
+		
+			<div class="table-row resp-table-row">
 				
-				<!-- BEGIN: PLUG_LIST_CONFIG-->
-			
-				<a href="{PLUG_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
-			
-				<!-- END: PLUG_LIST_CONFIG-->
-			
-			</td>
-			<td style="text-align:center;"><a href="{PLUG_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a></td>
-			<td style="text-align:center;">
-				
-				<!-- BEGIN: PLUG_LIST_OPEN-->			
-				
-				<a href="{PLUG_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a>
-			
-				<!-- END: PLUG_LIST_OPEN-->
-			
-			</td>
-		</tr>	
-	
-	<!-- END: PLUG_LIST-->
+				<div class="table-td text-left resp-table-td plug-name" data-label="{PHP.L.Code}">{PLUG_LIST_CODE}</div>
+				<div class="table-td text-left resp-table-td plug-error" data-label="{PHP.L.Error}">{PLUG_LIST_ERROR}</div>
+				<div class="table-td text-left resp-table-td plug-version" data-label=""></div>
+				<div class="table-td text-left resp-table-td plug-status" data-label=""></div>
+				<div class="table-td text-center resp-table-td plug-config" data-label=""></div>
+				<div class="table-td text-center resp-table-td plug-right" data-label=""></div>
+				<div class="table-td text-center resp-table-td plug-open"></div>
 
-	</table>
+			</div>
+
+		<!-- END: PLUG_LIST_ERROR-->
+		
+			<div class="table-row resp-table-row">
+				
+				<div class="table-td text-left resp-table-td plug-name" data-label="{PHP.L.Plugins} {PHP.L.adm_clicktoedit}">
+					<a href="{PLUG_LIST_DETAILS_URL}"><span class="icon"><i class="ic-plug ic-{PLUG_LIST_CODE}"></i></span> {PLUG_LIST_NAME}</a>
+				</div>
+				<div class="table-td text-left resp-table-td plug-code" data-label="{PHP.L.Code}">{PLUG_LIST_CODE}</div>
+				<div class="table-td text-left resp-table-td plug-version" data-label="{PHP.L.Version}">{PLUG_LIST_VERSION}</div>
+				<div class="table-td text-left resp-table-td plug-status" data-label="{PHP.L.Status} ({PHP.L.Parts})">{PLUG_LIST_STATUS} {PLUG_LIST_PARTS_COUNT}</div>
+				<div class="table-td text-center resp-table-td plug-config" data-label="{PHP.L.Configuration}">
+					<!-- BEGIN: PLUG_LIST_CONFIG-->				
+					<a href="{PLUG_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>				
+					<!-- END: PLUG_LIST_CONFIG-->				
+				</div>
+				<div class="table-td text-center resp-table-td plug-right" data-label="{PHP.L.Rights}"><a href="{PLUG_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a></div>
+				<div class="table-td text-center resp-table-td plug-open" data-label="{PHP.L.Open}">
+					<!-- BEGIN: PLUG_LIST_OPEN-->								
+					<a href="{PLUG_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a>				
+					<!-- END: PLUG_LIST_OPEN-->				
+				</div>
+
+			</div>
+		
+		<!-- END: PLUG_LIST-->
+		
+		</div>
+
+	</div>
   
   </div>
   
@@ -278,33 +382,39 @@
 		<div class="clear"></div>					
 	</div>    
     
-	<div class="content-box-content">  
-
-	<table class="cells striped">
+	<div class="content-box-content content-table">  
 	
-	<thead>
-		<tr>
-			<th class="coltop">{PHP.L.Hooks}</th>
-			<th class="coltop">{PHP.L.Plugin}</th>
-			<th class="coltop" style="text-align:center;">{PHP.L.File}</th>
-			<th class="coltop" style="text-align:center;">{PHP.L.Order}</th>
-			<th class="coltop" style="text-align:center;">{PHP.L.Active}</th>
-		</tr>
-	</thead>
-
-	<!-- BEGIN: HOOK_LIST -->
+		<div class="table cells striped resp-table">
 		
-		<tr>
-			<td>{HOOK_LIST_HOOK}</td>
-			<td>{HOOK_LIST_PLUG_TITLE} ({HOOK_LIST_PLUG_CODE})</td>
-			<td>{HOOK_LIST_PLUG_FILE}</td>
-			<td style="text-align:center;">{HOOK_LIST_ORDER}</td>
-			<td style="text-align:center;">{HOOK_LIST_STATUS}</td>
-		</tr>
-		
-	<!-- END: HOOK_LIST -->
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left">{PHP.L.Hooks}</div>	
+					<div class="table-th coltop text-left">{PHP.L.Plugin}</div>		
+					<div class="table-th coltop text-left">{PHP.L.File}</div>
+					<div class="table-th coltop text-center" style="width:50px;">{PHP.L.Order}</div>
+					<div class="table-th coltop text-center" style="width:50px;">{PHP.L.Active}</div>
+				</div>
+			</div>
+			
+			<div class="table-body resp-table-body"> 	
 
-	</table>
+			<!-- BEGIN: HOOK_LIST -->
+				
+				<div class="table-row resp-table-row">
+				
+					<div class="table-td text-left resp-table-td plug-hook" data-label="{PHP.L.Hooks}">{HOOK_LIST_HOOK}</div>
+					<div class="table-td text-left resp-table-td plug-name" data-label="{PHP.L.Plugin}">{HOOK_LIST_PLUG_TITLE} ({HOOK_LIST_PLUG_CODE})</div>
+					<div class="table-td text-left resp-table-td plug-file" data-label="{PHP.L.File}">{HOOK_LIST_PLUG_FILE}</div>
+					<div class="table-td text-center resp-table-td plug-order" data-label="{PHP.L.Order}">{HOOK_LIST_ORDER}</div>
+					<div class="table-td text-center resp-table-td plug-active" data-label="{PHP.L.Active}">{HOOK_LIST_STATUS}</div>
+					
+				</div>
+				
+			<!-- END: HOOK_LIST -->
+			
+			</div>
+
+		</div>
   
 	</div>
 	

@@ -103,6 +103,8 @@ switch ($a)
 			{
 			$extplugin_file = SED_ROOT . "/plugins/".$pl."/".$x;
 			$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
+			
+			$info_file['Error'] = str_replace(SED_ROOT, "", $info_file['Error']);
 
 			if (!empty($info_file['Error']))
 				{			

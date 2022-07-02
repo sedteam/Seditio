@@ -191,7 +191,8 @@
 		display: block;
 	}
 	
-	.config-title {
+	.config-title,
+	.pl-title {
 		display: block;
 		width:100%;
 		font-weight: bold;
@@ -258,6 +259,23 @@
 		right:0;
 		top: 10px;
 		z-index: 10;
+	}
+	
+	.plug-action {
+		text-align: center!important;
+	}
+	
+	.plug-config,
+	.plug-right,
+	.plug-open {
+		text-align: left!important;
+		float:left;
+		width:33%;
+	}
+	
+	.plug-order,
+	.plug-active {
+		text-align: left!important;
 	}
 	
 	.modules-row {
