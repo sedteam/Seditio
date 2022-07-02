@@ -71,13 +71,21 @@ function resize($filename)
 	$preview_dir = $cfg['res_dir'];	
 	
 	list($original_file, $type, $width, $height, $set_watermark) = get_resize_params($filename);
+	$size = $width . 'x' . $height;
 	
-	if (!file_exists($originals_dir . $original_file) || empty($original_file))
+	if (!is_array($cfg['available_image_sizes'])) 
+		{
+			$cfg['available_image_sizes'] = (!empty($cfg['available_image_sizes'])) ? explode('|', $cfg['available_image_sizes']) : array();			
+		}	
+		
+	$check_ais = (count($cfg['available_image_sizes']) > 0) ? in_array($size, $cfg['available_image_sizes']) : TRUE;
+	
+	if (!file_exists($originals_dir . $original_file) || empty($original_file) || !$check_ais)
 		{ 
 		header("HTTP/1.1 404 Not Found");
 		exit;
 		}
-
+	
 	$resized_file = add_resize_params($original_file, $type, $width, $height, $set_watermark);
 
 	$watermark_offset_x = $cfg['watermark_offset_x'];

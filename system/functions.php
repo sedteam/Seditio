@@ -68,6 +68,8 @@ $cfg['versions_list'] = array (120, 121, 125, 126, 130, 150, 159, 160, 161, 162,
 $cfg['group_colors'] = array ('red', 'yellow', 'black', 'blue', 'white', 'green', 'gray', 'navy', 'darkmagenta', 'pink', 'cadetblue', 'linen', 'deepskyblue', 'inherit');
 $cfg['separator_symbol'] = "&raquo;";
 
+$cfg['available_image_sizes'] = array(); // array("800x600", "400x300");
+
 $cfg['adminskin'] = "simple";
 
 /* Message type:  attention => a, error => e, success => s, information => i */
