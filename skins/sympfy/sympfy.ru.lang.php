@@ -266,8 +266,8 @@ $skinlang['usersedit']['Avatar'] = "Аватар:";
 $skinlang['usersedit']['Signature'] = "Подпись:";
 $skinlang['usersedit']['Photo'] = "Фотография:";
 $skinlang['usersedit']['Newpassword'] = "Установить новый пароль:";
-$skinlang['usersedit']['Newpasswordhint'] = "(Оставь пустым, чтобы сохранить текущий пароль)";
-$skinlang['usersedit']['Email'] = "Электропочта:";
+$skinlang['usersedit']['Newpasswordhint'] = "(Оставьте пустым, чтобы сохранить текущий пароль)";
+$skinlang['usersedit']['Email'] = "E-mail:";
 $skinlang['usersedit']['Hidetheemail'] = "Прятать e-mail адрес ?";
 $skinlang['usersedit']['PMnotify'] = "Сообщать о новых ЛС:";
 $skinlang['usersedit']['PMnotifyhint'] = "(Уведомлять на e-mail о приходе новых личных сообщений)";
@@ -292,7 +292,7 @@ $skinlang['usersprofile']['Userlastname'] = "Фамилия:";
 $skinlang['usersprofile']['Groupsmembership'] = "Состоит в группах:";
 $skinlang['usersprofile']['Maingroup'] = "Основная группа:";
 $skinlang['usersprofile']['Registeredsince'] = "Зарегистрирован с:";
-$skinlang['usersprofile']['Email'] = "Электропочта:";
+$skinlang['usersprofile']['Email'] = "E-mail:";
 $skinlang['usersprofile']['Hidetheemail'] = "Прятать e-mail адрес?";
 $skinlang['usersprofile']['PMnotify'] = "Сообщать о новых ЛС:";
 $skinlang['usersprofile']['PMnotifyhint'] = "(Уведомлять на e-mail о приходе новых личных сообщений)";
@@ -312,7 +312,7 @@ $skinlang['usersprofile']['Avatar'] = "Аватар:";
 $skinlang['usersprofile']['Photo'] = "Фотография:";
 $skinlang['usersprofile']['Signature'] = "Подпись:";
 $skinlang['usersprofile']['Newpassword'] = "Установить новый пароль:";
-$skinlang['usersprofile']['Newpasswordhint'] = "(Оставь пустым, чтобы сохранить текущий пароль)";
+$skinlang['usersprofile']['Newpasswordhint'] = "(Оставьте пустым, чтобы сохранить текущий пароль)";
 $skinlang['usersprofile']['Update'] = "Обновить";
 
 //users.register.tpl
@@ -322,9 +322,9 @@ $skinlang['usersregister']['Userlastname'] = "Фамилия :";
 $skinlang['usersregister']['Validemail'] = "Ваш e-mail :";
 $skinlang['usersregister']['Validemailhint'] = "Для завершения процесса регистрации необходим действующий e-mail !";
 $skinlang['usersregister']['Password'] = "Пароль :";
-$skinlang['usersregister']['Confirmpassword'] = "Повтори пароль :";
+$skinlang['usersregister']['Confirmpassword'] = "Повтор пароля :";
 $skinlang['usersregister']['Country'] = "Страна :";
-$skinlang['usersregister']['Formhint'] = "Более детально настроить свой аккаунт ты сможешь после регистрации на сайте, в профиле.";
+$skinlang['usersregister']['Formhint'] = "Более детально настроить свой аккаунт вы сможете после регистрации на сайте, в профиле.";
 $skinlang['usersregister']['Submit'] = "Зарегистрироваться";
 
 //users.tpl
