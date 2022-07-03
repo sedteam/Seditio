@@ -20,31 +20,36 @@
 <!-- END: PFS_BUTTONS -->
 
 <div class="content-box">
+	
 	<div class="content-box-header">					
-		<h3>{PHP.L.adm_allpfs}</h3>			
-		<div class="clear"></div>					
-	</div>    
-	<div class="content-box-content">
+		<h3>{PHP.L.adm_allpfs}</h3>				
+	</div>   
+	
+	<div class="content-box-content content-table">
 		
-		<table class="cells striped">
-		
-			<thead>
-			<tr>
-				<th class="coltop">{PHP.L.Edit}</th>
-				<th class="coltop">{PHP.L.User}</th>
-				<th class="coltop">{PHP.L.Files}</th>
-			</tr>
-			</thead>
+		<div class="table cells striped">	
+
+			<div class="table-head">
+				<div class="table-row">
+					<div class="table-th coltop text-center">{PHP.L.User}</div>
+					<div class="table-th coltop text-center">{PHP.L.Files}</div>
+					<div class="table-th coltop text-center">{PHP.L.Edit}</div>
+				</div>
+			</div>
 			
-			<!-- BEGIN: PFS_LIST -->
-			<tr>
-				<td style="text-align:center;">{PFS_LIST_EDIT}</td>
-				<td>{PFS_LIST_USER}</td>
-				<td style="text-align:center;">{PFS_LIST_COUNTFILES}</td>
-			</tr>
-			<!-- END: PFS_LIST -->
-		
-		</table>		 
+			<div class="table-body">
+							
+				<!-- BEGIN: PFS_LIST -->
+				<div class="table-row">
+					<div class="table-td text-center">{PFS_LIST_USER}</div>
+					<div class="table-td text-center">{PFS_LIST_COUNTFILES}</div>
+					<div class="table-td text-center">{PFS_LIST_EDIT}</div>
+				</div>
+				<!-- END: PFS_LIST -->
+			
+			</div>
+
+		</div>		 
 	  
 	</div>
 </div>	   
