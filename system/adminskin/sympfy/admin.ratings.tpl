@@ -22,60 +22,57 @@
 <!-- END: RATINGS_BUTTONS -->
 
 <div class="content-box">
-	<div class="content-box-content content-table">
-  
-		<!-- BEGIN: RATINGS_PAGINATION_TP -->
-		
-		<div class="paging">
-			<ul class="pagination">
-			  <li class="prev">{RATINGS_PAGEPREV}</li>
-			  {RATINGS_PAGINATION}
-			  <li class="next">{RATINGS_PAGENEXT}</li>
-			</ul>
-		</div>
 
-		<!-- END: RATINGS_PAGINATION_TP -->
+	<div class="content-box-content content-table">
 		
-		<table class="cells striped">
+		<div class="table cells striped resp-table">
 			
-			<thead>
-				<tr>
-					<th class="coltop" style="width:40px;">{PHP.L.Delete}</th>
-					<th class="coltop">{PHP.L.Code}</th>
-					<th class="coltop">{PHP.L.Date} (GMT)</th>
-					<th class="coltop">{PHP.L.Votes}</th>
-					<th class="coltop">{PHP.L.Rating}</th>
-					<th class="coltop" style="width:64px;">{PHP.L.Open}</th>
-				</tr>
-			</thead>
-			
-			<tbody>
-			
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">					
+					<div class="table-th coltop text-center" style="width:20px;">{PHP.L.Delete}</div>
+					<div class="table-th coltop text-left">{PHP.L.Code}</div>
+					<div class="table-th coltop text-left">{PHP.L.Date} (GMT)</div>
+					<div class="table-th coltop text-left">{PHP.L.Votes}</div>
+					<div class="table-th coltop text-left">{PHP.L.Rating}</div>
+					<div class="table-th coltop text-center" style="width:20px;">{PHP.L.Open}</div>
+				</div>
+			</div>			
+
+			<div class="table-body resp-table-body">
+				
 				<!-- BEGIN: RATINGS_LIST -->
 				
-				<tr>
-					<td style="text-align:center;"><a href="{RATINGS_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a></td>
-					<td style="text-align:center;">{RATINGS_LIST_CODE}</td>
-					<td style="text-align:center;">{RATINGS_LIST_CREATIONDATE}</td>
-					<td style="text-align:center;">{RATINGS_LIST_VOTES}</td>
-					<td style="text-align:center;">{RATINGS_LIST_AVERAGE}</td>
-					<td style="text-align:center;"><a href="{RATINGS_LIST_URL}"><img src="system/img/admin/jumpto.png" alt="" /></a></td>
-				</tr>			
+				<div class="table-row resp-table-row">
+					<div class="table-td text-center resp-table-td ratings-action">
+						<a href="{RATINGS_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a>
+					</div>
+					<div class="table-td text-left resp-table-td ratings-code" data-label="{PHP.L.Code}">
+						{RATINGS_LIST_CODE}
+					</div>
+					<div class="table-td text-left resp-table-td ratings-date" data-label="{PHP.L.Date} (GMT)">
+						{RATINGS_LIST_CREATIONDATE}
+					</div>
+					<div class="table-td text-left resp-table-td ratings-votes" data-label="{PHP.L.Votes}">
+						{RATINGS_LIST_VOTES}
+					</div>
+					<div class="table-td text-left resp-table-td ratings-val" data-label="{PHP.L.Rating}">
+						{RATINGS_LIST_AVERAGE}
+					</div>
+					<div class="table-td text-center resp-table-td ratings-open" data-label="{PHP.L.Open}">
+						<a href="{RATINGS_LIST_URL}"><i class="ic-arrow-right"></i></a>
+					</div>
+				</div>			
 				
 				<!-- END: RATINGS_LIST -->	
 				
-			</tbody>
+			</div>
 			
-			<tfoot>				
-				<tr>
-					<td colspan="6">
-						{PHP.L.adm_ratings_totalitems} : {ADMIN_RATINGS_TOTALITEMS}<br />
-						{PHP.L.adm_ratings_totalvotes} : {ADMIN_RATINGS_TOTALVOTES}
-					</td>
-				</tr>
-			</tfoot>	
-
-		</table>
+		</div>
+				
+		<div style="padding:10px;">
+			{PHP.L.adm_ratings_totalitems} : {ADMIN_RATINGS_TOTALITEMS}<br />
+			{PHP.L.adm_ratings_totalvotes} : {ADMIN_RATINGS_TOTALVOTES}
+		</div>	
 
 		<script>
 		  function confirmDelete() {

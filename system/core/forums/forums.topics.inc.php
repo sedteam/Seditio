@@ -42,13 +42,13 @@ function rev($sway)
 
 function cursort($trigger, $way)
 	{
+	global $cfg;
 	if ($trigger)
-		{
-		global $sed_img_up, $sed_img_down;
-		if ($way=='asc')
-			{ return ($sed_img_down); }
+		{		
+		if ($way == 'asc')
+			{ return ($cfg['arrow_down']); }
 		else
-			{ return ($sed_img_up); }
+			{ return ($cfg['arrow_up']); }
 		}
 	else
 		{ return (''); }

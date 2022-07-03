@@ -479,6 +479,31 @@ $yesno_revers_arr = array(0 => $L['Yes'], 1 => $L['No']);
 $out['whosonline'] = ($cfg['disablewhosonline']) ? '' : $sys['whosonline_reg_count'].' '.$L['com_members'].', '.$sys['whosonline_vis_count'].' '.$L['com_guests'];
 $out['copyright'] = "<a href=\"https://seditio.org\">".$L['foo_poweredby']." Seditio</a>";
 
+/* ======== Various ======== */
+
+$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" />";
+$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" />";
+$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" />";
+$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" />";
+$out['img_delete'] = "<img src=\"system/img/admin/delete.png\" alt=\"\" />";
+$out['img_edit'] = "<img src=\"system/img/admin/edit.png\" alt=\"\" />";
+$out['img_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
+$out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
+$out['img_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
+
+$sed_yesno[1] = $L['Yes'];
+$sed_yesno[0] = $L['No'];
+
+$sed_img_up = $out['img_up'];
+$sed_img_down = $out['img_down'];
+$sed_img_left = $out['img_left'];
+$sed_img_right = $out['img_right'];
+
+$cfg['arrow_up'] = $out['img_up'];
+$cfg['arrow_down'] = $out['img_down'];
+$cfg['arrow_left'] = $out['img_left'];
+$cfg['arrow_right'] = $out['img_right'];
+
 /* ======== Skin ======== */
 
 $usr['skin_raw'] = $usr['skin'];
@@ -567,25 +592,6 @@ if (!$sed_forums_str && !$cfg['disable_forums'])
 	$sed_forums_str = sed_load_forum_structure();
 	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
 	}
-
-/* ======== Various ======== */
-
-$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" />";
-$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" />";
-$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" />";
-$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" />";
-$out['img_delete'] = "<img src=\"system/img/admin/delete.png\" alt=\"\" />";
-$out['img_edit'] = "<img src=\"system/img/admin/edit.png\" alt=\"\" />";
-$out['img_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
-$out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
-$out['img_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
-
-$sed_yesno[1] = $L['Yes'];
-$sed_yesno[0] = $L['No'];
-$sed_img_up = $out['img_up'];
-$sed_img_down = $out['img_down'];
-$sed_img_left = $out['img_left'];
-$sed_img_right = $out['img_right'];
 
 /* ======== Directories ======== */
 

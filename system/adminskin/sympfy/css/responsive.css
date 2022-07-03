@@ -252,6 +252,7 @@
 	}
 	
 	.dic-actions,
+	.ratings-action,
 	.smilies-action,
 	.menu-action,
 	.banlist-action	{
@@ -264,7 +265,7 @@
 	.plug-action {
 		text-align: center!important;
 	}
-	
+		
 	.plug-config,
 	.plug-right,
 	.plug-open {
@@ -275,6 +276,10 @@
 	
 	.plug-order,
 	.plug-active {
+		text-align: left!important;
+	}
+	
+	.ratings-open {
 		text-align: left!important;
 	}
 	
