@@ -23,6 +23,11 @@ $cfg['pagination_arrowright'] = "<i class=\"ic-chevron-right\"></i>";
 
 $cfg['separator'] = "<i class=\"ic-arrow-right\"></i>";
 
+$cfg['arrow_up'] = "<i class=\"ic-arrow-narrow-up\"></i>";
+$cfg['arrow_down'] = "<i class=\"ic-arrow-narrow-down\"></i>";
+$cfg['arrow_left'] = "<i class=\"ic-arrow-narrow-left\"></i>";
+$cfg['arrow_right'] = "<i class=\"ic-arrow-narrow-right\"></i>";
+
 // ========= Plugin RecentItems ============================= //
 
 $cfg['plu_mask_pages'] = "<span class=\"rec-date\">%3\$s</span>"." "."%1\$s"." ".$cfg['separator']." "."%2\$s"."<br />";
