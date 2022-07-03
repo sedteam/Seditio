@@ -5,12 +5,12 @@ Seditio - Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
-File=install.en.lang.php
+File=install.ru.lang.php
 Version=178
-Updated=2022-jun-12
+Updated=2022-jul-03
 Type=Core
 Author=Seditio Team
-Description=English installation lang file
+Description=Russian installation lang file
 [END_SED]
 ==================== */
 
@@ -25,7 +25,7 @@ $L['install_language installation'] = "Язык установки";
 $L['install_select_language installation'] = "Выбор языка установки";
 $L['install_title'] = "Seditio - Установка"; 
 $L['install_build_config'] = "Создание файла конфигурации ";
-$L['install_looks_chmod'] = "Похоже успешно, сейчас попробую потихому выставить файлу CHMOD в режим #только для чтения#...";
+$L['install_looks_chmod'] = "Похоже успешно, сейчас попробую выставить файлу CHMOD в режим #только для чтения#...";
 $L['install_setting_mysql'] = "Настройка SQL базы данных...";
 $L['install_creating_mysql'] = "Создание таблиц в базе данных...";
 $L['install_presettings'] = "Предварительная настройка конфигурационных записей...";
@@ -43,8 +43,8 @@ $L['install_installing_plugins'] = "Установка плагинов :";
 $L['install_installed_plugins'] = "установлено плагинов (";
 $L['install_display_log'] = "Показать лог";
 $L['install_contine_homepage'] = "Продолжить и перейти на главную страницу";
-$L['install_error'] = "Ошибка !";
-$L['install_wrong_manual'] = "Что-то пошло не так, вам придется вручную настроить систему, подробные шаги <a href=\"http://www.neocrome.net/page.php?al=install\">здесь</a>.";
+$L['install_error'] = "Ошибка!";
+$L['install_wrong_manual'] = "Что-то пошло не так, вам придется вручную настроить систему, подробные шаги <a href=\"https://seditio.org/doc/\">здесь</a>.";
 $L['install_database_setup'] = "Настройка SQL базы данных :";
 $L['install_database_hosturl'] = "Хост URL базы данных:";
 $L['install_always_localhost'] = "Чаще всего это 'localhost'";
@@ -87,7 +87,7 @@ $L['install_not_found'] = "Не найдено";
 $L['install_file'] = "Файл";
 $L['install_found_writable'] = "Нейдено и доступно для записи";
 $L['install_found_notwritable'] = "Найдено, Но не доступно для записи";
-$L['install_notfound_folderwritable'] = "Не найдено, папка доступна для записи, так что должно быть все пучком.";
+$L['install_notfound_folderwritable'] = "Не найдено, папка доступна для записи, так что всё должно быть ОК.";
 $L['install_notfound_foldernotwritable'] = "Не найдено, и папка не доступна для записи";
 $L['install_phpversion'] = "Версия PHP :";
 $L['install_ok'] = "Ok";
@@ -97,7 +97,7 @@ $L['install_mysqli_extension'] = "MySQLi расширение :";
 $L['install_mysql_connector'] = "MySQL коннектор драйвер :";
 $L['install_mysql_preffered'] = "Наиболее предпочтительно MySQLi расширение";
 $L['install_available'] = "Доступно";
-$L['install_missing'] = "Недоступно ?";
+$L['install_missing'] = "Недоступно?";
 $L['install_refresh'] = "Обновить";
 $L['install_nextstep'] = "Следующий шаг";
 
