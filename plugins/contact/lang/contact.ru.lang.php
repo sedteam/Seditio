@@ -7,10 +7,10 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/lang/contact.ru.lang.php
 Version=178
-Updated=2012-may-16
+Updated=2022-jul-03
 Type=
 Author=Seditio Team
-Description=Перевод на могучий - Антонио [antony.ldu.ru]
+Description=Языковой файл для плагина формы обратной связи
 [END_SED]
 ==================== */
 
@@ -18,20 +18,20 @@ Description=Перевод на могучий - Антонио [antony.ldu.ru]
 $L['plu_title'] = "Контакт";
 
 
-$L['plu_explain'] = "Заполни эту форму чтобы отправить письмо : ";
+$L['plu_explain'] = "Заполните эту форму чтобы отправить письмо : ";
 $L['plu_recipients_title'] = "Получатель";
-$L['plu_email_title'] = "Электропочта";
+$L['plu_email_title'] = "E-mail";
 $L['plu_name_title'] = "Имя";
 $L['plu_phone_title'] = "Номер телефона";
 $L['plu_subject_title'] = "Тема письма";
 $L['plu_message_title'] = "Сообщение";
 $L['plu_required'] = "* = обязательные поля";
-$L['plu_verify'] = "введи эти цифры без точек : ";
+$L['plu_verify'] = "введите эти цифры без точек : ";
 $L['plu_send'] = "Отправить";
 
 $L['plu_fieldempty'] = "Одно из обязательных полей незаполнено.";
 $L['plu_wrongentry'] = "Обязательное поле заполнено с ошибкой.";
-$L['plu_antispam'] = "Защитный код введён неправильно, пожалуйста, попробуй напечатать его ещё раз !";
+$L['plu_antispam'] = "Защитный код введён неправильно, пожалуйста, попробуйте напечатать его ещё раз !";
 $L['plu_notsent'] = "Сообщение неотправлено.";
 $L['plu_sent'] = "Сообщение успешно отправлено !";
 $L['plu_notice'] = "Это сообщение было оправлено с ".$cfg['maintitle']." от : ";
