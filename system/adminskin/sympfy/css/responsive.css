@@ -118,6 +118,28 @@
 		margin-bottom: 12px;
 	}
 	
+	.responsive-form .form-row {
+		display: block;
+		padding: 10px 0;
+	}
+	
+	.responsive-form .form-label, 
+	.responsive-form .form-field {
+		width: 100%;
+		float: none;
+		max-width: 100%;
+		padding: 5px 10px
+	}
+	
+	.responsive-form .form-field {
+		border-bottom: 1px solid #f1efef;
+	}
+	
+	.responsive-form .form-label  label {
+		font-weight:600;
+		color: #555555;
+	}
+	
 	.resp-table {
 		display: block;
 		width: 100%;
@@ -191,12 +213,18 @@
 		display: block;
 	}
 	
+	.resp-form-title,
 	.poll-title,
 	.config-title,
 	.pl-title {
 		display: block;
 		width:100%;
 		font-weight: bold;
+	}
+	
+	.resp-form-field {
+		display: block;
+		width:100%;		
 	}
 	
 	.config-field {
@@ -225,6 +253,15 @@
 		float:left!important;
 		text-align:left!important;
 		padding-bottom:5px;
+	}
+	
+	.structure-pagecount,
+	.structure-rights,
+	.structure-delete {
+		width: 33%!important;
+		float:left!important;
+		text-align:center!important;
+		padding-bottom:5px;		
 	}
 	
 	.aqv-hits {
