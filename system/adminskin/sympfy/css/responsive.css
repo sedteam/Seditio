@@ -191,6 +191,7 @@
 		display: block;
 	}
 	
+	.poll-title,
 	.config-title,
 	.pl-title {
 		display: block;
@@ -204,6 +205,7 @@
 		float:left;		
 	}
 	
+	.poll-field input[type="text"], 
 	.config-field input[type="text"], 
 	.config-field textarea {
 		width: 100%;
@@ -255,10 +257,12 @@
 	.ratings-action,
 	.smilies-action,
 	.menu-action,
+	.poll-actions,
 	.banlist-action	{
 		position: absolute;
 		right:0;
 		top: 10px;
+		width: auto!important;
 		z-index: 10;
 	}
 	
@@ -272,6 +276,31 @@
 		text-align: left!important;
 		float:left;
 		width:33%;
+	}
+	
+	.trashcan-wipe,
+	.trashcan-restore {
+		text-align: center!important;
+		float:left;
+		width:50%;			
+	}
+	
+	.poll-delete,
+	.poll-reset,
+	.poll-bump,
+	.poll-open	{
+		text-align: center!important;
+		float:left;
+		width:25%;		
+	}
+	
+	.poll-update {
+		text-align: center!important;
+		width: 100%!important;
+	}
+	
+	.poll-votes {
+		text-align: left!important;
 	}
 	
 	.plug-order,

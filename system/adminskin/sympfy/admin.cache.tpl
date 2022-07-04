@@ -4,15 +4,19 @@
 	<span><i class="ic-cache"></i></span><h2>{PHP.L.adm_internalcache}</h2>
 </div>
 
+<ul class="arrow_list">
+	<li><a href="{CACHE_REFRESH_URL}">{PHP.L.Refresh}</a></li>
+	<li><a href="{CACHE_PURGE_URL}">{PHP.L.adm_purgeall}</a></li>
+	<li><a href="{CACHE_SHOWALL_URL}">{PHP.L.adm_showall}</a></li>
+</ul>
+
 <div class="content-box">
 
-	<div class="content-box-content"> 
-	
-		<ul class="arrow_list">
-			<li><a href="{CACHE_REFRESH_URL}">{PHP.L.Refresh}</a></li>
-			<li><a href="{CACHE_PURGE_URL}">{PHP.L.adm_purgeall}</a></li>
-			<li><a href="{CACHE_SHOWALL_URL}">{PHP.L.adm_showall}</a></li>
-		</ul>
+	<div class="content-box-header">					
+		<h3>{PHP.L.adm_internalcache}</h3>												
+	</div>  
+
+	<div class="content-box-content content-table"> 
 
 		<div class="table cells striped resp-table">
 			

@@ -412,6 +412,7 @@ $L['adm_enableratings'] = "Enable Ratings";     // New v173
 /* ====== Polls ====== */
 
 $L['adm_help_polls'] = "Once you created a new poll topics, select 'Edit' to add options (choices) for this poll.<br />'Delete' will delete the selected poll, the options, and all related votes.<br />'Reset' will delete all votes for the selected poll. It won't delete the poll itself or the options.<br />'Bump' will change the poll creation date to the current date, and so will make the poll 'current', top of the list.";
+$L['adm_poll_title'] = "Poll title";
 
 /* ====== Statistics ====== */
 

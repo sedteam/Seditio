@@ -189,7 +189,8 @@ function sed_rights_parseline($row, $title, $link)
 			}
 		
 		$t->assign(array(	
-			"RIGHTS_OPTIONS" => $box[$code]
+			"RIGHTS_OPTIONS" => $box[$code],
+			"RIGHTS_OPTIONS_CODE" => $code
 		));
 		
 		$t -> parse("ADMIN_RIGHTS.RIGHTS_GROUP.RIGHTS_LIST.RIGHTS_LIST_OPTIONS");
