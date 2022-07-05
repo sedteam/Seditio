@@ -295,7 +295,7 @@ $L['cfg_rss_timetolive'] = array("Cash time for RSS feed", "in seconds");
 $L['cfg_rss_defaultcode'] = array("Default RSS feed", "enter the category code");
 $L['cfg_rss_maxitems'] = array("The maximum number of rows in the RSS feed", "");
 
-$L['adm_help_config_rss'] = "Links to open RSS feeds: <br />rss.php (by default, the output of news categories specified in the settings) <br /> rss.php?m=pages&c=XX (XX - Category code, the last pages of the category) <br />rss.php?m=comments&id=XX (XX - ID page, comments page) <br />rss.php?m=forums (latest posts from all sections of the forum) <br />rss.php?m=forums&s=XX (XX - ID section, recent posts section) <br />rss.php?m=forums&q=XX (XX - ID topic, recent posts in the topic) <br />rss.php?m=forums&s=XX&q=YY (XX - ID section, YY - ID topic)";
+$L['adm_help_config_rss'] = "Links to open RSS feeds: <br />".$cfg['mainurl']."/"."rss (by default, the output of news categories specified in the settings) <br /> ".$cfg['mainurl']."/"."rss/pages?c=XX (XX - Category code, the last pages of the category) <br />".$cfg['mainurl']."/"."rss/comments?id=XX (XX - ID page, comments page) <br />".$cfg['mainurl']."/"."rss/forums (latest posts from all sections of the forum) <br />".$cfg['mainurl']."/"."rss/forums?s=XX (XX - ID section, recent posts section) <br />".$cfg['mainurl']."/"."rss/forums?q=XX (XX - ID topic, recent posts in the topic) <br />".$cfg['mainurl']."/"."rss/forums?s=XX&q=YY (XX - ID section, YY - ID topic)";
 
 /* ====== Forums ====== */
 

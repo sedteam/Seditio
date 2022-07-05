@@ -1,7 +1,7 @@
 <?PHP
 
 /* ====================
-Seditio - Website engine
+Seditio – Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
@@ -16,12 +16,12 @@ Description=Rss Creator
 
 /*
 Example of feeds:
-rss.php?m=pages&c=XX (XX - category code)
-rss.php?m=comments&id=XX (XX - page ID)
-rss.php?m=forums (latest posts from all sections)
-rss.php?m=forums&s=XX (XX - section ID, latest posts from section)
-rss.php?m=forums&q=XX (XX - topic ID, latest posts from topic)
-rss.php?m=forums&s=XX&q=YY(XX - section ID, YY - topic ID)
+rss/pages?c=XX (XX – category code)
+rss/comments?id=XX (XX – page ID)
+rss/forums (latest posts from all sections)
+rss/forums?s=XX (XX – section ID, latest posts from section)
+rss/forums?q=XX (XX – topic ID, latest posts from topic)
+rss/forums?s=XX&q=YY(XX – section ID, YY – topic ID)
 */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
@@ -46,6 +46,8 @@ $s = sed_import('s', 'G', 'INT');
 $c = empty($c) ? $cfg['rss_defaultcode'] : $c;
 
 if ($cfg['disable_rss']) { exit(); }
+
+$items = array();
 
 // RSS output
 header("Content-type: text/xml; charset=".$cfg['charset']);
@@ -84,7 +86,7 @@ switch ($m)
 
 		if (sed_auth('page', $row['page_cat'], 'R'))
 			{
-			$rss_title = $L['rss_lastcomments']." ".$cfg['separator']." ".$row['page_title']." ".$cfg['separator']." ".$cfg['maintitle'];
+			$rss_title = $L['rss_lastcomments']." – ".$row['page_title']." – ".$cfg['maintitle'];
 			$rss_description = $row['page_desc'];
 			
 			$sql1 = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
@@ -95,7 +97,7 @@ switch ($m)
 
 			while ($row1 = sed_sql_fetchassoc($sql1))
 				{
-				$items[$i]['title'] = $L['rss_commentauthor']." ".$cfg['separator']." ".sed_cc($row1['com_author']);
+				$items[$i]['title'] = $L['rss_commentauthor']." – ".sed_cc($row1['com_author']);
 
 				$row1['com_text'] = sed_parse($row1['com_text']);
 
@@ -119,7 +121,7 @@ switch ($m)
 	$where = (!empty($s)) ? " AND p.fp_sectionid ='$s'" : "";
 	$where .= (!empty($q)) ? " AND fp_topicid='$q'" : "";
 
-	$rss_title = $L['rss_lastforums']." ".$cfg['separator']." ".$cfg['maintitle'];
+	$rss_title = $L['rss_lastforums']." – ".$cfg['maintitle'];
 
 	$sql = sed_sql_query("SELECT p.fp_id, p.fp_text, p.fp_postername, p.fp_sectionid, p.fp_creation, t.ft_title, t.ft_desc, s.fs_title, s.fs_desc, s.fs_allowbbcodes, s.fs_allowsmilies   
 		FROM $db_forum_posts AS p JOIN $db_forum_topics AS t ON p.fp_topicid = t.ft_id JOIN $db_forum_sections AS s ON t.ft_sectionid=s.fs_id
@@ -134,7 +136,7 @@ switch ($m)
 			$fs_allowbbcodes = $row['fs_allowbbcodes'];
 			$fs_allowsmilies = $row['fs_allowsmilies'];
 
-			$items[$i]['title'] = $row['fp_postername']." ".$cfg['separator']." ".$row['ft_title'];
+			$items[$i]['title'] = $row['fp_postername']." – ".$row['ft_title'];
 
 			$row['fp_text'] = sed_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1, $row['fp_text_ishtml']);
 
@@ -150,12 +152,12 @@ switch ($m)
 			
 			if (!empty($s)) 
 				{ 
-				$rss_title = $L['rss_lastsections'].$row['fs_title']." ".$cfg['separator']." ".$cfg['maintitle']; 
+				$rss_title = $L['rss_lastsections'].$row['fs_title']." – ".$cfg['maintitle']; 
 				$rss_description = (!empty($row['fs_desc'])) ? $row['fs_desc'] : $rss_description;
 				}
 			if (!empty($q)) 
 				{ 
-				$rss_title = $L['rss_lasttopics'].$row['ft_title']." ".$cfg['separator']." ".$cfg['maintitle'];
+				$rss_title = $L['rss_lasttopics'].$row['ft_title']." – ".$cfg['maintitle'];
 				$rss_description = (!empty($row['ft_desc']))? $row['ft_desc'] : $rss_description;
 				}
 			}
@@ -185,7 +187,7 @@ switch ($m)
 	WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') 
 	ORDER by page_date DESC LIMIT ".$cfg['rss_maxitems']);
 
-	$rss_title = $sed_cat[$c]['title']." ".$cfg['separator']." ".$cfg['maintitle'];
+	$rss_title = $sed_cat[$c]['title']." – ".$cfg['maintitle'];
 	$rss_description = (!empty($sed_cat[$c]['desc'])) ? $sed_cat[$c]['desc'] : $rss_description; 
 	$i = 0;
 
