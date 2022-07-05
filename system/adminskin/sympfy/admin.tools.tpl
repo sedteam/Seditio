@@ -20,7 +20,7 @@
 					
 					<div class="table-head">
 						<div class="table-row modules-row">					
-							<div class="table-th coltop text-left">{PHP.L.Modules}</div>
+							<div class="table-th coltop text-left">{PHP.L.adm_module_name}</div>
 							<div class="table-th coltop text-center" style="width:80px;">{PHP.L.Rights}</div>
 							<div class="table-th coltop text-center" style="width:128px;">{PHP.L.Configuration}</div>						
 						</div>
@@ -113,7 +113,7 @@
 					
 					<div class="table-head">
 						<div class="table-row modules-row">					
-							<div class="table-th coltop text-left">{PHP.L.Tools} ({PHP.L.Plugins})</div>
+							<div class="table-th coltop text-left">{PHP.L.adm_tool_name}</div>
 							<div class="table-th coltop text-center" style="width:128px;">{PHP.L.Configuration}</div>						
 						</div>
 					</div>

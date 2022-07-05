@@ -82,6 +82,8 @@ $L['adm_required'] = "(обязательное)";
 $L['adm_clicktoedit'] = "(нажми для редактирования)";
 $L['adm_manage'] = "Инструменты";  // New in v150
 $L['adm_pagemanager'] = "Менеджер страниц";  // New in v177
+$L['adm_module_name'] = "Название модуля";  // New in v178
+$L['adm_tool_name'] = "Название инструмента";  // New in v178
 
 /* ====== Banlist ====== */
 

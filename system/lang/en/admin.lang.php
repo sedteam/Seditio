@@ -82,6 +82,8 @@ $L['adm_required'] = "(Required)";
 $L['adm_clicktoedit'] = "(Click to edit)";
 $L['adm_manage'] = "Manage";  // New in v150
 $L['adm_pagemanager'] = "Page manager";  // New in v177
+$L['adm_module_name'] = "Module name";  // New in v178
+$L['adm_tool_name'] = "Tool name";  // New in v178
 
 /* ====== Banlist ====== */
 
