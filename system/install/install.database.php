@@ -690,12 +690,12 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."auth VALUES (107, 6, 'menu'
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(1, 0, 'Menu', '', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(2, 1, 'Home', '/', 2, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(3, 1, 'Forums', '/forums/', 3, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(4, 1, 'Articles', '/articles/', 4, 0);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(5, 1, 'Galleries', '/gallery/', 5, 0);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(6, 1, 'Contact', '/plug/contact', 6, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(9, 4, 'Sample category 1', '/articles/sample1/', 1, 1);");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(10, 4, 'Sample category 2', '/articles/sample2/', 2, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(3, 1, 'Forums', 'forums/', 3, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(4, 1, 'Articles', 'articles/', 4, 0);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(5, 1, 'Galleries', 'gallery/', 5, 0);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(6, 1, 'Contact', 'plug/contact', 6, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(9, 4, 'Sample category 1', 'articles/sample1/', 1, 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(10, 4, 'Sample category 2', 'articles/sample2/', 2, 1);");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls VALUES(1, 0, 0, 1654936152, 'Looking forward to a new version of Seditio?');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls_options VALUES(1, 1, 'Yes', 0);");

@@ -77,6 +77,11 @@ if (!empty($module))
 	}
 }
 
+if (str_replace("/", "", $request_uri) == "index.php") {	
+	header("Location: /", TRUE, 301);
+	exit();
+}
+
 header("HTTP/1.1 404 Not Found");
 exit; 
    
