@@ -3199,6 +3199,20 @@ function sed_radiobox($name, $data, $check_data = '')
 	}
 	
 /** 
+ * Replace relative path to absolute url
+ * 
+ * @param string $text Text
+ * @return string 
+ */ 	
+	
+function sed_rel2abs($text)
+	{
+	global $cfg;
+	$text = preg_replace('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#', '$1="' . $cfg['mainurl']."/" . '$2$3', $text);
+	return $text;
+	}
+	
+/** 
  * Translit seo url
  * 
  * @param string $value Text for url value

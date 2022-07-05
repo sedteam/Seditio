@@ -26,15 +26,6 @@ rss/forums?s=XX&q=YY(XX – section ID, YY – topic ID)
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-/* === Functions === */
-
-function sed_rel2abs($text)
-	{
-	global $cfg;
-	$text = preg_replace('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#', '$1="' . $cfg['mainurl']."/" . '$2$3', $text);
-	return $text;
-	}
-
 /* ===============*/
 
 $c = sed_import('c', 'G', 'TXT');

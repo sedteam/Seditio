@@ -5,23 +5,14 @@ Seditio - Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
-File=sitemap.php
+File=sitemap.inc.php
 Version=178
-Updated=2017-nov-18
+Updated=2022-jul-05
 Type=Core
 Author=Seditio Team
 Description=XML Sitemap Generator
 [END_SED]
 ==================== */
-
-define('SED_CODE', TRUE);
-define('SED_RSS', TRUE);
-$location = 'Sitemap';
-$z = 'sitemap';
-
-require(SED_ROOT . '/system/functions.php');
-@include('datas/config.php');
-require(SED_ROOT . '/system/common.php');
 
 $smcfg['pages']['changefreq']  = "daily"; // (always/hourly/daily/weekly/monthly/yearly/never)
 $smcfg['pages']['priority']    = "0.8";   // (default: 0.5)
@@ -39,6 +30,10 @@ $smcfg['forums']['priority']   = "0.2";
 $smcfg['forums']['limit']      = 3000;
 
 $m = sed_import('m','G','ALP'); // (index/lists/pages/forums)
+
+$items = array();
+
+$main_url = ($cfg['absurls']) ? $sys['abs_url'] : $cfg['mainurl']."/";
 
 if (isset($smcfg[$m]))
 {
@@ -64,19 +59,19 @@ case 'lists':
         $sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code NOT LIKE 'system' ORDER BY structure_path ASC");
         
         while ($row = sed_sql_fetchassoc($sql))
-        {
-            list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row['structure_code']);
-            if($usr['auth_read'])
-              {
-              $i++;
-              $sys['catcode'] = $row['structure_code']; //new in v175 
-              $row['list_url'] = sed_url("list", "c=".$row['structure_code'], "", false, false);  
-            	$items[$i]['loc'] = $cfg['mainurl']."/".$row['list_url'];
-            	$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $sys['now']);
-              $items[$i]['changefreq'] = $smcfg['lists']['changefreq'];
-            	$items[$i]['priority'] = $smcfg['lists']['priority'];
-              }                
-        }
+			{
+			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row['structure_code']);
+			if($usr['auth_read'])
+				{
+				$i++;
+				$sys['catcode'] = $row['structure_code']; //new in v175 
+				$row['list_url'] = sed_url("list", "c=".$row['structure_code'], "", false, false);  
+				$items[$i]['loc'] = $main_url.$row['list_url'];
+				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $sys['now']);
+				$items[$i]['changefreq'] = $smcfg['lists']['changefreq'];
+				$items[$i]['priority'] = $smcfg['lists']['priority'];
+				}                
+			}
         
         break;
 
@@ -103,19 +98,19 @@ case 'pages':
         WHERE page_state = 0 AND page_cat NOT LIKE 'system'".$sql_cat." ORDER by page_date DESC LIMIT ".$smcfg['pages']['limit']);
         
         while ($row = sed_sql_fetchassoc($sql))
-        	{        
-          list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row['page_cat']);
-          if($usr['auth_read'])
-            {
-          	$i++;
-            $sys['catcode'] = $row['page_cat']; //new in v175        
-          	$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'], "", false, false) : sed_url("page", "al=".$row['page_alias'], "", false, false);          
-          	$items[$i]['loc'] = $cfg['mainurl']."/".$row['page_pageurl'];
-          	$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['page_date']);
-            $items[$i]['changefreq'] = $smcfg['pages']['changefreq'];
-          	$items[$i]['priority'] = $smcfg['pages']['priority'];
-          	}
-          }
+			{
+			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row['page_cat']);
+			if($usr['auth_read'])
+				{
+				$i++;
+				$sys['catcode'] = $row['page_cat']; //new in v175        
+				$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id'], "", false, false) : sed_url("page", "al=".$row['page_alias'], "", false, false);          
+				$items[$i]['loc'] = $main_url.$row['page_pageurl'];
+				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['page_date']);
+				$items[$i]['changefreq'] = $smcfg['pages']['changefreq'];
+				$items[$i]['priority'] = $smcfg['pages']['priority'];
+				}
+			}
         
         break;
 
@@ -127,18 +122,18 @@ case 'forums':
         $db_forum_structure AS n ON n.fn_code=s.fs_category ORDER by fn_path ASC, fs_order ASC");
 
         while ($row = sed_sql_fetchassoc($sql))
-        {
-                list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $row['fs_id']);
-                if($usr['auth_read'])
-                {
-                  $i++;
-                  $row['fs_url'] = sed_url("forums","m=topics&s=".$row['fs_id'], "", false, false);
-                	$items[$i]['loc'] = $cfg['mainurl']."/".$row['fs_url'];
-                	$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fs_lt_date']);
-                  $items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
-                	$items[$i]['priority'] = $smcfg['forums']['priority'];                        
-                }
-        }
+			{
+			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $row['fs_id']);
+			if($usr['auth_read'])
+				{
+				$i++;
+				$row['fs_url'] = sed_url("forums","m=topics&s=".$row['fs_id'], "", false, false);
+				$items[$i]['loc'] = $main_url.$row['fs_url'];
+				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fs_lt_date']);
+				$items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
+				$items[$i]['priority'] = $smcfg['forums']['priority'];                        
+				}
+			}
         
         // forum posts
         
@@ -147,19 +142,19 @@ case 'forums':
        GROUP BY t.ft_id ORDER BY t.ft_sticky DESC, p.fp_creation DESC LIMIT ".$smcfg['forums']['limit']);
         
         while ($row = sed_sql_fetchassoc($sql))
-        {
-                list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $row['fs_id']);
-                if($usr['auth_read'])
-                {
-                  $i++;
-                  $moved = ($row['ft_movedto']) ? $row['ft_movedto'] : $row['ft_id'];
-                  $row['fp_url'] = sed_url('forums', 'm=posts&q='.$moved, "", false, false);
-                	$items[$i]['loc'] = $cfg['mainurl']."/".$row['fp_url'];
-                	$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fp_updated']);
-                  $items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
-                	$items[$i]['priority'] = $smcfg['forums']['priority'];                        
-                }
-        }        
+			{
+			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $row['fs_id']);
+			if($usr['auth_read'])
+				{
+				$i++;
+				$moved = ($row['ft_movedto']) ? $row['ft_movedto'] : $row['ft_id'];
+				$row['fp_url'] = sed_url('forums', 'm=posts&q='.$moved, "", false, false);
+				$items[$i]['loc'] = $main_url.$row['fp_url'];
+				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fp_updated']);
+				$items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
+				$items[$i]['priority'] = $smcfg['forums']['priority'];                        
+				}
+			}        
 
         break;
 
@@ -169,31 +164,27 @@ default:
         $feed .= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         $feed .= "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
         foreach($smcfg as $key => $value)
-        {
-                $feed .= "<sitemap>\n";
-                $feed .= "<loc>".$cfg['mainurl']."/".sed_url("sitemap", "m=".$key)."</loc>\n";
-                $feed .= "<lastmod>".@date("Y-m-d\TH:i:s+00:00", $sys['now'])."</lastmod>\n";
-                $feed .= "</sitemap>\n";
-        }
-        $feed .= "</sitemapindex>\n";
-        
-        break;
-        
+			{
+			$feed .= "<sitemap>\n";
+			$feed .= "<loc>".$main_url.sed_url("sitemap", "m=".$key, "", false, false)."</loc>\n";
+			$feed .= "<lastmod>".@date("Y-m-d\TH:i:s+00:00", $sys['now'])."</lastmod>\n";
+			$feed .= "</sitemap>\n";
+			}
+        $feed .= "</sitemapindex>\n";        
+        break;       
 }
 
-if (isset($smcfg[$m])) {
-   
+if (isset($smcfg[$m])) {   
     foreach ($items as $item)
-    {        
-      $feed .= "<url>\n";
-      $feed .= "<loc>".$item['loc']."</loc>\n";
-      $feed .= "<lastmod>".$item['lastmod']."</lastmod>\n";
-      $feed .= "<changefreq>".$item['changefreq']."</changefreq>\n";
-      $feed .= "<priority>".$item['priority']."</priority>\n";
-      $feed .= "</url>\n";        
-    }
-    $feed .= "</urlset>";
-    
+		{        
+		$feed .= "<url>\n";
+		$feed .= "<loc>".$item['loc']."</loc>\n";
+		$feed .= "<lastmod>".$item['lastmod']."</lastmod>\n";
+		$feed .= "<changefreq>".$item['changefreq']."</changefreq>\n";
+		$feed .= "<priority>".$item['priority']."</priority>\n";
+		$feed .= "</url>\n";        
+		}
+    $feed .= "</urlset>";   
 }
 
 function miscGzHandler($buf) {
@@ -203,11 +194,11 @@ function miscGzHandler($buf) {
         .substr($bufZiped, 0, -4)
         .pack('V',crc32($buf))
         .pack('V',strlen($buf));
-        header('Content-description: File Transfer');
-        header('Content-type: application/x-gzip');
-        header('Content-encoding: gzip/x-gzip');
-        header('Content-length: '.strlen($bufZiped));
-        header("Content-Disposition: attachment; filename=sitemap.xml.gz");
+	header('Content-description: File Transfer');
+	header('Content-type: application/x-gzip');
+	header('Content-encoding: gzip/x-gzip');
+	header('Content-length: '.strlen($bufZiped));
+	header("Content-Disposition: attachment; filename=sitemap.xml.gz");
     return $bufZiped;
 }
 
