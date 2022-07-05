@@ -472,12 +472,24 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 	if ($cfg['disable_comments'] || !$usr['auth_read_com'])
 		{ return (array('',''));  }
 	
+	// ---------- Extra fields - getting
+	$extrafields = array(); 
+	$extrafields = sed_extrafield_get('com');  
+	$number_of_extrafields = count($extrafields);
+	
+	// ----------------------
+	
 	if ($display)
 		{
-		if ($n=='send' && $usr['auth_write_com'] && $allow)
+		if ($n == 'send' && $usr['auth_write_com'] && $allow)
 			{
 			sed_shield_protect();
+			
 			$rtext = sed_import('rtext','P','HTM');
+			
+			// --------- Extra fields     
+			if ($number_of_extrafields > 0) $newcommentextrafields = sed_extrafield_buildvar($extrafields, 'r', 'com');    
+			// ----------------------			
 
 			/* == Hook for the plugins == */
 			$extp = sed_getextplugins('comments.send.first');
@@ -490,7 +502,32 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 
 			if (empty($error_string))
 				{
-				$sql = sed_sql_query("INSERT INTO $db_com (com_code, com_author, com_authorid, com_authorip, com_text, com_date) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($usr['name'])."', ".(int)$usr['id'].", '".$usr['ip']."', '".sed_sql_prep($rtext)."', ".(int)$sys['now_offset'].")"); 
+				
+				// ------ Extra fields 
+				if(count($extrafields) > 0) 
+					{ 
+					foreach($extrafields as $i => $row) 
+						{ 
+						$ssql_extra_columns .= ', com_'.$row['code']; 
+						$ssql_extra_values .= ", '".sed_sql_prep($newcommentextrafields['com_'.$row['code']])."'"; 
+						} 
+					} 
+				// ----------------------
+				
+				$sql = sed_sql_query("INSERT INTO $db_com 
+						(com_code, 
+						com_author, 
+						com_authorid, 
+						com_authorip, 
+						com_text, 
+						com_date".$ssql_extra_columns.") 
+					VALUES 
+						('".sed_sql_prep($code)."', 
+						'".sed_sql_prep($usr['name'])."', 
+						".(int)$usr['id'].", 
+						'".$usr['ip']."', 
+						'".sed_sql_prep($rtext)."', 
+						".(int)$sys['now_offset'].$ssql_extra_values.")"); 
 
 				if (mb_substr($code, 0, 1) =='p')
 					{
@@ -510,7 +547,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				}
 			}
 
-		if ($n=='delete')
+		if ($n == 'delete')
 			{
 			sed_check_xg();
 			     
@@ -565,6 +602,10 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				sed_shield_protect(); 
 			
 				$rtext = sed_import('rtext','P','HTM');
+				
+				// --------- Extra fields     
+				if ($number_of_extrafields > 0) $rcommentextrafields = sed_extrafield_buildvar($extrafields, 'r', 'com');    
+				// ----------------------	
 	  
 				/* == Hook for the plugins == */
 				$extp = sed_getextplugins('comments.edit.update.first');
@@ -578,7 +619,18 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				if (empty($error_string))
 					{
 					sed_block($usr['allow_edit_com']);	
-					$sql3 = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($rtext)."' WHERE com_id='$b'"); 
+					
+					// ------ Extra fields 
+					if (count($extrafields) > 0) 
+						{ 
+						foreach($extrafields as $i => $row) 
+							{ 
+							$ssql_extra .= ", com_".$row['code']." = "."'".sed_sql_prep($rcommentextrafields['com_'.$row['code']])."'"; 
+							} 
+						} 
+					// ----------------------	
+					
+					$sql3 = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($rtext)."'".$ssql_extra." WHERE com_id='$b'"); 
 	  
 					/* == Hook for the plugins == */
 						$extp = sed_getextplugins('comments.edit.update.done');
@@ -628,6 +680,14 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					"COMMENTS_EDIT_FORM_TEXT" => $post_main,
 					"COMMENTS_EDIT_FORM_MYPFS" => $pfs
 				));
+				
+				// Extra fields 
+				if (count($extrafields) > 0) 
+				{ 
+					$extra_array = sed_build_extrafields('com', 'COMMENTS_EDIT_FORM', $extrafields, $row, 'r'); 			
+					$t->assign($extra_array);
+				} 
+				// -----------				
 	  
 				if ($usr['auth_write_com'])
 					{
@@ -684,6 +744,14 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				"COMMENTS_FORM_TEXT" => $post_main,
 				"COMMENTS_FORM_MYPFS" => $pfs
 			));
+			
+			// Extra fields 
+			if (count($extrafields) > 0) 
+			{ 
+				$extra_array = sed_build_extrafields('com', 'COMMENTS_FORM', $extrafields, $newcommentextrafields, 'r'); 			
+				$t->assign($extra_array);
+			} 
+			// -----------
 	  
 			if ($usr['auth_write_com'] && $allow)
 				{
@@ -757,6 +825,14 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						"COMMENTS_ROW_ODDEVEN" => sed_build_oddeven($i),
 						"COMMENTS_ROW_ADMIN" => $com_quote.$com_admin
 					));
+					
+					// ---------- Extra fields - getting
+					if (count($extrafields) > 0) 
+						{ 
+						$extra_array = sed_build_extrafields_data('com', 'COMMENTS_ROW', $extrafields, $row);
+						$t->assign($extra_array); 
+						} 	
+					// ----------------------						
 
 					/* === Hook - Part2 : Include === */
 					if (is_array($extp))

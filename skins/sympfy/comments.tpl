@@ -66,7 +66,7 @@
 	<div class="boxed">	
     <h4>{PHP.skinlang.comments.Newcomment}</h4>
 		{COMMENTS_FORM_TEXT}
-		<p><input type="submit" class="submit btn btn-big" value="{PHP.skinlang.comments.Send}"></p>
+		<p><button type="submit" class="submit btn btn-big">{PHP.skinlang.comments.Send}</button></p>
 	</div>
   </form>
 
@@ -79,7 +79,7 @@
 		<h4>{PHP.skinlang.comments.Commentedit}:</h4>
 		<a name="c{COMMENTS_EDIT_FORM_ID}"></a>
 		{COMMENTS_EDIT_FORM_TEXT}
-		<p><input type="submit" class="submit btn btn-big" value="{PHP.skinlang.comments.Update}"></p>
+		<p><button type="submit" class="submit btn btn-big">{PHP.skinlang.comments.Update}</button></p>
 	</div>
 	</form>
 
