@@ -8,57 +8,56 @@
 
 <div class="content-box">
 	<div class="content-box-header">					
-		<h3>{PHP.L.editdeleteentries} : {FN_UPDATE_FORM_TITLE}</h3>									
-		<div class="clear"></div>					
+		<h3>{PHP.L.editdeleteentries} : {FN_UPDATE_FORM_TITLE}</h3>													
 	</div>
 
 	<div class="content-box-content">  
 
-	<form id="savestructure" action="{FN_UPDATE_SEND}" method="post">  
+		<form id="savestructure" action="{FN_UPDATE_SEND}" method="post">  
 
-	<table class="cells striped">
-	
-		<tr>
-			<td>{PHP.L.Code} :</td>
-			<td>{FN_UPDATE_CODE}</td>
-		</tr>
-	
-		<tr>
-			<td>{PHP.L.Path} :</td>
-			<td>{FN_UPDATE_PATH}</td>
-		</tr>
-	
-		<tr>
-			<td>{PHP.L.Title} :</td>
-			<td>{FN_UPDATE_TITLE}</td>
-		</tr>
-	
-		<tr>
-			<td>{PHP.L.Description} :</td>
-			<td>{FN_UPDATE_DESC}</td>
-		</tr>
-	
-		<tr>
-			<td>{PHP.L.Icon} :</td>
-			<td>{FN_UPDATE_ICON}</td>
-		</tr>
-	
-		<tr>
-			<td>{PHP.L.adm_defstate} :</td>
-			<td>{FN_UPDATE_DEFSTATE}</td>
-		</tr>
-	
-		<tr>
-			<td>{PHP.L.adm_tpl_mode} :</td>
-			<td>{FN_UPDATE_TPLMODE}</td>
-		</tr>
-	
-		<tr>
-			<td colspan="2"><input type="submit" class="submit btn" value="{PHP.L.Update}" /></td>
-		</tr>
-	
-	</table>
-	</form>
+			<ul class="form responsive-form">
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Code} :</label></div>
+					<div class="form-field">{FN_UPDATE_CODE}</div>
+				</li>
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Path} :</label></div>
+					<div class="form-field">{FN_UPDATE_PATH}</div>
+				</li>
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Title} :</label></div>
+					<div class="form-field">{FN_UPDATE_TITLE}</div>
+				</li>
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Description} :</label></div>
+					<div class="form-field">{FN_UPDATE_DESC}</div>
+				</li>
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Icon} :</label></div>
+					<div class="form-field">{FN_UPDATE_ICON}</div>
+				</li>
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.adm_defstate} :</label></div>
+					<div class="form-field">{FN_UPDATE_DEFSTATE}</div>
+				</li>
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.adm_tpl_mode} :</label></div>
+					<div class="form-field">{FN_UPDATE_TPLMODE}</div>
+				</li>
+			
+			</ul>
+			<div class="form-btn text-center">
+				<button type="submit" class="submit btn">{PHP.L.Update}</button>
+			</div>	
+		
+		</form>
 
 	</div>
 
@@ -69,109 +68,144 @@
 
 <!-- BEGIN: FORUMS_STRUCTURE -->
 
-  <div class="content-box sedtabs">
+<div class="content-box sedtabs">
 	<div class="content-box-header">			
+		<h3 class="tab-title">{PHP.L.adm_forum_structure_cat}</h3>	
 		<ul class="content-box-tabs">
-		  <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.editdeleteentries}</a></li>
-		  <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.addnewentry}</a></li>
-		</ul>					
-		<div class="clear"></div>					
+			<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.adm_forum_structure_cat}">{PHP.L.adm_forum_structure_cat}</a></li>
+			<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.addnewentry}">{PHP.L.addnewentry}</a></li>
+		</ul>									
 	</div>    
     
-	<div class="content-box-content">
-	<div class="tab-content default-tab" id="tab1">   
-
-		<form id="savestructure" action="{FORUMS_STRUCTURE_UPDATE_SEND}" method="post">
-	  
-		<table class="cells striped">
-		<thead>
-		<tr>
-			<th class="coltop">{PHP.L.Delete}</th>
-			<th class="coltop">{PHP.L.Code}</th>
-			<th class="coltop">{PHP.L.Path}</th>
-			<th class="coltop">{PHP.L.adm_defstate}</th>
-			<th class="coltop">{PHP.L.TPL}</th>
-			<th class="coltop">{PHP.L.Title}</th>
-			<th class="coltop">{PHP.L.Sections}</th>
-			<th class="coltop">{PHP.L.Options}</th>
-		</tr>
-		</thead>
-		
-		<!-- BEGIN: STRUCTURE_LIST -->
-		
-		<tr>
-			<td style="text-align:center;">
-				<!-- BEGIN: STRUCTURE_LIST_DELETE -->
-					<a href="{STRUCTURE_LIST_DELETE_URL}"><i class="ic-trash"></i></a>
-				<!-- END: STRUCTURE_LIST_DELETE -->
-			</td>			
-			<td>{STRUCTURE_LIST_CODE}</td>
-			<td>{STRUCTURE_LIST_PATH}</td>
-			<td style="text-align:center;">{STRUCTURE_LIST_DEFSTATE}</td>
-			<td style="text-align:center;">{STRUCTURE_LIST_TPL}</td>
-			<td>{STRUCTURE_LIST_TITLE}</td>
-			<td style="text-align:right;">{STRUCTURE_LIST_SECTIONCOUNT}	<a href="{STRUCTURE_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a></td>
-			<td style="text-align:center;"><a href="{STRUCTURE_LIST_OPTIONS_URL}"><i class="ic-settings"></i></a></a></td>
-		</tr>	
-		
-		<!-- END: STRUCTURE_LIST -->
-		
-		<tr>
-			<td colspan="9"><input type="submit" class="submit btn" value="{PHP.L.Update}" /></td>
-		</tr>
-		</table>
-		</form>
+	<div class="content-box-content content-table">
 	
+		<div class="tab-content default-tab" id="tab1">   
+
+			<form id="savestructure" action="{FORUMS_STRUCTURE_UPDATE_SEND}" method="post">
+		  
+			<div class="table cells striped resp-table">
+			
+				<div class="table-head resp-table-head">
+						
+					<div class="table-row resp-table-row">
+					
+						<div class="table-th coltop text-left">{PHP.L.Code}</div>
+						<div class="table-th coltop text-left">{PHP.L.Path}</div>
+						<div class="table-th coltop text-left">{PHP.L.adm_defstate}</div>
+						<div class="table-th coltop text-center">{PHP.L.TPL}</div>
+						<div class="table-th coltop text-left">{PHP.L.Title}</div>
+						<div class="table-th coltop text-center">{PHP.L.Sections}</div>
+						<div class="table-th coltop text-center">{PHP.L.Options}</div>
+						<div class="table-th coltop text-center">{PHP.L.Delete}</div>
+						
+					</div>
+						
+				</div>
+						
+				<div class="table-body resp-table-body">
+			
+					<!-- BEGIN: STRUCTURE_LIST -->
+					
+					<div class="table-row resp-table-row">
+							
+						<div class="table-td text-left resp-table-td forums-str-code" data-label="{PHP.L.Code}">
+							{STRUCTURE_LIST_CODE}
+						</div>
+						<div class="table-td text-left resp-table-td forums-str-path" data-label="{PHP.L.Path}">
+							{STRUCTURE_LIST_PATH}
+						</div>
+						<div class="table-td text-left resp-table-td forums-str-defstate" data-label="{PHP.L.adm_defstate}">
+							{STRUCTURE_LIST_DEFSTATE}
+						</div>
+						<div class="table-td text-center resp-table-td forums-str-tpl" data-label="{PHP.L.TPL}">
+							{STRUCTURE_LIST_TPL}
+						</div>
+						<div class="table-td text-left resp-table-td forums-str-title" data-label="{PHP.L.Title}">
+							{STRUCTURE_LIST_TITLE}
+						</div>
+						<div class="table-td text-center resp-table-td forums-str-sections" data-label="{PHP.L.Sections}">
+							{STRUCTURE_LIST_SECTIONCOUNT} <a href="{STRUCTURE_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a>
+						</div>
+						<div class="table-td text-center resp-table-td forums-str-options" data-label="{PHP.L.Options}">
+							<a href="{STRUCTURE_LIST_OPTIONS_URL}"><i class="ic-settings"></i></a></a>
+						</div>
+						<div class="table-td text-center resp-table-td forums-str-actions">
+							<!-- BEGIN: STRUCTURE_LIST_DELETE -->
+								<a href="{STRUCTURE_LIST_DELETE_URL}"><i class="ic-trash"></i></a>
+							<!-- END: STRUCTURE_LIST_DELETE -->
+						</div>	
+						
+					</div>	
+					
+					<!-- END: STRUCTURE_LIST -->
+					
+				</div>
+				
+			</div>
+			
+			<div class="table-btn text-center">
+				<button type="submit" class="submit btn">{PHP.L.Update}</button>
+			</div>	
+		
+		</div>
+		
+		<div class="tab-content" id="tab2"> 
+		 
+			<form id="addstructure" action="{FN_ADD_SEND}" method="post">
+
+				<ul class="form responsive-form">
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Code} :</label></div>
+						<div class="form-field">
+							{FN_ADD_CODE} 
+							<div class="descr">{PHP.L.adm_required}</div>
+						</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Path} :</label></div>
+						<div class="form-field">
+							{FN_ADD_PATH} 
+							<div class="descr">{PHP.L.adm_required}</div>
+						</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.adm_defstate} :</label></div>
+						<div class="form-field">{FN_ADD_DEFSTATE}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Title} :</label></div>
+						<div class="form-field">
+							{FN_ADD_TITLE} 
+							<div class="descr">{PHP.L.adm_required}</div>
+						</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Description} :</label></div>
+						<div class="form-field">{FN_ADD_DESC}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Icon} :</label></div>
+						<div class="form-field">{FN_ADD_ICON}</div>
+					</li>
+				
+				</ul>
+				
+				<div class="form-btn text-center">
+					<button type="submit" class="submit btn">{PHP.L.Add}</button>
+				</div>
+			
+			</form>  
+		
+		</div>
+		
 	</div>
 	
-	<div class="tab-content" id="tab2"> 
-  
-  	<h4>{PHP.L.addnewentry}</h4>
-  	 
-	<form id="addstructure" action="{FN_ADD_SEND}" method="post">
-
-	<table class="cells striped">
-	
-	<tr>
-		<td style="width:180px;">{PHP.L.Code} :</td>
-		<td>{FN_ADD_CODE} {PHP.L.adm_required}</td>
-	</tr>
-	
-	<tr>
-		<td>{PHP.L.Path} :</td>
-		<td>{FN_ADD_PATH} {PHP.L.adm_required}</td>
-	</tr>
-	
-	<tr>
-		<td>{PHP.L.adm_defstate} :</td>
-		<td>{FN_ADD_DEFSTATE}</td>
-	</tr>
-	
-	<tr>
-		<td>{PHP.L.Title} :</td>
-		<td>{FN_ADD_TITLE} {PHP.L.adm_required}</td>
-	</tr>
-	
-	<tr>
-		<td>{PHP.L.Description} :</td>
-		<td>{FN_ADD_DESC}</td>
-	</tr>
-	
-	<tr>
-		<td>{PHP.L.Icon} :</td>
-		<td>{FN_ADD_ICON}</td>
-	</tr>
-	
-	<tr>
-		<td colspan="2"><input type="submit" class="submit btn" value="{PHP.L.Add}" /></td>
-	</tr>
-	
-	</table>
-	
-	</form>  
-	
-	</div>
-</div>
 </div>	
 	
 <!-- END: FORUMS_STRUCTURE -->

@@ -34,8 +34,8 @@
 				<div class="table-thead">
 					<div class="table-td coltop">{PHP.skinlang.forumssections.Subforums}</div>
 					<div class="table-td coltop">{PHP.skinlang.forumssections.Lastpost}</div>
-					<div class="table-td coltop" style="width:48px;">{PHP.skinlang.forumssections.Topics}</div>
-					<div class="table-td coltop" style="width:48px;">{PHP.skinlang.forumssections.Posts}</div>
+					<div class="table-td coltop" style="width:90px;">{PHP.skinlang.forumssections.Topics}</div>
+					<div class="table-td coltop" style="width:90px;">{PHP.skinlang.forumssections.Posts}</div>
 				</div>
 				
 				<div class="table-tbody">
@@ -114,8 +114,8 @@
 
 					<div class="table-td coltop">{FORUMS_TOPICS_TITLE_TOPICS} <div style="float:right; width:135px;">{FORUMS_TOPICS_TITLE_STARTED}</div></div>
 					<div class="table-td coltop" style="width:250px;">{FORUMS_TOPICS_TITLE_LASTPOST}</div>
-					<div class="table-td coltop" style="width:56px;">{FORUMS_TOPICS_TITLE_POSTS}</div>
-					<div class="table-td coltop" style="width:56px;">{FORUMS_TOPICS_TITLE_VIEWS}</div>
+					<div class="table-td coltop" style="width:90px;">{FORUMS_TOPICS_TITLE_POSTS}</div>
+					<div class="table-td coltop" style="width:90px;">{FORUMS_TOPICS_TITLE_VIEWS}</div>
 
 				</div>
 			  

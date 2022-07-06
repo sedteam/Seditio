@@ -185,7 +185,6 @@ pre {
 }
 
 .icon {
-    font-family: Verdana, Arial, sans-serif;
     display: inline-block;
     text-align: center;
     border: 1px solid #459300;
@@ -196,7 +195,7 @@ pre {
     border-radius: 16px;
     width: 28px;
     height: 28px;
-    line-height: 25px;
+    line-height: 23px;
     margin: 6px 5px;
 }
 
@@ -1129,7 +1128,6 @@ ul.content-box-tabs li a.current {
 	text-align: center;
 	padding: 8px;
 	width: 100%;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 }
 

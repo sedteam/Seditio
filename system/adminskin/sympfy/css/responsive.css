@@ -38,6 +38,10 @@
 	.topbar-trigger {
 		display: table-cell;
 	}	
+	
+	#sidebar #main-nav {
+		margin-bottom: 100px;
+	}
 
 }
 
@@ -276,9 +280,54 @@
 		padding-bottom:5px;	
 	}
 	
+	.forums-str-code,
+	.forums-str-path,
+	.forums-str-defstate,
+	.forums-str-tpl,
+	.forums-str-title {
+		text-align:left!important;	
+	}
 	
+	.forums-str-sections,
+	.forums-str-options {
+		width: 50%!important;
+		float:left!important;
+		text-align:left!important;
+		padding-bottom:5px;	
+	}	
 	
+	.forums-str-actions {
+		position: absolute;
+		right:0;
+		top: 10px;
+		width: auto!important;
+		z-index: 10;	
+	}	
 	
+	.pagemanager-id,
+	.pagemanager-title,
+	.pagemanager-date,
+	.pagemanager-owner,
+	.pagemanager-status,
+	.pagemanager-actions {
+		text-align:left!important;	
+	}
+		
+	.users-id,
+	.users-groups {
+		text-align:left!important;		
+	}
+	
+	.users-members,
+	.users-main,
+	.users-enable,
+	.users-hidden,
+	.users-rights {
+		width: 20%!important;
+		float:left!important;
+		text-align:center!important;
+		padding: 5px 0;		
+	}	
 	
 	.structure-pagecount,
 	.structure-rights,

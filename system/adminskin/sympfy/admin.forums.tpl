@@ -141,7 +141,7 @@
 	<div class="sedtabs">
 
 		<div class="content-box-header">
-			<h3 class="tab-title">{PHP.L.adm_forum_structure_cat}</h3>		
+			<h3 class="tab-title">{PHP.L.adm_forum_structure_cat}</h3>
 			<ul class="content-box-tabs">
 				<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.adm_forum_structure_cat}">{PHP.L.adm_forum_structure_cat}</a></li>
 				<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.addnewentry}">{PHP.L.addnewentry}</a></li>
@@ -197,7 +197,7 @@
 									{FS_LIST_TITLE}
 								</div>
 								<div class="table-td text-center resp-table-td forums-order" data-label="{PHP.L.Order}">
-									<a href="{FS_LIST_ORDER_UP_URL}">{PHP.sed_img_up}</a><a href="{FS_LIST_ORDER_DOWN_URL}">{PHP.sed_img_down}</a>
+									<a href="{FS_LIST_ORDER_UP_URL}">{PHP.cfg.arrow_up}</a><a href="{FS_LIST_ORDER_DOWN_URL}">{PHP.cfg.arrow_down}</a>
 								</div>
 								<div class="table-td text-center resp-table-td forums-prvtopics" data-label="{PHP.L.adm_enableprvtopics}">
 									{FS_LIST_ALLOWPRIWATETOPICS}

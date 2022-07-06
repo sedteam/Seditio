@@ -29,178 +29,236 @@
 <!-- END: USERS_BUTTONS -->
 
 <!-- BEGIN: USERS_EDIT -->
-  <div class="content-box"><div class="content-box-header">					
-  	<h3>{PHP.L.editdeleteentries}</h3>			
-  	<div class="clear"></div>					
-  </div>    
+<div class="content-box">
+  
+	<div class="content-box-header">					
+		<h3>{PHP.L.editdeleteentries}</h3>							
+	</div>    
     
-  <div class="content-box-content">  
+	<div class="content-box-content content-table">  
 
-	<form id="editlevel" action="{USERS_EDIT_SEND}" method="post">
-	<table class="cells striped">
-		<tr>
-			<td>{PHP.L.Group} :</td>
-			<td>{USERS_EDIT_TITLE} {PHP.L.adm_required}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Description} :</td>
-			<td>{USERS_EDIT_DESC}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Icon} :</td>
-			<td>{USERS_EDIT_ICON}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Alias} :</td>
-			<td>{USERS_EDIT_ALIAS}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.adm_color} :</td>
-			<td>{USERS_EDIT_COLOR}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.adm_maxsizesingle} :</td>
-			<td>{USERS_EDIT_MAXFILESIZE}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.adm_maxsizeallpfs} :</td>
-			<td>{USERS_EDIT_MAXTOTALSIZE}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Enabled} :</td>
-			<td>{USERS_EDIT_GRPDISABLE}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Hidden} :</td>
-			<td>{USERS_EDIT_GRPHIDDEN}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Level} :</td>
-			<td>{USERS_EDIT_GRPLEVEL}</td>
-		</tr>
-		<tr>
-			<td>{PHP.L.Rights} :</td>
-			<td><a href="{USERS_EDIT_RIGHT_URL}"><i class="ic-lock"></i></a></td>
-		</tr>
-		
-		<!-- BEGIN: USERS_EDIT_ADMIN -->
-		<tr>
-			<td>{PHP.L.Delete} :</td>
-			<td><a href="{USERS_EDIT_DELETE_URL}">{PHP.out.img_delete}</a></td>
-		</tr>
-		<!-- END: USERS_EDIT_ADMIN -->
-		
-		<tr>
-			<td colspan="2"><input type="submit" class="submit btn" value="{PHP.L.Update}" /></td>
-		</tr>
-	</table>
-	</form>
+		<form id="editlevel" action="{USERS_EDIT_SEND}" method="post">
+
+			<ul class="form responsive-form">
+			
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Group} :</label></div>
+					<div class="form-field">{USERS_EDIT_TITLE} <div class="descr">{PHP.L.adm_required}</div></div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Description} :</label></div>
+					<div class="form-field">{USERS_EDIT_DESC}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Icon} :</label></div>
+					<div class="form-field">{USERS_EDIT_ICON}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Alias} :</label></div>
+					<div class="form-field">{USERS_EDIT_ALIAS}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.adm_color} :</label></div>
+					<div class="form-field">{USERS_EDIT_COLOR}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.adm_maxsizesingle} :</label></div>
+					<div class="form-field">{USERS_EDIT_MAXFILESIZE}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.adm_maxsizeallpfs} :</label></div>
+					<div class="form-field">{USERS_EDIT_MAXTOTALSIZE}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Enabled} :</label></div>
+					<div class="form-field">{USERS_EDIT_GRPDISABLE}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Hidden} :</label></div>
+					<div class="form-field">{USERS_EDIT_GRPHIDDEN}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Level} :</label></div>
+					<div class="form-field">{USERS_EDIT_GRPLEVEL}</div>
+				</li>
+				
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Rights} :</label></div>
+					<div class="form-field"><a href="{USERS_EDIT_RIGHT_URL}"><i class="ic-lock"></i></a></div>
+				</li>
+				
+				<!-- BEGIN: USERS_EDIT_ADMIN -->
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.Delete} :</label></div>
+					<div class="form-field"><a href="{USERS_EDIT_DELETE_URL}">{PHP.out.img_delete}</a></div>
+				</li>
+				<!-- END: USERS_EDIT_ADMIN -->
+				
+				<li class="form-row">
+					<div class="form-field-100 text-center">
+						<button type="submit" class="submit btn">{PHP.L.Update}</button>		
+					</div>
+				</li>
+
+			</ul>
+
+		</form>
 
 	</div>
+	
 </div>
 <!-- END: USERS_EDIT -->
 
 <!-- BEGIN: USERS_GROUPS -->
 
 <div class="content-box sedtabs">
+	
 	<div class="content-box-header">					
-		<h3>{PHP.L.Users}</h3>					
+		<h3 class="tab-title">{PHP.L.Users}</h3>						
 		<ul class="content-box-tabs">
-		  <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Users}</a></li>
-		  <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.addnewentry}</a></li>
-		</ul>					
-		<div class="clear"></div>					
+		  <li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.Users}">{PHP.L.Users}</a></li>
+		  <li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.addnewentry}">{PHP.L.addnewentry}</a></li>
+		</ul>									
 	</div>    
 
-	<div class="content-box-content">
-	<div class="tab-content default-tab" id="tab1">    
-
-	<table class="cells striped">
-	<thead>
-		<tr>
-			<th class="coltop">#ID</th>
-			<th class="coltop">{PHP.L.Groups}</th>
-			<th class="coltop" style="width:15%;">{PHP.L.Members}</th>
-			<th class="coltop" style="width:15%;">{PHP.L.Main}</th>  
-			<th class="coltop" style="width:12%;">{PHP.L.Enabled}</th>
-			<th class="coltop" style="width:12%;">{PHP.L.Hidden}</th>
-			<th class="coltop" style="width:12%;">{PHP.L.Rights}</th>
-		</tr>
-	</thead>
-
-	<!-- BEGIN: GROUP_LIST -->
-			<tr>
-				<td style="text-align:center;">{GROUP_LIST_ID}</td>
-				<td><a href="{GROUP_LIST_URL}"><span class="icon"><i class="ic-user"></i></span> {GROUP_LIST_TITLE}</a></td>
-				<td style="text-align:center;">{GROUP_LIST_GRP_COUNT}</td>
-				<td style="text-align:center;">{GROUP_LIST_MAINGRP_COUNT}</td>
-				<td style="text-align:center;">{GROUP_LIST_DISABLE}</td>
-				<td style="text-align:center;">{GROUP_LIST_COUNT}</td>
-				<td style="text-align:center;"><a href="{GROUP_LIST_RIGHT_URL}"><i class="ic-lock"></i></a></td>
-			</tr>
-	<!-- END: GROUP_LIST -->
-
-	</table>
-
-	</div>
-	<div class="tab-content" id="tab2">  
-
-	<h4>{PHP.L.addnewentry} :</h4>
+	<div class="content-box-content content-table">
 	
-	<form id="addlevel" action="{GROUP_ADD_SEND}" method="post">
-	
-	<table class="cells striped">
-	<tr>
-		<td>{PHP.L.Group} :</td>
-		<td>{GROUP_ADD_TITLE} {PHP.L.adm_required}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.Description} :</td>
-		<td>{GROUP_ADD_DESC}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.Icon} :</td>
-		<td>{GROUP_ADD_ICON}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.Alias} :</td>
-		<td>{GROUP_ADD_ALIAS}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.adm_color} :</td>
-		<td>{GROUP_ADD_COLOR}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.adm_maxsizesingle} :</td>
-		<td>{GROUP_ADD_MAXFILESIZE}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.adm_maxsizeallpfs} :</td>
-		<td>{GROUP_ADD_MAXTOTALSIZE}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.adm_copyrightsfrom} :</td>
-		<td>{GROUP_ADD_COPYRIGHTSFROM} {PHP.L.adm_required}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.Level} :</td>
-		<td>{GROUP_ADD_GRPLEVEL}</td></tr>
-	<tr>
-		<td>{PHP.L.Enabled} :</td>
-		<td>{GROUP_ADD_GRPDISABLE}</td>
-	</tr>
-	<tr>
-		<td>{PHP.L.Hidden} :</td>
-		<td>{GROUP_ADD_GRPHIDDEN}</td>
-	</tr>
-	<tr>
-		<td colspan="2"><input type="submit" class="submit btn" value="{PHP.L.Add}" /></td>
-	</tr>
-	</table>
-	
-	</form>
+		<div class="tab-content default-tab" id="tab1">    
+
+			<div class="table cells striped resp-table">
+
+				<div class="table-head resp-table-head">
+				
+					<div class="table-row resp-table-row">
+						<div class="table-th coltop text-center">#ID</div>
+						<div class="table-th coltop text-left">{PHP.L.Groups}</div>
+						<div class="table-th coltop text-center" style="width:15%;">{PHP.L.Members}</div>
+						<div class="table-th coltop text-center" style="width:15%;">{PHP.L.Main}</div>  
+						<div class="table-th coltop text-center" style="width:12%;">{PHP.L.Enabled}</div>
+						<div class="table-th coltop text-center" style="width:12%;">{PHP.L.Hidden}</div>
+						<div class="table-th coltop text-center" style="width:12%;">{PHP.L.Rights}</div>
+					</div>
+					
+				</div>
+				
+				<div class="table-body resp-table-body">
+
+					<!-- BEGIN: GROUP_LIST -->
+					<div class="table-row resp-table-row">
+						<div class="table-td text-center resp-table-td users-id" data-label="#ID">
+							{GROUP_LIST_ID}
+						</div>
+						<div class="table-td text-left resp-table-td users-groups" data-label="{PHP.L.Groups}">
+							<a href="{GROUP_LIST_URL}"><span class="icon"><i class="ic-user"></i></span> {GROUP_LIST_TITLE}</a>
+						</div>
+						<div class="table-td text-center resp-table-td users-members" data-label="{PHP.L.Members}">
+							{GROUP_LIST_GRP_COUNT}
+						</div>
+						<div class="table-td text-center resp-table-td users-main" data-label="{PHP.L.Main}">
+							{GROUP_LIST_MAINGRP_COUNT}
+						</div>
+						<div class="table-td text-center resp-table-td users-enable" data-label="{PHP.L.Enabled}">
+							{GROUP_LIST_DISABLE}
+						</div>
+						<div class="table-td text-center resp-table-td users-hidden" data-label="{PHP.L.Hidden}">
+							{GROUP_LIST_COUNT}
+						</div>
+						<div class="table-td text-center resp-table-td users-rights" data-label="{PHP.L.Rights}">
+							<a href="{GROUP_LIST_RIGHT_URL}"><i class="ic-lock"></i></a>
+						</div>
+					</div>
+					<!-- END: GROUP_LIST -->
+
+				</div>
+				
+			</div>
+
+		</div>
+		
+		<div class="tab-content" id="tab2">  
+		
+			<form id="addlevel" action="{GROUP_ADD_SEND}" method="post">
+			
+				<ul class="form responsive-form">
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Group} :</label></div>
+						<div class="form-field">GROUP_ADD_TITLE} <div class="descr">{PHP.L.adm_required}</div></div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Description} :</label></div>
+						<div class="form-field">{GROUP_ADD_DESC}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Icon} :</label></div>
+						<div class="form-field">{GROUP_ADD_ICON}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Alias} :</label></div>
+						<div class="form-field">{GROUP_ADD_ALIAS}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.adm_color} :</label></div>
+						<div class="form-field">{GROUP_ADD_COLOR}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.adm_maxsizesingle} :</label></div>
+						<div class="form-field">{GROUP_ADD_MAXFILESIZE}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.adm_maxsizeallpfs} :</label></div>
+						<div class="form-field">{GROUP_ADD_MAXTOTALSIZE}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.adm_copyrightsfrom} :</label></div>
+						<div class="form-field">{GROUP_ADD_COPYRIGHTSFROM} <div class="descr">{PHP.L.adm_required}</div></div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Level} :</label></div>
+						<div class="form-field">{GROUP_ADD_GRPLEVEL}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Enabled} :</label></div>
+						<div class="form-field">{GROUP_ADD_GRPDISABLE}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Hidden} :</label></div>
+						<div class="form-field">{GROUP_ADD_GRPHIDDEN}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-field-100 text-center">
+							<button type="submit" class="submit btn">{PHP.L.Add}</button>		
+						</div>
+					</li>	
+				
+				</ul>
+			
+			</form>
+		
+		</div>
+		
 	</div>
-	</div>
+	
 </div>
 
 <!-- END: USERS_GROUPS -->
