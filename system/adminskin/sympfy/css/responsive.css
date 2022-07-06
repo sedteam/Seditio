@@ -145,6 +145,10 @@
 		width: 100%;
 	}
 	
+	.resp-hide {
+		display: none!important;
+	}
+	
 	.resp-table-head {
 		display: none;
 	}
@@ -254,6 +258,27 @@
 		text-align:left!important;
 		padding-bottom:5px;
 	}
+		
+	.forums-title,
+	.forums-order,
+	.forums-prvtopics {
+		text-align:left!important;	
+	}
+	
+	.forums-topics,
+	.forums-posts,
+	.forums-views,
+	.forums-rights,
+	.forums-open {
+		width: 20%!important;
+		float:left!important;
+		text-align:center!important;	
+		padding-bottom:5px;	
+	}
+	
+	
+	
+	
 	
 	.structure-pagecount,
 	.structure-rights,

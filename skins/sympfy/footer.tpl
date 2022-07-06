@@ -56,7 +56,7 @@
 
 						<!-- BEGIN: GUEST -->
 						<ul class="footer-auth">
-						  <li><i class="ic-user1"></i> <a href="{PHP.out.auth_link}">{PHP.skinlang.header.Login}</a></li>
+						  <li><i class="ic-user"></i> <a href="{PHP.out.auth_link}">{PHP.skinlang.header.Login}</a></li>
 						  <li><i class="ic-plus"></i> <a href="{PHP.out.register_link}">{PHP.skinlang.header.Register}</a></li>
 						</ul>
 						<!-- END: GUEST --> 												
