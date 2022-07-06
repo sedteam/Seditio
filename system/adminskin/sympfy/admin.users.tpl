@@ -192,7 +192,7 @@
 				
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.L.Group} :</label></div>
-						<div class="form-field">GROUP_ADD_TITLE} <div class="descr">{PHP.L.adm_required}</div></div>
+						<div class="form-field">{GROUP_ADD_TITLE} <div class="descr">{PHP.L.adm_required}</div></div>
 					</li>
 					
 					<li class="form-row">
