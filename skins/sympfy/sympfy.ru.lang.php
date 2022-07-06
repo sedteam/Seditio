@@ -112,7 +112,7 @@ $skinlang['pageadd']['Title'] = "Заголовок:";
 $skinlang['pageadd']['Description'] = "Описание:";
 $skinlang['pageadd']['Author'] = "Автор:";
 $skinlang['pageadd']['Extrakey'] = "Дополнительное поле (опционально):";
-$skinlang['pageadd']['Alias'] = "Псевдоним для страницы:<br />page.php?al=";
+$skinlang['pageadd']['Alias'] = "URL для страницы:";
 $skinlang['pageadd']['Owner'] = "Владелец:";
 $skinlang['pageadd']['Begin'] = "Начата:";
 $skinlang['pageadd']['Expire'] = "Истекает:";
@@ -123,7 +123,7 @@ $skinlang['pageadd']['URL'] = "Ссылка на файл:";
 $skinlang['pageadd']['URLhint'] = "(Указать если \"Прикрепить файл\" = Да)";
 $skinlang['pageadd']['Filesize'] = "Размер файла (KB):";
 $skinlang['pageadd']['Filesizehint'] = "(Указать если \"Прикрепить файл\" = Да)";
-$skinlang['pageadd']['Formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"plug.php?e=contact\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и утвердит.<br />";
+$skinlang['pageadd']['Formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"".sed_url("plug", "e=contact")."\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
 $skinlang['pageadd']['Submit'] = "Отправить";
 $skinlang['pageadd']['Publish'] = "Опубликовать"; // New v173
 $skinlang['pageadd']['Parsing'] = "Парсинг:"; // New v173
