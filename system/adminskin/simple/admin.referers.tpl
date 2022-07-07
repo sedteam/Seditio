@@ -39,13 +39,13 @@
 			<!-- BEGIN: REFERERS_LIST -->
 			
 			<tr>
-				<td colspan="2"><a href="http://{REFERER_GROUP_URL}">{REFERER_GROUP_URL}</a></td>
+				<td colspan="2"><a href="{REFERER_GROUP_URL}">{REFERER_GROUP_URL}</a></td>
 			</tr>
 			
 			<!-- BEGIN: REFERERS_LIST_ITEM -->
 			
 			<tr>
-				<td><a href="http://{REFERER_URL}">{REFERER_TITLE}</a></td>
+				<td><a href="{REFERER_URL}">{REFERER_TITLE}</a></td>
 				<td>{REFERER_COUNT}</td>
 			</tr>			
 			

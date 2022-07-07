@@ -44,7 +44,7 @@
 				
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td referers-title" data-label="{PHP.L.Referer}">
-						<a href="http://{REFERER_GROUP_URL}"><strong>{REFERER_GROUP_URL}</strong></a>
+						<a href="{REFERER_GROUP_URL}"><strong>{REFERER_GROUP_URL}</strong></a>
 					</div>
 					<div class="table-td text-left resp-table-td referers-code">
 						
@@ -55,7 +55,7 @@
 				
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td referers-title" data-label="{PHP.L.Referer}">
-						<a href="http://{REFERER_URL}">{REFERER_TITLE}</a>
+						<a href="{REFERER_URL}">{REFERER_TITLE}</a>
 					</div>
 					<div class="table-td text-left resp-table-td referers-code" data-label="{PHP.L.Hits}">
 						{REFERER_COUNT}
