@@ -5220,7 +5220,8 @@ function sed_sefurlredirect()
 
 /** 
  * Captcha value & answer time write to $_SESSION
- *   
+ * 
+ * @param string $code Code 
  */
 function sed_session_write($code)
     {      
@@ -5230,7 +5231,8 @@ function sed_session_write($code)
 	
 /** 
  * Captcha field name write to $_SESSION
- *   
+ *
+ * @param string $code Code
  */	
 function sed_session_field_write($code)
     {
@@ -5293,7 +5295,7 @@ function sed_userisonline($id)
  * @param int $wrap Wrapping boundary 
  * @return string 
  */ 
-function sed_wraptext($str,$wrap=128)
+function sed_wraptext($str, $wrap = 128)
 	{
 	if (!empty($str))
 		{ $str = preg_replace("/([^\n\r ?&\.\/<>\"\\-]{80})/i"," \\1\n", $str); }
@@ -5324,8 +5326,10 @@ function sed_xp()
   
 /** 
  * Get extra field for table 
- */  
- 
+ * 
+ * @param string $sql_table SQL Table name
+ * @return array 
+ */ 
 function sed_extrafield_get($sql_table) 
 { 
     global $sed_dic, $cfg;
@@ -5344,9 +5348,12 @@ function sed_extrafield_get($sql_table)
 	return $res; 
 } 
 
-/** 
+ /** 
  * Build vars if data is ARRAY? convert to type TXT 
- */  
+ * 
+ * @param array $data Array 
+ * @return array 
+ */ 
 function sed_array_buildvars($data)
 {
 	$res = array();

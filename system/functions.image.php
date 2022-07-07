@@ -30,16 +30,10 @@ $cfg['quality'] = 85;
 
 function resize_image($filename, $width = 0, $height = 0, $set_watermark = false)
     {
-        global $cfg;		
+        global $cfg;	
+		
 		$resized_filename = add_resize_params($filename, 'resize', $width, $height, $set_watermark);
-        $resized_filename_encoded = $resized_filename;
-
-        if (substr($resized_filename_encoded, 0, 7) == 'http://' || substr($resized_filename_encoded, 0,
-                8) == 'https://') {
-            $resized_filename_encoded = rawurlencode($resized_filename_encoded);
-            $resized_filename_encoded = rawurlencode($resized_filename_encoded);
-        }
-        return $cfg['res_dir'] . $resized_filename_encoded;
+        return $cfg['res_dir'] . $resized_filename;
     }
 
 function crop_image($filename, $width = 0, $height = 0, $set_watermark = false)
@@ -47,14 +41,7 @@ function crop_image($filename, $width = 0, $height = 0, $set_watermark = false)
         global $cfg;
 		
 		$resized_filename = add_resize_params($filename, 'crop', $width, $height, $set_watermark);
-        $resized_filename_encoded = $resized_filename;
-
-        if (substr($resized_filename_encoded, 0, 7) == 'http://' || substr($resized_filename_encoded, 0,
-                8) == 'https://') {
-            $resized_filename_encoded = rawurlencode($resized_filename_encoded);
-            $resized_filename_encoded = rawurlencode($resized_filename_encoded);
-        }
-        return $cfg['res_dir'] . $resized_filename_encoded;
+        return $cfg['res_dir'] . $resized_filename;
     }
 
 /**
