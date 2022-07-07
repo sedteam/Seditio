@@ -2773,13 +2773,12 @@ function sed_hextorgb($colour)
  * @param  string $keywords Value meta keywords
  * @return string $result
  */
-function sed_htmlmetas($description = '', $keywords = '')
+function sed_htmlmetas($description = '', $keywords = '', $contenttype = 'text/html')
 	{
 	global $cfg, $sys;
-	$contenttype = "text/html";
 	
-	$description = (empty($description)) ? $cfg['maintitle']." - ".$cfg['subtitle'] : $description;
-	$keywords = (empty($keywords)) ? $cfg['metakeywords'] : $keywords;
+	$description = (empty($description)) ? $cfg['subtitle'] : htmlspecialchars($description);
+	$keywords = (empty($keywords)) ? $cfg['metakeywords'] : htmlspecialchars($keywords);
 	
 	$result = "<base href=\"".$sys['abs_url']."\" />
 <meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />

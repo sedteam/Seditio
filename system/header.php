@@ -85,7 +85,7 @@ $t->assign(array (
 	"HEADER_GMTTIME" => $usr['gmttime'],
 	"HEADER_USERLIST" => $out['userlist'],
 	"HEADER_NOTICES" => $out['notices']
-	));
+));
 	
 if ($usr['id'] > 0)
 	{
@@ -146,7 +146,7 @@ else
 		"HEADER_GUEST_PASSWORD" => $out['guest_password'],
 		"HEADER_GUEST_REGISTER" => $out['guest_register'],
 		"HEADER_GUEST_COOKIETTL" => $out['guest_cookiettl']
-			));
+	));
 
 	$t->parse("HEADER.GUEST");
 	}
