@@ -541,7 +541,9 @@ if (!empty($pages))
 
 $t->assign(array(
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
-	"FORUMS_POSTS_SHORTTITLE" => $fs_title,
+	"FORUMS_POSTS_FSTITLE" => $fs_title,
+	"FORUMS_POSTS_TITLE" => $ft_title,
+	"FORUMS_POSTS_SHORTTITLE" => $ft_title,
 	"FORUMS_POSTS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
