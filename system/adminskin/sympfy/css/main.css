@@ -1133,7 +1133,6 @@ ul.content-box-tabs li a.current {
 
 .pagination {
 	position: relative;
-	left: -9px;
 	margin: 0;
 	list-style: none;
 }
@@ -1174,6 +1173,12 @@ ul.content-box-tabs li a.current {
 	border: 1px solid #ddd;
 	background-color: #333;
 	color: #ffffff;
+	text-decoration: none;
+}
+
+.pagination i {
+    font-size: 1em!important;
+    vertical-align: middle;
 }
 
 /* = Modal Windows

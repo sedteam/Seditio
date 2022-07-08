@@ -2,7 +2,7 @@
 
 		<div id="footer">
 			<small> 	
-			{FOOTER_BOTTOMLINE} | <a href="#">Top</a><br />
+			{FOOTER_BOTTOMLINE} | <a href="{PHP.sys.request_uri}#">Top</a><br />
 			{FOOTER_CREATIONTIME}<br />
 			{FOOTER_SQLSTATISTICS}
 			</small>

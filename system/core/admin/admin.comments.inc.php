@@ -63,7 +63,7 @@ $ii = 0;
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
-	$row['com_text'] = sed_cc(sed_cutstring(strip_tags($row['com_text']), 80));
+	$row['com_text'] = sed_cutstring(strip_tags($row['com_text']), 80);
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
 	$row['com_value'] = mb_substr($row['com_code'], 1);
 
