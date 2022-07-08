@@ -136,7 +136,7 @@ else
 	if ($a=='add')
 		{
 		$ntext = sed_import('ntext','P','HTM');
-		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
+		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_ownerid) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."', ".$usr['id'].")");
 		}
 
 	$sql = sed_sql_query("SELECT p.*, t.ft_id FROM $db_polls AS p

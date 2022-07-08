@@ -53,8 +53,8 @@ else
 			{
 			$poll_state = $row['poll_state'];
 			$poll_minlevel = $row['poll_minlevel'];
-      $poll_title = $row['poll_text'];
-      $poll_creationdate = $row['poll_creationdate'];
+			$poll_title = $row['poll_text'];
+			$poll_creationdate = $row['poll_creationdate'];
 
 			if ($usr['id']>0)
 			 	{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
