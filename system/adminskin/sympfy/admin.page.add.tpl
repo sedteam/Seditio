@@ -15,161 +15,169 @@
 
 <!-- END: PAGEADD_ERROR -->
 
-<div class="content-box sedtabs"><div class="content-box-header">										
-	<ul class="content-box-tabs">
-      <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Page}</a></li>
-      <li><a href="{PHP.sys.request_uri}#tab2">{PHP.L.Meta}</a></li>
-      <li><a href="{PHP.sys.request_uri}#tab3">{PHP.L.Options}</a></li>
-	</ul>					
-	<div class="clear"></div>					
-</div>
+<div class="content-box sedtabs">
 
-<div class="content-box-content content-table">
+	<div class="content-box-header">										
+		<h3 class="tab-title">{PHP.L.Page}</h3>
+		<ul class="content-box-tabs">
+			<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.Page}">{PHP.L.Page}</a></li>
+			<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.Meta}">{PHP.L.Meta}</a></li>
+			<li><a href="{PHP.sys.request_uri}#tab3" data-tabtitle="{PHP.L.Options}">{PHP.L.Options}</a></li>
+		</ul>										
+	</div>
 
-<form action="{PAGEADD_FORM_SEND}" method="post" name="newpage">
-     
-		<div class="tab-content default-tab" id="tab1">
-    
-			<table class="cells striped" class="simple tableforms">
+	<div class="content-box-content content-table">
 
-			<tr>
-				<td style="width:200px;">{PHP.skinlang.pageadd.Category}</td>
-				<td>{PAGEADD_FORM_CAT}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Title}</td>
-				<td>{PAGEADD_FORM_TITLE}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Description}</td>
-				<td>{PAGEADD_FORM_DESC}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Author}</td>
-				<td>{PAGEADD_FORM_AUTHOR}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Alias}</td>
-				<td>{PAGEADD_FORM_ALIAS}</td>
-			</tr>		
-		  
-			<tr>
-				<td colspan="2">{PHP.skinlang.pageadd.Bodyofthepage}<br /><br />{PAGEADD_FORM_TEXT}</td>
-			</tr>  
+		<form action="{PAGEADD_FORM_SEND}" method="post" name="newpage">
+			 
+			<div class="tab-content default-tab" id="tab1">
 			
-			<tr>
-				<td>{PHP.skinlang.pageadd.Thumbs}</td>
-				<td>{PAGEADD_FORM_THUMB}</td>
-			</tr> 
+				<ul class="form responsive-form">
 
-			<tr>
-				<td>{PAGEADD_FORM_SLIDER_TITLE}</td>
-				<td>{PAGEADD_FORM_SLIDER}</td>
-			</tr> 				
-		
-			</table>
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Category}</label></div>
+						<div class="form-field">{PAGEADD_FORM_CAT}</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Title}</label></div>
+						<div class="form-field">{PAGEADD_FORM_TITLE}</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Description}</label></div>
+						<div class="form-field">{PAGEADD_FORM_DESC}</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Author}</label></div>
+						<div class="form-field">{PAGEADD_FORM_AUTHOR}</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Alias}</label></div>
+						<div class="form-field">{PAGEADD_FORM_ALIAS}</div>
+					</li>		
+				  
+					<li class="form-row">
+						<div class="form-field-100">{PHP.skinlang.pageadd.Bodyofthepage}<br /><br />{PAGEADD_FORM_TEXT}</div>
+					</li>  
 					
-		</div>
-    <div class="tab-content" id="tab2">
-    
-			<table class="cells striped" class="simple tableforms">
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Thumbs}</label></div>
+						<div class="form-field">{PAGEADD_FORM_THUMB}</div>
+					</li> 
+
+					<li class="form-row">
+						<div class="form-label"><label>{PAGEADD_FORM_SLIDER_TITLE}</label></div>
+						<div class="form-field">{PAGEADD_FORM_SLIDER}</div>
+					</li> 				
 			
-			<tr>
-				<td style="width:200px;">{PHP.L.mt_title} H1</td>
-				<td>{PAGEADD_FORM_SEOH1}</td>
-			</tr>			
+				</ul>
+							
+			</div>
+			<div class="tab-content" id="tab2">
 			
-			<tr>
-				<td style="width:200px;">{PHP.L.mt_title}</td>
-				<td>{PAGEADD_FORM_SEOTITLE}</td>
-			</tr>
+				<ul class="form responsive-form">
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.mt_title} H1</label></div>
+						<div class="form-field">{PAGEADD_FORM_SEOH1}</div>
+					</li>			
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.mt_title}</label></div>
+						<div class="form-field">{PAGEADD_FORM_SEOTITLE}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.mt_description}</label></div>
+						<div class="form-field">{PAGEADD_FORM_SEODESC}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.mt_keywords}</label></div>
+						<div class="form-field">{PAGEADD_FORM_SEOKEYWORDS}</div>
+					</li>	
+							
+				</ul>    
+				
+			</div>
+				
+			<div class="tab-content" id="tab3">
+				
+				<ul class="form responsive-form">
 			
-			<tr>
-				<td>{PHP.L.mt_description}</td>
-				<td>{PAGEADD_FORM_SEODESC}</td>
-			</tr>
-			
-			<tr>
-				<td>{PHP.L.mt_keywords}</td>
-				<td>{PAGEADD_FORM_SEOKEYWORDS}</td>
-			</tr>	
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Begin}</label></div>
+						<div class="form-field">{PAGEADD_FORM_BEGIN}</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Expire}</label></div>
+						<div class="form-field">{PAGEADD_FORM_EXPIRE}</div>
+					</li>
+					
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Extrakey}</label></div>
+						<div class="form-field">{PAGEADD_FORM_KEY}</div>
+					</li>			
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Owner}</label></div>
+						<div class="form-field">{PAGEADD_FORM_OWNER}</div>
+					</li>			
+				  
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Allowcomments}</label></div>
+						<div class="form-field">{PAGEADD_FORM_ALLOWCOMMENTS}</div>
+					</li>	
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Allowratings}</label></div>
+						<div class="form-field">{PAGEADD_FORM_ALLOWRATINGS}</div>
+					</li>	
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.File}</label></div>							
+						<div class="form-field">
+							{PAGEADD_FORM_FILE}
+							<div class="descr">{PHP.skinlang.pageadd.Filehint}</div>
+						</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.URL}</label></div>							
+						<div class="form-field">
+							{PAGEADD_FORM_URL}
+							<div class="descr">{PHP.skinlang.pageadd.URLhint}</div>
+						</div>
+					</li>
+				
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.pageadd.Filesize}</label></div>
+						<div class="form-field">
+							{PAGEADD_FORM_SIZE}
+							<div class="descr">{PHP.skinlang.pageadd.Filesizehint}</div>
+						</div>
+					</li>
 						
-			</table>    
-		
-		</div>
-		
-    <div class="tab-content" id="tab3">
-		
-			<table class="cells striped" class="simple tableforms">
-		
-			<tr>
-				<td style="width:200px;">{PHP.skinlang.pageadd.Begin}</td>
-				<td>{PAGEADD_FORM_BEGIN}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Expire}</td>
-				<td>{PAGEADD_FORM_EXPIRE}</td>
-			</tr>
+				</ul>
+				
+			</div>
+
+			<div class="help">{PHP.skinlang.pageadd.Formhint} </div>
 			
-			<tr>
-				<td>{PHP.skinlang.pageadd.Extrakey}</td>
-				<td>{PAGEADD_FORM_KEY}</td>
-			</tr>			
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Owner}</td>
-				<td>{PAGEADD_FORM_OWNER}</td>
-			</tr>			
-		  
-			<tr>
-				<td>{PHP.skinlang.pageadd.Allowcomments}</td>
-				<td>{PAGEADD_FORM_ALLOWCOMMENTS}</td>
-			</tr>	
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Allowratings}</td>
-				<td>{PAGEADD_FORM_ALLOWRATINGS}</td>
-			</tr>	
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.File}<br />
-				{PHP.skinlang.pageadd.Filehint}</td>
-				<td>{PAGEADD_FORM_FILE}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.URL}<br />
-				{PHP.skinlang.pageadd.URLhint}</td>
-				<td>{PAGEADD_FORM_URL}</td>
-			</tr>
-		
-			<tr>
-				<td>{PHP.skinlang.pageadd.Filesize}<br />
-				{PHP.skinlang.pageadd.Filesizehint}</td>
-				<td>{PAGEADD_FORM_SIZE}</td>
-			</tr>
-					
-		  </table>
-		
-		</div>
-
-		<div class="help">{PHP.skinlang.pageadd.Formhint} </div>
-		
-		<div class="table-btn text-center">
-			<input type="submit" class="submit btn btn-big" value="{PHP.skinlang.pageadd.Submit}" />
-			<!-- BEGIN: PAGEADD_PUBLISH -->
-			<input type="submit" class="submit btn btn-big" name="newpagepublish" value="{PHP.skinlang.pageadd.Publish}" onclick="this.value='OK'; return true" />
-			<!-- END: PAGEADD_PUBLISH -->
-		</div>
-		
-		</div>
-
-</form>
+			<div class="table-btn text-center">
+				<button type="submit" class="submit btn btn-big">{PHP.skinlang.pageadd.Submit}</button>
+				<!-- BEGIN: PAGEADD_PUBLISH -->
+				<button class="submit btn btn-big" name="newpagepublish" onclick="this.value='OK'; return true">{PHP.skinlang.pageadd.Publish}</button>
+				<!-- END: PAGEADD_PUBLISH -->
+			</div>
+			
+		</form>	
+				
+	</div>
 
 </div>
 
