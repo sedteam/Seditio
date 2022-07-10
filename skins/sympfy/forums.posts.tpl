@@ -21,6 +21,8 @@
 		</div>
 
 		<div class="section-body">
+		
+		{FORUMS_POSTS_POLL}
 
 			<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 

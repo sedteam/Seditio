@@ -410,15 +410,18 @@ if (!$cfg['disable_polls'] && $ft_poll>0)
 	$totalvotes = sed_sql_result($sql4,0,"SUM(po_count)");
 
 	$row5 = sed_sql_fetchassoc($sql5);
+	
 	$poll_state = $row5['poll_state'];
+	$poll_text = $row5['poll_text'];
 
 	$sql6 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$ft_poll' ORDER by po_id ASC");
 	$sql9 = sed_sql_query("SELECT MAX(po_count) FROM $db_polls_options WHERE po_pollid='$ft_poll'");
 
 	$row9 = sed_sql_fetchassoc($sql9);
-	$coef = ($row9['MAX(po_count)']<1) ? 0 : ($totalvotes / $row9['MAX(po_count)'])*2.56;
+	$coef = ($row9['MAX(po_count)'] < 1) ? 0 : ($totalvotes / $row9['MAX(po_count)'])*2.56;
 
-	$poll_result = "<table>";
+	$poll_result = "<h4>".$poll_text."</h4>";
+	$poll_result .= "<table class=\"cells striped\">";
 	$ii=1;
 	while ($row6 = sed_sql_fetchassoc($sql6))
 		{
@@ -426,20 +429,11 @@ if (!$cfg['disable_polls'] && $ft_poll>0)
 		$po_count = $row6['po_count'];
 		$percent = @round(100 * ($po_count / $totalvotes),1);
 		$percentbar = floor($percent * $coef);
-
 		$poll_result .= "<tr><td>";
-
-		if ($alreadyvoted || $ft_state)
-			{ $poll_result .= $row6['po_text']; }
-		else
-			{ $poll_result .= "<a href=\"".sed_url("forums", "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll."&vote=".$po_id)."\">".$row6['po_text']."</a>"; }
-
-		$poll_result .= "</td><td style=\"text-align:right;\">".$percent."%</td><td style=\"text-align:center; width:24px;\">(".$po_count.")</td>";
-		$poll_result .= "<td style=\"text-align:left;\"><img src=\"skins/$skin/img/system/poll-bar1.gif\" height=\"12\" alt=\"\" />";
-		$poll_result .= "<img src=\"skins/$skin/img/system/poll-bar2.gif\" width=\"$percentbar\" height=\"12\" alt=\"\" />";
-		$poll_result .= "<img src=\"skins/$skin/img/system/poll-bar3.gif\" height=\"12\" alt=\"\" /></td></tr>";
+		$poll_result .= ($alreadyvoted || $ft_state) ? $row6['po_text'] : "<a href=\"".sed_url("forums", "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll."&vote=".$po_id)."\">".$row6['po_text']."</a>";
+		$poll_result .= "</td><td><div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
 		}
-	$poll_result .= "</table><br />";
+	$poll_result .= "</table>";
 
 	if ($alreadyvoted)
           	{ $poll_result .= ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
@@ -487,7 +481,7 @@ foreach ($forum_sections as $key => $value)
 	$jumpbox .= "<option $selected value=\"".sed_url("forums", "m=topics&s=".$forum_sections[$key]['fs_id'])."\">".$cfs."</option>";
 	}
 
-$movebox .= "</select> ".$L['Ghost']." <input type=\"checkbox\" class=\"checkbox\" name=\"ghost\" checked=\"checked\" />";
+$movebox .= "</select> ".$L['Ghost']." ".sed_checkbox('ghost', 1, true);
 $jumpbox .= "</select>";
 
 if ($fs_parentcat > 0) 

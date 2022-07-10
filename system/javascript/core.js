@@ -27,8 +27,8 @@ var sedjs = {
 	-------------------------------------*/
 	polls : function(rcode,modal)
 		{  
-		if (!modal) { window.open(sedjs.get_basehref()+'polls?id='+rcode,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }    
-		else { sedjs.modal.open("polls", "iframe", sedjs.get_basehref()+'polls?id='+rcode, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'polls?id='+rcode+'&stndl=1','Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }    
+		else { sedjs.modal.open("polls", "iframe", sedjs.get_basehref()+'polls?id='+rcode+'&stndl=1', "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Poll vote

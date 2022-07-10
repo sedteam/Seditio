@@ -1,20 +1,23 @@
 <!-- BEGIN: MAIN -->
 
-<main id="system">
-	
-	<div class="container">
-	
-	{POLLS_BREADCRUMBS}
+{POLLS_STANDALONE_HEADER1}
+<link href="skins/{PHP.skin}/css/framework.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/css/fonts.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/css/plugins.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/css/cms.css" type="text/css" rel="stylesheet" />		
+<link href="skins/{PHP.skin}/css/sympfy.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/css/responsive.css" type="text/css" rel="stylesheet" />
+{POLLS_STANDALONE_HEADER2}
+
+<main id="standalone">
 	
 	<!-- BEGIN: POLLS_VIEW -->
 	
 	<div class="section-title">
 		<h1>{POLLS_TITLE}</h1>
-			
+		<div class="section-desc"></div>		
 	</div>
-	
-	<div class="section-desc"></div>
-	
+
 	<div class="section-body">
 
 		{POLLS_RESULTS}
@@ -31,10 +34,8 @@
 	
 	<div class="section-title">
 		<h1>{PHP.skinlang.polls.Allpolls}</h1>
-				
+		<div class="section-desc"></div>		
 	</div>
-	
-	<div class="section-desc"></div>
 
 	<div class="section-body">	
 
@@ -54,9 +55,9 @@
 	</div>
 
 	<!-- END: POLLS_EXTRA -->	
-	
-	</div>
 
 </main>
+
+{POLLS_STANDALONE_FOOTER}
 
 <!-- END: MAIN -->

@@ -3363,7 +3363,7 @@ function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE)
 	{	
 	if (empty($data) || !is_array($data))
     {
-       $val = (empty($data)) ? "1" : "";
+       $val = (empty($data)) ? "1" : $data;
 	   
 	   $checked = ($check_data) ? " checked" : "";
 	   $disabled = ($disabled) ? " disabled" : "";	   
