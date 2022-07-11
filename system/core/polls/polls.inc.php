@@ -35,17 +35,21 @@ $ratings = sed_import('ratings','G','BOL');
 $ajax = sed_import('ajax', 'G', 'BOL');
 
 $vote = ($pvote) ? $pvote : $vote;
+$id = (empty($id)) ? 'viewall' : $id;
 
 $standalone = ($stndl) ? true : false;
 $standalone_url = ($stndl) ? "&stndl=1" : "";
 
+$out['subtitle'] = $L['Polls'];
+
 // ---------- Breadcrumbs
 $urlpaths = array();
+$urlpaths[sed_url("polls")] = $L['polls_viewarchives'];
 
-if ($id == 'viewall')
+if (empty($id) || $id == 'viewall')
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state=0 AND poll_type=0 ORDER BY poll_id DESC");
-	$urlpaths[sed_url("polls", "id=viewall")] = $L['polls_viewarchives'];
+	$title = $L['polls_viewarchives'];
 	}
 else
 	{
@@ -62,6 +66,8 @@ else
 			$poll_minlevel = $row['poll_minlevel'];
 			$poll_title = $row['poll_text'];
 			$poll_creationdate = $row['poll_creationdate'];
+			
+			$title = $poll_title;
 			
 			$urlpaths[sed_url("polls", "id=".$id)] = $poll_title;
 
@@ -96,7 +102,7 @@ else
 		{ sed_die(); }
 	}
 
-$out['subtitle'] = $L['Polls'];
+$out['subtitle'] = $title;
 
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
@@ -109,16 +115,16 @@ if ($standalone)
 	{
 	sed_sendheaders();
 	
-	$polls_header1 = $cfg['doctype']."\n<html>\n<head>
-	<title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript($morejavascript);
-	$polls_header2 = "</head>\n<body>";
-	$polls_footer = "</body>\n</html>";
-	
 	/* === Hook === */
 	$extp = sed_getextplugins('polls.stndl');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ===== */
+	/* ===== */	
+	
+	$polls_header1 = $cfg['doctype']."\n<html>\n<head>
+	<title>".$cfg['maintitle']."</title>".sed_htmlmetas().$moremetas.sed_javascript($morejavascript);
+	$polls_header2 = "</head>\n<body>";
+	$polls_footer = "</body>\n</html>";
 
 	$mskin = sed_skinfile(array('polls', 'standalone'));
 	$t = new XTemplate($mskin);
@@ -148,7 +154,7 @@ if (!empty($error_string))
 	$t->assign("POLLS_ERROR_BODY", $error_string);
 	$t->parse("MAIN.POLLS_ERROR");
 	}
-elseif ($id == 'viewall' || empty($id))
+elseif (empty($id) || $id == 'viewall')
 	{
 	
 	if (sed_sql_numrows($sql) == 0)
@@ -259,7 +265,6 @@ if (is_array($extp))
 /* ===== */
 
 $t->parse("MAIN");
-
 $t->out("MAIN");
 
 if ($standalone)
