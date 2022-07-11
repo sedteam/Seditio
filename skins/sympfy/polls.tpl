@@ -5,97 +5,101 @@
 	<div class="container">
 	
 		{POLLS_BREADCRUMBS}
+
+		<div id="pollajx">
 		
 		<!-- BEGIN: POLLS_VIEW -->
-		
-		<div class="section-title">
-			<h1>{POLLS_TITLE}</h1>			
-		</div>
-		
-		<div class="section-desc"></div>
-		
-		<div class="section-body">
-		
-			<!-- BEGIN: POLLS_ERROR -->
 
-			<div class="error">
-				{POLLS_ERROR_BODY}
+			<div class="section-title">
+				<h1>{POLLS_TITLE}</h1>			
 			</div>
+			
+			<div class="section-desc"></div>
+			
+			<div class="section-body">
+			
+				<!-- BEGIN: POLLS_ERROR -->
 
-			<!-- END: POLLS_ERROR -->
-			
-			<!-- BEGIN: POLLS_FORM -->
-					
-			<div class="poll-box">
-			
-				<form name="pollvotes" action="{POLLS_SEND_URL}" method="post">
+				<div class="error">
+					{POLLS_ERROR_BODY}
+				</div>
+
+				<!-- END: POLLS_ERROR -->
 				
-					<!-- BEGIN: POLLS_ROW_OPTIONS -->				
+				<!-- BEGIN: POLLS_FORM -->
+						
+				<div class="poll-box">
+				
+					<form name="pollvotes" id="pollvotes" action="{POLLS_SEND_URL}" method="post">
+					
+						<!-- BEGIN: POLLS_ROW_OPTIONS -->				
+						<div class="poll-item">
+							{POLLS_ROW_RADIO_ITEM}
+						</div>				
+						<!-- END: POLLS_ROW_OPTIONS -->
+						
+						<div class="poll-btn">
+							<button type="submit" class="btn" onclick="{POLLS_BUTTON_ONCLICK}">{PHP.L.Vote}</button>
+						</div>
+					
+					</form>
+				
+				</div>
+						
+				<!-- END: POLLS_FORM -->
+				
+				<!-- BEGIN: POLLS_RESULT -->
+				
+				<div class="poll-box">
+				
+					<!-- BEGIN: POLLS_ROW_RESULT -->				
 					<div class="poll-item">
-						{POLLS_ROW_RADIO_ITEM}
+						<div class="poll-head-table">
+							<div class="poll-title-td">
+								{POLLS_ROW_TEXT}
+							</div>
+							<div class="poll-count-td">
+								({POLLS_ROW_COUNT})
+							</div>
+						</div>
+						<div class="poll-bar">
+							<div class="bar_back">
+								<div class="bar_front" style="width:{POLLS_ROW_PERCENT}%;"></div>
+							</div>
+						</div>
+						
 					</div>				
-					<!-- END: POLLS_ROW_OPTIONS -->
+					<!-- END: POLLS_ROW_RESULT -->
 					
-					<div class="poll-btn">
-						<button type="submit" class="btn">{PHP.L.Vote}</button>
-					</div>
-				
-				</form>
-			
-			</div>
-					
-			<!-- END: POLLS_FORM -->
-			
-			<!-- BEGIN: POLLS_RESULT -->
-			
-			<div class="poll-box">
-			
-				<!-- BEGIN: POLLS_ROW_RESULT -->				
-				<div class="poll-item">
-					<div class="poll-head-table">
-						<div class="poll-title-td">
-							{POLLS_ROW_TEXT}
-						</div>
-						<div class="poll-count-td">
-							({POLLS_ROW_COUNT})
-						</div>
-					</div>
-					<div class="poll-bar">
-						<div class="bar_back">
-							<div class="bar_front" style="width:{POLLS_ROW_PERCENT}%;"></div>
-						</div>
-					</div>
-					
-				</div>				
-				<!-- END: POLLS_ROW_RESULT -->
-				
-			</div>	
+				</div>	
 
-			<!-- END: POLLS_RESULT -->	
-			
-			<p> {POLLS_INFO}<br />
-				{POLLS_VOTERS} {PHP.skinlang.polls.voterssince} {POLLS_SINCE}<br />
-				{POLLS_VIEWALL}
-			</p>	
-			
-			<!-- BEGIN: POLLS_COMMENTS -->
-			<div class="poll-comments spoiler-container {POLLS_COMMENTS_ISSHOW}"> 
-			
-				<div class="comments-box-title">
-					<h3><a href="{POLLS_COMMENTS_URL}">{PHP.skinlang.polls.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({POLLS_COMMENTS_COUNT})</span>{POLLS_COMMENTS_JUMP}</a></h3>						
-				</div>
+				<!-- END: POLLS_RESULT -->	
 				
-				<div class="comments-box spoiler-body">
-					{POLLS_COMMENTS_DISPLAY}	
+				<p> {POLLS_INFO}<br />
+					{POLLS_VOTERS} {PHP.skinlang.polls.voterssince} {POLLS_SINCE}<br />
+					{POLLS_VIEWALL}
+				</p>	
+				
+				<!-- BEGIN: POLLS_COMMENTS -->
+				<div class="poll-comments spoiler-container {POLLS_COMMENTS_ISSHOW}"> 
+				
+					<div class="comments-box-title">
+						<h3><a href="{POLLS_COMMENTS_URL}">{PHP.skinlang.polls.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({POLLS_COMMENTS_COUNT})</span>{POLLS_COMMENTS_JUMP}</a></h3>						
+					</div>
+					
+					<div class="comments-box spoiler-body">
+						{POLLS_COMMENTS_DISPLAY}	
+					</div>
+				
 				</div>
-			
+				<!-- END: POLLS_COMMENTS -->			
+				
 			</div>
-			<!-- END: POLLS_COMMENTS -->			
-			
-		</div>
 		
 		<!-- END: POLLS_VIEW -->
-				
+		
+		</div>
+					
 		<!-- BEGIN: POLLS_VIEWALL -->
 		
 		<div class="section-title">

@@ -272,8 +272,6 @@ var sedjs = {
 				this.load(opt.url,function(data){
 					if(opt.onSuccess) opt.onSuccess(data);
 					if(div) document.getElementById(opt.loadingid).removeChild(div);
-					
-						
 					if(opt.update && data != "") {document.getElementById(opt.update).innerHTML = data;}
 				},opt.format,opt.method, opt);
 			},

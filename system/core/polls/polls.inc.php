@@ -32,6 +32,7 @@ $pvote = sed_import('pvote','P','INT');
 $stndl = sed_import('stndl','G','BOL');
 $comments = sed_import('comments','G','BOL');
 $ratings = sed_import('ratings','G','BOL');
+$ajax = sed_import('ajax', 'G', 'BOL');
 
 $vote = ($pvote) ? $pvote : $vote;
 
@@ -150,7 +151,7 @@ if (!empty($error_string))
 elseif ($id == 'viewall' || empty($id))
 	{
 	
-	if (sed_sql_numrows($sql)==0)
+	if (sed_sql_numrows($sql) == 0)
 		{ 
 		$t->parse("MAIN.POLLS_VIEWALL.POLLS_NONE");			
 		}
@@ -175,9 +176,6 @@ elseif ($id == 'viewall' || empty($id))
 	}
 else
 	{
-
-	$result = "<table class=\"cells striped\">";
-
 	while ($row1 = sed_sql_fetchassoc($sql1))
 		{
 		$po_id = $row1['po_id'];
@@ -212,7 +210,12 @@ else
 	else 
 		{
 		$polls_info = $L['polls_notyetvoted'];
+		
+		$ajax_send = sed_url("polls", "a=send&".sed_xg()."&id=".$id.$standalone_url."&ajax=1");
+		$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajax.bind({'url': '".$ajax_send."', 'format':  'text', 'method':  'POST', 'update':  'pollajx', 'loading': 'pollvotes', 'formid':  'pollvotes'});" : "";
+		
 		$t->assign(array(
+			"POLLS_BUTTON_ONCLICK" => $onclick,
 			"POLLS_SEND_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id.$standalone_url)
 		));	
 		$t->parse("MAIN.POLLS_VIEW.POLLS_FORM");
@@ -229,9 +232,6 @@ else
 		"POLLS_SINCE" => sed_build_date($cfg['dateformat'], $poll_creationdate),
 		"POLLS_TITLE" => $poll_title,
 		"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-		"POLLS_RESULTS" => $result,
-		"POLLS_COMMENTS" => $comments_link,
-		"POLLS_COMMENTS_DISPLAY" => $comments_display,
 		"POLLS_VIEWALL" => "<a href=\"".sed_url("polls", "id=viewall".$standalone_url)."\">".$L['polls_viewarchives']."</a>",
 		"POLLS_INFO" => $polls_info
 		));
@@ -249,7 +249,7 @@ else
 	}	
 	
 	$t->parse("MAIN.POLLS_VIEW");
-	
+	if ($ajax) sed_ajax_flush($t->text("MAIN.POLLS_VIEW"), $ajax);  // AJAX Output
 	}
 
 /* === Hook === */
@@ -259,6 +259,7 @@ if (is_array($extp))
 /* ===== */
 
 $t->parse("MAIN");
+
 $t->out("MAIN");
 
 if ($standalone)

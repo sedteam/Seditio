@@ -1596,14 +1596,12 @@ a.alfabeta:hover {
 .poll-box {
 	border: 1px solid #d4d4d4;
     padding: 20px;
-	max-width: 600px;
 	margin-bottom:24px;
 }
 
 .poll-btn {
 	padding-top:15px;
 }
-
 
 .poll-head-table {
 	width:100%;
@@ -1626,6 +1624,11 @@ a.alfabeta:hover {
 
 .poll-bar {
 	width :100%;
+}
+
+#pollvotes,
+#pollajx {
+	position: relative;
 }
 
 /*-------------------------*/

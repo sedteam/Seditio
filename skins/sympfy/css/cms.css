@@ -600,6 +600,24 @@ ul.tabs li a.selected
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=0 );   			   
 }
 
+/* = Ajax Loading Indicator
+-----------------------------------------------------------------------------*/
+
+#loading-holder {
+	height:32px;
+}
+
+#loading {
+	display:none;
+	text-align:center;
+}
+
+.loading-indicator {
+	width:32px;
+	height:32px;
+	background:url("/system/img/vars/loading.gif") center center no-repeat;
+}
+
 /* = Ratings
 -----------------------------------------------------------------------------*/
 
