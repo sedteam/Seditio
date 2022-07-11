@@ -26,11 +26,14 @@ if (is_array($extp))
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['auth_read']);
 
-$id = sed_import('id','G','ALP',8);
+$id = sed_import('id','G','ALP', 8);
 $vote = sed_import('vote','G','INT');
+$pvote = sed_import('pvote','P','INT');
 $stndl = sed_import('stndl','G','BOL');
 $comments = sed_import('comments','G','BOL');
 $ratings = sed_import('ratings','G','BOL');
+
+$vote = ($pvote) ? $pvote : $vote;
 
 $standalone = ($stndl) ? true : false;
 $standalone_url = ($stndl) ? "&stndl=1" : "";
@@ -45,11 +48,12 @@ if ($id == 'viewall')
 	}
 else
 	{
-	$id = sed_import($id,'D','INT');
-	
-	if ($id>0)
+	$id = sed_import($id, 'D', 'INT');
+
+	if ($id > 0)
 		{
 		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' AND poll_state=0");
+		sed_die(sed_sql_numrows($sql) == 0);
 
 		if ($row = sed_sql_fetchassoc($sql))
 			{
@@ -62,12 +66,12 @@ else
 
 			if ($usr['id'] > 0)
 			 	{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
-					else
+			else
 			 	{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
 
 			$alreadyvoted = (sed_sql_numrows($sql2) > 0) ? 1 : 0;
 
-			if ($a=='send' && empty($error_string) && !$alreadyvoted)
+			if ($a == 'send' && empty($error_string) && !$alreadyvoted)
 				{
 				$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='$vote'");
 				if (sed_sql_affectedrows() == 1)
@@ -82,10 +86,10 @@ else
 			$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 
 			$sql1 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
-			$error_string = (sed_sql_numrows($sql1) < 1) ? $L['wrongURL'] : '';
+			$error_string = (sed_sql_numrows($sql1) < 1) ? $L['msg404_1'] : '';
 			}
        	else
-			{ $error_string = $L['wrongURL']; }
+			{ $error_string = $L['msg404_1']; }
 		}
 	else
 		{ sed_die(); }
@@ -140,33 +144,31 @@ else
 
 if (!empty($error_string))
 	{
-	$t->assign("POLLS_EXTRATEXT",$error_string);
-	$t->parse("MAIN.POLLS_EXTRA");
+	$t->assign("POLLS_ERROR_BODY", $error_string);
+	$t->parse("MAIN.POLLS_ERROR");
 	}
-
-elseif ($id == 'viewall')
+elseif ($id == 'viewall' || empty($id))
 	{
 	
-	$result = "<table class=\"cells striped\">";
-
 	if (sed_sql_numrows($sql)==0)
-		{ $result .= "<tr><td>".$L['None']."</td></tr>"; }
-	   else
+		{ 
+		$t->parse("MAIN.POLLS_VIEWALL.POLLS_NONE");			
+		}
+	else
 		{
 		while ($row = sed_sql_fetchassoc($sql))
 			{
-			$result .= "<tr>";
-			$result .= "<td style=\"width:128px;\">".sed_build_date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
-			$result .= "<td><a href=\"".sed_url("polls", "id=".$row['poll_id'].$standalone_url)."\"><img src=\"system/img/admin/polls.png\" alt=\"\" /></a></td>";
-			$result .= "<td>".$row['poll_text']."</td>";
-			$result .= "</tr>";
+			$t->assign(array(
+				"POLLS_LIST_URL" => sed_url("polls", "id=".$row['poll_id'].$standalone_url),
+				"POLLS_LIST_TEXT" => $row['poll_text'],
+				"POLLS_LIST_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['poll_creationdate'])
+			));				
+			$t->parse("MAIN.POLLS_VIEWALL.POLLS_LIST");			
 			}
 		}
-	$result .= "</table>";
 
 	$t->assign(array(
-		"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-		"POLLS_LIST" => $result
+		"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths)
 	));
 
 	$t->parse("MAIN.POLLS_VIEWALL");
@@ -180,21 +182,47 @@ else
 		{
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
+		$po_text = sed_cc($row1['po_text']);		
 		$percent = @round(100 * ($po_count / $totalvotes),1);
 		$percentbar = floor($percent * 2.24);
-		$result .= "<tr><td>";
-		$result .= ($alreadyvoted) ? $row1['po_text'] : "<a href=\"".sed_url("polls", "a=send&".sed_xg()."&id=".$id."&vote=".$po_id.$standalone_url)."\">".sed_cc($row1['po_text'])."</a>";
-		$result .= "</td><td><div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
+
+		$t->assign(array(
+			"POLLS_ROW_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id."&vote=".$po_id.$standalone_url),
+			"POLLS_ROW_TEXT" => sed_cc($row1['po_text']),
+			"POLLS_ROW_PERCENT" => $percent,
+			"POLLS_ROW_COUNT" => $po_count,
+			"POLLS_ROW_RADIO_ITEM" => sed_radio_item('pvote', $po_id, $po_text, $po_id, false)
+		));
+		
+		if ($alreadyvoted) 
+			{
+			$t->parse("MAIN.POLLS_VIEW.POLLS_RESULT.POLLS_ROW_RESULT");
+			} 
+			else 
+			{
+			$t->parse("MAIN.POLLS_VIEW.POLLS_FORM.POLLS_ROW_OPTIONS");
+			}		
 		}
-
-	$result .= "</table>";
-
+		
+	if ($alreadyvoted) 
+		{
+		$polls_info = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted'];
+		$t->parse("MAIN.POLLS_VIEW.POLLS_RESULT");
+		} 
+	else 
+		{
+		$polls_info = $L['polls_notyetvoted'];
+		$t->assign(array(
+			"POLLS_SEND_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id.$standalone_url)
+		));	
+		$t->parse("MAIN.POLLS_VIEW.POLLS_FORM");
+		}			
+	
 	$item_code = 'v'.$id;
   
 	$url_poll = array('part' => 'polls', 'params' => "id=".$id.$standalone_url."&comments=1");
   
-	$cfg['enablemodal'] = false;
-	list($comments_link, $comments_display) = sed_build_comments($item_code, $url_poll, $comments);
+	list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $url_poll, $comments);
 
 	$t->assign(array(
 		"POLLS_VOTERS" => $totalvotes,
@@ -205,21 +233,23 @@ else
 		"POLLS_COMMENTS" => $comments_link,
 		"POLLS_COMMENTS_DISPLAY" => $comments_display,
 		"POLLS_VIEWALL" => "<a href=\"".sed_url("polls", "id=viewall".$standalone_url)."\">".$L['polls_viewarchives']."</a>",
+		"POLLS_INFO" => $polls_info
 		));
-
+				
+	if (!empty($comments_link)) {
+		$t->assign(array(
+			"POLLS_COMMENTS" => $comments_link,
+			"POLLS_COMMENTS_URL" => sed_url('polls', "id=".$id.$standalone_url."&comments=1"),
+			"POLLS_COMMENTS_DISPLAY" => $comments_display,
+			"POLLS_COMMENTS_COUNT" => $comments_count,
+			"POLLS_COMMENTS_ISSHOW" => ($comments) ? " active" : "",
+			"POLLS_COMMENTS_JUMP" => ($comments) ? "<span class=\"spoiler-jump\"></span>" : ""
+		));	
+		$t->parse("MAIN.POLLS_VIEW.POLLS_COMMENTS");	
+	}	
+	
 	$t->parse("MAIN.POLLS_VIEW");
-
-	if ($alreadyvoted)
-		{ $extra = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
-	else
-		{ $extra = $L['polls_notyetvoted']; }
-
-	$t->assign(array(
-		"POLLS_EXTRATEXT" => $extra,
-		));
-
-	$t->parse("MAIN.POLLS_EXTRA");
-
+	
 	}
 
 /* === Hook === */

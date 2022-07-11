@@ -3237,11 +3237,12 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  * @param bool $checked Checked flag 
  * @return string 
  */ 
-function sed_radio_item($name, $value, $title = '', $id = '', $checked = false)
+function sed_radio_item($name, $value, $title = '', $id = '', $checked = false, $onclick = "")
 	{	
 	$id = (empty($id)) ? $name : $name."_".$id;
-	$checked = ($checked) ? " checked" : "";		
-	$result = "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"".$id."\" name=\"".$name."\" value=\"".$value."\"".$checked." /><label for=\"".$id."\">".$title."</label></span>";
+	$checked = ($checked) ? " checked" : "";	
+	$onclick = ($onclick) ? " onclick=\"".$onclick."\"" : "";		
+	$result = "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"".$id."\" name=\"".$name."\" value=\"".$value."\"".$checked.$onclick." /><label for=\"".$id."\">".$title."</label></span>";
 	return($result);
 	}	
 
