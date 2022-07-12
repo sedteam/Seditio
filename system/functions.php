@@ -1034,8 +1034,14 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 	
 /** 
  * Forums breadcrumbs build path arr
-*/ 
-function sed_build_forums_bc($sectionid, $title, $category, $link = true, $parentcat = false)
+ *
+ * @param int $sectionid Forum section id
+ * @param string $title Title  
+ * @param string $category Category code  
+ * @param string $cat Category code  
+ * @param string $cat Category code   
+*/
+function sed_build_forums_bc($sectionid, $title, $category, $parentcat = false)
 	{
 	global $sed_forums_str, $cfg, $urlpaths;
 	
@@ -1046,7 +1052,7 @@ function sed_build_forums_bc($sectionid, $title, $category, $link = true, $paren
 		$urlpaths[sed_url("forums", "c=".$x, "#".$x)] = sed_cc($sed_forums_str[$x]['title']); 
 		}
 			
-	if(is_array($parentcat))
+	if (is_array($parentcat))
 		{
 		$urlpaths[sed_url("forums", "m=topics&s=".$parentcat['sectionid'])] = sed_cc($parentcat['title']);
 		}
@@ -1056,6 +1062,8 @@ function sed_build_forums_bc($sectionid, $title, $category, $link = true, $paren
 	
 /** 
  * List breadcrumbs build path arr
+ *
+ * @param string $cat Category code  
 */ 	
 function sed_build_list_bc($cat)
 	{
@@ -1440,8 +1448,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		"RATINGS_VOTERS" => $rating_voters,
 		"RATINGS_SINCE" => $rating_since
 	));
-	
-	
+		
 	if ($usr['id']>0 && $votedcasted && $allow)
 		{
 		$t->assign(array(
@@ -1668,12 +1675,14 @@ function sed_br2nl($text)
 	}
 	
 /** 
- * Build breadcrumbs from array 
+ * Build breadcrumbs 
  * 
- * @param array $urlpaths urls arr
- */ 	
-	
-function sed_breadcrumbs($urlpaths, $startpos = 1, $home = true, $part = "MAIN")
+ * @global array $urlpaths Urls and titles array
+ * @global int $startpos Position 
+ * @param bool $home Home link flag 
+ * @return string 
+ */ 
+function sed_breadcrumbs($urlpaths, $startpos = 1, $home = true)
 	{
 		global $L, $t;
 		

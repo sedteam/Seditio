@@ -119,7 +119,15 @@ function sed_build_adminsection($adminpath, $breadcrumbsclass = "", $homeicon = 
 	return((!empty($breadcrumbsclass)) ? $bread : $result);
 	}
 	
-function sed_admin_breadcrumbs($urlpaths, $startpos = 1, $home = true, $part = "MAIN")
+/** 
+ * Build admin breadcrumbs 
+ * 
+ * @global array $urlpaths Urls and titles array
+ * @global int $startpos Position 
+ * @param bool $home Home link flag 
+ * @return string 
+ */ 	
+function sed_admin_breadcrumbs($urlpaths, $startpos = 1, $home = true)
 	{
 		global $L, $t;
 		

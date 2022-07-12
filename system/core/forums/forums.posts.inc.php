@@ -519,7 +519,7 @@ $toptitle .= ($usr['isadmin']) ? " *" : '';
 // ---------- Breadcrumbs
 $urlpaths = array();
 $urlpaths[sed_url("forums")] = $L['Forums'];
-sed_build_forums_bc($s, $fs_title, $fs_category, TRUE, $parentcat);
+sed_build_forums_bc($s, $fs_title, $fs_category, $parentcat);
 $urlpaths[sed_url("forums", "m=posts&q=".$q)] = $ft_title;
 
 if (!empty($pages))
