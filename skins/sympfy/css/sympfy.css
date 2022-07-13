@@ -1631,6 +1631,57 @@ a.alfabeta:hover {
 	position: relative;
 }
 
+.add-poll-label {
+	display: block;
+    padding: 12px 0 5px 0;
+    color: #7d7878;
+    font-weight: 300;
+}
+.add-poll-title {
+	
+}
+
+.add-poll-options {
+    display: block;
+    padding: 12px;
+    border: 1px dotted #e4e2e2;
+}
+
+.add-poll-option {
+	padding: 5px 0;
+}
+
+.add-poll-option>span {
+	color: #7d7878;
+    font-weight: 300;
+}
+
+.poll-addoption {
+	overflow: hidden;
+	border:none;
+	background:none;
+	border-bottom:1px dotted #010101;
+}
+
+.poll-option-delete {
+	overflow: hidden;
+	border: none;
+	background: none;
+	border: 1px solid #e4e2e2;
+	width: 26px;
+	line-height: 0.8em;
+	margin-left: 10px;
+	color: #ff0000;
+	border-radius: 2px;
+	height: 26px;
+}
+
+.poll-option-delete:hover {
+	color: #ffffff;
+	border: 1px solid #010101;
+	background: #010101;
+}
+
 /*-------------------------*/
 /***** POST IN SIDEBAR *****/
 /*-------------------------*/

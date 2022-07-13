@@ -652,6 +652,13 @@ $L['polls_since'] = "since";
 $L['polls_alreadyvoted'] = "You've already voted for this poll.";
 $L['polls_notyetvoted'] = "You can vote by clicking a line above.";
 $L['polls_votecasted'] = "Done, vote succesfully recorded";
+$L['polls_add'] = "Add poll";
+$L['polls_edit'] = "Edit poll";
+$L['polls_title'] = "Poll title";
+$L['polls_option'] = "Poll option";
+$L['polls_addoption'] = "Add poll option";
+$L['polls_options'] = "Poll options";
+$L['polls_emptytitle'] = "Poll title is empty or there are less than 2 answer options";
 
 /* ====== Ratings ====== */
 

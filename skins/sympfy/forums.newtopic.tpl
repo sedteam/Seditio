@@ -59,6 +59,30 @@
 						</div>
 					</li>
 					
+					<!-- BEGIN: FORUMS_NEW_POLL -->
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.polls_add}</label></div>
+						<div class="form-field">							
+							<div class="add-poll-label">{PHP.L.polls_title}:</div> 							
+							<div class="add-poll-title">								
+								{NEW_POLL_TEXT}
+							</div>							
+							<div class="add-poll-label">{PHP.L.polls_options}:</div>  
+							<div class="add-poll-options">
+								<!-- BEGIN: NEW_POLL_OPTIONS -->
+								<div class="add-poll-option">
+									{PHP.L.polls_option} #<span class="num">{NEW_POLL_NUM}</span>: {NEW_POLL_OPTION}
+									<!-- BEGIN: NEW_POLL_OPTIONS_DELETE -->
+										<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>
+									<!-- END: NEW_POLL_OPTIONS_DELETE -->
+									</div>
+								<!-- END: NEW_POLL_OPTIONS -->
+							</div>
+							<button type="button" onclick="sedjs.add_poll_option('.add-poll-option');" class="poll-addoption">{PHP.L.polls_addoption}</button>							
+						</div>
+					</li>					
+					<!-- END: FORUMS_NEW_POLL -->
+					
 					<li class="form-row">
 						<div class="form-field-100 text-center">
 							<button type="submit" class="submit btn">{PHP.skinlang.forumsnewtopic.Submit}</button>		

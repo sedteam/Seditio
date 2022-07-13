@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=upgrade_178_179.php
 Version=179
-Updated=2022-jul-08
+Updated=2022-jul-13
 Type=Core.upgrade
 Author=Seditio Team
 Description=Database upgrade
@@ -21,6 +21,11 @@ $sql = sed_sql_query("TRUNCATE TABLE ".$cfg['sqldbprefix']."cache");
 
 $adminmain .= "Adding the 'poll_ownerid' column to table polls...<br />";
 $sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."polls ADD poll_ownerid int(11) NOT NULL DEFAULT '0' AFTER poll_text";
+$adminmain .= sed_cc($sqlqr)."<br />";
+$sql = sed_sql_query($sqlqr); 
+
+$adminmain .= "Adding the 'poll_code' column to table polls...<br />";
+$sqlqr = "ALTER TABLE ".$cfg['sqldbprefix']."polls ADD poll_code varchar(16) NOT NULL default '' AFTER poll_ownerid";
 $adminmain .= sed_cc($sqlqr)."<br />";
 $sql = sed_sql_query($sqlqr); 
 

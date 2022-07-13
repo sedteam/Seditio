@@ -773,7 +773,7 @@ var sedjs = {
 	    }  
 	    return null;
 	},
-
+	
 	createCookie : function(name,value,days) 
 	{  
 	    if (days) 
@@ -858,8 +858,28 @@ var sedjs = {
 	   to.value = str;
 	},
 	
-	/*= Auto set file title from file name without extension
-	-------------------------------------*/		
+	/*= Add poll option */	
+	add_poll_option : function(apo)
+	{
+		let delete_button = '<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>';
+		let elem = document.querySelectorAll(apo);
+		let last = elem[elem.length-1];
+		let clone = last.cloneNode(true);
+		if (clone.querySelector('.poll-option-delete') == null) clone.innerHTML += delete_button;
+		let num = clone.querySelector('.num').innerHTML;
+		clone.querySelector('.num').innerHTML = parseInt(num)+1;
+		clone.querySelector('input').value = '';
+		last.after(clone);
+	},
+			
+	/*= Remove poll option */	
+	remove_poll_option : function(apo) 
+	{
+		let root = apo.parentNode;
+		root.parentNode.removeChild(root);
+	},		
+	
+	/*= Auto set file title from file name without extension */		
 	autofiletitle : function() 
 	{
 		var fileUpload = document.getElementsByClassName('file');

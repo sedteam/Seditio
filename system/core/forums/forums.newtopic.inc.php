@@ -36,6 +36,8 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+require_once(SED_ROOT.'/system/core/polls/polls.functions.php');
+
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
 if ($row = sed_sql_fetchassoc($sql))
@@ -78,6 +80,10 @@ if ($a=='newtopic')
 
 	$error_string .= (mb_strlen($newtopictitle)<2) ? $L['for_titletooshort']."<br />" : '';
 	$error_string .= (mb_strlen($newmsg)<2) ? $L['for_msgtooshort']."<br />" : '';
+	
+	if ($poll && !$cfg['disable_polls']) {
+		sed_poll_check();
+    }
 
 	if (empty($error_string))
 		{	
@@ -117,9 +123,12 @@ if ($a=='newtopic')
 				".(int)$usr['id'].",
 				'".sed_sql_prep($usr['name'])."')");
 
-			$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1 ORDER BY ft_id DESC LIMIT 1");
-			$row = sed_sql_fetchassoc($sql);
-			$q = $row['ft_id'];
+			$q = sed_sql_insertid();
+					
+			if ($poll && !$cfg['disable_polls']) {
+				$poll_id = sed_poll_addsave(1, $q);
+				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_poll = ".(int)$poll_id." WHERE ft_id = '".$q."'");
+			}
 
 			$sql = sed_sql_query("INSERT into $db_forum_posts
 				(fp_topicid,
@@ -141,17 +150,17 @@ if ($a=='newtopic')
 				'".$usr['ip']."')");
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
-				fs_postcount=fs_postcount+1,
-				fs_topiccount=fs_topiccount+1
-				WHERE fs_id='$s'");
+				fs_postcount = fs_postcount+1,
+				fs_topiccount = fs_topiccount+1
+				WHERE fs_id = '$s'");
 
 			if ($fs_autoprune>0)
 				{ sed_forum_prunetopics('updated', $s, $fs_autoprune); }
 
 			if ($fs_countposts)
 				{ $sql = sed_sql_query("UPDATE $db_users SET
-					user_postcount=user_postcount+1
-					WHERE user_id='".$usr['id']."'"); }
+					user_postcount = user_postcount+1
+					WHERE user_id = '".$usr['id']."'"); }
 
 			if (!$newprvtopic)
 				{ sed_forum_sectionsetlast($s); }
@@ -213,13 +222,12 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SHORTTITLE" => $L['for_newtopic'],	
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_parse($fs_desc),
 	"FORUMS_NEWTOPIC_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s),
+	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s."&poll=".$poll),
 	"FORUMS_NEWTOPIC_TITLE" => sed_textbox('newtopictitle', $newtopictitle, 56, 64),
 	"FORUMS_NEWTOPIC_DESC" => sed_textbox('newtopicdesc', $newtopicdesc, 56, 64),
-	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic')." ".$pfs.$poll_form,
+	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic')." ".$pfs,
 	"FORUMS_NEWTOPIC_TEXTONLY" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic'),
-	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
-	"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
+	"FORUMS_NEWTOPIC_MYPFS" => $pfs
 ));
 
 if ($fs_allowprvtopics)
@@ -233,6 +241,10 @@ if ($fs_allowprvtopics)
 			
 	$t->parse("MAIN.PRIVATE");
 	}
+	
+if ($poll && !$cfg['disable_polls']) {	
+	sed_poll_add("MAIN.FORUMS");
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.tags');

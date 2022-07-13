@@ -355,6 +355,7 @@ $sql = sed_sql_query("CREATE TABLE ".$cfg['mysqldb']."polls (
   poll_creationdate int(11) NOT NULL default '0',
   poll_text varchar(255) NOT NULL default '',
   poll_ownerid int(11) NOT NULL default '0',
+  poll_code varchar(16) NOT NULL default '',
   PRIMARY KEY  (poll_id),
   KEY poll_creationdate (poll_creationdate)
 ) ENGINE=".$cfg['mysqlengine']." DEFAULT CHARSET=".$cfg['mysqlcharset']." COLLATE=".$cfg['mysqlcollate'].";");
@@ -698,7 +699,7 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(6, 1, 'Contact'
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(9, 4, 'Sample category 1', 'articles/sample1/', 1, 1);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."menu VALUES(10, 4, 'Sample category 2', 'articles/sample2/', 2, 1);");
 
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls VALUES(1, 0, 0, 1654936152, 'Looking forward to a new version of Seditio?', 1);");
+$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls VALUES(1, 0, 0, 1654936152, 'Looking forward to a new version of Seditio?', 1, '');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls_options VALUES(1, 1, 'Yes', 0);");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."polls_options VALUES(2, 1, 'No', 0);");
 

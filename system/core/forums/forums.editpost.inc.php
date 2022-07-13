@@ -33,6 +33,8 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+require_once(SED_ROOT.'/system/core/polls/polls.functions.php');
+
 sed_blockguests();
 sed_check_xg();
 
@@ -74,7 +76,7 @@ if ($row = sed_sql_fetchassoc($sql))
 	else
 	{ sed_die(); }
 
-$sql = sed_sql_query("SELECT ft_state, ft_mode, ft_title, ft_desc, ft_poll FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
+$sql = sed_sql_query("SELECT ft_state, ft_mode, ft_title, ft_desc, ft_poll FROM $db_forum_topics WHERE ft_id = '$q' LIMIT 1");
 
 if ($row = sed_sql_fetchassoc($sql))
 	{
@@ -84,13 +86,14 @@ if ($row = sed_sql_fetchassoc($sql))
 		}
 	$ft_title = sed_cc($row['ft_title']);
 	$ft_desc = sed_cc($row['ft_desc']);
-	$ft_fulltitle = ($row['ft_mode']==1) ? "# ".$ft_title : $ft_title;
+	$ft_poll = $row['ft_poll'];
+	$ft_fulltitle = ($row['ft_mode'] == 1) ? "# ".$ft_title : $ft_title;
 	$sys['sublocation'] = 'q'.$q;
 	}
 else
 	{ sed_die(); }
 
-if ($a=='update')
+if ($a == 'update')
 	{
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.update.first');
@@ -105,20 +108,26 @@ if ($a=='update')
 
 	if (!empty($rmsg))
 		{
-		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='".sed_sql_prep($rmsg)."', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
+		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text = '".sed_sql_prep($rmsg)."', fp_updated = '".$sys['now_offset']."', fp_updater = '".sed_sql_prep($rupdater)."' WHERE fp_id = '$p'");
 		}
 
+	 $is_topic = false;
 	if (!empty($rtopictitle))
 		{
-		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
+		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = '$q' ORDER BY fp_id ASC LIMIT 1");
 		if ($row = sed_sql_fetchassoc($sql))
 			{
 			$fp_idp = $row['fp_id'];
-			if ($fp_idp==$p)
+			if ($fp_idp == $p)
 				{
-				if (mb_substr($rtopictitle, 0 ,1)=="#")
+				if (mb_substr($rtopictitle, 0, 1) == "#")
 					{ $rtopictitle = str_replace('#', '', $rtopictitle); }
-				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title='".sed_sql_prep($rtopictitle)."', ft_desc='".sed_sql_prep($rtopicdesc)."' WHERE ft_id='$q'");
+				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title = '".sed_sql_prep($rtopictitle)."', ft_desc = '".sed_sql_prep($rtopicdesc)."' WHERE ft_id = '$q'");
+				$is_topic = true;
+				if ($ft_poll > 0)
+					{
+						sed_poll_editsave($ft_poll);
+					}				
 				}
 			}
 		}
@@ -138,7 +147,7 @@ $sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' OR
 if ($row = sed_sql_fetchassoc($sql))
 	{
 	$fp_idp = $row['fp_id'];
-	$firstpost = ($fp_idp==$p) ? TRUE : FALSE;
+	$firstpost = ($fp_idp == $p) ? TRUE : FALSE;
 	}
 	
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rmsg', $L['Mypfs']);
@@ -181,6 +190,10 @@ if (!empty($error_string))
 	$t->assign("FORUMS_POSTS_EDITPOST_ERROR_BODY",$error_string);
 	$t->parse("MAIN.FORUMS_EDITPOST_ERROR");
 	}
+	
+if (($ft_poll > 0) && !$cfg['disable_polls']) {	
+	sed_poll_edit("MAIN.FORUMS", $ft_poll);
+}
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
