@@ -343,5 +343,7 @@ $skinlang['admintooltip']['pageedit'] = "Редактировать страни
 $skinlang['admintooltip']['pageeditcategory'] = "Редактировать категорию";
 $skinlang['admintooltip']['pageeditoption'] = "Редактировать свойство";
 
+//service.message.tpl
+$skinlang['message']['gohome'] = "Вернуться на главную";
 
 ?>

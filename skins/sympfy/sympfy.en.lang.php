@@ -343,4 +343,7 @@ $skinlang['admintooltip']['pageedit'] = "Edit page";
 $skinlang['admintooltip']['pageeditcategory'] = "Edit category";
 $skinlang['admintooltip']['pageeditoption'] = "Edit config option";
 
+//service.message.tpl
+$skinlang['message']['gohome'] = "Go home";
+
 ?>

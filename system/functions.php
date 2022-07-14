@@ -2368,7 +2368,6 @@ function sed_die_message($code, $header = TRUE, $message_title = '', $message_bo
     $body = empty($message_body) ? $L['msg' . $code . '_1'] : $message_body; 
 
     // Render the message page 
-    $stylesheet = "<link rel=\"stylesheet\" type=\"text/css\" href=\"skins/".$cfg['defaultskin']."/service.message.css\"/>"; 
     $redirect_meta = ''; 
     if (!empty($redirect)) 
     { 
@@ -2382,7 +2381,6 @@ function sed_die_message($code, $header = TRUE, $message_title = '', $message_bo
 
     $t->assign(array(  
         'MESSAGE_BASEHREF' => $sys['abs_url'], 
-        'MESSAGE_STYLESHEET' => $stylesheet,
         'MESSAGE_CODE' => $code, 
         'MESSAGE_REDIRECT' => $redirect_meta, 
         'MESSAGE_TITLE' => $title, 
