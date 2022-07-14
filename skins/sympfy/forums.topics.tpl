@@ -19,10 +19,11 @@
 		<div class="section-body">
 
 			<div class="row">
-				<div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
-					<a href="{FORUMS_TOPICS_NEWTOPICURL}" class="btn"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /> <span style="font-size:120%;">{PHP.L.for_newtopic}</span></a>
+				<div class="col-xs-12 col-sm-6 col-md-7 col-lg-7">
+					<a href="{FORUMS_TOPICS_NEWTOPICURL}" class="btn"><i class="ic-message"></i> {PHP.L.for_newtopic}</a> 
+					<a href="{FORUMS_TOPICS_NEWTOPICPOLLURL}" class="btn"><i class="ic-polls"></i> {PHP.L.polls_add}</a>
 				</div>  
-				<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 forums-topics-viewers">
+				<div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 forums-topics-viewers">
 					{FORUMS_TOPICS_VIEWERS} {PHP.skinlang.forumstopics.Viewers} &nbsp; 	{FORUMS_TOPICS_JUMPBOX}	
 				</div>
 			</div> 

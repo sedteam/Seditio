@@ -21,9 +21,9 @@
 		</div>
 
 		<div class="section-body">
+				
+			{FORUMS_POLL}
 		
-		{FORUMS_POSTS_POLL}
-
 			<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 
 			<div class="error">

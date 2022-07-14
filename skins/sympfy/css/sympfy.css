@@ -1599,6 +1599,14 @@ a.alfabeta:hover {
 	margin-bottom:24px;
 }
 
+.forum-poll-form {
+	padding-bottom:20px;
+}
+
+.poll-info {
+	color: #cccccc;
+}
+
 .poll-btn {
 	padding-top:15px;
 }

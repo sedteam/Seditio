@@ -26,6 +26,9 @@ $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
 $poll = sed_import('poll','G','INT');
 $vote = sed_import('vote','G','INT');
+$pvote = sed_import('pvote','P','INT');
+$vote = ($pvote) ? $pvote : $vote;
+$ajax = sed_import('ajax', 'G', 'BOL');
 $unread_done = FALSE;
 $fp_num = 0;
 unset ($notlastpage);
@@ -35,6 +38,8 @@ $extp = sed_getextplugins('forums.posts.first');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+
+require_once(SED_ROOT.'/system/core/polls/polls.functions.php');
 
 if ($n=='last' && !empty($q))
 	{
@@ -204,7 +209,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	if ($post12[0]==$p && $post12[1]>0)
+	if ($post12[0] == $p && $post12[1] > 0)
 		{ sed_die(); }
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_sectionid='$s'");
@@ -232,7 +237,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q'");
 
-	if (sed_sql_result($sql, 0, "COUNT(*)")==0)
+	if (sed_sql_result($sql, 0, "COUNT(*)") == 0)
 		{
 		// No posts left in this topic
 		$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
@@ -241,8 +246,10 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			{
 			if ($cfg['trash_forum'])
 				{ sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row); }
+			
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
+			if ($row['ft_poll'] > 0) sed_poll_delete($row['ft_poll']);
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
 				fs_topiccount=fs_topiccount-1,
@@ -347,99 +354,12 @@ if($users_extrafields_count > 0)
 		} 
 	} 
 	
-// ----------------------
-
 $sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature, ".$sql_extra."	
 	   u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 	   u.user_postcount
 		FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 		WHERE fp_topicid='$q'
 		ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
-
-$sys['sublocation'] = $fs_title;
-$out['subtitle'] = $L['Forums']." - ".sed_cc($ft_title);
-
-/**/
-$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
-$title_tags[] = array('%1$s', '%2$s', '%3$s');
-$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
-$out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
-/**/
-
-/* ===== */
-$out['canonical_url'] = $sys['abs_url'].sed_url("forums", "m=posts&q=".$q."&d=".$d);
-/* ===== */
-
-/* === Hook === */
-$extp = sed_getextplugins('forums.posts.main');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
-
-require(SED_ROOT . "/system/header.php");
-
-$mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
-$t = new XTemplate($mskin);
-
-if (!$cfg['disable_polls'] && $ft_poll>0)
-	{
-	$sql5 = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$ft_poll' AND poll_state='0' AND poll_type='1' LIMIT 1");
-
-	sed_die(sed_sql_numrows($sql5)==0);
-
-	if ($usr['id']>0)
-	 	{ $sql7 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$ft_poll' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
-		else
-	 	{ $sql7 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$ft_poll' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
-
-	$alreadyvoted = (sed_sql_numrows($sql7)>0) ? TRUE : FALSE;
-
-	if ($a=='send' && !$alreadyvoted && !$ft_state)
-		{
-		sed_check_xg();
-		$sql8 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$ft_poll' AND po_id='$vote'");
-		if (sed_sql_affectedrows()==1)
-			{
-			$sql8 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$ft_poll.", ".(int)$usr['id'].", '".$usr['ip']."')");
-			$votecasted = TRUE;
-			$alreadyvoted = TRUE;
-			}
-		}
-
-	$sql4 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-	$totalvotes = sed_sql_result($sql4,0,"SUM(po_count)");
-
-	$row5 = sed_sql_fetchassoc($sql5);
-	
-	$poll_state = $row5['poll_state'];
-	$poll_text = $row5['poll_text'];
-
-	$sql6 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$ft_poll' ORDER by po_id ASC");
-	$sql9 = sed_sql_query("SELECT MAX(po_count) FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-
-	$row9 = sed_sql_fetchassoc($sql9);
-	$coef = ($row9['MAX(po_count)'] < 1) ? 0 : ($totalvotes / $row9['MAX(po_count)'])*2.56;
-
-	$poll_result = "<h4>".$poll_text."</h4>";
-	$poll_result .= "<table class=\"cells striped\">";
-	$ii=1;
-	while ($row6 = sed_sql_fetchassoc($sql6))
-		{
-		$po_id = $row6['po_id'];
-		$po_count = $row6['po_count'];
-		$percent = @round(100 * ($po_count / $totalvotes),1);
-		$percentbar = floor($percent * $coef);
-		$poll_result .= "<tr><td>";
-		$poll_result .= ($alreadyvoted || $ft_state) ? $row6['po_text'] : "<a href=\"".sed_url("forums", "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll."&vote=".$po_id)."\">".$row6['po_text']."</a>";
-		$poll_result .= "</td><td><div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
-		}
-	$poll_result .= "</table>";
-
-	if ($alreadyvoted)
-          	{ $poll_result .= ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
-	else
-		{ $poll_result .= $L['polls_notyetvoted']; }
-	}
 
 $nbpages = ceil($totalposts / $cfg['maxtopicsperpage']);
 $curpage = $d / $cfg['maxtopicsperpage'];
@@ -477,7 +397,7 @@ foreach ($forum_sections as $key => $value)
 
 	if ($row1['fs_id'] != $s && $usr['isadmin'])
 		{ $movebox .= "<option value=\"".$forum_sections[$key]['fs_id']."\">".$cfs."</option>"; }
-   	$selected = ($forum_sections[$key]['fs_id']==$s) ? "selected=\"selected\"" : '';
+   	$selected = ($forum_sections[$key]['fs_id'] == $s) ? "selected=\"selected\"" : '';
 	$jumpbox .= "<option $selected value=\"".sed_url("forums", "m=topics&s=".$forum_sections[$key]['fs_id'])."\">".$cfs."</option>";
 	}
 
@@ -507,7 +427,7 @@ if ($usr['isadmin'])
 else
 	{ $adminoptions = ""; }
 
-if ($ft_poll>0)
+if ($ft_poll > 0)
 	{ $ft_title = $L['Poll'].": ".$ft_title; }
 
 $ft_title = ($ft_mode==1) ? "# ".sed_cc($ft_title) : sed_cc($ft_title);
@@ -516,11 +436,114 @@ $toptitle = "<a href=\"".sed_url("forums")."\">".$L['Forums']."</a> ".$cfg['sepa
 $toptitle .= " ".$cfg['separator']." <a href=\"".sed_url("forums", "m=posts&q=".$q)."\">".$ft_title."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
+$sys['sublocation'] = $fs_title;
+$out['subtitle'] = $L['Forums']." - ".sed_cc($ft_title);
+
+/**/
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
+/**/
+
+/* ===== */
+$out['canonical_url'] = $sys['abs_url'].sed_url("forums", "m=posts&q=".$q."&d=".$d);
+/* ===== */
+
+/* === Hook === */
+$extp = sed_getextplugins('forums.posts.main');
+if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+require(SED_ROOT . "/system/header.php");
+
+$mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
+$t = new XTemplate($mskin);
+
 // ---------- Breadcrumbs
 $urlpaths = array();
 $urlpaths[sed_url("forums")] = $L['Forums'];
 sed_build_forums_bc($s, $fs_title, $fs_category, $parentcat);
 $urlpaths[sed_url("forums", "m=posts&q=".$q)] = $ft_title;
+
+// ---------- Polls on forum
+if (!$cfg['disable_polls'] && $ft_poll > 0)
+	{
+	$sql5 = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$ft_poll' AND poll_state='0' AND poll_type='1' LIMIT 1");
+
+	if (sed_sql_numrows($sql5) > 0)
+		{			
+		$row5 = sed_sql_fetchassoc($sql5);		
+		$poll_title = $row5['poll_text'];
+		$poll_creationdate = $row5['poll_creationdate'];
+		
+		list($alreadyvoted, $votecasted) = sed_poll_vote($ft_poll, $vote);
+
+		$sql6 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$ft_poll'");
+		$totalvotes = sed_sql_result($sql6,0,"SUM(po_count)");
+
+		$sql7 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$ft_poll' ORDER by po_id ASC");		
+
+		$xpoll = new XTemplate(sed_skinfile('poll'));  
+		
+		while ($row7 = sed_sql_fetchassoc($sql7))
+			{
+			$po_id = $row7['po_id'];
+			
+			$po_count = $row7['po_count'];
+			$po_text = sed_cc($row7['po_text']);		
+			$percent = @round(100 * ($po_count / $totalvotes),1);
+			$percentbar = floor($percent * 2.24);
+
+			$xpoll->assign(array(
+				"POLL_ROW_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id."&vote=".$po_id.$standalone_url),
+				"POLL_ROW_TEXT" => sed_cc($row7['po_text']),
+				"POLL_ROW_PERCENT" => $percent,
+				"POLL_ROW_COUNT" => $po_count,
+				"POLL_ROW_RADIO_ITEM" => sed_radio_item('pvote', $po_id, $po_text, $po_id, false)
+			));
+			
+			if ($alreadyvoted) 
+				{ $xpoll->parse("POLL.POLL_RESULT.POLL_ROW_RESULT"); } 
+				else 
+				{ $xpoll->parse("POLL.POLL_FORM.POLL_ROW_OPTIONS"); }		
+			}
+			
+		if ($alreadyvoted) 
+			{
+			$polls_info = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted'];
+			$xpoll->parse("POLL.POLL_RESULT");
+			} 
+		else 
+			{
+			$polls_info = $L['polls_notyetvoted'];
+			
+			$ajax_send = sed_url("forums", "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll."&vote=".$po_id."&ajax=1");
+			$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajax.bind({'url': '".$ajax_send."', 'format':  'text', 'method':  'POST', 'update':  'pollajx', 'loading': 'pollvotes', 'formid':  'pollvotes'});" : "";
+			
+			$xpoll->assign(array(
+				"POLL_BUTTON_ONCLICK" => $onclick,
+				"POLL_SEND_URL" => sed_url("forums", "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll)
+			));	
+			$xpoll->parse("POLL.POLL_FORM");
+			}	
+			
+		$xpoll->assign(array(
+			"POLL_VOTERS" => $totalvotes,
+			"POLL_SINCE" => sed_build_date($cfg['dateformat'], $poll_creationdate),
+			"POLL_TITLE" => $poll_title,
+			"POLL_INFO" => $polls_info	
+		));		
+				
+		$xpoll->parse("POLL");
+		$res_poll = $xpoll->text("POLL");
+		sed_ajax_flush($res_poll, $ajax);  // AJAX Output
+		
+		$t->assign("FORUMS_POLL", $res_poll);
+		
+		}
+	}
 
 if (!empty($pages))
 	{

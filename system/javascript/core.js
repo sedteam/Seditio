@@ -867,8 +867,10 @@ var sedjs = {
 		let clone = last.cloneNode(true);
 		if (clone.querySelector('.poll-option-delete') == null) clone.innerHTML += delete_button;
 		let num = clone.querySelector('.num').innerHTML;
-		clone.querySelector('.num').innerHTML = parseInt(num)+1;
+		clone.querySelector('.num').innerHTML = parseInt(num)+1;		
 		clone.querySelector('input').value = '';
+		clone.querySelector('input').setAttribute('name', 'poll_option[]');
+		clone.querySelector('input').setAttribute('value', '');
 		last.after(clone);
 	},
 			

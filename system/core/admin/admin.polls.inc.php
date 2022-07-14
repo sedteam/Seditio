@@ -97,7 +97,7 @@ if ($n=='options')
 	}
 else
 	{
-	if ($a=='delete')
+	if ($a == 'delete')
 		{
 		sed_check_xg();
 		$id2 = "v".$id;
@@ -114,7 +114,7 @@ else
 		exit;
 		}
 
-	elseif ($a=='reset')
+	elseif ($a == 'reset')
 		{
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
@@ -125,7 +125,7 @@ else
 		exit;
 		}
 
-	if ($a=='bump')
+	if ($a == 'bump')
 		{
 		sed_check_xg();
 		$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
@@ -133,7 +133,7 @@ else
 		exit;
 		}
 
-	if ($a=='add')
+	if ($a == 'add')
 		{
 		$ntext = sed_import('ntext','P','HTM');
 		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_ownerid) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."', ".$usr['id'].")");

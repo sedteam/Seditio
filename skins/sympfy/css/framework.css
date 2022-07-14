@@ -1445,7 +1445,9 @@ input::placeholder { color: #bbbdbf; }
     border-radius: 0px;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:focus,
+.btn:active {
     text-decoration: none;
     color: #ffffff;
     background: #448aa1;

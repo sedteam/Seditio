@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=polls.php
 Version=178
-Updated=2022-jun-12
+Updated=2022-jul-14
 Type=Core
 Author=Seditio Team
 Description=Polls
@@ -64,6 +64,7 @@ else
 			{
 			$poll_state = $row['poll_state'];
 			$poll_minlevel = $row['poll_minlevel'];
+			$poll_id = $row['poll_id'];
 			$poll_title = $row['poll_text'];
 			$poll_creationdate = $row['poll_creationdate'];
 			
@@ -149,13 +150,11 @@ else
 	$t = new XTemplate($mskin);			
 	}
 
-if (!empty($error_string))
+
+if (empty($id) || $id == 'viewall')
 	{
-	$t->assign("POLLS_ERROR_BODY", $error_string);
-	$t->parse("MAIN.POLLS_ERROR");
-	}
-elseif (empty($id) || $id == 'viewall')
-	{
+	
+	$title = $L['polls_viewarchives'];
 	
 	if (sed_sql_numrows($sql) == 0)
 		{ 
@@ -174,14 +173,19 @@ elseif (empty($id) || $id == 'viewall')
 			}
 		}
 
-	$t->assign(array(
-		"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths)
-	));
-
 	$t->parse("MAIN.POLLS_VIEWALL");
 	}
 else
 	{
+	
+	if (!empty($error_string))
+	{
+		$t->assign("POLL_ERROR_BODY", $error_string);
+		$t->parse("MAIN.POLL_ERROR");
+	}
+	
+	$xpoll = new XTemplate(sed_skinfile('poll'));
+	
 	while ($row1 = sed_sql_fetchassoc($sql1))
 		{
 		$po_id = $row1['po_id'];
@@ -190,28 +194,28 @@ else
 		$percent = @round(100 * ($po_count / $totalvotes),1);
 		$percentbar = floor($percent * 2.24);
 
-		$t->assign(array(
-			"POLLS_ROW_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id."&vote=".$po_id.$standalone_url),
-			"POLLS_ROW_TEXT" => sed_cc($row1['po_text']),
-			"POLLS_ROW_PERCENT" => $percent,
-			"POLLS_ROW_COUNT" => $po_count,
-			"POLLS_ROW_RADIO_ITEM" => sed_radio_item('pvote', $po_id, $po_text, $po_id, false)
+		$xpoll->assign(array(
+			"POLL_ROW_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id."&vote=".$po_id.$standalone_url),
+			"POLL_ROW_TEXT" => sed_cc($row1['po_text']),
+			"POLL_ROW_PERCENT" => $percent,
+			"POLL_ROW_COUNT" => $po_count,
+			"POLL_ROW_RADIO_ITEM" => sed_radio_item('pvote', $po_id, $po_text, $po_id, false)
 		));
 		
 		if ($alreadyvoted) 
 			{
-			$t->parse("MAIN.POLLS_VIEW.POLLS_RESULT.POLLS_ROW_RESULT");
+			$xpoll->parse("POLL.POLL_RESULT.POLL_ROW_RESULT");
 			} 
 			else 
 			{
-			$t->parse("MAIN.POLLS_VIEW.POLLS_FORM.POLLS_ROW_OPTIONS");
+			$xpoll->parse("POLL.POLL_FORM.POLL_ROW_OPTIONS");
 			}		
 		}
 		
 	if ($alreadyvoted) 
 		{
 		$polls_info = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted'];
-		$t->parse("MAIN.POLLS_VIEW.POLLS_RESULT");
+		$xpoll->parse("POLL.POLL_RESULT");
 		} 
 	else 
 		{
@@ -220,11 +224,11 @@ else
 		$ajax_send = sed_url("polls", "a=send&".sed_xg()."&id=".$id.$standalone_url."&ajax=1");
 		$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajax.bind({'url': '".$ajax_send."', 'format':  'text', 'method':  'POST', 'update':  'pollajx', 'loading': 'pollvotes', 'formid':  'pollvotes'});" : "";
 		
-		$t->assign(array(
-			"POLLS_BUTTON_ONCLICK" => $onclick,
-			"POLLS_SEND_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id.$standalone_url)
+		$xpoll->assign(array(
+			"POLL_BUTTON_ONCLICK" => $onclick,
+			"POLL_SEND_URL" => sed_url("polls", "a=send&".sed_xg()."&id=".$id.$standalone_url)
 		));	
-		$t->parse("MAIN.POLLS_VIEW.POLLS_FORM");
+		$xpoll->parse("POLL.POLL_FORM");
 		}			
 	
 	$item_code = 'v'.$id;
@@ -233,30 +237,38 @@ else
   
 	list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $url_poll, $comments);
 
-	$t->assign(array(
-		"POLLS_VOTERS" => $totalvotes,
-		"POLLS_SINCE" => sed_build_date($cfg['dateformat'], $poll_creationdate),
-		"POLLS_TITLE" => $poll_title,
-		"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-		"POLLS_VIEWALL" => "<a href=\"".sed_url("polls", "id=viewall".$standalone_url)."\">".$L['polls_viewarchives']."</a>",
-		"POLLS_INFO" => $polls_info
-		));
+	$title = $L['Poll']."#".$poll_id;
+	
+	$xpoll->assign(array(
+		"POLL_VOTERS" => $totalvotes,
+		"POLL_SINCE" => sed_build_date($cfg['dateformat'], $poll_creationdate),
+		"POLL_TITLE" => $poll_title,
+		"POLL_INFO" => $polls_info
+	));
 				
-	if (!empty($comments_link)) {
-		$t->assign(array(
-			"POLLS_COMMENTS" => $comments_link,
-			"POLLS_COMMENTS_URL" => sed_url('polls', "id=".$id.$standalone_url."&comments=1"),
-			"POLLS_COMMENTS_DISPLAY" => $comments_display,
-			"POLLS_COMMENTS_COUNT" => $comments_count,
-			"POLLS_COMMENTS_ISSHOW" => ($comments) ? " active" : "",
-			"POLLS_COMMENTS_JUMP" => ($comments) ? "<span class=\"spoiler-jump\"></span>" : ""
+	if (!empty($comments_link) && !$ajax) {
+		$xpoll->assign(array(
+			"POLL_COMMENTS" => $comments_link,
+			"POLL_COMMENTS_URL" => sed_url('polls', "id=".$id.$standalone_url."&comments=1"),
+			"POLL_COMMENTS_DISPLAY" => $comments_display,
+			"POLL_COMMENTS_COUNT" => $comments_count,
+			"POLL_COMMENTS_ISSHOW" => ($comments) ? " active" : "",
+			"POLL_COMMENTS_JUMP" => ($comments) ? "<span class=\"spoiler-jump\"></span>" : ""
 		));	
-		$t->parse("MAIN.POLLS_VIEW.POLLS_COMMENTS");	
+		$xpoll->parse("POLL.POLL_COMMENTS");	
 	}	
 	
-	$t->parse("MAIN.POLLS_VIEW");
-	if ($ajax) sed_ajax_flush($t->text("MAIN.POLLS_VIEW"), $ajax);  // AJAX Output
+	$xpoll->parse("POLL");
+	$res_poll = $xpoll->text("POLL");
+	sed_ajax_flush($res_poll, $ajax);  // AJAX Output	
+	$t->assign("POLL_VIEW", $res_poll);	
 	}
+	
+$t->assign(array(
+	"POLLS_TITLE" => $title,
+	"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+	"POLLS_VIEWALL" => "<a href=\"".sed_url("polls", "id=viewall".$standalone_url)."\">".$L['polls_viewarchives']."</a>"
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.tags');
