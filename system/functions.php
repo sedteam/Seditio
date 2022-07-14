@@ -3335,7 +3335,7 @@ function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text
 
 function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255, $class = "text", $disabled = false)
 	{
-	sed_textbox($name, $value, $size, $maxlength, $class, $disabled, 'hidden');
+	return sed_textbox($name, $value, $size, $maxlength, $class, $disabled, 'hidden');
 	} 
 
 /** 

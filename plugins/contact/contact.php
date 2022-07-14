@@ -112,8 +112,8 @@ $antispam_key = implode ('.', $antispam_key);
 $antispam_fak = implode ('.', $antispam_fak);
 
 $antispam .= "&nbsp; <strong>".$antispam_key."</strong> &nbsp;";
-$antispam .= "<input type=\"text\" class=\"text\" name=\"sender_key\" value=\"\" size=\"8\" maxlength=\"8\" />";
-$antispam .= "<input type=\"hidden\" name=\"sender_fak\" value=\"".$antispam_fak."\" />";
+$antispam .= sed_textbox('sender_key', $sender_key, 8, 8);
+$antispam .= sed_textbox_hidden('sender_fak', $antispam_fak);
 
 // ---------- Breadcrumbs
 $urlpaths = array();
@@ -135,15 +135,15 @@ $t->assign(array(
   "PLUGIN_CONTACT_RECIPIENTS_TITLE" => $L['plu_recipients_title'],
   "PLUGIN_CONTACT_RECIPIENTS" => $recipients,
   "PLUGIN_CONTACT_EMAIL_TITLE" => $L['plu_email_title'],
-  "PLUGIN_CONTACT_EMAIL" => "<input type=\"text\" class=\"text\" name=\"sender_email\" value=\"".sed_cc($sender_email)."\" size=\"32\" maxlength=\"64\" />",
+  "PLUGIN_CONTACT_EMAIL" => sed_textbox('sender_email', $sender_email, 32, 64),
   "PLUGIN_CONTACT_NAME_TITLE" => $L['plu_name_title'],
-  "PLUGIN_CONTACT_NAME" => "<input type=\"text\" class=\"text\" name=\"sender_name\" value=\"".sed_cc($sender_name)."\" size=\"32\" maxlength=\"64\" />",      
+  "PLUGIN_CONTACT_NAME" => sed_textbox('sender_name', $sender_name, 32, 64),
   "PLUGIN_CONTACT_PHONE_TITLE" => $L['plu_phone_title'],
-  "PLUGIN_CONTACT_PHONE" =>  "<input type=\"text\" class=\"text\" name=\"sender_tel\" value=\"".sed_cc($sender_tel)."\" size=\"32\" maxlength=\"18\" /></td>",
+  "PLUGIN_CONTACT_PHONE" => sed_textbox('sender_tel', $sender_tel, 18, 18),
   "PLUGIN_CONTACT_SUBJECT_TITLE" => $L['plu_subject_title'],
-  "PLUGIN_CONTACT_SUBJECT" => "<input type=\"text\" class=\"text\" name=\"sender_subject\" value=\"".sed_cc($sender_subject)."\" size=\"48\" maxlength=\"64\" />",
+  "PLUGIN_CONTACT_SUBJECT" => sed_textbox('sender_subject', $sender_subject, 48, 64),
   "PLUGIN_CONTACT_BODY_TITLE" => $L['plu_message_title'],
-  "PLUGIN_CONTACT_BODY" => "<textarea cols=\"48\" rows=\"8\" name=\"sender_message\" class=\"noeditor\">".sed_cc($sender_message)."</textarea><input type=\"text\" class=\"text\" name=\"sender_tarp\" value=\"\" size=\"20\" maxlength=\"20\" style=\"display:none;\"/>",
+  "PLUGIN_CONTACT_BODY" => sed_textarea('sender_message', $sender_message, 8, 48, 'noeditor').sed_textbox_hidden('sender_tarp', ''),
   "PLUGIN_CONTACT_REQUIRED" => $L['plu_required'],
   "PLUGIN_CONTACT_ANTISPAM" => $L['plu_verify'].$antispam,
   "PLUGIN_CONTACT_EXTRA1" => $cfg['plugin']['contact']['extra1'],
