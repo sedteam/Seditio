@@ -19,6 +19,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['isadmin']);
 
+require_once(SED_ROOT.'/system/core/polls/polls.functions.php');
+
 $id = sed_import('id','G','TXT');
 $po = sed_import('po','G','TXT');
 
@@ -100,16 +102,7 @@ else
 	if ($a == 'delete')
 		{
 		sed_check_xg();
-		$id2 = "v".$id;
-
-		$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$id'");
-		$num = sed_sql_affectedrows();
-		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$id'");
-		$num = $num + sed_sql_affectedrows();
-		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
-		$num = $num + sed_sql_affectedrows();
-		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
-		$num = $num + sed_sql_affectedrows();
+		$num = sed_poll_delete($id);
 		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=".$num, "", true));
 		exit;
 		}
@@ -117,10 +110,7 @@ else
 	elseif ($a == 'reset')
 		{
 		sed_check_xg();
-		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
-		$num = sed_sql_affectedrows();
-		$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
-		$num = $num + sed_sql_affectedrows();
+		$num = sed_poll_reset($id);
 		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=".$num, "", true));
 		exit;
 		}
@@ -128,7 +118,7 @@ else
 	if ($a == 'bump')
 		{
 		sed_check_xg();
-		$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
+		sed_poll_bump($id);
 		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=1", "", true));
 		exit;
 		}
