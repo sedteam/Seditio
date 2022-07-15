@@ -211,6 +211,7 @@ $skinfiles[] = 'pfs.tpl';
 $skinfiles[] = 'plugin.tpl';
 $skinfiles[] = 'pm.send.tpl';
 $skinfiles[] = 'pm.tpl';
+$skinfiles[] = 'poll.tpl';
 $skinfiles[] = 'polls.tpl';
 $skinfiles[] = 'polls.standalone.tpl';
 $skinfiles[] = 'popup.tpl';
