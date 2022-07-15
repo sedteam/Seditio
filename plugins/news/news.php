@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/news/news.php
-Version=178
+Version=179
 Updated=2012-may-23
 Type=Plugin
 Author=Seditio Team

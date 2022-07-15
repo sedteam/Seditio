@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/whosonline.php
-Version=178
+Version=179
 Updated=2007-mar-03
 Type=Plugin
 Author=Seditio Team

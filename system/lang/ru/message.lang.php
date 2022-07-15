@@ -12,8 +12,8 @@ Localization done by : Antar, http://subs.com.ru;
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/message.lang.php
-Version=178
-Updated=2012-may-16
+Version=179
+Updated=2022-jul-15
 Type=Lang
 Author=Seditio Team
 Description=Language messages

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/lang/statistics.ru.lang.php
 Version=170
-Updated=2012-may-16
+Updated=2022-jul-15
 Type=
 Author=Seditio Team
 Description=

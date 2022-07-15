@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/sednews/lang/sednews.en.lang.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jul-15
 Type=Plugin
 Author=Seditio Team
 Description=

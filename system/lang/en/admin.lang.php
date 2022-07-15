@@ -11,8 +11,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/core/admin/lang/en/admin.lang.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jul-15
 Type=Lang
 Author=Seditio Team
 Description=Admin panel

@@ -6,8 +6,8 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/skineditor/skineditor.setup.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jul-15
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -17,7 +17,7 @@ Description=
 Code=skineditor
 Name=Skin editor
 Description=Manage your templates files online
-Version=178
+Version=179
 Date=2010-feb-05
 Author=Seditio Team
 Copyright=

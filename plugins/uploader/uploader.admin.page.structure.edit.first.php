@@ -6,7 +6,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.admin.page.structure.edit.first.php
-Version=178
+Version=179
 Updated=2021-jun-19
 Type=Plugin
 Author=Amro

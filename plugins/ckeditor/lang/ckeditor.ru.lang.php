@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/lang/ckeditor.ru.lang.php
-Version=178
+Version=179
 Updated=2012-оct-19
 Type=Plugin
 Author=Seditio Team

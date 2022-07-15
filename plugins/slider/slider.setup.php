@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/slider/slider.setup.php
-Version=178
+Version=179
 Updated=2013-jul-08
 Type=Plugin
 Author=Seditio Team
@@ -18,7 +18,7 @@ Description=
 Code=slider
 Name=Slider
 Description=Slider displayed on the home page
-Version=178
+Version=179
 Updated=2013-jul-08
 Author=Seditio Team
 Copyright=

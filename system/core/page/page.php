@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=page.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jul-15
 Type=Core
 Author=Seditio Team
 Description=Pages loader

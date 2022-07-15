@@ -11,8 +11,8 @@ Localization done by : Antar, Antony & Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jun-15
 Type=Lang
 Author=Seditio Team
 Description=Language main

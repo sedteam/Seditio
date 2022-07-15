@@ -1987,6 +1987,24 @@ ul.subforums-list li::before {
     left: -15px;
 }
 
+.forum-lastpost {
+	
+}
+
+.forum-lastposter {
+	font-size: 0.9em;
+	color: #8c8c8c;
+}
+
+.forum-timeago {
+	font-size: 0.9em;
+}
+
+.forums-main-table .desc {
+	color: #8c8c8c;
+	font-size:0.9em;
+}
+
 /*-------------------------*/
 /***** FOOTER *****/
 /*-------------------------*/

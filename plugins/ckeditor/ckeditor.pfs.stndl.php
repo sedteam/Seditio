@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.pfs.stndl.php
-Version=178
+Version=179
 Updated=2012-feb-23
 Type=Plugin
 Author=Amro

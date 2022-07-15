@@ -11,8 +11,8 @@ Localization done by : Antar, Antony, Amro
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
-Version=178
-Updated=2012-may-20
+Version=179
+Updated=2022-jul-15
 Type=Lang
 Author=Seditio Team
 Description=Admin panel

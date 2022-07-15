@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=admin.page.manager.php
-Version=178
+Version=179
 Updated=2015-may-24
 Type=Core.admin
 Author=Seditio Team

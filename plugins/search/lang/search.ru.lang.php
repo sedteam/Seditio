@@ -3,8 +3,8 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.ru.lang.php
-Version=178
-Updated=2012-may-16
+Version=179
+Updated=2022-jul-15
 Type=
 Author=Seditio Team, Translated by Amro - http://seditio.org
 Description=

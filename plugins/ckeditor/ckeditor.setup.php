@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.setup.php
-Version=178
+Version=179
 Updated=2021-nov-16
 Type=Plugin
 Author=Amro

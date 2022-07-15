@@ -11,8 +11,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/en/message.lang.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jun-15
 Type=Lang
 Author=Seditio Team
 Description=Language messages

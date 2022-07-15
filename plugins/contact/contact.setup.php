@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.setup.php
 Version=150
-Updated=2022-jun-12
+Updated=2022-jul-15
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -17,7 +17,7 @@ Description=
 Code=contact
 Name=Contact
 Description=Web based email form
-Version=178
+Version=179
 Date=2010-feb-05
 Author=Seditio Team
 Copyright=

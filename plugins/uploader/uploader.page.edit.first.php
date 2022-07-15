@@ -7,7 +7,7 @@ http://www.neocrome.net
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.page.edit.first.php
-Version=178
+Version=179
 Updated=2021-jun-23
 Type=Plugin
 Author=Amro

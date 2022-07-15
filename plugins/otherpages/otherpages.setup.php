@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/otherpages/otherpages.setup.php
-Version=178
+Version=179
 Updated=2021-jul-08
 Type=Plugin
 Author=Seditio Team
@@ -18,7 +18,7 @@ Description=
 Code=otherpages
 Name=Other pages
 Description=Display other pages in category
-Version=178
+Version=179
 Updated=2021-jul-08
 Author=Seditio Team
 Copyright=

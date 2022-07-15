@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/cleaner/lang/cleaner.ru.lang.php
-Version=178
-Updated=2012-may-16
+Version=179
+Updated=2022-jul-15
 Type=Plugin
 Author=Seditio Team
 Description=

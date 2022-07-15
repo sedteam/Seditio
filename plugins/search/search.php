@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/search/search.php
-Version=178
+Version=179
 Date=2008-jun-04
 Type=Plugin
 Author=Olivier C. & Spartan

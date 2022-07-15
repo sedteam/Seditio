@@ -3,7 +3,7 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/search.setup.php
-Version=178
+Version=179
 Date=2010-feb-05
 Type=Plugin
 Author=Seditio Team
@@ -14,7 +14,7 @@ Description=
 Code=search
 Name=Search
 Description=Search for words in pages and forums
-Version=178
+Version=179
 Date=2008-jun-04
 Author=Seditio Team
 Copyright=

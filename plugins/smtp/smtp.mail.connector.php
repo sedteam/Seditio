@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/smtp/smtp.mail.connector.php
-Version=178
+Version=179
 Updated=2021-dec-07
 Type=Plugin
 Author=Amro

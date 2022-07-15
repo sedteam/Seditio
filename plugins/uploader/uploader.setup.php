@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.setup.php
-Version=178
+Version=179
 Updated=2021-jun-23
 Type=Plugin
 Author=Amro
@@ -18,7 +18,7 @@ Description=
 Code=uploader
 Name=Uploader
 Description=Uploader plugin
-Version=178
+Version=179
 Updated=2021-jun-23
 Author=Amro
 Copyright=Amro

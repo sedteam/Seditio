@@ -6,7 +6,7 @@ http://www.neocrome.net http://ldu.ru
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/sedcaptcha.auth.check.php
-Version=178
+Version=179
 Updated=2022-jun-09
 Type=Plugin
 Author=Amro

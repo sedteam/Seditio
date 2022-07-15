@@ -3,8 +3,8 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.en.lang.php
-Version=178
-Updated=2022-jun-12
+Version=179
+Updated=2022-jul-15
 Type=
 Author=Seditio Team
 Description=

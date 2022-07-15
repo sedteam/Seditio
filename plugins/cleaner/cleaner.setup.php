@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/cleaner/cleaner.setup.php
-Version=178
+Version=179
 Updated=2006-sep-07
 Type=Plugin
 Author=Seditio Team
