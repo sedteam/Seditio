@@ -35,8 +35,8 @@ var sedjs = {
 	-------------------------------------*/
 	pollvote : function(rcode,rvote,modal)
 		{ 
-		if (!modal) { window.open(sedjs.get_basehref()+'polls?a=send&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
-		else {sedjs.modal.open("pollvote", "iframe", sedjs.get_basehref()+'polls?a=send&id='+rcode+'&vote='+rvote, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
+		if (!modal) { window.open(sedjs.get_basehref()+'polls?a=send&stndl=1&id='+rcode+'&vote='+rvote,'Polls','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16'); }
+		else {sedjs.modal.open("pollvote", "iframe", sedjs.get_basehref()+'polls?a=send&stndl=1&id='+rcode+'&vote='+rvote, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");  }
 		},
 		
 	/*= Picture show 
