@@ -33,17 +33,17 @@ $p = sed_import('p','G','ALP');
 $v = sed_import('v','G','TXT');
 
 if (empty($a) && empty($n) && empty($o))
-  {
-  $n = 'edit';
-  $o = 'core';
-  $p = 'main';
-  }	
+	{
+	$n = 'edit';
+	$o = 'core';
+	$p = 'main';
+	}	
   
 if ($o == 'plug' && !empty($p))  //New in v173
-  {
-    $plug_langfile = SED_ROOT."/plugins/".$p."/lang/".$p.".".$usr['lang'].".lang.php";
-    if (@file_exists($plug_langfile)) { require($plug_langfile); }
-  } 
+	{
+	$plug_langfile = SED_ROOT."/plugins/".$p."/lang/".$p.".".$usr['lang'].".lang.php";
+	if (@file_exists($plug_langfile)) { require($plug_langfile); }
+	} 
 
 switch ($n)
 	{
@@ -51,10 +51,10 @@ switch ($n)
 	$o = (empty($o)) ? 'core' : $o;
 	$p = (empty($o)) ? 'main' : $p;
 
-	if ($a=='update' && !empty($n))
+	if ($a == 'update' && !empty($n))
 		{
 		sed_check_xg();
-		if ($o=='core')
+		if ($o == 'core')
 			{
 			reset($cfgmap);
 			foreach ($cfgmap as $k => $line)
@@ -80,53 +80,52 @@ switch ($n)
 		exit;
 		}
 
-	elseif ($a=='reset' && $o=='core' && !empty($v))
+	elseif ($a == 'reset' && $o == 'core' && !empty($v))
 		{
 		sed_check_xg();
 		foreach($cfgmap as $i => $line)
 			{
-			if ($v==$line[2])
+			if ($v == $line[2])
 				{ $sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($line[4])."', config_type='".sed_sql_prep($line[3])."' WHERE config_name='$v' AND config_owner='$o'"); }
 			}
 		}
-	elseif ($a=='reset' && $o=='plug' && !empty($v) &&  !empty($p))
+	elseif ($a == 'reset' && $o == 'plug' && !empty($v) &&  !empty($p))
 		{
 		sed_check_xg();
 		$extplugin_info = SED_ROOT."/plugins/".$p."/".$p.".setup.php";
     
 		if (file_exists($extplugin_info))
-		  { 
-      if (empty($info_cfg['Error']))
-        { 
-        $info_cfg = sed_infoget($extplugin_info, 'SED_EXTPLUGIN_CONFIG');
- 
-        foreach($info_cfg as $i => $x)
-				  {
-          $line = explode(":", $x);
-          if (is_array($line) && !empty($line[1]) && !empty($i))
-            {
-            if ($v==$i)
-              { $sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($line[3])."' WHERE config_name='$v' AND config_owner='$o'"); }
-            }
-          }         
-        }
-      }
-    }
+			{ 
+			if (empty($info_cfg['Error']))
+				{ 
+				$info_cfg = sed_infoget($extplugin_info, 'SED_EXTPLUGIN_CONFIG');
+				foreach($info_cfg as $i => $x)
+					{
+					$line = explode(":", $x);
+					if (is_array($line) && !empty($line[1]) && !empty($i))
+						{
+						if ($v == $i)
+							{ $sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($line[3])."' WHERE config_name='$v' AND config_owner='$o'"); }
+						}
+					}         
+				}
+			}
+		}
   
 	$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
-	sed_die(sed_sql_numrows($sql)==0);
+	sed_die(sed_sql_numrows($sql) == 0);
 
 	foreach ($cfgmap as $k => $line)
 		{ $cfg_params[$line[2]] = $line[5]; }
 
-	if ($o=='core')
+	if ($o == 'core')
 		{ 			
-			$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $L["core_".$p];
-			$admintitle = $L["core_".$p];
-			
-			$adminhelpconfig = $L["adm_help_config_$p"]; 
-			$adminlegend = $L["core_".$p];
-    }
+		$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $L["core_".$p];
+		$admintitle = $L["core_".$p];
+		
+		$adminhelpconfig = $L["adm_help_config_$p"]; 
+		$adminlegend = $L["core_".$p];
+		}
 	else
 		{
 		$extplugin_info = SED_ROOT."/plugins/".$p."/".$p.".setup.php";
@@ -147,8 +146,7 @@ switch ($n)
 		$config_name = $row['config_name'];
 		$config_value = $row['config_value'];
 		$config_default = $row['config_default'];
-		$config_type = $row['config_type'];		
-    
+		$config_type = $row['config_type'];   
 		$config_title = $L['cfg_'.$row['config_name']][0];
 		$check_config_title = empty($config_title);  //fix Sed v173      
 		$config_title = (empty($config_title)) ? $row['config_name'] : $config_title;	
@@ -163,24 +161,16 @@ switch ($n)
 			{ $config_field = sed_textbox($config_name, $config_value, 32, 255); }
 		elseif ($config_type == 2)
 			{
-			if ($o=='plug' && !empty($row['config_default']))
+			if ($o == 'plug' && !empty($row['config_default']))
 				{
 				$cfg_params[$config_name] = explode(",", $row['config_default']);
 				}
-
 			if (is_array($cfg_params[$config_name]))
 				{
-				reset($cfg_params[$config_name]);
-				$config_field = "<select name=\"$config_name\" size=\"1\">";
-				foreach ($cfg_params[$config_name] as $i => $x)
-					{
-					$x = trim($x);
-					$selected = ($x == $config_value) ? "selected=\"selected\"" : '';
-					$config_field .= "<option value=\"".$x."\" $selected>".$x;
-					}
-				$config_field .= "</select>";
+				reset($cfg_params[$config_name]);				
+				$config_field = sed_selectbox($config_value, $config_name, $cfg_params[$config_name], false, false);				
 				}
-			elseif ($cfg_params[$config_name]=="userlevels")
+			elseif ($cfg_params[$config_name] == "userlevels")
 				{
 				$config_field = sed_selectboxlevels(0, 99, $config_value, $config_name);
 				}
@@ -200,7 +190,7 @@ switch ($n)
 			reset($$varname);			
 			foreach ($$varname as $i => $x)
 				{
-				$selected = ($config_value==$x[0]) ? "selected=\"selected\"" : '';
+				$selected = ($config_value == $x[0]) ? "selected=\"selected\"" : '';
 				$config_field .= "<option value=\"".$x[0]."\" $selected>".$x[1]."</option>";
 				}
 			$config_field .= "</select>";
@@ -210,8 +200,8 @@ switch ($n)
 			$config_field = "<textarea name=\"$config_name\" rows=\"5\" cols=\"76\" class=\"noeditor\">".$config_value."</textarea>";
 			}
 
-		$config_reset_url = ($o=='core') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '';
-		$config_reset_url .= ($o=='plug') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '&nbsp;';
+		$config_reset_url = ($o == 'core') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '';
+		$config_reset_url .= ($o == 'plug') ? sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name."&".sed_xg()) : '&nbsp;';
 		
 		$t -> assign(array( 
 			"CONFIG_LIST_TITLE" => $config_title,
@@ -225,20 +215,20 @@ switch ($n)
 		}
   
 	if (!empty($adminhelpconfig))
-	{
+		{
 		$t -> assign(array( 
 			"HELP_CONFIG" => $adminhelpconfig 
 		)); 
 		
 		$t -> parse("ADMIN_CONFIG.HELP");  	
-	}
+		}
 	
 	$t -> assign(array( 
 		"ADMIN_CONFIG_FORM_SEND" => sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p."&a=update&".sed_xg()),
 		"ADMIN_CONFIG_ADMINLEGEND" => $adminlegend
 	)); 
 	
-	$t->assign("ADMIN_CONFIG_TITLE", $admintitle);	
+	$t -> assign("ADMIN_CONFIG_TITLE", $admintitle);	
 		
 	$t -> parse("ADMIN_CONFIG");
 

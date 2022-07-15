@@ -4105,9 +4105,10 @@ function sed_redirect($url, $base64=false)
  * @param string $name Dropdown name 
  * @param array $values Options available
  * @param bool $empty_option Insert first empty element ---  
+ * @param bool $key_isvalue Use value & key from array $values, or only value (if false)  
  * @return string 
  */
-function sed_selectbox($check, $name, $values, $empty_option = true)
+function sed_selectbox($check, $name, $values, $empty_option = true, $key_isvalue = true)
 	{
 	$check = trim($check);
 	
@@ -4122,7 +4123,7 @@ function sed_selectbox($check, $name, $values, $empty_option = true)
 	foreach ($values as $k => $x)
 		{
 		$x = trim($x);
-		$v = ($isarray) ? $k : $x;
+		$v = ($isarray && $key_isvalue) ? $k : $x;
 		$selected = ($v == $check) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$v\" $selected>".sed_cc($x)."</option>";
 		}

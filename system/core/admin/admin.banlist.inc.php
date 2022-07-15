@@ -92,16 +92,14 @@ while ($row = sed_sql_fetchassoc($sql))
 	$t -> parse("ADMIN_BANLIST.BANLIST_EDIT_LIST");
 
 	}
-
-	$nexpire = "<select name=\"nexpire\" size=\"1\">";
-	$nexpire .= "<option value=\"3600\">1 hour</option><option value=\"7200\">2 hours</option><option value=\"14400\">4 hours</option><option value=\"28800\">8 hours</option>";
-	$nexpire .= "<option value=\"57600\">16 hours</option><option value=\"86400\">1 day</option><option value=\"172800\">2 days</option><option value=\"345600\">4 days</option>";
-	$nexpire .= "<option value=\"604800\">1 week</option><option value=\"1209600\">2 weeks</option><option value=\"1814400\">3 weeks</option><option value=\"2592000\">1 month</option>";
-	$nexpire .= "<option value=\"0\" selected=\"selected\">".$L['adm_neverexpire']."</option></select>";
-
+	
+	$expire_arr = array(0 => $L['adm_neverexpire'], 3600 => '1 hour', 7200 => '2 hours', 14400 => '4 hours', 28800 => '8 hours',
+						57600 => '16 hours', 86400 => '1 day', 172800 => '2 days', 345600 => '4 days',
+						604800 => '1 week', 1209600 => '2 weeks', 1814400 => '3 weeks', 2592000 => '1 month');
+	
 	$t->assign(array(
 		"BANLIST_ADD_SEND_URL" => sed_url("admin", "m=banlist&a=add&".sed_xg()),
-		"BANLIST_ADD_NEXPIRE" => $nexpire,
+		"BANLIST_ADD_NEXPIRE" => sed_selectbox(0, 'nexpire', $expire_arr, false),
 		"BANLIST_ADD_IP" => sed_textbox('nbanlistip', $nbanlistip, 14, 16),
 		"BANLIST_ADD_EMAIL_MASK" => sed_textbox('nbanlistemail', $nbanlistemail, 24, 64),
 		"BANLIST_ADD_REASON" => sed_textbox('nbanlistreason', $nbanlistreason, 48, 64)
