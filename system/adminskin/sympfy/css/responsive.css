@@ -196,7 +196,15 @@
 		clear: both;
 		display: inline-block;
 		color: #ccc;
-	}		
+	}	
+
+	.no-label .resp-table-td::after {
+		content: none;
+	}
+	
+	.no-label .resp-table-td::before {
+		content: none;
+	}	
 	
 	.cache-delete {	
 		width: 50px;
@@ -432,7 +440,7 @@
 @media (max-width: 500px) {
 	ul.content-box-tabs {
 		padding: 11px 5px 0 5px!important;
-		float: none;
+		float: left;
 		clear: both;
 	}
 	ul.content-box-tabs li a {
