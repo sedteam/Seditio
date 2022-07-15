@@ -70,7 +70,7 @@ $cfg['separator_symbol'] = "&raquo;";
 
 $cfg['available_image_sizes'] = array(); // array("800x600", "400x300");
 
-$cfg['adminskin'] = "simple";
+$cfg['adminskin'] = "sympfy";
 
 /* Message type:  attention => a, error => e, success => s, information => i */
 $cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e', 

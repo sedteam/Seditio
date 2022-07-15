@@ -27,8 +27,9 @@ $cfg['mysqldb'] = 'seditio';		// Database name
 // Default skin and default language
 // ========================
 
-$cfg['defaultskin'] = 'simple';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
+$cfg['defaultskin'] = 'sympfy';		// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
 $cfg['defaultlang'] = 'en';			// Default language code
+$cfg['adminskin'] = 'sympfy';		// Default admin skin
 
 // ========================
 // More settings
