@@ -240,8 +240,7 @@
 		color: #afaaaa;
 		font-size:0.9em;
 	}
-	
-	
+		
 	.forums-post-table .forums-post-infoposter {
 		display: table;
 		width:100%;
@@ -286,8 +285,7 @@
 		padding-bottom:0;
 		margin-bottom:0;
 	}
-	
-	
+		
 	.brnomobile {
 		display:none;
 	}
@@ -324,8 +322,90 @@
 	
 	.responsive-form .form-label  label {
 		font-weight:600;
+		color: #555555;
 	}
 	
+	.resp-table {
+		display: block;
+		width: 100%;
+	}
+	
+	.resp-hide {
+		display: none!important;
+	}
+	
+	.resp-table-head {
+		display: none;
+	}
+	
+	.resp-table-body {
+		display: block;
+		width: 100%;
+	}	
+	
+	.resp-table-row {
+		display: block;
+		width: 100%;
+		clear: both;
+		padding: 10px 0;
+	}
+	
+	.resp-table-row:before,
+	.resp-table-row:after {
+		content: " ";
+		display: block;
+	}
+
+	.resp-table-row:after {
+		clear: both;
+	}	
+
+	.resp-table-td {
+		display: block;
+		padding: 5px 10px;
+	}
+	
+	.resp-table-td::before {
+		content: attr(data-label);
+		clear: both;
+		display: block;
+		color: #ccc;
+	}	
+	
+	.resp-table-td::after {
+		content: attr(data-afterlabel);
+		clear: both;
+		display: inline-block;
+		color: #ccc;
+	}	
+	
+	.users-maingrp,
+	.users-country,
+	.users-regdate	{
+		width: 33%!important;
+		float:left!important;
+		text-align:left!important;	
+		padding-bottom:5px;	
+	}
+	
+	.users-pm {
+		position: absolute;
+		right:0;
+		top: 10px;
+		width: auto!important;
+		z-index: 10;		
+	}
+		
+	.maingrp-table {
+		display: block;
+		width:100%;
+	}
+
+	.maingrp-td-icon,
+	.maingrp-td-title {
+		display: block;
+		width:100%;
+	}	
 	
 }
 

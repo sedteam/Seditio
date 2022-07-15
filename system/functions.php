@@ -149,19 +149,21 @@ function sed_alphaonly($text)
 /** 
  * Displays results AJAX request 
  * 
- * Clearing the output buffer and sending a new content generated as a result of the AJAX call.
+ * Clearing the output buffer and sending a new content generated as a result of the AJAX call. 
  * 
  * @param string $res Result of the AJAX call
+ * @param string $ajax Ajax content flag
+ * @param string $content_type Content type
  */	
-function sed_ajax_flush($res, $ajax)
+function sed_ajax_flush($res, $ajax, $content_type = 'text/html')
 	{	
 	if ($ajax)
 		{
 		ob_clean();
-		sed_sendheaders();		
-	  echo $res; 
-	  ob_flush(); 
-	  exit; 		
+		sed_sendheaders($content_type);		
+		echo $res; 
+		ob_flush(); 
+		exit; 		
 		}
 	}
 	

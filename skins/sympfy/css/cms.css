@@ -398,7 +398,6 @@ table.cells tr:nth-child(even) {
 	background-color: #f2f2f2;
 }
 
-
 .table,
 .table-cells {
 	display:table;
@@ -407,13 +406,29 @@ table.cells tr:nth-child(even) {
 	position:relative;
 }
 
-.table-tr {
+.table-tr,
+.table-row {
 	display:table-row;
 	position:relative;
 }
 
+.table-row:nth-child(odd) {
+    
+}
+
+.table-row:nth-child(even) {
+    background: #f3f3f3;
+}
+
 .table-cells .table-tr:nth-child(even) {
 	background-color: #f2f2f2;
+}
+
+.table-th {
+	display: table-cell;
+	padding: 10px;
+    vertical-align: middle;
+	position: relative;
 }
 
 .table-td {
@@ -428,8 +443,29 @@ table.cells tr:nth-child(even) {
 }
 
 .table-thead    { display: table-header-group; }
-.table-tbody    { display: table-row-group; }
 .table-tfoot    { display: table-footer-group; }
+
+.table-head {
+	font-weight: bold;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f3f3;
+    color: #000;
+    text-align: center;
+    line-height: 1.3em;
+    vertical-align: middle;
+	display: table-header-group;
+}
+
+.table-foot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+
+.table-tbody,
+.table-body {
+	display: table-row-group;
+}
 
 .table-colspan-100 {
 	display:block;
@@ -529,6 +565,21 @@ table.cells tr:nth-child(even) {
   text-indent:-9999px;
   background:url("../img/addimg.png") bottom left no-repeat;
 } 
+
+.maingrp-table {
+	display: table;
+	width:100%;
+}
+
+.maingrp-td-icon,
+.maingrp-td-title {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.maingrp-td-icon {
+	width:30px;
+}
 
 /* = Tabs
 -----------------------------------------------------------------------------*/

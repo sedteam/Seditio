@@ -38,30 +38,50 @@
 
 			<div class="centered">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
 
-			<table class="cells striped">
+			<div class="table cells striped resp-table">
 
-				<tr>
-					<td class="coltop" style="width:20px;">{USERS_TOP_PM}</td>
-					<td class="coltop">{USERS_TOP_NAME}</td>
-					<td class="coltop" style="width:180px;" colspan="2">{USERS_TOP_MAINGRP}</td>
-					<td class="coltop" style="width:128px;">{USERS_TOP_COUNTRY}</td>
-					<td class="coltop" style="width:200px;">{USERS_TOP_REGDATE}</td>
-				</tr>
+				<div class="table-head resp-table-head">
+				
+					<div class="table-row resp-table-row">				
+						<div class="table-th coltop text-center" style="width:120px;">{USERS_TOP_PM}</div>
+						<div class="table-th coltop text-left">{USERS_TOP_NAME}</div>
+						<div class="table-th coltop text-left" style="width:210px;">{USERS_TOP_MAINGRP}</div>
+						<div class="table-th coltop text-left" style="width:128px;">{USERS_TOP_COUNTRY}</div>
+						<div class="table-th coltop text-center" style="width:200px;">{USERS_TOP_REGDATE}</div>
+					</div>
+							
+				</div>
+							
+				<div class="table-body resp-table-body">
 
 				<!-- BEGIN: USERS_ROW -->
-
-				<tr>
-					<td>{USERS_ROW_PM}</td>
-					<td><strong>{USERS_ROW_NAME}</strong> {USERS_ROW_TAG}</td>
-					<td>{USERS_ROW_MAINGRP}</td>
-					<td style="width:90px;">{USERS_ROW_MAINGRPSTARS}</td>
-					<td>{USERS_ROW_COUNTRYFLAG} {USERS_ROW_COUNTRY}</td>
-					<td>{USERS_ROW_REGDATE}</td>
-				</tr>
+				
+				<div class="table-row resp-table-row">				
+					<div class="table-td text-center resp-table-td users-pm">
+						{USERS_ROW_PM}
+					</div>
+					<div class="table-td text-left resp-table-td users-name" data-label="{PHP.L.Username}">
+						<strong>{USERS_ROW_NAME}</strong> {USERS_ROW_TAG}
+					</div>				
+					<div class="table-td text-left resp-table-td users-maingrp" data-label="{PHP.L.Maingroup}">
+						<div class="maingrp-table">
+							<div class="maingrp-td-title">{USERS_ROW_MAINGRP}</div> 
+							<div class="maingrp-td-icon">{USERS_ROW_MAINGRPSTARS}</div>
+						</div>
+					</div>				
+					<div class="table-td text-left resp-table-td users-country" data-label="{PHP.L.Country}">
+						{USERS_ROW_COUNTRYFLAG} {USERS_ROW_COUNTRY}
+					</div>	
+					<div class="table-td text-center resp-table-td users-regdate" data-label="{PHP.L.Registered}">
+						{USERS_ROW_REGDATE}
+					</div>	
+				</div>
 
 				<!-- END: USERS_ROW -->
+				
+				</div>
 
-			</table>
+			</div>
 
 			<div class="centered">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>  
 	
