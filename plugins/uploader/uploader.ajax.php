@@ -90,23 +90,6 @@ elseif ($upl_rotate)
 	exit;
 }
 
-/*
-if ($buildfilename == 'timestamp')
-  {
-    $filename = time().'_'.strtolower($upl_filename);
-    $filename = preg_replace("#\\s+#", "_", $filename);
-    $filename = $usr['id']."-".sed_newname($filename);
-  }
-else
-  {
-    $filename = '_'.strtolower($upl_filename);
-    $filename = preg_replace("#\\s+#", "_", $filename);
-    $filename = sed_newname($filename);
-    $filename= $usr['id']."-page_".$upl_pid.$filename;
-  }  
-  
-*/
-
 $sql_total = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='".$usr['id']."'");
 $pfs_totalsize = sed_sql_result($sql_total, 0, "SUM(pfs_size)");
 
@@ -122,11 +105,16 @@ if ($row = sed_sql_fetchassoc($sql))
 else
 	{ exit; }
 
+if ($maxfile == 0 || $maxtotal == 0 || !$usr['auth_write'])
+	{ 
+	$disp_errors = $L['pfs_filetoobigorext'];		
+	}
+
 $filename = sed_newname($usr['id']."-".$upl_filename, TRUE);
 
 if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'].$filename))
 	{
-		$filename = sed_newname($usr['id']."-".time().sed_unique(3)."-".$upl_filename, TRUE);
+	$filename = sed_newname($usr['id']."-".time().sed_unique(3)."-".$upl_filename, TRUE);
 	}  
   
 $allow_extension = array('gif','png','jpg','jpeg','bmp');
@@ -135,9 +123,13 @@ $f_extension = end($extension_arr);
 
 if (in_array($f_extension, $allow_extension) == FALSE)  
 	{
-		$disp_errors = "Bad file extension";
-	}	 
-elseif (!file_exists($cfg['pfs_dir'].$filename))
+	$disp_errors = "Bad file extension";
+	}
+elseif (file_exists($cfg['pfs_dir'].$filename))
+	{	
+	$disp_errors = $L['pfs_fileexists'];
+	}
+elseif (empty($disp_errors))
 	{
 	$u_size = file_put_contents($cfg['pfs_dir'].$filename, file_get_contents('php://input'));
 	$imgsize = @getimagesize($cfg['pfs_dir'].$filename);
@@ -158,6 +150,8 @@ elseif (!file_exists($cfg['pfs_dir'].$filename))
 		
 		$u_sqlname = $filename;
 		$u_title = $filename;
+		
+		@chmod($cfg['pfs_dir'].$filename, 0644);
 
 		$folder_title = $L[date('F')]." ".date('Y'); 
 
@@ -212,9 +206,6 @@ elseif (!file_exists($cfg['pfs_dir'].$filename))
 		sed_sm_createthumb($cfg['pfs_dir'].$filename, $cfg['th_dir'].$filename, $cfg['th_x'], $cfg['th_y'], $cfg['th_jpeg_quality'], "resize", TRUE);
 		}
 	}
-else {
-	$disp_errors = $L['pfs_fileexists'];
-}
 
 $res = new stdClass;
 $res->filename = $filename;
