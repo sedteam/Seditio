@@ -12,9 +12,9 @@
 			sed_uploader_hide_on_exceed      : true,
 			sed_uploader_hide_in_progress    : false,
 			sed_uploader_attach_images       : [],	
-			sed_uploader_path  	   	         : '/plugins/uploader',
-			sed_uploader_main_path           : '/datas/users',
-			sed_uploader_thumbnail_path      : '/datas/thumbs',
+			sed_uploader_path  	   	         : 'plugins/uploader',
+			sed_uploader_main_path           : 'datas/users',
+			sed_uploader_thumbnail_path      : 'datas/thumbs',
 			sed_uploader_file_delete_label 	 : "",
 			sed_uploader_file_rotation_label : "",
 			sed_uploader_field_name          : $(this).attr('id'),
@@ -116,7 +116,7 @@
 			jQuery.data(holdername, "already_uploaded", jQuery.data(holdername, "already_uploaded")-1);
 			
 			$.ajax({
-				url: "/plug/?ajx=uploader&upl_delete=" + encodeURIComponent($(this).parent().attr('filename'))
+				url: "plug/?ajx=uploader&upl_delete=" + encodeURIComponent($(this).parent().attr('filename'))
 			});			
 			
 			$(this).parent().fadeOut("slow", function() {
@@ -142,7 +142,7 @@
 			var context = this;
 			
 			$.ajax({
-				url: "/plug/?ajx=uploader&upl_rotate=" + encodeURIComponent($(this).parent().attr('filename'))+"&upl_degree_lvl=" + $(this).closest('.rotate_picture').attr('degree-lvl')
+				url: "plug/?ajx=uploader&upl_rotate=" + encodeURIComponent($(this).parent().attr('filename'))+"&upl_degree_lvl=" + $(this).closest('.rotate_picture').attr('degree-lvl')
 			}).done(function(file_name) {
 				$img = $('html,body').find("input[value^='"+file_name+"']").prev('img');				
 				if (parseInt($(context).closest('.rotate_picture').attr('degree-lvl')) > 3)  {
@@ -213,7 +213,7 @@
 			$(holder).parent().find('.uploadButton').hide();	
 		}
 		var xhr = new XMLHttpRequest();
-		xhr.open("POST", "/plug/?ajx=uploader&upl_filename="+encodeURIComponent(file.name), true);
+		xhr.open("POST", "plug/?ajx=uploader&upl_filename="+encodeURIComponent(file.name), true);
 		xhr.send(file);
 		xhr.onreadystatechange = function() 
 		{
