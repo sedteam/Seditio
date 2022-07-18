@@ -149,8 +149,9 @@ elseif ($f=='all')
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
 
-$allfilters = "<form action=\"".sed_url("users", "f=search")."\" method=\"post\">".$L['Filters'].": <a href=\"".sed_url("users")."\">".$L['All']."</a> ";
-$allfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
+$allfilters = "<form action=\"".sed_url("users", "f=search")."\" method=\"post\">";
+$allfilters .= "<div>".$L['Filters'].": <a href=\"".sed_url("users")."\">".$L['All']."</a></div>";
+$allfilters .= "<div><select name=\"bycountry\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 
 foreach ($sed_countries as $i => $x)
 	{
@@ -167,8 +168,8 @@ foreach ($sed_countries as $i => $x)
        	}
 	}
 
-$allfilters .= "</select>";
-$allfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Maingroup']."...";
+$allfilters .= "</select></div>";
+$allfilters .= "<div><select name=\"bymaingroup\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Maingroup']."...";
 foreach($sed_groups as $k => $i)
 	{
 	$selected = ($k==$g) ? "selected=\"selected\"" : '';
@@ -181,21 +182,21 @@ foreach($sed_groups as $k => $i)
 		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 		}
 	}
-$allfilters .= "</select>";
-$allfilters .= " <select name=\"bygroupms\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Group']."...";
-$allfilters .= $grpms."</select>";
+$allfilters .= "</select></div>";
+$allfilters .= "<div><select name=\"bygroupms\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Group']."...";
+$allfilters .= $grpms."</select></div>";
 
-$allfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"16\" maxlength=\"32\" /> <input type=\"submit\" class=\"submit btn\" value=\"".$L['Search']."\" /></form>";
+$allfilters .= "<div>".sed_textbox('y', $y, 16, 32)."<button type=\"submit\" class=\"submit btn\">".$L['Search']."</button></div></form>"; 
 
-$allfilters .= "\n".$L['Byfirstletter'].":";
+$alpafilters = "\n".$L['Byfirstletter'].":";
 
 for ($i = 1; $i <= 26; $i++)
 	{
 	$j = chr($i+64);
-	$allfilters .= " <a href=\"".sed_url("users", "f=".$j)."\" class=\"alfabeta\">".$j."</a>";
+	$alpafilters .= " <a href=\"".sed_url("users", "f=".$j)."\" class=\"alfabeta\">".$j."</a>";
 	}
 	
-$allfilters .= " <a href=\"".sed_url("users", "f=_")."\" class=\"alfabeta\">%</a>";
+$alpafilters .= " <a href=\"".sed_url("users", "f=_")."\" class=\"alfabeta\">%</a>";
 
 $out['subtitle'] = $L['Users'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
@@ -242,6 +243,7 @@ $t-> assign(array(
 	"USERS_TOP_MAXPERPAGE" => $cfg['maxusersperpage'],
 	"USERS_TOP_TOTALUSERS" => $totalusers,
 	"USERS_TOP_FILTERS" => $allfilters,
+	"USERS_TOP_ALPHAFILTERS" => $alpafilters,
 	"USERS_TOP_PM" => $L['Message'],
 	"USERS_TOP_USERID" => "<a href=\"".sed_url("users", "f=".$f."&s=id&w=asc&g=".$g."&gm=".$gm."&sq=".$sq)."\">".$cfg['arrow_down']."</a><a href=\"".sed_url("users", "f=".$f."&s=id&w=desc&g=".$g."&gm=".$gm."&sq=".$sq)."\">".$cfg['arrow_up']."</a> ".$L['Userid'],
 	"USERS_TOP_NAME" => "<a href=\"".sed_url("users", "f=".$f."&s=name&w=asc&g=".$g."&gm=".$gm."&sq=".$sq)."\">".$cfg['arrow_down']."</a><a href=\"".sed_url("users", "f=".$f."&s=name&w=desc&g=".$g."&gm=".$gm."&sq=".$sq)."\">".$cfg['arrow_up']."</a> ".$L['Username'],

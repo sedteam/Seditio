@@ -54,7 +54,8 @@ ul {
 }
 
 .section-desc {
-	position: relative;
+    position: relative;
+    margin-top: 15px;
 }
 
 .section-admin {

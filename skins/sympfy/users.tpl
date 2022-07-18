@@ -19,7 +19,8 @@
 		<div class="section-body">
 
 			<div class="filters">
-				{USERS_TOP_FILTERS}				
+				<div class="filters-form">{USERS_TOP_FILTERS}</div>
+				<div class="filters-alphafilters">{USERS_TOP_ALPHAFILTERS}</div>				
 			</div>
 			
 			<!-- BEGIN: USERS_PAGINATION_TP -->
@@ -36,7 +37,7 @@
 		  
 			<!-- END: USERS_PAGINATION_TP -->
 
-			<div class="centered">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
+			<div class="text-center descr">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
 
 			<div class="table cells striped resp-table">
 
@@ -83,7 +84,7 @@
 
 			</div>
 
-			<div class="centered">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>  
+			<div class="text-center descr">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>  
 	
 			<!-- BEGIN: USERS_PAGINATION_BM -->
 			

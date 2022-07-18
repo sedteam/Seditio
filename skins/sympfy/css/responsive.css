@@ -420,7 +420,15 @@
 	#slider .slide-body h3 {
 		font-size: 2em;
 	}
-		
+	
+	.section-title h2, 
+	.section-title h1 {
+		font-size: 2.3em;
+	}	
+	
+	ul.tabs li a {
+		padding: 8px 15px 8px 15px;
+	}		
 }
 
 @media (max-width: 400px) {

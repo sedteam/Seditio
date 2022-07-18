@@ -903,6 +903,18 @@ ul.admin-buttons li {
 .help {
   font-style: italic;
   padding: 15px 0;
-  color:#ccc;
+  color: #ccc;
+}
+
+.filters {
+	padding: 15px;
+	border: 1px dotted #cccccc;
+	background: #fbfbfb;
+	margin-bottom: 15px;
+}
+
+.filters .filters-form div {
+	display: inline-block;
+	padding: 5px;
 }
 

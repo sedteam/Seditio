@@ -28,7 +28,7 @@
 			
 				<form name="login" action="{USERS_AUTH_SEND}" method="post">
 
-					<ul class="form">
+					<ul class="form responsive-form">
 
 						<li class="form-row">
 							<div class="form-label">{PHP.skinlang.usersauth.Username}</div>

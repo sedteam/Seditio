@@ -28,7 +28,7 @@
 
 				<form name="login" action="{USERS_REGISTER_SEND}" method="post">
 
-				<ul class="form"> 
+				<ul class="form responsive-form"> 
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersregister.Username} *</label></div>
 						<div class="form-field">{USERS_REGISTER_USER}</div>
