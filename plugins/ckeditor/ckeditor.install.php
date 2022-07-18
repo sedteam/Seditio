@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.install.php
 Version=179
-Updated=2012-feb-23
+Updated=2022-jul-18
 Type=Plugin
 Author=Seditio Team
 Description=

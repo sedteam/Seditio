@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.ajax.php
 Version=179
-Updated=2013-oct-09
+Updated=2022-jul-18
 Type=Plugin
 Author=Amro
 Description=

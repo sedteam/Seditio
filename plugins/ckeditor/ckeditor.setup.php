@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.setup.php
 Version=179
-Updated=2021-nov-16
+Updated=2022-jul-18
 Type=Plugin
 Author=Amro
 Description=
@@ -17,8 +17,8 @@ Description=
 Code=ckeditor
 Name=Ckeditor
 Description=Ckeditor for Seditio (Universal textarea JS connector) 
-Version=4.16.2
-Date=2021-dec-30
+Version=4.19
+Date=2022-jul-18
 Author=Amro
 Copyright=Amro
 Notes=

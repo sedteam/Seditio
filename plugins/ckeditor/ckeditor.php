@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.php
 Version=179
-Updated=2013-oct-09
+Updated=2022-jul-18
 Type=Plugin
 Author=Amro
 Description=
@@ -77,7 +77,7 @@ if ($usr['maingrp'] > 3) {
 	if (window.addEventListener) { window.addEventListener('load', ckeditorReplace, false);
 	} else if (window.attachEvent) { window.attachEvent('onload', ckeditorReplace); } else { window.onload = ckeditorReplace; }  
 	</script>";
-	$moremetas .= "<script src=\"plugins/ckeditor/lib4/ckeditor.js?v=5\" type=\"text/javascript\"></script>".$init_ck;
+	$moremetas .= "<script src=\"plugins/ckeditor/lib/ckeditor.js?v=4\" type=\"text/javascript\"></script>".$init_ck;
 }
 
 ?>
