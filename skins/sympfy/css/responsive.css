@@ -395,6 +395,14 @@
 		width: auto!important;
 		z-index: 10;		
 	}
+	
+	.pfs-td-delete,
+	.pfs-td-edit,
+	.pfs-td-viewcounts,
+	.pfs-td-setasample,
+	.pfs-td-stndl {
+		text-align: left!important;
+	}
 		
 	.maingrp-table {
 		display: block;

@@ -35,10 +35,12 @@ $L_pff_type[2] = $L['Gallery'];
 if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
+	$useradm = FALSE;
 	}
 else
 	{
 	$more = "userid=".$userid;
+	$useradm = TRUE;
 	}
 
 if ($userid != $usr['id'])
@@ -49,7 +51,7 @@ $user_info = sed_userinfo($userid);
 $standalone = FALSE;
 $maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
 
-$moretitle = ($userid > 0 && !empty($more)) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
+$moretitle = ($userid > 0 && !$useradm) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
@@ -173,7 +175,7 @@ $t->parse("MAIN.PFS_EDITFOLDER");
 $t-> assign(array(
 	"PFS_TITLE" => $title,
 	"PFS_SHORTTITLE" => $shorttitle,
-	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),		
+	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, !$standalone),
 	"PFS_SUBTITLE" => $subtitle
 ));
 

@@ -1464,6 +1464,29 @@ input::placeholder { color: #bbbdbf; }
     vertical-align: bottom;
 }
 
+.btn-icon {
+	width: 24px;
+    height: 24px;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 25px;
+    border-radius: 2px;
+    background-color: #315eb4;
+    color: #ffffff;
+    border: 1px solid #133d8d;
+	text-decoration:none;
+}
+
+.btn-icon:hover,
+.btn-icon:focus,
+.btn-icon:active {
+	background-color: #5980cb;
+	border: 1px solid #2f59a9;	
+	text-decoration:none;
+	color: #ffffff;
+} 
+
 blockquote {
 	color: #999999;
 	font-style: italic;

@@ -35,10 +35,12 @@ $L_pff_type[2] = $L['Gallery'];
 if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
+	$useradm = FALSE;
 	}
 else
 	{
 	$more = "userid=".$userid;
+	$useradm = TRUE;
 	}
 
 if ($userid != $usr['id'])
@@ -51,7 +53,7 @@ $upload_status = array();
 $user_info = sed_userinfo($userid);
 $maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
 
-$moretitle = ($userid > 0 && !empty($more)) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
+$moretitle = ($userid > 0 && !$useradm) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
 
 $sql = sed_sql_query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
 if ($row = sed_sql_fetchassoc($sql))
@@ -706,7 +708,7 @@ $disp_iconshelp .= "<img src=\"skins/$skin/img/system/icon-pastethumb.gif\" alt=
 $t-> assign(array(
 	"PFS_TITLE" => $title,
 	"PFS_SHORTTITLE" => $shorttitle,
-	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),		
+	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, !$standalone),
 	"PFS_SUBTITLE" => $subtitle,
 	"PFS_STATS" => $disp_stats,
 	"PFS_HELP" => ($standalone) ? $disp_iconshelp : ''
