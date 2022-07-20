@@ -605,6 +605,8 @@ $L['pfs_filesintheroot'] = "File(s) in the root";
 $L['pfs_filesinthisfolder'] = "File(s) in this folder";
 $L['pfs_newfile'] = "Upload a file :";
 $L['pfs_newfolder'] = "Create a new folder :";
+$L['pfs_editfolder'] = "Editing a folder";
+$L['pfs_editfile'] = "Editing a file";
 $L['pfs_extallowed'] = "Extensions allowed";
 
 $L['pfs_insertasthumbnail'] = "Insert as thumbnail"; // New in v175

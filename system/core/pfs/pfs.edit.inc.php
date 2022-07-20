@@ -27,7 +27,7 @@ $userid = sed_import('userid','G','INT');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_write']);
 
-if (!$usr['isadmin'] || $userid=='')
+if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
 	}
@@ -36,12 +36,14 @@ else
 	$more = "userid=".$userid;
 	}
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 	{ sed_block($usr['isadmin']); }
 
 $standalone = FALSE;
 $user_info = sed_userinfo($userid);
-$maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
+$maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
+
+$moretitle = ($userid > 0 && !empty($more)) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
@@ -58,21 +60,19 @@ if (!empty($c1) || !empty($c2))
 
 /* ============= */
 
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"".sed_url("pfs", $more)."\">".$L['pfs_title']."</a>";
-$shorttitle = $L['pfs_title'];
+$title = $L['pfs_editfile'];
+$shorttitle = $L['pfs_editfile'];
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("pfs", $more)] = $L['pfs_title'];
+$urlpaths[sed_url("pfs", $more)] = $L['PFS'].$moretitle;
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 	{
 	sed_block($usr['isadmin']);
-	$title .= ($userid==0) ? '' : " (".sed_build_user($user_info['user_id'], $user_info['user_name']).")";
 	}
-
-$title .= " ".$cfg['separator']." ".$L['Edit'];
+	
+$urlpaths[sed_url("pfs", "m=edit&id=".$id."&".$more)] = $L['pfs_editfile'];
 
 $sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
 
@@ -122,71 +122,76 @@ if ($a=='update' && !empty($id))
 	sed_redirect(sed_url("pfs", "f=".$pfs_folderid."&".$more, "", true));
 	exit;
 	}
-
-$body .= "<table class=\"cells striped\">";
-$body .= "<form id=\"edit\" action=\"".sed_url("pfs", "m=edit&a=update&id=".$pfs_id."&".$more)."\" method=\"post\">";
-$body .= "<tr><td>".$L['File']." : </td><td>".$pfs_file."</td></tr>";
-$body .= "<tr><td>".$L['Date']." : </td><td>".$pfs_date."</td></tr>";
-$body .= "<tr><td>".$L['Folder']." : </td><td>".sed_selectbox_folders($userid, "", $pfs_folderid)."</td></tr>";
-$body .= "<tr><td>".$L['URL']." : </td><td><a href=\"".$ff."\">".$ff."</a></td></tr>";
-$body .= "<tr><td>".$L['Size']." : </td><td>".$pfs_size." ".$L['kb']."</td></tr>";
-$body .= "<tr><td>".$L['Title']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pfs_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br />".sed_textarea('rdesc', $pfs_desc, 8, 56, 'Micro')."</td></tr>";
-$body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-$body .= "</form></table>";
-
-/* ============= */
-
+	
 if ($standalone)
 	{
-	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$out['subtitle']."</title>";
-	$pfs_header2 = "</head><body>";
-	$pfs_footer = "</body></html>";
-	
-	/* === New Hook Sed 175 === */
+	sed_sendheaders();
+
+	$pfs_header1 = $cfg['doctype']."\n<html>\n<head>
+	<title>".$cfg['maintitle']."</title>".sed_htmlmetas().$moremetas.sed_javascript($morejavascript);
+	$pfs_header2 = "</head>\n<body>";
+	$pfs_footer = "</body>\n</html>";
+		
+	/* === Hook === */
 	$extp = sed_getextplugins('pfs.stndl');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ================================ */	
+	/* ===== */		
 
-	$mskin = sed_skinfile(array('pfs', 'standalone'));
+	$mskin = sed_skinfile(array('pfs.edit', 'standalone'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
 		"PFS_STANDALONE_HEADER2" => $pfs_header2,
-		"PFS_STANDALONE_FOOTER" => $pfs_footer,
+		"PFS_STANDALONE_FOOTER" => $pfs_footer
 	));
-
-	$t->parse("MAIN.STANDALONE_HEADER");
-	$t->parse("MAIN.STANDALONE_FOOTER");
-
-	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_SHORTTITLE" => $shorttitle,
-		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, false),		
-		"PFS_BODY" => $body
-	));
-
-	$t->parse("MAIN");
-	$t->out("MAIN");
 	}
-else
+else 
 	{
 	require(SED_ROOT . "/system/header.php");
-
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
-	
-	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_SHORTTITLE" => $shorttitle,
-		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-		"PFS_BODY" => $body
-	));
-
-	$t->parse("MAIN");
-	$t->out("MAIN");
-
-	require(SED_ROOT . "/system/footer.php");
+	$mskin = sed_skinfile('pfs.edit');
+	$t = new XTemplate($mskin);	
 	}
+		
+$t->assign(array(
+	"PFS_EDITFILE_SEND" => sed_url("pfs", "m=edit&a=update&id=".$pfs_id."&".$more),
+	"PFS_EDITFILE_TITLE" => sed_textbox('rtitle', $pfs_title, 56, 255),
+	"PFS_EDITFILE_DESC" => sed_textarea('rdesc', $pfs_desc, 8, 56, 'Micro'),
+	"PFS_EDITFILE_FILE" => $pfs_file,
+	"PFS_EDITFILE_FOLDER" => sed_selectbox_folders($userid, "", $pfs_folderid),
+	"PFS_EDITFILE_DATE" => $pfs_date,
+	"PFS_EDITFILE_URL" => "<a href=\"".$ff."\">".$ff."</a>",
+	"PFS_EDITFILE_SIZE" => $pfs_size." ".$L['kb'],
+));		
+
+$t->parse("MAIN.PFS_EDITFILE");
+
+$t-> assign(array(
+	"PFS_TITLE" => $title,
+	"PFS_SHORTTITLE" => $shorttitle,
+	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),		
+	"PFS_SUBTITLE" => $subtitle
+));
+
+/* === Hook === */
+$extp = sed_getextplugins('pfs.editfolder.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+$t->parse("MAIN");
+$t->out("MAIN");
+
+if ($standalone)
+	{
+	@ob_end_flush();
+	@ob_end_flush();
+	sed_sql_close($connection_id);	
+	}
+else 
+	{
+	require(SED_ROOT . "/system/footer.php");	
+	}
+
 ?>

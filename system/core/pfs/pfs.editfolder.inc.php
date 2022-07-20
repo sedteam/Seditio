@@ -32,7 +32,7 @@ $L_pff_type[0] = $L['Private'];
 $L_pff_type[1] = $L['Public'];
 $L_pff_type[2] = $L['Gallery'];
 
-if (!$usr['isadmin'] || $userid=='')
+if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
 	}
@@ -41,12 +41,15 @@ else
 	$more = "userid=".$userid;
 	}
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 	{ sed_block($usr['isadmin']); }
 
-$standalone = FALSE;
 $user_info = sed_userinfo($userid);
-$maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
+
+$standalone = FALSE;
+$maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
+
+$moretitle = ($userid > 0 && !empty($more)) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
@@ -63,21 +66,18 @@ if (!empty($c1) || !empty($c2))
 
 /* ============= */
 
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"".sed_url("pfs", $more)."\">".$L['pfs_title']."</a>";
-$shorttitle = $L['pfs_title'];
+$title = $L['pfs_editfolder'];
+$shorttitle = $L['pfs_editfolder'];
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("pfs", $more)] = $L['pfs_title'];
+$urlpaths[sed_url("pfs", $more)] = $L['PFS'].$moretitle;
+$urlpaths[sed_url("pfs", "m=editfolder&f=".$f."&".$more)] = $L['pfs_editfolder'];
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 	{
 	sed_block($usr['isadmin']);
-	$title .= ($userid==0) ? '' : " (".sed_build_user($user_info['user_id'], $user_info['user_name']).")";
 	}
-
-$title .= " ".$cfg['separator']." ".$L['Edit'];
 
 $out['subtitle'] = $L['Mypfs']." - ".$L['Edit'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
@@ -96,7 +96,7 @@ if ($row = sed_sql_fetchassoc($sql))
 	$pff_desc = $row['pff_desc'];
 	$pff_type = $row['pff_type'];
 	$pff_count = $row['pff_count'];
-	$title .= " : ".sed_cc($pff_title);
+	$title = sed_cc($pff_title);
 	}
 else
 	{ sed_die(); }
@@ -125,73 +125,76 @@ if ($a=='update' && !empty($f))
 $row['pff_date'] = sed_build_date($cfg['dateformat'], $row['pff_date']);
 $row['pff_updated'] = sed_build_date($cfg['dateformat'], $row['pff_updated']);
 
-$body .= "<table class=\"cells striped\">";
-$body .= "<form id=\"editfolder\" action=\"".sed_url("pfs" ,"m=editfolder&a=update&f=".$pff_id."&".$more)."\" method=\"post\">";
-$body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td>".$L['Date']." : </td><td>".$row['pff_date']."</td></tr>";
-$body .= "<tr><td>".$L['Updated']." : </td><td>".$row['pff_updated']."</td></tr>";
-$body .= "<tr><td>".$L['Type']." : </td><td>";
-
-$rtype_arr = ($usr['auth_write_gal']) ? array(0 => $L['Private'], 1 => $L['Public'], 2 => $L['Gallery']) : array(0 => $L['Private'], 1 => $L['Public']);	
-$body .= sed_radiobox("rtype", $rtype_arr, $row['pff_type']);
-
-$body .= "</td></tr>";
-$body .= "<tr><td colspan=\"2\">".$L['Description']." : <br />".sed_textarea('rdesc', $pff_desc, 8, 56, 'Micro')."</td></tr>";
-$body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></td></tr>";
-$body .= "</form></table>";
-
-/* ============= */
-
 if ($standalone)
 	{
-	$pfs_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."<title>".$out['subtitle']."</title>";
-	$pfs_header2 = "</head><body>";
-	$pfs_footer = "</body></html>";
-	
-	/* === New Hook Sed 175 === */
+	sed_sendheaders();
+
+	$pfs_header1 = $cfg['doctype']."\n<html>\n<head>
+	<title>".$cfg['maintitle']."</title>".sed_htmlmetas().$moremetas.sed_javascript($morejavascript);
+	$pfs_header2 = "</head>\n<body>";
+	$pfs_footer = "</body>\n</html>";
+		
+	/* === Hook === */
 	$extp = sed_getextplugins('pfs.stndl');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ================================ */	
+	/* ===== */		
 
-	$mskin = sed_skinfile(array('pfs', 'standalone'));
+	$mskin = sed_skinfile(array('pfs.edit', 'standalone'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
 		"PFS_STANDALONE_HEADER2" => $pfs_header2,
-		"PFS_STANDALONE_FOOTER" => $pfs_footer,
+		"PFS_STANDALONE_FOOTER" => $pfs_footer
 	));
-
-	$t->parse("MAIN.STANDALONE_HEADER");
-	$t->parse("MAIN.STANDALONE_FOOTER");
-
-	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_SHORTTITLE" => $shorttitle,
-		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, false),
-		"PFS_BODY" => $body
-	));
-
-	$t->parse("MAIN");
-	$t->out("MAIN");
 	}
-else
+else 
 	{
 	require(SED_ROOT . "/system/header.php");
-
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
-	
-	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_SHORTTITLE" => $shorttitle,
-		"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),		
-		"PFS_BODY" => $body
-	));
-
-	$t->parse("MAIN");
-	$t->out("MAIN");
-
-	require(SED_ROOT . "/system/footer.php");
+	$mskin = sed_skinfile('pfs.edit');
+	$t = new XTemplate($mskin);	
 	}
+
+$rtype_arr = ($usr['auth_write_gal']) ? array(0 => $L['Private'], 1 => $L['Public'], 2 => $L['Gallery']) : array(0 => $L['Private'], 1 => $L['Public']);
+
+$t->assign(array(
+	"PFS_EDITFOLDER_SEND" => sed_url("pfs" ,"m=editfolder&a=update&f=".$pff_id."&".$more),
+	"PFS_EDITFOLDER_TITLE" => sed_textbox('rtitle', $pff_title, 56, 255),
+	"PFS_EDITFOLDER_DESC" => sed_textarea('rdesc', $pff_desc, 8, 56, 'Micro'),
+	"PFS_EDITFOLDER_DATE" => $row['pff_date'],
+	"PFS_EDITFOLDER_UPDATE" => $row['pff_updated'],
+	"PFS_EDITFOLDER_TYPE" => sed_radiobox("rtype", $rtype_arr, 0)
+));		
+
+$t->parse("MAIN.PFS_EDITFOLDER");
+
+
+$t-> assign(array(
+	"PFS_TITLE" => $title,
+	"PFS_SHORTTITLE" => $shorttitle,
+	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),		
+	"PFS_SUBTITLE" => $subtitle
+));
+
+/* === Hook === */
+$extp = sed_getextplugins('pfs.editfolder.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+$t->parse("MAIN");
+$t->out("MAIN");
+
+if ($standalone)
+	{
+	@ob_end_flush();
+	@ob_end_flush();
+	sed_sql_close($connection_id);	
+	}
+else 
+	{
+	require(SED_ROOT . "/system/footer.php");	
+	}
+
 ?>
