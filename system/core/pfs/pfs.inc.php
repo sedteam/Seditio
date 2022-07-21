@@ -53,7 +53,7 @@ $upload_status = array();
 $user_info = sed_userinfo($userid);
 $maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
 
-$moretitle = ($userid > 0 && !$useradm) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
+$moretitle = ($userid > 0 && $useradm) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
 
 $sql = sed_sql_query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
 if ($row = sed_sql_fetchassoc($sql))
@@ -441,12 +441,12 @@ else
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 		
 		if ($pff_type == 2)
-			{ $icon_f = "<img src=\"skins/$skin/img/system/icon-gallery.gif\" alt=\"\" />"; }
+			{ $icon_f = $cfg['ic_gallery']; }
 		else
-			{ $icon_f = "<img src=\"skins/$skin/img/system/icon-folder.gif\" alt=\"\" />"; }
+			{ $icon_f = $cfg['ic_folder']; }
 
 		if ($pff_type == 2 && !$cfg['disable_gallery'])
-			{ $icon_g = "<a href=\"".sed_url("gallery", "f=".$pff_id)."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a>"; }
+			{ $icon_g = "<a href=\"".sed_url("gallery", "f=".$pff_id)."\">".$cfg['ic_jumpto']."</a>"; }
 		else
 			{ $icon_g = ''; }
 			
@@ -515,7 +515,7 @@ while ($row = sed_sql_fetchassoc($sql))
   
   if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
 		{		
-		$setassample = ($pfs_id == $pff_sample) ?  $out['img_checked'] : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\">".$out['img_set']."</a>";    
+		$setassample = ($pfs_id == $pff_sample) ?  "<span class=\"dsl-icon\">".$cfg['ic_checked']."</span>" : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\" class=\"btn-icon\">".$cfg['ic_set']."</a>";    
 		$pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"".$cfg['th_rel']."\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
 		
 		if (!file_exists($cfg['th_dir'].$pfs_file) && file_exists($cfg['pfs_dir'].$pfs_file))
@@ -527,16 +527,16 @@ while ($row = sed_sql_fetchassoc($sql))
 
 		if ($standalone) 
 			{ 
-			$add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" alt=\"".$L['pfs_insertasthumbnail']."\" /></a>"; 
-			$add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" alt=\"".$L['pfs_insertasimage']."\" /></a>"; 
+			$add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\">".$cfg['ic_pastethumb']."</a>"; 
+			$add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\">".$cfg['ic_pasteimage']."</a>"; 
 			} 
 		}
 	  
-	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>" : '';
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\">".$cfg['ic_pastefile']."</a>" : '';
 	
 	if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) 
 		{ 
-		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" /></a>"; 
+		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\">".$cfg['ic_pastefile']."</a>"; 
 		$add_thumbnail = "";
 		$add_image = "";
 		} 
@@ -640,7 +640,7 @@ if ($usr['auth_write'])
 			{
 			$t->assign(array(
 				"PFS_UPLOAD_MORE_URL" => "javascript:sedjs.toggleblock('moreuploads')",
-				"PFS_UPLOAD_MORE_ICON" => "<img src=\"skins/".$skin."/img/system/arrow-down.gif\" alt=\"\" />"
+				"PFS_UPLOAD_MORE_ICON" => $cfg['arrow_down']
 			));			
 			$t->parse("MAIN.PFS_UPLOAD.PFS_UPLOAD_LIST.PFS_UPLOAD_MORE");
 			}
@@ -701,9 +701,7 @@ if (count($upload_status) > 0)
 // ========== Icons Help =========
 
 $disp_iconshelp = "<h4>".$L['Help']." :</h4>";
-$disp_iconshelp .= "<img src=\"skins/$skin/img/system/icon-pastethumb.gif\" alt=\"\" /> : ".$L['pfs_insertasthumbnail']." &nbsp; &nbsp; 
-	<img src=\"skins/$skin/img/system/icon-pasteimage.gif\" alt=\"\" /> : ".$L['pfs_insertasimage']." &nbsp; &nbsp; 
-	<img src=\"skins/$skin/img/system/icon-pastefile.gif\" alt=\"\" /> : ".$L['pfs_insertaslink']; 	
+$disp_iconshelp .= "<span>".$cfg['ic_pastethumb']."</span> : ".$L['pfs_insertasthumbnail']." &nbsp; <span>".$cfg['ic_pasteimage']."</span> : ".$L['pfs_insertasimage']." &nbsp; <span>".$cfg['ic_pastefile']."</span>: ".$L['pfs_insertaslink']; 	
 
 $t-> assign(array(
 	"PFS_TITLE" => $title,

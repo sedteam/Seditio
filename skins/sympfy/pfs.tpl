@@ -68,31 +68,31 @@
 							<!-- BEGIN: PFS_LIST_FOLDERS -->	
 							
 							<div class="table-row resp-table-row">				
-								<div class="table-td text-left resp-table-td">
+								<div class="table-td text-left resp-table-td pff-td-folder" data-label="{PHP.L.Folder}">
 									<a href="{PFS_LIST_FOLDERS_URL}">{PFS_LIST_FOLDERS_TITLE}</a>
 								</div>
-								<div class="table-td text-left resp-table-td">
+								<div class="table-td text-left resp-table-td pff-td-type" data-label="{PHP.L.Type}">
 									{PFS_LIST_FOLDERS_TYPE}
 								</div>
-								<div class="table-td text-center resp-table-td">
+								<div class="table-td text-center resp-table-td pff-td-files" data-label="{PHP.L.Files}">
 									{PFS_LIST_FOLDERS_HITS}
 								</div>
-								<div class="table-td text-center resp-table-td">
+								<div class="table-td text-center resp-table-td pff-td-size" data-label="{PHP.L.Size}">
 									{PFS_LIST_FOLDERS_SIZE}
 								</div>
-								<div class="table-td text-left resp-table-td">
+								<div class="table-td text-left resp-table-td pff-td-updates" data-label="{PHP.L.Updated}">
 									{PFS_LIST_FOLDERS_UPDATE}
 								</div>
-								<div class="table-td text-center resp-table-td">
+								<div class="table-td text-center resp-table-td pff-td-hits" data-label="{PHP.L.Hits}">
 									{PFS_LIST_FOLDERS_VIEWCOUNTS}
 								</div>
-								<div class="table-td text-center resp-table-td">
+								<div class="table-td text-center resp-table-td pff-td-delete">
 									<!-- BEGIN: PFS_LIST_FOLDERS_DELETE_URL -->
-										<a href="{PFS_LIST_FOLDERS_DELETE_URL}" class="btn-icon"><i class="ic-trash"></i></a>
+										<a href="{PFS_LIST_FOLDERS_DELETE_URL}" class="btn-icon" title="{PHP.L.Delete}"><i class="ic-trash"></i></a>
 									<!-- END: PFS_LIST_FOLDERS_DELETE_URL -->
 								</div>
-								<div class="table-td text-center resp-table-td">
-									<a href="{PFS_LIST_FOLDERS_EDIT_URL}" class="btn-icon"><i class="ic-pencil"></i></a>
+								<div class="table-td text-center resp-table-td pff-td-edit">
+									<a href="{PFS_LIST_FOLDERS_EDIT_URL}" class="btn-icon" title="{PHP.L.Edit}"><i class="ic-pencil"></i></a>
 								</div>								
 							</div>
 								
@@ -121,7 +121,7 @@
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.pfs_setassample}</div>
-									<div class="table-th coltop text-center">&nbsp;</div>
+									<div class="table-th coltop text-center"></div>
 								</div>
 										
 							</div>
@@ -155,14 +155,14 @@
 									</div>
 									
 									<div class="table-td text-center resp-table-td pfs-td-delete">
-										<a href="{PFS_LIST_FILES_DELETE_URL}" class="btn-icon"><i class="ic-trash"></i></a>
+										<a href="{PFS_LIST_FILES_DELETE_URL}" class="btn-icon" title="{PHP.L.Delete}"><i class="ic-trash"></i></a>
 									</div>
 							
 									<div class="table-td text-center resp-table-td pfs-td-edit">
-										<a href="{PFS_LIST_FILES_EDIT_URL}" class="btn-icon"><i class="ic-pencil"></i></a>
+										<a href="{PFS_LIST_FILES_EDIT_URL}" class="btn-icon" title="{PHP.L.Edit}"><i class="ic-pencil"></i></a>
 									</div>									
 
-									<div class="table-td text-center resp-table-td pfs-td-setasample" data-label="{PHP.L.pfs_setassample}">
+									<div class="table-td text-center resp-table-td pfs-td-setasample">
 										{PFS_LIST_FILES_SETASSAMPLE}
 									</div>
 

@@ -1487,6 +1487,19 @@ input::placeholder { color: #bbbdbf; }
 	color: #ffffff;
 } 
 
+.dsl-icon {
+	width: 24px;
+    height: 24px;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 25px;
+    border-radius: 2px;
+    color: #315eb4;
+    border: 1px solid #cccccc;
+	text-decoration:none;	
+}
+
 blockquote {
 	color: #999999;
 	font-style: italic;

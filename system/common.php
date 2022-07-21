@@ -481,6 +481,13 @@ $out['img_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
 $out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
 $out['img_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
 
+$out['img_gallery'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-gallery.gif\" alt=\"\" />";
+$out['img_folder'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-folder.gif\" alt=\"\" />";
+$out['img_jumpto'] = "<img src=\"system/img/admin/jumpto.gif\" alt=\"\" />";
+$out['img_pastethumb'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pastethumb.gif\" alt=\"".$L['pfs_insertasthumbnail']."\" />";
+$out['img_pastefile'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" />";
+$out['img_pasteimage'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pasteimage.gif\" alt=\"".$L['pfs_insertasimage']."\" />";
+
 $sed_yesno[1] = $L['Yes'];
 $sed_yesno[0] = $L['No'];
 
@@ -493,6 +500,17 @@ $cfg['arrow_up'] = $out['img_up'];
 $cfg['arrow_down'] = $out['img_down'];
 $cfg['arrow_left'] = $out['img_left'];
 $cfg['arrow_right'] = $out['img_right'];
+
+$cfg['ic_gallery'] = $out['img_gallery'];
+$cfg['ic_folder'] = $out['img_folder'];
+
+$cfg['ic_jumpto'] = $out['img_jumpto'];
+$cfg['ic_pastethumb'] = $out['img_pastethumb'];
+$cfg['ic_pastefile'] = $out['img_pastefile'];
+$cfg['ic_pasteimage'] = $out['img_pasteimage'];
+
+$cfg['ic_checked'] = $out['img_checked'];
+$cfg['ic_set'] = $out['img_set'];
 
 /* ======== Skin ======== */
 

@@ -51,7 +51,7 @@ $user_info = sed_userinfo($userid);
 $standalone = FALSE;
 $maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
 
-$moretitle = ($userid > 0 && !$useradm) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
+$moretitle = ($userid > 0 && $useradm) ? " &laquo;".$user_info['user_name']."&raquo;" : "";
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)

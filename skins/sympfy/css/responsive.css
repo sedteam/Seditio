@@ -403,6 +403,45 @@
 	.pfs-td-stndl {
 		text-align: left!important;
 	}
+	
+	.pfs-td-delete,
+	.pfs-td-edit,
+	.pfs-td-setasample {
+		width: 33%!important;
+		float:left!important;
+		text-align:center!important;	
+		padding-bottom:5px;			
+	}	
+	
+	.pfs-td-size,
+	.pfs-td-update {
+		width: 50%!important;
+		float:left!important;
+		text-align:left!important;		
+	}
+	
+	.pfs-td-title {
+		clear: both;
+	}
+		
+	.pff-td-folder,
+	.pff-td-type,
+	.pff-td-files,
+	.pff-td-size,
+	.pff-td-updates,
+	.pff-td-hits,
+	.pff-td-delete,
+	.pff-td-edit {
+		text-align: left!important;
+	}
+	
+	.pff-td-delete,
+	.pff-td-edit {
+		width: 40px!important;
+		float:left!important;
+		text-align:left!important;	
+		padding-bottom:5px;			
+	}		
 		
 	.maingrp-table {
 		display: block;

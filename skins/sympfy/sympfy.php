@@ -28,6 +28,12 @@ $cfg['arrow_down'] = "<i class=\"ic-arrow-narrow-down\"></i>";
 $cfg['arrow_left'] = "<i class=\"ic-arrow-narrow-left\"></i>";
 $cfg['arrow_right'] = "<i class=\"ic-arrow-narrow-right\"></i>";
 
+$cfg['ic_checked'] = "<i class=\"ic-check\"></i>";
+$cfg['ic_set'] = "<i class=\"ic-wand\"></i>";
+
+$cfg['ic_folder'] = "<i class=\"ic-folder\"></i>";
+$cfg['ic_gallery'] = "<i class=\"ic-paper-bag\"></i>";
+
 // ========= Plugin RecentItems ============================= //
 
 $cfg['plu_mask_pages'] = "<span class=\"rec-date\">%3\$s</span>"." "."%1\$s"." ".$cfg['separator']." "."%2\$s"."<br />";
