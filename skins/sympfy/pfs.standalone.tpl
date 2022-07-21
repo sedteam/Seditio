@@ -63,7 +63,7 @@
 									<div class="table-th coltop text-center">{PHP.L.Files}</div>
 									<div class="table-th coltop text-center" style="width:90px;">{PHP.L.Size}</div>
 									<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Updated}</div>
-									<div class="table-th coltop text-center">{PHP.L.Hits}</div>
+									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Hits}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
 								</div>
@@ -123,8 +123,8 @@
 									<div class="table-th coltop text-left" style="width:70px;">{PHP.L.File}</div>
 									<div class="table-th coltop text-left" style="width:90px;">{PHP.L.Size}</div>
 									<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Date}</div>
-									<div class="table-th coltop text-left">{PHP.L.Title}</div>
-									<div class="table-th coltop text-center">{PHP.L.Hits}</div>
+									<div class="table-th coltop text-left" style="width:auto;">{PHP.L.Title}</div>
+									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Hits}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.pfs_setassample}</div>
@@ -271,7 +271,7 @@
 										<div class="table-td text-left resp-table-td">
 											{PFS_UPLOAD_LIST_FILE}
 											<!-- BEGIN: PFS_UPLOAD_MORE -->
-											<a href="{PFS_UPLOAD_MORE_URL}">{PFS_UPLOAD_MORE_ICON}</a>
+											<a href="{PFS_UPLOAD_MORE_URL}" class="btn-icon">{PFS_UPLOAD_MORE_ICON}</a>
 											<!-- END: PFS_UPLOAD_MORE -->	
 										</div>
 
