@@ -40,7 +40,7 @@ if (!$usr['isadmin'] || $userid == '')
 else
 	{
 	$more = "userid=".$userid;
-	$useradm = TRUE;
+	$useradm = ($userid != $usr['id']) ? TRUE : FALSE;
 	}
 
 if ($userid != $usr['id'])

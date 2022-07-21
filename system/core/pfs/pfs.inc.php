@@ -40,7 +40,7 @@ if (!$usr['isadmin'] || $userid == '')
 else
 	{
 	$more = "userid=".$userid;
-	$useradm = TRUE;
+	$useradm = ($userid != $usr['id']) ? TRUE : FALSE;
 	}
 
 if ($userid != $usr['id'])
@@ -527,16 +527,16 @@ while ($row = sed_sql_fetchassoc($sql))
 
 		if ($standalone) 
 			{ 
-			$add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\">".$cfg['ic_pastethumb']."</a>"; 
-			$add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\">".$cfg['ic_pasteimage']."</a>"; 
+			$add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\" class=\"btn-icon\">".$cfg['ic_pastethumb']."</a>"; 
+			$add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\" class=\"btn-icon\">".$cfg['ic_pasteimage']."</a>"; 
 			} 
 		}
 	  
-	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\">".$cfg['ic_pastefile']."</a>" : '';
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$cfg['ic_pastefile']."</a>" : '';
 	
 	if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) 
 		{ 
-		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\">".$cfg['ic_pastefile']."</a>"; 
+		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$cfg['ic_pastefile']."</a>"; 
 		$add_thumbnail = "";
 		$add_image = "";
 		} 
@@ -574,7 +574,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$t->parse("MAIN.PFS_FILES.PFS_LIST_FILES");	
 
 	$pfs_foldersize = $pfs_foldersize + $pfs_filesize;
-	}
+	}		
 	
 	if ($files_count > 0) 
 		{	
@@ -601,6 +601,18 @@ $disp_allowedlist = array();
 foreach ($sed_extensions as $k => $line)
  	{ $disp_allowedlist[] = $icon[$line[0]]." .".$line[0]." (".$filedesc[$line[0]].")"; }
 $disp_allowed .= implode(", ", $disp_allowedlist);
+
+// ========== Icons Help =========
+
+$disp_iconshelp = "<span class=\"dsl-icon\">".$cfg['ic_pastethumb']."</span> ".$L['pfs_insertasthumbnail']." &nbsp; <span class=\"dsl-icon\">".$cfg['ic_pasteimage']."</span> ".$L['pfs_insertasimage']." &nbsp; <span class=\"dsl-icon\">".$cfg['ic_pastefile']."</span> ".$L['pfs_insertaslink'];
+
+if ($standalone)
+	{
+	$t->assign(array(
+		"PFS_HELP" => $disp_iconshelp
+	));
+	$t->parse("MAIN.PFS_HELP");	
+	}
 
 // ========== Upload =========
 
@@ -698,18 +710,12 @@ if (count($upload_status) > 0)
 	$t->parse("MAIN.PFS_UPLOAD_STATUS");	
 	}
 	
-// ========== Icons Help =========
-
-$disp_iconshelp = "<h4>".$L['Help']." :</h4>";
-$disp_iconshelp .= "<span>".$cfg['ic_pastethumb']."</span> : ".$L['pfs_insertasthumbnail']." &nbsp; <span>".$cfg['ic_pasteimage']."</span> : ".$L['pfs_insertasimage']." &nbsp; <span>".$cfg['ic_pastefile']."</span>: ".$L['pfs_insertaslink']; 	
-
 $t-> assign(array(
 	"PFS_TITLE" => $title,
 	"PFS_SHORTTITLE" => $shorttitle,
 	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, !$standalone),
 	"PFS_SUBTITLE" => $subtitle,
-	"PFS_STATS" => $disp_stats,
-	"PFS_HELP" => ($standalone) ? $disp_iconshelp : ''
+	"PFS_STATS" => $disp_stats
 ));
 
 /* === Hook === */

@@ -54,8 +54,8 @@
 									<div class="table-th coltop text-left" style="width:30%;">{PHP.L.Folder}</div>
 									<div class="table-th coltop text-left">{PHP.L.Type}</div>
 									<div class="table-th coltop text-center">{PHP.L.Files}</div>
-									<div class="table-th coltop text-center">{PHP.L.Size}</div>
-									<div class="table-th coltop text-left">{PHP.L.Updated}</div>
+									<div class="table-th coltop text-center" style="width:90px;">{PHP.L.Size}</div>
+									<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Updated}</div>
 									<div class="table-th coltop text-center">{PHP.L.Hits}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
@@ -114,7 +114,7 @@
 							
 								<div class="table-row resp-table-row">				
 									<div class="table-th coltop text-left" style="width:70px;">{PHP.L.File}</div>
-									<div class="table-th coltop text-left" style="width:70px;">{PHP.L.Size}</div>
+									<div class="table-th coltop text-left" style="width:90px;">{PHP.L.Size}</div>
 									<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Date}</div>
 									<div class="table-th coltop text-left">{PHP.L.Title}</div>
 									<div class="table-th coltop text-center">{PHP.L.Hits}</div>
@@ -177,8 +177,15 @@
 							</div>
 							
 						</div>	
-						
+
 						<!-- END: PFS_FILES -->	
+						
+						<!-- BEGIN: PFS_HELP -->
+						<div class="pfs-help">
+							<h5>{PHP.L.Help} :</h5>
+							{PFS_HELP}
+						</div>
+						<!-- END: PFS_HELP -->						
 
 					</div>
 
@@ -298,10 +305,6 @@
 						<div class="pfs-allow">
 							<h5>{PHP.L.pfs_extallowed}</h5>
 							{PFS_ALLOWED_EXT}
-						</div>
-						
-						<div class="pfs-help">
-							{PFS_HELP}
 						</div>
 						
 					</div>

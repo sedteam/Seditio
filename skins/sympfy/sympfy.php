@@ -32,7 +32,7 @@ $cfg['ic_checked'] = "<i class=\"ic-check\"></i>";
 $cfg['ic_set'] = "<i class=\"ic-wand\"></i>";
 
 $cfg['ic_folder'] = "<i class=\"ic-folder\"></i>";
-$cfg['ic_gallery'] = "<i class=\"ic-paper-bag\"></i>";
+$cfg['ic_gallery'] = "<i class=\"ic-gallery\"></i>";
 
 // ========= Plugin RecentItems ============================= //
 
