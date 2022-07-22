@@ -561,6 +561,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	$t->assign(array(
 		"PFS_LIST_FILES_ID" => $pfs_id,
 		"PFS_LIST_FILES_DELETE_URL" => sed_url("pfs", "a=delete&".sed_xg()."&id=".$pfs_id."&o=".$o."&".$more),
+		"PFS_LIST_FILES_FILE" => $pfs_file,
 		"PFS_LIST_FILES_URL" => $pfs_fullfile,
 		"PFS_LIST_FILES_TITLE" => $pfs_title,
 		"PFS_LIST_FILES_EDIT_URL" => sed_url("pfs" ,"m=edit&id=".$pfs_id."&".$more),
@@ -583,6 +584,9 @@ while ($row = sed_sql_fetchassoc($sql))
 		));
 		$t->parse("MAIN.PFS_FILES");	
 		}
+	else {
+		$t->parse("MAIN.PFS_EMPTY");	
+	}
 		
 // ========== Statistics =========
 

@@ -879,6 +879,19 @@ var sedjs = {
 	{
 		let root = apo.parentNode;
 		root.parentNode.removeChild(root);
+	},
+
+	/*= Copy url from href */		
+	copyurl : function(el) 
+	{		
+		event.preventDefault();
+		var cpLink = el.getAttribute('href');
+		var dummy = document.createElement("input");
+		document.body.appendChild(dummy);
+		dummy.setAttribute('value', cpLink);
+		dummy.select();
+		document.execCommand('copy');
+		document.body.removeChild(dummy);
 	},		
 	
 	/*= Auto set file title from file name without extension */		

@@ -121,9 +121,9 @@
 							
 								<div class="table-row resp-table-row">				
 									<div class="table-th coltop text-left" style="width:70px;">{PHP.L.File}</div>
-									<div class="table-th coltop text-left" style="width:90px;">{PHP.L.Size}</div>
-									<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Date}</div>
 									<div class="table-th coltop text-left" style="width:auto;">{PHP.L.Title}</div>
+									<div class="table-th coltop text-left" style="width:90px;">{PHP.L.Size}</div>
+									<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Date}</div>									
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Hits}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
@@ -145,6 +145,10 @@
 										<!-- END: PFS_LIST_FILES_ICON -->
 									</div>	
 									
+									<div class="table-td text-left resp-table-td pfs-td-title" data-label="{PHP.L.Title}">
+										<a href="{PFS_LIST_FILES_URL}" class="fn-copyurl" title="{PHP.L.Copyurl}" onclick="sedjs.copyurl(event);"><i class="ic-link"></i></a> {PFS_LIST_FILES_TITLE}
+									</div>									
+									
 									<div class="table-td text-left resp-table-td pfs-td-size" data-label="{PHP.L.Size}">
 										{PFS_LIST_FILES_SIZE}
 									</div>	
@@ -152,10 +156,6 @@
 									<div class="table-td text-left resp-table-td pfs-td-update" data-label="{PHP.L.Date}">
 										{PFS_LIST_FILES_UPDATE} 
 									</div>	
-
-									<div class="table-td text-left resp-table-td pfs-td-title" data-label="{PHP.L.Title}">
-										<a href="{PFS_LIST_FILES_URL}">{PFS_LIST_FILES_TITLE}</a>
-									</div>
 
 									<div class="table-td text-center resp-table-td pfs-td-viewcounts" data-label="{PHP.L.Hits}">
 										{PFS_LIST_FILES_VIEWCOUNTS}
@@ -186,6 +186,12 @@
 						</div>	
 
 						<!-- END: PFS_FILES -->	
+						
+						<!-- BEGIN: PFS_EMPTY -->
+						<div class="pfs-empty">
+							{PHP.L.pfs_filelistempty}
+						</div>
+						<!-- END: PFS_EMPTY -->						
 						
 						<!-- BEGIN: PFS_HELP -->
 						<div class="pfs-help">
