@@ -44,12 +44,12 @@ if (!empty($p))
 		{
 		foreach($sed_plugins as $i => $k)
 			{
-			if ($k['pl_hook']=='module' && $k['pl_code']==$p)
+			if ($k['pl_hook'] == 'module' && $k['pl_code']==$p)
 				{ $extp[$i] = $k; }
 			}
 		}
 
-	if (count($extp)==0)
+	if (count($extp) == 0)
 		{
 		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
@@ -100,7 +100,7 @@ elseif (!empty($e))
 		{
 		foreach($sed_plugins as $i => $k)
 			{
-			if ($k['pl_hook']=='standalone' && $k['pl_code']==$e)
+			if ($k['pl_hook'] == 'standalone' && $k['pl_code']==$e)
 				{ $out['subtitle'] = $k['pl_title']; }
 			}
 		}
@@ -129,7 +129,7 @@ elseif (!empty($e))
 			}
 		}
 
-	if (count($extp)==0)
+	if (count($extp) == 0)
 		{
 		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
@@ -170,7 +170,7 @@ elseif (!empty($o))
 		{
 		foreach($sed_plugins as $i => $k)
 			{
-			if ($k['pl_hook']=='popup' && $k['pl_code']==$o)
+			if ($k['pl_hook'] == 'popup' && $k['pl_code']==$o)
 				{ $extp[$i] = $k; }
 			}
 		}
@@ -208,34 +208,13 @@ elseif (!empty($o))
 	}
 
 elseif (!empty($h))
-
 	{
-	if ($h=='smilies')
-		{
-		if (is_array($sed_smilies))
-			{
-			$popup_body = $L['Smilies']." (".$L['Smilies_explain'].") :<p>";
-			$popup_body .= "<div class=\"smilies\"><table>";
-			reset ($sed_smilies);
 
-			while (list($i,$dat) = each($sed_smilies))
-				{
-				$popup_body .= "<tr><td style=\"text-align:right;\"><a href=\"javascript:add('".$dat['smilie_code']."')\"><img src=\"".$dat['smilie_image']."\"  alt=\"\" /></a></td><td>".$dat['smilie_code']."</td><td> ".sed_cc($dat['smilie_text'])."</td></tr>";
-				}
-			$popup_body .= "</table></div></p>";
-			}
-		else
-			{ $popup_body = $L['None']; }
-
-		}
-	else
-		{
-		$incl = "system/help/$h.txt";
-		$fd = @fopen($incl, "r") or die("Couldn't find a file : ".$incl);
-		$popup_body = fread($fd, filesize($incl));
-		fclose($fd);
-		}
-
+	$incl = "system/help/$h.txt";
+	$fd = @fopen($incl, "r") or die("Couldn't find a file : ".$incl);
+	$popup_body = fread($fd, filesize($incl));
+	fclose($fd);
+		
 	$openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';
 	
 	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\n".$openerparent.".document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
@@ -281,7 +260,7 @@ elseif (!empty($ajx))
     { 
         foreach($sed_plugins as $i => $k) 
         { 
-            if ($k['pl_hook']=='ajax' && $k['pl_code']==$ajx) 
+            if ($k['pl_hook'] == 'ajax' && $k['pl_code']==$ajx) 
             { $extp[$i] = $k; } 
         } 
     } 
