@@ -28,7 +28,6 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 $sk = sed_import('sk','G','ALP',24);
 $f = sed_import('f','G','TXT',128);
 $fb = sed_import('fb','G','TXT',128);
-$out['img_reset'] = "<img src=\"system/img/admin/reset.png\" alt=\"\" />";
 
 if (!empty($sk))
   {
@@ -101,7 +100,7 @@ switch ($n)
 	$plugin_body .= "<td class=\"coltop\" style=\"width:8%;\">".$L['Edit']."</td>";
 	$plugin_body .= "<td class=\"coltop\" style=\"width:25%;\">".$L['File']."</td>";
 	$plugin_body .= "<td class=\"coltop\" style=\"width:15%;\">".$L['Size']."</td>";
-	$plugin_body .= "<td class=\"coltop\" style=\"width:45%;\" colspan=\"2\">".$out['ic_checked']."=".$L['plu_makbak']." &nbsp; &nbsp; ".$out['img_unchecked']."=".$L['plu_delbak']." &nbsp; &nbsp; ".$out['img_reset'] ."=".$L['plu_resbak']."</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:45%;\" colspan=\"2\">".$out['ic_checked']."=".$L['plu_makbak']." &nbsp; &nbsp; ".$out['ic_unchecked']."=".$L['plu_delbak']." &nbsp; &nbsp; ".$out['ic_reset'] ."=".$L['plu_resbak']."</td>";
 
 	$plugin_body .= "</tr>";
 	$j = 0;
@@ -121,8 +120,8 @@ switch ($n)
 		if ($backupfile[$xbak])
 			{
 			$plugin_body .= "<td style=\"width:10%; text-align:center;\">";
-			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=delbak&".sed_xg())."\">".$out['img_unchecked']."</a> &nbsp; ";
-			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=resbak&".sed_xg())."\">".$out['img_reset']."</a>";
+			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=delbak&".sed_xg())."\">".$out['ic_unchecked']."</a> &nbsp; ";
+			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=resbak&".sed_xg())."\">".$out['ic_reset']."</a>";
 			$plugin_body .= "</td>"; 
 			$plugin_body .= "<td>".$xbak."</td>";      
 			}

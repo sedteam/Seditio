@@ -48,11 +48,6 @@ $sys['inc'] = SED_ROOT . '/system/core/admin/'.$sys['inc'].'.inc.php';
 if (!file_exists($sys['inc']))
 	{ sed_die(); }
 
-$allow_img['0']['0'] = "<img src=\"system/img/admin/deny.gif\" alt=\"\" />";
-$allow_img['1']['0'] = "<img src=\"system/img/admin/allow.gif\" alt=\"\" />";
-$allow_img['0']['1'] = "<img src=\"system/img/admin/deny_locked.gif\" alt=\"\" />";
-$allow_img['1']['1'] = "<img src=\"system/img/admin/allow_locked.gif\" alt=\"\" />";
-
 require($sys['inc']);
 
 $adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box\"><div class=\"content-box-header\"><h3>".$L['Help']."</h3></div>";

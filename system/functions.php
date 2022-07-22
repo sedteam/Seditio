@@ -429,7 +429,7 @@ function sed_build_catpath($cat, $mask)
  */
 function sed_build_comments($code, $url, $display, $allow = TRUE)
 	{
-	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $skin, $flocation;
+	global $db_com, $db_users, $db_pages, $cfg, $out, $usr, $L, $sys, $skin, $flocation;
 
 	$flocation = 'Comments';
 
@@ -885,7 +885,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		$res_display = '';
 		}
 
-	$res = "<a href=\"".sed_url($url_part, $url_params.$lurl)."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
+	$res = "<a href=\"".sed_url($url_part, $url_params.$lurl)."\">".$out['ic_comment'];
 
 	if ($cfg['countcomments'])
 		{
@@ -1241,8 +1241,8 @@ function sed_build_pfs($id, $c1, $c2, $title)
  */ 
 function sed_build_pm($user)
 	{
-	global $usr, $cfg, $L;
-	$result = "<a href=\"".sed_url("pm", "m=send&to=".$user)."\"><img src=\"skins/".$usr['skin']."/img/system/icon-pm.gif\"  alt=\"\" /></a>";
+	global $usr, $cfg, $L, $out;
+	$result = "<a href=\"".sed_url("pm", "m=send&to=".$user)."\">".$out['ic_pm']."</a>";
 	return($result);
 	}
 

@@ -111,7 +111,7 @@ if ($sys['user_istopadmin'])
 	
 	$t->assign(array(	
 		"UPG_CHECKSTATUS" => $upgstat,
-		"UPG_STATUS" => ($status_ok) ? $out['ic_checked'] : "<img src=\"system/img/admin/warning.png\" alt=\"\" />",
+		"UPG_STATUS" => ($status_ok) ? $out['ic_checked'] : $out['ic_warning'],
 		"UPG_FORCESQL" => $forcesql
 	));	
 

@@ -156,7 +156,7 @@ function sed_get_latestcomments($limit, $mask)
 
 function sed_get_latesttopics($limit, $mask)
 	{
-	global $t, $L, $db_forum_topics, $db_forum_sections, $db_users, $usr, $cfg, $skin, $plu_empty;
+	global $t, $L, $db_forum_topics, $db_forum_sections, $db_users, $usr, $cfg, $skin, $plu_empty, $out;
 
 	$sql0 = sed_sql_query("SELECT fs_id, fs_title, fs_parentcat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername 
 		FROM $db_forum_sections WHERE fs_parentcat = 0 ORDER BY fs_order ASC");

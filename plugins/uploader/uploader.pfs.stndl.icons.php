@@ -36,11 +36,11 @@ $add_thumbnail = "";
 $add_image = "";
 } 
 
-if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled') 
+if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode'] != 'Disabled') 
 {
     $stndl_icons_list = "<td>".$add_thumbnail." ".$add_image." ".$add_file."</td>";    
 }
-elseif (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']=='Disabled') {
+elseif (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode'] == 'Disabled') {
     $stndl_icons_list = "<td>".$add_image." ".$add_file."</td>";
 }
 else {

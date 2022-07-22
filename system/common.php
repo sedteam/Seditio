@@ -31,7 +31,7 @@ mb_internal_encoding('UTF-8'); // New v171
 
 $sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
-if (sed_sql_numrows($sql_config)<100)
+if (sed_sql_numrows($sql_config) < 100)
 	{
 	define('SED_ADMIN',TRUE);
 	require_once(SED_ROOT.'/system/functions.admin.php');
@@ -46,7 +46,7 @@ if (sed_sql_numrows($sql_config)<100)
 
 while ($row = sed_sql_fetchassoc($sql_config))
 	{
-	if ($row['config_owner']=='core')
+	if ($row['config_owner'] == 'core')
 		{ $cfg[$row['config_name']] = $row['config_value']; }
 	else
 		{ $cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value']; }
@@ -152,7 +152,7 @@ $ipmasks = "('".$userip[0].".".$userip[1].".".$userip[2].".".$userip[3]."','".$u
 
 $sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks, 'Common/banlist/check');
 
-If (sed_sql_numrows($sql)>0)
+If (sed_sql_numrows($sql) > 0)
 	{
 	$row = sed_sql_fetchassoc($sql);
 	if ($sys['now']>$row['banlist_expire'] && $row['banlist_expire']>0)
@@ -173,7 +173,7 @@ if (!$sed_groups )
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
-	if (sed_sql_numrows($sql)>0)
+	if (sed_sql_numrows($sql) > 0)
 		{
 		while ($row = sed_sql_fetchassoc($sql))
 			{
@@ -197,7 +197,7 @@ if (!$sed_groups )
 	else
 		{ sed_diefatal('No groups found.'); }
 
-	sed_cache_store('sed_groups',$sed_groups,3600);
+	sed_cache_store('sed_groups', $sed_groups, 3600);
 	}
 
 /* ======== User/Guest ======== */
@@ -230,9 +230,9 @@ elseif (isset($_COOKIE[$sys['site_id']]) && ($cfg['authmode']==1 || $cfg['authmo
 	$rseditios = sed_import($u[2],'D','ALP');
 	}
 
-if ($rsedition>0 && $cfg['authmode']>0)
+if ($rsedition>0 && $cfg['authmode'] > 0)
 	{
-	if (mb_strlen($rseditiop)!=32)
+	if (mb_strlen($rseditiop) != 32)
 		{ sed_diefatal('Wrong value for the password.'); }
 
 	if ($cfg['ipcheck'])
@@ -288,7 +288,7 @@ else
 	  	}
 	}
 
-if ($usr['id']==0)
+if ($usr['id'] == 0)
 	{
 	$usr['auth'] = sed_auth_build(0);
 	$usr['skin'] = (empty($usr['skin'])) ? $cfg['defaultskin'] : $usr['skin'];
@@ -298,18 +298,18 @@ if ($usr['id']==0)
 
 /* ======== GET imports ======== */
 
-$z = mb_strtolower(sed_import('z','G','ALP',32));
-$m = sed_import('m','G','ALP',24);
-$n = sed_import('n','G','ALP',24);
-$a = sed_import('a','G','ALP',24);
-$b = sed_import('b','G','ALP',24);
+$z = mb_strtolower(sed_import('z', 'G', 'ALP', 32));
+$m = sed_import('m', 'G', 'ALP', 24);
+$n = sed_import('n', 'G', 'ALP', 24);
+$a = sed_import('a', 'G', 'ALP', 24);
+$b = sed_import('b', 'G', 'ALP', 24);
 
 /* ======== Plugins ======== */
 
 if (!$sed_plugins)
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
-	if (sed_sql_numrows($sql)>0)
+	if (sed_sql_numrows($sql) > 0)
 		{
 		while ($row = sed_sql_fetcharray($sql))
 			{
@@ -331,7 +331,7 @@ if (defined('SED_PLUG') && !empty($_GET['e']))
 
 /* ======== Hooks for plugins (admin tools) ======== */
 
-if (defined('SED_ADMIN') && $m=='tools' && !empty($_GET['p']))
+if (defined('SED_ADMIN') && $m == 'tools' && !empty($_GET['p']))
   {
   $extp = sed_getextplugins('common.tool.'.$_GET['p']);
   if (is_array($extp))
@@ -370,10 +370,10 @@ if (!$cfg['disablewhosonline'])
 	$sys['whosonline_reg_count'] = sed_sql_numrows($sql);
 	$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
 
-	$ii=0;
+	$ii = 0;
 	while ($row = sed_sql_fetchassoc($sql))
 		{
-		$out['whosonline_reg_list'] .= ($ii>0) ? ', ' : '';
+		$out['whosonline_reg_list'] .= ($ii > 0) ? ', ' : '';
 		$out['whosonline_reg_list'] .= sed_build_user($row['online_userid'], sed_cc($row['online_name']));
 		$sed_usersonline[] = $row['online_userid'];
       	$ii++;
@@ -385,7 +385,7 @@ if (!$cfg['disablewhosonline'])
 
 if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 	{
-	if ($usr['id']>0)
+	if ($usr['id'] > 0)
 		{
 		$sql = sed_sql_query("SELECT online_id FROM $db_online WHERE online_userid='".$usr['id']."'");
 
@@ -409,9 +409,9 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
    else
       {
       $sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_ip='".$usr['ip']."'");
-      $online_count = sed_sql_result($sql,0,'COUNT(*)');
+      $online_count = sed_sql_result($sql, 0, 'COUNT(*)');
 
-      if ($online_count>0)
+      if ($online_count > 0)
          {
 
          if ($cfg['shieldenabled'])
@@ -475,8 +475,10 @@ $out['ic_jumpto'] = "<img src=\"system/img/admin/jumpto.gif\" alt=\"\" />";
 $out['ic_delete'] = "<img src=\"system/img/admin/delete.png\" alt=\"\" />";
 $out['ic_edit'] = "<img src=\"system/img/admin/edit.png\" alt=\"\" />";
 $out['ic_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
-$out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
+$out['ic_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
 $out['ic_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
+$out['ic_reset'] = "<img src=\"system/img/admin/reset.png\" alt=\"\" />";
+$out['ic_warning'] = "<img src=\"system/img/admin/warning.png\" alt=\"\" />";
 
 $out['ic_arrow_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" />";
 $out['ic_arrow_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" />";
@@ -550,7 +552,7 @@ if (!$cfg['disablehitstats'])
 	sed_stat_inc('totalpages');
 	$hits_today = sed_stat_get($sys['day']);
 
-	if ($hits_today>0)
+	if ($hits_today > 0)
 		{ sed_stat_inc($sys['day']); }
 	else
 		{ sed_stat_create($sys['day']); }
@@ -566,9 +568,9 @@ if (!$cfg['disablehitstats'])
 		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === FALSE)
 	{
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_referers WHERE ref_url = '".sed_sql_prep($sys['referer'])."'");
-		$count = sed_sql_result($sql,0,"COUNT(*)");
+		$count = sed_sql_result($sql, 0, "COUNT(*)");
 
-		if ($count>0)
+		if ($count > 0)
 			{
 			$sql = sed_sql_query("UPDATE $db_referers SET ref_count=ref_count+1,
 				ref_date='".$sys['now_offset']."'
@@ -657,7 +659,7 @@ if (!$sed_dic && (sed_stat_get("version") >= 177))
 				}
 			}	
 		}
-	sed_cache_store('sed_dic',$sed_dic,3600);
+	sed_cache_store('sed_dic', $sed_dic, 3600);
 	}
 	
 /* ======== Menus ======== */
@@ -691,13 +693,13 @@ if (!$sed_smilies)
 		while ($row = sed_sql_fetchassoc($sql))
 			{ $sed_smilies[] = $row; }
 		}
-	sed_cache_store('sed_smilies',$sed_smilies,3550);
+	sed_cache_store('sed_smilies', $sed_smilies, 3550);
 	}
 
 /* ======== Local/GMT time ======== */
 
 $usr['timetext'] = sed_build_timezone($usr['timezone']);
-$usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
+$usr['gmttime'] = @date($cfg['dateformat'], $sys['now_offset']).' GMT';
 
 
 /* ======== Maintenance Mode ======== */  // New in 175
