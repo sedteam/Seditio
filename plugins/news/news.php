@@ -128,7 +128,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 		$pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pcomments) : sed_url("page", "al=".$pag['page_alias'].$pcomments);
 		$pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id']."&ratings=1") : sed_url("page", "al=".$pag['page_alias']."&ratings=1");
 
-		$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
+		$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\">".$out['ic_comment']." (".$pag['page_comcount'].")</a>";
 		
 		$news-> assign(array(
 			"PAGE_ROW_URL" => $pag['page_pageurl'],

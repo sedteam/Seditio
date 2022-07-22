@@ -150,7 +150,7 @@ if ($n=='edit')
     {   
     $t->assign(array(  
       "FS_UPDATE_RESYNC" => "<a href=\"".sed_url("admin", "m=forums&n=edit&a=resync&id=".$fs_id."&".sed_xg())."\">".$L['Resync']."</a>",
-      "FS_UPDATE_DELETE" => "<a href=\"".sed_url("admin", "m=forums&n=edit&a=delete&id=".$fs_id."&".sed_xg())."\">".$out['img_delete']."</a>"
+      "FS_UPDATE_DELETE" => "<a href=\"".sed_url("admin", "m=forums&n=edit&a=delete&id=".$fs_id."&".sed_xg())."\">".$out['ic_delete']."</a>"
     ));  
   
     $t -> parse("ADMIN_FORUMS.FS_UPDATE.FS_ADMIN");

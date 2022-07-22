@@ -30,14 +30,14 @@ if (is_array($extp))
 
 
 $sql_pfs = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_id='$id' LIMIT 1");
-sed_die(sed_sql_numrows($sql_pfs)==0);
+sed_die(sed_sql_numrows($sql_pfs) == 0);
 $pfs = sed_sql_fetchassoc($sql_pfs);
 $f = $pfs['pfs_folderid'];
 
 $sql_pff = sed_sql_query("SELECT f.*, u.user_name FROM $db_pfs_folders f
 LEFT JOIN $db_users AS u ON f.pff_userid=u.user_id
 WHERE pff_id='$f' AND pff_type=2");
-sed_die(sed_sql_numrows($sql_pff)==0);
+sed_die(sed_sql_numrows($sql_pff) == 0);
 $pff = sed_sql_fetchassoc($sql_pff);
 
 $sql_pfsall = sed_sql_query("SELECT pfs_id FROM $db_pfs
@@ -55,15 +55,15 @@ $total = count ($pfsall);
 
 foreach($pfsall as $j => $k)
   {
-  $browse_list .= ($current==$j) ? "<strong>[" : '';
+  $browse_list .= ($current == $j) ? "<strong>[" : '';
   $browse_list .= "<a href=\"".sed_url("gallery", "id=".$k)."\">$j</a>";
-  $browse_list .= ($current==$j) ? "]</strong>" : '';
+  $browse_list .= ($current == $j) ? "]</strong>" : '';
   $browse_list .= " &nbsp;";
   }
 
-$browse_prev = ($pfsall[$current-1]>0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current-1])."\"><img src=\"skins/".$skin."/img/system/gallery_prev.png\" alt=\"\" /></a>": '';
-$browse_next = ($pfsall[$current+1]>0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current+1])."\"><img src=\"skins/".$skin."/img/system/gallery_next.png\" alt=\"\" /></a>": '';
-$browse_back =  "<a href=\"".sed_url("gallery", "f=".$f)."\"><img src=\"skins/".$skin."/img/system/gallery_back.png\" alt=\"\" /></a>";
+$browse_prev = ($pfsall[$current-1]>0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current-1])."\">".$out['ic_gallery_prev']."</a>": '';
+$browse_next = ($pfsall[$current+1]>0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current+1])."\">".$out['ic_gallery_next']."</a>": '';
+$browse_back =  "<a href=\"".sed_url("gallery", "f=".$f)."\">".$out['ic_gallery_back']."</a>";
 
 $pfs['pfs_fullfile'] = $cfg['pfs_dir'].$pfs['pfs_file'];
 $pfs['pfs_filesize'] = floor($pfs['pfs_size']/1024);
@@ -71,7 +71,7 @@ $pfs['pfs_imgsize'] = @getimagesize($pfs['pfs_fullfile']);
 $pfs['pfs_imgsize_xy'] = $pfs['pfs_imgsize'][0].'x'.$pfs['pfs_imgsize'][1];
 $pfs['pfs_img'] = "<img src=\"".$cfg['pfs_dir'].$pfs['pfs_file']."\" alt=\"\" />";
 
-if ($pfs['pfs_imgsize'][0]>$cfg['gallery_imgmaxwidth'])
+if ($pfs['pfs_imgsize'][0] > $cfg['gallery_imgmaxwidth'])
   {
   if (!file_exists($cfg['res_dir'].$pfs['pfs_file']))
     { sed_image_resize($pfs['pfs_fullfile'], $cfg['res_dir'].$pfs['pfs_file'], $cfg['gallery_imgmaxwidth'], $pfs['pfs_extension'], 90); }
@@ -81,7 +81,7 @@ if ($pfs['pfs_imgsize'][0]>$cfg['gallery_imgmaxwidth'])
     $pfs['pfs_img'] = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
     $pfs['pfs_img'] .= "<img src=\"".$cfg['res_dir'].$pfs['pfs_file']."\" alt=\"\" /></a>";
     $browse_zoom = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
-    $browse_zoom .= "<img src=\"skins/".$skin."/img/system/gallery_zoom.png\" title=\"Zoom\" /></a>";
+    $browse_zoom .= $out['ic_gallery_zoom']."</a>";
     }
   }
 
@@ -122,8 +122,8 @@ $pfs['pfs_desc'] = sed_parse($pfs['pfs_desc']);
 
 if ($usr['isadmin'])
 	{
-	$pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$pfs['pfs_userid'])."\">".$out['img_edit']."</a>";
-	$pfs['admin'] .= " &nbsp; <a href=\"".sed_url("pfs", "a=setsample&id=".$pfs['pfs_id']."&f=".$pff['pff_id']."&".sed_xg())."\" title=\"".$L['pfs_setassample']."\">".$out['img_set']."</a>";  
+	$pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$pfs['pfs_userid'])."\">".$out['ic_edit']."</a>";
+	$pfs['admin'] .= " &nbsp; <a href=\"".sed_url("pfs", "a=setsample&id=".$pfs['pfs_id']."&f=".$pff['pff_id']."&".sed_xg())."\" title=\"".$L['pfs_setassample']."\">".$out['ic_set']."</a>";  
 	
 	$t-> assign(array(
 		"GALLERY_DETAILS_ADMIN" => $pfs['admin']

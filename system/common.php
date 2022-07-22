@@ -471,46 +471,49 @@ $out['copyright'] = "<a href=\"https://seditio.org\">".$L['foo_poweredby']." Sed
 
 /* ======== Various ======== */
 
-$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" />";
-$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" />";
-$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" />";
-$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" />";
-$out['img_delete'] = "<img src=\"system/img/admin/delete.png\" alt=\"\" />";
-$out['img_edit'] = "<img src=\"system/img/admin/edit.png\" alt=\"\" />";
-$out['img_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
+$out['ic_jumpto'] = "<img src=\"system/img/admin/jumpto.gif\" alt=\"\" />";
+$out['ic_delete'] = "<img src=\"system/img/admin/delete.png\" alt=\"\" />";
+$out['ic_edit'] = "<img src=\"system/img/admin/edit.png\" alt=\"\" />";
+$out['ic_checked'] = "<img src=\"system/img/admin/checked.png\" alt=\"\" />";
 $out['img_unchecked'] = "<img src=\"system/img/admin/unchecked.png\" alt=\"\" />";
-$out['img_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
+$out['ic_set'] = "<img src=\"system/img/admin/set.png\" alt=\"\" />";
 
-$out['img_gallery'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-gallery.gif\" alt=\"\" />";
-$out['img_folder'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-folder.gif\" alt=\"\" />";
-$out['img_jumpto'] = "<img src=\"system/img/admin/jumpto.gif\" alt=\"\" />";
-$out['img_pastethumb'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pastethumb.gif\" alt=\"".$L['pfs_insertasthumbnail']."\" />";
-$out['img_pastefile'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" />";
-$out['img_pasteimage'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pasteimage.gif\" alt=\"".$L['pfs_insertasimage']."\" />";
+$out['ic_arrow_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" />";
+$out['ic_arrow_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" />";
+$out['ic_arrow_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" />";
+$out['ic_arrow_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" />";
+$out['ic_arrow_unread'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-unread.gif\" alt=\"\" />";
+$out['ic_arrow_follow'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-follow.gif\" alt=\"\" />";
+
+$out['ic_gallery'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-gallery.gif\" alt=\"\" />";
+$out['ic_folder'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-folder.gif\" alt=\"\" />";
+
+$out['ic_pastethumb'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pastethumb.gif\" alt=\"".$L['pfs_insertasthumbnail']."\" />";
+$out['ic_pastefile'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pastefile.gif\" alt=\"".$L['pfs_insertaslink']."\" />";
+$out['ic_pasteimage'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pasteimage.gif\" alt=\"".$L['pfs_insertasimage']."\" />";
+
+$out['ic_comment'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
+
+$out['ic_posts_moved'] = "<img src=\"skins/".$usr['skin']."/img/system/posts_moved.gif\" alt=\"\" />";
+
+$out['ic_gallery_prev'] = "<img src=\"skins/".$usr['skin']."/img/system/gallery_prev.png\" alt=\"\" />";
+$out['ic_gallery_next'] = "<img src=\"skins/".$usr['skin']."/img/system/gallery_next.png\" alt=\"\" />";
+$out['ic_gallery_back'] = "<img src=\"skins/".$usr['skin']."/img/system/gallery_back.png\" alt=\"\" />";
+$out['ic_gallery_zoom'] = "<img src=\"skins/".$usr['skin']."/img/system/gallery_zoom.png\" alt=\"Zoom\" />";
+
+$out['ic_pm_new'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-new.gif\" alt=\"\" />";
+$out['ic_pm'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm.gif\" alt=\"\" />";
+$out['ic_pm_trashcan'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" />";
+$out['ic_pm_reply'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" />";
+$out['ic_pm_archive'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" />";
 
 $sed_yesno[1] = $L['Yes'];
 $sed_yesno[0] = $L['No'];
 
-$sed_img_up = $out['img_up'];
-$sed_img_down = $out['img_down'];
-$sed_img_left = $out['img_left'];
-$sed_img_right = $out['img_right'];
-
-$cfg['arrow_up'] = $out['img_up'];
-$cfg['arrow_down'] = $out['img_down'];
-$cfg['arrow_left'] = $out['img_left'];
-$cfg['arrow_right'] = $out['img_right'];
-
-$cfg['ic_gallery'] = $out['img_gallery'];
-$cfg['ic_folder'] = $out['img_folder'];
-
-$cfg['ic_jumpto'] = $out['img_jumpto'];
-$cfg['ic_pastethumb'] = $out['img_pastethumb'];
-$cfg['ic_pastefile'] = $out['img_pastefile'];
-$cfg['ic_pasteimage'] = $out['img_pasteimage'];
-
-$cfg['ic_checked'] = $out['img_checked'];
-$cfg['ic_set'] = $out['img_set'];
+$sed_img_up = $out['ic_arrow_up'];
+$sed_img_down = $out['ic_arrow_down'];
+$sed_img_left = $out['ic_arrow_left'];
+$sed_img_right = $out['ic_arrow_right'];
 
 /* ======== Skin ======== */
 

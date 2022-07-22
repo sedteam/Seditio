@@ -441,12 +441,12 @@ else
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 		
 		if ($pff_type == 2)
-			{ $icon_f = $cfg['ic_gallery']; }
+			{ $icon_f = $out['ic_gallery']; }
 		else
-			{ $icon_f = $cfg['ic_folder']; }
+			{ $icon_f = $out['ic_folder']; }
 
 		if ($pff_type == 2 && !$cfg['disable_gallery'])
-			{ $icon_g = "<a href=\"".sed_url("gallery", "f=".$pff_id)."\">".$cfg['ic_jumpto']."</a>"; }
+			{ $icon_g = "<a href=\"".sed_url("gallery", "f=".$pff_id)."\">".$out['ic_jumpto']."</a>"; }
 		else
 			{ $icon_g = ''; }
 			
@@ -505,7 +505,7 @@ while ($row = sed_sql_fetchassoc($sql))
 	
 	unset($add_thumbnail, $add_image, $add_file); 
 		
-	if ($pfs_extension!=$pfs_realext);
+	if ($pfs_extension != $pfs_realext);
 		{
 		$sql1 = sed_sql_query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
 		$pfs_extension = $pfs_realext;
@@ -515,7 +515,7 @@ while ($row = sed_sql_fetchassoc($sql))
   
   if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
 		{		
-		$setassample = ($pfs_id == $pff_sample) ?  "<span class=\"dsl-icon\">".$cfg['ic_checked']."</span>" : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\" class=\"btn-icon\">".$cfg['ic_set']."</a>";    
+		$setassample = ($pfs_id == $pff_sample) ?  "<span class=\"dsl-icon\">".$out['ic_checked']."</span>" : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\" class=\"btn-icon\">".$out['ic_set']."</a>";    
 		$pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"".$cfg['th_rel']."\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
 		
 		if (!file_exists($cfg['th_dir'].$pfs_file) && file_exists($cfg['pfs_dir'].$pfs_file))
@@ -527,16 +527,16 @@ while ($row = sed_sql_fetchassoc($sql))
 
 		if ($standalone) 
 			{ 
-			$add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\" class=\"btn-icon\">".$cfg['ic_pastethumb']."</a>"; 
-			$add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\" class=\"btn-icon\">".$cfg['ic_pasteimage']."</a>"; 
+			$add_thumbnail .= "<a href=\"javascript:addthumb('".$cfg['th_dir'].$pfs_file."', '".$pfs_file."')\" title=\"".$L['pfs_insertasthumbnail']."\" class=\"btn-icon\">".$out['ic_pastethumb']."</a>"; 
+			$add_image = "<a href=\"javascript:addpix('".$pfs_fullfile."')\" title=\"".$L['pfs_insertasimage']."\" class=\"btn-icon\">".$out['ic_pasteimage']."</a>"; 
 			} 
 		}
 	  
-	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$cfg['ic_pastefile']."</a>" : '';
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$out['ic_pastefile']."</a>" : '';
 	
 	if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) 
 		{ 
-		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$cfg['ic_pastefile']."</a>"; 
+		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$out['ic_pastefile']."</a>"; 
 		$add_thumbnail = "";
 		$add_image = "";
 		} 
@@ -604,7 +604,7 @@ $disp_allowed .= implode(", ", $disp_allowedlist);
 
 // ========== Icons Help =========
 
-$disp_iconshelp = "<span class=\"dsl-icon\">".$cfg['ic_pastethumb']."</span> ".$L['pfs_insertasthumbnail']." &nbsp; <span class=\"dsl-icon\">".$cfg['ic_pasteimage']."</span> ".$L['pfs_insertasimage']." &nbsp; <span class=\"dsl-icon\">".$cfg['ic_pastefile']."</span> ".$L['pfs_insertaslink'];
+$disp_iconshelp = "<span class=\"dsl-icon\">".$out['ic_pastethumb']."</span> ".$L['pfs_insertasthumbnail']." &nbsp; <span class=\"dsl-icon\">".$out['ic_pasteimage']."</span> ".$L['pfs_insertasimage']." &nbsp; <span class=\"dsl-icon\">".$out['ic_pastefile']."</span> ".$L['pfs_insertaslink'];
 
 if ($standalone)
 	{
@@ -652,7 +652,7 @@ if ($usr['auth_write'])
 			{
 			$t->assign(array(
 				"PFS_UPLOAD_MORE_URL" => "javascript:sedjs.toggleblock('moreuploads')",
-				"PFS_UPLOAD_MORE_ICON" => $cfg['arrow_down']
+				"PFS_UPLOAD_MORE_ICON" => $out['ic_arrow_down']
 			));			
 			$t->parse("MAIN.PFS_UPLOAD.PFS_UPLOAD_LIST.PFS_UPLOAD_MORE");
 			}

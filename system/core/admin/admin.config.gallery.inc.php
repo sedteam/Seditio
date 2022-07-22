@@ -27,7 +27,7 @@ if (!function_exists('gd_info'))
 	$gd_datas = gd_info();
 	foreach ($gd_datas as $k => $i)
 		{
-		if (mb_strlen($i) < 2) { $i = ($i) ? $out['img_checked'] : ''; }
+		if (mb_strlen($i) < 2) { $i = ($i) ? $out['ic_checked'] : ''; }
 		
 		$t -> assign(array( 
 			"GD_SETTING_NAME" => $k,

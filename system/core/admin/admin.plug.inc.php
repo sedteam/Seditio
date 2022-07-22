@@ -440,7 +440,7 @@ switch ($a)
 			"HOOK_LIST_HOOK" => $row['pl_hook'],
 			"HOOK_LIST_PLUG_TITLE" => $row['pl_title'],
 			"HOOK_LIST_PLUG_CODE" => $row['pl_code'],
-			"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">".$extplugin_file_path."</span>" : "<a href=\"".sed_url("admin", "m=plug&a=delhook&id=".$row['pl_id']."&".sed_xg(), "#hooks")."\">".$out['img_delete']."</a> <span style=\"color:#AC5866; font-weight:bold;\">".$L['adm_missing']." : ".$extplugin_file_path."</span>",
+			"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">".$extplugin_file_path."</span>" : "<a href=\"".sed_url("admin", "m=plug&a=delhook&id=".$row['pl_id']."&".sed_xg(), "#hooks")."\">".$out['ic_delete']."</a> <span style=\"color:#AC5866; font-weight:bold;\">".$L['adm_missing']." : ".$extplugin_file_path."</span>",
 			"HOOK_LIST_ORDER" => $row['pl_order'],
 			"HOOK_LIST_STATUS" => $sed_yesno[$row['pl_active']]
 		));

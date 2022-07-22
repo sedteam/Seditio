@@ -36,7 +36,7 @@ foreach ($langlist as $i => $x)
 	$lang_desc = $L['Version']." : ".$info['Version']."<br />";
 	$lang_desc .= $L['Author']." : ".$info['Author']."<br />";
 	$lang_desc .= $L['Updated']." : ".$info['Updated'];
-	$lang_default = ($x == $cfg['defaultlang']) ? $out['img_checked'] : '';	
+	$lang_default = ($x == $cfg['defaultlang']) ? $out['ic_checked'] : '';	
 	
 	$t -> assign(array( 
 		"LANG_LIST_NAME" => $lang_name,

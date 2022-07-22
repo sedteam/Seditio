@@ -209,7 +209,7 @@ $extp = sed_getextplugins('pm.loop');
 while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 	{
 	$jj++;
-	$row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";
+	$row['pm_icon_status'] = ($row['pm_state'] == '0' && $f != 'sentbox') ? "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\">".$out['ic_pm_new']."</a>" : "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\">".$out['ic_pm']."</a>";
 
 	if ($f=='sentbox')
 		{
@@ -218,7 +218,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 		$pm_touserid = $row['pm_touserid'];
 		$pm_touser = sed_cc($row['user_name']);
 		$pm_fromortouser = sed_build_user($pm_touserid, $pm_touser);
-		$row['pm_icon_action'] = "<a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
+		$row['pm_icon_action'] = "<a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\">".$out['ic_pm_trashcan']."</a>";
 
 		if (!empty($id))
 			{
@@ -235,7 +235,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"".sed_url("pm", "m=send&to=".$row['pm_fromuserid']."&q=".$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" /></a> <a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
+		$row['pm_icon_action'] = "<a href=\"".sed_url("pm", "m=send&to=".$row['pm_fromuserid']."&q=".$row['pm_id'])."\">".$out['ic_pm_reply']."</a> <a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\">".$out['ic_pm_trashcan']."</a>";
 		}
 	else
 		{
@@ -244,8 +244,8 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"".sed_url("pm", "m=send&to=".$row['pm_fromuserid']."&q=".$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" /></a> <a href=\"".sed_url("pm", "m=edit&a=archive&".sed_xg()."&id=".$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" /></a>";
-		$row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
+		$row['pm_icon_action'] = "<a href=\"".sed_url("pm", "m=send&to=".$row['pm_fromuserid']."&q=".$row['pm_id'])."\">".$out['ic_pm_reply']."</a> <a href=\"".sed_url("pm", "m=edit&a=archive&".sed_xg()."&id=".$row['pm_id'])."\">".$out['ic_pm_archive']."</a>";
+		$row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url("pm", "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\">".$out['ic_pm_trashcan']."</a>" : '';
 		}
 
     $row['pm_text'] = sed_parse($row['pm_text']);

@@ -23,16 +23,16 @@ $cfg['pagination_arrowright'] = "<i class=\"ic-chevron-right\"></i>";
 
 $cfg['separator'] = "<i class=\"ic-arrow-right\"></i>";
 
-$cfg['arrow_up'] = "<i class=\"ic-arrow-narrow-up\"></i>";
-$cfg['arrow_down'] = "<i class=\"ic-arrow-narrow-down\"></i>";
-$cfg['arrow_left'] = "<i class=\"ic-arrow-narrow-left\"></i>";
-$cfg['arrow_right'] = "<i class=\"ic-arrow-narrow-right\"></i>";
+$out['ic_arrow_up'] = "<i class=\"ic-arrow-narrow-up\"></i>";
+$out['ic_arrow_down'] = "<i class=\"ic-arrow-narrow-down\"></i>";
+$out['ic_arrow_left'] = "<i class=\"ic-arrow-narrow-left\"></i>";
+$out['ic_arrow_right'] = "<i class=\"ic-arrow-narrow-right\"></i>";
 
-$cfg['ic_checked'] = "<i class=\"ic-check\"></i>";
-$cfg['ic_set'] = "<i class=\"ic-wand\"></i>";
+$out['ic_checked'] = "<i class=\"ic-check\"></i>";
+$out['ic_set'] = "<i class=\"ic-wand\"></i>";
 
-$cfg['ic_folder'] = "<i class=\"ic-folder\"></i>";
-$cfg['ic_gallery'] = "<i class=\"ic-gallery\"></i>";
+$out['ic_folder'] = "<i class=\"ic-folder\"></i>";
+$out['ic_gallery'] = "<i class=\"ic-gallery\"></i>";
 
 // ========= Plugin RecentItems ============================= //
 

@@ -288,30 +288,30 @@ if (!$sed_cat[$c]['group'])
 		"LIST_TOP_TOTALLINES" => $totallines,
 		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 		"LIST_TOP_TOTALPAGES" => $totalpages,
-		"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Title'],
-		"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Key'],
-		"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a>",
-		"LIST_TOP_EXTRA2" => "<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a>",
-		"LIST_TOP_EXTRA3" => "<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a>",
-		"LIST_TOP_EXTRA4" => "<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a>",
-		"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a>",
-		"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Date'],
-		"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Author'],
-		"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Owner'],
-		"LIST_TOP_COUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=count&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=count&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Hits'],
-		"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_down']."</a>
-		<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$cfg['arrow_up']."</a> ".$L['Hits']
+		"LIST_TOP_TITLE" => "<a href=\"".sed_url("list", "c=".$c."&s=title&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=title&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Title'],
+		"LIST_TOP_KEY" => "<a href=\"".sed_url("list", "c=".$c."&s=key&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=key&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Key'],
+		"LIST_TOP_EXTRA1" => "<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra1&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a>",
+		"LIST_TOP_EXTRA2" => "<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra2&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a>",
+		"LIST_TOP_EXTRA3" => "<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra3&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a>",
+		"LIST_TOP_EXTRA4" => "<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra4&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a>",
+		"LIST_TOP_EXTRA5" => "<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=extra5&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a>",
+		"LIST_TOP_DATE" => "<a href=\"".sed_url("list", "c=".$c."&s=date&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=date&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Date'],
+		"LIST_TOP_AUTHOR" => "<a href=\"".sed_url("list", "c=".$c."&s=author&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=author&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Author'],
+		"LIST_TOP_OWNER" => "<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=ownerid&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Owner'],
+		"LIST_TOP_COUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=count&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=count&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Hits'],
+		"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=asc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_down']."</a>
+		<a href=\"".sed_url("list", "c=".$c."&s=filecount&w=desc&o=".$o."&p=".$p.$filter_urlparams)."\">".$out['ic_arrow_up']."</a> ".$L['Hits']
 	));
 
 	// ----- Extra fields 
@@ -320,7 +320,7 @@ if (!$sed_cat[$c]['group'])
 		foreach($extrafields as $row) 
 			{ 
 			$extratitle = isset($L['page_'.$row['code'].'_title']) ? $L['page_'.$row['code'].'_title'] : $row['title']; 
-			$t->assign('LIST_TOP_'.strtoupper($row['code']), "<a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=asc&o=$o&p=$p".$filter_urlparams)."\">".$cfg['arrow_down']."</a><a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=desc&o=$o&p=$p".$filter_urlparams)."\">".$cfg['arrow_up']."</a> $extratitle"); 
+			$t->assign('LIST_TOP_'.strtoupper($row['code']), "<a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=asc&o=$o&p=$p".$filter_urlparams)."\">".$out['ic_arrow_down']."</a><a href=\"".sed_url('list', "c=$c&s=".$row['code']."&w=desc&o=$o&p=$p".$filter_urlparams)."\">".$out['ic_arrow_up']."</a> $extratitle"); 
 			} 
 		}
 	//--------------- 
@@ -398,7 +398,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	$item_code = 'p'.$pag['page_id'];
 	$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
-	$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
+	$pag['page_comments'] = "<a href=\"".$pag['page_pageurlcom']."\">".$out['ic_comment']." (".$pag['page_comcount'].")</a>";
   
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url("admin", "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url("page", "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> &nbsp;<a href=\"".sed_url("page", "m=add&id=".$pag['page_id']."&r=list&a=clone")."\">".$L['Clone']."</a> " : '';
 

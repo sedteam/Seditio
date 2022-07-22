@@ -46,9 +46,9 @@ function cursort($trigger, $way)
 	if ($trigger)
 		{		
 		if ($way == 'asc')
-			{ return ($cfg['arrow_down']); }
+			{ return ($out['ic_arrow_down']); }
 		else
-			{ return ($cfg['arrow_up']); }
+			{ return ($out['ic_arrow_up']); }
 		}
 	else
 		{ return (''); }
@@ -485,20 +485,20 @@ while ($row = sed_sql_fetchassoc($sql))
 	if ($row['ft_movedto']>0)
 		{
 		$row['ft_url'] = sed_url("forums", "m=posts&q=".$row['ft_movedto']);
-		$row['ft_icon'] = "<img src=\"skins/$skin/img/system/posts_moved.gif\" alt=\"\" />";
+		$row['ft_icon'] = $out['ic_posts_moved'];
 		$row['ft_title']= $L['Moved'].": ".$row['ft_title'];
 		$row['ft_lastpostername'] = "&nbsp;";
 		$row['ft_postcount'] = "&nbsp;";
 		$row['ft_replycount'] = "&nbsp;";
 		$row['ft_viewcount'] = "&nbsp;";
 		$row['ft_lastpostername'] = "&nbsp;";
-		$row['ft_lastposturl'] = "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ".$L['Moved'];
+		$row['ft_lastposturl'] = "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom")."\">".$out['ic_arrow_follow']."</a> ".$L['Moved'];
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		}
 	else
 		{
 		$row['ft_url'] = sed_url("forums", "m=posts&q=".$row['ft_id']);
-		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a>";
+		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\">".$out['ic_arrow_unread']."</a>" : "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".$out['ic_arrow_follow']."</a>";
 		$row['ft_lastposturl'] .= " ".sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated']);
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;

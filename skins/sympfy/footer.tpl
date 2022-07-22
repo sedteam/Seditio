@@ -74,7 +74,7 @@
 			<div class="container">
 				<div class="footer-bottom-table">
 					<div class="footer-bottom-copyright">
-						<p>{FOOTER_BOTTOMLINE} {FOOTER_CREATIONTIME}</p>
+						<p>{FOOTER_BOTTOMLINE}</p>
 					</div>
 					<div class="footer-bottom-dev">
 						<p><a href="https://seditio.org" target="_blank" title="CMS Seditio">Merci, Olivier!</a></p>

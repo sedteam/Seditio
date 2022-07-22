@@ -101,7 +101,7 @@ switch ($n)
 	$plugin_body .= "<td class=\"coltop\" style=\"width:8%;\">".$L['Edit']."</td>";
 	$plugin_body .= "<td class=\"coltop\" style=\"width:25%;\">".$L['File']."</td>";
 	$plugin_body .= "<td class=\"coltop\" style=\"width:15%;\">".$L['Size']."</td>";
-	$plugin_body .= "<td class=\"coltop\" style=\"width:45%;\" colspan=\"2\">".$out['img_checked']."=".$L['plu_makbak']." &nbsp; &nbsp; ".$out['img_unchecked']."=".$L['plu_delbak']." &nbsp; &nbsp; ".$out['img_reset'] ."=".$L['plu_resbak']."</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:45%;\" colspan=\"2\">".$out['ic_checked']."=".$L['plu_makbak']." &nbsp; &nbsp; ".$out['img_unchecked']."=".$L['plu_delbak']." &nbsp; &nbsp; ".$out['img_reset'] ."=".$L['plu_resbak']."</td>";
 
 	$plugin_body .= "</tr>";
 	$j = 0;
@@ -112,7 +112,7 @@ switch ($n)
 		$extension = mb_substr($f, $dotpos, 5);
 		$file_size = @filesize($skindir.$x);
 		$plugin_body .= "<tr>";
-		$plugin_body .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&f=".$x)."\">".$out['img_edit']."</a></td>"; 
+		$plugin_body .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&f=".$x)."\">".$out['ic_edit']."</a></td>"; 
 		$plugin_body .= "<td><strong>".$x."</strong></td>";
 		$plugin_body .= "<td style=\"text-align:center;\">".$file_size."</td>";
 		   
@@ -129,7 +129,7 @@ switch ($n)
 		else
 			{
 			$plugin_body .= "<td style=\"width:10%; text-align:center;\">";
-			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=makbak&".sed_xg())."\">".$out['img_checked']."</a>";
+			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=makbak&".sed_xg())."\">".$out['ic_checked']."</a>";
 			$plugin_body .= "</td>";
 			$plugin_body .= "<td>&nbsp;</td>";      
 			}
@@ -273,16 +273,16 @@ switch ($n)
 		$skininfo = "skins/".$x."/".$x.".php";
 		$info = sed_infoget($skininfo);
 		$plugin_body .= "<tr>";
-		$plugin_body .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$x)."\">".$out['img_edit']."</a></td>"; 
+		$plugin_body .= "<td style=\"text-align:center;\"><a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$x)."\">".$out['ic_edit']."</a></td>"; 
 		$plugin_body .= "<td><strong>".$info['Name']."</strong></td>";
 		$plugin_body .= "<td style=\"text-align:center;\">".$x."</td>";
 		$plugin_body .= "<td style=\"text-align:center;\">".$info['Version']."</td>";
 		$plugin_body .= "<td style=\"text-align:center;\">".$info['Updated']."</td>";
 		$plugin_body .= "<td style=\"text-align:center;\">".$info['Author']."</td>";
 		$plugin_body .= "<td style=\"text-align:center; vertical-align:middle; width:10%;\">";  
-		$plugin_body .= ($x == $cfg['defaultskin']) ? $out['img_checked'] : '';
+		$plugin_body .= ($x == $cfg['defaultskin']) ? $out['ic_checked'] : '';
 		$plugin_body .= "</td><td style=\"text-align:center; vertical-align:middle; width:10%;\">";
-		$plugin_body .= ($x == $skin) ? $out['img_checked'] : '';
+		$plugin_body .= ($x == $skin) ? $out['ic_checked'] : '';
 		$plugin_body .= "</td>"; 
 		$plugin_body .= "</tr>";
 		}

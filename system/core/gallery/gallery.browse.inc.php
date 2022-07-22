@@ -116,7 +116,7 @@ while ($pfs = sed_sql_fetchassoc($sql))
 
 	if ($usr['isadmin'])
 		{
-		$pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$userid)."\">".$out['img_edit']."</a>";
+		$pfs['admin'] = "<a href=\"".sed_url("pfs", "m=edit&id=".$pfs['pfs_id']."&userid=".$userid)."\">".$out['ic_edit']."</a>";
 		}
 	
   $pfs['pfs_desc'] = sed_parse($pfs['pfs_desc']);
