@@ -384,6 +384,7 @@ function sed_get_pagepath(&$args, &$section) {
 
 function sed_get_listpath(&$args, &$section) {
   global $sed_cat;
+  $url = '';
   $cpath = $sed_cat[$args['c']]['path']; 
   $cpath_arr = explode('.', $cpath);
   foreach($cpath_arr as $a)

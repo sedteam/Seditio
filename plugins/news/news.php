@@ -160,7 +160,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
 			"PAGE_ROW_COMMENTS_URL" => $pag['page_pageurlcom'],
 			"PAGE_ROW_COMMENTS_COUNT" => $pag['page_comcount'],				
-			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
+			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurlrat']."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['page_rating'],0).".gif\" alt=\"\" /></a>",
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 		));
 				

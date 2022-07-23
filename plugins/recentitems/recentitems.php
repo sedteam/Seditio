@@ -37,7 +37,7 @@ $cfg['plu_mask_pages'] = empty($cfg['plu_mask_pages']) ? "%3\$s"." "."%1\$s"." "
 // %2\$s = Link to the page
 // %3\$s = Date
 
-//$cfg['plu_mask_pages_date'] = "<span class=\"sdate\">{d-m-Y}</span><span class=\"stime\">{H:i}</span>";
+$cfg['plu_mask_pages_date'] = "<span class=\"sdate\">{d-m} {H:i}</span>";
 
 $cfg['plu_mask_topics'] = empty($cfg['plu_mask_topics']) ? "%2\$s"." "."%3\$s"." ".$cfg['separator']." "."%4\$s"." ("."%5\$s".")<br />" : $cfg['plu_mask_topics'];
 // %1\$s = "Follow" image
@@ -46,7 +46,7 @@ $cfg['plu_mask_topics'] = empty($cfg['plu_mask_topics']) ? "%2\$s"." "."%3\$s"."
 // %4\$s = Topic title
 // %5\$s = Number of replies
 
-//$cfg['plu_mask_topics_date'] = "<span class=\"sdate\">{d-m-Y}</span><span class=\"stime\">{H:i}</span>";
+$cfg['plu_mask_topics_date'] = "<span class=\"sdate\">{d-m} {H:i}</span>";
 
 $cfg['plu_mask_comments'] = empty($cfg['plu_mask_comments']) ? "%3\$s"." "."%1\$s"." ".$cfg['separator']." "."%5\$s"." ".$cfg['separator']." %2\$s<br />" : $cfg['plu_mask_comments'];
 // %1\$s = Link to the comment
@@ -55,7 +55,7 @@ $cfg['plu_mask_comments'] = empty($cfg['plu_mask_comments']) ? "%3\$s"." "."%1\$
 // %4\$s = User Avatar
 // %5\$s = Comments Text
 
-//$cfg['plu_mask_comments_date'] = "<span class=\"sdate\">{d-m-Y}</span><span class=\"stime\">{H:i}</span>";
+$cfg['plu_mask_comments_date'] = "<span class=\"sdate\">{d-m} {H:i}</span>";
 
 $cfg['plu_mask_polls'] =  empty($cfg['plu_mask_polls']) ? "<div>%1\$s</div>" : $cfg['plu_mask_polls'];
 

@@ -16,7 +16,7 @@ Description=Common
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-error_reporting(E_ALL ^ E_NOTICE);  
+error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */
 
@@ -183,7 +183,7 @@ if (!$sed_groups )
 				'level' => $row['grp_level'],
  				'disabled' => $row['grp_disabled'],
  				'hidden' => $row['grp_hidden'],
-				'state' => $row['grp_state'],
+				//'state' => $row['grp_state'],
 				'title' => sed_cc($row['grp_title']),
 				'desc' => sed_cc($row['grp_desc']),
 				'icon' => $row['grp_icon'],
@@ -191,7 +191,7 @@ if (!$sed_groups )
 				'pfs_maxfile' => $row['grp_pfs_maxfile'],
 				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
 				'ownerid' => $row['grp_ownerid']
-					);
+				);
 			}
 		}
 	else
@@ -257,7 +257,9 @@ if ($rsedition>0 && $cfg['authmode'] > 0)
 			$usr['auth'] = unserialize($row['user_auth']);
 			$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
 			$usr['profile'] = $row;
-		
+			$sys['sql_update_lastvisit'] = '';
+			$sys['sql_update_auth'] = '';
+			
 			if ($usr['lastlog']+$cfg['timedout'] < $sys['now_offset'])
 				{
 				$sys['comingback']= TRUE;
@@ -313,8 +315,8 @@ if (!$sed_plugins)
 		{
 		while ($row = sed_sql_fetcharray($sql))
 			{
-			$sed_plugins[] = $row; 
-			$sed_plugins[$row['pl_code']]['pl_title'] = $row['pl_title'];
+			$sed_plugins[$row['pl_hook']][] = $row; 
+			//$sed_plugins[$row['pl_code']]['pl_title'] = $row['pl_title'];
 			}
 		}
 	sed_cache_store('sed_plugins', $sed_plugins, 3300);
@@ -369,7 +371,7 @@ if (!$cfg['disablewhosonline'])
 	$sql = sed_sql_query("SELECT online_name, online_userid FROM $db_online WHERE online_name NOT LIKE 'v' ORDER BY online_name ASC");
 	$sys['whosonline_reg_count'] = sed_sql_numrows($sql);
 	$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
-
+	$out['whosonline_reg_list'] = '';
 	$ii = 0;
 	while ($row = sed_sql_fetchassoc($sql))
 		{
@@ -391,7 +393,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 		if ($row = sed_sql_fetchassoc($sql))
 			{
-  		$online_count = 1;
+			$online_count = 1;
 
 			if ($cfg['shieldenabled'])
 				{
@@ -557,7 +559,7 @@ if (!$cfg['disablehitstats'])
 	else
 		{ sed_stat_create($sys['day']); }
 
-	$sys['referer'] = mb_substr(mb_strtolower($_SERVER['HTTP_REFERER']), 0, 255);
+	$sys['referer'] = isset($_SERVER['HTTP_REFERER']) ? mb_substr(mb_strtolower($_SERVER['HTTP_REFERER']), 0, 255) : '';
 	$sys['httphost'] = mb_strtolower($_SERVER['HTTP_HOST']); // New Sed175
 
 	if (!empty($sys['referer'])

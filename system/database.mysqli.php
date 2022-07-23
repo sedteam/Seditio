@@ -217,12 +217,15 @@ function sed_sql_query($query, $halterr = true, $conn_id = null)
 
 	$conn_id = is_null($conn_id) ? $connection_id : $conn_id; 
 
+	$sys['qcount'] = 0;
+	$sys['tcount'] = 0;
 	$sys['qcount']++;
 	$xtime = microtime();
+	
 	if ($halterr)
-    { $result = mysqli_query($conn_id, $query) OR sed_diefatal('SQL error : '.sed_sql_error()); }
-  else
-    { $result = mysqli_query($conn_id, $query); }
+		{ $result = mysqli_query($conn_id, $query) OR sed_diefatal('SQL error : '.sed_sql_error()); }
+	else
+		{ $result = mysqli_query($conn_id, $query); }
     
 	$ytime = microtime();
 	$xtime = explode(' ',$xtime);

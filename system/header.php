@@ -34,7 +34,7 @@ $title_data = array($cfg['maintitle'], $cfg['subtitle']);
 $out['subtitle'] = (empty($out['subtitle'])) ? sed_title('defaulttitle', $title_tags, $title_data) : $out['subtitle'];
 /**/
 
-$out['currenturl'] .= sed_getcurrenturl();
+$out['currenturl'] = sed_getcurrenturl();
 $out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_url'];  // New in 175
 $out['register_link'] = sed_url("users", "m=register");  // New in 175
 $out['auth_link'] = sed_url("users", "m=auth");  // New in 175
@@ -65,9 +65,9 @@ if (is_array($extp))
 /* ===== */
 
 if ($cfg['enablecustomhf'])
-	{ $mskin = sed_skinfile(array('header', mb_strtolower($location)), $adminskin); }
+	{ $mskin = sed_skinfile(array('header', mb_strtolower($location))); }
 else
-	{ $mskin = sed_skinfile('header', $adminskin); }
+	{ $mskin = sed_skinfile('header'); }
 	
 $t = new XTemplate($mskin);
 

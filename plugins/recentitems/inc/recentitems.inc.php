@@ -26,6 +26,8 @@ function sed_get_latestpages($limit, $mask)
 
 	$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
 	
+	$res = '';
+	
 	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_ownerid, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
 						FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 						WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' 
@@ -83,6 +85,8 @@ function sed_get_latestcomments($limit, $mask)
 
 	$modal = ($cfg['enablemodal']) ? ',1' : ''; 
 
+	$res = '';
+	
 	$sql = sed_sql_query("SELECT MAX(com_id) AS max_com_id, MAX(com_date) AS max_com_date FROM $db_com WHERE com_isspecial = 0 GROUP BY com_code ORDER BY max_com_date DESC LIMIT $limit");
 
 	$com_latest = array();
@@ -101,7 +105,6 @@ function sed_get_latestcomments($limit, $mask)
     
     $com_text = sed_cutstring(strip_tags($row['com_text']), 100);
     
-    $z = $row['page_title'];
     $j = substr($com_code, 0, 1);
     $k = substr($com_code, 1);
     
@@ -158,6 +161,8 @@ function sed_get_latesttopics($limit, $mask)
 	{
 	global $t, $L, $db_forum_topics, $db_forum_sections, $db_users, $usr, $cfg, $skin, $plu_empty, $out;
 
+	$res = '';
+	
 	$sql0 = sed_sql_query("SELECT fs_id, fs_title, fs_parentcat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername 
 		FROM $db_forum_sections WHERE fs_parentcat = 0 ORDER BY fs_order ASC");
 
@@ -194,8 +199,8 @@ function sed_get_latesttopics($limit, $mask)
 			//print_r($row);
 			
 			$t-> assign(array(
-				"LATEST_TOPICS_ROW_ID" => $row['page_id'],
-				"LATEST_TOPICS_ROW_FORUMPATH" => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],30), sed_cutstring($row['fs_category'], 30), TRUE, $parentcat),
+				"LATEST_TOPICS_ROW_ID" => $row['ft_id'],
+				"LATEST_TOPICS_ROW_FORUMPATH" => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'], 30), sed_cutstring($row['fs_category'], 30), TRUE, $parentcat),
 				"LATEST_TOPICS_ROW_URL" => sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom"),
 				"LATEST_TOPICS_ROW_SHORTTITLE" => sed_cutstring($row['ft_title'], 50),
 				"LATEST_TOPICS_ROW_TITLE" => $row['ft_title'],			
@@ -233,6 +238,8 @@ function sed_get_latestpolls($limit, $mask)
 	{
 	global $t, $L, $cfg, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
 
+	$res = '';
+	
 	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
 
 	$modal = ($cfg['enablemodal']) ? ',1' : ''; 
@@ -247,18 +254,18 @@ function sed_get_latestpolls($limit, $mask)
 	{
 		if (!empty($id) && !empty($vote))
 			{
-			if ($usr['id']>0)
+			if ($usr['id'] > 0)
 				{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
 					else
 				{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
 			
-			$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;
+			$alreadyvoted = (sed_sql_numrows($sql2) > 0) ? 1 : 0;
 	
 			if (!$alreadyvoted)
 				{
 				$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 
 							WHERE po_pollid='$id' AND po_id='$vote'");
-				if (sed_sql_affectedrows()==1)
+				if (sed_sql_affectedrows() == 1)
 					{
 					$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) 
 							VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
@@ -272,19 +279,19 @@ function sed_get_latestpolls($limit, $mask)
 	$res_all = "<div id=\"pollajx\">";
 	while ($row_p = sed_sql_fetchassoc($sql_p))
 		{
-		unset($res);
+		$res = '';
 		$poll_id = $row_p['poll_id'];
 
-		if ($usr['id']>0)
+		if ($usr['id'] > 0)
 	 		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$poll_id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
 	       else
 	 		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$poll_id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
 
-		if (sed_sql_numrows($sql2)>0)
+		if (sed_sql_numrows($sql2) > 0)
 			{
 			$alreadyvoted = 1;
 			$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$poll_id'");
-			$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
+			$totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
 			}
 		else
 			{ 

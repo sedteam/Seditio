@@ -199,7 +199,7 @@ $pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$p
 $pratings = ($ratings) ? "" : "&ratings=1";
 $pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=".$pag['page_id'].$pratings) : sed_url("page", "al=".$pag['page_alias'].$pratings);
 
-$sys['sublocation'] = $sed_cat[$c]['title'];
+$sys['sublocation'] = $sed_cat[$pag['page_cat']]['title'];
 
 $out['subtitle'] = (empty($pag['page_seo_title'])) ? $pag['page_title'] : $pag['page_seo_title'];
 $out['subdesc'] = (empty($pag['page_seo_desc'])) ? $pag['page_desc'] : $pag['page_seo_desc'];
@@ -239,7 +239,6 @@ $t = new XTemplate($mskin);
 $t->assign(array(
 	"PAGE_ID" => $pag['page_id'],
 	"PAGE_STATE" => $pag['page_state'],
-	"PAGE_EXECUTE" => $pag['page_execute'],
 	"PAGE_TITLE" => $pag['page_fulltitle'],
 	"PAGE_SHORTTITLE" => $pag['page_title'],
 	"PAGE_SEOH1" => (empty($pag['page_seo_h1'])) ? $pag['page_title'] : $pag['page_seo_title'],

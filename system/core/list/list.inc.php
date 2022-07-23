@@ -35,6 +35,7 @@ $number_of_extrafields = count($extrafields);
 $filter_vars = array();
 $filter_sql = array();
 $filter_urlspar = array();
+$filter_urlparams_arr = array();
 $filter_urlparams = "";
 
 $sql_where = "";
@@ -50,17 +51,19 @@ if (count($extrafields) > 0)
 				{ 
 				$filter_sql[] = "page_".$key." = '".$filter_vars['filter_'.$key]."'"; 
 				$filter_urlspar['filter_'.$key] = $filter_vars['filter_'.$key];	
+				$filter_urlparams_arr[] = $key." = '".$filter_vars['filter_'.$key]."'"; 
 				}
 			}  
 	}
 }
 
+$filter_urlparams = (count($filter_urlparams_arr) > 0) ? "&".implode('&', $filter_urlparams_arr) : "";
 $sql_where = (count($filter_sql) > 0) ? " AND ".implode(' AND ', $filter_sql) : " ";
 
-if (!array_key_exists($c, $sed_cat) && !($c=='all'))
-  {
-    sed_die();
-  }
+if (!array_key_exists($c, $sed_cat) && !($c == 'all'))
+	{
+	sed_die();
+	}
 
 if ($c=='all' || $c=='system')
 	{
@@ -171,7 +174,8 @@ if ($c != 'all')
 	$list_text = sed_parse($row2['structure_text']);
 	}	
 	
-$incl="datas/content/list.$c.txt";
+$incl = "datas/content/list.$c.txt";
+$extratext = '';
 
 if (@file_exists($incl))
 	{
@@ -194,14 +198,18 @@ if (count($filter_urlspar) > 0)
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
 
-$pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$pn_s."&w=".$pn_w."&o=".$o."&p=".$p.$filter_param_url), $d, $totallines, $cfg['maxrowsperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$pn_s."&w=".$pn_w."&o=".$o."&p=".$p.$filter_param_url), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+$pagination = sed_pagination(sed_url("list", "c=".$c."&s=".$pn_s."&w=".$pn_w."&o=".$o."&p=".$p.$filter_urlparams), $d, $totallines, $cfg['maxrowsperpage']);
+list($pageprev, $pagenext) = sed_pagination_pn(sed_url("list", "c=".$c."&s=".$pn_s."&w=".$pn_w."&o=".$o."&p=".$p.$filter_urlparams), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
 //fix for sed_url()
 $url_list = array('part' => 'list', 'params' => "c=".$c);
 
-list($list_comments, $list_comments_display) = sed_build_comments($item_code, $url_list, $comments);
-list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, $url_list, $ratings);
+// Options for category
+$allowcommentscat = $sed_cat[$c]['allowcomments'];
+$allowratingscat = $sed_cat[$c]['allowratings'];
+
+list($list_comments, $list_comments_display) = sed_build_comments($item_code, $url_list, $allowcommentscat);
+list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, $url_list, $allowratingscat);
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = $sed_cat[$c]['title'];

@@ -44,6 +44,7 @@ unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_sm
 
 $cfg['authmode'] = 3; 				// (1:cookies, 2:sessions, 3:cookies+sessions)
 $cfg['enablecustomhf'] = TRUE;		// To enable header.$location.tpl and footer.$location.tpl
+$cfg['devmode'] = FALSE;
 $cfg['pfs_dir'] = 'datas/users/';
 $cfg['av_dir'] = 'datas/avatars/';
 $cfg['photos_dir'] = 'datas/photos/';
@@ -70,7 +71,7 @@ $cfg['separator_symbol'] = "&raquo;";
 
 $cfg['available_image_sizes'] = array(); // array("800x600", "400x300");
 
-$cfg['adminskin'] = "sympfy";
+$cfg['adminskin'] = "sympfy"; 
 
 /* Message type:  attention => a, error => e, success => s, information => i */
 $cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e', 
@@ -78,6 +79,16 @@ $cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', 
 '603' => 'a', '900' => 'a', '904' => 'a', '907' => 'e', '911' => 'e', '915' => 'e', '916' => 's', '917' => 's', '930' => 'a', '940' => 'a', '950' => 'e');
 
 $cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'information', 'a' => 'attention');
+
+/* ======== Empty default Var ======== */
+
+$out['notices'] = '';
+$out['subdesc'] = '';
+$out['subkeywords'] = '';
+$morejavascript = '';
+$moremetas = '';
+$sys['sublocation'] = '';
+$shield_hammer = 0;
 
 /* ======== Names of the SQL tables ========= */
 
@@ -290,9 +301,13 @@ function sed_auth_build($userid, $maingrp=0)
     $sql_groups = implode(',', $groups);
 	$sql = sed_sql_query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
 
+	$i=0;
 	while ($row = sed_sql_fetchassoc($sql))
-	    { $authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights']; }
-
+	    { 
+		$i++;		
+		@$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights']; 
+		}
+	
    	return($authgrid);
 	}
 
@@ -439,6 +454,8 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 	$quote = sed_import('quote','G','INT');
 	//$cm = sed_import('cm', 'G', 'INT');  
 	$d = sed_import('d', 'G', 'INT');
+	
+	$error_string = '';
 
 	$wd = (is_null($d) && empty($b)) ? TRUE : FALSE;
   
@@ -598,7 +615,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		  
 			if (!$usr['allow_edit_com']) { $error_string .= $L['com_commenteditallowtime']."<br />"; }
 
-			if ($n=='update')
+			if ($n == 'update')
 				{
 				sed_check_xg();    	
 				sed_shield_protect(); 
@@ -724,7 +741,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 
 			if ($usr['auth_write_com'] && $allow)
 				{  
-				if ($quote>0)
+				if ($quote > 0)
 					{
 					$sqlq = sed_sql_query("SELECT com_id, com_author, com_text FROM $db_com WHERE com_id = '$quote' LIMIT 1");
 					if ($rowq = sed_sql_fetchassoc($sqlq))
@@ -732,7 +749,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						$rtext = "<blockquote><a href=\"".sed_url($url_part, $url_params.$lurl, "#".$rowq['com_id'])."\">#".$rowq['com_id']."</a> <strong>".$rowq['com_author']." :</strong><br />".$rowq['com_text']."</blockquote><br />";
 						}
 					}  			
-		
+				$rtext = sed_import('rtext','P','HTM');
 				$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
 				$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
 				$post_main = sed_textarea('rtext', $rtext, 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
@@ -947,7 +964,7 @@ function sed_build_date($dateformat, $udate, $mask = "")
 	if (!empty($mask))
 		{
 		$mask = preg_replace('#\{(.+?)\}#isu', "{{".$udate."}{\$1}}", $mask); 
-		$result = preg_replace_callback('#\{\{(.+?)\}\{(.+?)\}\}#isu', create_function('$matches', 'return @date($matches[2], $matches[1]);'), $mask);
+		$result = preg_replace_callback('#\{\{(.+?)\}\{(.+?)\}\}#isu', function($matches){ return @date($matches[2], $matches[1]);}, $mask);
 		return($result);
 		}
 
@@ -1388,7 +1405,9 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		}
 		
 	$votedcasted = ($ina == 'added') ? 1 : 0;
-
+	$alreadyvoted = FALSE;
+	$rate_form = '';
+	
 	for($i = 1; $i <= 10; $i++) 
 		{	
 		$rate_form .= sed_radio_item("newrate", $i, "<img src=\"skins/".$usr['skin']."/img/system/vote".$i.".gif\" alt=\"\" /> ".$i." - ".$L['rat_choice'.$i], $i)."<br />";
@@ -2679,20 +2698,21 @@ function sed_generate_field_code()
 function sed_getextplugins($hook, $cond = 'R')
 	{
 	global $sed_plugins, $cfg, $sys;
-
-	if (is_array($sed_plugins))
+	
+	$extplugins = array();
+	
+	if (isset($sed_plugins[$hook]) && is_array($sed_plugins[$hook]))
 		{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins[$hook] as $i => $k)
 			{
-			if ($k['pl_hook']==$hook && sed_auth('plug', $k['pl_code'], $cond))
-        { 
-        $extplugins[$i] = $k; 
-        if ($cfg['devmode'])
-		      { $sys['devmode']['hooks'][] = $k; }   
-        }
+			if ($k['pl_hook'] == $hook && sed_auth('plug', $k['pl_code'], $cond))
+				{ 
+				$extplugins[] = $k; 
+				if ($cfg['devmode'])
+					  { $sys['devmode']['hooks'][] = $k; }   
+				}
 			}
 		}
-   
 	return ($extplugins);
 	}
 
@@ -2721,8 +2741,8 @@ function sed_get_comcount($code)
  */ 
 function sed_getcurrenturl()
 	{
-	$url = 'http';
-	if ($_SERVER["HTTPS"] == "on") { $url .= "s"; }
+	global $_SERVER;
+	$url = (sed_is_ssl()) ? 'https' : 'http';
 	$url .= "://";
 	if ($_SERVER["SERVER_PORT"] != "80")
 		{ $url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"]; }
@@ -3019,18 +3039,18 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	switch($source)
 		{
 		case 'G':
-		$v = $_GET[$name];
+		$v = (isset($_GET[$name])) ? $_GET[$name] :NULL;
 		$log = TRUE;
 		break;
 
 		case 'P':
-		$v = $_POST[$name];
+		$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
 		$log = TRUE;
-		if ($filter=='ARR') { return($v); }
+		if ($filter == 'ARR') { return($v); }
 		break;
 
 		case 'C':
-		$v = $_COOKIE[$name];
+		$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : NULL;
 		$log = TRUE;
 		break;
 
@@ -3271,6 +3291,7 @@ function sed_radiobox($name, $data, $check_data = '')
 		{ $data = explode(',', $data); }
 	
 	$jj = 0;
+	$result = '';
 	
 	foreach ($data as $key => $v) 
 		{
@@ -3330,7 +3351,7 @@ function sed_translit_seourl($value)
  
 function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text", $disabled = false, $type = "text")
 	{
-	if ($disabled) $add_disabled = " disabled=\"disabled\"";
+	$add_disabled = ($disabled) ? " disabled=\"disabled\"" : "";
 	$res = "<input type=\"".$type."\" class=\"".$class."\" name=\"".$name."\" value=\"".sed_cc($value)."\" size=\"".$size."\" maxlength=\"".$maxlength."\"".$add_disabled." />";
 	return($res);
 	}
@@ -3913,6 +3934,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 
 	$i = 1;
 	$n = 0;
+	$res = '';
   
 	while($i < $cur_left) 
 		{ 
@@ -3965,8 +3987,10 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 	global $L, $cfg;
 
 	$address = $url.((mb_strpos($url, '?') !== false) ? '&amp;' : '?').$characters.'=';
-  
-  if ($current > 0)
+	$res_r = ''; 
+	$res_l = '';
+	
+	if ($current > 0)
 		{
 		$prevpage = $current - $perpage;
 		if ($prevpage < 0 || $prevpage == 0) 
@@ -4806,13 +4830,11 @@ function sed_skinfile($base, $adminskin = false)
 	global $usr, $cfg;
 	$base_depth = is_array($base) ? count($base) : 1;
 	
-  
-	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base.'.tpl';
-	$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base.'.tpl';  
-	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
-
 	if ($base_depth == 1) 
 		{ 	
+		$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base.'.tpl';
+		$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base.'.tpl';  
+		$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
 		return ($adminskin) ? $tpl_admin_path : $tpl_path; 
 		}
 
@@ -4829,7 +4851,7 @@ function sed_skinfile($base, $adminskin = false)
 	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base[0].'.tpl';
 	$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base[0].'.tpl';  
 	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
-  
+
 	return ($adminskin) ? $tpl_admin_path : $tpl_path;
 	}
 
@@ -5172,19 +5194,22 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
         }
     }
 	if(!empty($args)) 
-    { 
-      $qs = ($cfg['sefurls']) ? '?' : '&'; 
-      $sep_len = mb_strlen($sep); 
-      foreach($args as $key => $val) 
-      { 
-          if($rule['params'][$key] != $val) 
-          { 
-              $qs .= $key.'='.urlencode($val).'&'; 
-          } 
-      } 
-      $qs = mb_substr($qs, 0, -1); 
-      $url .= $qs; 
-    }
+		{ 
+		$qs = ($cfg['sefurls']) ? '?' : '&';		
+		foreach($args as $key => $val) 
+			{ 
+			if (isset($rule['params'][$key]))
+				{
+				if ($rule['params'][$key] != $val) 
+					{ 
+					$qs .= $key.'='.urlencode($val).'&'; 
+					} 
+				}
+			else { $qs .= $key.'='.urlencode($val).'&'; }
+			} 
+		$qs = mb_substr($qs, 0, -1); 
+		$url .= $qs; 
+		}
 		
   $url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&amp;', $url);
   $path = ($header || ($cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';	  
@@ -5636,7 +5661,7 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data)
         $return_arr[$t1] = $t2;
         $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title']; 
         $return_arr[$t4] = $row['form_desc']; 
-        $return_arr[$t5] = $row['form_mera']; 		
+        $return_arr[$t5] = $row['mera']; 		
     } 
     return $return_arr; 
 } 

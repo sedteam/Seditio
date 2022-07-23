@@ -65,9 +65,9 @@ if (is_array($extp))
 /* ===== */
 
 if ($cfg['enablecustomhf'])
-	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location)), $adminskin); }
+	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
 else
-	{ $mskin = sed_skinfile('footer', $adminskin); }
+	{ $mskin = sed_skinfile('footer'); }
 	
 $t = new XTemplate($mskin);
 
@@ -182,7 +182,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 $t->assign(array (
 	"FOOTER_CREATIONTIME" => $out['creationtime'],
 	"FOOTER_SQLSTATISTICS" => $out['sqlstatistics'],
-	"FOOTER_DEVMODE" => $out['devmode']
+	"FOOTER_DEVMODE" => isset($out['devmode']) ? $out['devmode'] : ''
 	));
 
 
