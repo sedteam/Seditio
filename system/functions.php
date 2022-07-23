@@ -5610,7 +5610,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data = array()
         $return_arr[$t1] = $t2;
         $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title']; 
         $return_arr[$t4] = $row['form_desc']; 
-        $return_arr[$t5] = $row['form_mera']; 
+        $return_arr[$t5] = $row['mera']; 
     } 
     return $return_arr; 
 } 

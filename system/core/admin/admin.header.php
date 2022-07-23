@@ -34,7 +34,7 @@ $title_data = array($cfg['maintitle'], $cfg['subtitle']);
 $out['subtitle'] = (empty($out['subtitle'])) ? sed_title('defaulttitle', $title_tags, $title_data) : $out['subtitle'];
 /**/
 
-$out['currenturl'] .= sed_getcurrenturl();
+$out['currenturl'] = sed_getcurrenturl();
 $out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_url'];  // New in 175
 $out['register_link'] = sed_url("users", "m=register");  // New in 175
 $out['auth_link'] = sed_url("users", "m=auth");  // New in 175
@@ -134,7 +134,7 @@ if ($usr['id'] > 0)
 	if (sed_auth('admin', 'a', 'A'))
 		{    
 			$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'");			
-			$config_menu .= "<ul>";
+			$config_menu = "<ul>";
 			
 			while ($row = sed_sql_fetchassoc($sql))
 				{
@@ -157,7 +157,7 @@ if ($usr['id'] > 0)
 
 	// Pages menu 
 
-	$page_menu .= "<ul>";
+	$page_menu = "<ul>";
 	$page_menu .= ($mn == 'queue') ? "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&mn=queue"), $L['adm_valqueue'], sed_auth('admin', 'any', 'A'))."</li>";
 	$page_menu .= ($m == 'page' && $s == 'add') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
 	$page_menu .= ($m == 'page' && $s == 'manager') ? "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=page&s=manager"), $L['adm_pagemanager'], sed_auth('page', 'any', 'A'))."</li>";
@@ -181,7 +181,7 @@ if ($usr['id'] > 0)
 
 	if (sed_auth('admin', 'a', 'A'))
 	{
-		$forums_menu .= "<ul class=\"arrow_list\">";
+		$forums_menu = "<ul class=\"arrow_list\">";
 		$forums_menu .= ($m == "forums" && empty($s)) ? "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums"), $L['adm_forum_structure_cat'], sed_auth('admin', 'a', 'A'))."</li>";
 		$forums_menu .= ($s == "structure") ? "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'), 'current')."</li>" : "<li>".sed_linkif(sed_url("admin", "m=forums&s=structure"), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'))."</li>";
 		$forums_menu .= "</ul>";

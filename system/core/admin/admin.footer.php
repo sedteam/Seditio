@@ -179,7 +179,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 $t->assign(array (
 	"FOOTER_CREATIONTIME" => $out['creationtime'],
 	"FOOTER_SQLSTATISTICS" => $out['sqlstatistics'],
-	"FOOTER_DEVMODE" => $out['devmode']
+	"FOOTER_DEVMODE" => isset($out['devmode']) ? $out['devmode'] : ''
 	));
 
 

@@ -36,6 +36,8 @@ sed_block($usr['auth_read']);
 $enabled[0] = $L['Disabled'];
 $enabled[1] = $L['Enabled'];
 
+$adminmain = '';
+
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.main');
 if (is_array($extp))
@@ -54,6 +56,8 @@ $adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box\"><div class=
 $adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box-content\">".$adminhelp."</div></div>";
 
 $out['subtitle'] = $L['Administration'];
+
+$adminsubtitle = isset($adminsubtitle) ? $adminsubtitle : '';
 
 /**/
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');

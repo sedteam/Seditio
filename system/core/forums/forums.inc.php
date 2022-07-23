@@ -53,7 +53,7 @@ $sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
 
 // All subforums	
 
-$sql2 = sed_sql_query("SELECT fs_id, fs_title, fs_parentcat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername 
+$sql2 = sed_sql_query("SELECT fs_id, fs_title, fs_desc, fs_icon, fs_parentcat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername 
 	FROM $db_forum_sections WHERE fs_parentcat > 0 ORDER BY fs_order ASC");
 
 while ($fsn_sub = sed_sql_fetchassoc($sql2))
@@ -63,7 +63,7 @@ while ($fsn_sub = sed_sql_fetchassoc($sql2))
 
 //---
 
-if (!$sed_sections_act)
+if (!isset($sed_sections_act))
 	{
 	$timeback = $sys['now'] - 604800;
 	$sqlact = sed_sql_query("SELECT fs_id FROM $db_forum_sections");
@@ -77,7 +77,7 @@ if (!$sed_sections_act)
 	sed_cache_store('sed_sections_act', $sed_sections_act, 600);
 	}
 
-if (!$sed_sections_vw)
+if (!isset($sed_sections_vw))
 	{
 	$sqltmp = sed_sql_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
 
@@ -142,6 +142,7 @@ while ($fsn = sed_sql_fetchassoc($sql)) //v178
 	{
 	$fsn_arr[$fsn['fn_id']][$fsn['fs_id']] = $fsn;
 	$sect_arr[$fsn['fn_id']] = $fsn;
+	
 	}
 
 // by structure extending
@@ -150,7 +151,9 @@ foreach ($sect_arr as $fsec_key => $fsec)
 	$cattitle = "<a href=\"javascript:sedjs.toggleblock('blk_".$fsec['fs_category']."')\">";
 	$cattitle .= $sed_forums_str[$fsec['fs_category']]['tpath'];
 	$cattitle .= "</a>";
-
+	
+	$lt_date = $fsec['fs_lt_date'];
+	
 	if ($c=='fold')
 		{ $fold = TRUE; }
 	elseif ($c=='unfold')
@@ -162,7 +165,7 @@ foreach ($sect_arr as $fsec_key => $fsec)
 	else
 		{ $fold = (!$sed_forums_str[$fsec['fs_category']]['defstate']) ? TRUE : FALSE; }	
 		
-	$fsec['toggle_state'] .= ($fold) ? " style=\"display:none;\"" : '';	
+	$fsec['toggle_state'] = ($fold) ? " style=\"display:none;\"" : '';	
 	$fsec['toggle_body'] = "id=\"blk_".$fsec['fs_category']."\" ".$fsec['toggle_state'];
 
 	$t-> assign(array(
@@ -176,16 +179,19 @@ foreach ($sect_arr as $fsec_key => $fsec)
 	));	
 		
 	// by sections extending v178
+	$fs_num = 0;
 	foreach ($fsn_arr[$fsec_key] as $fsn_key => $fsn)
 		{
 		if (sed_auth('forums', $fsn['fs_id'], 'R'))
 			{
+			
 			$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
 			$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
 			$fsn['fs_newposts'] = '0';
 			$fsn['fs_desc'] = sed_parse($fsn['fs_desc']);
 			$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
-			$sed_sections_vw_cur = (!$sed_sections_vw[$fsn['fs_title']]) ? "0" : $sed_sections_vw[$fsn['fs_title']];
+						
+			$sed_sections_vw_cur = (isset($sed_sections_vw[$fsn['fs_title']]) && $sed_sections_vw[$fsn['fs_title']]) ? $sed_sections_vw[$fsn['fs_title']] : "0";
 
 			if (!$fsn['fs_lt_id'])
 				{ sed_forum_sectionsetlast($fsn['fs_id']); }

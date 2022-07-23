@@ -40,11 +40,12 @@ if (!empty($p))
 		{ require($path_lang_def); }
 
 	$extp = array();
-	if (is_array($sed_plugins))
+
+	if (is_array($sed_plugins) && isset($sed_plugins['module']))
 		{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['module'] as $i => $k)
 			{
-			if ($k['pl_hook'] == 'module' && $k['pl_code']==$p)
+			if ($k['pl_code'] == $p)
 				{ $extp[$i] = $k; }
 			}
 		}
@@ -96,11 +97,11 @@ elseif (!empty($e))
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', $e);
 	sed_block($usr['auth_read']);
 
-	if (is_array($sed_plugins))
+	if (is_array($sed_plugins) && isset($sed_plugins['standalone']))
 		{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['standalone'] as $i => $k)
 			{
-			if ($k['pl_hook'] == 'standalone' && $k['pl_code']==$e)
+			if ($k['pl_code'] == $e)
 				{ $out['subtitle'] = $k['pl_title']; }
 			}
 		}
@@ -120,11 +121,11 @@ elseif (!empty($e))
 
 	$extp = array();
 
-	if (is_array($sed_plugins))
+	if (is_array($sed_plugins) && isset($sed_plugins['standalone']))
 		{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['standalone'] as $i => $k)
 			{
-			if ($k['pl_hook']=='standalone' && $k['pl_code']==$e)
+			if ($k['pl_code'] == $e)
 				{ $extp[$i] = $k; }
 			}
 		}
@@ -166,16 +167,16 @@ elseif (!empty($o))
 
 	{
 	$extp = array();
-	if (is_array($sed_plugins))
+	if (is_array($sed_plugins) && isset($sed_plugins['popup']))
 		{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['popup'] as $i => $k)
 			{
-			if ($k['pl_hook'] == 'popup' && $k['pl_code']==$o)
+			if ($k['pl_code'] == $o)
 				{ $extp[$i] = $k; }
 			}
 		}
 
-	if (count($extp)==0)
+	if (count($extp) == 0)
 		{
 		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
@@ -256,16 +257,16 @@ elseif (!empty($r))
 elseif (!empty($ajx))	
 { 
     $extp = array(); 
-    if (is_array($sed_plugins)) 
+    if (is_array($sed_plugins) && isset($sed_plugins['ajax'])) 
     { 
-        foreach($sed_plugins as $i => $k) 
+        foreach($sed_plugins['ajax'] as $i => $k) 
         { 
-            if ($k['pl_hook'] == 'ajax' && $k['pl_code']==$ajx) 
+            if ($k['pl_code'] == $ajx) 
             { $extp[$i] = $k; } 
         } 
     } 
 
-    if (count($extp)==0) 
+    if (count($extp) == 0) 
     { 
         sed_redirect(sed_url("message", "msg=907", "", true)); 
         exit; 

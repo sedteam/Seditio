@@ -70,6 +70,12 @@ while ($row = sed_sql_fetchrow($sql))
 	$status1 = sed_sql_fetcharray($status);
 	$tables[] = $status1;
     }
+	
+$total_length = 0;
+$total_rows = 0;
+$total_index_length = 0;
+$total_fragmented = 0;
+$total_data_length = 0;	
 
 foreach ($tables as $i => $dat)
 	{

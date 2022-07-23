@@ -45,14 +45,14 @@ if (!empty($p))
 
 	if (is_array($sed_plugins))
 		{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['tools'] as $i => $k)
 			{
-			if ($k['pl_hook']=='tools' && $k['pl_code']==$p)
+			if ($k['pl_code'] == $p)
 				{ $extp[$i] = $k; }
 			}
 		}
 
-	if (count($extp)==0)
+	if (count($extp) == 0)
 		{
 		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;

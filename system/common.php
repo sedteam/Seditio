@@ -169,7 +169,7 @@ If (sed_sql_numrows($sql) > 0)
 
 /* ======== Groups ======== */
 
-if (!$sed_groups )
+if (!isset($sed_groups))
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
@@ -308,7 +308,7 @@ $b = sed_import('b', 'G', 'ALP', 24);
 
 /* ======== Plugins ======== */
 
-if (!$sed_plugins)
+if (!isset($sed_plugins))
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
 	if (sed_sql_numrows($sql) > 0)
@@ -594,7 +594,7 @@ if (!$cfg['disablehitstats'])
 
 /* ======== Categories ======== */
 
-if (!$sed_cat && !$cfg['disable_page'])
+if (!isset($sed_cat) && !$cfg['disable_page'])
 	{
 	$sed_cat = sed_load_structure();
 	sed_cache_store('sed_cat', $sed_cat, 3600);
@@ -602,7 +602,7 @@ if (!$sed_cat && !$cfg['disable_page'])
 
 /* ======== Forums ======== */
 
-if (!$sed_forums_str && !$cfg['disable_forums'])
+if (!isset($sed_forums_str) && !$cfg['disable_forums'])
 	{
 	$sed_forums_str = sed_load_forum_structure();
 	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
@@ -613,7 +613,7 @@ if (!$sed_forums_str && !$cfg['disable_forums'])
 $dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
 $dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT', 'boolean' => 'BOL');
 
-if (!$sed_dic && (sed_stat_get("version") >= 177))
+if (!isset($sed_dic) && (sed_stat_get("version") >= 177))
 	{
 	// Load directories
 	$sql = sed_sql_query("SELECT * FROM $db_dic");
@@ -666,7 +666,7 @@ if (!$sed_dic && (sed_stat_get("version") >= 177))
 	
 /* ======== Menus ======== */
 
-if (!$sed_menu && (sed_stat_get("version") > 177))
+if (!isset($sed_menu) && (sed_stat_get("version") > 177))
 	{	
 	$sql = sed_sql_query("SELECT * FROM sed_menu WHERE 1 ORDER BY menu_position ASC");
 	while ($row = sed_sql_fetchassoc($sql))
@@ -687,7 +687,7 @@ if (!$sed_menu && (sed_stat_get("version") > 177))
 
 /* ======== Smilies ======== */
 
-if (!$sed_smilies)
+if (!isset($sed_smilies))
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
 	 if (sed_sql_numrows($sql)>0)

@@ -123,7 +123,7 @@ switch ($n)
 		$urlpaths[sed_url("admin", "m=config&n=edit&o=".$o."&p=".$p)] = $L["core_".$p];
 		$admintitle = $L["core_".$p];
 		
-		$adminhelpconfig = $L["adm_help_config_$p"]; 
+		$adminhelpconfig = isset($L["adm_help_config_$p"]) ? $L["adm_help_config_$p"] : ''; 
 		$adminlegend = $L["core_".$p];
 		}
 	else

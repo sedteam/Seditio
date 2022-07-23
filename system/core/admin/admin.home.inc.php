@@ -24,6 +24,8 @@ $admintitle = $L['Home'];
 $pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
 $pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
 
+$upgstat = '';
+
 $sys['user_istopadmin'] = sed_auth('admin', 'a', 'A');
 
 if ($cfg['trash_prunedelay'] > 0)

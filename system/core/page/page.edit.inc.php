@@ -238,7 +238,7 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpa
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
 $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
 
-$sys['sublocation'] = $sed_cat[$c]['title'];
+$sys['sublocation'] = $sed_cat[$pag['page_cat']]['title'];
 
 $out['subtitle'] = $L['paged_title'];
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
@@ -286,7 +286,7 @@ if ($usr['isadmin'])
 	$t->parse("MAIN.PAGEEDIT_PUBLISH"); 
 	}
 	
-$form_send_url = (defined('SED_ADMIN')) ? sed_url("admin", "m=page&s=edit&a=update&id=".$pag['page_id']."&r=".$r."&".sed_xg()) : sed_url("page", "m=edit&a=update&id=".$pag['page_id']."&r=".$r."&".sed_xg());	
+$form_send_url = (defined('SED_ADMIN')) ? sed_url("admin", "m=page&s=edit&a=update&id=".$pag['page_id']."&".sed_xg()) : sed_url("page", "m=edit&a=update&id=".$pag['page_id']."&".sed_xg());	
 
 $t->assign(array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
