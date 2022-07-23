@@ -395,8 +395,9 @@ foreach ($forum_sections as $key => $value)
 
 	$cfs = sed_build_forums($forum_sections[$key]['fs_id'], $forum_sections[$key]['fs_title'], $forum_sections[$key]['fs_category'], FALSE, $parentcat2);
 
-	if ($row1['fs_id'] != $s && $usr['isadmin'])
+	if ($forum_sections[$key]['fs_id'] != $s && $usr['isadmin'])
 		{ $movebox .= "<option value=\"".$forum_sections[$key]['fs_id']."\">".$cfs."</option>"; }
+	
    	$selected = ($forum_sections[$key]['fs_id'] == $s) ? "selected=\"selected\"" : '';
 	$jumpbox .= "<option $selected value=\"".sed_url("forums", "m=topics&s=".$forum_sections[$key]['fs_id'])."\">".$cfs."</option>";
 	}
@@ -690,8 +691,8 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=".$s."&q=".$q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => sed_textarea('newmsg', $newmsg, 80, 12, 'Basic')." ".$pfs,
-		"FORUMS_POSTS_NEWPOST_TEXTONLY" => sed_textarea('newmsg', $newmsg, 80, 12, 'Basic'),
+		"FORUMS_POSTS_NEWPOST_TEXT" => sed_textarea('newmsg', isset($newmsg)?$newmsg:'', 80, 12, 'Basic')." ".$pfs,
+		"FORUMS_POSTS_NEWPOST_TEXTONLY" => sed_textarea('newmsg', isset($newmsg)?$newmsg:'', 80, 12, 'Basic'),
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
 

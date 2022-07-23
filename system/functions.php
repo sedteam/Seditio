@@ -88,6 +88,7 @@ $out['subkeywords'] = '';
 $morejavascript = '';
 $moremetas = '';
 $sys['sublocation'] = '';
+$error_string = '';
 $shield_hammer = 0;
 
 /* ======== Names of the SQL tables ========= */
@@ -739,6 +740,9 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				$t->parse("COMMENTS.COMMENTS_ERROR");
 				}
 
+			$pfs = ''; 
+			$post_main = '';
+			
 			if ($usr['auth_write_com'] && $allow)
 				{  
 				if ($quote > 0)
@@ -3377,6 +3381,7 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor")
 	global $cfg;
 	$rows = (empty($rows)) ? $cfg['textarea_default_height'] : $rows;
 	$cols = (empty($cols)) ? $cfg['textarea_default_width'] : $cols;
+	
 	$res = "<textarea name=\"".$name."\" rows=\"".$rows."\" cols=\"".$cols."\" data-editor=\"".$editor."\">".sed_cc(sed_checkmore($value, false), ENT_QUOTES)."</textarea>";
 	return($res);
 	} 
@@ -5090,7 +5095,7 @@ function sed_vardump($v, $mode = '')
 	{
 		ob_start();
 		unset ($v['devmode'], $v['auth_log']);
-    if ($mode == 'print_r') print_r($v); else var_dump($v);			
+		if ($mode == 'print_r') print_r($v); else var_dump($v);			
 		$res = "<pre style=\"white-space:pre-wrap; word-wrap: break-word;\">".htmlspecialchars(ob_get_clean(), ENT_QUOTES)."</pre>";
 		return $res;
 	}

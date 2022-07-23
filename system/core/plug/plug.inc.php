@@ -152,7 +152,7 @@ elseif (!empty($e))
 			"PLUGIN_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 			"PLUGIN_SHORTTITLE" => $plugin_title,
 			"PLUGIN_URL" => sed_url("plug", "e=".$e),
-			"PLUGIN_SUBTITLE" => $plugin_subtitle,
+			"PLUGIN_SUBTITLE" => isset($plugin_subtitle) ? $plugin_subtitle : '',
 			"PLUGIN_BODY" => $plugin_body
 			));
 		}

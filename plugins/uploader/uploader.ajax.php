@@ -36,6 +36,7 @@ $upl_delete = sed_import('upl_delete', 'G', 'TXT');
 $upl_rotate = sed_import('upl_rotate', 'G', 'TXT');
 $upl_degree_lvl = sed_import('upl_degree_lvl', 'G', 'INT');
 $upl_pid = sed_import('upl_pid', 'G', 'INT');
+$disp_errors = '';
 
 $buildfilename = $cfg['plugin']['uploader']['buildfilename'];
 
@@ -136,7 +137,7 @@ elseif (empty($disp_errors))
 
 	if(!isset($imgsize) || !isset($imgsize['mime']) || !in_array($imgsize['mime'], array('image/jpeg', 'image/png', 'image/gif')))
 		{
-		$disp_errors = "File is not image!";
+		$disp_errors = "File is not image!";		
 		unlink($cfg['pfs_dir'].$filename);
 		}
 	elseif ((($pfs_totalsize + $u_size) > $maxtotal * 1024) || ($u_size > ($maxfile * 1024)))
@@ -198,7 +199,7 @@ elseif (empty($disp_errors))
 			'".sed_sql_prep($f_extension)."',
 			".(int)$folderid.",
 			'".sed_sql_prep($u_title)."',
-			'".sed_sql_prep($desc)."',
+			'',
 			".(int)$u_size.",
 			0) ");
 

@@ -225,8 +225,8 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=".$s."&poll=".$poll),
 	"FORUMS_NEWTOPIC_TITLE" => sed_textbox('newtopictitle', $newtopictitle, 56, 64),
 	"FORUMS_NEWTOPIC_DESC" => sed_textbox('newtopicdesc', $newtopicdesc, 56, 64),
-	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic')." ".$pfs,
-	"FORUMS_NEWTOPIC_TEXTONLY" => sed_textarea('newmsg', $newmsg, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic'),
+	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', isset($newmsg)?$newmsg:'', $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic')." ".$pfs,
+	"FORUMS_NEWTOPIC_TEXTONLY" => sed_textarea('newmsg', isset($newmsg)?$newmsg:'', $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic'),
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs
 ));
 

@@ -238,11 +238,11 @@ if (empty($newpagecat) && !empty($c))
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
 }
 
-$pageadd_form_file = sed_radiobox("newpagefile", $yesno_arr, $newpagefile);
+$pageadd_form_file = sed_radiobox("newpagefile", $yesno_arr, isset($newpagefile)?$newpagefile:0);
 $pageadd_form_allowcomments = sed_radiobox("newpageallowcomments", $yesno_arr, $newpageallowcomments); 
 $pageadd_form_allowratings = sed_radiobox("newpageallowratings", $yesno_arr, $newpageallowratings);
 
-$pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
+$pageadd_form_categories = sed_selectbox_categories(isset($newpagecat)?$newpagecat:'', 'newpagecat');
 $newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600, 'long', '_beg');
 $newpage_form_expire = sed_selectbox_date(1861916400, 'long', '_exp');
 
@@ -252,7 +252,7 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'ne
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpageurl", $L['Mypfs']) : '';
 $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
 
-$sys['sublocation'] = $sed_cat[$c]['title'];
+$sys['sublocation'] = isset($newpagecat) ? $sed_cat[$newpagecat]['title'] : '';
 
 $out['subtitle'] = $L['pagadd_title'];
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
@@ -270,14 +270,17 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+$newpage_tpl = (isset($newpagecat) && isset($sed_cat[$newpagecat]['tpl'])) ? $sed_cat[$newpagecat]['tpl'] : '';
+
 if (defined('SED_ADMIN'))
 	{
-	$mskin = sed_skinfile(array('admin', 'page', 'add', $sed_cat[$newpagecat]['tpl']), true);	
+	$mskin = sed_skinfile(array('admin', 'page', 'add', $newpage_tpl), true);	
 	}
 else 
 	{
+	
 	require(SED_ROOT . "/system/header.php");
-	$mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));	
+	$mskin = sed_skinfile(array('page', 'add', $newpage_tpl));	
 	}
 
 $t = new XTemplate($mskin);
@@ -299,16 +302,16 @@ $t->assign(array(
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
 	"PAGEADD_FORM_SEND" => $form_send_url,
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
-	"PAGEADD_FORM_KEY" => sed_textbox('newpagekey', $newpagekey, 16, 16),
-	"PAGEADD_FORM_ALIAS" => sed_textbox('newpagealias', $newpagealias),
-	"PAGEADD_FORM_TITLE" => sed_textbox('newpagetitle', $newpagetitle),
-	"PAGEADD_FORM_DESC" => sed_textarea('newpagedesc', $newpagedesc, 3, 75),
-	"PAGEADD_FORM_SEOTITLE" => sed_textbox('newpageseotitle', $newpageseotitle),
-	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', $newpageseodesc),
-	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', $newpageseokeywords),
-	"PAGEADD_FORM_SEOH1" => sed_textbox('newpageseoh1', $newpageseoh1),
-	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', $newpagethumb),
-	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', $newpageauthor, 16, 24),
+	"PAGEADD_FORM_KEY" => sed_textbox('newpagekey', isset($newpagekey)?$newpagekey:'', 16, 16),
+	"PAGEADD_FORM_ALIAS" => sed_textbox('newpagealias', isset($newpagealias)?$newpagealias:''),
+	"PAGEADD_FORM_TITLE" => sed_textbox('newpagetitle', isset($newpagetitle)?$newpagetitle:''),
+	"PAGEADD_FORM_DESC" => sed_textarea('newpagedesc', isset($newpagedesc)?$newpagedesc:'', 3, 75),
+	"PAGEADD_FORM_SEOTITLE" => sed_textbox('newpageseotitle', isset($newpageseotitle)?$newpageseotitle:''),
+	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', isset($newpageseodesc)?$newpageseodesc:''),
+	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', isset($newpageseokeywords)?$newpageseokeywords:''),
+	"PAGEADD_FORM_SEOH1" => sed_textbox('newpageseoh1', isset($newpageseoh1)?$newpageseoh1:''),
+	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', isset($newpagethumb)?$newpagethumb:''),
+	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', isset($newpageauthor)?$newpageauthor:'', 16, 24),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),
 	"PAGEADD_FORM_OWNERID" => $usr['id'],
 	"PAGEADD_FORM_BEGIN" => $newpage_form_begin,
@@ -316,17 +319,17 @@ $t->assign(array(
 	"PAGEADD_FORM_FILE" => $pageadd_form_file,
 	"PAGEADD_FORM_ALLOWRATINGS" => $pageadd_form_allowratings,
 	"PAGEADD_FORM_ALLOWCOMMENTS" => $pageadd_form_allowcomments,
-	"PAGEADD_FORM_URL" => sed_textbox('newpageurl', $newpageurl)." ".$pfs_form_url_myfiles,
-	"PAGEADD_FORM_SIZE" => sed_textbox('newpagesize', $newpagesize),
-	"PAGEADD_FORM_TEXT" => sed_textarea('newpagetext', $newpagetext, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended')." ".$pfs,
-	"PAGEADD_FORM_TEXT2" => sed_textarea('newpagetext2', $newpagetext2, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
+	"PAGEADD_FORM_URL" => sed_textbox('newpageurl', isset($newpageurl)?$newpageurl:'')." ".$pfs_form_url_myfiles,
+	"PAGEADD_FORM_SIZE" => sed_textbox('newpagesize', isset($newpagesize)?$newpagesize:''),
+	"PAGEADD_FORM_TEXT" => sed_textarea('newpagetext', isset($newpagetext)?$newpagetext:'', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended')." ".$pfs,
+	"PAGEADD_FORM_TEXT2" => sed_textarea('newpagetext2', isset($newpagetext2)?$newpagetext2:'', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended'),
 	"PAGEADD_FORM_MYPFS" => $pfs
 ));
 
 // Extra fields 
 if(count($extrafields)>0) 
 { 
-	$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, $newpageextrafields, 'newpage'); 
+	$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, isset($newpageextrafields)?$newpageextrafields:array(), 'newpage'); 
 } 
 
 $t->assign($extra_array); 

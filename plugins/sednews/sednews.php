@@ -56,7 +56,7 @@ $t->parse("ADMIN_HOME.ADMIN_RSS_NEWS_TAB");
 
 $sn = new XTemplate(SED_ROOT . '/plugins/sednews/sednews.tpl');	
 
-if (!$sed_rss_news)
+if (!isset($sed_rss_news))
 	{
 	$rss_content = @file_get_contents($sednews_rssfeed);
 	$sed_rss_news = sed_get_rss($rss_content);

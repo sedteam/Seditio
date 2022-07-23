@@ -34,7 +34,7 @@ sed_block($usr['auth_read']);
 
 function rev($sway)
 	{
-	if ($sway=='desc')
+	if ($sway == 'desc')
 		{ return ('asc'); }
 	else
 		{ return ('desc'); }
@@ -42,7 +42,7 @@ function rev($sway)
 
 function cursort($trigger, $way)
 	{
-	global $cfg;
+	global $out;
 	if ($trigger)
 		{		
 		if ($way == 'asc')
@@ -112,7 +112,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$s' and fp_topicid='$q'");
 		$num = sed_sql_result($sql, 0, "COUNT(*)");
 
-		if ($num<1 || $s==$ns)
+		if ($num < 1 || $s == $ns)
 			{ sed_die(); }
 
 		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
@@ -399,7 +399,7 @@ while ($fsn = sed_sql_fetchassoc($sql2))
 			$fsn['fs_newposts'] = '1';
 			}
 
-		if ($fsn['fs_lt_id']>0)
+		if ($fsn['fs_lt_id'] > 0)
 			{
 			$fsn['lastpost'] = ($usr['id'] > 0 && $fsn['fs_lt_date'] > $usr['lastvisit'] && $fsn['fs_lt_posterid'] != $usr['id']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">" : "<a href=\"".sed_url("forums","m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom")."\">";
 			$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
@@ -412,8 +412,8 @@ while ($fsn = sed_sql_fetchassoc($sql2))
 			$fsn['fs_lt_posterid'] = 0;
 			}
 
-		$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? sed_build_date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date']) : '';
-    	$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
+		$fsn['fs_lt_date'] = ($fsn['fs_lt_date'] > 0) ? sed_build_date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date']) : '';
+    	$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount'] > 9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
 	    $fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
 
 		if (!$secact_max)
@@ -426,7 +426,7 @@ while ($fsn = sed_sql_fetchassoc($sql2))
 			{
 			$secact_num = round(6.25 * $sed_sections_act[$fsn['fs_id']] / $secact_max);
 			if ($secact_num>5) { $secact_num = 5; }
-			if (!$secact_num && $sed_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
+			if (!$secact_num && $sed_sections_act[$fsn['fs_id']] > 1) { $secact_num = 1; }
 			$section_activity_img = "<img src=\"skins/".$skin."/img/system/activity".$secact_num.".gif\" alt=\"\" />";
 			}
 		$fs_num++;
@@ -471,7 +471,7 @@ while ($fsn = sed_sql_fetchassoc($sql2))
   
 /* ========================================*/
 
-
+$ft_num = 0;
 while ($row = sed_sql_fetchassoc($sql))
 	{
 	$row['ft_icon'] = 'posts';
@@ -479,10 +479,10 @@ while ($row = sed_sql_fetchassoc($sql))
 	$row['ft_pages'] = '';
 	$ft_num++;
 
-	if ($row['ft_mode']==1)
+	if ($row['ft_mode'] == 1)
 		{ $row['ft_title'] = "# ".$row['ft_title']; }
 
-	if ($row['ft_movedto']>0)
+	if ($row['ft_movedto'] > 0)
 		{
 		$row['ft_url'] = sed_url("forums", "m=posts&q=".$row['ft_movedto']);
 		$row['ft_icon'] = $out['ic_posts_moved'];
@@ -498,18 +498,18 @@ while ($row = sed_sql_fetchassoc($sql))
 	else
 		{
 		$row['ft_url'] = sed_url("forums", "m=posts&q=".$row['ft_id']);
-		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\">".$out['ic_arrow_unread']."</a>" : "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".$out['ic_arrow_follow']."</a>";
+		$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\">".$out['ic_arrow_unread']."</a>" : "<a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">".$out['ic_arrow_follow']."</a>";
 		$row['ft_lastposturl'] .= " ".sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated']);
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
-		if ($row['ft_updated']>$usr['lastvisit'] && $usr['id']>0)
+		if ($row['ft_updated'] > $usr['lastvisit'] && $usr['id'] > 0)
 			{
 			$row['ft_icon'] .= '_new';
 			$row['ft_postisnew'] = TRUE;
 			}
 
-		if ($row['ft_postcount']>=$cfg['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
+		if ($row['ft_postcount'] >= $cfg['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
 			{ $row['ft_icon'] = ($row['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot'; }
 		else
 			{
@@ -526,18 +526,20 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], sed_cc($row['ft_firstpostername']));
 
-	if ($row['ft_poll']>0)
+	if ($row['ft_poll'] > 0)
 		{ $row['ft_title'] = $L['Poll'].": ".$row['ft_title']; }
 
-	if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
+	$row['ft_maxpages'] = 0;
+	
+	if ($row['ft_postcount'] > $cfg['maxtopicsperpage'])
 		{
 		$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
 		$row['ft_pages'] = $L['Pages'].":";
 		for ($a = 1; $a <= $row['ft_maxpages']; $a++)
 			{
-			$row['ft_pages'] .= (is_int($a/5) || $a<10 || $a==$row['ft_maxpages']) ? " <a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&d=".($a-1) * $cfg['maxtopicsperpage'])."\">".$a."</a>" : '';
-   		}
-	}
+			$row['ft_pages'] .= (is_int($a/5) || $a < 10 || $a == $row['ft_maxpages']) ? " <a href=\"".sed_url("forums", "m=posts&q=".$row['ft_id']."&d=".($a-1) * $cfg['maxtopicsperpage'])."\">".$a."</a>" : '';
+			}
+		}
 
 	$t-> assign(array(
 		"FORUMS_TOPICS_ROW_ID" => $row['ft_id'],

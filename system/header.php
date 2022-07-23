@@ -26,6 +26,8 @@ $out['logstatus'] = ($usr['id']>0) ? $L['hea_youareloggedas'].' '.$usr['name'] :
 $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url("users")."\">".$L['hea_users']."</a>" : '';
 $out['metas'] = sed_htmlmetas($out['subdesc'], $out['subkeywords']).$moremetas;
 $out['compopup'] = sed_javascript($morejavascript);
+$out['pmreminder'] = '';
+$out['adminpanel'] = '';
 
 /**/
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}');

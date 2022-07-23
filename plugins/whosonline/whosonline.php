@@ -40,11 +40,11 @@ $row = sed_sql_fetcharray($sql3);
 $maxusers = $row[0];
 $visitornum = 0;
 
-$plugin_body .= $L['plu_mostonline'].$maxusers.".<br />";
+$plugin_body = $L['plu_mostonline'].$maxusers.".<br />";
 $plugin_body .= $L['plu_therescurrently'].$total2.$L['plu_visitors'].$total1.$L['plu_members']."<br />&nbsp;<br /><table class=\"cells striped\">";
 
 	$plugin_body .= "<tr>";
-	$plugin_body .= ($cfg_showavatars) ? "<td class=\"coltop\">".$user_avatar."</td>" : '';
+	$plugin_body .= ($cfg_showavatars) ? "<td class=\"coltop\"></td>" : '';
 	$plugin_body .= "<td class=\"coltop\">".$L['User']."</td>";
 	$plugin_body .= "<td class=\"coltop\">".$L['Group']."</td>";
 	$plugin_body .= "<td class=\"coltop\">".$L['Country']."</td>";
