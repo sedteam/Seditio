@@ -3238,7 +3238,7 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 				$ii=1;
 				while (!empty($linex[$ii]))
 					{
-					$result[$linex[0]] .= trim($linex[$ii]);
+					@$result[$linex[0]] .= trim($linex[$ii]);
 					$ii++;
 					}
 				}
@@ -5654,7 +5654,7 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data)
             break;
              
             case "radio": 
-                $t2 = $row['terms'][$data[$rowname.'_'.$row['code']]];
+                $t2 = isset($row['terms'][$data[$rowname.'_'.$row['code']]]) ? $row['terms'][$data[$rowname.'_'.$row['code']]] : "";
             break; 
         } 
         

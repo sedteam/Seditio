@@ -41,7 +41,8 @@ function sed_auth_getvalue($mask)
 	$mn['A'] = 128;
 
 	$masks = str_split($mask);
-
+	$res = 0;
+	
 	foreach($mn as $k => $v)
 		{
 		if (in_array($k, $masks))
@@ -359,164 +360,162 @@ function sed_loadcharsets()
  */ 
 function sed_loadconfigmap()
 	{
-$result = array();
-$result[] = array ('main', '01', 'maintitle', 1, 'Title of your site', '');
-$result[] = array ('main', '02', 'subtitle', 1, 'Subtitle', '');
-$result[] = array ('main', '03', 'mainurl', 1, 'http://www.yourdomain.com', '');
-$result[] = array ('main', '03', 'multihost', 3, '1', '');    // New in v175
-$result[] = array ('main', '04', 'absurls', 3, '0', '');   // New in v175
-$result[] = array ('main', '04', 'sefurls', 3, '1', '');   // New in v175
-$result[] = array ('main', '04', 'sefurls301', 3, '0', '');   // New in v175
-$result[] = array ('main', '04', 'adminemail', 1, 'admin@mysite.com', '');
-$result[] = array ('main', '05', 'clustermode', 3, '0', '');
-$result[] = array ('main', '05', 'hostip', 1, '999.999.999.999', '');
-$result[] = array ('main', '06', 'cache', 3, '1', '');
-$result[] = array ('main', '06', 'gzip', 3, '1', '');
-$result[] = array ('main', '07', 'devmode', 3, '0', '');
-$result[] = array ('main', '10', 'cookiedomain', 1, '', '');
-$result[] = array ('main', '10', 'cookiepath', 1, '', '');
-$result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));
-$result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
+	$result = array();
+	$result[] = array ('main', '01', 'maintitle', 1, 'Title of your site', '');
+	$result[] = array ('main', '02', 'subtitle', 1, 'Subtitle', '');
+	$result[] = array ('main', '03', 'mainurl', 1, 'http://www.yourdomain.com', '');
+	$result[] = array ('main', '03', 'multihost', 3, '1', '');    // New in v175
+	$result[] = array ('main', '04', 'absurls', 3, '0', '');   // New in v175
+	$result[] = array ('main', '04', 'sefurls', 3, '1', '');   // New in v175
+	$result[] = array ('main', '04', 'sefurls301', 3, '0', '');   // New in v175
+	$result[] = array ('main', '04', 'adminemail', 1, 'admin@mysite.com', '');
+	$result[] = array ('main', '05', 'clustermode', 3, '0', '');
+	$result[] = array ('main', '05', 'hostip', 1, '999.999.999.999', '');
+	$result[] = array ('main', '06', 'cache', 3, '1', '');
+	$result[] = array ('main', '06', 'gzip', 3, '1', '');
+	$result[] = array ('main', '07', 'devmode', 3, '0', '');
+	$result[] = array ('main', '10', 'cookiedomain', 1, '', '');
+	$result[] = array ('main', '10', 'cookiepath', 1, '', '');
+	$result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));
+	$result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
 
-$result[] = array ('main', '13', 'ajax', 3, '0', ''); //Sed 175
-$result[] = array ('main', '14', 'enablemodal', 3, '0', ''); //Sed 175
+	$result[] = array ('main', '13', 'ajax', 3, '0', ''); //Sed 175
+	$result[] = array ('main', '14', 'enablemodal', 3, '0', ''); //Sed 175
 
-$result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
-$result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
-$result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));
-$result[] = array ('main', '21', 'maintenance', 3, '0', ''); //Sed 175
-$result[] = array ('main', '22', 'maintenancelevel', 2, '95', array(0,1,2,3,4,5,7,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,99)); //Sed 175
-$result[] = array ('main', '23', 'maintenancereason', 1, 'The site is in maintenance mode!', ''); //Sed 175
+	$result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
+	$result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
+	$result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));
+	$result[] = array ('main', '21', 'maintenance', 3, '0', ''); //Sed 175
+	$result[] = array ('main', '22', 'maintenancelevel', 2, '95', array(0,1,2,3,4,5,7,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,99)); //Sed 175
+	$result[] = array ('main', '23', 'maintenancereason', 1, 'The site is in maintenance mode!', ''); //Sed 175
 
-$result[] = array ('time', '11', 'dateformat', 1, 'Y-m-d H:i', '');
-$result[] = array ('time', '11', 'formatmonthday', 1, 'm-d', '');
-$result[] = array ('time', '11', 'formatyearmonthday', 1, 'Y-m-d', '');
-$result[] = array ('time', '11', 'formatmonthdayhourmin', 1, 'm-d H:i', '');
-$result[] = array ('time', '11', 'servertimezone', 1, '0', '');
-$result[] = array ('time', '12', 'defaulttimezone', 1, '0', '');
-$result[] = array ('time', '14', 'timedout', 2, '1200', array(30,60,120,300,600,900,1200,1800,2400,3600));
+	$result[] = array ('time', '11', 'dateformat', 1, 'Y-m-d H:i', '');
+	$result[] = array ('time', '11', 'formatmonthday', 1, 'm-d', '');
+	$result[] = array ('time', '11', 'formatyearmonthday', 1, 'Y-m-d', '');
+	$result[] = array ('time', '11', 'formatmonthdayhourmin', 1, 'm-d H:i', '');
+	$result[] = array ('time', '11', 'servertimezone', 1, '0', '');
+	$result[] = array ('time', '12', 'defaulttimezone', 1, '0', '');
+	$result[] = array ('time', '14', 'timedout', 2, '1200', array(30,60,120,300,600,900,1200,1800,2400,3600));
 
-$result[] = array ('meta', '01', 'defaulttitle', 1, '{MAINTITLE} - {SUBTITLE}', '');  //Sed 175
-$result[] = array ('meta', '02', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-$result[] = array ('meta', '03', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-$result[] = array ('meta', '04', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-$result[] = array ('meta', '05', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-$result[] = array ('meta', '06', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-$result[] = array ('meta', '07', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-$result[] = array ('meta', '08', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-$result[] = array ('meta', '09', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '01', 'defaulttitle', 1, '{MAINTITLE} - {SUBTITLE}', '');  //Sed 175
+	$result[] = array ('meta', '02', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+	$result[] = array ('meta', '03', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+	$result[] = array ('meta', '04', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '05', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '06', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+	$result[] = array ('meta', '07', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '08', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '09', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
 
-$result[] = array ('skin', '02', 'forcedefaultskin', 3, '1', '');
-$result[] = array ('skin', '04', 'doctypeid', 4, '8', '');
-$result[] = array ('skin', '06', 'charset', 4, 'UTF-8', '');
-$result[] = array ('skin', '08', 'metakeywords', 1, '', '');
-$result[] = array ('skin', '08', 'separator', 1, '&raquo;', '');
-$result[] = array ('skin', '15', 'disablesysinfos', 3, '1', '');
-$result[] = array ('skin', '15', 'keepcrbottom', 3, '1', '');
-$result[] = array ('skin', '15', 'showsqlstats', 3, '0', '');
-$result[] = array ('skin', '16', 'defskin', 7, '', '');
-$result[] = array ('lang', '10', 'forcedefaultlang', 3, '0',  '');
-$result[] = array ('menus', '10', 'topline', 0, '', '');
-$result[] = array ('menus', '10', 'banner', 0, '', '');
-$result[] = array ('menus', '10', 'bottomline', 0, '', '');
-$result[] = array ('menus', '15', 'menu1', 0, '<ul><li><a href="/">Home</a></li><li><a href="/forums/">Forums</a></li><li><a href="/articles/">Articles</a></li><li><a href="/gallery/">Galleries</a></li><li><a href="/plug/contact">Contact</a></li></ul>', '');
-$result[] = array ('menus', '15', 'menu2', 0, '',  '');
-$result[] = array ('menus', '15', 'menu3', 0, '', '');
-$result[] = array ('menus', '15', 'menu4', 0, '', '');
-$result[] = array ('menus', '15', 'menu5', 0, '', '');
-$result[] = array ('menus', '15', 'menu6', 0, '', '');
-$result[] = array ('menus', '15', 'menu7', 0, '', '');
-$result[] = array ('menus', '15', 'menu8', 0, '', '');
-$result[] = array ('menus', '15', 'menu9', 0, '', '');
-$result[] = array ('menus', '20', 'freetext1', 0, '', '');
-$result[] = array ('menus', '20', 'freetext2', 0, '', '');
-$result[] = array ('menus', '20', 'freetext3', 0, '', '');
-$result[] = array ('menus', '20', 'freetext4', 0, '', '');
-$result[] = array ('menus', '20', 'freetext5', 0, '', '');
-$result[] = array ('menus', '20', 'freetext6', 0, '', '');
-$result[] = array ('menus', '20', 'freetext7', 0, '', '');
-$result[] = array ('menus', '20', 'freetext8', 0, '', '');
-$result[] = array ('menus', '20', 'freetext9', 0, '', '');
-$result[] = array ('comments', '01', 'disable_comments', 3, '0', '');
-$result[] = array ('comments', '04', 'showcommentsonpage', 3, '0', ''); //New v172
-$result[] = array ('comments', '05', 'maxcommentsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90)); //New v173
-$result[] = array ('comments', '06', 'maxtimeallowcomedit', 2, '15', array(0,5,10,15,20,25,30,35,40,45,50,60,70,80,90)); //New v173
-$result[] = array ('comments', '07', 'maxcommentlenght', 1, '2000', '');
-$result[] = array ('comments', '10', 'countcomments', 3, '1', '');
-$result[] = array ('comments', '11', 'commentsorder', 2, 'ASC', array('ASC','DESC')); //New v173
-$result[] = array ('forums', '01', 'disable_forums', 3, '0', '');
-$result[] = array ('forums', '10', 'hideprivateforums', 3, '0', '');
-$result[] = array ('forums', '10', 'hottopictrigger', 2, '20', array(5,10,15,20,25,30,35,40,50));
-$result[] = array ('forums', '10', 'maxtopicsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
-$result[] = array ('forums', '12', 'antibumpforums', 3, '0', '');
-$result[] = array ('page', '01', 'disable_page', 3, '0', '');
-$result[] = array ('page', '03', 'showpagesubcatgroup', 3, '0', '');
-$result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
-$result[] = array ('page', '06', 'genseourls', 3, '1', '');   // New in v178
-$result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
-$result[] = array ('pfs', '02', 'pfs_filemask', 3, '0', '');
-// $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
-$result[] = array ('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled','GD1','GD2'));
-$result[] = array ('pfs', '10', 'th_x', 2, '112', '');
-$result[] = array ('pfs', '10', 'th_y', 2, '84', '');
-$result[] = array ('pfs', '10', 'th_border', 2, '0', '');
-$result[] = array ('pfs', '10', 'th_dimpriority', 2, 'Width', array('Width','Height'));
-$result[] = array ('pfs', '10', 'th_keepratio', 3, '1', '');
-$result[] = array ('pfs', '10', 'th_jpeg_quality', 2, '85', array(0,5,10,20,30,40,50,60,70,75,80,85,90,95,100));
-$result[] = array ('pfs', '10', 'th_colorbg', 2, '000000', '');
-$result[] = array ('pfs', '10', 'th_colortext', 2, 'FFFFFF', '');
-$result[] = array ('pfs', '10', 'th_rel', 2, 'sedthumb', '');
-$result[] = array ('pfs', '10', 'th_textsize', 2, '0', array(0,1,2,3,4,5));
-// ---- New in v173
-$result[] = array ('rss', '01', 'disable_rss', 3, '0', '');
-$result[] = array ('rss', '02', 'disable_rsspages', 3, '0', '');
-$result[] = array ('rss', '03', 'disable_rsscomments', 3, '0', '');
-$result[] = array ('rss', '04', 'disable_rssforums', 3, '0', '');
-$result[] = array ('rss', '05', 'rss_timetolive', 2, '300', '');
-$result[] = array ('rss', '06', 'rss_maxitems', 2, '30', array(0,5,10,20,30,40,50,60,70,75,80,85,90,95,100));
-$result[] = array ('rss', '07', 'rss_defaultcode', 2, 'news', '');
-// ----
-$result[] = array ('gallery', '01', 'disable_gallery', 3, '0', '');
-$result[] = array ('gallery', '10', 'gallery_gcol', 2, '4', '');      
-$result[] = array ('gallery', '11', 'gallery_bcol', 2, '6', ''); 
-$result[] = array ('gallery', '12', 'gallery_imgmaxwidth', 2, '600', '');
-$result[] = array ('gallery', '20', 'gallery_logofile', 1, '', '');
-$result[] = array ('gallery', '21', 'gallery_logopos', 2, 'Bottom left', array('Top left','Top right','Bottom left','Bottom right'));      
-$result[] = array ('gallery', '22', 'gallery_logotrsp', 2, '50', array(0,5,10,15,20,30,40,50,60,70,80,90,95,100)); 
-$result[] = array ('gallery', '23', 'gallery_logojpegqual', 2, '90', array(0,5,10,20,30,40,50,60,70,80,90,95,100));
-$result[] = array ('plug', '01', 'disable_plug', 3, '0', '');
-$result[] = array ('pm', '01', 'disable_pm', 3, '0', '');
-$result[] = array ('pm', '10', 'pm_maxsize', 2, '10000', array(200,500,1000,2000, 5000,10000,15000,20000,30000,50000,65000));
-$result[] = array ('pm', '10', 'pm_allownotifications', 3, '1', '');
-$result[] = array ('polls', '01', 'disable_polls', 3, '0', '');
-$result[] = array ('ratings', '01', 'disable_ratings', 3, '0', '');
-$result[] = array ('trash', '01', 'trash_prunedelay', 2, '7', array(0,1,2,3,4,5,7,10,15,20,30,45,60,90,120));
-$result[] = array ('trash', '10', 'trash_comment', 3, '1', '');
-$result[] = array ('trash', '11', 'trash_forum', 3, '1', '');
-$result[] = array ('trash', '12', 'trash_page', 3, '1', '');
-$result[] = array ('trash', '13', 'trash_pm', 3, '1', '');
-$result[] = array ('trash', '14', 'trash_user', 3, '1', '');
-$result[] = array ('users', '01', 'disablereg', 3, '0', '');
-$result[] = array ('users', '02', 'defaultcountry', 2, '', '');
-$result[] = array ('users', '03', 'disablewhosonline', 3, '0', '');
-$result[] = array ('users', '05', 'maxusersperpage', 2, '50', array(5,10,15,20,25,30,35,40,45,50,75,100,150,200));
-$result[] = array ('users', '07', 'regrequireadmin', 3, '0',  '');
-$result[] = array ('users', '10', 'regnoactivation', 3, '0', '');
-$result[] = array ('users', '10', 'useremailchange', 3, '0', '');
-$result[] = array ('users', '10', 'usertextimg', 3, '0', '');
-$result[] = array ('users', '10', 'color_group', 3, '0', '');   //new in v175
-$result[] = array ('users', '12', 'av_maxsize', 2, '64000', '');
-$result[] = array ('users', '12', 'av_maxx', 2, '128', '');
-$result[] = array ('users', '12', 'av_maxy', 2, '128', '');
-$result[] = array ('users', '12', 'usertextmax', 2, '300', '');
-$result[] = array ('users', '13', 'sig_maxsize', 2, '64000', '');
-$result[] = array ('users', '13', 'sig_maxx', 2, '640', '');
-$result[] = array ('users', '13', 'sig_maxy', 2, '100', '');
-$result[] = array ('users', '14', 'ph_maxsize', 2, '64000', '');
-$result[] = array ('users', '14', 'ph_maxx', 2, '256', '');
-$result[] = array ('users', '14', 'ph_maxy', 2, '256', '');
-
-
+	$result[] = array ('skin', '02', 'forcedefaultskin', 3, '1', '');
+	$result[] = array ('skin', '04', 'doctypeid', 4, '8', '');
+	$result[] = array ('skin', '06', 'charset', 4, 'UTF-8', '');
+	$result[] = array ('skin', '08', 'metakeywords', 1, '', '');
+	$result[] = array ('skin', '08', 'separator', 1, '&raquo;', '');
+	$result[] = array ('skin', '15', 'disablesysinfos', 3, '1', '');
+	$result[] = array ('skin', '15', 'keepcrbottom', 3, '1', '');
+	$result[] = array ('skin', '15', 'showsqlstats', 3, '0', '');
+	$result[] = array ('skin', '16', 'defskin', 7, '', '');
+	$result[] = array ('lang', '10', 'forcedefaultlang', 3, '0',  '');
+	$result[] = array ('menus', '10', 'topline', 0, '', '');
+	$result[] = array ('menus', '10', 'banner', 0, '', '');
+	$result[] = array ('menus', '10', 'bottomline', 0, '', '');
+	$result[] = array ('menus', '15', 'menu1', 0, '<ul><li><a href="/">Home</a></li><li><a href="/forums/">Forums</a></li><li><a href="/articles/">Articles</a></li><li><a href="/gallery/">Galleries</a></li><li><a href="/plug/contact">Contact</a></li></ul>', '');
+	$result[] = array ('menus', '15', 'menu2', 0, '',  '');
+	$result[] = array ('menus', '15', 'menu3', 0, '', '');
+	$result[] = array ('menus', '15', 'menu4', 0, '', '');
+	$result[] = array ('menus', '15', 'menu5', 0, '', '');
+	$result[] = array ('menus', '15', 'menu6', 0, '', '');
+	$result[] = array ('menus', '15', 'menu7', 0, '', '');
+	$result[] = array ('menus', '15', 'menu8', 0, '', '');
+	$result[] = array ('menus', '15', 'menu9', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext1', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext2', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext3', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext4', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext5', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext6', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext7', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext8', 0, '', '');
+	$result[] = array ('menus', '20', 'freetext9', 0, '', '');
+	$result[] = array ('comments', '01', 'disable_comments', 3, '0', '');
+	$result[] = array ('comments', '04', 'showcommentsonpage', 3, '0', ''); //New v172
+	$result[] = array ('comments', '05', 'maxcommentsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90)); //New v173
+	$result[] = array ('comments', '06', 'maxtimeallowcomedit', 2, '15', array(0,5,10,15,20,25,30,35,40,45,50,60,70,80,90)); //New v173
+	$result[] = array ('comments', '07', 'maxcommentlenght', 1, '2000', '');
+	$result[] = array ('comments', '10', 'countcomments', 3, '1', '');
+	$result[] = array ('comments', '11', 'commentsorder', 2, 'ASC', array('ASC','DESC')); //New v173
+	$result[] = array ('forums', '01', 'disable_forums', 3, '0', '');
+	$result[] = array ('forums', '10', 'hideprivateforums', 3, '0', '');
+	$result[] = array ('forums', '10', 'hottopictrigger', 2, '20', array(5,10,15,20,25,30,35,40,50));
+	$result[] = array ('forums', '10', 'maxtopicsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
+	$result[] = array ('forums', '12', 'antibumpforums', 3, '0', '');
+	$result[] = array ('page', '01', 'disable_page', 3, '0', '');
+	$result[] = array ('page', '03', 'showpagesubcatgroup', 3, '0', '');
+	$result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
+	$result[] = array ('page', '06', 'genseourls', 3, '1', '');   // New in v178
+	$result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
+	$result[] = array ('pfs', '02', 'pfs_filemask', 3, '0', '');
+	// $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
+	$result[] = array ('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled','GD1','GD2'));
+	$result[] = array ('pfs', '10', 'th_x', 2, '112', '');
+	$result[] = array ('pfs', '10', 'th_y', 2, '84', '');
+	$result[] = array ('pfs', '10', 'th_border', 2, '0', '');
+	$result[] = array ('pfs', '10', 'th_dimpriority', 2, 'Width', array('Width','Height'));
+	$result[] = array ('pfs', '10', 'th_keepratio', 3, '1', '');
+	$result[] = array ('pfs', '10', 'th_jpeg_quality', 2, '85', array(0,5,10,20,30,40,50,60,70,75,80,85,90,95,100));
+	$result[] = array ('pfs', '10', 'th_colorbg', 2, '000000', '');
+	$result[] = array ('pfs', '10', 'th_colortext', 2, 'FFFFFF', '');
+	$result[] = array ('pfs', '10', 'th_rel', 2, 'sedthumb', '');
+	$result[] = array ('pfs', '10', 'th_textsize', 2, '0', array(0,1,2,3,4,5));
+	// ---- New in v173
+	$result[] = array ('rss', '01', 'disable_rss', 3, '0', '');
+	$result[] = array ('rss', '02', 'disable_rsspages', 3, '0', '');
+	$result[] = array ('rss', '03', 'disable_rsscomments', 3, '0', '');
+	$result[] = array ('rss', '04', 'disable_rssforums', 3, '0', '');
+	$result[] = array ('rss', '05', 'rss_timetolive', 2, '300', '');
+	$result[] = array ('rss', '06', 'rss_maxitems', 2, '30', array(0,5,10,20,30,40,50,60,70,75,80,85,90,95,100));
+	$result[] = array ('rss', '07', 'rss_defaultcode', 2, 'news', '');
+	// ----
+	$result[] = array ('gallery', '01', 'disable_gallery', 3, '0', '');
+	$result[] = array ('gallery', '10', 'gallery_gcol', 2, '4', '');      
+	$result[] = array ('gallery', '11', 'gallery_bcol', 2, '6', ''); 
+	$result[] = array ('gallery', '12', 'gallery_imgmaxwidth', 2, '600', '');
+	$result[] = array ('gallery', '20', 'gallery_logofile', 1, '', '');
+	$result[] = array ('gallery', '21', 'gallery_logopos', 2, 'Bottom left', array('Top left','Top right','Bottom left','Bottom right'));      
+	$result[] = array ('gallery', '22', 'gallery_logotrsp', 2, '50', array(0,5,10,15,20,30,40,50,60,70,80,90,95,100)); 
+	$result[] = array ('gallery', '23', 'gallery_logojpegqual', 2, '90', array(0,5,10,20,30,40,50,60,70,80,90,95,100));
+	$result[] = array ('plug', '01', 'disable_plug', 3, '0', '');
+	$result[] = array ('pm', '01', 'disable_pm', 3, '0', '');
+	$result[] = array ('pm', '10', 'pm_maxsize', 2, '10000', array(200,500,1000,2000, 5000,10000,15000,20000,30000,50000,65000));
+	$result[] = array ('pm', '10', 'pm_allownotifications', 3, '1', '');
+	$result[] = array ('polls', '01', 'disable_polls', 3, '0', '');
+	$result[] = array ('ratings', '01', 'disable_ratings', 3, '0', '');
+	$result[] = array ('trash', '01', 'trash_prunedelay', 2, '7', array(0,1,2,3,4,5,7,10,15,20,30,45,60,90,120));
+	$result[] = array ('trash', '10', 'trash_comment', 3, '1', '');
+	$result[] = array ('trash', '11', 'trash_forum', 3, '1', '');
+	$result[] = array ('trash', '12', 'trash_page', 3, '1', '');
+	$result[] = array ('trash', '13', 'trash_pm', 3, '1', '');
+	$result[] = array ('trash', '14', 'trash_user', 3, '1', '');
+	$result[] = array ('users', '01', 'disablereg', 3, '0', '');
+	$result[] = array ('users', '02', 'defaultcountry', 2, '', '');
+	$result[] = array ('users', '03', 'disablewhosonline', 3, '0', '');
+	$result[] = array ('users', '05', 'maxusersperpage', 2, '50', array(5,10,15,20,25,30,35,40,45,50,75,100,150,200));
+	$result[] = array ('users', '07', 'regrequireadmin', 3, '0',  '');
+	$result[] = array ('users', '10', 'regnoactivation', 3, '0', '');
+	$result[] = array ('users', '10', 'useremailchange', 3, '0', '');
+	$result[] = array ('users', '10', 'usertextimg', 3, '0', '');
+	$result[] = array ('users', '10', 'color_group', 3, '0', '');   //new in v175
+	$result[] = array ('users', '12', 'av_maxsize', 2, '64000', '');
+	$result[] = array ('users', '12', 'av_maxx', 2, '128', '');
+	$result[] = array ('users', '12', 'av_maxy', 2, '128', '');
+	$result[] = array ('users', '12', 'usertextmax', 2, '300', '');
+	$result[] = array ('users', '13', 'sig_maxsize', 2, '64000', '');
+	$result[] = array ('users', '13', 'sig_maxx', 2, '640', '');
+	$result[] = array ('users', '13', 'sig_maxy', 2, '100', '');
+	$result[] = array ('users', '14', 'ph_maxsize', 2, '64000', '');
+	$result[] = array ('users', '14', 'ph_maxx', 2, '256', '');
+	$result[] = array ('users', '14', 'ph_maxy', 2, '256', '');
 	return($result);
 	}
 
@@ -588,7 +587,7 @@ function sed_plugin_install($pl)
 		$res .= "<strong>Looking for parts...</strong><br />";
 		while ($f = readdir($handle))
 			{
-			if ($f != "." && $f != ".." && $f!=$setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='php')
+			if ($f != "." && $f != ".." && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php')
 				{
 				$res .= "- Found : ".$f."<br />";
 				$parts[] = $f;
@@ -715,7 +714,7 @@ function sed_plugin_install($pl)
 		}
 	
 	sed_auth_reset();
-  $res .= "<strong>Resetting the auth column for all the users...</strong><br />";
+	$res .= "<strong>Resetting the auth column for all the users...</strong><br />";
 
 	$extplugin_install = "plugins/".$pl."/".$pl.".install.php";
 	$res .= "<strong>Looking for the optional PHP file : ".$extplugin_install."...</strong> ";
@@ -745,11 +744,11 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 	global $db_plugins, $db_config, $db_auth, $db_users;
 
 	// New v173 Delete all plugins for upgrade mode
-	$where = ($all && $pl=="all") ? "" : " WHERE pl_code='$pl' LIMIT 1";
+	$where = ($all && $pl == "all") ? "" : " WHERE pl_code='$pl' LIMIT 1";
 
 	$sql0 = sed_sql_query("SELECT * FROM $db_plugins".$where);
 	while($row = sed_sql_fetchassoc($sql0))
-	{
+		{
 		$pl = $row['pl_code'];		
 		$res .= "<h3>Removing : plugins/".$pl."</h3>"; 
 		$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
@@ -774,7 +773,7 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 			}
 		else
 			{ $res .= "Not found.<br />"; 	}		
-	}
+		}
 	sed_cache_clearall();
 	return ($res);
 	}
@@ -815,7 +814,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 
 	if (!empty($title) && !empty($code) && !empty($path) && $code!='all')
 		{
-    $code = sed_replacespace($code);  //New in175
+		$code = sed_replacespace($code);  //New in175
     
 		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
 		if (sed_sql_numrows($sql)==0)

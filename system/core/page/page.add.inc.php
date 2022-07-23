@@ -38,7 +38,7 @@ $extrafields = sed_extrafield_get('pages');
 $number_of_extrafields = count($extrafields);
 // ----------------------
 
-if ($a=='add')
+if ($a == 'add')
 	{
 	sed_shield_protect();
 
@@ -187,10 +187,10 @@ if ($a=='add')
 		}
 	}
 
-if (($a=='clone') && ($id > 0))
+if (($a == 'clone') && ($id > 0))
 	{		
 	$sql1 = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
-	sed_die(sed_sql_numrows($sql1)==0);
+	sed_die(sed_sql_numrows($sql1) == 0);
 	$row1 = sed_sql_fetchassoc($sql1);
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row1['page_cat']);

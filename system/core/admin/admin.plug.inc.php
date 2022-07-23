@@ -104,7 +104,7 @@ switch ($a)
 			$extplugin_file = SED_ROOT . "/plugins/".$pl."/".$x;
 			$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 			
-			$info_file['Error'] = str_replace(SED_ROOT, "", $info_file['Error']);
+			$info_file['Error'] = isset($info_file['Error']) ? str_replace(SED_ROOT, "", $info_file['Error']) : '';
 
 			if (!empty($info_file['Error']))
 				{			
@@ -367,7 +367,7 @@ switch ($a)
 						{ $part_status = 1; }
 					}
 
-				if ($cfgentries[$info['Code']] > 0)
+				if (isset($cfgentries[$info['Code']]) && $cfgentries[$info['Code']] > 0)
 					{
 					$t->assign(array(
 						"PLUG_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=plug&p=".$info['Code'])
@@ -376,13 +376,13 @@ switch ($a)
 					$t -> parse("ADMIN_PLUG.PLUG_LISTING.PLUG_LIST.PLUG_LIST_CONFIG");
 					}
 					
-				if ($plg_tools[$info['Code']])
+				if (isset($plg_tools[$info['Code']]) && $plg_tools[$info['Code']])
 					{
 					$pl_url = sed_url("admin", "m=tools&p=".$info['Code']);
 					}
 				else
 					{
-					$pl_url = ($plg_standalone[$info['Code']]) ? sed_url("plug", "e=".$info['Code']) : '';
+					$pl_url = (isset($plg_standalone[$info['Code']]) && $plg_standalone[$info['Code']]) ? sed_url("plug", "e=".$info['Code']) : '';
 					}
 				
 				if (!empty($pl_url))
