@@ -2496,8 +2496,11 @@ function sed_diemaintenance()
  */ 
 function sed_error_msg($message)
     {
-		$_SESSION[$_SERVER['REMOTE_ADDR']]++;
-        return($message);
+	if (isset($_SESSION[$_SERVER['REMOTE_ADDR']]))
+		{ $_SESSION[$_SERVER['REMOTE_ADDR']]++; }
+	else 
+		{ $_SESSION[$_SERVER['REMOTE_ADDR']] = 1; }
+	return($message);
     }
 
 /** 

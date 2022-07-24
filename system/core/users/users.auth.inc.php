@@ -24,7 +24,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if ($a=='check')
+if ($a == 'check')
 	{
 	sed_shield_protect();
 
@@ -58,15 +58,15 @@ if ($a=='check')
 
 		if ($row = sed_sql_fetchassoc($sql))
 			{
-			if ($row['user_maingrp']==2)
+			if ($row['user_maingrp'] == 2)
 				{
 				sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
 				sed_redirect(sed_url("message", "msg=152", "", true));
 				exit;
 				}
-			elseif ($row['user_maingrp']==3)
+			elseif ($row['user_maingrp'] == 3)
 				{
-				if ($sys['now'] > $row['user_banexpire'] && $row['user_banexpire']>0)
+				if ($sys['now'] > $row['user_banexpire'] && $row['user_banexpire'] > 0)
 					{
 					$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='4' WHERE user_id='".$row['user_id']."'");
 					}
@@ -85,15 +85,15 @@ if ($a=='check')
 
 			sed_sql_query("UPDATE $db_users SET user_secret = '".$rmdpass_secret."', user_lastip='".$usr['ip']."' WHERE user_id='".$row['user_id']."' LIMIT 1");
 
-			if ($rcookiettl>0 && ($cfg['authmode']==1 || $cfg['authmode']==3))
+			if ($rcookiettl > 0 && ($cfg['authmode'] == 1 || $cfg['authmode'] == 3))
 				{
-				$rcookiettl = ($rcookiettl==0) ? 604800 : $rcookiettl;
+				$rcookiettl = ($rcookiettl == 0) ? 604800 : $rcookiettl;
 				$rcookiettl = ($rcookiettl > $cfg['cookielifetime']) ? $cfg['cookielifetime'] : $rcookiettl;
 				$u = base64_encode("$ruserid:_:$rmdpass_secret:_:$rdefskin");
 				sed_setcookie($sys['site_id'], $u, time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
 
-			if ($cfg['authmode']==2 || $cfg['authmode']==3)
+			if ($cfg['authmode'] == 2 || $cfg['authmode'] == 3)
 				{
 				$_SESSION[$sys['site_id'].'_n'] = $ruserid;
 				$_SESSION[$sys['site_id'].'_p'] = $rmdpass_secret;
@@ -119,9 +119,6 @@ if ($a=='check')
 			}
 		}
 	}
-
-else
-	{ unset($redir); }
 
 $out['subtitle'] = $L['aut_logintitle'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
@@ -152,7 +149,7 @@ $t->assign(array(
 	"USERS_AUTH_SEND" => sed_url("users", "m=auth&a=check&redirect=".$redirect),
 	"USERS_AUTH_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"USERS_AUTH_USER" => sed_textbox("rusername", "", 16, 100),
-	"USERS_AUTH_PASSWORD" => sed_textbox("rpassword", "", 16, 32, "password", false, "password").$redir,
+	"USERS_AUTH_PASSWORD" => sed_textbox("rpassword", "", 16, 32, "password", false, "password"),
 	"USERS_AUTH_REGISTER" => sed_url("users", "m=register"),
 	"USERS_AUTH_LOSTPASSWORD" => sed_url("plug", "e=passrecover")
 ));

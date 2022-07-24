@@ -65,9 +65,9 @@ while ($fsn_sub = sed_sql_fetchassoc($sql2))
 
 if (!isset($sed_sections_act))
 	{
+	$sed_sections_act = array();
 	$timeback = $sys['now'] - 604800;
 	$sqlact = sed_sql_query("SELECT fs_id FROM $db_forum_sections");
-
 	while ($tmprow = sed_sql_fetchassoc($sqlact))
 		{
 		$section = $tmprow['fs_id'];
@@ -79,16 +79,14 @@ if (!isset($sed_sections_act))
 
 if (!isset($sed_sections_vw))
 	{
+	$sed_sections_vw = array();
 	$sqltmp = sed_sql_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
-
 	while ($tmprow = sed_sql_fetchassoc($sqltmp))
 		{
 		$sed_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
 		}
 	sed_cache_store('sed_sections_vw', $sed_sections_vw, 120);
 	}
-
-unset($pcat); // Whats Is ??
 
 $secact_max = max($sed_sections_act);
 

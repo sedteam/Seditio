@@ -34,10 +34,13 @@ $comments = sed_import('comments','G','BOL');
 $ratings = sed_import('ratings','G','BOL');
 $ajax = sed_import('ajax', 'G', 'BOL');
 
+$votecasted = FALSE;
+$alreadyvoted = FALSE;
+
 $vote = ($pvote) ? $pvote : $vote;
 $id = (empty($id)) ? 'viewall' : $id;
 
-$standalone = ($stndl) ? true : false;
+$standalone = ($stndl) ? TRUE : FALSE;
 $standalone_url = ($stndl) ? "&stndl=1" : "";
 
 $out['subtitle'] = $L['Polls'];
@@ -63,7 +66,6 @@ else
 		if ($row = sed_sql_fetchassoc($sql))
 			{
 			$poll_state = $row['poll_state'];
-			$poll_minlevel = $row['poll_minlevel'];
 			$poll_id = $row['poll_id'];
 			$poll_title = $row['poll_text'];
 			$poll_creationdate = $row['poll_creationdate'];
@@ -115,13 +117,13 @@ $out['subtitle'] = sed_title('polltitle', $title_tags, $title_data);
 if ($standalone)
 	{
 	sed_sendheaders();
-	
+
 	/* === Hook === */
 	$extp = sed_getextplugins('polls.stndl');
 	if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */	
-	
+
 	$polls_header1 = $cfg['doctype']."\n<html>\n<head>
 	<title>".$cfg['maintitle']."</title>".sed_htmlmetas().$moremetas.sed_javascript($morejavascript);
 	$polls_header2 = "</head>\n<body>";
