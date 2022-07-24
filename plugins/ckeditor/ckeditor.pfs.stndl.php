@@ -25,10 +25,7 @@ Order=11
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-if ( $cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes" )
-	{
-	$auto_popup_close = "window.close();";
-	}
+$auto_popup_close = ($cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes") ? "window.close();" : "";
 	
 $openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';	
 

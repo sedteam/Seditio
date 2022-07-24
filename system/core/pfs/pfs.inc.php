@@ -32,6 +32,8 @@ $L_pff_type[0] = $L['Private'];
 $L_pff_type[1] = $L['Public'];
 $L_pff_type[2] = $L['Gallery'];
 
+$more = '';
+
 if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
@@ -435,8 +437,8 @@ else
 		$pff_desc = $row1['pff_desc'];
 		$pff_type = $row1['pff_type'];
 		$pff_count = $row1['pff_count'];
-		$pff_fcount = $pff_filescount[$pff_id];
-		$pff_fsize = floor($pff_filessize[$pff_id]/1024);
+		$pff_fcount = isset($pff_filescount[$pff_id]) ? $pff_filescount[$pff_id] : 0;
+		$pff_fsize = isset($pff_filessize[$pff_id]) ? floor($pff_filessize[$pff_id]/1024) : 0;
 		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 		
@@ -473,6 +475,7 @@ else
 		$t->parse("MAIN.PFS_FOLDERS.PFS_LIST_FOLDERS");
 		
 		}
+		
 		if ($folders_count > 0) 
 			{
 			$t->assign(array(
@@ -487,6 +490,7 @@ $files_count = sed_sql_numrows($sql);
 $movebox = (empty($f)) ? sed_selectbox_folders($userid,"/","") : sed_selectbox_folders($userid,"$f","");
 $th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
 $th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
+$pfs_foldersize = 0;
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
@@ -503,7 +507,9 @@ while ($row = sed_sql_fetchassoc($sql))
 	$dotpos = mb_strrpos($pfs_file, ".") + 1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
 	
-	unset($add_thumbnail, $add_image, $add_file); 
+	$add_thumbnail = '';
+	$add_image = '';
+	$add_file = '';
 		
 	if ($pfs_extension != $pfs_realext);
 		{
@@ -513,11 +519,11 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$setassample = "";
   
-  if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
+	if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode']!='Disabled')
 		{		
-		$setassample = ($pfs_id == $pff_sample) ?  "<span class=\"dsl-icon\">".$out['ic_checked']."</span>" : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\" class=\"btn-icon\">".$out['ic_set']."</a>";    
+		$setassample = (isset($pff_sample) && $pfs_id == $pff_sample) ?  "<span class=\"dsl-icon\">".$out['ic_checked']."</span>" : "<a href=\"".sed_url("pfs", "a=setsample&id=".$pfs_id."&f=".$f."&".sed_xg()."&".$more)."\" title=\"".$L['pfs_setassample']."\" class=\"btn-icon\">".$out['ic_set']."</a>";    
 		$pfs_icon = "<a href=\"".$pfs_fullfile."\" rel=\"".$cfg['th_rel']."\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";
-		
+
 		if (!file_exists($cfg['th_dir'].$pfs_file) && file_exists($cfg['pfs_dir'].$pfs_file))
 			{
 			$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
@@ -537,8 +543,6 @@ while ($row = sed_sql_fetchassoc($sql))
 	if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) 
 		{ 
 		$add_file = "<a href=\"javascript:addfile_pageurl('".$pfs_fullfile."')\" title=\"".$L['pfs_insertaslink']."\" class=\"btn-icon\">".$out['ic_pastefile']."</a>"; 
-		$add_thumbnail = "";
-		$add_image = "";
 		} 
 		
 	$stndl_icons_list = "";
@@ -602,9 +606,11 @@ $disp_stats .= "<div class=\"bar_front\" style=\"width:".$pfs_precentbar."%;\"><
 reset($sed_extensions);
 sort($sed_extensions);
 $disp_allowedlist = array();
+
 foreach ($sed_extensions as $k => $line)
  	{ $disp_allowedlist[] = $icon[$line[0]]." .".$line[0]." (".$filedesc[$line[0]].")"; }
-$disp_allowed .= implode(", ", $disp_allowedlist);
+	
+$disp_allowed = implode(", ", $disp_allowedlist);
 
 // ========== Icons Help =========
 
@@ -718,7 +724,7 @@ $t-> assign(array(
 	"PFS_TITLE" => $title,
 	"PFS_SHORTTITLE" => $shorttitle,
 	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, !$standalone),
-	"PFS_SUBTITLE" => $subtitle,
+	"PFS_SUBTITLE" => $out['subtitle'],
 	"PFS_STATS" => $disp_stats
 ));
 
