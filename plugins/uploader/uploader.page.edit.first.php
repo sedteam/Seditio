@@ -32,7 +32,7 @@ $extraslot = $cfg['plugin']['uploader']['thumb_extra'];
 $rpageextra = 'rpage'.$extraslot;
 
 $imageuploader = sed_import('imageuploader', 'P', 'ARR');
-if (count($imageuploader) > 0)
+if (is_array($imageuploader) && count($imageuploader) > 0)
   {
     foreach ($imageuploader as $imagename)
       {  

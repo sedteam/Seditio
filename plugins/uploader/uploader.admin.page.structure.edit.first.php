@@ -29,7 +29,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $rextra = 'rthumb';
 
 $imageuploader = sed_import('imageuploader', 'P', 'ARR');
-if (count($imageuploader) > 0)
+if (is_array($imageuploader) && count($imageuploader) > 0)
   {
     foreach ($imageuploader as $imagename)
       {  
