@@ -290,11 +290,10 @@ $number_of_extrafields = count($extrafields);
 if(count($extrafields) > 0) 
 	{ 
 	$extra_array = sed_build_extrafields_data('page', 'PAGE', $extrafields, $pag);
+	$t->assign($extra_array);
 	} 
 
-$t->assign($extra_array); 
 // ----------------------
-
 
 if (!empty($pag['page_thumb']))
 	{	

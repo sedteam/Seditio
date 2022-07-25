@@ -378,8 +378,8 @@ switch ($a)
 
 	}
 
-$profile_form_skins .= sed_selectbox_skin($urr['user_skin'], 'ruserskin');
-$profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
+$profile_form_skins = sed_selectbox_skin($urr['user_skin'], 'ruserskin');
+$profile_form_langs = sed_selectbox_lang($urr['user_lang'], 'ruserlang');
 
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
@@ -397,18 +397,18 @@ $profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
 $profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
 $profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />" : sed_cc($urr['user_email']);
 
-$profile_form_avatar .= (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=avatardelete&".sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
-$profile_form_avatar .= $L['pro_avatarsupload']." (".$cfg['av_maxx']."x".$cfg['av_maxy']."x".$cfg['av_maxsize'].$L['b'].")<br />";
+$profile_form_avatar = (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=avatardelete&".sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
+$profile_form_avatar .= $L['pro_avatarsupload']." (".$cfg['av_maxx']."x".$cfg['av_maxy']."x".$cfg['av_maxsize'].$L['bytes'].")<br />";
 $profile_form_avatar .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['av_maxsize']*1024)."\" />";
 $profile_form_avatar .= "<input name=\"userfile\" type=\"file\" class=\"file\" size=\"24\" /><br />";
 
-$profile_form_photo .= (!empty($urr['user_photo'])) ? "<img src=\"".$urr['user_photo']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=phdelete&".sed_xg())."\">x</a>]" : '';
-$profile_form_photo .= $L['pro_photoupload']." (".$cfg['ph_maxx']."x".$cfg['ph_maxy']."x".$cfg['ph_maxsize'].$L['b'].")<br />";
+$profile_form_photo = (!empty($urr['user_photo'])) ? "<img src=\"".$urr['user_photo']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=phdelete&".sed_xg())."\">x</a>]" : '';
+$profile_form_photo .= $L['pro_photoupload']." (".$cfg['ph_maxx']."x".$cfg['ph_maxy']."x".$cfg['ph_maxsize'].$L['bytes'].")<br />";
 $profile_form_photo .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['ph_maxsize']*1024)."\" />";
 $profile_form_photo .= "<input name=\"userphoto\" type=\"file\" class=\"file\" size=\"24\" /><br />";
 
-$profile_form_signature .= (!empty($urr['user_signature'])) ? "<img src=\"".$urr['user_signature']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=sigdelete&".sed_xg())."\">x</a>]" : '';
-$profile_form_signature .= $L['pro_sigupload']." (".$cfg['sig_maxx']."x".$cfg['sig_maxy']."x".$cfg['sig_maxsize'].$L['b'].")<br />";
+$profile_form_signature = (!empty($urr['user_signature'])) ? "<img src=\"".$urr['user_signature']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url("users", "m=profile&a=sigdelete&".sed_xg())."\">x</a>]" : '';
+$profile_form_signature .= $L['pro_sigupload']." (".$cfg['sig_maxx']."x".$cfg['sig_maxy']."x".$cfg['sig_maxsize'].$L['bytes'].")<br />";
 $profile_form_signature .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['sig_maxsize']*1024)."\" />";
 $profile_form_signature .= "<input name=\"usersig\" type=\"file\" class=\"file\" size=\"24\" /><br />";
 
@@ -497,14 +497,12 @@ $t->assign(array(
 	"USERS_PROFILE_NEWPASS2" => sed_textbox("rnewpass2", "", 16, 32, "password", false, "password")
 ));
 
-
 // Extra fields 
 if(count($extrafields) > 0) 
 	{ 
 	$extra_array = sed_build_extrafields('user', 'USERS_PROFILE', $extrafields, $urr, 'ruser');
+	$t->assign($extra_array); 
 	} 
-
-$t->assign($extra_array); 
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');

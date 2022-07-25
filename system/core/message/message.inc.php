@@ -266,7 +266,7 @@ if($rc!='')
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 	}
 
-elseif ($rd!='')
+elseif (isset($rd) && $rd != '')
 	{
 	$moremetas .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];

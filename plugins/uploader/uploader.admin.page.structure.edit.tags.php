@@ -39,23 +39,23 @@ $use_rotation = ($cfg['plugin']['uploader']['use_rotation'] == "yes") ? 'true' :
 $uploader = new XTemplate('plugins/uploader/uploader.tpl');
 
 $first_thumb_array = rtrim($row['structure_thumb']); 
+$preload_images = '';
 
-if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') {
-  $first_thumb_array = mb_substr($first_thumb_array, 0, -1);
-}
-
-$first_thumb_array = explode(";", $first_thumb_array);
-
-$preload_images_arr = array();
-
-foreach ($first_thumb_array as $imgfile)
-    {        
-        if ($imgfile && ($imgfile != '')) $preload_images_arr[] =  "'".$imgfile."'";     
-    }
-    
-$preload_images = implode(',', $preload_images_arr);
-
-$preload_images = (count($preload_images_arr) > 0) ? "sed_uploader_attach_images: [".$preload_images."]," : "";
+if (!empty($first_thumb_array))
+	{
+	if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
+		{
+		$first_thumb_array = mb_substr($first_thumb_array, 0, -1);
+		}
+	$first_thumb_array = explode(";", $first_thumb_array);
+	$preload_images_arr = array();
+	foreach ($first_thumb_array as $imgfile)
+		{        
+		if ($imgfile && ($imgfile != '')) $preload_images_arr[] =  "'".$imgfile."'";     
+		}		
+	$preload_images = implode(',', $preload_images_arr);
+	$preload_images = (count($preload_images_arr) > 0) ? "sed_uploader_attach_images: [".$preload_images."]," : "";
+	}
 
 $uploader-> assign(array(
     "UPLOADER_PRELOAD_IMAGES" => $preload_images,

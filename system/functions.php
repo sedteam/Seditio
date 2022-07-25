@@ -1032,9 +1032,9 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 			{ $tmp[]= "<a href=\"".sed_url("forums", "c=".$x, "#".$x)."\">".sed_cc($sed_forums_str[$x]['title'])."</a>"; }
 				
 		if(is_array($parentcat))
-		{
+			{
 			$tmp[] =  "<a href=\"".sed_url("forums", "m=topics&s=".$parentcat['sectionid'])."\">".sed_cc($parentcat['title'])."</a>";
-		}
+			}
 		$tmp[]= "<a href=\"".sed_url("forums", "m=topics&s=".$sectionid)."\">".sed_cc($title)."</a>";
 		}
 	else
@@ -1043,14 +1043,14 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 			{ $tmp[]= sed_cc($sed_forums_str[$x]['title']); }
 		
 		if(is_array($parentcat))
-		{
+			{
 			$tmp[] = $parentcat['title'];
-		}
+			}
 		
 		$tmp[]= sed_cc($title);
 		}
 
-	$result = implode(' '.$cfg['separator'].' ', $tmp);
+	$result = implode(' '.$cfg['separator_symbol'].' ', $tmp);
 
 	return($result);
 	}
@@ -1158,15 +1158,16 @@ function sed_build_groupsms($userid, $edit = false, $maingrp = 0)
 
 	while ($row = sed_sql_fetchassoc($sql))
 		{ $member[$row['gru_groupid']] = true;	}
-
+	
+	$res = '';
 	foreach($sed_groups as $k => $i)
 		{
-		$checked = ($member[$k]) ? "checked=\"checked\"" : '';
-		$checked_maingrp = ($maingrp==$k) ? "checked=\"checked\"" : '';
-		$readonly = (!$edit || $k==1 || $k==2 || $k==3 || ($k==5 && $userid==1)) ? "disabled=\"disabled\"" : '';
-		$readonly_maingrp = (!$edit || $k==1 || ($k==2 && $userid==1) || ($k==3 && $userid==1)) ? "disabled=\"disabled\"" : '';
+		$checked = (isset($member[$k]) && $member[$k]) ? "checked=\"checked\"" : '';
+		$checked_maingrp = ($maingrp == $k) ? "checked=\"checked\"" : '';
+		$readonly = (!$edit || $k == 1 || $k == 2 || $k == 3 || ($k == 5 && $userid == 1)) ? "disabled=\"disabled\"" : '';
+		$readonly_maingrp = (!$edit || $k == 1 || ($k == 2 && $userid == 1) || ($k == 3 && $userid == 1)) ? "disabled=\"disabled\"" : '';
 
-		if ($member[$k] || $edit)
+		if ((isset($member[$k]) && $member[$k]) || $edit)
 			{
 			if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
 				{
@@ -1205,6 +1206,7 @@ function sed_build_ipsearch($ip)
  */ 
 function sed_build_skype($skype)
 	{
+	$result = '';
 	if (!empty($skype))
 		{
 		$skype = sed_cc($skype);
@@ -3528,13 +3530,13 @@ function sed_load_structure()
 
 		$row['structure_tpl'] = (empty($row['structure_tpl'])) ? $row['structure_code'] : $row['structure_tpl'];
 
-		if ($path2>0)
+		if ($path2 > 0)
 			{
-			$path1 = mb_substr($row['structure_path'],0,($path2));
+			$path1 = mb_substr($row['structure_path'], 0, ($path2));
 			$spath = $path[$path1]; //new sed175
 			$path[$row['structure_path']] = $path[$path1].'.'.$row['structure_code'];
 			$tpath[$row['structure_path']] = $tpath[$path1].' '.$cfg['separator_symbol'].' '.$row['structure_title'];
-			$row['structure_tpl'] = ($row['structure_tpl']=='same_as_parent') ? $parent_tpl : $row['structure_tpl'];
+			$row['structure_tpl'] = ($row['structure_tpl'] == 'same_as_parent') ? $parent_tpl : $row['structure_tpl'];
 			}
 		else
 			{

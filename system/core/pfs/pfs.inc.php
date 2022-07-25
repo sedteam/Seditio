@@ -353,6 +353,7 @@ elseif ($a == 'setsample')
 
 $f = (empty($f)) ? '0' : $f;
 
+$subtitle = '';
 $out['subtitle'] = $L['Mypfs'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
@@ -382,6 +383,9 @@ if ($standalone)
 		"PFS_STANDALONE_HEADER2" => $pfs_header2,
 		"PFS_STANDALONE_FOOTER" => $pfs_footer
 	));
+	
+	$t->parse("MAIN.PFS_STANDALONE_HEADER");
+	$t->parse("MAIN.PFS_STANDALONE_FOOTER");
 	}
 else 
 	{
@@ -724,7 +728,7 @@ $t-> assign(array(
 	"PFS_TITLE" => $title,
 	"PFS_SHORTTITLE" => $shorttitle,
 	"PFS_BREADCRUMBS" => sed_breadcrumbs($urlpaths, 1, !$standalone),
-	"PFS_SUBTITLE" => $out['subtitle'],
+	"PFS_SUBTITLE" => $subtitle,
 	"PFS_STATS" => $disp_stats
 ));
 

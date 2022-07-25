@@ -27,6 +27,8 @@ $userid = sed_import('userid','G','INT');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_write']);
 
+$more = '';
+
 if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
@@ -95,7 +97,7 @@ if ($row = sed_sql_fetchassoc($sql))
 
 $title .= " ".$cfg['separator']." ".sed_cc($pfs_file);
 
-
+$subtitle = '';
 $out['subtitle'] = $L['Mypfs']." - ".$L['Edit'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');

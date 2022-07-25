@@ -116,9 +116,8 @@ $number_of_extrafields = count($extrafields);
 if(count($extrafields) > 0) 
 	{ 
 	$extra_array = sed_build_extrafields_data('user', 'USERS_DETAILS', $extrafields, $urr);
+	$t->assign($extra_array); 
 	} 
-
-$t->assign($extra_array); 
 // ----------------------
 
 /* === Hook === */

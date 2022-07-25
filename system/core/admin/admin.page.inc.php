@@ -162,7 +162,7 @@ switch($mn)
 
 		$rtplmode_arr = array(1 => $L['adm_tpl_empty'], 3 => $L['adm_tpl_parent'], 2 => $L['adm_tpl_forced']);	
 		
-		$st_tpl .= sed_radiobox("rtplmode", $rtplmode_arr, $check_rtplmode);
+		$st_tpl = sed_radiobox("rtplmode", $rtplmode_arr, $check_rtplmode);
 				
 		$st_tpl .=  " <select name=\"rtplforced\" size=\"1\">";    
     	foreach($sed_cat as $i => $x)
@@ -253,7 +253,8 @@ switch($mn)
     
     	$skinpath = SED_ROOT . "/skins/".$skin."/";
     
-    	while ($row = sed_sql_fetchassoc($sql))
+    	$jj = 0;
+		while ($row = sed_sql_fetchassoc($sql))
     		{
     		$jj++;
     		$structure_id = $row['structure_id'];
@@ -268,9 +269,9 @@ switch($mn)
 			$structure_seo_keywords = $row['structure_seo_keywords'];
 			$structure_seo_h1 = $row['structure_seo_h1'];
     		$structure_group = $row['structure_group'];
-    		$pathfieldlen = (mb_strpos($structure_path, ".")==0) ? 3 : 9;
-    		$pathfieldimg = (mb_strpos($structure_path, ".")==0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
-    		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? "0" : $pagecount[$structure_code];
+    		$pathfieldlen = (mb_strpos($structure_path, ".") == 0) ? 3 : 9;
+    		$pathfieldimg = (mb_strpos($structure_path, ".") == 0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
+    		$pagecount[$structure_code] = (isset($pagecount[$structure_code]) && $pagecount[$structure_code]) ? $pagecount[$structure_code] : "0";
     
     		if (empty($row['structure_tpl']))
     			{ $structure_tpl_sym = $L['adm_tpl_empty']; }
@@ -319,12 +320,12 @@ switch($mn)
 			$t->assign(array( 
 				"PAGE_STRUCTURE_SEND" => sed_url("admin", "m=page&mn=structure&a=update"),
 				"PAGE_STRUCTURE_ADD_SEND" => sed_url("admin", "m=page&mn=structure&a=add"),
-				"PAGE_STRUCTURE_ADD_CODE" => sed_textbox('ncode', $ncode, 48, 255), 
-				"PAGE_STRUCTURE_ADD_PATH" => sed_textbox('npath', $npath, 16, 16),
-				"PAGE_STRUCTURE_ADD_TITLE" => sed_textbox('ntitle', $ntitle, 48, 64),
-				"PAGE_STRUCTURE_ADD_DESC" => sed_textbox('ndesc', $ndesc, 64, 255),
-				"PAGE_STRUCTURE_ADD_ICON" => sed_textbox('nicon', $nicon, 64, 128),
-				"PAGE_STRUCTURE_ADD_THUMB" => sed_textbox('nthumb', $nicon, 64, 255),
+				"PAGE_STRUCTURE_ADD_CODE" => sed_textbox('ncode', isset($ncode)?$ncode:'', 48, 255), 
+				"PAGE_STRUCTURE_ADD_PATH" => sed_textbox('npath', isset($npath)?$npath:'', 16, 16),
+				"PAGE_STRUCTURE_ADD_TITLE" => sed_textbox('ntitle', isset($ntitle)?$ntitle:'', 48, 64),
+				"PAGE_STRUCTURE_ADD_DESC" => sed_textbox('ndesc', isset($ndesc)?$ndesc:'', 64, 255),
+				"PAGE_STRUCTURE_ADD_ICON" => sed_textbox('nicon', isset($nicon)?$nicon:'', 64, 128),
+				"PAGE_STRUCTURE_ADD_THUMB" => sed_textbox('nthumb', isset($nicon)?$nicon:'', 64, 255),
 				"PAGE_STRUCTURE_ADD_GROUP" => sed_checkbox('ngroup')
 			));
 

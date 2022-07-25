@@ -589,7 +589,7 @@ while ($row = sed_sql_fetchassoc($sql))
 
 	$adminoptions = ($usr['id'] > 0) ? "<a href=\"".sed_url("forums", "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\" class=\"btn btn-adm\">".$L['Quote']."</a>" : "&nbsp;";
 	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? " <a href=\"".sed_url("forums", "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\" class=\"btn btn-adm\">".$L['Edit']."</a>" : '';
-	$adminoptions .= ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && !($post12[0] == $row['fp_id'] && $post12[1] > 0)) ? " <a href=\"".sed_url("forums", "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\" class=\"btn btn-adm\">".$L['Delete']."</a>" : '';
+	$adminoptions .= ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && !($post12[0] == $row['fp_id'] && isset($post12[1]) && $post12[1] > 0)) ? " <a href=\"".sed_url("forums", "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\" class=\"btn btn-adm\">".$L['Delete']."</a>" : '';
 	$adminoptions .= ($fp_num == $totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
 
 	if ($usr['id'] > 0 && $n == 'unread' && !$unread_done && $row['fp_creation'] > $usr['lastvisit'])

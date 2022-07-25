@@ -368,31 +368,31 @@ $sed_urltrans['*'] = array(
 /*  Callback functions */
 
 function sed_get_pagepath(&$args, &$section) {
-   global $sys, $sed_cat;   
-   $url = "";
-   if ($sys['catcode'] != "system")
-   { 
-     $cpath = $sed_cat[$sys['catcode']]['path'];   
-     $cpath_arr = explode('.', $cpath);
-     foreach($cpath_arr as $a)
-     {
-        $url .= urlencode($a)."/";
-     }
-   }
-   return $url;          
+	global $sys, $sed_cat;   
+	$url = "";
+	if (isset($sys['catcode']) && $sys['catcode'] != "system")
+		{ 
+		$cpath = $sed_cat[$sys['catcode']]['path'];   
+		$cpath_arr = explode('.', $cpath);
+		foreach($cpath_arr as $a)
+			{
+			$url .= urlencode($a)."/";
+			}
+		}
+	return $url;          
 }
 
 function sed_get_listpath(&$args, &$section) {
-  global $sed_cat;
-  $url = '';
-  $cpath = $sed_cat[$args['c']]['path']; 
-  $cpath_arr = explode('.', $cpath);
-  foreach($cpath_arr as $a)
-   {
-      $url .= urlencode($a)."/";
-   }
-  unset($args['c']);
-  return $url;    
+	global $sed_cat;
+	$url = '';
+	$cpath = $sed_cat[$args['c']]['path']; 
+	$cpath_arr = explode('.', $cpath);
+	foreach($cpath_arr as $a)
+		{
+		$url .= urlencode($a)."/";
+		}
+	unset($args['c']);
+	return $url;    
 }
 
 function sed_get_section(&$args, &$section) {

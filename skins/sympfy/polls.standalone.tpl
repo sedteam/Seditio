@@ -1,5 +1,7 @@
 <!-- BEGIN: MAIN -->
 
+<!-- BEGIN: POLLS_STANDALONE_HEADER -->
+
 {POLLS_STANDALONE_HEADER1}
 <link href="skins/{PHP.skin}/css/framework.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/css/fonts.css" type="text/css" rel="stylesheet" />
@@ -8,6 +10,8 @@
 <link href="skins/{PHP.skin}/css/sympfy.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/css/responsive.css" type="text/css" rel="stylesheet" />
 {POLLS_STANDALONE_HEADER2}
+
+<!-- END: POLLS_STANDALONE_HEADER -->
 
 <main id="standalone">
 
@@ -47,10 +51,14 @@
 
 </main>
 
+<!-- BEGIN: POLLS_STANDALONE_HEADER -->
+
 <script src="skins/{PHP.skin}/js/jquery.min.js"></script>
 <script src="skins/{PHP.skin}/js/jquery.plugins.min.js"></script>	
 <script src="skins/{PHP.skin}/js/app.js"></script>
 
 {POLLS_STANDALONE_FOOTER}
+
+<!-- END: POLLS_STANDALONE_HEADER -->
 
 <!-- END: MAIN -->

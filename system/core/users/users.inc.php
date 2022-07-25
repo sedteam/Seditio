@@ -170,16 +170,17 @@ foreach ($sed_countries as $i => $x)
 
 $allfilters .= "</select></div>";
 $allfilters .= "<div><select name=\"bymaingroup\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"".sed_url("users")."\">".$L['Maingroup']."...";
+$grpms = '';
 foreach($sed_groups as $k => $i)
 	{
-	$selected = ($k==$g) ? "selected=\"selected\"" : '';
-	$selected1 = ($k==$gm) ? "selected=\"selected\"" : '';
+	$selected = ($k == $g) ? "selected=\"selected\"" : '';
+	$selected1 = ($k == $gm) ? "selected=\"selected\"" : '';
 	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
 		{
-		$allfilters .= ($k>1) ? "<option value=\"".sed_url("users", "g=".$k)."\" $selected> ".$sed_groups[$k]['title'] : '';
-		$allfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		$grpms .= ($k>1) ? "<option value=\"".sed_url("users", "gm=".$k)."\" $selected1> ".$sed_groups[$k]['title'] : '';
-		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+		$allfilters .= ($k > 1) ? "<option value=\"".sed_url("users", "g=".$k)."\" $selected> ".$sed_groups[$k]['title'] : '';
+		$allfilters .= ($k > 1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+		$grpms .= ($k > 1) ? "<option value=\"".sed_url("users", "gm=".$k)."\" $selected1> ".$sed_groups[$k]['title'] : '';
+		$grpms .= ($k > 1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 		}
 	}
 $allfilters .= "</select></div>";
@@ -324,9 +325,8 @@ while ($urr = sed_sql_fetchassoc($sql) AND $jj < $cfg['maxusersperpage'])
 	if(count($extrafields) > 0) 
 		{ 
 		$extra_array = sed_build_extrafields_data('user', 'USERS_ROW', $extrafields, $urr);
+		$t->assign($extra_array); 
 		} 
-  
-	$t->assign($extra_array); 
 	// ----------------------		
 
 	/* === Hook - Part2 : Include === */

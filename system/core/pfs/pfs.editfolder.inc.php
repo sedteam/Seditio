@@ -32,6 +32,8 @@ $L_pff_type[0] = $L['Private'];
 $L_pff_type[1] = $L['Public'];
 $L_pff_type[2] = $L['Gallery'];
 
+$more = '';
+
 if (!$usr['isadmin'] || $userid == '')
 	{
 	$userid = $usr['id'];
@@ -81,6 +83,7 @@ if ($userid != $usr['id'])
 	sed_block($usr['isadmin']);
 	}
 
+$subtitle = '';
 $out['subtitle'] = $L['Mypfs']." - ".$L['Edit'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
@@ -92,8 +95,8 @@ $sql = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' A
 if ($row = sed_sql_fetchassoc($sql))
 	{
 	$pff_id=$row['pff_id'];
-	$pff_date = $row['pff_date'];
-	$pff_updated = $row['pff_updated'];
+	$pff_date = sed_build_date($cfg['dateformat'], $row['pff_date']);
+	$pff_updated = sed_build_date($cfg['dateformat'], $row['pff_updated']);
 	$pff_title = $row['pff_title'];
 	$pff_desc = $row['pff_desc'];
 	$pff_type = $row['pff_type'];
@@ -103,15 +106,15 @@ if ($row = sed_sql_fetchassoc($sql))
 else
 	{ sed_die(); }
 
-if ($a=='update' && !empty($f))
+if ($a == 'update' && !empty($f))
 	{
 	$rtitle = sed_import('rtitle','P','TXT');
 	$rdesc = sed_import('rdesc','P','HTM');
 	$folderid = sed_import('folderid','P','INT');
 	$rtype = sed_import('rtype','P','INT');
 	$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
-	sed_die(sed_sql_numrows($sql)==0);
-	$rtype = ($rtype==2 && !$usr['auth_write_gal']) ? 1 : $rtype;
+	sed_die(sed_sql_numrows($sql) == 0);
+	$rtype = ($rtype == 2 && !$usr['auth_write_gal']) ? 1 : $rtype;
 
 	$sql = sed_sql_query("UPDATE $db_pfs_folders SET
 		pff_title='".sed_sql_prep($rtitle)."',
@@ -123,9 +126,6 @@ if ($a=='update' && !empty($f))
 	sed_redirect(sed_url("pfs", $more, "", true));
 	exit;
 	}
-
-$row['pff_date'] = sed_build_date($cfg['dateformat'], $row['pff_date']);
-$row['pff_updated'] = sed_build_date($cfg['dateformat'], $row['pff_updated']);
 
 if ($standalone)
 	{
@@ -164,8 +164,8 @@ $t->assign(array(
 	"PFS_EDITFOLDER_SEND" => sed_url("pfs" ,"m=editfolder&a=update&f=".$pff_id."&".$more),
 	"PFS_EDITFOLDER_TITLE" => sed_textbox('rtitle', $pff_title, 56, 255),
 	"PFS_EDITFOLDER_DESC" => sed_textarea('rdesc', $pff_desc, 8, 56, 'Micro'),
-	"PFS_EDITFOLDER_DATE" => $row['pff_date'],
-	"PFS_EDITFOLDER_UPDATE" => $row['pff_updated'],
+	"PFS_EDITFOLDER_DATE" => $pff_date,
+	"PFS_EDITFOLDER_UPDATE" => $pff_updated,
 	"PFS_EDITFOLDER_TYPE" => sed_radiobox("rtype", $rtype_arr, 0)
 ));		
 

@@ -464,11 +464,9 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 	if (count($extrafields) > 0) 
 		{ 
 		$extra_array = sed_build_extrafields_data('page', 'LIST_ROW', $extrafields, $pag);
-		} 
-  
-	$t->assign($extra_array); 
-	// ----------------------				
-			
+		$t->assign($extra_array); 
+		}
+	// ----------------------			
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))

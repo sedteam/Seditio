@@ -51,6 +51,8 @@ $cfg_names = explode (",", $cfg['plugin']['contact']['recipients']);
 
 if ($a=='send')
 	{
+	$error = '';
+	
 	if (!empty($sender_tarp))
 		{ die("Error."); }
 

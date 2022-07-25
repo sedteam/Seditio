@@ -57,6 +57,6 @@ $use_xhtml = ($cfg['plugin']['jevix']['use_xhtml'] == "yes") ? true : false;
 $use_admin = (($cfg['plugin']['jevix']['use_for_admin'] == "no") && ($usr['maingrp'] == 5)) ? false : true;
 
 // Use jevix only html mode
-if ($cfg['textmode'] != "bbcode") { $v = sed_jevix($v, $filter, $use_xhtml, $use_admin); }
+$v = sed_jevix($v, $filter, $use_xhtml, $use_admin);
 
 ?>

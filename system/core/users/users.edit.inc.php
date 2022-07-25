@@ -316,8 +316,6 @@ $t->assign(array(
 	"USERS_EDIT_NAME" => $user_form_username,
 	"USERS_EDIT_FIRSTNAME" => sed_textbox('ruserfirstname', $urr['user_firstname'], 32, 100), 
 	"USERS_EDIT_LASTNAME" => sed_textbox('ruserlastname', $urr['user_lastname'], 32, 100),     
-	"USERS_EDIT_ACTIVE" => $user_form_active,
-	"USERS_EDIT_BANNED" => $user_form_banned,
 	"USERS_EDIT_SKIN" => sed_textbox('ruserskin', $urr['user_skin'], 16, 32),
 	"USERS_EDIT_LANG" => sed_textbox('ruserlang', $urr['user_lang'], 16, 32),
 	"USERS_EDIT_NEWPASS" => $user_form_pass,
@@ -347,11 +345,10 @@ $t->assign(array(
 
 // Extra fields 
 if(count($extrafields)>0) 
-{ 
+	{ 
 	$extra_array = sed_build_extrafields('user', 'USERS_EDIT', $extrafields, $urr, 'ruser');
-} 
-
-$t->assign($extra_array); 
+	$t->assign($extra_array); 
+	} 
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.tags');

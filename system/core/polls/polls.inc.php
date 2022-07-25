@@ -137,6 +137,9 @@ if ($standalone)
 		"POLLS_STANDALONE_HEADER2" => $polls_header2,
 		"POLLS_STANDALONE_FOOTER" => $polls_footer
 	));
+	
+	$t->parse("MAIN.POLLS_STANDALONE_HEADER");
+	$t->parse("MAIN.POLLS_STANDALONE_FOOTER");
 	}
 else 
 	{
