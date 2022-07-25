@@ -164,7 +164,7 @@ function get_resize_params($filename)
 function image_constrain_gd(
 	$src_file,
 	$dst_file,
-	$type = '',
+	$type,
 	$max_w,
 	$max_h,
 	$watermark = null,
@@ -351,7 +351,7 @@ function image_constrain_gd(
 function image_constrain_imagick(
 	$src_file,
 	$dst_file,
-	$type = '',
+	$type,
 	$max_w,
 	$max_h,
 	$watermark = null,

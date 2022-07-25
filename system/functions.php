@@ -5581,7 +5581,7 @@ function sed_extrafield_remove($sql_table, $name)
 /** 
  * Build extra field 
  */ 
-function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data = array(), $importrowname) 
+function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importrowname) 
 { 
     global $sed_dic; 
     
