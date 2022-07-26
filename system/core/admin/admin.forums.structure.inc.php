@@ -25,15 +25,14 @@ $id = sed_import('id','G','INT');
 $urlpaths = array();
 $urlpaths[sed_url("admin", "m=forums")] = $L['Forums'];
 $urlpaths[sed_url("admin", "m=forums&s=structure")] = $L['adm_forum_structure'];
-$admintitle = $L['adm_forum_structure'];
 
-$adminhelp = $L['adm_help_forum_structure'];
+$admintitle = $L['adm_forum_structure'];
 
 $t = new XTemplate(sed_skinfile('admin.forums.structure', true));
 
-if ($n=='options')
+if ($n == 'options')
 	{
-	if ($a=='update')
+	if ($a == 'update')
 		{
 		$rpath = sed_import('rpath','P','TXT');
 		$rtitle = sed_import('rtitle','P','TXT');
@@ -42,9 +41,9 @@ if ($n=='options')
 		$ricon = sed_import('ricon','P','TXT');
 		$rdefstate = sed_import('rdefstate','P','BOL');										
 
-	if ($rtplmode==1)
+	if ($rtplmode == 1)
 		{ $rtpl = ''; }
-	elseif ($rtplmode==3)
+	elseif ($rtplmode == 3)
 		{ $rtpl = 'same_as_parent'; }
 
 		$sql = sed_sql_query("UPDATE $db_forum_structure SET
@@ -129,7 +128,7 @@ if ($n=='options')
 else
 	{
 
-	if ($a=='update')
+	if ($a == 'update')
 		{
 		$s = sed_import('s', 'P', 'ARR');
 
@@ -145,7 +144,7 @@ else
 		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true));
 		exit;
 		}
-	elseif ($a=='add')
+	elseif ($a == 'add')
 		{
 		$g = array ('ncode','npath', 'ntitle', 'ndesc', 'nicon', 'ndefstate');
 		foreach($g as $k => $x) $$x = $_POST[$x];
@@ -162,7 +161,7 @@ else
 		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true));
 		exit;
 		}
-	elseif ($a=='delete')
+	elseif ($a == 'delete')
 		{
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
@@ -177,7 +176,8 @@ else
 		{ $sectioncount[$row['fs_category']] = $row['COUNT(*)']; }
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC");   
-
+	
+	$jj = 0;
 	while ($row = sed_sql_fetchassoc($sql))
 		{
 		$jj++;
@@ -229,12 +229,12 @@ else
 	$t->assign(array(
 		"FORUMS_STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&a=update"),
 		"FN_ADD_SEND" => sed_url("admin", "m=forums&s=structure&a=add"),
-		"FN_ADD_CODE" => sed_textbox('ncode', $ncode, 16, 16),
-		"FN_ADD_PATH" => sed_textbox('npath', $npath, 16, 16),
+		"FN_ADD_CODE" => sed_textbox('ncode', isset($ncode)?$ncode:'', 16, 16),
+		"FN_ADD_PATH" => sed_textbox('npath', isset($npath)?$npath:'', 16, 16),
 		"FN_ADD_DEFSTATE" => $fn_defstate,
-		"FN_ADD_TITLE" => sed_textbox('ntitle', $ntitle, 64, 255),
-		"FN_ADD_DESC" => sed_textbox('ndesc', $ndesc, 64, 255),
-		"FN_ADD_ICON" => sed_textbox('nicon', $nicon, 64, 255)
+		"FN_ADD_TITLE" => sed_textbox('ntitle', isset($ntitle)?$ntitle:'', 64, 255),
+		"FN_ADD_DESC" => sed_textbox('ndesc', isset($ndesc)?$ndesc:'', 64, 255),
+		"FN_ADD_ICON" => sed_textbox('nicon', isset($nicon)?$nicon:'', 64, 255)
 	));	
 	
 	$t -> parse("ADMIN_FORUMS.FORUMS_STRUCTURE"); 

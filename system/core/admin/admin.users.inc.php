@@ -148,7 +148,7 @@ switch($n)
 	if ($g > 5) {
 		$grpdisable = sed_radiobox("rdisabled", $yesno_revers_arr, $row['grp_disabled']); 
 		} 
-	else { $grpdisable .= $L['Yes']; }
+	else { $grpdisable = $L['Yes']; }
 	
 	if ($g != 4) {		
 		$grphidden = sed_radiobox("rhidden", $yesno_arr, $row['grp_hidden']);
@@ -200,7 +200,9 @@ switch($n)
 		while ($row = sed_sql_fetchassoc($sql))
 			{
 			$row['grp_hidden'] = ($row['grp_hidden']) ? '1' : '0';
-			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
+			
+			$members[$row['grp_id']] = (!isset($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
+			$members_main[$row['grp_id']] = (!isset($members_main[$row['grp_id']])) ? '0' : $members_main[$row['grp_id']];
 			
 			$t->assign(array(
 				"GROUP_LIST_ID" => $row['grp_id'],
@@ -226,7 +228,7 @@ switch($n)
 		
 		$grplevel = "<select name=\"nlevel\" size=\"1\">";
 		for ($i = 1; $i < 100; $i++)
-			{ $grplevel .= "<option value=\"$i\" $selected>".$i."</option>"; }
+			{ $grplevel .= "<option value=\"$i\">".$i."</option>"; }
 		$grplevel .= "</select>";		
 		
 		$grpdisable = sed_radiobox("ndisabled", $yesno_revers_arr, 0);

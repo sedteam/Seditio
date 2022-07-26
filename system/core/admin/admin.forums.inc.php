@@ -39,9 +39,9 @@ if (sed_auth('admin', 'a', 'A'))
 
 $t -> parse("ADMIN_FORUMS.FORUMS_BUTTONS");
 
-if ($n=='edit')
+if ($n == 'edit')
 	{
-	if ($a=='update')
+	if ($a == 'update')
 		{
 		sed_check_xg();
 		$rstate = sed_import('rstate', 'P', 'BOL');

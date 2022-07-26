@@ -100,9 +100,9 @@ while ($row = sed_sql_fetchassoc($sql))
 	$t->assign(array(
 		"BANLIST_ADD_SEND_URL" => sed_url("admin", "m=banlist&a=add&".sed_xg()),
 		"BANLIST_ADD_NEXPIRE" => sed_selectbox(0, 'nexpire', $expire_arr, false),
-		"BANLIST_ADD_IP" => sed_textbox('nbanlistip', $nbanlistip, 14, 16),
-		"BANLIST_ADD_EMAIL_MASK" => sed_textbox('nbanlistemail', $nbanlistemail, 24, 64),
-		"BANLIST_ADD_REASON" => sed_textbox('nbanlistreason', $nbanlistreason, 48, 64)
+		"BANLIST_ADD_IP" => sed_textbox('nbanlistip', isset($nbanlistip)?$nbanlistip:'', 14, 16),
+		"BANLIST_ADD_EMAIL_MASK" => sed_textbox('nbanlistemail', isset($nbanlistemail)?$nbanlistemail:'', 24, 64),
+		"BANLIST_ADD_REASON" => sed_textbox('nbanlistreason', isset($nbanlistreason)?$nbanlistreason:'', 48, 64)
 	));
 	
 $t->assign("ADMIN_BANLIST_TITLE", $admintitle);	

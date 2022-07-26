@@ -147,11 +147,11 @@ switch ($n)
 		$config_value = $row['config_value'];
 		$config_default = $row['config_default'];
 		$config_type = $row['config_type'];   
-		$config_title = $L['cfg_'.$row['config_name']][0];
+		$config_title = isset($L['cfg_'.$row['config_name']][0]) ? $L['cfg_'.$row['config_name']][0] : '';
 		$check_config_title = empty($config_title);  //fix Sed v173      
 		$config_title = (empty($config_title)) ? $row['config_name'] : $config_title;	
 		$config_text = sed_cc($row['config_text']);
-		$config_more = $L['cfg_'.$row['config_name']][1];	
+		$config_more = isset($L['cfg_'.$row['config_name']][1]) ? $L['cfg_'.$row['config_name']][1] : '';	
 		$config_more = (!empty($config_more)) ? '('.$config_more.')' : $config_more;	
 		$config_title = (!empty($config_text) && $check_config_title) ? $config_text : $config_title; //fix Sed v173 
 

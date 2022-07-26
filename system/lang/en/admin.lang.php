@@ -317,7 +317,6 @@ $L['adm_defstate_0'] = "Folded";
 $L['adm_defstate_1'] = "Unfolded";
 $L['adm_parentcat'] = "Parent category";	// New in v172	
 
-
 /* ====== IP search ====== */
 
 $L['adm_searchthisuser'] = "Search for this IP in the user database";

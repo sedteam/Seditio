@@ -25,8 +25,6 @@ $urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
 
 $admintitle = $L['adm_manage'];
 
-$adminhelp = $L['adm_help_tools'];
-
 $p = sed_import('p','G','ALP');
 
 $t = new XTemplate(sed_skinfile('admin.tools', true)); 
@@ -123,7 +121,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		$t->parse("ADMIN_TOOLS.MODULES_LIST.MODULES_LIST_RIGHTS");		
 		}
 			
-	if ($cfgentries[$row['ct_code']]>0)
+	if (isset($cfgentries[$row['ct_code']]) && $cfgentries[$row['ct_code']] > 0)
 		{
 		$t-> assign(array(
 			"MODULES_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=".$row['ct_code'])
@@ -207,7 +205,7 @@ while ($row = sed_sql_fetchassoc($sql))
 				$info['Name'] = $x[0]." : ".$L['msg907_1'];
 				}
 			
-			if ($cfgentries[$info['Code']] > 0)
+			if (isset($cfgentries[$info['Code']]) && $cfgentries[$info['Code']] > 0)
 				{
 				$t-> assign(array(	
 					"TOOLS_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=plug&p=".$info['Code'])
