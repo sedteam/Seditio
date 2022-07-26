@@ -121,10 +121,10 @@ switch($mn)
   
 	$t -> assign(array(
 		"TERM_ADD_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=add&did='.$did),
-		"TERM_ADD_TITLE" => sed_textbox('ditemtitle', $ditemtitle),
-		"TERM_ADD_CODE" => sed_textbox('ditemcode', $ditemcode),
+		"TERM_ADD_TITLE" => sed_textbox('ditemtitle', isset($ditemtitle)?$ditemtitle:''),
+		"TERM_ADD_CODE" => sed_textbox('ditemcode', isset($ditemcode)?$ditemcode:''),
 		"TERM_ADD_CHILDRENDIC" => sed_selectbox('', 'ditemchildren', $dic_list),	
-		"TERM_ADD_DEFVAL" => sed_radiobox("ditemdefval", $sed_yesno, $ditemdefval)
+		"TERM_ADD_DEFVAL" => sed_radiobox("ditemdefval", $sed_yesno, isset($ditemdefval)?$ditemdefval:'')
 	));	    
     
 	$t -> parse("ADMIN_DIC.DIC_TERMS");
@@ -225,20 +225,21 @@ switch($mn)
     for ($i = 1; $i <= 255; $i++) { $maxsize_arr[$i] = $i; }
 
     if (!empty($row['dic_extra_location']))
-      {
-        $i = 1;
-        $colname = $row['dic_code'];
-        $fieldsres = sed_sql_query("SELECT * FROM ".$cfg['sqldbprefix'].$row['dic_extra_location']." LIMIT 1"); 
-    	$isset_column = "";
-       
-        while ($i <= sed_sql_numfields($fieldsres)) 
-          { 
-            $column = sed_sql_fetchfield($fieldsres, $i);                                   
-            preg_match("#.*?_$colname$#", $column->name, $match);                       
-            if($match[0] != "") { $isset_column = $match[0]; break; }            
-            $i++; 
-          } 
-      }  
+		{
+		$i = 1;
+		$colname = $row['dic_code'];
+		$fieldsres = sed_sql_query("SELECT * FROM ".$cfg['sqldbprefix'].$row['dic_extra_location']." LIMIT 1"); 
+		$isset_column = "";
+		while ($i <= sed_sql_numfields($fieldsres)) 
+			{ 
+			$column = sed_sql_fetchfield($fieldsres, $i);                                   
+			if (preg_match("#.*?_$colname$#", $column->name, $match))                     
+				{ 
+				$isset_column = ($match[0] != "") ? $match[0] : ""; 
+				break; 
+				}
+			} 
+		}  
     
     if (!empty($isset_column))
       {
@@ -363,7 +364,7 @@ switch($mn)
 	while ($row = sed_sql_fetchassoc($sql))
 		{
 
-		if ($termcount[$row['dic_id']] < 1)
+		if (isset($termcount[$row['dic_id']]) && $termcount[$row['dic_id']] < 1)
 		  {
 		  $t -> assign(array(
 			"DIC_LIST_DELETE_URL" => sed_url("admin", "m=dic&a=delete&did=".$row['dic_id'])
@@ -380,20 +381,23 @@ switch($mn)
 		$dic_code = "<a href=\"".sed_url('admin', 'm=dic&mn=extra&did='.$row['dic_id'])."\">".$row['dic_code']."</a>";
 	   
 		if (!empty($row['dic_extra_location']))
-		  {
+			{
 			$i = 1;
 			$colname = $row['dic_code'];
 			$fieldsres = sed_sql_query("SELECT * FROM ".$cfg['sqldbprefix'].$row['dic_extra_location']." LIMIT 1"); 
 			$isset_column = "";
-		   
+
 			while ($i <= sed_sql_numfields($fieldsres)) 
-			  { 
+				{ 
 				$column = sed_sql_fetchfield($fieldsres, $i);                                   
-				preg_match("#.*?_$colname$#", $column->name, $match);                       
-				if($match[0] != "") { $dic_code .= " <strong>(".$column->table."#".$match[0].")</strong>"; break; }            
+				if (preg_match("#.*?_$colname$#", $column->name, $match))                     
+					{ 
+					$dic_code .= ($match[0] != "") ? " <strong>(".$column->table."#".$match[0].")</strong>" : ""; 
+					break; 
+					}            
 				$i++; 
-			  } 
-		  }  
+				} 
+			}  
 
 
 		$t -> assign(array(
@@ -412,7 +416,7 @@ switch($mn)
 		"DIC_ADD_VALUES" => sed_textarea('dvalues', $dvalues, 5, 60),
 		"DIC_ADD_MERA" => sed_textbox('dmera', $dmera, 8, 50),				
 		"DIC_ADD_CODE" => sed_textbox('dcode', $dcode),
-		"DIC_ADD_TYPE" => sed_selectbox($dtype, 'dtype', $dic_type),
+		"DIC_ADD_TYPE" => sed_selectbox(isset($dtype)?$dtype:'', 'dtype', $dic_type),
 		"DIC_ADD_FORM_TITLE" => sed_textbox('dformtitle', $dformtitle),		 
 		"DIC_ADD_FORM_DESC" => sed_textarea('dformdesc', $dformdesc, 5, 60),
 		"DIC_ADD_FORM_SIZE" => sed_textbox('dformsize', $dformsize, 3, 10),

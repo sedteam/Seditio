@@ -25,9 +25,11 @@ Order=10
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-$sk = sed_import('sk','G','ALP',24);
-$f = sed_import('f','G','TXT',128);
-$fb = sed_import('fb','G','TXT',128);
+$sk = sed_import('sk', 'G', 'ALP', 24);
+$f = sed_import('f', 'G', 'TXT', 128);
+$fb = sed_import('fb', 'G', 'TXT', 128);
+
+$plugin_body = '';
 
 if (!empty($sk))
   {
@@ -88,7 +90,7 @@ switch ($n)
 	closedir($handle);
 	sort($skinlist);
 	
-	if (is_array($baklist))
+	if (isset($baklist) && is_array($baklist))
 		{
 		@sort($baklist);
 		foreach($baklist as $i => $x)
@@ -103,7 +105,9 @@ switch ($n)
 	$plugin_body .= "<td class=\"coltop\" style=\"width:45%;\" colspan=\"2\">".$out['ic_checked']."=".$L['plu_makbak']." &nbsp; &nbsp; ".$out['ic_unchecked']."=".$L['plu_delbak']." &nbsp; &nbsp; ".$out['ic_reset'] ."=".$L['plu_resbak']."</td>";
 
 	$plugin_body .= "</tr>";
-	$j = 0;
+	
+	$j = 0;	
+	$total_size = 0;
 	
 	foreach($skinlist as $i => $x)
 		{
@@ -117,7 +121,7 @@ switch ($n)
 		   
 		$xbak = $x.".bak";
 		  
-		if ($backupfile[$xbak])
+		if (isset($backupfile[$xbak]) && $backupfile[$xbak])
 			{
 			$plugin_body .= "<td style=\"width:10%; text-align:center;\">";
 			$plugin_body .= "<a href=\"".sed_url("admin", "m=tools&p=skineditor&sk=".$sk."&fb=".$x."&a=delbak&".sed_xg())."\">".$out['ic_unchecked']."</a> &nbsp; ";

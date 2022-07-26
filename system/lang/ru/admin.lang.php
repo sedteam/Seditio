@@ -364,6 +364,8 @@ $L['adm_dic_extra_size'] = "Длина поля";
 
 $L['adm_dic_comma_separat'] = "(значения, разделенные через запятую)";
 
+$L['adm_help_dic'] = ""; //Need add
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Пункты меню";

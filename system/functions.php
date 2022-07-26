@@ -3046,14 +3046,14 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
  * @param bool $dieonerror Die with fatal error on wrong input 
  * @return mixed 
  */ 
-function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
+function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror=FALSE)
 	{
   global $cfg;
   
 	switch($source)
 		{
 		case 'G':
-		$v = (isset($_GET[$name])) ? $_GET[$name] :NULL;
+		$v = (isset($_GET[$name])) ? $_GET[$name] : NULL;
 		$log = TRUE;
 		break;
 
@@ -3078,31 +3078,31 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		break;
 		}
 
-	if ($v=='' || $v == NULL)
+	if ($v == '' || $v == NULL)
 		{ return($v); }
 
-	if ($maxlen>0)
+	if ($maxlen > 0)
 		{ $v = mb_substr($v, 0, $maxlen); }
 
 	$pass = FALSE;
 	$defret = NULL;
-	$filter = ($filter=='STX') ? 'TXT' : $filter;
+	$filter = ($filter == 'STX') ? 'TXT' : $filter;
 
 	switch($filter)
 		{
 		case 'INT':
-		if (is_numeric($v)==TRUE && floor($v)==$v)
+		if (is_numeric($v) == TRUE && floor($v) == $v)
 	       	{ $pass = TRUE; }
 		break;
 
 		case 'NUM':
-		if (is_numeric($v)==TRUE)
+		if (is_numeric($v) == TRUE)
 	       	{ $pass = TRUE; }
 		break;
 
 		case 'TXT':
 		$v = trim($v);
-		if (mb_strpos($v, '<')===FALSE)
+		if (mb_strpos($v, '<') === FALSE)
 	       	{ $pass = TRUE; }
 		else
 			{ $defret = str_replace('<', '&lt;', $v); }
@@ -3177,12 +3177,12 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		break;
 
 		case 'BOL':
-		if ($v=="1" || $v=="on")
+		if ($v == "1" || $v == "on")
 	       	{
 	       	$pass = TRUE;
 	       	$v = "1";
 	       	}
-		elseif ($v=="0" || $v=="off")
+		elseif ($v == "0" || $v == "off")
 	       	{
 	       	$pass = TRUE;
 	       	$v = "0";
@@ -3194,7 +3194,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		break;
 
 		case 'LVL':
-		if (is_numeric($v)==TRUE && $v>=0 && $v<=100 && floor($v)==$v)
+		if (is_numeric($v) == TRUE && $v >= 0 && $v <= 100 && floor($v) == $v)
 	       	{ $pass = TRUE; }
 		else
 			{ $defret = NULL; }
@@ -4244,7 +4244,7 @@ function sed_selectbox_countries($check,$name)
 	$result =  "<select name=\"$name\" size=\"1\">";
 	foreach($sed_countries as $i => $x)
 		{
-		$selected = ($i==$check) ? "selected=\"selected\"" : '';
+		$selected = ($i == $check) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>".$x."</option>";
 		}
 	$result .= "</select>";

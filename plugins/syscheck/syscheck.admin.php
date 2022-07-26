@@ -25,7 +25,6 @@ Order=10
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-
 $systemfiles[] = '*Core Router Launchers';
 
 $systemfiles[] = 'system/core/admin/admin.php';
@@ -273,6 +272,7 @@ $table_header .= "</tr>";
 
 $color[0] = "#bc6262";
 $color[1] = "#62bc6a";
+$plugin_body = '';
 
 foreach ($systemfiles as $file)
 	{

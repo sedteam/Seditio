@@ -29,8 +29,6 @@ $urlpaths[sed_url("admin", "m=comments")] = $L['Comments'];
 
 $admintitle = $L['Comments'];
 
-$adminhelp = $L['adm_help_comments'];
-
 if ($a == 'delete')
 	{
 	sed_check_xg();

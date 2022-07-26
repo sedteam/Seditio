@@ -28,6 +28,7 @@ Order=10
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $plugin_title = "Mass-move topics in forums";
+$plugin_body = '';
 
 $sourceid = sed_import('sourceid','P','INT');
 $targetid = sed_import('targetid','P','INT');

@@ -29,8 +29,6 @@ $urlpaths[sed_url("admin", "m=menu")] =  $L['core_menu'];
 
 $admintitle = $L['core_menu'];
 
-$adminhelp = $L['adm_help_menu'];
-
 $t = new XTemplate(sed_skinfile('admin.menu', true));
 
 switch($a)
@@ -193,18 +191,17 @@ switch($mn)
 			$parent_select .= "<option value=\"0\">---</option>\n";
 			foreach($options as $key => $val) {
 				$k = substr($key, 1);
-				$selected = ($k == $row['menu_pid']) ? " selected" : "";
-				$parent_select .= "<option value=\"".substr($key,1)."\"".$selected.">".$val."</option>\n";
+				$parent_select .= "<option value=\"".substr($key,1)."\">".$val."</option>\n";
 			}
 			$parent_select .= "</select>\n";			
 			
 			$t -> assign(array(
 				"MENU_ADD_SEND" => sed_url('admin', 'm=menu&a=add'),
 				"MENU_ADD_PARENT" => $parent_select,
-				"MENU_ADD_TITLE" => sed_textbox('mtitle', $mtitle),
-				"MENU_ADD_URL" => sed_textbox('murl', $murl),
-				"MENU_ADD_POSITION" => sed_textbox('mposition', $mposition, 3, 5),
-				"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', $mvisible)		
+				"MENU_ADD_TITLE" => sed_textbox('mtitle', isset($mtitle)?$mtitle:''),
+				"MENU_ADD_URL" => sed_textbox('murl', isset($murl)?$murl:''),
+				"MENU_ADD_POSITION" => sed_textbox('mposition', isset($mposition)?$mposition:'', 3, 5),
+				"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', isset($mvisible)?$mvisible:'')		
 			));	
 			
 			$t -> parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");

@@ -648,15 +648,15 @@ function sed_plugin_install($pl)
 
 				if (is_array($line) && !empty($line[1]) && !empty($i))
 					{
-          $j++;
-              
-          /* ===== */
-          /*  if (isset($L['setup_cfg_'.$i])) { $line[4] = $L['setup_cfg_'.$i]; }  */
-          /* ===== */
-          
-          sed_config_add('plug', $pl, $line[0], $i, $line[1], $line[3], $line[2], $line[4] );
-          $res .= "- Entry #$j : $i (".$line[1].") Installed<br />";
-			   	}
+					$j++;
+					  
+					/* ===== */
+					/*  if (isset($L['setup_cfg_'.$i])) { $line[4] = $L['setup_cfg_'.$i]; }  */
+					/* ===== */
+
+					sed_config_add('plug', $pl, $line[0], $i, $line[1], $line[3], $line[2], $line[4] );
+					$res .= "- Entry #$j : $i (".$line[1].") Installed<br />";
+					}
 				}
 			}
 		else
@@ -675,7 +675,7 @@ function sed_plugin_install($pl)
 
 	$res .= "<strong>Adding the rights for the user groups...</strong><br />";
 
-	foreach($sed_groups as $k => $v)
+	foreach ($sed_groups as $k => $v)
 		{
 		$comment = ' (Plugin setup)';
 
@@ -728,9 +728,9 @@ function sed_plugin_install($pl)
 
 	sed_auth_reorder();
 	sed_cache_clearall();
-  $res .= ($j>0) ? "<strong><a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$pl)."\">There was configuration entries, click here to open the configuration panel</a></strong><br />" : '';
-  return ($res);
-  }
+	$res .= (isset($j) && $j > 0) ? "<strong><a href=\"".sed_url("admin", "m=config&n=edit&o=plug&p=".$pl)."\">There was configuration entries, click here to open the configuration panel</a></strong><br />" : '';
+	return ($res);
+	}
   
 /** 
  * Plugin uninstall
@@ -747,6 +747,7 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 	$where = ($all && $pl == "all") ? "" : " WHERE pl_code='$pl' LIMIT 1";
 
 	$sql0 = sed_sql_query("SELECT * FROM $db_plugins".$where);
+	$res = '';
 	while($row = sed_sql_fetchassoc($sql0))
 		{
 		$pl = $row['pl_code'];		

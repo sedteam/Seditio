@@ -362,6 +362,8 @@ $L['adm_dic_extra_size'] = "Length of field";
 
 $L['adm_dic_comma_separat'] = "(values comma separated)";
 
+$L['adm_help_dic'] = ""; //Need add
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Menu items";

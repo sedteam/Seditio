@@ -67,6 +67,8 @@ if (!empty($p))
 		sed_redirect(sed_url("message", "msg=907", "", true));
 		exit;
 		}
+		
+	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
 
 	$urlpaths[sed_url("admin", "m=tools&p=".$p)] = $info['Name'];
 
@@ -89,8 +91,6 @@ if (!empty($p))
 			}
 		}
 
-	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
-
 	$t->parse("ADMIN_TOOL");
 	$adminmain .= $t -> text("ADMIN_TOOL");
 
@@ -98,45 +98,45 @@ if (!empty($p))
 else
 	{
 
-$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner!='plug' GROUP BY config_cat");
-while ($row = sed_sql_fetchassoc($sql))
-	{ $cfgentries[$row['config_cat']] = $row['COUNT(*)']; }
+	$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner!='plug' GROUP BY config_cat");
+	while ($row = sed_sql_fetchassoc($sql))
+		{ $cfgentries[$row['config_cat']] = $row['COUNT(*)']; }
 
-$sql = sed_sql_query("SELECT DISTINCT(auth_code), COUNT(*) FROM $db_auth WHERE 1 GROUP BY auth_code");
-while ($row = sed_sql_fetchassoc($sql))
-	{ $authentries[$row['auth_code']] = $row['COUNT(*)']; }
+	$sql = sed_sql_query("SELECT DISTINCT(auth_code), COUNT(*) FROM $db_auth WHERE 1 GROUP BY auth_code");
+	while ($row = sed_sql_fetchassoc($sql))
+		{ $authentries[$row['auth_code']] = $row['COUNT(*)']; }
 
-$sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'forums', 'users', 'plug', 'page', 'trash') ORDER BY ct_title ASC");
-$lines = array();
+	$sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'forums', 'users', 'plug', 'page', 'trash') ORDER BY ct_title ASC");
+	$lines = array();
 
-while ($row = sed_sql_fetchassoc($sql))
-	{	
-	$row['ct_title_loc'] = (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']];
-		
-	if ($authentries[$row['ct_code']]>0) 
-		{
+	while ($row = sed_sql_fetchassoc($sql))
+		{	
+		$row['ct_title_loc'] = (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']];
+			
+		if ($authentries[$row['ct_code']]>0) 
+			{
+			$t-> assign(array(	
+				"MODULES_LIST_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=".$row['ct_code']."&io=a")
+			));
+			$t->parse("ADMIN_TOOLS.MODULES_LIST.MODULES_LIST_RIGHTS");		
+			}
+				
+		if (isset($cfgentries[$row['ct_code']]) && $cfgentries[$row['ct_code']] > 0)
+			{
+			$t-> assign(array(
+				"MODULES_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=".$row['ct_code'])
+			));				
+			$t->parse("ADMIN_TOOLS.MODULES_LIST.MODULES_LIST_CONFIG");
+			}	
+			
 		$t-> assign(array(	
-			"MODULES_LIST_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=".$row['ct_code']."&io=a")
-		));
-		$t->parse("ADMIN_TOOLS.MODULES_LIST.MODULES_LIST_RIGHTS");		
+			"MODULES_LIST_URL" => sed_url("admin", "m=".$row['ct_code']),
+			"MODULES_LIST_CODE" => $row['ct_code'],
+			"MODULES_LIST_TITLE" => $row['ct_title_loc']
+		));	
+				
+		$t->parse("ADMIN_TOOLS.MODULES_LIST");	
 		}
-			
-	if (isset($cfgentries[$row['ct_code']]) && $cfgentries[$row['ct_code']] > 0)
-		{
-		$t-> assign(array(
-			"MODULES_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=".$row['ct_code'])
-		));				
-		$t->parse("ADMIN_TOOLS.MODULES_LIST.MODULES_LIST_CONFIG");
-		}	
-		
-	$t-> assign(array(	
-		"MODULES_LIST_URL" => sed_url("admin", "m=".$row['ct_code']),
-		"MODULES_LIST_CODE" => $row['ct_code'],
-		"MODULES_LIST_TITLE" => $row['ct_title_loc']
-	));	
-			
-	$t->parse("ADMIN_TOOLS.MODULES_LIST");	
-	}
 
 	$t->assign(array(	
 		"MODULES_LIST_BANLIST_URL" => sed_url("admin", "m=banlist")

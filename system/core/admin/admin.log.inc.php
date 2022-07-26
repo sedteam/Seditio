@@ -25,8 +25,6 @@ $urlpaths[sed_url("admin", "m=log")] =  $L['Log'];
 
 $admintitle = $L['Log'];
 
-$adminhelp = $L['adm_help_log'];
-
 $log_groups = array (
 	'all' => $L['All'],
 	'def' => $L['Default'],
