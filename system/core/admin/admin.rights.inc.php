@@ -43,10 +43,11 @@ $L['adm_code']['polls'] = $L['Polls'];
 $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 $L['adm_code']['dic'] = $L['core_dic'];
+$L['adm_code']['menu'] = $L['core_menu'];
 
 $t = new XTemplate(sed_skinfile('admin.rights', true)); 
 
-if ($a=='update')
+if ($a == 'update')
 	{
 	$ncopyrightsconf =  sed_import('ncopyrightsconf','P','BOL');
 	$ncopyrightsfrom =  sed_import('ncopyrightsfrom','P','INT');
@@ -105,7 +106,7 @@ if (is_array($extp))
 
 $sql1 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	WHERE auth_groupid='$g' AND auth_code IN ('admin', 'comments', 'index', 'message', 'pfs', 'gallery', 'polls', 'pm', 'ratings', 'users', 'dic')
+	WHERE auth_groupid='$g' AND auth_code IN ('admin', 'comments', 'index', 'message', 'pfs', 'gallery', 'polls', 'pm', 'ratings', 'users', 'dic', 'menu')
 	ORDER BY auth_code ASC");
 	
 sed_die(sed_sql_numrows($sql1)==0);
