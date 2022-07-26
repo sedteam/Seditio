@@ -63,6 +63,7 @@ function sed_get_otherpages($pid, $cat, $limit)
 					"OTHER_PAGES_ROW_URL" => $row['page_pageurl'],
 					"OTHER_PAGES_ROW_ID" => $row['page_id'],
 					"OTHER_PAGES_ROW_CAT" => $row['page_cat'],
+					"OTHER_PAGES_ROW_CATURL" => sed_url('list', 'c='.$row['page_cat']),
 					"OTHER_PAGES_ROW_DESC" => $row['page_desc'],
 					"OTHER_PAGES_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
 					"OTHER_PAGES_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
