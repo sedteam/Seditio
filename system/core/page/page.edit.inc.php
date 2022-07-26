@@ -127,7 +127,6 @@ if ($a=='update')
 			}
 		else
 			{
-			$rpagebegin = ($rpagebegin<0) ? 0 : $rpagebegin;
 			$rpagedate = ($rpagedatenow) ? $sys['now_offset'] : sed_mktime($rhour, $rminute, 0, $rmonth, $rday, $ryear) - $usr['timezone'] * 3600;
 			$rpagebegin = sed_mktime($rhour_beg, $rminute_beg, 0, $rmonth_beg, $rday_beg, $ryear_beg) - $usr['timezone'] * 3600;
 			$rpageexpire = sed_mktime($rhour_exp, $rminute_exp, 0, $rmonth_exp, $rday_exp, $ryear_exp) - $usr['timezone'] * 3600;
@@ -149,6 +148,7 @@ if ($a=='update')
 				}
 				
 			// ------ Extra fields 
+			$ssql_extra = '';
 			if(count($extrafields) > 0) 
 				{ 
 				foreach($extrafields as $i => $row) 

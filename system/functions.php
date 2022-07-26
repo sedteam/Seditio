@@ -1902,7 +1902,7 @@ function sed_captcha_image($code)
 function sed_cc($text, $ent_quotes = null, $bbmode = FALSE)
 	{
 	global $cfg;
-
+	$text = is_null($text) ? '' : $text;
 	if (!$bbmode) {
 		return is_null($ent_quotes) ? htmlspecialchars($text) : htmlspecialchars($text, ENT_QUOTES);
 		} 
@@ -1954,16 +1954,18 @@ function sed_check_xp()
  * @param bool $more Forward OR backward
  * @return string 
  */ 
-function sed_checkmore($text, $more = false) 
+function sed_checkmore($text = '', $more = false) 
 	{
-  global $cfg;  
-  
+	global $cfg;  
+
+	$text = (is_null($text)) ? '' : $text;
+	
 	if ($more == true) 
-    { $text = preg_replace('/(\<hr id="readmore"(.*?)?\>)/' ,'<!--readmore-->', $text);	}
-  else 
-    { $text = preg_replace('/(\<!--readmore--\>)/' ,'<hr id="readmore" />', $text); }
-  
-  return($text);
+		{ $text = preg_replace('/(\<hr id="readmore"(.*?)?\>)/' ,'<!--readmore-->', $text);	}
+	else 
+		{ $text = preg_replace('/(\<!--readmore--\>)/' ,'<hr id="readmore" />', $text); }
+
+	return($text);
 	}
 
 /** 
@@ -2595,8 +2597,11 @@ function sed_forum_sectionsetlast($id)
 	global $db_forum_topics, $db_forum_sections;
 
 	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
-	$row = sed_sql_fetchassoc($sql);
-	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
+	if (sed_sql_numrows($sql) > 0)
+		{
+		$row = sed_sql_fetchassoc($sql);
+		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
+		}
 	return;
 	}
 	
@@ -4142,12 +4147,13 @@ function sed_redirect($url, $base64=false)
  * @param bool $key_isvalue Use value & key from array $values, or only value (if false)  
  * @return string 
  */
-function sed_selectbox($check, $name, $values, $empty_option = true, $key_isvalue = true)
+function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalue = TRUE)
 	{
 	$check = trim($check);
 	
+	$isarray = FALSE;
 	if (is_array($values))  
-		{ $isarray = true; } 
+		{ $isarray = TRUE; } 
 	else 
 		{ $values = explode(',', $values); }
 	
@@ -4548,7 +4554,7 @@ function sed_radiobox_skin($check, $name)
 		}
 	closedir($handle);
 	sort($skinlist);
-
+	$result = '';
 	foreach ($skinlist as $i => $x)
 		{
 		$checked = ($x == $check) ? "checked=\"checked\"" : '';
@@ -5222,7 +5228,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 		}
 		
   $url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&amp;', $url);
-  $path = ($header || ($cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';	  
+  $path = ($header || (isset($cfg['absurls']) && $cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';	  
   return($path.$url.$anchor);
 }
 

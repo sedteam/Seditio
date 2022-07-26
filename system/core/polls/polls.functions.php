@@ -49,10 +49,10 @@ function sed_poll_add($part)
 	$t->parse($part."_NEW_POLL");		
 }
 
-function sed_poll_addsave($type = 0, $code) 
+function sed_poll_addsave($type, $code) 
 {
 	global $cfg, $usr, $L, $sys, $db_polls, $db_polls_options;
-		
+	
 	$poll_text = sed_import('poll_text', 'P', 'TXT');
 	$poll_option_arr = sed_import('poll_option', 'P', 'ARR');		
 	

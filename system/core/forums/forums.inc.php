@@ -32,7 +32,7 @@ $poll = sed_import('poll','G','INT');
 $vote = sed_import('vote','G','INT');
 $unread_done = FALSE;
 $filter_cats = FALSE;
-$ce = explode('_', $s);
+//$ce = explode('_', $s); ??
 $sys['sublocation'] = $L['Home'];
 
 /* === Hook === */
@@ -262,7 +262,7 @@ foreach ($sect_arr as $fsec_key => $fsec)
 				));
 
 			/* ============ For Subforums  Sed 172 ================== */
-			if (is_array($forum_subforums)) 
+			if (isset($forum_subforums) && is_array($forum_subforums))
 			{
 			$ii = 0;
 			foreach ($forum_subforums as $key => $row)

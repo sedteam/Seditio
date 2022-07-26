@@ -33,7 +33,7 @@ $sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, confi
 
 if (sed_sql_numrows($sql_config) < 100)
 	{
-	define('SED_ADMIN',TRUE);
+	define('SED_ADMIN', TRUE);
 	require_once(SED_ROOT.'/system/functions.admin.php');
 	unset($query);
 
@@ -230,7 +230,7 @@ elseif (isset($_COOKIE[$sys['site_id']]) && ($cfg['authmode']==1 || $cfg['authmo
 	$rseditios = sed_import($u[2],'D','ALP');
 	}
 
-if ($rsedition>0 && $cfg['authmode'] > 0)
+if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0)
 	{
 	if (mb_strlen($rseditiop) != 32)
 		{ sed_diefatal('Wrong value for the password.'); }
@@ -300,7 +300,9 @@ if ($usr['id'] == 0)
 
 /* ======== GET imports ======== */
 
-$z = mb_strtolower(sed_import('z', 'G', 'ALP', 32));
+$z = sed_import('z', 'G', 'ALP', 32);
+$z = (!empty($z)) ? mb_strtolower($z) : $z;
+
 $m = sed_import('m', 'G', 'ALP', 24);
 $n = sed_import('n', 'G', 'ALP', 24);
 $a = sed_import('a', 'G', 'ALP', 24);

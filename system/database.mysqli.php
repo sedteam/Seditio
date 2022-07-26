@@ -199,6 +199,7 @@ function sed_sql_numrows($res) {
  */
 function sed_sql_prep($res, $conn_id = null) {
   global $connection_id; 
+  if (empty($res)) return($res);
   return is_null($conn_id) ? mysqli_real_escape_string($connection_id, $res) : mysqli_real_escape_string($conn_id, $res);  
 }
 

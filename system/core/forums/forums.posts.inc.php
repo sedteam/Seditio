@@ -495,7 +495,7 @@ if (!$cfg['disable_polls'] && $ft_poll > 0)
 			
 			$po_count = $row7['po_count'];
 			$po_text = sed_cc($row7['po_text']);		
-			$percent = @round(100 * ($po_count / $totalvotes), 1);
+			$percent = ($totalvotes > 0) ? @round(100 * ($po_count / $totalvotes), 1) : 0;
 			$percentbar = floor($percent * 2.24);
 
 			$xpoll->assign(array(

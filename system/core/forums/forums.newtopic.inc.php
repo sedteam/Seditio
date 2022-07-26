@@ -233,7 +233,7 @@ $t->assign(array(
 if ($fs_allowprvtopics)
 	{
 
-	$prvtopic = sed_checkbox('newprvtopic', '', $newprvtopic);
+	$prvtopic = sed_checkbox('newprvtopic', '', isset($newprvtopic)?$newprvtopic:0);
 
 	$t->assign(array(
 		"FORUMS_NEWTOPIC_ISPRIVATE" => $prvtopic

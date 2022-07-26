@@ -112,6 +112,8 @@ if ($a == 'add')
 			}
 
     // ------ Extra fields 
+	$ssql_extra_columns = ''; 
+	$ssql_extra_values = ''; 
     if(count($extrafields) > 0) 
 		{ 
 		foreach($extrafields as $i => $row) 

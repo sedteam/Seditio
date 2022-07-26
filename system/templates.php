@@ -406,8 +406,7 @@ class XTemplate {
 									by comma or closing bracket
 									)|,?\s*?([\w(?<!\%)]+)[,|\)$]' . $this->preg_delimiter, $matches[1] . ')', $param_matches)) {
 									$parameters = $param_matches[0];
-								}
-
+								}							
 								if (count($parameters)) {
 									array_walk($parameters, array($this, 'trim_callback'));
 									if (($key = array_search('%s', $parameters)) !== false) {
@@ -434,7 +433,7 @@ class XTemplate {
 									$var = call_user_func_array($callback, $parameters);
 									unset($parameters);
 								} else {
-									$var = call_user_func($callback, $var);
+									$var = call_user_func($callback, isset($var)?$var:'');
 								}
 							}
 						}

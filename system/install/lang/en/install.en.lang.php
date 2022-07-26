@@ -73,12 +73,12 @@ $L['install_email'] = "Email :";
 $L['install_doublecheck'] = "Double-check, it's important!";
 $L['install_country'] = "Country :";
 $L['install_validate'] = "Validate";
-$L['install_auto_installer'] = "This is the auto-installer for Seditio (build ".$cfg['version'].")";
-$L['install_create_configfile'] = "It will create the configuration file <strong>".$cfg['config_file']."</strong>, \n
+$L['install_auto_installer'] = "This is the auto-installer for Seditio (build ".@$cfg['version'].")";
+$L['install_create_configfile'] = "It will create the configuration file <strong>".@$cfg['config_file']."</strong>, \n
 	         then will create and populate the tables in your MySQL database.<br /> \n
 	         Prior to running this tool, you have to create the database itself with your hosting panel, \n
 	         and all the PHP and system files have to be uploaded on your web host.<br />&nbsp<br /> \n
-	         In case something goes wrong during the installation process, delete the file <strong>".$cfg['config_file']."</strong> with your FTP client, and re-open the web root URL in your browser.<br />&nbsp<br /> \n
+	         In case something goes wrong during the installation process, delete the file <strong>".@$cfg['config_file']."</strong> with your FTP client, and re-open the web root URL in your browser.<br />&nbsp<br /> \n
 	         Right now, CHMOD 0777 any folder listed below that is not already writable, with your FTP client :<br />";
 $L['install_folder'] = "Folder";
 $L['install_writable'] = "Writable";
@@ -93,6 +93,7 @@ $L['install_phpversion'] = "PHP version :";
 $L['install_ok'] = "Ok";
 $L['install_too_old'] = "Too old";
 $L['install_mysql_extension'] = "MySQL extension :";
+$L['install_gd_extension'] = "GD extension :";
 $L['install_mysqli_extension'] = "MySQLi extension :";
 $L['install_mysql_connector'] = "MySQL connector driver :";
 $L['install_mysql_preffered'] = "Most preferred MySQLi extension";

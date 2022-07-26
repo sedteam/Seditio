@@ -45,6 +45,8 @@ $sys['dir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SER
 if ($sys['dir_uri'][mb_strlen($sys['dir_uri']) - 1] != '/') { $sys['dir_uri'] .= '/'; }   
 $sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['dir_uri'];
 
+$res = "";
+
 // ------------------------------------
 
 $disp_header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
@@ -143,7 +145,7 @@ switch($m)
 		sed_sql_set_charset($connection_id, 'utf8');
 		require(SED_ROOT . '/system/install/install.database.php');
 
-		define('SED_ADMIN',TRUE);
+		@define('SED_ADMIN', TRUE);
 		unset($query);
 
 		$res .= $L['install_presettings']."<br />";
@@ -161,6 +163,7 @@ switch($m)
 		$rpassword = sed_import('admin_pass','P','TXT',16);
 		$ruseremail = sed_import('admin_email','P','TXT',64, TRUE);
 		$rcountry = sed_import('admin_country','P','TXT');
+		$ip = $_SERVER['REMOTE_ADDR'];
     
 		$defgroup = 5;
 		
@@ -221,7 +224,7 @@ switch($m)
 			'$validationkey',
 			'',
 			0,
-			'', '', '".$usr['ip']."')");
+			'', '', '".$ip."')");
 
 		$userid = sed_sql_insertid();
 		$sql = sed_sql_query("INSERT INTO ".$sqldbprefix."groups_users (gru_userid, gru_groupid) VALUES (".(int)$userid.", ".(int)$defgroup.")");
@@ -269,7 +272,7 @@ switch($m)
 	{
 		$extplugin_info = "plugins/".$v."/".$v.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-		$checked = ($info['Installer_skip']==1) ? '' : "checked=\"checked\"";
+		$checked = (isset($info['Installer_skip']) && $info['Installer_skip'] == 1) ? '' : "checked=\"checked\"";
 		$disabled = '';
 
 		$disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
@@ -299,7 +302,7 @@ switch($m)
 	$j = 0;
 	unset($log);
 
-	if (!$sed_groups )
+	if (!isset($sed_groups))
 		{
 		$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 		if (sed_sql_numrows($sql)>0)
@@ -424,7 +427,7 @@ switch($m)
 	$res .= "<tr><td style=\"width:172px;\">".$L['install_email']."</td>";
 	$res .= "<td><input type=\"text\" name=\"admin_email\" size=\"32\" value=\"\" maxlength=\"128\" /> (".$L['install_doublecheck'].")</td></tr>";
 	$res .= "<tr><td style=\"width:172px;\">".$L['install_country']."</td>";
-	$res .= "<td>".sed_selectbox_countries($cfg['defaultcountry'], 'admin_country')."</td></tr>";
+	$res .= "<td>".sed_selectbox_countries(isset($cfg['defaultcountry'])?$cfg['defaultcountry']:'', 'admin_country')."</td></tr>";
 	$res .= "<tr><td colspan=\"2\" style=\"padding-top:32px; text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['install_validate']."\"></td></tr>";
 	$res .= "</table>";
 	
@@ -469,17 +472,21 @@ switch($m)
 	$res .= "</td></tr>";
 
 	$res .= "<tr><td style=\"width:150px;\">".$L['install_phpversion']."</td><td>";
-	$res .= (version_compare($php_version, '4.3') < 0) ? '<span class="yes">'.PHP_VERSION.' : '.$L['install_ok'].'</span>' : '<span class="no">'.PHP_VERSION.' : '.$L['install_too_old'].'</span>';
+	$res .= (version_compare(PHP_VERSION, '5.3') > 0) ? '<span class="yes">'.PHP_VERSION.' : '.$L['install_ok'].'</span>' : '<span class="no">'.PHP_VERSION.' : '.$L['install_too_old'].'</span>';
 	$res .= "</td></tr>";
 
 	$res .= "<tr><td style=\"width:150px;\">MB String</td><td>";
 	$res .= (extension_loaded('mbstring')) ? '<span class="yes">'.$L['install_available'].'</span>' : '<span class="no">'.$L['install_missing'].'</span>';
 	$res .= "</td></tr>";
+	
+	$res .= "<tr><td style=\"width:150px;\">".$L['install_gd_extension']."</td><td>";
+	$res .= (extension_loaded('gd')) ? '<span class="yes">'.$L['install_available'].'</span>' : '<span class="no">'.$L['install_missing'].'</span>';
+	$res .= "</td></tr>";	
 
-	$res .= "<tr><td style=\"width:150px;\">".$L['install_mysql_extension']."</td><td>";
+/*	$res .= "<tr><td style=\"width:150px;\">".$L['install_mysql_extension']."</td><td>";
 	$res .= (extension_loaded('mysql')) ? '<span class="yes">'.$L['install_available'].'</span>' : '<span class="no">'.$L['install_missing'].'</span>';
 	$res .= "</td></tr>";
-	
+*/	
 	$res .= "<tr><td style=\"width:150px;\">".$L['install_mysqli_extension']."</td><td>";
 	$res .= (extension_loaded('mysqli')) ? '<span class="yes">'.$L['install_available'].'</span>' : '<span class="no">'.$L['install_missing'].'</span>';
 	$res .= "</td></tr>";
