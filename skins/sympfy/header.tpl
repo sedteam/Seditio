@@ -44,7 +44,7 @@
 			<div class="header-wrapper">
 
 				<div class="logo-col">
-					 <a href="/" alt="{HEADER_TITLE}"><img class="logo" src="skins/{PHP.skin}/img/seditio.svg" alt="{HEADER_TITLE}"></a>
+					 <a href="{PHP.sys.dir_uri}" alt="{HEADER_TITLE}"><img class="logo" src="skins/{PHP.skin}/img/seditio.svg" alt="{HEADER_TITLE}"></a>
 				</div>
 
 				<div class="menu-col">

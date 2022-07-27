@@ -1711,14 +1711,14 @@ function sed_br2nl($text)
  */ 
 function sed_breadcrumbs($urlpaths, $startpos = 1, $home = true)
 	{
-		global $L, $t;
+		global $L, $t, $sys;
 		
 		if (is_array($urlpaths))  
 			{ $isarray = true; } 
 		else 
 			{ $urlpaths = explode(',', $urlpaths); }
-		 
-		$urlpaths = ($home) ? array_merge(array("/" => $L['Home']), $urlpaths) : $urlpaths;
+		 		
+		$urlpaths = ($home) ? array_merge(array($sys['dir_uri'] => $L['Home']), $urlpaths) : $urlpaths;
 		
 		$b = new XTemplate(sed_skinfile('breadcrumbs'));
 		
@@ -3739,16 +3739,18 @@ function sed_mail($fmail, $subject, $body, $headers='', $param='', $content='pla
  * 
  * @return string
  */ 
-function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $only_childrensonlevel = false, $class = "" )
-{
+function sed_menu_tree($menus, $parent_id, $level = 0, $only_parent = false, $only_childrensonlevel = false, $class = "")
+	{
+	global $sys;
 	if ( is_array( $menus ) && isset( $menus[$parent_id] ) )
 		{
 		$class = (!empty($class)) ? " ".$class : "";
 		$tree = "<ul class=\"level-".$level.$class."\">";
-		if ( $only_parent == false )
+		if ($only_parent == false)
 			{
 			$level++;
 			foreach ($menus[$parent_id] as $item) {
+				$item['menu_url'] = ($item['menu_url'] == '/') ? $sys['dir_uri'] : $item['menu_url'];
 				if ($only_childrensonlevel)
 					{
 					$tree .= "<li><a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a></li>";
@@ -3762,7 +3764,7 @@ function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $o
 					}
 				}
 			}
-		elseif ( $only_parent ) {
+		elseif ($only_parent) {
 			$item = $menus[$parent_id];
 			$tree = (!empty($item['menu_url'])) ? "<a href=\"".$item['menu_url']."\" data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</a>" : "<span data-mid=\"".$item['menu_id']."\">".$item['menu_title']."</span>";
 			return $tree;
@@ -3773,7 +3775,7 @@ function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $o
 		return null;
 		}
 	return $tree;
-}
+	}
 
 /** 
  * Menu array options generate
@@ -3781,7 +3783,7 @@ function sed_menu_tree( $menus, $parent_id, $level = 0, $only_parent = false, $o
  * @return array
  */ 
 function sed_menu_options($array, $parent = 0, $indent = "&nbsp; &nbsp; &nbsp;") 
-{
+	{
 	$return = array();
 	foreach($array as $key => $val) {
 	  if ($val['menu_pid'] == $parent) {
@@ -3790,7 +3792,7 @@ function sed_menu_options($array, $parent = 0, $indent = "&nbsp; &nbsp; &nbsp;")
 	  }
 	}
 	return $return;
-}  
+	}  
 
 /** 
  * Creates UNIX timestamp out of a date 
