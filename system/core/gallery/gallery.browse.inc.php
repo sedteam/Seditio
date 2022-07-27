@@ -41,6 +41,13 @@ $sql2 = sed_sql_query("UPDATE $db_pfs_folders SET pff_count=pff_count+1 WHERE pf
 $title = $pff['pff_title'];
 $subtitle = '';
 
+reset($sed_extensions);
+foreach ($sed_extensions as $k => $line)
+	{
+ 	$icon[$line[0]] = "<img src=\"system/img/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+	$icon[$line[0]] = "<img src=\"system/img/ext/".$line[2].".svg\" alt=\"".$line[1]."\" width=\"16\" />";
+ 	}
+
 $out['subtitle'] = $pff['pff_title'];
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
@@ -78,7 +85,7 @@ while ($pfs = sed_sql_fetchassoc($sql))
 	$pfs['pfs_fullfile'] = $cfg['pfs_dir'].$pfs['pfs_file'];
 	$pfs['pfs_filesize'] = floor($pfs['pfs_size']/1024);
 
-	if (($pfs['extension']=='jpg' || $pfs['extension']=='jpeg' || $pfs['extension']=='png') && $cfg['th_amode']!='Disabled')
+	if (($pfs['pfs_extension'] == 'jpg' || $pfs['pfs_extension'] == 'jpeg' || $pfs['pfs_extension'] == 'png') && $cfg['th_amode'] != 'Disabled')
 		{
 		if (!file_exists($cfg['th_dir'].$pfs['pfs_file']) && file_exists($cfg['pfs_dir'].$pfs['pfs_file']))
 			{
@@ -112,7 +119,7 @@ while ($pfs = sed_sql_fetchassoc($sql))
 			}
  		}
 
-	$pfs['popup'] = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."',200,200)\">";
+	$pfs['popup'] = "<a href=\"javascript:sedjs.picture('".sed_url("pfs", "m=view&v=".$pfs['pfs_file'])."', 200, 200)\">";
 
 	if ($usr['isadmin'])
 		{

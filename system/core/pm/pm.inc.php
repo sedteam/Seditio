@@ -182,8 +182,6 @@ $pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url("pm", "m=send")."\">"
 require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/".$skin."/pm.tpl");
 
-if ($pm_totalpages=='0') {$pm_totalpages = '1'; }
-
 $t-> assign(array(
 	"PM_PAGETITLE" => $title,
 	"PM_SHORTTITLE" => $shorttitle,
@@ -193,11 +191,11 @@ $t-> assign(array(
 	"PM_INBOX" => "<a href=\"".sed_url("pm")."\">".$L['pm_inbox']."</a> : ".$totalinbox,
 	"PM_ARCHIVES" => "<a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a> : ".$totalarchives,
 	"PM_SENTBOX" => "<a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a> : ".$totalsentbox,
-	"PM_TOP_PAGEPREV" => $pm_pageprev,
-	"PM_TOP_PAGENEXT" => $pm_pagenext,
-	"PM_TOP_PAGINATION" => $pm_pagination,
-	"PM_TOP_CURRENTPAGE" => $pm_currentpage,
-	"PM_TOP_TOTALPAGES" => $pm_totalpages,
+	"PM_TOP_PAGEPREV" => isset($pm_pageprev)?$pm_pageprev:'',
+	"PM_TOP_PAGENEXT" => isset($pm_pagenext)?$pm_pagenext:'',
+	"PM_TOP_PAGINATION" => isset($pm_pagination)?$pm_pagination:'',
+	"PM_TOP_CURRENTPAGE" => isset($pm_currentpage)?$pm_currentpage:'',
+	"PM_TOP_TOTALPAGES" => isset($pm_totalpages)?$pm_totalpages:'0'
 ));
 
 $jj=0;
@@ -211,7 +209,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 	$jj++;
 	$row['pm_icon_status'] = ($row['pm_state'] == '0' && $f != 'sentbox') ? "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\">".$out['ic_pm_new']."</a>" : "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\">".$out['ic_pm']."</a>";
 
-	if ($f=='sentbox')
+	if ($f == 'sentbox')
 		{
 		$pm_fromuserid = $usr['id'];
 		$pm_fromuser = sed_cc($usr['name']);
@@ -228,7 +226,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 			$pm_editbox .= "<br />&nbsp;<br /><input type=\"submit\" class=\"submit btn\" value=\"".$L['Update']."\" /></form>";
 			}
 		}
-	elseif ($f=='archives')
+	elseif ($f == 'archives')
 		{
 		$pm_fromuserid = $row['pm_fromuserid'];
 		$pm_fromuser = sed_cc($row['pm_fromuser']);
@@ -259,8 +257,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj<$cfg['maxrowsperpage']))
 		"PM_ROW_TOUSERID" => $pm_touserid,
 		"PM_ROW_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
 		"PM_ROW_TITLE" => "<a href=\"".sed_url("pm", "id=".$row['pm_id'])."\">".sed_cc($row['pm_title'])."</a>",
-		"PM_ROW_TEXT" => $row['pm_text'].$pm_editbox,
-		"PM_ROW_TEXTBOXER" => $row['pm_text'].$pm_editbox,
+		"PM_ROW_TEXT" => $row['pm_text'].(isset($pm_editbox)?$pm_editbox:''),
 		"PM_ROW_FROMORTOUSER" => $pm_fromortouser,
 		"PM_ROW_ICON_STATUS" => $row['pm_icon_status'],
 		"PM_ROW_ICON_ACTION" => $row['pm_icon_action'],

@@ -503,7 +503,7 @@ function calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 'res
 			$dst_h = $max_h;
 		}
 	}
-	return array($dst_w, $dst_h);
+	return array((int)$dst_w, (int)$dst_h);
 }
 
 /**

@@ -20,7 +20,13 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('gallery
 sed_block($usr['auth_read']);
 
 $comments = sed_import('comments','G','BOL');
-unset($browse_list, $browse_zoom);
+
+reset($sed_extensions);
+foreach ($sed_extensions as $k => $line)
+	{
+ 	$icon[$line[0]] = "<img src=\"system/img/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+	$icon[$line[0]] = "<img src=\"system/img/ext/".$line[2].".svg\" alt=\"".$line[1]."\" width=\"16\" />";
+ 	}
 
 /* === Hook === */
 $extp = sed_getextplugins('gallery.details.first');
@@ -42,7 +48,9 @@ $pff = sed_sql_fetchassoc($sql_pff);
 
 $sql_pfsall = sed_sql_query("SELECT pfs_id FROM $db_pfs
 WHERE pfs_folderid='$f' AND pfs_extension IN $gd_supported_sql ORDER BY pfs_id ASC");
+
 $pos = 0;
+$current = 0;
 
 while ($row = sed_sql_fetchassoc($sql_pfsall))
 	{
@@ -53,6 +61,8 @@ while ($row = sed_sql_fetchassoc($sql_pfsall))
 	}
 $total = count ($pfsall);
 
+$browse_list = '';
+
 foreach($pfsall as $j => $k)
   {
   $browse_list .= ($current == $j) ? "<strong>[" : '';
@@ -61,8 +71,9 @@ foreach($pfsall as $j => $k)
   $browse_list .= " &nbsp;";
   }
 
-$browse_prev = ($pfsall[$current-1]>0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current-1])."\">".$out['ic_gallery_prev']."</a>": '';
-$browse_next = ($pfsall[$current+1]>0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current+1])."\">".$out['ic_gallery_next']."</a>": '';
+$browse_prev = (isset($pfsall[$current-1]) && $pfsall[$current-1] > 0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current-1])."\">".$out['ic_gallery_prev']."</a>": '';
+$browse_next = (isset($pfsall[$current+1]) && $pfsall[$current+1] > 0) ? "<a href=\"".sed_url("gallery", "id=".$pfsall[$current+1])."\">".$out['ic_gallery_next']."</a>": '';
+
 $browse_back =  "<a href=\"".sed_url("gallery", "f=".$f)."\">".$out['ic_gallery_back']."</a>";
 
 $pfs['pfs_fullfile'] = $cfg['pfs_dir'].$pfs['pfs_file'];
@@ -134,7 +145,6 @@ if ($usr['isadmin'])
 $t-> assign(array(
 	"GALLERY_DETAILS_ID" => $pfs['pfs_id'],
 	"GALLERY_DETAILS_VIEWURL" => sed_url("gallery", "id=".$pfs['pfs_id']),
-	"GALLERY_DETAILS_VIEW_POPUP" => $pfs['popup'],
 	"GALLERY_DETAILS_FILE" => $pfs['pfs_file'],
 	"GALLERY_DETAILS_FULLFILE" => $pfs['pfs_fullfile'],
 	"GALLERY_DETAILS_THUMB" => $pfs['pfs_file'],

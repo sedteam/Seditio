@@ -45,7 +45,7 @@ $totalsentbox = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state<2");
 $totalinbox = sed_sql_result($sql, 0, "COUNT(*)");
 
-if ($a=='send')
+if ($a == 'send')
 	{
 		
 	/* === Hook === */
@@ -72,19 +72,19 @@ if ($a=='send')
 		$touser_ids[] = $row['user_id'];
 		$row['user_name'] = sed_cc($row['user_name']);
 		$touser_names[] = $row['user_name'];
-		$touser_usrlnk[] .= sed_build_user($row['user_id'], $row['user_name']);
+		$touser_usrlnk[] = sed_build_user($row['user_id'], $row['user_name']);
 		}
 
 	$touser = ($totalrecipients>0) ? implode (",", $touser_names) : '';
-	$error_string .= (mb_strlen($newpmtitle)<2) ? $L['pm_titletooshort']."<br />" : '';
-	$error_string .= (mb_strlen($newpmtext)<2) ? $L['pm_bodytooshort']."<br />" : '';
-	$error_string .= (mb_strlen($newpmtext)>$cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
-	$error_string .= ($totalrecipients<$touser_req ) ? $L['pm_wrongname']."<br />" : '';
-	$error_string .= ($totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+	$error_string .= (mb_strlen($newpmtitle) < 2) ? $L['pm_titletooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtext) < 2) ? $L['pm_bodytooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtext) > $cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
+	$error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
+	$error_string .= ($totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
 
 	if (empty($error_string))
 		{
-		$newpmtext .= ($totalrecipients>1) ? "\n\n".sprintf($L['pm_multiplerecipients'], $totalrecipients-1)."\n".implode(', ', $touser_usrlnk)  : '';
+		$newpmtext .= ($totalrecipients > 1) ? "\n\n".sprintf($L['pm_multiplerecipients'], $totalrecipients-1)."\n".implode(', ', $touser_usrlnk)  : '';
 
 		foreach($touser_ids as $k => $userid)
 			{
@@ -139,7 +139,7 @@ if ($a=='send')
 	}
 elseif (!empty($to))
 	{
-	if (mb_substr(mb_strtolower($to),0,1)=='g' && $usr['maingrp']==5)
+	if (mb_substr(mb_strtolower($to),0,1) == 'g' && $usr['maingrp'] == 5)
 		{
 		$group = sed_import(mb_substr($to, 1, 8), 'D', 'INT');
 		if ($group>1)
@@ -159,7 +159,7 @@ elseif (!empty($to))
 			if ($userid > 0)
 				{ $touser_sql[] = "'".$userid."'"; }
 			}
-		if (count($touser_sql)>0)
+		if (count($touser_sql) > 0)
 			{
 			$touser_sql = implode (',', $touser_sql);
 			$touser_sql = '('.$touser_sql.')';
@@ -168,7 +168,7 @@ elseif (!empty($to))
 			}
 		}
 
-	if ($totalrecipients>0)
+	if ($totalrecipients > 0)
 		{
 		while ($row = sed_sql_fetchassoc($sql))
 			{
@@ -176,8 +176,8 @@ elseif (!empty($to))
 			$touser_names[] = sed_cc($row['user_name']);
 			}
 		$touser = implode (", ", $touser_names);
-		$error_string .= ($totalrecipients<$touser_req) ? $L['pm_wrongname']."<br />" : '';
-		$error_string .= ($totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+		$error_string .= ($totalrecipients < $touser_req) ? $L['pm_wrongname']."<br />" : '';
+		$error_string .= ($totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
 		}
 	}
 
@@ -233,10 +233,10 @@ $t->assign(array(
 	"PMSEND_ARCHIVES" => "<a href=\"".sed_url("pm", "f=archives")."\">".$L['pm_archives']."</a>:".$totalarchives,
 	"PMSEND_SENTBOX" => "<a href=\"".sed_url("pm", "f=sentbox")."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PMSEND_FORM_SEND" => sed_url("pm", "m=send&a=send&to=".$to),
-	"PMSEND_FORM_TITLE" => sed_textbox('newpmtitle', $newpmtitle, 64, 64),
-	"PMSEND_FORM_TEXT" =>  sed_textarea('newpmtext', $newpmtext, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic').$pfs,
+	"PMSEND_FORM_TITLE" => sed_textbox('newpmtitle', isset($newpmtitle)?$newpmtitle:'', 64, 64),
+	"PMSEND_FORM_TEXT" =>  sed_textarea('newpmtext', isset($newpmtext)?$newpmtext:'', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic').$pfs,
 	"PMSEND_FORM_MYPFS" => $pfs,
-	"PMSEND_FORM_TOUSER" => sed_textarea('newpmrecipient', $touser, 2, $cfg['textarea_default_width'])
+	"PMSEND_FORM_TOUSER" => sed_textarea('newpmrecipient', isset($touser)?$touser:'', 2, $cfg['textarea_default_width'])
 ));
 
 /* === Hook === */

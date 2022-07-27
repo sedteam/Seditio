@@ -153,9 +153,9 @@ if ($a=='update')
 
 		$ruserbirthdate = ($rmonth == 0 || $rday == 0 || $ryear == 0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
 
-	   	if (!$ruserbanned)
+	   	if (!isset($ruserbanned))
 	   		{ $rbanexpire = 0; }
-		if ($ruserbanned && $rbanexpire>0)
+		elseif ($ruserbanned && $rbanexpire > 0)
 			{ $rbanexpire += $sys['now']; }
 
 		if ($rusername != $urr['user_name'])
@@ -179,6 +179,7 @@ if ($a=='update')
 			}
 			
 		// ------ Extra fields 
+		$ssql_extra = '';
 		if(count($extrafields) > 0) 
 			{ 
 			foreach($extrafields as $i => $row) 
@@ -220,7 +221,7 @@ if ($a=='update')
 			{
 			$rusermaingrp = ($rusermaingrp < 4 && $id == 1) ? 5 : $rusermaingrp;
 
-			if (!$rusergroupsms[$rusermaingrp])
+			if (!isset($rusergroupsms[$rusermaingrp]))
 				{ $rusergroupsms[$rusermaingrp] = 1; }
 
 			$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='$rusermaingrp' WHERE user_id='$id'");
@@ -237,7 +238,7 @@ if ($a=='update')
 					{ $sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'"); }
 				}
 
-			if ($rusermaingrp==4 && $urr['user_maingrp']==2)
+			if ($rusermaingrp == 4 && $urr['user_maingrp'] == 2)
 				{
 				$rsubject = $cfg['maintitle']." - ".$L['useed_accountactivated'];
 				$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";

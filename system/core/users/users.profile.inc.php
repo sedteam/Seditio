@@ -135,20 +135,29 @@ switch ($a)
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$uav_tmp_name = $_FILES['userfile']['tmp_name'];
-	$uav_type = $_FILES['userfile']['type'];
-	$uav_name = $_FILES['userfile']['name'];
-	$uav_size = $_FILES['userfile']['size'];
-
-	$uph_tmp_name = $_FILES['userphoto']['tmp_name'];
-	$uph_type = $_FILES['userphoto']['type'];
-	$uph_name = $_FILES['userphoto']['name'];
-	$uph_size = $_FILES['userphoto']['size'];
-
-	$usig_tmp_name = $_FILES['usersig']['tmp_name'];
-	$usig_type = $_FILES['usersig']['type'];
-	$usig_name = $_FILES['usersig']['name'];
-	$usig_size = $_FILES['usersig']['size'];
+	if (isset($_FILES['userfile']['tmp_name']))
+		{
+		$uav_tmp_name = $_FILES['userfile']['tmp_name'];
+		$uav_type = $_FILES['userfile']['type'];
+		$uav_name = $_FILES['userfile']['name'];
+		$uav_size = $_FILES['userfile']['size'];
+		}
+		
+	if (isset($_FILES['userphoto']['tmp_name']))
+		{
+		$uph_tmp_name = $_FILES['userphoto']['tmp_name'];
+		$uph_type = $_FILES['userphoto']['type'];
+		$uph_name = $_FILES['userphoto']['name'];
+		$uph_size = $_FILES['userphoto']['size'];
+		}
+		
+	if (isset($_FILES['usersig']['tmp_name']))
+		{		
+		$usig_tmp_name = $_FILES['usersig']['tmp_name'];
+		$usig_type = $_FILES['usersig']['type'];
+		$usig_name = $_FILES['usersig']['name'];
+		$usig_size = $_FILES['usersig']['size'];
+		}
 
 	if (!empty($uav_tmp_name) || !empty($uph_tmp_name) || !empty($usig_tmp_name))
 		{ @clearstatcache(); }
@@ -330,6 +339,7 @@ switch ($a)
 			{ $ruseremail = $urr['user_email']; }
 		
 		// ------ Extra fields 
+		$ssql_extra = '';
 		if(count($extrafields) > 0) 
 			{ 
 			foreach($extrafields as $i => $row) 
