@@ -2118,7 +2118,7 @@ ul.subforums-list li::before {
     font-variant: normal;
     text-transform: none;
     line-height: 2.1em;
-    content: "\e90f";
+    content: "\ea61";
     color: #636369;
     font-weight: bold;
     display: inline-block;
