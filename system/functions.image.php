@@ -30,18 +30,18 @@ $cfg['quality'] = 85;
 
 function resize_image($filename, $width = 0, $height = 0, $set_watermark = false)
     {
-        global $cfg;	
-		
-		$resized_filename = add_resize_params($filename, 'resize', $width, $height, $set_watermark);
-        return $cfg['res_dir'] . $resized_filename;
+	global $cfg;	
+	
+	$resized_filename = add_resize_params($filename, 'resize', $width, $height, $set_watermark);
+	return $cfg['res_dir'] . $resized_filename;
     }
 
 function crop_image($filename, $width = 0, $height = 0, $set_watermark = false)
     {
-        global $cfg;
-		
-		$resized_filename = add_resize_params($filename, 'crop', $width, $height, $set_watermark);
-        return $cfg['res_dir'] . $resized_filename;
+	global $cfg;
+	
+	$resized_filename = add_resize_params($filename, 'crop', $width, $height, $set_watermark);
+	return $cfg['res_dir'] . $resized_filename;
     }
 
 /**
@@ -50,7 +50,7 @@ function crop_image($filename, $width = 0, $height = 0, $set_watermark = false)
   * @return string preview file name
   */
 function resize($filename)
-{        
+	{        
 	global $cfg;
 	
 	// Picture folder paths
@@ -62,7 +62,7 @@ function resize($filename)
 	
 	if (!is_array($cfg['available_image_sizes'])) 
 		{
-			$cfg['available_image_sizes'] = (!empty($cfg['available_image_sizes'])) ? explode('|', $cfg['available_image_sizes']) : array();			
+		$cfg['available_image_sizes'] = (!empty($cfg['available_image_sizes'])) ? explode('|', $cfg['available_image_sizes']) : array();			
 		}	
 		
 	$check_ais = (count($cfg['available_image_sizes']) > 0) ? in_array($size, $cfg['available_image_sizes']) : TRUE;
@@ -81,11 +81,12 @@ function resize($filename)
 	$sharpen = min(100, $cfg['images_sharpen']) / 100;
 	$watermark_transparency = 1 - min(100, $cfg['watermark_transparency']) / 100;
 
-	if ($set_watermark && is_file($cfg['gallery_logofile'])) {
+	if ($set_watermark && is_file($cfg['gallery_logofile'])) 
+		{
 		$watermark = $cfg['gallery_logofile'];
-	} else {
-		$watermark = null;
-	}
+		} 
+	else
+		{ $watermark = null; }
 	
 	if (class_exists('Imagick') && $cfg['use_imagick']) {
 		image_constrain_imagick($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
@@ -96,7 +97,7 @@ function resize($filename)
 	}
 	
 	return $preview_dir . $resized_file;
-}
+	}
 
 /**
  * @param $filename
@@ -107,31 +108,37 @@ function resize($filename)
  * @return string
  */
 function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false)
-{
-	if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) {
+	{
+	if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) 
+		{
 		$file = $dirname . '/' . pathinfo($filename, PATHINFO_FILENAME);
-	} else {
+		} 
+	else 
+		{
 		$file = pathinfo($filename, PATHINFO_FILENAME);
-	}
+		}
+		
 	$ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-	if ($width > 0 || $height > 0) {
+	if ($width > 0 || $height > 0) 
+		{
 		$resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext;
-	} else {
+		} 
+	else 
+		{
 		// TODO fix this option does not work now
 		$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext;
-	}
+		}
 
 	return $resized_filename;
-}
+	}
 
 /**
  * @param string $filename
  * @return array|false
  */
 function get_resize_params($filename)
-{
-	
+	{
 	// Determining the resize parameters
 	if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)$/', $filename, $matches)) {
 		return false;
@@ -145,7 +152,7 @@ function get_resize_params($filename)
 	$ext = $matches[6];                     // file extension
 
 	return array($file . '.' . $ext, $type, $width, $height, $set_watermark);
-}
+	}
 
 /**
 * Create previews using gd
@@ -186,12 +193,14 @@ function image_constrain_gd(
 		return false;
 	}
 
-	if ($dst_file) {
+	if ($dst_file) 
+		{
 		$directory = dirname($dst_file);
-		if (!is_dir($directory)) {
+		if (!is_dir($directory)) 
+			{
 			@mkdir($directory, 0777, true);
+			}
 		}
-	}
 
 	// Do I need to crop?
 	if (!$watermark && ($src_w <= $max_w) && ($src_h <= $max_h) && $type == 'resize') {
@@ -271,7 +280,8 @@ function image_constrain_gd(
 		return false;
 	}
 
-	if ($type == 'crop') {
+	if ($type == 'crop') 
+		{
 		$x0 = ($dst_w - $max_w) / 2;
 		$y0 = ($dst_h - $max_h) / 2;
 		$_dst_img = imagecreatetruecolor($max_w, $max_h);
@@ -283,17 +293,18 @@ function image_constrain_gd(
 			$_dst_img,
 			$dst_img,
 			0, 0,
-			$x0, $y0,
+			(int)$x0, (int)$y0,
 			$max_w, $max_h
 		);
 
 		$dst_img = $_dst_img;
 		$dst_w = $max_w;
 		$dst_h = $max_h;
-	}
+		}
 
 	// Watermark
-	if (!empty($watermark) && is_readable($watermark)) {
+	if (!empty($watermark) && is_readable($watermark)) 
+		{
 		$overlay = imagecreatefrompng($watermark);
 
 		// Get the size of overlay
@@ -306,10 +317,11 @@ function image_constrain_gd(
 		//imagecopy($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight);
 		//imagecopymerge($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity*100);
 		imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity * 100);
-	}
+		}
 
 	// recalculate quality value for png image
-	if ('image/png' === $src_type) {
+	if ('image/png' === $src_type) 
+		{
 		$quality = round(($quality / 100) * 10);
 		if ($quality < 1) {
 			$quality = 1;
@@ -317,7 +329,7 @@ function image_constrain_gd(
 			$quality = 10;
 		}
 		$quality = 10 - $quality;
-	}
+		}
 
 	// Save the image
 	switch ($src_type) {
@@ -369,12 +381,14 @@ function image_constrain_imagick(
 		return false;
 	}
 
-	if ($dst_file) {
+	if ($dst_file) 
+		{
 		$directory = dirname($dst_file);
-		if (!is_dir($directory)) {
+		if (!is_dir($directory)) 
+			{
 			@mkdir($directory, 0777, true);
+			}
 		}
-	}
 
 	// Dimensions of the original image
 	$src_w = $thumb->getImageWidth();
@@ -399,7 +413,7 @@ function image_constrain_imagick(
 		$thumb->thumbnailImage($dst_w, $dst_h);
 		$dst_w = $max_w;
 		$dst_h = $max_h;
-		$thumb->cropImage($dst_w, $dst_h, $x0, $y0);
+		$thumb->cropImage($dst_w, $dst_h, (int)$x0, (int)$y0);
 	} else {
 		$thumb->thumbnailImage($dst_w, $dst_h);
 	}

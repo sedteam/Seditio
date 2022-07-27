@@ -121,7 +121,7 @@
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.pfs_setassample}</div>
-									<div class="table-th coltop text-center"></div>
+									<div class="table-th coltop text-center" style="width:150px;"></div>
 								</div>
 										
 							</div>

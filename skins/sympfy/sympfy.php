@@ -34,6 +34,10 @@ $out['ic_set'] = "<i class=\"ic-wand\"></i>";
 $out['ic_folder'] = "<i class=\"ic-folder\"></i>";
 $out['ic_gallery'] = "<i class=\"ic-gallery\"></i>";
 
+$out['ic_pastethumb'] = "<i class=\"ic-image\"></i>";
+$out['ic_pastefile'] = "<i class=\"ic-link\"></i>";
+$out['ic_pasteimage'] = "<i class=\"ic-photo\"></i>";
+
 // ========= Plugin RecentItems ============================= //
 
 $cfg['plu_mask_pages'] = "<span class=\"rec-date\">%3\$s</span>"." "."%1\$s"." ".$cfg['separator']." "."%2\$s"."<br />";

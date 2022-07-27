@@ -142,7 +142,7 @@ while ($pfs = sed_sql_fetchassoc($sql))
 		"GALLERY_BROWSE_ROW_DATE" => sed_build_date($cfg['dateformat'], $pfs['pfs_date']),
 		"GALLERY_BROWSE_ROW_SIZE" => $pfs['pfs_filesize'].$L['kb'],
 		"GALLERY_BROWSE_ROW_COUNT" => $pfs['pfs_count'],
-		"GALLERY_BROWSE_ROW_ADMIN" => $pfs['admin']
+		"GALLERY_BROWSE_ROW_ADMIN" => isset($pfs['admin'])?$pfs['admin']:''
 	));
 	
 	if (!empty($pfs['pfs_desc'])) $t->parse("MAIN.GALLERY.ROW.GALLERY_BROWSE_ROW_DESC");

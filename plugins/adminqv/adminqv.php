@@ -128,7 +128,7 @@ if (!$cfg['disable_comments'])
 		
 	$qv-> assign(array(		
 		"QV_NEWCOMMENTS" => $newcomments,
-		"QV_NEWCOMMENTS_URL" => sed_url("admin", "m=page")
+		"QV_NEWCOMMENTS_URL" => sed_url("admin", "m=comments")
 	));
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWCOMMENTS");	
 	
