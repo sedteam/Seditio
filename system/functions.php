@@ -1453,7 +1453,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		
 		if ($rating_average < 1)
 			{ $rating_average = 1; }
-		elseif ($ratingaverage > 10)
+		elseif ($rating_average > 10)
 			{ $rating_average = 10; }
 	
 		$rating = round($rating_average,0);
@@ -5597,7 +5597,8 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
         $t3 = $tpl_tag.'_'.strtoupper($row['code'].'_TITLE'); 
         $t4 = $tpl_tag.'_'.strtoupper($row['code'].'_DESC'); 
         $t5 = $tpl_tag.'_'.strtoupper($row['code'].'_MERA'); 
-
+		
+		$data[$rowname.'_'.$row['code']] = isset($data[$rowname.'_'.$row['code']]) ? $data[$rowname.'_'.$row['code']] : '';
 		$data[$rowname.'_'.$row['code']] = (empty($data[$rowname.'_'.$row['code']]) && !empty($row['term_default'])) ? $row['term_default'] : $data[$rowname.'_'.$row['code']];
         
         switch($row['type']) 

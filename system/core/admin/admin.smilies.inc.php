@@ -124,10 +124,10 @@ $t -> parse("ADMIN_SMILIES.SMILIES_LIST");
 
 $t -> assign(array( 
 	"SMILIE_ADD_SEND" => sed_url("admin", "m=smilies&a=add"),
-	"SMILIE_ADD_CODE" => sed_textbox("nsmiliecode", $nsmiliecode, 10, 16),
-	"SMILIE_ADD_IMAGEURL" => sed_textbox("nsmilieimage", $nsmilieimage, 32, 128),
-	"SMILIE_ADD_TEXT" => sed_textbox("nsmilietext", $nsmilietext, 12, 64),
-	"SMILIE_ADD_ORDER" => sed_textbox("nsmilieorder", $nsmilieorder, 5, 5)
+	"SMILIE_ADD_CODE" => sed_textbox("nsmiliecode", isset($nsmiliecode)?$nsmiliecode:'', 10, 16),
+	"SMILIE_ADD_IMAGEURL" => sed_textbox("nsmilieimage", isset($nsmilieimage)?$nsmilieimage:'', 32, 128),
+	"SMILIE_ADD_TEXT" => sed_textbox("nsmilietext", isset($nsmilietext)?$nsmilietext:'', 12, 64),
+	"SMILIE_ADD_ORDER" => sed_textbox("nsmilieorder", isset($nsmilieorder)?$nsmilieorder:'', 5, 5)
 ));
 
 $t -> parse("ADMIN_SMILIES.ADD_SMILIE");

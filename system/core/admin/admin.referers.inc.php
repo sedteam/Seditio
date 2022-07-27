@@ -26,8 +26,6 @@ $urlpaths[sed_url("admin", "m=referers")] =  $L['Referers'];
 
 $admintitle = $L['Referers'];
 
-$adminhelp = $L['adm_help_referers'];
-
 $d = sed_import('d', 'G', 'INT');
 if(empty($d)) { $d = 0; }
 

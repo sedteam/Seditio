@@ -26,8 +26,6 @@ $urlpaths[sed_url("admin", "m=pm")] =  $L['Private_Messages'];
 
 $admintitle = $L['Private_Messages'];
 
-$adminhelp = $L['adm_help_pm'];
-
 $t = new XTemplate(sed_skinfile('admin.pm', true)); 
 
 if (sed_auth('admin', 'a', 'A'))

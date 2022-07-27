@@ -26,8 +26,6 @@ $urlpaths[sed_url("admin", "m=pfs")] =  $L['PFS'];
 
 $admintitle = $L['PFS'];
 
-$adminhelp = $L['adm_help_pfs'];
-
 $t = new XTemplate(sed_skinfile('admin.pfs', true)); 
 
 $t -> assign(array( 

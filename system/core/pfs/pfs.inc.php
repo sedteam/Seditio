@@ -127,7 +127,7 @@ if ($a == 'upload')
 		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	if ($folder_id != 0)
+	if ($folderid != 0)
 		{
 		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
 		sed_die(sed_sql_numrows($sql) == 0);
@@ -181,6 +181,7 @@ if ($a == 'upload')
 				{
 				if (!file_exists($cfg['pfs_dir'].$u_name))
 					{
+					/*
 					if ($cfg['pfsuserfolder'])
 						{
 						if (!is_dir($cfg['pfs_dir']))
@@ -188,7 +189,7 @@ if ($a == 'upload')
 						if (!is_dir($cfg['th_dir']))
 							{ mkdir($cfg['th_dir'], 0666); }
 						}
-
+					*/
 					move_uploaded_file($u_tmp_name, $cfg['pfs_dir'].$u_name);
 					@chmod($cfg['pfs_dir'].$u_name, 0766);
 
