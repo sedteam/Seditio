@@ -30,4 +30,13 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $extraslot = $cfg['plugin']['uploader']['thumb_extra'];
 
+if (($c2 == "newpage".$extraslot) || ($c2 == "rpage".$extraslot) || ($c2 == "ricon")) 
+	{ 
+	$add_file = "<a href=\"javascript:upl_addimg('".$cfg['th_dir'].$pfs_file."','".$pfs_id."','".$pfs_file."');\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"\" /></a>"; 
+	$add_thumbnail = "";
+	$add_image = "";	
+	$pfs_icon = "<a href=\"javascript:upl_addimg('".$cfg['th_dir'].$pfs_file."','".$pfs_id."','".$pfs_file."');\"><img src=\"".$cfg['th_dir'].$pfs_file."\" alt=\"".$pfs_file."\"></a>";	
+	} 
+
+
 ?>
