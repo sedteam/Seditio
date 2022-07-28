@@ -20,6 +20,8 @@ $L['plu_toomanywords'] = "Слишком много слов, ограничен
 $L['plu_found'] = "Найдено";
 $L['plu_match'] = "совпадений";
 
+$L['plu_nofound'] = "Совпадений не найдено";
+
 $L['plu_allsections'] = "Все секции";
 $L['plu_allcategories'] = "Все категории";
 

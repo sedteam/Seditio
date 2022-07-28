@@ -460,6 +460,23 @@
 		width:100%;
 	}	
 	
+	.search-form select {
+		width:100%;
+	}
+	
+	.pl-search-date,
+	.pl-search-poster,
+	.pl-search-owner {
+		width: 50%!important;
+		float:left!important;
+		text-align:left!important;			
+	}
+	.pl-search-poster,
+	.pl-search-owner {
+		text-align:right!important;		
+	}		
+	
+	
 }
 
 @media (max-width: 570px) {

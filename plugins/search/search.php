@@ -7,9 +7,9 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/search/search.php
 Version=179
-Date=2022-jul-25
+Date=2022-jul-28
 Type=Plugin
-Author=Olivier C. & Spartan
+Author=Amro
 Description=
 [END_SED]
 
@@ -32,190 +32,197 @@ $sq = sed_import('sq','P','TXT');
 $a = sed_import('a','G','TXT');
 $checked_catarr = array();
       
-$plugin_title = '';
-$plugin_body = '';
+$error_string = '';
+$total_items = 0;
 
-if ($a=='search' && $sq=='')
-  {
-  unset($a);
-  }
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("plug", "e=search")] = $L['plu_title'];	
 
-if ($a=='search')
-  {
-	if (mb_strlen($sq)<3)
+if ($a == 'search')
+	{	
+	if (empty($sq) || mb_strlen($sq) < 3)
 		{
-		$plugin_body .= "<p>".$L['plu_querytooshort']."</p>";
-		unset($a);
+		$error_string .= $L['plu_querytooshort']."<br />";
 		}
 	else
 		{
 		$sq = sed_sql_prep($sq);
 		$words = explode(" ", $sq);
 		$words_count = count($words);
-		if ($words_count>$cfg_maxwords)
+		if ($words_count > $cfg_maxwords)
 			{
-			$plugin_body .= "<p>".$L['plu_toomanywords']." ".$cfg_maxwords."</p>";
-			unset($a);
+			$error_string .= $L['plu_toomanywords']." ".$cfg_maxwords."<br />";
 			}
 		}
-  }
-
-if ($a=='search')
-	{
-	$sqlsearch = implode("%", $words);
-	$sqlsearch = "%".$sqlsearch."%";
-
-	if (!$cfg['disable_page'])
+		
+	if (empty($error_string))
 		{
+		$sqlsearch = (count($words) > 1) ? implode("%", $words) : $words[0];
+		$sqlsearch = "%".$sqlsearch."%";
+
+		if (!$cfg['disable_page'])
+			{
+				
+			$pag_sub = sed_import('pag_sub', 'P', 'ARR');
+			if (!is_array($pag_sub) || $pag_sub[0] == 'all')
+				{ $sqlsections = ''; }
+			else
+				{
+				$sub = array();
+				foreach($pag_sub as $i => $k)
+					{ 
+					$k = sed_import($k,'D','TXT');
+					$checked_catarr[] = $k;
+					$sub[] = "page_cat='".sed_sql_prep($k)."'"; 
+					}
+				 $sqlsections = "AND (".implode(' OR ', $sub).")";
+				}
+
+			$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+
+			$sql  = sed_sql_query("SELECT page_id, page_ownerid, page_title, page_cat, page_alias, page_date from $db_pages p, $db_structure s
+					WHERE $pagsql (p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND p.page_cat = s.structure_code
+					AND p.page_cat NOT LIKE 'system' $sqlsections ORDER by page_date DESC 
+					LIMIT $cfg_maxitems");
+			  
+			$items = sed_sql_numrows($sql);
+
+			if ($items > 0)
+				{			
+				while ($row = sed_sql_fetchassoc($sql))
+					{
+					if (sed_auth('page', $row['page_cat'], 'R'))
+						{
+						$sys['catcode'] = $row['page_cat'];
+						$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=".$row['page_id']) : sed_url("page", "al=".$row['page_alias']);
+						$ownername = sed_sql_fetchassoc(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));					
+						$t->assign(array(
+							"PLUGIN_SEARCH_ROW_PAGE_CATEGORY_URL" => sed_url("list", "c=".$row['page_cat']),
+							"PLUGIN_SEARCH_ROW_PAGE_CATEGORY_TITLE" => $sed_cat[$row['page_cat']]['tpath'],
+							"PLUGIN_SEARCH_ROW_PAGE_URL" =>	$row['page_pageurl'],
+							"PLUGIN_SEARCH_ROW_PAGE_TITLE" => sed_cc($row['page_title']),
+							"PLUGIN_SEARCH_ROW_PAGE_DATE" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+							"PLUGIN_SEARCH_ROW_PAGE_OWNER" => sed_build_user($row['page_ownerid'], $ownername['user_name'])	
+						));					
+						$t->parse("MAIN.PLUGIN_SEARCH_PAGES.PLUGIN_SEARCH_PAGES_ROW");
+						}				
+					}
+				$total_items += $items;
+				$t->assign("PLUGIN_SEARCH_PAGE_FOUND", $items);				
+				$t->parse("MAIN.PLUGIN_SEARCH_PAGES");			
+				}
+			}
+	  
+		if (!$cfg['disable_forums'])
+			{
+			$frm_sub = sed_import('frm_sub','P','ARR');
+
+			if (!is_array($frm_sub) || $frm_sub[0] == 9999)
+				{ $sqlsections = ''; }
+			else
+				{
+				foreach($frm_sub as $i => $k)
+					{ $sections1[] = "s.fs_id='".sed_sql_prep($k)."'"; }
+				$sqlsections = "AND (".implode(' OR ', $sections1).")";
+				}
+
+			$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, t.ft_updated, s.fs_id, s.fs_title, s.fs_category
+			FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
+			WHERE 1 AND (p.fp_text LIKE '".sed_sql_prep($sqlsearch)."' OR t.ft_title LIKE '".sed_sql_prep($sqlsearch)."')
+			AND p.fp_topicid=t.ft_id AND p.fp_sectionid=s.fs_id $sqlsections 
+			GROUP BY t.ft_id ORDER BY ft_updated DESC
+			LIMIT $cfg_maxitems");
+
+			$items = sed_sql_numrows($sql);
 			
-		$pag_sub = sed_import('pag_sub', 'P', 'ARR');
-		if (!is_array($pag_sub) || $pag_sub[0] == 'all')
-			{ $sqlsections = ''; }
-		else
-			{
-			$sub = array();
-			foreach($pag_sub as $i => $k)
-				{ 
-				$k = sed_import($k,'D','TXT');
-				$checked_catarr[] = $k;
-				$sub[] = "page_cat='".sed_sql_prep($k)."'"; 
-				}
-			 $sqlsections = "AND (".implode(' OR ', $sub).")";
-			}
-
-		$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
-
-		$sql  = sed_sql_query("SELECT page_id, page_ownerid, page_title, page_cat, page_date from $db_pages p, $db_structure s
-				WHERE $pagsql (p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND 
-				 p.page_cat=s.structure_code
-				AND p.page_cat NOT LIKE 'system' $sqlsections ORDER by page_date DESC 
-				LIMIT $cfg_maxitems");
-          
-		$items = sed_sql_numrows($sql);
-
-		$plugin_body .= "<h4>".$L['Pages'].", ".$L['plu_found']." ".$items." ".$L['plu_match'].": </h4>";
-
-		if ($items>0)
-			{
-			$plugin_body .= "<table class=\"cells striped\" width=\"100%\">";      
-			$plugin_body .= "<tr>";
-			$plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Category']."</td>";
-			$plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Page']."</td>";
-			$plugin_body .= "<td style=\"width:15%;\" class=\"coltop\">".$L['Date']."</td>";      
-			$plugin_body .= "<td style=\"width:15%;\" width=\"15%\"class=\"coltop\">".$L['Owner']."</td>";
-			$plugin_body .= "</tr>";
-
-			while ($row = sed_sql_fetchassoc($sql))
-				{
-				if (sed_auth('page', $row['page_cat'], 'R'))
+			if ($items > 0)
+				{			
+				while ($row = sed_sql_fetchassoc($sql))
 					{
-					$ownername = sed_sql_fetchassoc(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
-					$plugin_body .= "<tr><td><a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
-					$plugin_body .= "<td><a href=\"".sed_url("page", "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a></td>";
-					$plugin_body .= "<td style=\"text-align:center;\">".@date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)."</td>";          
-					$plugin_body .= "<td style=\"text-align:center;\">".sed_build_user($row['page_ownerid'], $ownername['user_name'])."</td>";
-					$plugin_body .= "</tr>";
-					}
-				}
-			$plugin_body .= "</table>";
-			}
-		}
-  
-	if (!$cfg['disable_forums'])
-		{
-		$frm_sub = sed_import('frm_sub','P','ARR');
-
-		if (!is_array($frm_sub) || $frm_sub[0] == 9999)
-			{ $sqlsections = ''; }
-		else
-			{
-			foreach($frm_sub as $i => $k)
-				{ $sections1[] = "s.fs_id='".sed_sql_prep($k)."'"; }
-			$sqlsections = "AND (".implode(' OR ', $sections1).")";
-			}
-
-		$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, t.ft_updated, s.fs_id, s.fs_title, s.fs_category
-		FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		WHERE 1 AND (p.fp_text LIKE '".sed_sql_prep($sqlsearch)."' OR t.ft_title LIKE '".sed_sql_prep($sqlsearch)."')
-		AND p.fp_topicid=t.ft_id AND p.fp_sectionid=s.fs_id $sqlsections 
-		GROUP BY t.ft_id ORDER BY ft_updated DESC
-		LIMIT $cfg_maxitems");
-
-		$items = sed_sql_numrows($sql);
-		$plugin_body .= "<h4>".$L['Forums'].", ".$L['plu_found']." ".$items." ".$L['plu_match']." :</h4>";
-       
-		if ($items > 0)
-			{
-			$plugin_body .= "<table class=\"cells striped\" width=\"100%\">";
-			$plugin_body .= "<tr>";
-			$plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Section']."</td>";
-			$plugin_body .= "<td style=\"width:35%;\" class=\"coltop\">".$L['Topic']."</td>";
-			$plugin_body .= "<td style=\"width:15%;\" class=\"coltop\">".$L['Date']."</td>";
-			$plugin_body .= "<td style=\"width:15%;\" class=\"coltop\">".$L['Poster']."</td>";
-			$plugin_body .= "</tr>";
-
-			while ($row = sed_sql_fetchassoc($sql))
-				{
-				if (sed_auth('forums', $row['fs_id'], 'R'))
-					{
-					$plugin_body .= "<tr>";
-					$plugin_body .= "<td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td>";
-					$plugin_body .= "<td><a href=\"".sed_url("forums", "m=posts&p=".$row['fp_id'], "#".$row['fp_id'])."\">".sed_cc($row['ft_title'])."</a></td>";
-					$plugin_body .= "<td style=\"text-align:center;\">".@date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600)."</td>";
-					$plugin_body .= "<td style=\"text-align:center;\">".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td>";
-
-					$plugin_body .= "</tr>";
-					}
+					if (sed_auth('forums', $row['fs_id'], 'R'))
+						{					
+						$t->assign(array(
+							"PLUGIN_SEARCH_ROW_FORUM_SECTION" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
+							"PLUGIN_SEARCH_ROW_FORUM_TOPIC_TITLE" => sed_cc($row['ft_title']),
+							"PLUGIN_SEARCH_ROW_FORUM_TOPIC_URL" => sed_url("forums", "m=posts&p=".$row['fp_id'], "#".$row['fp_id']),
+							"PLUGIN_SEARCH_ROW_FORUM_DATE" => @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600),
+							"PLUGIN_SEARCH_ROW_FORUM_POSTER" =>	sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])	
+						));	
+						$t->parse("MAIN.PLUGIN_SEARCH_FORUMS.PLUGIN_SEARCH_FORUMS_ROW");					
+						}
+					}   
+				$total_items += $items;
+				$t->assign("PLUGIN_SEARCH_FORUM_FOUND", $items);										
+				$t->parse("MAIN.PLUGIN_SEARCH_FORUMS");					
 				}    
-				$plugin_body .= "</table>";
-			}    
+			}
 		}
 	}
-
-$plugin_body .= "<h4>&nbsp;</h4>";
-$plugin_body .= "<form id=\"search\" action=\"".sed_url("plug", "e=search&a=search")."\" method=\"post\">";
-$plugin_body .= "<table class=\"cells striped\">";
-$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin']." :</td>";
-$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"40\" maxlength=\"64\" /></td></tr>";
-
+	
 if (!$cfg['disable_page'])
 	{
-	$plugin_body .= "<tr><td>".$L['Pages']."</td>";
-	$plugin_body .= "<td><select multiple name=\"pag_sub[]\" size=\"5\">";
-	$plugin_body .= "<option value=\"all\" selected=\"selected\">".$L['plu_allcategories']."</option>";
+	$page_cats = "<select multiple name=\"pag_sub[]\" size=\"5\">";
+	$page_cats .= "<option value=\"all\" selected=\"selected\">".$L['plu_allcategories']."</option>";
 
 	foreach ($sed_cat as $i =>$x)
 		{
 		if ($i != 'all' && $i != 'system' && sed_auth('page', $i, 'R'))
 			{
 			$selected = (count($checked_catarr) > 0 && in_array($i, $checked_catarr)) ? "selected=\"selected\"" : '';
-			$plugin_body .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
+			$page_cats .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
 			}
-		}  
-  }
+		}
+		
+	$page_cats .= "</select>";
+
+	$t->assign("PLUGIN_SEARCH_FORM_PAGES", $page_cats);
+	$t->parse("MAIN.PLUGIN_SEARCH_FORM.PLUGIN_SEARCH_FORM_PAGES");
+	}
 
 if (!$cfg['disable_forums'])
 	{
-	$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
-		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
-   	ORDER by fn_path ASC, fs_order ASC");
+	$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s 
+			LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
+			ORDER by fn_path ASC, fs_order ASC");
 
-	$plugin_body .= "<tr><td>".$L['Forums']."</td>";
-	$plugin_body .= "<td><select multiple name=\"frm_sub[]\" size=\"5\">";
-	$plugin_body .= "<option value=\"9999\" selected=\"selected\">".$L['plu_allsections']."</option>";
+	$forums_sections = "<select multiple name=\"frm_sub[]\" size=\"5\">";
+	$forums_sections .= "<option value=\"9999\" selected=\"selected\">".$L['plu_allsections']."</option>";
 
 	while ($row1 = sed_sql_fetchassoc($sql1))
 		{
 		if (sed_auth('forums', $row1['fs_id'], 'R'))
 			{
-			$plugin_body .= "<option value=\"".$row1['fs_id']."\">".sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE)."</option>";
+			$forums_sections .= "<option value=\"".$row1['fs_id']."\">".sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE)."</option>";
 			}
 		}
 
-	$plugin_body .= "</select></td></tr>";
+	$forums_sections .= "</select>";
+	$t->assign("PLUGIN_SEARCH_FORM_FORUMS", $forums_sections);
+	$t->parse("MAIN.PLUGIN_SEARCH_FORM.PLUGIN_SEARCH_FORM_FORUMS");
 	}
-   
-$plugin_body .= "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" class=\"submit btn btn-big\" value=\"".$L['Search']."\" /></td></tr>";
-$plugin_body .= "</table></form>";
+	
+$t->assign(array(
+	"PLUGIN_SEARCH_FORM_SEND" => sed_url("plug", "e=search&a=search"),
+	"PLUGIN_SEARCH_FORM_INPUT" => sed_textbox('sq', sed_cc($sq), 40, 64)
+));
+
+$t->parse("MAIN.PLUGIN_SEARCH_FORM");
+
+if ($total_items == 0 && $a == 'search') 
+	{ $error_string .= $L['plu_nofound']; }
+
+if (!empty($error_string))
+	{
+	$t->assign("PLUGIN_SEARCH_ERROR_BODY", $error_string);
+	$t->parse("MAIN.PLUGIN_SEARCH_ERROR");
+	}	
+	
+$t->assign(array(
+	"PLUGIN_SEARCH_TITLE" => "<a href=\"".sed_url("plug", "e=search")."\">".$L['plu_title'] ."</a>",
+	"PLUGIN_SEARCH_SHORTTITLE" => $L['plu_title'],
+	"PLUGIN_SEARCH_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
+	"PLUGIN_SEARCH_URL" => sed_url("plug", "e=search")
+));
 
 ?>
