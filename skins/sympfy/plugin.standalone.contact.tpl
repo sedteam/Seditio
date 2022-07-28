@@ -20,13 +20,23 @@
 		
 			<!-- BEGIN: PLUGIN_CONTACT_ERROR -->
 
-			<div class="error">
+			<div class="message error">
 
 				{PLUGIN_CONTACT_ERROR_BODY}
 
 			</div>
 
-			<!-- END: PAGEADD_ERROR -->
+			<!-- END: PLUGIN_CONTACT_ERROR -->
+			
+			<!-- BEGIN: PLUGIN_CONTACT_DONE -->
+
+			<div class="message okmess">
+
+				{PLUGIN_CONTACT_DONE_BODY}
+
+			</div>
+
+			<!-- END: PLUGIN_CONTACT_DONE -->			
 
 			<form action="{PLUGIN_CONTACT_FORM}" method="post" name="sendmail">
 
