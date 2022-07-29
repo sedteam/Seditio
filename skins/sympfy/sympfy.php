@@ -38,6 +38,13 @@ $out['ic_pastethumb'] = "<i class=\"ic-image\"></i>";
 $out['ic_pastefile'] = "<i class=\"ic-link\"></i>";
 $out['ic_pasteimage'] = "<i class=\"ic-photo\"></i>";
 
+$out['ic_alert_error'] = "<i class=\"ic-circle-x\"></i>";
+$out['ic_alert_info'] = "<i class=\"ic-alert-circle\"></i>";
+$out['ic_alert_warning'] = "<i class=\"ic-alert-triangle\"></i>";
+$out['ic_alert_success'] = "<i class=\"ic-check-circle\"></i>";
+
+$out['ic_close'] = "<i class=\"ic-close\"></i>";
+
 // ========= Plugin RecentItems ============================= //
 
 $cfg['plu_mask_pages'] = "<span class=\"rec-date\">%3\$s</span>"." "."%1\$s"." ".$cfg['separator']." "."%2\$s"."<br />";

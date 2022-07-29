@@ -37,6 +37,7 @@ $enabled[0] = $L['Disabled'];
 $enabled[1] = $L['Enabled'];
 
 $adminmain = '';
+$adminwarnings = '';
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.main');
@@ -55,14 +56,15 @@ require($sys['inc']);
 $adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box\"><div class=\"content-box-header\"><h3>".$L['Help']."</h3></div>";
 $adminmain .= (empty($adminhelp)) ? '' : "<div class=\"content-box-content\">".$adminhelp."</div></div>";
 
-$out['subtitle'] = $L['Administration'];
+$out['subtitle'] = $admintitle;
 
 $adminsubtitle = isset($adminsubtitle) ? $adminsubtitle : '';
 
 /**/
-$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
-$title_tags[] = array('%1$s', '%2$s', '%3$s');
-$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$cfg['admintitle'] = '{TITLE} - {ADMINISTRATION}';
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}', '{ADMINISTRATION}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s', '%4$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle'], $L['Administration']);
 $out['subtitle'] = sed_title('admintitle', $title_tags, $title_data);
 /**/
 
@@ -82,12 +84,10 @@ if (!empty($msg) || !empty($adminwarnings))
   {
   require(SED_ROOT . "/system/lang/$lang/message.lang.php");
   	
-  $msg_type = (array_key_exists($msg, $cfg['msgtype'])) ? $cfg['msgtype_name'][$cfg['msgtype'][$msg]] : $cfg['msgtype_name']['i'];	
+  $msg_type = (array_key_exists($msg, $cfg['msgtype'])) ? $cfg['msgtype'][$msg] : 'i';	
 
-  $t->assign(array(
-    "ADMIN_MSG_CLASS" => (!empty($adminwarnings)) ? $cfg['msgtype_name']['a'] : $msg_type,
-    "ADMIN_MSG_TITLE" => (!empty($adminwarnings)) ? $L['adm_warnings'] : $L["msg".$msg."_0"],
-    "ADMIN_MSG_TEXT" => (!empty($adminwarnings)) ? $adminwarnings : $L["msg".$msg."_1"]
+  $t->assign(array(	
+	"ADMIN_MESSAGE_BODY" => (!empty($adminwarnings)) ? sed_alert($adminwarnings, 'w') : sed_alert(array('title' => $L["msg".$msg."_0"], 'text' => $L["msg".$msg."_1"]), $msg_type)
   ));
   
   $t->parse("MAIN.ADMIN_MESSAGE");

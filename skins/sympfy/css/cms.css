@@ -249,12 +249,62 @@ ul.systemlist li::before {
     color: #ccc;
 }
 
+.user-groups {
+	line-height:1.5em;
+}
+
+.bar_front {
+	background-color: #72b626;
+	border-right: 0px solid #333333;
+	padding: 0;
+	color: #DDDDDD;
+	height: 13px;
+}
+
+.bar_back {
+    background-color: #EBECF1;
+    border: 1px solid #333333;
+    margin: 2px 0px 2px 0px;
+    height: 15px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.btn-adm {
+	font-size: 0.9em;
+    padding: 3px 8px;
+}
+
+/*-------------------------*/
+/***** ALERTS *****/
+/*-------------------------*/
+
+.alert-icon {
+	position:absolute;
+	left:15px;
+	top:15px;
+}
+
+.alert-close {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	margin: 0;
+	line-height: 1em;
+	border: 0;
+	padding: 0;
+	background: none;
+}
+
 .alert {
     position: relative;
-    padding: 15px;
+    padding: 15px 15px 15px 40px;
     margin-bottom: 15px;
     border: 1px solid transparent;
     border-radius: 3px;
+	line-height: 1.35em;
 }
 
 .alert-success {
@@ -326,34 +376,6 @@ ul.systemlist li::before {
 	text-align:center;
 	font-size:1.2em;
     color: #ea0202;
-}
-
-.user-groups {
-	line-height:1.5em;
-}
-
-.bar_front {
-	background-color: #72b626;
-	border-right: 0px solid #333333;
-	padding: 0;
-	color: #DDDDDD;
-	height: 13px;
-}
-
-.bar_back {
-    background-color: #EBECF1;
-    border: 1px solid #333333;
-    margin: 2px 0px 2px 0px;
-    height: 15px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.btn-adm {
-	font-size: 0.9em;
-    padding: 3px 8px;
 }
 
 /* = Horizontal Pils (use in forums)

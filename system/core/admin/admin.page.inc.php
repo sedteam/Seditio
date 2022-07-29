@@ -48,9 +48,9 @@ switch($mn)
 	$urlpaths[sed_url("admin", "m=page&mn=structure")] = $L['Structure'];
 	$admintitle = $L['Structure'];
     
-    if ($n=='options')
+    if ($n == 'options')
     	{
-    	if ($a=='update')
+    	if ($a == 'update')
     		{
 				
 			/* === Hook === */
@@ -76,9 +76,9 @@ switch($mn)
     		$rallowcomments = sed_import('rallowcomments', 'P', 'BOL');  //New v173
     		$rallowratings = sed_import('rallowratings', 'P', 'BOL');  //New v173
     		
-			if ($rtplmode==1)
+			if ($rtplmode == 1)
 				  { $rtpl = ''; }
-			elseif ($rtplmode==3)
+			elseif ($rtplmode == 3)
 			  { $rtpl = 'same_as_parent'; }
 			else
 			  { $rtpl = sed_import('rtplforced','P','ALS'); }
@@ -106,9 +106,9 @@ switch($mn)
     		  }
     
         $sql = sed_sql_query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
-        sed_die(sed_sql_numrows($sql)==0);
+        sed_die(sed_sql_numrows($sql) == 0);
     
-        $handle=opendir("skins/".$cfg['defaultskin']."/");
+        $handle = opendir("skins/".$cfg['defaultskin']."/");
         $allskinfiles = array();
     
         while ($f = readdir($handle))
@@ -167,7 +167,7 @@ switch($mn)
 		$st_tpl .=  " <select name=\"rtplforced\" size=\"1\">";    
     	foreach($sed_cat as $i => $x)
     		{
-    		if ($i!='all')
+    		if ($i != 'all')
     			{
     			$selected = ($i==$row['structure_tpl']) ? "selected=\"selected\"" : '';
     			$st_tpl .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
@@ -290,9 +290,9 @@ switch($mn)
     		$st_tpl .= "</span>";    
      
     		$st_group = "<select name=\"s[$structure_id][rgroup]\" size=\"1\">";   
-    		for ($i=0; $i<3; $i++)
+    		for ($i = 0; $i < 3; $i++)
     			{
-    			$selected = ($i==$structure_group) ? "selected=\"selected\"" : '';
+    			$selected = ($i == $structure_group) ? "selected=\"selected\"" : '';
     			$st_group .= "<option value=\"$i\" $selected>".$structure_mode[$i]."</option>";	   
     			}
     		$st_group .=  "</select>";    

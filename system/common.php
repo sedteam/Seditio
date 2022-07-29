@@ -513,6 +513,12 @@ $out['ic_pm_trashcan'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-t
 $out['ic_pm_reply'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" />";
 $out['ic_pm_archive'] = "<img src=\"skins/".$usr['skin']."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" />";
 
+$out['ic_alert_error'] = "<img src=\"system/img/alerts/error.png\" alt=\"\" />";
+$out['ic_alert_info'] = "<img src=\"system/img/alerts/info.png\" alt=\"\" />";
+$out['ic_alert_warning'] = "<img src=\"system/img/alerts/warning.png\" alt=\"\" />";
+$out['ic_alert_success'] = "<img src=\"system/img/alerts/success.png\" alt=\"\" />";
+$out['ic_close'] = "<img src=\"system/img/alerts/close.png\" alt=\"\" />";
+
 $sed_yesno[1] = $L['Yes'];
 $sed_yesno[0] = $L['No'];
 

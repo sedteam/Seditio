@@ -42,7 +42,7 @@ $t = new XTemplate(sed_skinfile('admin.home', true));
 // --------------------------
 
 if (!function_exists('gd_info') && $cfg['th_amode']!='Disabled')
-	{ $adminwarnings .= "<p>".$L['adm_nogd']."</p>"; }
+	{ $adminwarnings .= $L['adm_nogd']."<br />"; }
 
 $t->assign(array(
 	"HOME_PAGE_QUEUED" => "<a href=\"".sed_url("admin", "m=page")."\">".$L['Pages']." : ".$pagesqueued."</a>",
@@ -56,7 +56,7 @@ if ($sys['user_istopadmin'])
 	if ($a == 'force')
 		{
 		sed_check_xg();
-		$forcesql = sed_import('forcesql','P',INT);
+		$forcesql = sed_import('forcesql','P', 'INT');
 		sed_stat_set('version', $forcesql);
 		sed_redirect(sed_url("admin", "", "", true));
 		exit;

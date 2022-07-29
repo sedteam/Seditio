@@ -150,14 +150,24 @@ if (!function_exists('set_magic_quotes_runtime'))
 /** 
  * Strips everything but alphanumeric, hyphens and underscores 
  * 
- * @param string $text Alert text
+ * @param mixed $alert Alert text (or arr text & title)
  * @param string $type Alert type 
  * @return string 
  */ 
-function sed_alert($text, $type = 'i')
+function sed_alert($alert, $type = 'i', $close = TRUE)
 	{
-	global $cfg; 
-	return "<div class=\"alert alert-".$cfg['msgtype_name'][$type]."\">".$text."</div>";
+	global $L, $cfg, $out; 
+	
+	if (is_array($alert) && isset($alert['title'])) {
+		$alert_text = "<strong>".$alert['title']."</strong><br />".$alert['text'];
+	} else {
+		$alert_text = $alert;		
+	}
+	
+	$alert_icon = isset($out['ic_alert_'.$cfg['msgtype_name'][$type]]) ? "<span class=\"alert-icon\">".$out['ic_alert_'.$cfg['msgtype_name'][$type]]."</span>" : '';
+	$alert_close = ($close) ? "<button class=\"alert-close\" title=\"".$L['Close']."\">".$out['ic_close']."</button>" : '';
+	
+	return "<div class=\"alert alert-".$cfg['msgtype_name'][$type]."\">".$alert_icon.$alert_text.$alert_close."</div>";
 	}
 
 /** 

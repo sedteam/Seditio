@@ -74,7 +74,7 @@
 
     //Close button:
 		
-		$(".close").click(
+		$(".close, .alert-close").click(
 			function () {
 				$(this).parent().fadeTo(400, 0, function () { // Links with the class "close" will close parent
 					$(this).slideUp(400);
