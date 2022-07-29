@@ -219,7 +219,7 @@ $t = new XTemplate("skins/".$skin."/pm.send.tpl");
 
 if (!empty($error_string))
 	{
-	$t->assign("PMSEND_ERROR_BODY",$error_string);
+	$t->assign("PMSEND_ERROR_BODY", sed_alert($error_string, 'e'));
 	$t->parse("MAIN.PMSEND_ERROR");
 	}
 

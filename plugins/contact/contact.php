@@ -125,13 +125,13 @@ $urlpaths[sed_url("plug", "e=contact")] = $L['plu_title'];
 
 if (!empty($error_string))
 	{
-	$t->assign("PLUGIN_CONTACT_ERROR_BODY", $error_string);
+	$t->assign("PLUGIN_CONTACT_ERROR_BODY", sed_alert($error_string, 'e'));
 	$t->parse("MAIN.PLUGIN_CONTACT_ERROR");
 	}
 	
 if (!empty($message))
 	{
-	$t->assign("PLUGIN_CONTACT_DONE_BODY", $message);
+	$t->assign("PLUGIN_CONTACT_DONE_BODY", sed_alert($message, 's'));
 	$t->parse("MAIN.PLUGIN_CONTACT_DONE");
 	}	
 	

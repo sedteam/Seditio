@@ -20,9 +20,7 @@
 
 			<!-- BEGIN: PMSEND_ERROR -->
 
-			<div class="error">
 				{PMSEND_ERROR_BODY}
-			</div>
 
 			<!-- END: PMSEND_ERROR -->
 

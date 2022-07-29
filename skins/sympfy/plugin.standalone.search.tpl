@@ -20,11 +20,7 @@
 		
 			<!-- BEGIN: PLUGIN_SEARCH_ERROR -->
 
-			<div class="message error">
-
 				{PLUGIN_SEARCH_ERROR_BODY}
-
-			</div>
 
 			<!-- END: PLUGIN_SEARCH_ERROR -->
 			

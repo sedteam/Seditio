@@ -133,7 +133,7 @@ if ($a == 'upload')
 		sed_die(sed_sql_numrows($sql) == 0);
 		}
 		
-	$count_userfile = count($_FILES['userfile']['name']);
+	$count_userfile = isset($_FILES['userfile']['name']) ? count($_FILES['userfile']['name']) : 0;
 	
 	for ($ii = 0; $ii < $count_userfile; $ii++)
 		{
@@ -720,7 +720,7 @@ if ($f == 0 && $usr['auth_write'])
 if (count($upload_status) > 0)
 	{
 	$t->assign(array(
-		"PFS_UPLOAD_STATUS" => implode('<br />', $upload_status)
+		"PFS_UPLOAD_STATUS" => sed_alert(implode('<br />', $upload_status), 'i')
 	));			
 	$t->parse("MAIN.PFS_UPLOAD_STATUS");	
 	}

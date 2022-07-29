@@ -214,7 +214,7 @@ if ($total_items == 0 && $a == 'search')
 
 if (!empty($error_string))
 	{
-	$t->assign("PLUGIN_SEARCH_ERROR_BODY", $error_string);
+	$t->assign("PLUGIN_SEARCH_ERROR_BODY", sed_alert($error_string, 'e'));
 	$t->parse("MAIN.PLUGIN_SEARCH_ERROR");
 	}	
 	

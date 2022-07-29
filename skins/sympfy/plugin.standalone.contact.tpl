@@ -20,21 +20,13 @@
 		
 			<!-- BEGIN: PLUGIN_CONTACT_ERROR -->
 
-			<div class="message error">
-
 				{PLUGIN_CONTACT_ERROR_BODY}
-
-			</div>
 
 			<!-- END: PLUGIN_CONTACT_ERROR -->
 			
 			<!-- BEGIN: PLUGIN_CONTACT_DONE -->
 
-			<div class="message okmess">
-
 				{PLUGIN_CONTACT_DONE_BODY}
-
-			</div>
 
 			<!-- END: PLUGIN_CONTACT_DONE -->			
 

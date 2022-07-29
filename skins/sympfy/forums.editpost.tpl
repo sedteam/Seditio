@@ -21,9 +21,7 @@
 
 				<!-- BEGIN: FORUMS_EDITPOST_ERROR -->
 
-				<div class="error">
-					{FORUMS_POSTS_EDITPOST_ERROR_BODY}
-				</div>
+					{FORUMS_EDITPOST_ERROR_BODY}
 
 				<!-- END: FORUMS_EDITPOST_ERROR -->
 

@@ -271,7 +271,7 @@ $t = new XTemplate($mskin);
 
 if (!empty($error_string))
 	{
-	$t->assign("PAGEEDIT_ERROR_BODY",$error_string);
+	$t->assign("PAGEEDIT_ERROR_BODY", sed_alert($error_string, 'e'));
 	$t->parse("MAIN.PAGEEDIT_ERROR");
 	}
 

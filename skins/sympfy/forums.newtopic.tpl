@@ -20,9 +20,7 @@
 
 			<!-- BEGIN: FORUMS_NEWTOPIC_ERROR -->
 
-			<div class="error">
 				{FORUMS_NEWTOPIC_ERROR_BODY}
-			</div>
 
 			<!-- END: FORUMS_NEWTOPIC_ERROR -->
 

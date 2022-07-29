@@ -52,7 +52,7 @@ if ($row = sed_sql_fetchassoc($sql))
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 
-	if (!$usr['isadmin'] && $fp_posterid!=$usr['id'])
+	if (!$usr['isadmin'] && $fp_posterid != $usr['id'])
 		{
 		sed_log("Attempt to edit a post without rights", 'sec');
 		sed_die();
@@ -106,40 +106,45 @@ if ($a == 'update')
 	$rtopicdesc = sed_import('rtopicdesc','P','TXT', 64);
 	$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
-	if (!empty($rmsg))
-		{
-		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text = '".sed_sql_prep($rmsg)."', fp_updated = '".$sys['now_offset']."', fp_updater = '".sed_sql_prep($rupdater)."' WHERE fp_id = '$p'");
-		}
+	$error_string .= ((!empty($rtopictitle)) && mb_strlen($rtopictitle) < 2) ? $L['for_titletooshort']."<br />" : '';
+	$error_string .= (mb_strlen($rmsg) < 2) ? $L['for_msgtooshort']."<br />" : '';	
 
-	 $is_topic = false;
-	if (!empty($rtopictitle))
-		{
-		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = '$q' ORDER BY fp_id ASC LIMIT 1");
-		if ($row = sed_sql_fetchassoc($sql))
+	if (empty($error_string))
+		{		
+		if (!empty($rmsg))
 			{
-			$fp_idp = $row['fp_id'];
-			if ($fp_idp == $p)
+			$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text = '".sed_sql_prep($rmsg)."', fp_updated = '".$sys['now_offset']."', fp_updater = '".sed_sql_prep($rupdater)."' WHERE fp_id = '$p'");
+			}			
+		$is_topic = false;
+		if (!empty($rtopictitle))
+			{
+			$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = '$q' ORDER BY fp_id ASC LIMIT 1");
+			if ($row = sed_sql_fetchassoc($sql))
 				{
-				if (mb_substr($rtopictitle, 0, 1) == "#")
-					{ $rtopictitle = str_replace('#', '', $rtopictitle); }
-				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title = '".sed_sql_prep($rtopictitle)."', ft_desc = '".sed_sql_prep($rtopicdesc)."' WHERE ft_id = '$q'");
-				$is_topic = true;
-				if ($ft_poll > 0)
+				$fp_idp = $row['fp_id'];
+				if ($fp_idp == $p)
 					{
+					if (mb_substr($rtopictitle, 0, 1) == "#")
+						{ $rtopictitle = str_replace('#', '', $rtopictitle); }
+					$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title = '".sed_sql_prep($rtopictitle)."', ft_desc = '".sed_sql_prep($rtopicdesc)."' WHERE ft_id = '$q'");
+					$is_topic = true;
+					if ($ft_poll > 0)
+						{
 						sed_poll_editsave($ft_poll);
-					}				
+						}				
+					}
 				}
 			}
+
+		/* === Hook === */
+		$extp = sed_getextplugins('forums.editpost.update.done');
+		if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
+		sed_forum_sectionsetlast($fp_sectionid);
+		sed_redirect(sed_url('forums','m=posts&p='.$p, '#'.$p, true));
 		}
-
-	/* === Hook === */
-	$extp = sed_getextplugins('forums.editpost.update.done');
-	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ===== */
-
-	sed_forum_sectionsetlast($fp_sectionid);
-	sed_redirect(sed_url('forums','m=posts&p='.$p, '#'.$p, true));
 	}
 
 $sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
@@ -187,7 +192,7 @@ $t = new XTemplate($mskin);
 
 if (!empty($error_string))
 	{
-	$t->assign("FORUMS_POSTS_EDITPOST_ERROR_BODY",$error_string);
+	$t->assign("FORUMS_EDITPOST_ERROR_BODY", sed_alert($error_string, 'e'));
 	$t->parse("MAIN.FORUMS_EDITPOST_ERROR");
 	}
 	

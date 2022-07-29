@@ -679,7 +679,7 @@ if (!$notlastpage && !$ft_state && $usr['id'] > 0 && $allowreplybox && $usr['aut
 		
 	if (!empty($error_string))
 		{
-		$t->assign("FORUMS_POSTS_NEWPOST_ERROR_BODY",$error_string);
+		$t->assign("FORUMS_POSTS_NEWPOST_ERROR_BODY", sed_alert($error_string, 'e'));
 		$t->parse("MAIN.FORUMS_POSTS_NEWPOST.FORUMS_POSTS_NEWPOST_ERROR");
 		}		
 

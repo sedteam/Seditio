@@ -54,9 +54,7 @@
 
 <!-- BEGIN: COMMENTS_ERROR -->
 
-	<div class="error">
-		{COMMENTS_ERROR_BODY}
-	</div>
+	{COMMENTS_ERROR_BODY}
 
 <!-- END: COMMENTS_ERROR -->
 

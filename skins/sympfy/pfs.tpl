@@ -35,10 +35,8 @@
 					<div id="tab1" class="tabs">		
 
 						<!-- BEGIN: PFS_UPLOAD_STATUS -->
-						
-						<div class="box">
+
 							{PFS_UPLOAD_STATUS}
-						</div>
 						
 						<!-- END: PFS_UPLOAD_STATUS -->						
 						

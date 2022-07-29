@@ -73,12 +73,12 @@ $cfg['available_image_sizes'] = array(); // array("800x600", "400x300");
 
 $cfg['adminskin'] = "sympfy"; 
 
-/* Message type:  attention => a, error => e, success => s, information => i */
+/* Message type:  warning => w, error => e, success => s, info => i */
 $cfg['msgtype'] = array('100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e', 
-'152' => 'e', '153' => 'e', '157' => 'a', '300' => 's', '400' => 'e', '401' => 'e', '403' => 'e', '404' => 'e', '500' => 'e', '502' => 's', '602' => 'a', 
-'603' => 'a', '900' => 'a', '904' => 'a', '907' => 'e', '911' => 'e', '915' => 'e', '916' => 's', '917' => 's', '930' => 'a', '940' => 'a', '950' => 'e');
+'152' => 'e', '153' => 'e', '157' => 'w', '300' => 's', '400' => 'e', '401' => 'e', '403' => 'e', '404' => 'e', '500' => 'e', '502' => 's', '602' => 'w', 
+'603' => 'w', '900' => 'w', '904' => 'w', '907' => 'e', '911' => 'e', '915' => 'e', '916' => 's', '917' => 's', '930' => 'w', '940' => 'w', '950' => 'e');
 
-$cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'information', 'a' => 'attention');
+$cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'info', 'w' => 'warning');
 
 /* ======== Empty default Var ======== */
 
@@ -146,6 +146,19 @@ if (!function_exists('set_magic_quotes_runtime'))
         return true;
 		}
 	}	
+
+/** 
+ * Strips everything but alphanumeric, hyphens and underscores 
+ * 
+ * @param string $text Alert text
+ * @param string $type Alert type 
+ * @return string 
+ */ 
+function sed_alert($text, $type = 'i')
+	{
+	global $cfg; 
+	return "<div class=\"alert alert-".$cfg['msgtype_name'][$type]."\">".$text."</div>";
+	}
 
 /** 
  * Strips everything but alphanumeric, hyphens and underscores 
@@ -736,7 +749,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				  
 			if (!empty($error_string))
 				{
-				$t->assign("COMMENTS_ERROR_BODY",$error_string);
+				$t->assign("COMMENTS_ERROR_BODY", sed_alert($error_string, 'e'));
 				$t->parse("COMMENTS.COMMENTS_ERROR");
 				}
 
@@ -2385,12 +2398,7 @@ function sed_die_message($code, $header = TRUE, $message_title = '', $message_bo
         951 => '503 Service Unavailable' 
     ); 
 
-    if (!$out['meta_contenttype']) 
-    { 
-        $out['meta_contenttype'] = 'text/html'; 
-    } 
-    
-    sed_sendheaders($out['meta_contenttype'], $msg_status[$code]); 
+    sed_sendheaders('text/html', $msg_status[$code]); 
 
     // Determine message title and body 
     $title = empty($message_title) ? $L['msg' . $code . '_0'] : $message_title; 
@@ -2431,8 +2439,7 @@ function sed_die_message($code, $header = TRUE, $message_title = '', $message_bo
 function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
 	{
 	global $cfg;
-
-	$disp .= "<div style=\"font:14px Segoe UI, Verdana, Arial; border:1px dashed #CCCCCC; padding:8px; margin:16px;\">";
+	$disp = "<div style=\"font:14px Segoe UI, Verdana, Arial; border:1px dashed #CCCCCC; padding:8px; margin:16px;\">";
 	$disp .= "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br />";
 	$disp .= @date('Y-m-d H:i').' / '.$title.' : '.$text;
 	$disp .= "</div>";

@@ -47,9 +47,7 @@
 
 						<!-- BEGIN: PFS_UPLOAD_STATUS -->
 						
-						<div class="box">
 							{PFS_UPLOAD_STATUS}
-						</div>
 						
 						<!-- END: PFS_UPLOAD_STATUS -->						
 						

@@ -145,9 +145,7 @@
 			
 			<!-- BEGIN: FORUMS_POSTS_NEWPOST_ERROR -->
 			
-				<div class="error">
-					{FORUMS_POSTS_NEWPOST_ERROR_BODY}
-				</div>			
+				{FORUMS_POSTS_NEWPOST_ERROR_BODY}		
 			
 			<!-- END: FORUMS_POSTS_NEWPOST_ERROR -->
 			

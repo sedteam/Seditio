@@ -20,9 +20,7 @@
 
 			<!-- BEGIN: PAGEADD_ERROR -->
 
-			<div class="error">
-					{PAGEADD_ERROR_BODY}
-			</div>
+				{PAGEADD_ERROR_BODY}
 
 			<!-- END: PAGEADD_ERROR -->
 			

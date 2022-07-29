@@ -62,7 +62,7 @@ if ($fs_state)
 	sed_redirect(sed_url("message", "msg=602", "", true));
 	}
 
-if ($a=='newtopic')
+if ($a == 'newtopic')
 	{
 	sed_shield_protect();
 
@@ -213,7 +213,7 @@ $t = new XTemplate($mskin);
 
 if (!empty($error_string))
 	{
-	$t->assign("FORUMS_NEWTOPIC_ERROR_BODY",$error_string);
+	$t->assign("FORUMS_NEWTOPIC_ERROR_BODY", sed_alert($error_string, 'e'));
 	$t->parse("MAIN.FORUMS_NEWTOPIC_ERROR");
 	}
 

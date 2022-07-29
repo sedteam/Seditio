@@ -20,9 +20,7 @@
 
 			<!-- BEGIN: PAGEEDIT_ERROR -->
 
-			<div class="error">
 				{PAGEEDIT_ERROR_BODY}
-			</div>
 
 			<!-- END: PAGEEDIT_ERROR -->
 
