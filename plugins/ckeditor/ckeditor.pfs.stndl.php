@@ -24,10 +24,11 @@ Order=11
 ==================== */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-$auto_popup_close = ($cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes") ? "window.close();" : "";
 	
 $openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';	
+$openerparent_close = ($cfg['enablemodal']) ? 'window.parent.modal.close();' : 'window.close();';
+
+$auto_popup_close = ($cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes") ? $openerparent_close : "";
 
 $pfs_header1 = $cfg['doctype']."<html>
 <head>
