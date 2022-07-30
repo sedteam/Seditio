@@ -156,7 +156,7 @@ if ($pag['page_totaltabs']>1)
     
     $pag['page_tabtitles'][] .= "<a href=\"".$tab_url."\">".($i+1).". ".$pag['page_tabtitle'][$i]."</a>";		
 		$pag['page_tabs'][$i] = trim(str_replace('[newpage]', '', $pag['page_tabs'][$i]));
-		$selected = ($i==$pag['page_tab']) ? "selected=\"selected\"" : '';
+		$selected = ($i == $pag['page_tab']) ? "selected=\"selected\"" : '';
 		$pag['page_tabselect'] .= "<option $selected value=\"".$tab_url."\">".($i+1)." - ".$pag['page_tabtitle'][$i]."</option>";	
   	}
 
@@ -297,15 +297,15 @@ if(count($extrafields) > 0)
 
 if (!empty($pag['page_thumb']))
 	{	
-	$first_thumb_array = rtrim($pag['page_thumb']); 
-	if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
+	$page_thumbs_array = rtrim($pag['page_thumb']); 
+	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') 
 		{
-		$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+		$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);		
 		}		
-	$first_thumb_array = explode(";", $first_thumb_array);
-	if (count($first_thumb_array) > 0)
+	$page_thumbs_array = explode(";", $page_thumbs_array);
+	if (count($page_thumbs_array) > 0)
 		{
-		$t->assign("PAGE_THUMB", $first_thumb_array[0]);  
+		$t->assign("PAGE_THUMB", $page_thumbs_array[0]);  
 		$t->parse("MAIN.PAGE_THUMB");	
 		}		
 	}

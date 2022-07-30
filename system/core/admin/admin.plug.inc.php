@@ -160,6 +160,7 @@ switch ($a)
 				
 				$t -> parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST.PLUG_PARTS"); 
 				
+				$listtags = '';
 				if (empty($info_file['Tags']))
 					{
 					$listtags = $L['None']."<br />";

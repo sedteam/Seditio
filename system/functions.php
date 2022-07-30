@@ -3246,7 +3246,7 @@ function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror=FALSE)
  * @param int $maxsize Max header size 
  * @return array 
  */ 
-function sed_infoget($file, $limiter='SED', $maxsize=32768)
+function sed_infoget($file, $limiter = 'SED', $maxsize = 32768)
 	{
 	$result = array();
 
@@ -3258,15 +3258,15 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 		$begin = mb_strpos($data, $limiter_begin);
 		$end = mb_strpos($data, $limiter_end);
 
-		if ($end>$begin && $begin>0)
+		if ($end > $begin && $begin > 0)
 			{
 			$lines = mb_substr($data, $begin+8+mb_strlen($limiter), $end-$begin-mb_strlen($limiter)-8);
-			$lines = explode ("\n",$lines);
+			$lines = explode ("\n", $lines);
 
 			foreach ($lines as $k => $line)
 				{
 				$linex = explode ("=", $line);
-				$ii=1;
+				$ii = 1;
 				while (!empty($linex[$ii]))
 					{
 					@$result[$linex[0]] .= trim($linex[$ii]);
@@ -3274,16 +3274,16 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 					}
 				}
 			}
-		elseif (mb_substr(mb_strtolower($file), mb_strlen($file)-12) == ".install.php")
+		elseif (mb_substr(mb_strtolower($file), mb_strlen($file) - 12) == ".install.php")
 			{ $result['Error'] = 'Optional install file'; }
-		elseif (mb_substr(mb_strtolower($file), mb_strlen($file)-14) == ".uninstall.php")
+		elseif (mb_substr(mb_strtolower($file), mb_strlen($file) - 14) == ".uninstall.php")
 			{ $result['Error'] = 'Optional uninstall file'; }
 		else
 			{ $result['Error'] = 'Warning: No markers found in '.$file; }
+		@fclose($fp);
 		}
 	else
-		{ $result['Error'] = 'Error: File '.$file.' is missing!'; }
-	@fclose($fp);
+		{ $result['Error'] = 'Error: File '.$file.' is missing!'; }	
 	return ($result);
 	}
   
