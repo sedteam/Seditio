@@ -82,15 +82,15 @@ function sed_get_otherpages($pid, $cat, $limit)
 				
 				if (!empty($row['page_thumb']))
 					{	
-					$first_thumb_array = rtrim($row['page_thumb']); 
-					if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
+					$page_thumbs_array = rtrim($row['page_thumb']); 
+					if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') 
 						{
-						$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+						$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);		
 						}		
-					$first_thumb_array = explode(";", $first_thumb_array);
-					if (count($first_thumb_array) > 0)
+					$page_thumbs_array = explode(";", $page_thumbs_array);
+					if (count($page_thumbs_array) > 0)
 						{
-						$t->assign("OTHER_PAGES_ROW_THUMB", $first_thumb_array[0]);  
+						$t->assign("OTHER_PAGES_ROW_THUMB", $page_thumbs_array[0]);  
 						$t->parse("MAIN.OTHER_PAGES.OTHER_PAGES_ROW.OTHER_PAGES_ROW_THUMB");	
 						}
 					else 

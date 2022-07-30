@@ -41,18 +41,18 @@ $maximum_uploads = $cfg['plugin']['uploader']['maximum_uploads'];
 
 $uploader = new XTemplate('plugins/uploader/uploader.tpl');
 
-$first_thumb_array = isset($$newpageextra) ? trim($$newpageextra) : ''; 
+$page_thumbs_array = isset($$newpageextra) ? trim($$newpageextra) : ''; 
 $preload_images = '';
 
-if (!empty($first_thumb_array))
+if (!empty($page_thumbs_array))
 	{
-	if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
+	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') 
 		{
-		$first_thumb_array = mb_substr($first_thumb_array, 0, -1);
+		$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);
 		}
-	$first_thumb_array = explode(";", $first_thumb_array);
+	$page_thumbs_array = explode(";", $page_thumbs_array);
 	$preload_images_arr = array();
-	foreach ($first_thumb_array as $imgfile)
+	foreach ($page_thumbs_array as $imgfile)
 		{        
 		if ($imgfile && ($imgfile != '')) $preload_images_arr[] =  "'".$imgfile."'";     
 		}   

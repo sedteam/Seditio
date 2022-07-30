@@ -161,15 +161,15 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 				
 		if (!empty($pag['page_thumb']))
 			{	
-			$first_thumb_array = rtrim($pag['page_thumb']); 
-			if ($first_thumb_array[mb_strlen($first_thumb_array) - 1] == ';') 
+			$page_thumbs_array = rtrim($pag['page_thumb']); 
+			if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') 
 				{
-				$first_thumb_array = mb_substr($first_thumb_array, 0, -1);		
+				$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);		
 				}		
-			$first_thumb_array = explode(";", $first_thumb_array);
-			if (count($first_thumb_array) > 0)
+			$page_thumbs_array = explode(";", $page_thumbs_array);
+			if (count($page_thumbs_array) > 0)
 				{
-				$news->assign("PAGE_ROW_THUMB", $first_thumb_array[0]);  
+				$news->assign("PAGE_ROW_THUMB", $page_thumbs_array[0]);  
 				$news->parse("NEWS.PAGE_ROW.PAGE_ROW_THUMB");	
 				}		
 			}
