@@ -212,16 +212,15 @@ $usr['timezone'] = empty($cfg['defaulttimezone']) ? 0 : $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if ($cfg['authmode']==2 || $cfg['authmode']==3)
-	{ session_start(); }
+session_start();
 
-if (isset($_SESSION[$sys['site_id'].'_n']) && ($cfg['authmode']==2 || $cfg['authmode']==3))
+if (isset($_SESSION[$sys['site_id'].'_n']) && ($cfg['authmode'] == 2 || $cfg['authmode'] == 3))
 	{
 	$rsedition = $_SESSION[$sys['site_id'].'_n'];
 	$rseditiop = $_SESSION[$sys['site_id'].'_p'];
 	$rseditios = $_SESSION[$sys['site_id'].'_s'];
 	}
-elseif (isset($_COOKIE[$sys['site_id']]) && ($cfg['authmode']==1 || $cfg['authmode']==3))
+elseif (isset($_COOKIE[$sys['site_id']]) && ($cfg['authmode'] == 1 || $cfg['authmode'] == 3))
 	{
 	$u = base64_decode($_COOKIE[$sys['site_id']]);
 	$u = explode(':_:',$u);
@@ -242,10 +241,10 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0)
 
 	if ($row = sed_sql_fetcharray($sql))
 		{
-		if ($row['user_maingrp']>3)
+		if ($row['user_maingrp'] > 3)
 			{
 			$usr['id'] = $row['user_id'];
-			$usr['sessionid'] = ($cfg['authmode']==1) ? sed_hash($row['user_lastvisit'], 2) : sed_hash($row['user_secret'], 2);
+			$usr['sessionid'] = ($cfg['authmode'] == 1) ? sed_hash($row['user_lastvisit'], 2) : sed_hash($row['user_secret'], 2);
 			$usr['name'] = $row['user_name'];
 			$usr['maingrp'] = $row['user_maingrp'];
 			$usr['lastvisit'] = $row['user_lastvisit'];
@@ -279,7 +278,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0)
 	}
 else
 	{
-	if (empty($rseditios) && ($cfg['authmode']==1 || $cfg['authmode']==3))
+	if (empty($rseditios) && ($cfg['authmode'] == 1 || $cfg['authmode'] == 3))
 		{
 		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin']);
 		sed_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);

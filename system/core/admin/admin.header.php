@@ -118,7 +118,7 @@ if ($usr['id'] > 0)
 		"HEADER_USER_PMS" => $out['pms'],
 		"HEADER_USER_PFS" => $out['pfs'],
 		"HEADER_USER_AVATAR" => sed_build_userimage($usr['profile']['user_avatar']),
-		"HEADER_USER_PMREMINDER" => $out['pmreminder'],
+		"HEADER_USER_PMREMINDER" => isset($out['pmreminder'])?$out['pmreminder']:'',
 		"HEADER_USER_PAGEADD" => $out['pageadd'],
 		"HEADER_USER_MESSAGES" => $usr['messages']
 	));

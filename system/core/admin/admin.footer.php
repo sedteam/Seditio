@@ -72,7 +72,7 @@ $t->assign(array (
 	"FOOTER_BOTTOMLINE" => $out['bottomline'],
 	"FOOTER_COPYRIGHT" => $out['copyright'],
 	"FOOTER_LOGSTATUS" => $out['logstatus'],
-	"FOOTER_PMREMINDER" => $out['pmreminder'],
+	"FOOTER_PMREMINDER" => isset($out['pmreminder'])?$out['pmreminder']:'',
 	"FOOTER_ADMINPANEL" => $out['adminpanel']
 	));
 
@@ -101,7 +101,7 @@ $out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.round($
 if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	{
 
-	$out['devmode'] .= "<h2>Dev-mode :</h2>";	
+	$out['devmode'] = "<h2>Dev-mode :</h2>";	
 	$out['devmode'] .= "<div class=\"sedtabs\" style=\"color:#000; margin:0 0 20px 0\">";	
 	$out['devmode'] .= "<ul class=\"tabs\">";
 	$out['devmode'] .= "<li><a href=\"".$sys['request_uri']."#tab101\" class=\"selected\">Hooks</a></li>";
@@ -161,8 +161,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	$out['devmode'] .= "</div><div id=\"tab103\" class=\"tabs\">";
 	$out['devmode'] .= "<h4>Auth :</h4>";
 
-	if (is_array($sys['auth_log']))
-	{ $out['devauth'] .= "AUTHLOG: ".implode(', ',$sys['auth_log']); }
+	$out['devauth'] = is_array($sys['auth_log']) ? "AUTHLOG: ".implode(', ',$sys['auth_log']) : '';
 
 	$txt_r = ($usr['auth_read']) ? '1' : '0';
 	$txt_w = ($usr['auth_write']) ? '1' : '0';

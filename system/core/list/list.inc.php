@@ -41,21 +41,22 @@ $filter_urlparams = "";
 $sql_where = "";
 
 if (count($extrafields) > 0)
-{
-	foreach ($extrafields as $key => $val)
 	{
-		if (in_array($val['vartype'], array('INT', 'BOL'))) 
-			{ 
+	foreach ($extrafields as $key => $val)
+		{
+		array_push($available_sort, $key);
+		if (in_array($val['vartype'], array('INT', 'BOL', 'TXT'))) 
+			{			
 			$filter_vars['filter_'.$key] = sed_import('filter_'.$key,'G', $val['vartype']);
 			if (!empty($filter_vars['filter_'.$key])) 
 				{ 
-				$filter_sql[] = "page_".$key." = '".$filter_vars['filter_'.$key]."'"; 
+				$filter_sql[] = "page_".$key." = '".sed_sql_prep($filter_vars['filter_'.$key])."'"; 
 				$filter_urlspar['filter_'.$key] = $filter_vars['filter_'.$key];	
 				$filter_urlparams_arr[] = $key." = '".$filter_vars['filter_'.$key]."'"; 
 				}
 			}  
+		}
 	}
-}
 
 $filter_urlparams = (count($filter_urlparams_arr) > 0) ? "&".implode('&', $filter_urlparams_arr) : "";
 $sql_where = (count($filter_sql) > 0) ? " AND ".implode(' AND ', $filter_sql) : " ";
@@ -93,7 +94,7 @@ if (empty($w)) { $w = 'asc'; }
 if (empty($d)) { $d = '0'; }
 
 $pn_s = ($s == $sed_cat[$c]['order']) ? "" : $s;
-$pn_w = ($w == $sed_cat[$c]['way']) ? "" : $w;
+$pn_w = ($w == $sed_cat[$c]['way'] && $s == $sed_cat[$c]['order']) ? "" : $w;
 
 $cfg['maxrowsperpage'] = ($c=='all' || $c=='system') ? $cfg['maxrowsperpage']*2 : $cfg['maxrowsperpage'];
 
