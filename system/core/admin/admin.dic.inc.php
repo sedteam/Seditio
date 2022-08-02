@@ -315,12 +315,15 @@ switch($mn)
 			}
 	elseif ($a == 'add')
 			{
-			if (empty($dtitle) || empty($dcode))
+			if (empty($dtitle) || empty($dcode) || empty($dtype))
 				{
 				$msg = 303;
 				}
 			else
 				{			
+				
+				$dcode = preg_replace('/[^a-zA-Z0-9]/', '', $dcode);
+				
 				$sql = sed_sql_query("INSERT into $db_dic 
 					(dic_title, 
 					dic_code, 
@@ -405,7 +408,7 @@ switch($mn)
 			"DIC_LIST_URL" => sed_url('admin', 'm=dic&mn=dicitem&did='.$row['dic_id']),
 			"DIC_LIST_TITLE" => $row['dic_title'],
 			"DIC_LIST_CODE" => $dic_code,
-			"DIC_LIST_TYPE" =>	$dic_type[$row['dic_type']]	
+			"DIC_LIST_TYPE" => isset($dic_type[$row['dic_type']])?$dic_type[$row['dic_type']]:''	
 		));
 		$t -> parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST");
 		}

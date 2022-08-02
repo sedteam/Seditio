@@ -632,12 +632,12 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177))
 				{ $vartype = 'ARR'; }
 			else 
 				{ $vartype = (!empty($row['dic_extra_type'])) ? $dic_var_type[$row['dic_extra_type']] : 'TXT'; }
-			
+			$dictype = !empty($row['dic_type']) ? $dic_type[$row['dic_type']] : $dic_type[4];
 			$sed_dic[$row['dic_code']] = array (
 				'id' => $row['dic_id'],
 				'title' => $row['dic_title'],
 				'code' => $row['dic_code'],
-				'type' => $dic_type[$row['dic_type']],
+				'type' => $dictype,
 				'vartype' => $vartype,
 				'values' => $row['dic_values'],
 				'parent' => $row['dic_parent'],

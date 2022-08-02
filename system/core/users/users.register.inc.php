@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=users.register.inc.php
 Version=179
-Updated=2022-jul-15
+Updated=2022-aug-02
 Type=Core
 Author=Seditio Team
 Description=User auth
@@ -19,10 +19,10 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $v = sed_import('v','G','ALP');
 
 if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel']) 
-  { 
-  sed_diemaintenance();
-  exit; 
-  } 
+	{ 
+	sed_diemaintenance();
+	exit; 
+	} 
 
 if ($cfg['disablereg'])
 	{
@@ -42,7 +42,7 @@ $extrafields = sed_extrafield_get('users');
 $number_of_extrafields = count($extrafields);	
 // ----------------------	
 
-if ($a=='add')
+if ($a == 'add')
 	{
 	$bannedreason = FALSE;
 	sed_shield_protect();
@@ -96,13 +96,13 @@ if ($a=='add')
 	$error_string .= (mb_strlen($rusername) < 2) ? $L['aut_usernametooshort']."<br />" : '';
 	$error_string .= (mb_strlen($rpassword1) < 4) ? $L['aut_passwordtooshort']."<br />" : '';
 	$error_string .= (mb_strlen($ruseremail) < 4) ? $L['aut_emailtooshort']."<br />" : '';
-	$error_string .= ($res1>0) ? $L['aut_usernamealreadyindb']."<br />" : '';
-	$error_string .= ($res2>0) ? $L['aut_emailalreadyindb']."<br />" : '';
-	$error_string .= ($rpassword1!=$rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';
+	$error_string .= ($res1 > 0) ? $L['aut_usernamealreadyindb']."<br />" : '';
+	$error_string .= ($res2 > 0) ? $L['aut_emailalreadyindb']."<br />" : '';
+	$error_string .= ($rpassword1 != $rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';
 
 	if (empty($error_string))
 		{
-		if (sed_sql_rowcount($db_users)==0)
+		if (sed_sql_rowcount($db_users) == 0)
 			{ $defgroup = 5; }
 		else
 			{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
@@ -195,7 +195,7 @@ if ($a=='add')
 			{ foreach ($extp as $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		if ($cfg['regnoactivation'] || $defgroup==5)
+		if ($cfg['regnoactivation'] || $defgroup == 5)
 			{
 			sed_redirect(sed_url("message", "msg=106", "", true));
 			exit;
@@ -228,7 +228,7 @@ if ($a=='add')
 		}
 	}
 
-elseif ($a=='validate' && mb_strlen($v)==32)
+elseif ($a == 'validate' && mb_strlen($v) == 32)
 	{
 	sed_shield_protect();
 	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_lostpass='$v' AND user_maingrp=2");
@@ -250,8 +250,9 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 		}
 	}
 
-$form_usergender = sed_selectbox_gender($rusergender,'rusergender');
-$form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short');
+$form_usergender = sed_selectbox_gender((isset($rusergender)?$rusergender:''),'rusergender');
+
+$form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, (isset($rmonth)?$rmonth:0), (isset($rday)?$rday:0), (isset($ryear)?$ryear:0)), 'short');
 
 $rtimezone = (empty($rtimezone)) ? $cfg['defaulttimezone'] : $rtimezone;
 $rcountry = (empty($rcountry)) ? $cfg['defaultcountry'] : $rcountry;
@@ -293,31 +294,29 @@ $t->assign(array(
 	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
 	"USERS_REGISTER_SEND" => sed_url("users", "m=register&a=add"),
-	"USERS_REGISTER_USER" => sed_textbox("rusername", $rusername, 24, 100),
-	"USERS_REGISTER_FIRSTNAME" => sed_textbox("ruserfirstname", $ruserfirstname, 24, 100), 
-	"USERS_REGISTER_LASTNAME" => sed_textbox("ruserlastname", $ruserlastname, 24, 100),   
-	"USERS_REGISTER_EMAIL" => sed_textbox("ruseremail", $ruseremail, 24, 64),
+	"USERS_REGISTER_USER" => sed_textbox("rusername", isset($rusername)?$rusername:'', 24, 100),
+	"USERS_REGISTER_FIRSTNAME" => sed_textbox("ruserfirstname", isset($ruserfirstname)?$ruserfirstname:'', 24, 100), 
+	"USERS_REGISTER_LASTNAME" => sed_textbox("ruserlastname", isset($ruserlastname)?$ruserlastname:'', 24, 100),   
+	"USERS_REGISTER_EMAIL" => sed_textbox("ruseremail", isset($ruseremail)?$ruseremail:'', 24, 64),
 	"USERS_REGISTER_PASSWORD" => sed_textbox("rpassword1", "", 16, 32, "password", false, "password"),
 	"USERS_REGISTER_PASSWORDREPEAT" => sed_textbox("rpassword2", "", 16, 32, "password", false, "password"),
 	"USERS_REGISTER_COUNTRY" => sed_selectbox_countries($rcountry, 'rcountry'),
-	"USERS_REGISTER_LOCATION" => sed_textbox("rlocation", $rlocation, 24, 64),
+	"USERS_REGISTER_LOCATION" => sed_textbox("rlocation", isset($rlocation)?$rlocation:'', 24, 64),
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
-	"USERS_REGISTER_OCCUPATION" => sed_textbox("roccupation", $roccupation, 24, 64),
+	"USERS_REGISTER_OCCUPATION" => sed_textbox("roccupation", isset($roccupation)?$roccupation:'', 24, 64),
 	"USERS_REGISTER_GENDER" => $form_usergender,
 	"USERS_REGISTER_BIRTHDATE" => $form_birthdate,
-	"USERS_REGISTER_WEBSITE" => sed_textbox("ruserwebsite", $ruserwebsite, 56, 128),
-	"USERS_REGISTER_SKYPE" => sed_textbox("ruserskype", $ruserskype, 32, 64)
+	"USERS_REGISTER_WEBSITE" => sed_textbox("ruserwebsite", isset($ruserwebsite)?$ruserwebsite:'', 56, 128),
+	"USERS_REGISTER_SKYPE" => sed_textbox("ruserskype", isset($ruserskype)?$ruserskype:'', 32, 64)
 ));
 
 // Extra fields 
-if(count($extrafields)>0) 
+if(count($extrafields) > 0) 
 	{ 
 	$extra_array = sed_build_extrafields('user', 'USERS_REGISTER', $extrafields, $ruserextrafields, 'ruser');
-	} 
-
-$t->assign($extra_array); 
+	$t->assign($extra_array); 
+	}
 
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');

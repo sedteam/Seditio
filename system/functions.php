@@ -513,7 +513,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 	sed_block($usr['auth_read_com']);
 	
 	if ($cfg['disable_comments'] || !$usr['auth_read_com'])
-		{ return (array('',''));  }
+		{ return (array('','',''));  }
 	
 	// ---------- Extra fields - getting
 	$extrafields = array(); 
@@ -708,7 +708,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				{
 				if ($usr['auth_write_com'])
 					{  			
-					$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "editcomment", "rtext", $L['Mypfs']) : '';
+					$pfs = ($usr['id'] > 0) ? sed_build_pfs($usr['id'], "editcomment", "rtext", $L['Mypfs']) : '';
 					$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editcomment", "rtext", $L['SFS']) : '';					
 					$post_main = sed_textarea('rtext', $row['com_text'], 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
 					}
@@ -777,7 +777,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						}
 					}  			
 				$rtext = sed_import('rtext','P','HTM');
-				$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
+				$pfs = ($usr['id'] > 0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
 				$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
 				$post_main = sed_textarea('rtext', $rtext, 6, $cfg['textarea_default_width'], 'Micro')." ".$pfs;
 				}
@@ -822,7 +822,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				
 			if (($totalpages > 1) && $wd && ($cfg['commentsorder'] != "DESC")) { $d = ($totalpages-1)*$cfg['maxcommentsperpage']; }
 			
-			$currentpage= ceil($d / $cfg['maxcommentsperpage'])+1;  
+			$currentpage= ceil($d / $cfg['maxcommentsperpage']) + 1;  
 		 
 			$pagination = sed_pagination(sed_url($url_part, $url_params.$lurl), $d, $totallines, $cfg['maxcommentsperpage']);		
 			list($pageprev, $pagenext) = sed_pagination_pn(sed_url($url_part, $url_params.$lurl), $d, $totallines, $cfg['maxcommentsperpage'], TRUE);
@@ -4279,7 +4279,7 @@ function sed_selectbox_countries($check,$name)
  * @param string $ext Variable name suffix 
  * @return string 
  */ 
-function sed_selectbox_date($utime, $mode, $ext='')
+function sed_selectbox_date($utime, $mode, $ext = '')
 	{
 	global $L;
 	list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
