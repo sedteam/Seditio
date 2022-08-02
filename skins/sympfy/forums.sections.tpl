@@ -15,7 +15,7 @@
 
 		<div class="section-body">
 
-			<nav class="nav-pills">
+			<nav class="inline-menu">
 				<ul>
 					<li><a href="{FORUMS_SECTIONS_SEARCH}">{PHP.skinlang.forumssections.Searchinforums}</a></li>
 					<li>{FORUMS_SECTIONS_MARKALL}</li>

@@ -227,9 +227,9 @@ var seditio 				  	= [];
 		  }
 	});
 	
-	/* user menu */
-	$('.openTools').on('click', function () {
-	  $(this).closest('.admTools').toggleClass('open');
+	/* user panel menu */
+	$('.openuserpanel').on('click', function () {
+	  $(this).closest('.userpanel').toggleClass('open');
 	});	
 
 	$(".close, .alert-close").click(

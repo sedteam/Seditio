@@ -901,6 +901,11 @@ ul {
 	border-radius:3px;
 }
 
+.inline-menu ul li>span {
+	color: #010101;
+	padding: 3px 7px;
+}
+
 .inline-menu ul li a span {
     position: relative;
     top: -1px;

@@ -17,8 +17,8 @@
 <body>
 
 	<!-- BEGIN: USER -->
-	<div class="admTools">
-		<a href="javascript:void(0);" class="openTools"><i class="ic-settings"></i></a>
+	<div class="userpanel">
+		<a href="javascript:void(0);" class="openuserpanel"><i class="ic-settings"></i></a>
 		<div id="user">
 			<!-- BEGIN: HEADER_NOTICES -->
 			<div class="notices">{HEADER_NOTICES}</div>
