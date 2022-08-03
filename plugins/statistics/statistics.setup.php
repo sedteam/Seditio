@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/statistics.setup.php
 Version=179
-Updated=2022-jul-15
+Updated=2022-aug-03
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -17,8 +17,8 @@ Description=
 Code=statistics
 Name=Statistics
 Description=All kind of statistics about the site
-Version=100
-Date=2006-mar-10
+Version=2.0
+Date=2022-aug-03
 Author=Seditio Team
 Copyright=
 Notes=
