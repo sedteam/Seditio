@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ipsearch/ipsearch.setup.php
 Version=179
-Updated=2006-jul-13
+Updated=2022-aug-03
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,8 +18,8 @@ Description=
 Code=ipsearch
 Name=IP search
 Description=Search for an IP in the user database.
-Version=1.1
-Date=2006-jul-13
+Version=1.2
+Date=2022-aug-03
 Author=Seditio Team
 Icon=forums
 Copyright=
