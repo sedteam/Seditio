@@ -140,14 +140,15 @@ elseif ($f=='all')
 	{
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	if ($s=='maingrp')
+	if ($s == 'maingrp')
 		{ $sql = sed_sql_query("SELECT u.* FROM $db_users as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE 1 $sql_where ORDER BY grp_level $w LIMIT $d,".$cfg['maxusersperpage']); }
 	else
 		{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE 1 $sql_where ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']); }
 	}
 
+$totalusers = isset($totalusers) ? $totalusers : 0;
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
-$currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
+$currentpage= ceil ($d / $cfg['maxusersperpage']) + 1;
 
 $allfilters = "<form action=\"".sed_url("users", "f=search")."\" method=\"post\">";
 $allfilters .= "<div>".$L['Filters'].": <a href=\"".sed_url("users")."\">".$L['All']."</a></div>";
@@ -155,7 +156,7 @@ $allfilters .= "<div><select name=\"bycountry\" size=\"1\" onchange=\"sedjs.redi
 
 foreach ($sed_countries as $i => $x)
 	{
-	if ($i=='00')
+	if ($i == '00')
 		{
 		$allfilters .= "<option value=\"".sed_url("users")."\">".$L['Country']."...</option>";
 		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
