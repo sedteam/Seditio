@@ -176,25 +176,29 @@ ul.systemlist li::before {
 /*-------------------------*/
 
 .form {
-  display:block;
-  margin:0;
-  padding:0;
+	display:block;
+	margin:0;
+	padding:0;
 }
 
-.form img { margin:0; }
+.form img { 
+	margin:0; 
+}
 
 .form .form-row {
-  display: block;
-  width: 100%;
-  position: relative;
-  clear: both;
+	display: flex;
+	flex-direction: row;
+	align-items: center;  
+	width: 100%;
+	position: relative;
+	clear: both;
 }
 
 .form .form-row:after, 
 .form .form-row:before {
-  content: " ";
-  display: table;
-  clear:both;
+	content: " ";
+	display: table;
+	clear:both;
 }
 
 .form-field {
@@ -202,17 +206,17 @@ ul.systemlist li::before {
 } 
 
 .form .form-field {
-  display:block;
-  padding: 12px;
-  float:left; 
-  width:70%;
+	display:block;
+	padding: 12px;
+	float:left; 
+	width:70%;
 }
 
 .form .form-field-2col {
-  display:block;
-  float:left; 
-  width:50%;
-  padding-right:10px;
+	display:block;
+	float:left; 
+	width:50%;
+	padding-right:10px;
 }
 
 .form-group {
@@ -220,7 +224,7 @@ ul.systemlist li::before {
 }
 
 .form .form-field > span {
-  padding: 6px 0;
+	padding: 6px 0;
 }
 
 .form .form-field-help

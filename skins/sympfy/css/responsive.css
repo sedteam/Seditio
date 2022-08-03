@@ -301,7 +301,11 @@
 		display:block;
 		width:100%;
 		text-align:center;
-	}	
+	}
+
+	.responsive-form .form-row {
+		display: block!important;
+	}		
 	
 	.responsive-form .form-label, 
 	.responsive-form .form-field {
