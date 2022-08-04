@@ -2353,12 +2353,12 @@ function sed_check_antispam ()
  * @param bool $cond Really die? 
  * @return bool 
  */ 
-function sed_die($cond=TRUE)
+function sed_die($cond = TRUE, $notfound = FALSE)
 	{
 	if ($cond)
 		{
-		//sed_redirect(sed_url("message", "msg=950", "", true));
-		sed_die_message(404);
+		$msg = $notfound ? '404' : '950';
+		sed_die_message($msg);
 		}
 	return(FALSE);
 	}

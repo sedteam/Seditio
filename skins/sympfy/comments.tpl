@@ -1,6 +1,5 @@
 <!-- BEGIN: COMMENTS -->
 
-
 <!-- BEGIN: COMMENTS_EMPTY -->
 
 	<div class="block">
