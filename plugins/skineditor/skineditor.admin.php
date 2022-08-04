@@ -29,8 +29,6 @@ $sk = sed_import('sk', 'G', 'ALP', 24);
 $f = sed_import('f', 'G', 'TXT', 128);
 $fb = sed_import('fb', 'G', 'TXT', 128);
 
-$plugin_title = "IP search";
-$plugin_body = '';
 $error_string = '';
 
 // For show & edit php file add into array 'php'

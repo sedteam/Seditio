@@ -27,8 +27,6 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-$plugin_title = "IP search";
-
 $ipx = new XTemplate(SED_ROOT . '/plugins/ipsearch/ipsearch.tpl');	
 
 $ipx -> assign(array(
