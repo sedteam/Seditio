@@ -4195,38 +4195,16 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
  * 
  * @param string $check Selected value 
  * @param string $name Dropdown name 
- * @param bool $hideprivate Hide private categories 
+ * @param bool $hideprivate Hide private categories
+ * @param string $redirecturl Redirect URL 
+ * @param string $additional Selectbox additional 
  * @return string 
  */ 
-/* 
-function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirecturl = "", $additional="")
+function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirecturl = "", $additional = "")
 	{
 	global $db_structure, $usr, $sed_cat, $L;
 
-	$onchange = (!empty($redirecturl)) ? " onchange=\"sedjs.redirect(this)\"" : ""; 
-	
-	$result =  "<select name=\"$name\"".$onchange." size=\"1\">".$additional;
-
-	foreach($sed_cat as $i => $x)
-		{
-		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : TRUE;
-
-		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
-			{
-			$selected = ($i==$check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$redirecturl.$i."\" $selected> ".$x['tpath']."</option>";
-			}
-		}
-	$result .= "</select>";
-	return($result);
-	}
-*/
-
-function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirecturl = "", $additional="")
-	{
-	global $db_structure, $usr, $sed_cat, $L;
-
-	$onchange = (!empty($redirecturl)) ? " onchange=\"sedjs.redirect(this)\"" : ""; 
+	$onchange = (!empty($redirecturl)) ? " onchange=\"sedjs.redirect(this)\"" : "";
 	
 	$result =  "<select name=\"$name\"".$onchange." size=\"1\">".$additional;
 	
@@ -4234,12 +4212,11 @@ function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirectu
 		{
 		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : TRUE;
 		
-		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
+		if (sed_auth('page', $i, 'R') && $i != 'all' && $display)
 			{				
 			$points_count = substr_count($x['path'], '.');			
 			$x['title'] = str_repeat("--", $points_count)." ".$x['title'];			
-			$x['tpath'] = str_repeat("&nbsp;&nbsp;&nbsp;", $points_count)." ".$x['title']; 				
-				
+			$x['tpath'] = str_repeat("&nbsp;&nbsp;&nbsp;", $points_count)." ".$x['title'];				
 			$selected = ($i==$check) ? "selected=\"selected\"" : '';
 			$result .= "<option value=\"".$redirecturl.$i."\" $selected> ".$x['tpath']."</option>";
 			}
