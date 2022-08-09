@@ -218,7 +218,7 @@ $out['subdesc'] = $sed_cat[$c]['desc'];
 
 /* ===== */
 $sys['catcode'] = $c;
-$out['canonical_url'] = $sys['abs_url'].sed_url("list", "c=".$c."&d=".$d);
+$out['canonical_url'] = ($cfg['absurls']) ? sed_url("list", "c=".$c."&d=".$d) : $sys['abs_url'].sed_url("list", "c=".$c."&d=".$d);
 /* ===== */
 
 /**/

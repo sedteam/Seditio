@@ -310,7 +310,7 @@ $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 /**/
 
 /* ===== */
-$out['canonical_url'] = $sys['abs_url'].sed_url("forums", "m=topics&s=".$s."&d=".$d);
+$out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums", "m=topics&s=".$s."&d=".$d) : $sys['abs_url'].sed_url("forums", "m=topics&s=".$s."&d=".$d);
 /* ===== */
 
 /* === Hook === */

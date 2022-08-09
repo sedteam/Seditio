@@ -103,7 +103,7 @@ $urlpaths = array();
 $urlpaths[sed_url("forums")] = $L['Forums'];
 
 /* ===== */
-$out['canonical_url'] = $sys['abs_url'].sed_url("forums");
+$out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums") : $sys['abs_url'].sed_url("forums");
 /* ===== */
 
 /* === Hook === */
