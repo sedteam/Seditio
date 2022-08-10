@@ -437,14 +437,15 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 if (!$cfg['disablehitstats'])
 	{
-	$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-
+	$maxusers = 0;
+	
+	$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");	
 	if ($row = sed_sql_fetcharray($sql))
     	{ $maxusers = $row[0]; }
 	else
     	{ $sql = sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('maxusers', 1)"); }
-
-	if ($maxusers<$sys['whosonline_all_count'])
+	
+	if ($maxusers < $sys['whosonline_all_count'])
     	{ $sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."' WHERE stat_name='maxusers'"); }
 	}
 

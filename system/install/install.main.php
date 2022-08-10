@@ -227,6 +227,13 @@ switch($m)
 			'', '', '".$ip."')");
 
 		$userid = sed_sql_insertid();
+		
+		$usr['id'] = $userid;
+		$usr['name'] = $userid;
+		$usr['ip'] = $userid;
+		
+		$_SESSION['usr'] = $usr;
+		
 		$sql = sed_sql_query("INSERT INTO ".$sqldbprefix."groups_users (gru_userid, gru_groupid) VALUES (".(int)$userid.", ".(int)$defgroup.")");
 
 		unset($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb);
@@ -259,7 +266,7 @@ switch($m)
 	$res .= "<td style=\"width:10%;\" class=\"coltop\">".$L['install_install']."</td>";
 	$res .= "</tr>";  
 
-	$handle=opendir("plugins");
+	$handle = opendir("plugins");
 	while ($f = readdir($handle))
 		{
 		if (!is_file($f) && $f!='.' && $f!='..' && $f!='code')
@@ -299,13 +306,17 @@ switch($m)
 
 	$pl = sed_import('pl', 'P', 'ARR');
 	$res .= "<h3>".$L['install_installing_plugins']."</h3>";
+
+	$usr = $_SESSION['usr'];
+	$sys['now_offset'] = time();
+		
 	$j = 0;
-	unset($log);
+	$log = '';
 
 	if (!isset($sed_groups))
 		{
-		$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
-		if (sed_sql_numrows($sql)>0)
+		$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled = 0 ORDER BY grp_level DESC");
+		if (sed_sql_numrows($sql) > 0)
 			{
 			while ($row = sed_sql_fetchassoc($sql))
 				{
@@ -315,7 +326,6 @@ switch($m)
 						'level' => $row['grp_level'],
 						'disabled' => $row['grp_disabled'],
 						'hidden' => $row['grp_hidden'],
-						'state' => $row['grp_state'],
 						'title' => sed_cc($row['grp_title']),
 						'desc' => sed_cc($row['grp_desc']),
 						'icon' => $row['grp_icon'],
@@ -328,13 +338,13 @@ switch($m)
 		}
   
 	foreach($pl as $k => $v)
-	{
+		{
 		$j++;
 		$extplugin_info = "plugins/".$v."/".$v.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 		$res .= "- Installing : ".$info['Name']."<br />";
 		$log .= sed_plugin_install($v);
-	}
+		}
 
 	$res .= "<br />".$j." ".$L['install_installed_plugins'];
 	$res .= "<a onclick=\"return toggleblock('logf')\" href=\"#\">".$L['install_display_log']."</a>).<br />";

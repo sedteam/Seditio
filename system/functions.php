@@ -5468,16 +5468,15 @@ function sed_extrafield_add($sql_table, $name, $type, $size)
 		} 
     
     $fieldsres = sed_sql_query("SELECT * FROM ".$table_prefix.$sql_table." LIMIT 1"); 
-    
+    $i = 0;
 	while ($i < sed_sql_numfields($fieldsres)) 
 		{ 
 		$column = sed_sql_fetchfield($fieldsres, $i); 
 		
 		// get column prefix in this table 
 		$column_prefix = substr($column->name, 0, strpos($column->name, "_")); 
-		preg_match("#.*?_$name$#", $column->name, $match);
-		 
-		if ($match[1] != "") return false; // No adding - fields already exist 
+		preg_match("#.*?_$name$#", $column->name, $match);		 
+		if (isset($match[1]) && $match[1] != "") return false; // No adding - fields already exist 
 		$i++; 
 		} 
        

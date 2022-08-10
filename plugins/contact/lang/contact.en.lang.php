@@ -14,9 +14,7 @@ Description=
 [END_SED]
 ==================== */
 
-
 $L['plu_title'] = "Contact";
-
 
 $L['plu_explain'] = "Fill this form to send us an email, we'll reply as soon as possible !";
 $L['plu_recipients_title'] = "Recipient";
@@ -34,6 +32,6 @@ $L['plu_wrongentry'] = "There's a mistake in at least one field.";
 $L['plu_antispam'] = "The Spambot protection key was wrong, please retype it !";
 $L['plu_notsent'] = "The message was NOT sent.";
 $L['plu_sent'] = "Message successfully sent !";
-$L['plu_notice'] = "This message was sent from ".$cfg['maintitle']." by : ";
+$L['plu_notice'] = "This message was sent from ".(isset($cfg['maintitle'])?$cfg['maintitle']:"")." by : ";
 
 ?>

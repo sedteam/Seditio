@@ -105,7 +105,7 @@ if ($sys['user_istopadmin'])
 
 	foreach ($cfg['versions_list'] as $i => $x)
 		{
-		$selected = ($x==$cfg['sqlversion']) ? "selected=\"selected\"" : '';
+		$selected = ($x == $cfg['sqlversion']) ? "selected=\"selected\"" : '';
 		$forcesql .= "<option value=\"$x\" $selected>".$x."</option>";
 		}
 
