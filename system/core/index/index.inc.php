@@ -24,12 +24,20 @@ if (is_array($extp))
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('index', 'a');
 
+$out['subdesc'] = (!empty($cfg['homemetadescription'])) ? $cfg['homemetadescription'] : $out['subdesc'];
+$out['subkeywords'] = (!empty($cfg['homemetakeywords'])) ? $cfg['homemetakeywords'] : $out['subkeywords'];
+$out['subtitle'] = (!empty($cfg['hometitle'])) ? $cfg['hometitle'] : $L['Home'];
+
+$title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$out['subtitle'] = sed_title('indextitle', $title_tags, $title_data);
+
 /* === Hook === */
 $extp = sed_getextplugins('index.main');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
-
 
 require(SED_ROOT . "/system/header.php");
 

@@ -378,17 +378,19 @@ function sed_loadconfigmap()
 	$result[] = array ('main', '10', 'cookiepath', 1, '', '');
 	$result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));
 	$result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
-
 	$result[] = array ('main', '13', 'ajax', 3, '0', ''); //Sed 175
 	$result[] = array ('main', '14', 'enablemodal', 3, '0', ''); //Sed 175
-
 	$result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
 	$result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
 	$result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));
 	$result[] = array ('main', '21', 'maintenance', 3, '0', ''); //Sed 175
 	$result[] = array ('main', '22', 'maintenancelevel', 2, '95', array(0,1,2,3,4,5,7,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,99)); //Sed 175
 	$result[] = array ('main', '23', 'maintenancereason', 1, 'The site is in maintenance mode!', ''); //Sed 175
-
+	
+	$result[] = array ('index', '01', 'hometitle', 1, '', ''); // ---- New in v179
+	$result[] = array ('index', '02', 'homemetadescription', 1, '', ''); // ---- New in v179
+	$result[] = array ('index', '03', 'homemetakeywords', 1, '', ''); // ---- New in v179
+	
 	$result[] = array ('time', '11', 'dateformat', 1, 'Y-m-d H:i', '');
 	$result[] = array ('time', '11', 'formatmonthday', 1, 'm-d', '');
 	$result[] = array ('time', '11', 'formatyearmonthday', 1, 'Y-m-d', '');
@@ -398,14 +400,15 @@ function sed_loadconfigmap()
 	$result[] = array ('time', '14', 'timedout', 2, '1200', array(30,60,120,300,600,900,1200,1800,2400,3600));
 
 	$result[] = array ('meta', '01', 'defaulttitle', 1, '{MAINTITLE} - {SUBTITLE}', '');  //Sed 175
-	$result[] = array ('meta', '02', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-	$result[] = array ('meta', '03', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-	$result[] = array ('meta', '04', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-	$result[] = array ('meta', '05', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-	$result[] = array ('meta', '06', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-	$result[] = array ('meta', '07', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-	$result[] = array ('meta', '08', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-	$result[] = array ('meta', '09', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '02', 'indextitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 179
+	$result[] = array ('meta', '03', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+	$result[] = array ('meta', '04', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+	$result[] = array ('meta', '05', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '06', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '07', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
+	$result[] = array ('meta', '08', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '09', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	$result[] = array ('meta', '10', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
 
 	$result[] = array ('skin', '02', 'forcedefaultskin', 3, '1', '');
 	$result[] = array ('skin', '04', 'doctypeid', 4, '8', '');
@@ -622,7 +625,7 @@ function sed_plugin_install($pl)
 				}
 			else
 				{
-        if (mb_substr($x, -11, 11)=='install.php')
+        if (mb_substr($x, -11, 11) == 'install.php')
           {  $res .= "Ignoring.<br />"; }
         else
           { $res .= "Error !<br />"; }
@@ -679,25 +682,25 @@ function sed_plugin_install($pl)
 		{
 		$comment = ' (Plugin setup)';
 
-		if ($v['id']==1 || $v['id']==2)
+		if ($v['id'] == 1 || $v['id'] == 2)
 			{
 			$ins_auth = sed_auth_getvalue($info['Auth_guests']);
 			$ins_lock = sed_auth_getvalue($info['Lock_guests']);
 
-			if ($ins_auth>128 || $ins_lock<128)
+			if ($ins_auth > 128 || $ins_lock < 128)
 				{
-				$ins_auth = ($ins_auth>127) ? $ins_auth-128 : $ins_auth;
+				$ins_auth = ($ins_auth > 127) ? $ins_auth-128 : $ins_auth;
 				$ins_lock = 128;
 				$comment = ' (System override, guests and inactive are not allowed to admin)';
 				}
 			}
-		elseif ($v['id']==3)
+		elseif ($v['id'] == 3)
 			{
 			$ins_auth = 0;
 			$ins_lock = 255;
 			$comment = ' (System override, Banned)';
 			}
-		elseif ($v['id']==5)
+		elseif ($v['id'] == 5)
 			{
 			$ins_auth = 255;
 			$ins_lock = 255;
@@ -710,6 +713,7 @@ function sed_plugin_install($pl)
 			}
 
 		$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
+		
 		$res .= "Group #".$v['id'].", ".$sed_groups[$v['id']]['title']." : Auth=".sed_build_admrights($ins_auth)." / Lock=".sed_build_admrights($ins_lock).$comment."<br />";
 		}
 	

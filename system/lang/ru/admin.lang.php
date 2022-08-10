@@ -41,6 +41,7 @@ $L['core_ratings'] = "Рейтинги";
 $L['core_trash'] = "Корзина";
 $L['core_users'] = "Пользователи";
 $L['core_meta'] = "HTML Meta";
+$L['core_index'] = "Главная страница";
 $L['core_menu'] = "Менеджер меню"; // New in v178
 
 /* ====== Upgrade ====== */
@@ -276,9 +277,14 @@ $L['cfg_color_group'] = array("Раскрашивать пользователе
 $L['cfg_ajax'] = array("Включить AJAX", "");  // New in v175
 $L['cfg_enablemodal'] = array("Включить модальные окна", "");  // New in v175
 
+$L['cfg_hometitle'] = array("Заголовок главной", "Опционально, для SEO"); // New in v179
+$L['cfg_homemetadescription'] = array("Мета описание главной", "Опционально, для SEO"); // New in v179
+$L['cfg_homemetakeywords'] = array("Ключевые слова главной", "Опционально, для SEO"); // New in v179
+
 /* ====== HTML Meta ====== */
 
 $L['cfg_defaulttitle'] = array("Заголовок по-умолчанию", "Доступные опции: {MAINTITLE}, {SUBTITLE}");		//Sed 175
+$L['cfg_indextitle'] = array("Заголовок для главной", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 179
 $L['cfg_listtitle'] = array("Заголовок для списков страниц", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
 $L['cfg_pagetitle'] = array("Заголовок для страниц", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");		//Sed 175
 $L['cfg_forumstitle'] = array("Заголовок для форумов", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175

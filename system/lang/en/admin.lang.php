@@ -41,6 +41,7 @@ $L['core_ratings'] = "Ratings";
 $L['core_trash'] = "Trash can";
 $L['core_users'] = "Users";
 $L['core_meta'] = "HTML Meta";
+$L['core_index'] = "Home page";
 $L['core_menu'] = "Menu manager"; // New in v178
 
 /* ====== Upgrade ====== */
@@ -275,9 +276,14 @@ $L['cfg_color_group'] = array("Colorize group of users", "Default: No, for bette
 $L['cfg_ajax'] = array("Enable AJAX", "");  // New in v175
 $L['cfg_enablemodal'] = array("Enable modal windows", "");  // New in v175
 
+$L['cfg_hometitle'] = array("Homepage title", "Optional, for SEO"); // New in v179
+$L['cfg_homemetadescription'] = array("Homepage meta description", "Optional, for SEO"); // New in v179
+$L['cfg_homemetakeywords'] = array("Homepage meta keywords", "Optional, for SEO"); // New in v179
+
 /* ====== HTML Meta ====== */
 
 $L['cfg_defaulttitle'] = array("Default Title", "Available options: {MAINTITLE}, {SUBTITLE}");		//Sed 175
+$L['cfg_indextitle'] = array("Title for Homepage", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 179
 $L['cfg_listtitle'] = array("Title for lists of pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
 $L['cfg_pagetitle'] = array("Title for pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");		//Sed 175
 $L['cfg_forumstitle'] = array("Title for forums", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
