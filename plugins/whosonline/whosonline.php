@@ -117,8 +117,8 @@ while ($row = sed_sql_fetchassoc($sql2))
 	}
 	
 $t->assign(array(
-	"PLUGIN_WHOSONLINE_URL" => sed_url("plug", "e=search"),
 	"PLUGIN_WHOSONLINE_TITLE" => $L['plu_title'],
+	"PLUGIN_WHOSONLINE_URL" => sed_url("plug", "e=whosonline"),	
 	"PLUGIN_WHOSONLINE_BREADCRUMBS" => sed_breadcrumbs($urlpaths)
 ));
 
