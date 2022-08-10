@@ -478,7 +478,11 @@
 	.pl-search-poster,
 	.pl-search-owner {
 		text-align:right!important;		
-	}		
+	}	
+
+	.pl-whosonline-guest {
+		display: none;
+	}
 	
 	
 }
