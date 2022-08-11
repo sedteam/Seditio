@@ -32,6 +32,7 @@
 					<!-- BEGIN: PAGE_THUMB -->
 					<div class="page-thumb">					
 						<figure class="post-container">	  
+							<!-- pseudo webp example <img class="post-img" src="{PAGE_THUMB|crop_image(%s, 865, 600, 0, 1)}" alt="{PAGE_SHORTTITLE}" /> -->
 							<img class="post-img" src="{PAGE_THUMB|crop_image(%s, 865, 600)}" alt="{PAGE_SHORTTITLE}" />
 						</figure>						
 					</div>

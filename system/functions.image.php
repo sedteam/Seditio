@@ -18,29 +18,26 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $cfg['allowed_extentions'] = array('png', 'gif', 'jpg', 'jpeg', 'ico');
 
-$cfg['pfs_dir'] = SED_ROOT.'/datas/users/';
-$cfg['res_dir'] = SED_ROOT.'/datas/resized/';
-
 $cfg['watermark_offset_x'] = 0;
 $cfg['watermark_offset_y'] = 0;
 $cfg['images_sharpen'] = 0;
 $cfg['watermark_transparency'] = 0;
-$cfg['use_imagick'] = true;
+$cfg['use_imagick'] = 0;
 $cfg['quality'] = 85;
 
-function resize_image($filename, $width = 0, $height = 0, $set_watermark = false)
+function resize_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
     {
 	global $cfg;	
 	
-	$resized_filename = add_resize_params($filename, 'resize', $width, $height, $set_watermark);
+	$resized_filename = add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp);
 	return $cfg['res_dir'] . $resized_filename;
     }
 
-function crop_image($filename, $width = 0, $height = 0, $set_watermark = false)
+function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
     {
 	global $cfg;
 	
-	$resized_filename = add_resize_params($filename, 'crop', $width, $height, $set_watermark);
+	$resized_filename = add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp);
 	return $cfg['res_dir'] . $resized_filename;
     }
 
@@ -54,10 +51,10 @@ function resize($filename)
 	global $cfg;
 	
 	// Picture folder paths
-	$originals_dir = $cfg['pfs_dir'];
-	$preview_dir = $cfg['res_dir'];	
+	$originals_dir = SED_ROOT.'/'.$cfg['pfs_dir'];
+	$preview_dir = SED_ROOT.'/'.$cfg['res_dir'];
 	
-	list($original_file, $type, $width, $height, $set_watermark) = get_resize_params($filename);
+	list($original_file, $type, $width, $height, $set_watermark, $use_webp) = get_resize_params($filename);
 	$size = $width . 'x' . $height;
 	
 	if (!is_array($cfg['available_image_sizes'])) 
@@ -73,7 +70,7 @@ function resize($filename)
 		exit;
 		}
 	
-	$resized_file = add_resize_params($original_file, $type, $width, $height, $set_watermark);
+	$resized_file = add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp);
 
 	$watermark_offset_x = $cfg['watermark_offset_x'];
 	$watermark_offset_y = $cfg['watermark_offset_y'];
@@ -90,10 +87,10 @@ function resize($filename)
 	
 	if (class_exists('Imagick') && $cfg['use_imagick']) {
 		image_constrain_imagick($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
-			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $sharpen);
+			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $sharpen, $use_webp);
 	} else {
 		image_constrain_gd($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
-			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency);
+			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $use_webp);
 	}
 	
 	return $preview_dir . $resized_file;
@@ -107,7 +104,7 @@ function resize($filename)
  * @param bool $set_watermark
  * @return string
  */
-function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false)
+function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
 	{
 	if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) 
 		{
@@ -122,12 +119,12 @@ function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_
 
 	if ($width > 0 || $height > 0) 
 		{
-		$resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext;
+		$resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext. ($use_webp ? '.webp' : '');
 		} 
 	else 
 		{
 		// TODO fix this option does not work now
-		$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext;
+		$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext. ($use_webp ? '.webp' : '');
 		}
 
 	return $resized_filename;
@@ -140,7 +137,7 @@ function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_
 function get_resize_params($filename)
 	{
 	// Determining the resize parameters
-	if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)$/', $filename, $matches)) {
+	if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)(\.webp)?$/', $filename, $matches)) {
 		return false;
 	}
 
@@ -150,8 +147,9 @@ function get_resize_params($filename)
 	$height = $matches[4];                  // height of the future image
 	$set_watermark = $matches[5] == 'w';    // whether to put a watermark
 	$ext = $matches[6];                     // file extension
+	$use_webp = !empty($matches[7]) ? true : false;
 
-	return array($file . '.' . $ext, $type, $width, $height, $set_watermark);
+	return array($file . '.' . $ext, $type, $width, $height, $set_watermark, $use_webp);
 	}
 
 /**
@@ -177,7 +175,8 @@ function image_constrain_gd(
 	$watermark = null,
 	$watermark_offset_x = 0,
 	$watermark_offset_y = 0,
-	$watermark_opacity = 1
+	$watermark_opacity = 1,
+	$use_webp = false
 ) {
 	
 	global $cfg;
@@ -248,7 +247,7 @@ function image_constrain_gd(
 	}
 
 	$transparent_index = imagecolortransparent($src_img);
-	if ($transparent_index >= 0 && $transparent_index <= 128) {
+	if ($transparent_index >= 0 && $transparent_index < imagecolorstotal($src_img)) {
 		$t_c = imagecolorsforindex($src_img, $transparent_index);
 		$transparent_index = imagecolorallocate($dst_img, $t_c['red'], $t_c['green'], $t_c['blue']);
 		if ($transparent_index === false) {
@@ -320,7 +319,7 @@ function image_constrain_gd(
 		}
 
 	// recalculate quality value for png image
-	if ('image/png' === $src_type) 
+	if ('image/png' === $src_type && !$use_webp) 
 		{
 		$quality = round(($quality / 100) * 10);
 		if ($quality < 1) {
@@ -334,12 +333,14 @@ function image_constrain_gd(
 	// Save the image
 	switch ($src_type) {
 		case 'image/jpeg':
-			return imageJpeg($dst_img, $dst_file, $quality);
+			return ($use_webp) ? imagewebp($dst_img, $dst_file, $quality) : imageJpeg($dst_img, $dst_file, $quality);
 		case 'image/gif':
-			return imageGif($dst_img, $dst_file);
-		case 'image/png':
-			imagesavealpha($dst_img, true);
-			return imagePng($dst_img, $dst_file, $quality);
+			return ($use_webp) ? imagewebp($dst_img, $dst_file) : imageGif($dst_img, $dst_file);
+		case 'image/png':		
+			imagepalettetotruecolor($dst_img);
+			imagealphablending($dst_img, true);
+			imagesavealpha($dst_img, true);		
+			return ($use_webp) ? imagewebp($dst_img, $dst_file, $quality) : imagePng($dst_img, $dst_file, $quality);
 		default:
 			return false;
 	}
@@ -370,13 +371,15 @@ function image_constrain_imagick(
 	$watermark_offset_x = 0,
 	$watermark_offset_y = 0,
 	$watermark_opacity = 1,
-	$sharpen = 0.2
+	$sharpen = 0.2,
+	$use_webp = false
 ) {
 	global $cfg;
 	
 	$thumb = new Imagick();
 
 	// Reading the image
+	
 	if (!$thumb->readImage($src_file)) {
 		return false;
 	}
@@ -417,8 +420,15 @@ function image_constrain_imagick(
 	} else {
 		$thumb->thumbnailImage($dst_w, $dst_h);
 	}
+	
+	if ($use_webp) {
+		$thumb->setImageFormat('webp');	
+		$thumb->setOption('webp:lossless', 'true');	
+	}		
+	
 	$watermark_x = null;
 	$watermark_y = null;
+
 	// Installing the watermark
 	if ($watermark && is_readable($watermark)) {
 		$overlay = new Imagick($watermark);
@@ -460,8 +470,9 @@ function image_constrain_imagick(
 
 	// TODO put into settings
 	$quality = $cfg['quality'];
+	
 	$thumb->setImageCompressionQuality($quality);
-
+	
 	// We record a picture
 	if (!$thumb->writeImages($dst_file, true)) {
 		return false;
