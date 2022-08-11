@@ -22,7 +22,7 @@ $cfg['watermark_offset_x'] = 0;
 $cfg['watermark_offset_y'] = 0;
 $cfg['images_sharpen'] = 0;
 $cfg['watermark_transparency'] = 0;
-$cfg['use_imagick'] = 0;
+$cfg['use_imagick'] = true;
 $cfg['quality'] = 85;
 
 function resize_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
