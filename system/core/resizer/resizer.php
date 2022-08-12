@@ -26,7 +26,7 @@ require(SED_ROOT . '/system/common.php');
 
 $filename = $_GET['file'];
 	
-$resized_filename = resize($filename);
+$resized_filename = sed_resize($filename);
 
 if (is_readable($resized_filename))
 	{

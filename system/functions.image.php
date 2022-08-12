@@ -18,10 +18,10 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $cfg['allowed_extentions'] = array('png', 'gif', 'jpg', 'jpeg', 'ico');
 
-$cfg['watermark_offset_x'] = 0;
-$cfg['watermark_offset_y'] = 0;
+$cfg['watermark_offset_x'] = 8;
+$cfg['watermark_offset_y'] = 8;
+
 $cfg['images_sharpen'] = 0;
-$cfg['watermark_transparency'] = 0;
 $cfg['use_imagick'] = true;
 $cfg['quality'] = 85;
 
@@ -29,7 +29,7 @@ function resize_image($filename, $width = 0, $height = 0, $set_watermark = false
     {
 	global $cfg;	
 	
-	$resized_filename = add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp);
+	$resized_filename = sed_add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp);
 	return $cfg['res_dir'] . $resized_filename;
     }
 
@@ -37,7 +37,7 @@ function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, 
     {
 	global $cfg;
 	
-	$resized_filename = add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp);
+	$resized_filename = sed_add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp);
 	return $cfg['res_dir'] . $resized_filename;
     }
 
@@ -46,7 +46,7 @@ function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, 
   * @param $ filename image file (without file path)
   * @return string preview file name
   */
-function resize($filename)
+function sed_resize($filename)
 	{        
 	global $cfg;
 	
@@ -54,7 +54,7 @@ function resize($filename)
 	$originals_dir = SED_ROOT.'/'.$cfg['pfs_dir'];
 	$preview_dir = SED_ROOT.'/'.$cfg['res_dir'];
 	
-	list($original_file, $type, $width, $height, $set_watermark, $use_webp) = get_resize_params($filename);
+	list($original_file, $type, $width, $height, $set_watermark, $use_webp) = sed_get_resize_params($filename);
 	$size = $width . 'x' . $height;
 	
 	if (!is_array($cfg['available_image_sizes'])) 
@@ -70,27 +70,27 @@ function resize($filename)
 		exit;
 		}
 	
-	$resized_file = add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp);
+	$resized_file = sed_add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp);
 
 	$watermark_offset_x = $cfg['watermark_offset_x'];
 	$watermark_offset_y = $cfg['watermark_offset_y'];
+	$watermark_position = $cfg['gallery_logopos'];
 
 	$sharpen = min(100, $cfg['images_sharpen']) / 100;
-	$watermark_transparency = 1 - min(100, $cfg['watermark_transparency']) / 100;
+	$watermark_transparency = min(100, $cfg['gallery_logotrsp']);
 
-	if ($set_watermark && is_file($cfg['gallery_logofile'])) 
+	if (!empty($cfg['gallery_logofile']) && $set_watermark)
 		{
-		$watermark = $cfg['gallery_logofile'];
-		} 
-	else
-		{ $watermark = null; }
-	
+		$watermark = (strpos($cfg['gallery_logofile'], "/") == 0) ? SED_ROOT . $cfg['gallery_logofile'] : SED_ROOT .'/'. $cfg['gallery_logofile'];
+		}
+	$watermark = ($set_watermark && is_file($watermark)) ? $watermark : null; 
+
 	if (class_exists('Imagick') && $cfg['use_imagick']) {
-		image_constrain_imagick($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
-			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $sharpen, $use_webp);
+		sed_image_constrain_imagick($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
+			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $watermark_position, $sharpen, $use_webp);
 	} else {
-		image_constrain_gd($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
-			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $use_webp);
+		sed_image_constrain_gd($originals_dir . $original_file, $preview_dir . $resized_file, $type, $width,
+			$height, $watermark, $watermark_offset_x, $watermark_offset_y, $watermark_transparency, $watermark_position, $use_webp);
 	}
 	
 	return $preview_dir . $resized_file;
@@ -104,7 +104,7 @@ function resize($filename)
  * @param bool $set_watermark
  * @return string
  */
-function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
+function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
 	{
 	if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) 
 		{
@@ -134,7 +134,7 @@ function add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_
  * @param string $filename
  * @return array|false
  */
-function get_resize_params($filename)
+function sed_get_resize_params($filename)
 	{
 	// Determining the resize parameters
 	if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)(\.webp)?$/', $filename, $matches)) {
@@ -166,7 +166,7 @@ function get_resize_params($filename)
 * @param int $watermark_opacity
 * @return bool
 */
-function image_constrain_gd(
+function sed_image_constrain_gd(
 	$src_file,
 	$dst_file,
 	$type,
@@ -175,8 +175,9 @@ function image_constrain_gd(
 	$watermark = null,
 	$watermark_offset_x = 0,
 	$watermark_offset_y = 0,
-	$watermark_opacity = 1,
-	$use_webp = false
+	$watermark_opacity = 100,
+	$watermark_postition = '',
+	$use_webp = false,	
 ) {
 	
 	global $cfg;
@@ -231,7 +232,7 @@ function image_constrain_gd(
 	}
 
 	// Preview sizes at proportional reduction
-	@list($dst_w, $dst_h) = calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type);
+	@list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type);
 
 	$src_colors = imagecolorstotal($src_img);
 
@@ -310,12 +311,35 @@ function image_constrain_gd(
 		$owidth = imagesx($overlay);
 		$oheight = imagesy($overlay);
 
-		$watermark_x = min(($dst_w - $owidth) * $watermark_offset_x / 100, $dst_w);
-		$watermark_y = min(($dst_h - $oheight) * $watermark_offset_y / 100, $dst_h);
+		switch ($watermark_postition)
+			{
+			case 'Top left':
+			$watermark_x = $watermark_offset_x;
+			$watermark_y = $watermark_offset_y;
+			break;
 
-		//imagecopy($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight);
-		//imagecopymerge($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity*100);
-		imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity * 100);
+			case 'Top right':
+			$watermark_x = $dst_w - $watermark_offset_x - $owidth;
+			$watermark_y = $watermark_offset_y;
+			break;
+
+			case 'Bottom left':
+			$watermark_x = $watermark_offset_x;
+			$watermark_y = $dst_h - $watermark_offset_y - $oheight;
+			break;
+
+			case 'Bottom right':
+			$watermark_x = $dst_w - $watermark_offset_x - $owidth;
+			$watermark_y = $dst_h - $watermark_offset_y - $oheight;
+			break;
+
+			default:
+			$watermark_x = min(($dst_w - $owidth) * $watermark_offset_x / 100, $dst_w);
+			$watermark_y = min(($dst_h - $oheight) * $watermark_offset_y / 100, $dst_h);
+			break;
+			}		
+
+		sed_imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity);
 		}
 
 	// recalculate quality value for png image
@@ -361,7 +385,7 @@ function image_constrain_gd(
 * @param float$ sharpen
 * @return bool
 */
-function image_constrain_imagick(
+function sed_image_constrain_imagick(
 	$src_file,
 	$dst_file,
 	$type,
@@ -370,7 +394,8 @@ function image_constrain_imagick(
 	$watermark = null,
 	$watermark_offset_x = 0,
 	$watermark_offset_y = 0,
-	$watermark_opacity = 1,
+	$watermark_opacity = 100,
+	$watermark_postition = '',	
 	$sharpen = 0.2,
 	$use_webp = false
 ) {
@@ -407,7 +432,7 @@ function image_constrain_imagick(
 	}
 
 	// Preview sizes at proportional reduction
-	list($dst_w, $dst_h) = calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type);
+	list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type);
 
 	// Reducing
 	if ($type == 'crop') {
@@ -434,14 +459,39 @@ function image_constrain_imagick(
 		$overlay = new Imagick($watermark);
 		//$overlay->setImageOpacity($watermark_opacity);
 		//$overlay_compose = $overlay->getImageCompose();
-		$overlay->evaluateImage(Imagick::EVALUATE_MULTIPLY, $watermark_opacity, Imagick::CHANNEL_ALPHA);
+		$overlay->evaluateImage(Imagick::EVALUATE_MULTIPLY, $watermark_opacity / 100, Imagick::CHANNEL_ALPHA);
 
 		// Get the size of overlay
 		$owidth = $overlay->getImageWidth();
-		$oheight = $overlay->getImageHeight();
+		$oheight = $overlay->getImageHeight();		
+		
+		switch ($watermark_postition)
+			{
+			case 'Top left':
+			$watermark_x = $watermark_offset_x;
+			$watermark_y = $watermark_offset_y;
+			break;
 
-		$watermark_x = min(($dst_w - $owidth) * $watermark_offset_x / 100, $dst_w);
-		$watermark_y = min(($dst_h - $oheight) * $watermark_offset_y / 100, $dst_h);
+			case 'Top right':
+			$watermark_x = $dst_w - $watermark_offset_x - $owidth;
+			$watermark_y = $watermark_offset_y;
+			break;
+
+			case 'Bottom left':
+			$watermark_x = $watermark_offset_x;
+			$watermark_y = $dst_h - $watermark_offset_y - $oheight;
+			break;
+
+			case 'Bottom right':
+			$watermark_x = $dst_w - $watermark_offset_x - $owidth;
+			$watermark_y = $dst_h - $watermark_offset_y - $oheight;
+			break;
+
+			default:
+			$watermark_x = min(($dst_w - $owidth) * $watermark_offset_x / 100, $dst_w);
+			$watermark_y = min(($dst_h - $oheight) * $watermark_offset_y / 100, $dst_h);
+			break;
+			}					
 	}
 
 
@@ -460,8 +510,7 @@ function image_constrain_imagick(
 
 		if (isset($overlay) && is_object($overlay)) {
 			// $frame->compositeImage($overlay, $overlay_compose, $watermark_x, $watermark_y, imagick::COLOR_ALPHA);
-			$frame->compositeImage($overlay, imagick::COMPOSITE_OVER, $watermark_x, $watermark_y,
-				imagick::COLOR_ALPHA);
+			$frame->compositeImage($overlay, imagick::COMPOSITE_OVER, $watermark_x, $watermark_y);
 		}
 	}
 
@@ -497,7 +546,7 @@ function image_constrain_imagick(
 * @param string $type
 * @return array | bool
 */
-function calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 'resize')
+function sed_calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 'resize')
 {
 	if ($src_w == 0 || $src_h == 0) {
 		return false;
@@ -550,7 +599,7 @@ function calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 'res
  * @param int $src_h Source height
  * @param int $pct Opacity or source image
  */
-function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
+function sed_imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
 {
 	// creating a cut resource
 	$cut = imagecreatetruecolor($src_w, $src_h);
