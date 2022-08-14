@@ -612,3 +612,454 @@ function sed_imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src
 	// insert cut resource to destination image
 	imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
 }
+
+/** 
+ * Image Merge
+ * 
+ * @param string $img1_file Original one image path 
+ * @param string $img1_extension One Image extension  
+ * @param string $img2_file Original two image path 
+ * @param string $img2_extension Two Image extension
+ * @param int $img2_x1 Two Image width
+ * @param int $img2_y1 Two Image height
+ * @param string $position Position the insertion 
+ * @param int $trsp Merge percentage in %
+ * @param int $jpegqual JPEG quality in %
+ */
+function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extension, $img2_x1, $img2_y1, $position='Param', $trsp=100, $jpegqual=100)
+	{
+	global $cfg;
+
+	switch($img1_extension)
+		{
+		case 'gif':
+		$img1 = imagecreatefromgif($img1_file);
+		break;
+
+		case 'png':
+		$img1 = imagecreatefrompng($img1_file);
+		break;
+
+		default:
+		$img1 = imagecreatefromjpeg($img1_file);
+		break;
+		}
+
+	switch($img2_extension)
+		{
+		case 'gif':
+		$img2 = imagecreatefromgif($img2_file);
+		break;
+
+		case 'png':
+		$img2 = imagecreatefrompng($img2_file);
+		break;
+
+		default:
+		$img2 = imagecreatefromjpeg($img2_file);
+		break;
+		}
+
+	$img1_w = imagesx($img1);
+	$img1_h = imagesy($img1);
+	$img2_w = imagesx($img2);
+	$img2_h = imagesy($img2);
+
+	switch($position)
+		{
+		case 'Top left':
+		$img2_x = 8;
+		$img2_y = 8;
+		break;
+
+		case 'Top right':
+		$img2_x = $img1_w - 8 - $img2_w;
+		$img2_y = 8;
+		break;
+
+		case 'Bottom left':
+		$img2_x = 8;
+		$img2_y = $img1_h - 8 - $img2_h;
+		break;
+
+		case 'Bottom right':
+		$img2_x = $img1_w - 8 - $img2_w;
+		$img2_y = $img1_h - 8 - $img2_h;
+		break;
+
+		default:
+		$img2_x = $img2_x1;
+		$img2_y = $img2_y1;
+		break;
+		}
+
+	imagecopymerge($img1, $img2, $img2_x, $img2_y, 0, 0, $img2_w, $img2_h, $trsp);
+
+	switch($img1_extension)
+		{
+		case 'gif':
+		imagegif($img1, $img1_file);
+		break;
+
+		case 'png':
+		imagepng($img1, $img1_file);
+		break;
+
+		default:
+		imagejpeg($img1, $img1_file, $jpegqual);
+		break;
+		}
+
+	imagedestroy($img1);
+	imagedestroy($img2);
+	}
+
+/** 
+ * Image Resize
+ * 
+ * @param string $img_big Original big image path 
+ * @param int $img_small Resized image path
+ * @param int $small_x Resized image width
+ * @param string $extension Image extension
+ * @param int $jpegquality JPEG quality in %
+ */
+function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquality)
+	{
+	if (!function_exists('gd_info'))
+		{ return; }
+
+	global $cfg;
+
+	switch($extension)
+		{
+		case 'gif':
+		$source = imagecreatefromgif($img_big);
+		break;
+
+		case 'png':
+		$source = imagecreatefrompng($img_big);
+		break;
+
+		default:
+		$source = imagecreatefromjpeg($img_big);
+		break;
+		}
+
+	$big_x = imagesx($source);
+	$big_y = imagesy($source);
+
+	$thumb_x = $small_x;
+	$thumb_y = floor($big_y * ($small_x / $big_x));
+
+	if ($cfg['th_amode']=='GD1')
+		{ $new = imagecreate($thumb_x, $thumb_y); }
+	else
+		{ $new = imagecreatetruecolor($thumb_x, $thumb_y); }
+      
+	imagealphablending($new, false); //Set the blending mode for an image  
+	imagesavealpha($new, true); //Set the flag to save full alpha channel information    
+
+	if ($cfg['th_amode']=='GD1')
+		{ imagecopyresized($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+	else
+		{ imagecopyresampled($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+
+	switch($extension)
+		{
+		case 'gif':
+		imagegif($new, $img_small);
+		break;
+
+		case 'png':
+		imagepng($new, $img_small);
+		break;
+
+		default:
+		imagejpeg($new, $img_small, $jpegquality);
+		break;
+		}
+
+	imagedestroy($new);
+	imagedestroy($source);
+	return;
+	}
+	
+/** 
+ * Creates image thumbnail 
+ * 
+ * @param string $img_big Original image path 
+ * @param string $img_small Thumbnail path 
+ * @param int $small_x Thumbnail width 
+ * @param int $small_y Thumbnail height 
+ * @param bool $keepratio Keep original ratio 
+ * @param string $extension Image type 
+ * @param string $filen Original file name 
+ * @param int $fsize File size in kB 
+ * @param string $textcolor Text color 
+ * @param int $textsize Text size 
+ * @param string $bgcolor Background color 
+ * @param int $bordersize Border thickness 
+ * @param int $jpegquality JPEG quality in % 
+ * @param string $dim_priority Resize priority dimension 
+ */
+function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
+	{
+	if (!function_exists('gd_info'))
+		{ return; }
+
+	global $cfg;
+
+	switch($extension)
+		{
+		case 'gif':
+		$source = imagecreatefromgif($img_big);
+		break;
+
+		case 'png':
+		$source = imagecreatefrompng($img_big);
+		break;
+
+		default:
+		$source = imagecreatefromjpeg($img_big);
+		break;
+		}
+
+	$big_x = imagesx($source);
+	$big_y = imagesy($source);
+
+	if (!$keepratio)
+		{
+		$thumb_x = $small_x;
+		$thumb_y = $small_y;
+		}
+	elseif ($dim_priority=="Width")
+		{
+		$thumb_x = $small_x;
+		$thumb_y = floor($big_y * ($small_x / $big_x));
+		}
+	else
+		{
+		$thumb_x = floor($big_x * ($small_y / $big_y));
+		$thumb_y = $small_y;
+		}
+
+	if ($textsize==0)
+		{
+		if ($cfg['th_amode'] == 'GD1')
+			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
+		else
+			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
+          
+		imagealphablending($new, false); //Set the blending mode for an image  	
+		imagesavealpha($new, true); //Set the flag to save full alpha channel information  
+
+		$background_color = imagecolorallocate ($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
+		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2, $background_color);
+
+		if ($cfg['th_amode'] == 'GD1')
+			{ imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+		else
+			{ imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+
+		}
+   else
+		{
+		if ($cfg['th_amode'] == 'GD1')
+			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
+		else
+			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
+    
+		imagealphablending($new, false);  //Set the blending mode for an image    
+		imagesavealpha($new, true);  //Set the flag to save full alpha channel information
+
+		$background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
+		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*4+14, $background_color);
+		$text_color = imagecolorallocate($new, $textcolor[0],$textcolor[1],$textcolor[2]);
+
+		if ($cfg['th_amode']=='GD1')
+			{ imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+		else
+			{ imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+
+		imagestring ($new, $textsize, $bordersize, $thumb_y+$bordersize+$textsize+1, $big_x."x".$big_y." ".$fsize."kb", $text_color);
+		}
+
+	switch($extension)
+		{
+		case 'gif':
+		imagegif($new, $img_small);
+		break;
+
+		case 'png':
+		imagepng($new, $img_small);
+		break;
+
+		default:
+		imagejpeg($new, $img_small, $jpegquality);
+		break;
+		}
+
+	imagedestroy($new);
+	imagedestroy($source);
+	return;
+	}
+
+/** 
+ * Simple Creates image thumbnail 
+ * 
+ * @param string $img_big Original image path 
+ * @param string $img_small Thumbnail path 
+ * @param int $small_x Thumbnail width 
+ * @param int $small_y Thumbnail height 
+ * @param int $jpegquality JPEG quality in % 
+ * @param bool $keepratio Keep original ratio 
+ * @param string $bgcolor Background color 
+ * @param int $bordersize Border thickness  
+ * @param string $dim_priority Resize priority dimension 
+ */
+	
+function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquality = "90", $type = "resize", $keepratio = FALSE, $dim_priority = "Width")
+	{	
+	global $cfg;
+	
+	if (!function_exists('gd_info'))
+		{ return; }
+
+	$extension = @end(explode(".", $img_big));
+
+	switch($extension)
+		{
+		case 'gif':
+			$source = imagecreatefromgif($img_big);
+			break;
+
+		case 'png':
+			$source = imagecreatefrompng($img_big);
+			break;	
+
+		default:
+			$source = imagecreatefromjpeg($img_big);
+			break;
+		}
+
+	$big_x = imagesx($source);
+	$big_y = imagesy($source);
+	
+	if (!$keepratio || $type == "crop")
+		{
+		$thumb_x = $small_x;
+		$thumb_y = $small_y;
+		}
+	elseif ($dim_priority == "Width")
+		{
+		$thumb_x = $small_x;
+		$thumb_y = floor($big_y * ($small_x / $big_x));
+		}
+	else
+		{
+		$thumb_x = floor($big_x * ($small_y / $big_y));
+		$thumb_y = $small_y;
+		}	
+	
+	$new = imagecreatetruecolor($thumb_x, $thumb_y);          
+	imagealphablending($new, false); //Set the blending mode for an image  	
+	imagesavealpha($new, true); //Set the flag to save full alpha channel information 	
+		
+	// crop
+	if ($type == "crop") 
+		{		
+		$big_x_new = $big_y * $small_x / $small_y;
+		$big_y_new = $big_x * $small_y / $small_x;		
+		if($big_x_new > $big_x) 
+			{
+				$h_point = (($big_y - $big_y_new) / 2);
+				imagecopyresampled($new, $source, 0, 0, 0, $h_point, $thumb_x, $thumb_y, $big_x, $big_y_new);
+			} 
+			else 
+			{
+				$w_point = (($big_x - $big_x_new) / 2);
+				imagecopyresampled($new, $source, 0, 0, $w_point, 0, $thumb_x, $thumb_y, $big_x_new, $big_y);
+			}	
+		}
+	// resize
+	else 
+		{		
+		imagecopyresampled($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
+
+	switch($extension)
+		{
+		case 'gif':
+		imagegif($new, $img_small);
+		break;
+
+		case 'png':
+		imagepng($new, $img_small);
+		break;
+
+		default:
+		imagejpeg($new, $img_small, $jpegquality);
+		break;
+		}
+
+	imagedestroy($new);
+	imagedestroy($source);
+	return;
+	}
+	
+/** 
+ * Simple Rotate Image
+ * 
+ * @param string $image_source Original image path 
+ * @param string $degree_lvl Degree level 
+ */	 
+		
+function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
+{
+	global $cfg;
+	
+	if (!function_exists('gd_info'))
+	{ return; }
+
+	$extension = @end(explode(".", $image_source));
+
+	switch($extension)
+		{
+		case 'gif':
+			$source = imagecreatefromgif($image_source);
+			break;
+
+		case 'png':
+			$source = imagecreatefrompng($image_source);
+			break;	
+
+		default:
+			$source = imagecreatefromjpeg($image_source);
+			break;
+		}
+	
+	$transColor = imagecolorallocatealpha($source, 255, 255, 255, 0);
+	$rotated_image = imagerotate($source, -90*$degree_lvl, 0);
+	
+	imagealphablending($rotated_image, false); //Set the blending mode for an image  	
+	imagesavealpha($rotated_image, true); //Set the flag to save full alpha channel information	
+
+	switch($extension)
+		{
+		case 'gif':
+		imagegif($rotated_image, $image_source);
+		break;
+
+		case 'png':
+		imagepng($rotated_image, $image_source);
+		break;
+
+		default:
+		imagejpeg($rotated_image, $image_source, $jpegquality);
+		break;
+		}	
+		
+	imagedestroy($rotated_image);
+	imagedestroy($source);	
+	return;
+}	
