@@ -26,7 +26,7 @@ $urlpaths[sed_url("admin", "m=pfs")] =  $L['PFS'];
 
 $admintitle = $L['PFS'];
 
-$t = new XTemplate(sed_skinfile('admin.pfs', true)); 
+$t = new XTemplate(sed_skinfile('admin.pfs', false, true)); 
 
 $t -> assign(array( 
 	"BUTTON_PFS_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=pfs"),

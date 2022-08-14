@@ -69,7 +69,7 @@ if ($n=='all')
 else
 	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d,100");
 
-$t = new XTemplate(sed_skinfile('admin.log', true)); 
+$t = new XTemplate(sed_skinfile('admin.log', false, true)); 
 
 if (!empty($pagination))
 	{

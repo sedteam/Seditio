@@ -64,7 +64,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$mskin = sed_skinfile('admin.header', true);
+$mskin = sed_skinfile('admin.header', false, true);
 	
 $t = new XTemplate($mskin);
 

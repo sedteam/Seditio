@@ -26,7 +26,7 @@ $urlpaths[sed_url("admin", "m=gallery")] =  $L['Gallery'];
 
 $admintitle = $L['Gallery'];
 
-$t = new XTemplate(sed_skinfile('admin.gallery', true)); 
+$t = new XTemplate(sed_skinfile('admin.gallery', false, true)); 
 		
 $t -> parse("ADMIN_GALLERY");
 

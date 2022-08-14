@@ -16,7 +16,7 @@ Description=Administration panel
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
-$t = new XTemplate(sed_skinfile('admin.config.gallery', true)); 
+$t = new XTemplate(sed_skinfile('admin.config.gallery', false, true)); 
 
 if (!function_exists('gd_info'))
 	{

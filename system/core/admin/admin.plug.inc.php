@@ -36,7 +36,7 @@ $found_txt[1] = '<span style="color:#739E48; font-weight:bold;">'.$L['adm_presen
 
 unset($disp_errors);
 
-$t = new XTemplate(sed_skinfile('admin.plug', true));
+$t = new XTemplate(sed_skinfile('admin.plug', false, true));
 
 switch ($a)
 	{

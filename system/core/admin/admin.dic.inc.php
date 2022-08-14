@@ -39,7 +39,7 @@ while ($row_dic = sed_sql_fetchassoc($sql_dic))
 		$dic_list[$row_dic['dic_id']] = $row_dic['dic_title']; 
 	}
 
-$t = new XTemplate(sed_skinfile('admin.dic', true)); 
+$t = new XTemplate(sed_skinfile('admin.dic', false, true)); 
 
 switch($mn)
 	{

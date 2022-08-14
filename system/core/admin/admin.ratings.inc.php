@@ -28,7 +28,7 @@ $admintitle = $L['Ratings'];
 
 $adminhelp = $L['adm_help_ratings'];
 
-$t = new XTemplate(sed_skinfile('admin.ratings', true)); 
+$t = new XTemplate(sed_skinfile('admin.ratings', false, true)); 
 
 $id = sed_import('id','G','TXT');
 $ii = 0;

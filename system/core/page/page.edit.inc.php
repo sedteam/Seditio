@@ -259,7 +259,7 @@ if (is_array($extp))
 
 if (defined('SED_ADMIN'))
 	{
-	$mskin = sed_skinfile(array('admin', 'page', 'edit', $sed_cat[$pag['page_cat']]['tpl']), true);
+	$mskin = sed_skinfile(array('admin', 'page', 'edit', $sed_cat[$pag['page_cat']]['tpl']), false, true);
 	}
 else
 	{

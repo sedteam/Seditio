@@ -67,7 +67,7 @@ elseif ($a=='delete')
 	exit;
 	}
 
-$t = new XTemplate(sed_skinfile('admin.banlist', true));
+$t = new XTemplate(sed_skinfile('admin.banlist', false, true));
 
 $sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC");
 

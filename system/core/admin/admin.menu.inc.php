@@ -29,7 +29,7 @@ $urlpaths[sed_url("admin", "m=menu")] =  $L['core_menu'];
 
 $admintitle = $L['core_menu'];
 
-$t = new XTemplate(sed_skinfile('admin.menu', true));
+$t = new XTemplate(sed_skinfile('admin.menu', false, true));
 
 switch($a)
 	{

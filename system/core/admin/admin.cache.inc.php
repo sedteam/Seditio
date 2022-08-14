@@ -41,7 +41,7 @@ $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 
 $cachesize = 0;
 
-$t = new XTemplate(sed_skinfile('admin.cache', true));
+$t = new XTemplate(sed_skinfile('admin.cache', false, true));
 
 while ($row = sed_sql_fetchassoc($sql))
 	{

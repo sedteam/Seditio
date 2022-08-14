@@ -276,7 +276,7 @@ $newpage_tpl = (isset($newpagecat) && isset($sed_cat[$newpagecat]['tpl'])) ? $se
 
 if (defined('SED_ADMIN'))
 	{
-	$mskin = sed_skinfile(array('admin', 'page', 'add', $newpage_tpl), true);	
+	$mskin = sed_skinfile(array('admin', 'page', 'add', $newpage_tpl), false, true);	
 	}
 else 
 	{

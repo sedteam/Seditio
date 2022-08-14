@@ -137,7 +137,7 @@ switch ($n)
 		$adminlegend = $L['Plugin'].' : '.$info['Name'].' ('.$p.')';
 		}
 
-	$t = new XTemplate(sed_skinfile('admin.config', true)); 
+	$t = new XTemplate(sed_skinfile('admin.config', false, true)); 
 		
 	while ($row = sed_sql_fetchassoc($sql))
 		{

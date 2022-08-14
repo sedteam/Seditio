@@ -4384,7 +4384,7 @@ function sed_shield_update($shield_add, $shield_newaction)
  * @param mixed $base Item name (string), or base names (array) 
  * @return string 
  */ 
-function sed_skinfile($base, $adminskin = false)
+function sed_skinfile($base, $plugskin = false, $adminskin = false)
 	{
 	global $usr, $cfg;
 	$base_depth = is_array($base) ? count($base) : 1;

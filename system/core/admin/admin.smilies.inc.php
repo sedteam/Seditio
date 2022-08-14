@@ -83,7 +83,7 @@ elseif ($a=='delete')
 
 $sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
 
-$t = new XTemplate(sed_skinfile('admin.smilies', true)); 
+$t = new XTemplate(sed_skinfile('admin.smilies', false, true)); 
 
 while ($row = sed_sql_fetchassoc($sql))
 	{

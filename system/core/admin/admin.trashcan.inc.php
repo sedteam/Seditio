@@ -51,7 +51,7 @@ $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE 1 ORDER by tr_id DESC");
 	
-$t = new XTemplate(sed_skinfile('admin.trashcan', true)); 
+$t = new XTemplate(sed_skinfile('admin.trashcan', false, true)); 
 
 $ii = 0;
 

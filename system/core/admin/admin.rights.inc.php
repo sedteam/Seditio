@@ -45,7 +45,7 @@ $L['adm_code']['users'] = $L['Users'];
 $L['adm_code']['dic'] = $L['core_dic'];
 $L['adm_code']['menu'] = $L['core_menu'];
 
-$t = new XTemplate(sed_skinfile('admin.rights', true)); 
+$t = new XTemplate(sed_skinfile('admin.rights', false, true)); 
 
 if ($a == 'update')
 	{

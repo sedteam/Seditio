@@ -34,7 +34,7 @@ $structure_mode[0] = $L['Default'];
 $structure_mode[1] = $L['Group'];
 $structure_mode[2] = $L['Sub'];
 
-$t = new XTemplate(sed_skinfile('admin.page', true));
+$t = new XTemplate(sed_skinfile('admin.page', false, true));
 
 switch($mn)
 	{

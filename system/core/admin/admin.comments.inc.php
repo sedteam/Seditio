@@ -44,7 +44,7 @@ list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']*2);
 
-$t = new XTemplate(sed_skinfile('admin.comments', true)); 
+$t = new XTemplate(sed_skinfile('admin.comments', false, true)); 
 
 if (!empty($pagination))
 	{

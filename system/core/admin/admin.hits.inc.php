@@ -29,7 +29,7 @@ $admintitle = $L['Hits'];
 $f = sed_import('f','G','ALP',10);
 $v = sed_import('v','G','TXT',8);
 
-$t = new XTemplate(sed_skinfile('admin.hits', true)); 
+$t = new XTemplate(sed_skinfile('admin.hits', false, true)); 
 
 if ($f == 'year' || $f == 'month')
 	{

@@ -46,7 +46,7 @@ list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, 100");
 
-$t = new XTemplate(sed_skinfile('admin.referers', true)); 
+$t = new XTemplate(sed_skinfile('admin.referers', false, true)); 
 
 if ($usr['isadmin'])
 {

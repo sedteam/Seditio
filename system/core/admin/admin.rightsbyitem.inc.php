@@ -38,9 +38,9 @@ $L['adm_code']['users'] = $L['Users'];
 $L['adm_code']['dic'] = $L['core_dic'];
 $L['adm_code']['menu'] = $L['core_menu'];
 
-$t = new XTemplate(sed_skinfile('admin.rightsbyitem', true)); 
+$t = new XTemplate(sed_skinfile('admin.rightsbyitem', false, true)); 
 
-if ($a=='update')
+if ($a == 'update')
 	{
 	$mask = array();
 	$auth = sed_import('auth', 'P', 'ARR');
@@ -51,7 +51,7 @@ if ($a=='update')
 		{
 		if (is_array($j))
 			{
-			$mask =0;
+			$mask = 0;
 			foreach($j as $l => $m)
 					{ $mask +=  sed_auth_getvalue($l); 	}
 			 $sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$i' AND auth_code='$ic' AND auth_option='$io'");
@@ -69,7 +69,7 @@ $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db
 	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
 	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
 
-sed_die(sed_sql_numrows($sql)==0);
+sed_die(sed_sql_numrows($sql) == 0);
 
 switch($ic)
 	{

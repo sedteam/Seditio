@@ -28,7 +28,7 @@ $urlpaths[sed_url("admin", "m=forums&s=structure")] = $L['adm_forum_structure'];
 
 $admintitle = $L['adm_forum_structure'];
 
-$t = new XTemplate(sed_skinfile('admin.forums.structure', true));
+$t = new XTemplate(sed_skinfile('admin.forums.structure', false, true));
 
 if ($n == 'options')
 	{

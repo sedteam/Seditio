@@ -27,7 +27,7 @@ $admintitle = $L['adm_manage'];
 
 $p = sed_import('p','G','ALP');
 
-$t = new XTemplate(sed_skinfile('admin.tools', true)); 
+$t = new XTemplate(sed_skinfile('admin.tools', false, true)); 
 
 if (!empty($p))
 	{
@@ -113,7 +113,7 @@ else
 		{	
 		$row['ct_title_loc'] = (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']];
 			
-		if ($authentries[$row['ct_code']]>0) 
+		if ($authentries[$row['ct_code']] > 0) 
 			{
 			$t-> assign(array(	
 				"MODULES_LIST_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=".$row['ct_code']."&io=a")
@@ -170,7 +170,7 @@ else
 
 	$plugins = array();
 
-	function cmp ($a, $b, $k=1)
+	function cmp ($a, $b, $k = 1)
 		{
 		if ($a[$k] == $b[$k]) return 0;
 		return ($a[$k] < $b[$k]) ? -1 : 1;

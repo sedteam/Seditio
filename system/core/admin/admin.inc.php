@@ -70,7 +70,7 @@ $out['subtitle'] = sed_title('admintitle', $title_tags, $title_data);
 
 require(SED_ROOT . "/system/core/admin/admin.header.php");
 
-$t = new XTemplate(sed_skinfile("admin", true));
+$t = new XTemplate(sed_skinfile("admin", false, true));
 
 $t->assign(array(
 	"ADMIN_TITLE" => $admintitle,

@@ -26,7 +26,7 @@ while ($f = readdir($handle))
 closedir($handle);
 sort($langlist);
 
-$t = new XTemplate(sed_skinfile('admin.config.lang', true)); 
+$t = new XTemplate(sed_skinfile('admin.config.lang', false, true)); 
 
 foreach ($langlist as $i => $x)
 	{

@@ -37,7 +37,7 @@ while ($f = readdir($handle))
 closedir($handle);
 sort($skinlist);
 
-$t = new XTemplate(sed_skinfile('admin.config.skin', true)); 
+$t = new XTemplate(sed_skinfile('admin.config.skin', false, true)); 
 
 foreach ($skinlist as $i => $x)
 	{

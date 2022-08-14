@@ -27,7 +27,7 @@ $urlpaths[sed_url("admin", "m=forums")] =  $L['Forums'];
 
 $admintitle = $L['Forums'];
 
-$t = new XTemplate(sed_skinfile('admin.forums', true));  
+$t = new XTemplate(sed_skinfile('admin.forums', false, true));  
 
 if (sed_auth('admin', 'a', 'A'))
 	{

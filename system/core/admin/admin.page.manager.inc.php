@@ -69,7 +69,7 @@ if (empty($sm)) { $sm = 'title'; }
 if (empty($wm)) { $wm = 'asc'; }
 if (empty($d)) { $d = '0'; }
 
-$t = new XTemplate(sed_skinfile('admin.page.manager', true)); 
+$t = new XTemplate(sed_skinfile('admin.page.manager', false, true)); 
 
 $redirecturl = sed_url('admin','m=page&s=manager')."&c=";
 $additional = "<option value=\"".$redirecturl."\">".$L['All']."</option>";

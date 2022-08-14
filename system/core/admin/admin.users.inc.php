@@ -28,7 +28,7 @@ $urlpaths[sed_url("admin", "m=users")] =  $L['Users'];
 $admintitle = $L['Users'];
 
 
-$t = new XTemplate(sed_skinfile('admin.users', true)); 
+$t = new XTemplate(sed_skinfile('admin.users', false, true)); 
 
 if (sed_auth('admin', 'a', 'A'))
 	{

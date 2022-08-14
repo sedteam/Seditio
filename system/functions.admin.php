@@ -141,7 +141,7 @@ function sed_admin_breadcrumbs($urlpaths, $startpos = 1, $home = true)
 		$urlpathadmhome[sed_url("admin")] = $L['Adminpanel'];		
 		$urlpaths = ($home) ? array_merge($urlpathadmhome, $urlpaths) : $urlpaths;
 		
-		$b = new XTemplate(sed_skinfile('admin.breadcrumbs', true));
+		$b = new XTemplate(sed_skinfile('admin.breadcrumbs', false, true));
 		
 		foreach ($urlpaths as $url => $title) 
 			{						

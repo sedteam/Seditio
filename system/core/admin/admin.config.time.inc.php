@@ -18,7 +18,7 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
 $adminhelp = $L['adm_help_versions'];
 
-$t = new XTemplate(sed_skinfile('admin.config.time', true)); 
+$t = new XTemplate(sed_skinfile('admin.config.time', false, true)); 
 
 	$t -> assign(array( 
 		"CONFIG_TIME_1" => date("Y-m-d H:i"),

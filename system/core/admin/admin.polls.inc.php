@@ -33,7 +33,7 @@ $admintitle = $L['Polls'];
 
 $adminhelp = $L['adm_help_polls'];
 
-$t = new XTemplate(sed_skinfile('admin.polls', true)); 
+$t = new XTemplate(sed_skinfile('admin.polls', false, true)); 
 
 if ($n=='options')
 	{

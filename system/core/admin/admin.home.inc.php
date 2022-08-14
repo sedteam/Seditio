@@ -37,7 +37,7 @@ if ($cfg['trash_prunedelay'] > 0)
 		{ sed_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm'); }
 	}
 
-$t = new XTemplate(sed_skinfile('admin.home', true));
+$t = new XTemplate(sed_skinfile('admin.home', false, true));
 
 // --------------------------
 
