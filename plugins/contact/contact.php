@@ -69,7 +69,9 @@ if ($a == 'send')
 		{
 		$fheaders = ("From: ".$sender_email."\n"."Content-Type: text/plain; charset=".$cfg['charset']."\n");
 		$fbody = $L['plu_notice'];
-		$fbody .= $sender_name."\n".$L['plu_email_title']." : ".$sender_email."\n".$L['plu_phone_title']." : ".$sender_tel."\n\n";
+
+		$fbody .= $sender_name."\n".$L['plu_recipients_title']." : ".$cfg_names[$sender_recip]."\n".$L['plu_email_title']." : ".$sender_email ."\n".$L['plu_phone_title']." : ".$sender_tel."\n\n";		
+
 		$fbody .= $L['plu_message_title']." : \n\n".sed_br2nl($sender_message);
 		sed_mail($cfg_emails[$sender_recip], $sender_subject, $fbody, $fheaders);
 		
