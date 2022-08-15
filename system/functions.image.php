@@ -843,18 +843,18 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 		$thumb_y = $small_y;
 		}
 
-	if ($textsize==0)
+	if ($textsize == 0)
 		{
 		if ($cfg['th_amode'] == 'GD1')
 			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
 		else
-			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
+			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y + $bordersize*2); }
           
 		imagealphablending($new, false); //Set the blending mode for an image  	
 		imagesavealpha($new, true); //Set the flag to save full alpha channel information  
 
 		$background_color = imagecolorallocate ($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
-		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2, $background_color);
+		imagefilledrectangle ($new, 0, 0, $thumb_x + $bordersize*2, $thumb_y + $bordersize*2, $background_color);
 
 		if ($cfg['th_amode'] == 'GD1')
 			{ imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
@@ -865,23 +865,23 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
    else
 		{
 		if ($cfg['th_amode'] == 'GD1')
-			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
+			{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y + $bordersize*2 + floor($textsize*3.5)+6); }
 		else
-			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
+			{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y + $bordersize*2 + floor($textsize*3.5)+6); }
     
 		imagealphablending($new, false);  //Set the blending mode for an image    
 		imagesavealpha($new, true);  //Set the flag to save full alpha channel information
 
 		$background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
-		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*4+14, $background_color);
+		imagefilledrectangle ($new, 0, 0, $thumb_x + $bordersize*2, $thumb_y + $bordersize*2 + $textsize*4 + 14, $background_color);
 		$text_color = imagecolorallocate($new, $textcolor[0],$textcolor[1],$textcolor[2]);
 
-		if ($cfg['th_amode']=='GD1')
+		if ($cfg['th_amode'] == 'GD1')
 			{ imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
 		else
 			{ imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
 
-		imagestring ($new, $textsize, $bordersize, $thumb_y+$bordersize+$textsize+1, $big_x."x".$big_y." ".$fsize."kb", $text_color);
+		imagestring ($new, $textsize, $bordersize, $thumb_y + $bordersize + $textsize + 1, $big_x."x".$big_y." ".$fsize."kb", $text_color);
 		}
 
 	switch($extension)

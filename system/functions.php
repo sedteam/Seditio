@@ -4406,8 +4406,8 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 	
 	if ($adminskin) 
 		{
-        $scan_prefix[] = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/';
-        if ($plugskin)
+		$scan_prefix[] = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/';
+		if ($plugskin)
 			{
 			$scan_prefix[] = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/plugins/';
 			}			

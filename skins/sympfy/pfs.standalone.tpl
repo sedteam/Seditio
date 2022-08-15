@@ -130,7 +130,9 @@
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Delete}</div>
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Edit}</div>									
 									<div class="table-th coltop text-center" style="width:30px;">{PHP.L.pfs_setassample}</div>
+									<!-- BEGIN: PFS_STNDL_HEAD -->	
 									<div class="table-th coltop text-center" style="width:150px;"></div>
+									<!-- END: PFS_STNDL_HEAD -->
 								</div>
 										
 							</div>
@@ -175,9 +177,11 @@
 										{PFS_LIST_FILES_SETASSAMPLE}
 									</div>
 
+									<!-- BEGIN: PFS_LIST_FILES_STNDL -->	
 									<div class="table-td text-center resp-table-td pfs-td-stndl">
 										{PFS_LIST_FILES_STNDL}
 									</div>	
+									<!-- END: PFS_LIST_FILES_STNDL -->
 
 								</div>					
 					

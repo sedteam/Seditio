@@ -496,6 +496,7 @@ $movebox = (empty($f)) ? sed_selectbox_folders($userid,"/","") : sed_selectbox_f
 $th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
 $th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 $pfs_foldersize = 0;
+$stndl_flag = false;
 
 while ($row = sed_sql_fetchassoc($sql))
 	{
@@ -566,6 +567,15 @@ while ($row = sed_sql_fetchassoc($sql))
 		));
 		$t->parse("MAIN.PFS_FILES.PFS_LIST_FILES.PFS_LIST_FILES_ICON");	
 		}	
+		
+	if (!empty($add_thumbnail) || !empty($add_image) || !empty($add_file) || !empty($stndl_icons_list))
+		{
+		$stndl_flag = true;
+		$t->assign(array(
+			"PFS_LIST_FILES_STNDL"  => (empty($stndl_icons_list)) ? $add_thumbnail." ".$add_image." ".$add_file : $stndl_icons_list
+		));
+		$t->parse("MAIN.PFS_FILES.PFS_LIST_FILES.PFS_LIST_FILES_STNDL");		
+		}
 	
 	$t->assign(array(
 		"PFS_LIST_FILES_ID" => $pfs_id,
@@ -577,8 +587,7 @@ while ($row = sed_sql_fetchassoc($sql))
 		"PFS_LIST_FILES_SIZE" => $pfs_filesize." ".$L['kb'],
 		"PFS_LIST_FILES_UPDATE" => sed_build_date($cfg['dateformat'], $pfs_date),
 		"PFS_LIST_FILES_VIEWCOUNTS" => $row['pfs_count'],
-		"PFS_LIST_FILES_SETASSAMPLE" => $setassample,
-		"PFS_LIST_FILES_STNDL" => (empty($stndl_icons_list)) ? $add_thumbnail." ".$add_image." ".$add_file : $stndl_icons_list
+		"PFS_LIST_FILES_SETASSAMPLE" => $setassample
 	));		
 	
 	$t->parse("MAIN.PFS_FILES.PFS_LIST_FILES");	
@@ -588,9 +597,13 @@ while ($row = sed_sql_fetchassoc($sql))
 	
 	if ($files_count > 0) 
 		{	
+		if ($stndl_flag) 
+			{ $t->parse("MAIN.PFS_FILES.PFS_STNDL_HEAD"); }
+		
 		$t->assign(array(
 			"PFS_FILES_COUNT" => $files_count
 		));
+		
 		$t->parse("MAIN.PFS_FILES");	
 		}
 	else {
