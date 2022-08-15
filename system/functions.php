@@ -4387,35 +4387,64 @@ function sed_shield_update($shield_add, $shield_newaction)
 function sed_skinfile($base, $plugskin = false, $adminskin = false)
 	{
 	global $usr, $cfg;
-	$base_depth = is_array($base) ? count($base) : 1;
+
+	$base = (is_string($base) && mb_strpos($base, '.') !== false) ? explode('.', $base) : $base;
+	$bname = is_array($base) ? $base[0] : $base;	
 	
-	if ($base_depth == 1) 
-		{ 	
-		$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base.'.tpl';
-		$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base.'.tpl';  
-		$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
-		return ($adminskin) ? $tpl_admin_path : $tpl_path; 
-		}
-
-	for($i = $base_depth; $i > 1; $i--)
+	if ($plugskin)
 		{
-		$levels = array_slice($base, 0, $i);
-		$skinfile = SED_ROOT . '/skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
-		$skinfile_admin = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.implode('.', $levels).'.tpl';		
-		$skinfile_admin = (file_exists($skinfile_admin)) ? $skinfile_admin : $skinfile;
-		$skinfile = ($adminskin) ? $skinfile_admin : $skinfile;
-		if(file_exists($skinfile)) { return($skinfile); }
+		$scan_prefix[] = SED_ROOT . '/skins/'.$usr['skin'].'/plugins/';
+		$scan_prefix[] = SED_ROOT . '/skins/'.$usr['skin'].'/plugin.standalone.';
+		if ($usr['skin'] != $cfg['defaultskin'])
+			{
+			$scan_prefix[] = SED_ROOT . '/skins/'.$cfg['defaultskin'].'/plugins/';
+			$scan_prefix[] = SED_ROOT . '/skins/'.$cfg['defaultskin'].'/plugin.standalone.';
+			}
+		$scan_prefix[] = SED_ROOT . '/plugins/'.$bname .'/';
+		$scan_prefix[] = SED_ROOT . '/plugins/'.$bname.'/tpl/';        
+		}
+	
+	if ($adminskin) 
+		{
+        $scan_prefix[] = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/';
+        if ($plugskin)
+			{
+			$scan_prefix[] = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/plugins/';
+			}			
 		}
 
-	$tpl_path = SED_ROOT . '/skins/'.$usr['skin'].'/'.$base[0].'.tpl';
-	$tpl_admin_path = SED_ROOT . '/system/adminskin/'.$cfg['adminskin'].'/'.$base[0].'.tpl';  
-	$tpl_admin_path = (file_exists($tpl_admin_path)) ? $tpl_admin_path : $tpl_path;
-
-	return ($adminskin) ? $tpl_admin_path : $tpl_path;
+	$scan_prefix[] = SED_ROOT . '/skins/'.$usr['skin'].'/';
+	if ($usr['skin'] != $cfg['defaultskin'])
+		{
+		$scan_prefix[] = SED_ROOT . 'skins/'.$cfg['defaultskin'].'/';
+		}		
+		
+	if (is_array($base))
+		{
+		$base_depth = count($base);
+		for ($i = $base_depth; $i > 0; $i--)
+			{
+			$levels = array_slice($base, 0, $i);
+			$skinfile = implode('.', $levels).'.tpl';
+			foreach ($scan_prefix as $pfx)
+				{
+				if (file_exists($pfx . $skinfile)) 
+					{ return $pfx . $skinfile; }
+				}
+			}
+		}
+	else
+		{
+		foreach ($scan_prefix as $pfx)
+			{
+			if (file_exists($pfx . $base . '.tpl')) 
+				{ return $pfx . $base . '.tpl'; }
+			}
+		}
 	}
 
 /** 
- * Parses smiles in text 
+ * Parses smilies in text 
  * 
  * @param string $res Source text 
  * @return string 

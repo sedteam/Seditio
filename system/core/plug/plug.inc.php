@@ -31,8 +31,8 @@ unset ($plugin_title, $plugin_body);
 if (!empty($p))
 	{
 
-	$path_lang_def	= "plugins/$p/lang/$p.en.lang.php";
-	$path_lang_alt	= "plugins/$p/lang/$p.$lang.lang.php";
+	$path_lang_def	= SED_ROOT . "/plugins/$p/lang/$p.en.lang.php";
+	$path_lang_alt	= SED_ROOT . "/plugins/$p/lang/$p.$lang.lang.php";
 
 	if (file_exists($path_lang_alt))
 		{ require($path_lang_alt); }
@@ -62,11 +62,12 @@ if (!empty($p))
 	}
 elseif (!empty($e))
 	{
-	$path_lang_def	= "plugins/$e/lang/$e.en.lang.php";
-	$path_lang_alt	= "plugins/$e/lang/$e.$lang.lang.php";
-	$path_skin_ntg	= "skins/$skin/plugin.tpl";
-	$path_skin_def	= "plugins/$e/$e.tpl";
-	$path_skin_alt	= "skins/$skin/plugin.standalone.$e.tpl";
+	$path_lang_def	= SED_ROOT . "/plugins/$e/lang/$e.en.lang.php";
+	$path_lang_alt	= SED_ROOT . "/plugins/$e/lang/$e.$lang.lang.php";
+
+	$path_skin_ntg  = sed_skinfile('plugin');
+	$path_skin_def  = SED_ROOT . "/plugins/$e/$e.tpl";
+	$path_skin_alt  = sed_skinfile($e, true);
 
 	if (file_exists($path_lang_alt))
 		{ require($path_lang_alt); }
