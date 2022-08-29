@@ -3065,10 +3065,10 @@ function sed_is_bot()
  * @param string $more Extra javascript 
  * @return string 
  */ 
-function sed_javascript($more='')
+function sed_javascript($more = '')
 	{
 	$result = "<script type=\"text/javascript\" src=\"system/javascript/core.js\"></script>\n";
-	$result .= (!empty($more)) ? "<script type=\"text/javascript\"> <!-- ".$more." //-->  </script>" : '';
+	$result .= (!empty($more)) ? "<script type=\"text/javascript\">\n".$more."\n</script>\n" : '';
 	return ($result);
 	}
 
