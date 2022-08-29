@@ -1998,7 +1998,7 @@ function sed_checkmore($text = '', $more = false)
  * @param int $l Length 
  * @return string 
  */ 
-function sed_cutstring($res, $l)
+function sed_cutstring($res, $l, $ellipsis = '...')
 	{
 	global $cfg;
 
@@ -2006,12 +2006,12 @@ function sed_cutstring($res, $l)
 	if ($enc == 'utf-8')
 		{
 		if(mb_strlen($res) > $l)
-			{ $res = mb_substr($res, 0, ($l-3), $enc).'...'; }
+			{ $res = mb_substr($res, 0, ($l - mb_strlen($ellipsis)), $enc).$ellipsis; }
 		}
 	else
 		{
 		if(mb_strlen($res)>$l)
-			{ $res = mb_substr($res, 0, ($l-3)).'...'; }
+			{ $res = mb_substr($res, 0, ($l - mb_strlen($ellipsis))).$ellipsis; }
 		}
   return($res);
   }
@@ -3203,9 +3203,10 @@ function sed_load_forum_structure()
  */
 function sed_log($text, $group = 'def')
 	{
-	global $db_logger, $sys, $usr, $_SERVER;
+	global $db_logger, $sys, $usr;
 
-	$sql = sed_sql_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".sed_sql_prep($usr['name'])."', '$group', '".sed_sql_prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
+	$text = mb_substr($text, 0, 250 - mb_strlen($sys['request_uri'])).' - '.$sys['request_uri'];
+	$sql = sed_sql_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".sed_sql_prep($usr['name'])."', '$group', '".sed_sql_prep($text)."')");
 	return;
 	}
 
