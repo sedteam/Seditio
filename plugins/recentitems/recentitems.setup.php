@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/recentitems/recentitems.setup.php
 Version=179
-Updated=2013-jul-08
+Updated=2022-jul-08
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -19,7 +19,7 @@ Code=recentitems
 Name=Recent items
 Description=Recent pages, polls, commments and topics in forums, displayed on the home page
 Version=179
-Updated=2013-jul-08
+Date=2022-jul-08
 Author=Seditio Team
 Copyright=
 Notes=

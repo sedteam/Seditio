@@ -182,9 +182,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 		if(count($extrafields) > 0) 
 			{ 
 			$extra_array = sed_build_extrafields_data('page', 'PAGE_ROW', $extrafields, $pag);
-			} 
-		
-		$news->assign($extra_array); 
+			$news->assign($extra_array); 
+			}	
 		// ----------------------									
 								
 		$pag['page_text'] = sed_parse($pag['page_text']);										

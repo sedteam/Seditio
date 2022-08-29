@@ -141,11 +141,11 @@ switch ($a)
 					$multi_order .= $vo."<br />";
 				}	
 
-				if ($info_file['Status']==3)
+				if ($info_file['Status'] == 3)
 					{ $pl_action = "-"; }
-				elseif ($row['pl_active']==1)
+				elseif ($row['pl_active'] == 1)
 					{ $pl_action = "<a href=\"".sed_url("admin", "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Pause</a>"; }
-				elseif ($row['pl_active']==0)
+				elseif ($row['pl_active'] == 0)
 					{ $pl_action = "<a href=\"".sed_url("admin" ,"m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id']."&".sed_xg())."\" class=\"btn btn-adm\">Un-pause</a>"; }
 
 				$t->assign(array( 		
@@ -167,20 +167,22 @@ switch ($a)
 					}
 				else
 					{
-					$line = explode (":",$info_file['Tags']);					
+					$line = explode(":", $info_file['Tags']);					
 					$line[0] = trim($line[0]);					
-					$tpls = explode (",", $line[0]);
+					$tpls = explode(",", $line[0]);
 					
 					foreach ($tpls as $kt => $vt)
 						{								
-							$tags = explode (",",$line[1]);
+						if (isset($line[1]) && mb_strpos($line[1], ',')) 
+							{
+							$tags = explode(",", $line[1]);
 							$listtags .= $vt." :<br />";
 							foreach ($tags as $k => $v)
 								{
-								if (mb_substr(trim($v),0,1)=='{')
+								if (mb_substr(trim($v), 0, 1) == '{')
 									{
 									$listtags .= $v." : ";
-									$found = sed_stringinfile('skins/'.$cfg['defaultskin'].'/'.$vt, trim($v));
+									$found = sed_stringinfile(SED_ROOT . '/skins/'.$cfg['defaultskin'].'/'.$vt, trim($v));
 									$listtags .= $found_txt[$found];
 									$listtags .= "<br />";
 									}
@@ -190,6 +192,9 @@ switch ($a)
 									}
 								}
 							$listtags .= "<br />";
+							} else {
+								$listtags = $L['None']."<br />";
+							}
 						}
 					}
 				

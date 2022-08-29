@@ -4537,13 +4537,13 @@ function sed_stat_set($name, $value)
  * @param int $maxsize Search limit 
  * @return int 
  */
-function sed_stringinfile($file, $str, $maxsize=32768)
+function sed_stringinfile($file, $str, $maxsize = 32768)
 	{
 	if ($fp = @fopen($file, 'r'))
 		{
 		$data = fread($fp, $maxsize);
 		$pos = mb_strpos($data, $str);
-		$result = ($pos===FALSE) ? FALSE : TRUE;
+		$result = ($pos === FALSE) ? FALSE : TRUE;
 		}
 	else
 		{ $result = FALSE; }
