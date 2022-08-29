@@ -219,6 +219,22 @@ $urlpaths = array();
 sed_build_list_bc($pag['page_cat']);
 $urlpaths[$pag['page_pageurl']] = $pag['page_title'];
 
+// ---------- Page thumb
+$page_thumbs_array = array();
+if (!empty($pag['page_thumb']))
+	{	
+	$page_thumbs_array = rtrim($pag['page_thumb']); 
+	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') 
+		{
+		$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);		
+		}		
+	$page_thumbs_array = explode(";", $page_thumbs_array);
+	if (count($page_thumbs_array) > 0)
+		{
+		$out['image'] = $page_thumbs_array[0];
+		}			
+	}
+
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
 if (is_array($extp))
@@ -295,25 +311,16 @@ if(count($extrafields) > 0)
 
 // ----------------------
 
-if (!empty($pag['page_thumb']))
-	{	
-	$page_thumbs_array = rtrim($pag['page_thumb']); 
-	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') 
-		{
-		$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);		
-		}		
-	$page_thumbs_array = explode(";", $page_thumbs_array);
-	if (count($page_thumbs_array) > 0)
-		{
-		$t->assign("PAGE_THUMB", $page_thumbs_array[0]);  
-		$t->parse("MAIN.PAGE_THUMB");	
-		}		
+if (count($page_thumbs_array) > 0)
+	{
+	$t->assign("PAGE_THUMB", $page_thumbs_array[0]);  
+	$t->parse("MAIN.PAGE_THUMB");	
 	}
 else 
 	{
 	$t->assign("PAGE_THUMB", sed_cc($pag['page_thumb']));
-	}	
-	
+	}
+
 if($pag['page_totaltabs']>1)
 	{
 	$t->assign(array(

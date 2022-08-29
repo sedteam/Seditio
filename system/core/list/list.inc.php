@@ -66,7 +66,7 @@ if (!array_key_exists($c, $sed_cat) && !($c == 'all'))
 	sed_die();
 	}
 
-if ($c=='all' || $c=='system')
+if ($c == 'all' || $c == 'system')
 	{
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 	sed_block($usr['isadmin']);
@@ -102,7 +102,7 @@ $item_code = 'list_'.$c;
 $join_ratings_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
 $join_ratings_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
 
-if ($c=='all')
+if ($c == 'all')
 	{
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='0' $sql_where");
 	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
@@ -232,6 +232,22 @@ $out['subtitle'] = sed_title('listtitle', $title_tags, $title_data);
 $urlpaths = array();
 sed_build_list_bc($c);
 
+// ---------- List thumb
+$list_thumbs_array = array();
+if (!empty($sed_cat[$c]['thumb']))
+	{	
+	$list_thumbs_array = rtrim($sed_cat[$c]['thumb']); 
+	if ($list_thumbs_array[mb_strlen($list_thumbs_array) - 1] == ';') 
+		{
+		$list_thumbs_array = mb_substr($list_thumbs_array, 0, -1);		
+		}		
+	$list_thumbs_array = explode(";", $list_thumbs_array);
+	if (count($list_thumbs_array) > 0)
+		{
+		$out['image'] = $list_thumbs_array[0];
+		}			
+	}
+
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
 if (is_array($extp))
@@ -289,6 +305,16 @@ $t->assign(array(
 if (!empty($list_text)) {
 	$t->parse("MAIN.LIST_CATTEXT");	
 }
+
+if (count($list_thumbs_array) > 0)
+	{
+	$t->assign("LIST_THUMB", $list_thumbs_array[0]);  
+	$t->parse("MAIN.LIST_THUMB");	
+	}
+else 
+	{
+	$t->assign("LIST_THUMB", sed_cc($sed_cat[$c]['thumb']));
+	}
 
 if (!$sed_cat[$c]['group'])
 	{
