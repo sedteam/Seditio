@@ -32,10 +32,11 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $syntaxhighlight_theme = $cfg['plugin']['syntaxhighlight']['syntaxhighlight_theme'].".css";
 
-$moremetas .= "<script type=\"text/javascript\" src=\"plugins/syntaxhighlight/scripts/shCore.js\"></script>
-<script type=\"text/javascript\" src=\"plugins/syntaxhighlight/scripts/shBrush.js\"></script>
-<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/syntaxhighlight/styles/shCore.css\"/>
-<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/syntaxhighlight/styles/".$syntaxhighlight_theme."\"/>
-<script type=\"text/javascript\">SyntaxHighlighter.config.clipboardSwf = 'plugins/syntaxhighlight/scripts/clipboard.swf'; SyntaxHighlighter.all();</script>";
+$moremetas .= "
+		<script type=\"text/javascript\" src=\"plugins/syntaxhighlight/scripts/shCore.js\"></script>
+		<script type=\"text/javascript\" src=\"plugins/syntaxhighlight/scripts/shBrush.js\"></script>
+		<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/syntaxhighlight/styles/shCore.css\"/>
+		<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/syntaxhighlight/styles/".$syntaxhighlight_theme."\"/>
+		<script type=\"text/javascript\">SyntaxHighlighter.config.clipboardSwf = 'plugins/syntaxhighlight/scripts/clipboard.swf'; SyntaxHighlighter.all();</script>";
 
 ?>

@@ -447,13 +447,14 @@ function sed_build_catpath($cat, $mask)
 	global $sed_cat, $cfg;
 
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
+	$tmp = array();
 	foreach($pathcodes as $k => $x)
 		{ 
 		if ($x != 'system') 
-			{ $tmp[]= sprintf($mask, sed_url("list", "c=".$x), $sed_cat[$x]['title']); } 
+			{ $tmp[] = sprintf($mask, sed_url("list", "c=".$x), $sed_cat[$x]['title']); } 
 		}
 
-	$result = is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : ''; 
+	$result = (count($tmp) > 0) ? implode(' '.$cfg['separator'].' ', $tmp) : ''; 
 	return ($result);
 	}
 	
@@ -2559,15 +2560,16 @@ function sed_htmlmetas($description = '', $keywords = '', $contenttype = 'text/h
 	$description = (empty($description)) ? $cfg['subtitle'] : htmlspecialchars($description);
 	$keywords = (empty($keywords)) ? $cfg['metakeywords'] : htmlspecialchars($keywords);
 	
-	$result = "<base href=\"".$sys['abs_url']."\" />
-<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
-<meta name=\"description\" content=\"".$description."\" />
-<meta name=\"keywords\" content=\"".$keywords."\" />
-<meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
-<meta http-equiv=\"pragma\" content=\"no-cache\" />
-<meta http-equiv=\"cache-control\" content=\"no-cache\" />
-<meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
-<link rel=\"shortcut icon\" href=\"favicon.ico\" />";
+	$result = "
+		<base href=\"".$sys['abs_url']."\" />
+		<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
+		<meta name=\"description\" content=\"".$description."\" />
+		<meta name=\"keywords\" content=\"".$keywords."\" />
+		<meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
+		<meta http-equiv=\"pragma\" content=\"no-cache\" />
+		<meta http-equiv=\"cache-control\" content=\"no-cache\" />
+		<meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
+		<link rel=\"shortcut icon\" href=\"favicon.ico\" />";
 	return ($result);
 	}
 
@@ -5217,8 +5219,8 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data)
 		$t3 = $tpl_tag.'_'.strtoupper($row['code'].'_TITLE'); 
         $t4 = $tpl_tag.'_'.strtoupper($row['code'].'_DESC'); 
         $t5 = $tpl_tag.'_'.strtoupper($row['code'].'_MERA'); 
-
-        switch($row['type']) 
+		
+		switch($row['type']) 
         { 
             case 'textinput': 
                 $t2 = $data[$rowname.'_'.$row['code']];
@@ -5229,7 +5231,7 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data)
             break; 
             
             case "select":                 
-                $t2 = $row['terms'][$data[$rowname.'_'.$row['code']]];  
+                $t2 = (isset($row['terms'][$data[$rowname.'_'.$row['code']]])) ? $row['terms'][$data[$rowname.'_'.$row['code']]] : "";  
             break; 
             
             case "checkbox":                

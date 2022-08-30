@@ -60,24 +60,26 @@ if ($usr['maingrp'] > 3) {
   
 	/* ===== Init Ckeditor ===== */  
 
-	$init_ck = "<script type=\"text/javascript\">
-	var CkTextareas = Array(); CkTextareas['Micro'] = 150; CkTextareas['Basic'] = 200; CkTextareas['Extended'] = 400; CkTextareas['Full'] = 400;
-	function ckeditorReplace() { 
-	var textareas = document.getElementsByTagName('textarea');
-	for (var i = 0; i < textareas.length; i++) { 
-	  if (CkTextareas[textareas[i].getAttribute('data-editor')] != undefined) {
-		CKEDITOR.timestamp='ABCDFGDD';
-		CKEDITOR.config.customConfig = '".$ck_config."';
-		CKEDITOR.config.baseHref = '".$sys['abs_url']."';
-		CKEDITOR.replace(textareas[i], {toolbar: ".$ck_toolbar.",  skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
-		smiley_descriptions: ".$smiley_descriptions.",         
-		height: CkTextareas[textareas[i].getAttribute('data-editor')]}); 
-	  }
-	  }}
-	if (window.addEventListener) { window.addEventListener('load', ckeditorReplace, false);
-	} else if (window.attachEvent) { window.attachEvent('onload', ckeditorReplace); } else { window.onload = ckeditorReplace; }  
-	</script>";
-	$moremetas .= "<script src=\"plugins/ckeditor/lib/ckeditor.js?v=4\" type=\"text/javascript\"></script>".$init_ck;
+	$init_ck = "
+		<script type=\"text/javascript\">
+			var CkTextareas = Array(); CkTextareas['Micro'] = 150; CkTextareas['Basic'] = 200; CkTextareas['Extended'] = 400; CkTextareas['Full'] = 400;
+			function ckeditorReplace() { 
+			var textareas = document.getElementsByTagName('textarea');
+			for (var i = 0; i < textareas.length; i++) { 
+			  if (CkTextareas[textareas[i].getAttribute('data-editor')] != undefined) {
+				CKEDITOR.timestamp='ABCDFGDD';
+				CKEDITOR.config.customConfig = '".$ck_config."';
+				CKEDITOR.config.baseHref = '".$sys['abs_url']."';
+				CKEDITOR.replace(textareas[i], {toolbar: ".$ck_toolbar.",  skin: '".$ckeditor_skin."',  language: '".$ckeditor_lang."', uiColor: '".$ckeditor_color_toolbar."', smiley_path: '/', smiley_images: ".$smiley_path.", 
+				smiley_descriptions: ".$smiley_descriptions.",         
+				height: CkTextareas[textareas[i].getAttribute('data-editor')]}); 
+			  }
+			  }}
+			if (window.addEventListener) { window.addEventListener('load', ckeditorReplace, false);
+			} else if (window.attachEvent) { window.attachEvent('onload', ckeditorReplace); } else { window.onload = ckeditorReplace; }  
+		</script>";
+	$moremetas .= "
+		<script src=\"plugins/ckeditor/lib/ckeditor.js?v=4\" type=\"text/javascript\"></script>".$init_ck;
 }
 
 ?>
