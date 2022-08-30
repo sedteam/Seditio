@@ -351,28 +351,30 @@ if (!$sed_cat[$c]['group'])
 	//--------------- 
 	}
 
-$ii=0;
-$jj=1;
+$ii = 0;
+$jj = 1;
 $mtch = $sed_cat[$c]['path'].".";
 $mtchlen = mb_strlen($mtch);
 $mtchlvl = mb_substr_count($mtch,".");
 
 foreach ($sed_cat as $i => $x)	
 	{
-	if (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
+	if (mb_substr($x['path'], 0, $mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
 		{
 		$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
 			WHERE p.page_cat=s.structure_code
 			AND s.structure_path LIKE '".$sed_cat[$i]['rpath']."%'
 			AND page_state=0 ");
 		
-		$sub_count = sed_sql_result($sql4,0,"COUNT(*)");
+		$sub_count = sed_sql_result($sql4, 0, "COUNT(*)");
 
 		$t-> assign(array(
+			"LIST_ROWCAT_ID" => $x['id'],			
 			"LIST_ROWCAT_URL" => sed_url("list", "c=".$i),
 			"LIST_ROWCAT_TITLE" => $x['title'],
 			"LIST_ROWCAT_DESC" => $x['desc'],
 			"LIST_ROWCAT_ICON" => $x['icon'],
+			"LIST_ROWCAT_ICONSRC" => $x['iconsrc'],			
 			"LIST_ROWCAT_COUNT" => $sub_count,
 			"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($ii)
 		));
@@ -386,7 +388,7 @@ $extpf = sed_getextplugins('list.loopfirst');
 $extp = sed_getextplugins('list.loop');
 /* ===== */
 
-while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
+while ($pag = sed_sql_fetchassoc($sql) and ($jj <= $cfg['maxrowsperpage']))
 	{
 
 	/* === Hook - Part2 : Include === */
@@ -403,8 +405,8 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	if (!empty($pag['page_url']) && $pag['page_file'])
 		{
-		$dotpos = mb_strrpos($pag['page_url'],".")+1;
-		$pag['page_fileicon'] = (mb_strlen($pag['page_url']) - $dotpos>4) ? "doc" : mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
+		$dotpos = mb_strrpos($pag['page_url'],".") + 1;
+		$pag['page_fileicon'] = (mb_strlen($pag['page_url']) - $dotpos > 4) ? "doc" : mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
 
 		$t-> assign(array(
 			"LIST_ROW_FILEICON" => $pag['page_fileicon'],
