@@ -278,6 +278,13 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+$out['subtitle'] = $message;
+
+$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
+$out['subtitle'] = sed_title('defaulttitle', $title_tags, $title_data);
+
 require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/".$skin."/message.tpl");
 

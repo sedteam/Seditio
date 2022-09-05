@@ -540,7 +540,6 @@ $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."stats (stat_name, stat_valu
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."stats (stat_name, stat_value) VALUES ('totalmailpmnot', '0');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."stats (stat_name, stat_value) VALUES ('totalpms', '0');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."stats (stat_name, stat_value) VALUES ('totalantihammer', '0');");
-$sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."stats (stat_name, stat_value) VALUES ('textboxerprev', '0');");
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."stats (stat_name, stat_value) VALUES ('version', '".$cfg['version']."');");
 
 $sql = sed_sql_query("INSERT INTO ".$cfg['mysqldb']."core VALUES (1, 'admin', 'Administration panel', '100', 1, 1);");

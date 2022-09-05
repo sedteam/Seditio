@@ -5209,7 +5209,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 /** 
  * Show extra field 
  */ 
-function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data) 
+function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $getvalue = false) 
 { 
     global $sed_dic; 
     
@@ -5249,7 +5249,7 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data)
             break; 
         } 
         
-        $return_arr[$t1] = $t2;
+		$return_arr[$t1] = ($getvalue) ? $data[$rowname.'_'.$row['code']] : $t2;
         $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title']; 
         $return_arr[$t4] = $row['form_desc']; 
         $return_arr[$t5] = $row['mera']; 		

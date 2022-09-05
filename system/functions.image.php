@@ -177,7 +177,7 @@ function sed_image_constrain_gd(
 	$watermark_offset_y = 0,
 	$watermark_opacity = 100,
 	$watermark_postition = '',
-	$use_webp = false,	
+	$use_webp = false
 ) {
 	
 	global $cfg;
