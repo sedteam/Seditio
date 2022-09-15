@@ -44,6 +44,7 @@ $sys['host'] = $_SERVER['HTTP_HOST'];
 $sys['dir_uri'] = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : "/"; 
 if ($sys['dir_uri'][mb_strlen($sys['dir_uri']) - 1] != '/') { $sys['dir_uri'] .= '/'; }   
 $sys['abs_url'] = $sys['scheme'].'://'.$sys['host'].$sys['dir_uri'];
+$sys['request_uri'] = $_SERVER['REQUEST_URI'];
 
 $res = "";
 
@@ -279,16 +280,14 @@ switch($m)
 	{
 		$extplugin_info = "plugins/".$v."/".$v.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+		
 		$checked = (isset($info['Installer_skip']) && $info['Installer_skip'] == 1) ? '' : "checked=\"checked\"";
-		$disabled = '';
-
-		$disabled = (!empty($checked) || $v=='ipsearch') ? '' : "disabled = \"disabled\"";
-
+	
 		$res .= "<tr><td style=\"width:6%; text-align:center;\">";
 		$res .= sed_plugin_icon($v);  
 		$res .= "</td><td><strong>".$info['Name']."</strong><br /><spab class=\"desc\">".$info['Description']."</span></td>";
 		$res .= "<td style=\"width:6%; text-align:center;\">";
-		$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"pl[]\" value=\"".$v."\" ".$checked." ".$disabled." />";
+		$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"pl[]\" value=\"".$v."\" ".$checked." />";
 		$res .= "</td></tr>";
 	}
   
