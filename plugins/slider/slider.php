@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/slider/slider.php
 Version=179
-Updated=2013-jul-08
+Updated=2022-sep-20
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=slider
 Part=main
 File=slider
-Hooks=index.tags,list.tags,page.tags
+Hooks=index.tags
 Tags=index.tpl:{PLUGIN_SLIDER}
 Minlevel=0
 Order=10
@@ -107,7 +107,7 @@ if (sed_sql_numrows($sql) > 0)
 			$t->parse("MAIN.SLIDER.SLIDER_ROW");
 
 			/* old result view use mask */
-			$slider .= sprintf($mask,
+			$slider .= sprintf($cfg['plu_mask_slider'],
 				"<a href=\"".sed_url("list", "c=".$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
 				"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 50))."</a>",
 				sed_cc(sed_cutstring(stripslashes($row['page_title']), 50)),
