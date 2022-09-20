@@ -46,6 +46,8 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 	global $L, $t, $pag, $db_pages, $db_users, $usr, $cfg, $sed_cat, $plu_empty;
 
 	$sql_cat = "";
+	$res = "";
+	
 	if (!empty($sim_category)) 
 		{ 
 		$sim_category = explode(',', $sim_category);
@@ -57,14 +59,14 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 			$catsub = array();
 			$catsub[] = $i;
 			@reset($sed_cat);
-			while (list($j,$x) = each($sed_cat) ) { if (substr($x['path'],0,$mtchlen)==$mtch) { $catsub[] = $j; } }
+			foreach ($sed_cat as $j => $x) { if (substr($x['path'],0,$mtchlen)==$mtch) { $catsub[] = $j; } }
 			}
 		$sql_cat = "AND page_cat IN ('".implode("','", $catsub)."')";   
 		}  
   
 	$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
 	
-	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_ownerid, 
+	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_ownerid, p.page_count,
 						p.page_comcount, p.page_thumb, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
 						FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 						WHERE p.page_state=0 AND p.page_cat NOT LIKE 'system' ".$sql_cat." AND p.page_id != ".$pag['page_id']." AND MATCH (p.page_title) 
@@ -98,6 +100,7 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 					"SIMILARPAGES_ROW_OWNER_AVATAR" => sed_build_userimage($row['user_avatar']),				
 					"SIMILARPAGES_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
 					"SIMILARPAGES_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
+					"SIMILARPAGES_ROW_COUNT" => $row['page_count'],
 					"SIMILARPAGES_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
 					"SIMILARPAGES_ROW_COMMENTS_COUNT" => $row['page_comcount']
 				));

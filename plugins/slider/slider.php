@@ -43,7 +43,7 @@ $slider = "<div id=\"slider\">";
 $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
 
 $sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_desc, p.page_date, p.page_text, p.page_thumb, 
-					p.page_ownerid, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
+					p.page_ownerid, p.page_count, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
 					FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 					WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' AND p.page_slider = 1 
 					ORDER BY p.page_date DESC LIMIT $sliderlimit");
@@ -72,6 +72,7 @@ if (sed_sql_numrows($sql) > 0)
 				"SLIDER_ROW_AUTHOR" => sed_cc($row['user_name']),
 				"SLIDER_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
 				"SLIDER_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
+				"SLIDER_ROW_COUNT" => $row['page_count'],
 				"SLIDER_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
 				"SLIDER_ROW_COMMENTS_COUNT" => $row['page_comcount'],				
 				"SLIDER_ROW_AVATAR" => sed_build_userimage($row['user_avatar'])

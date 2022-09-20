@@ -1565,7 +1565,7 @@ a.alfabeta:hover {
 
 .similar-arrows .slick-prev:before, 
 .similar-arrows [dir='rtl'] .slick-prev:before {
-    content: "\e92e";
+    content: "\ea60";
     font-size: 16px;
 }
 
