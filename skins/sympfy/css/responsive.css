@@ -277,6 +277,7 @@
 	.odd.forums-message-td {
 		background: #f3f3f3;
 	}
+	
 	.even.forums-message-td	{
 		background: #f9f9f9;
 	}
@@ -289,6 +290,11 @@
 	.brnomobile {
 		display:none;
 	}
+	
+	.commentlist .comment .comment-container .comment-entry {
+		margin-left: 0;
+	}	
+	
 }
 
 @media (max-width: 768px) {

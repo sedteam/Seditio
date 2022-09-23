@@ -41,11 +41,11 @@ $sed_urltrans['rss'] = array(
 $sed_urltrans['sitemap'] = array(
     array( 
           'params' => 'm=*', 
-          'rewrite' => 'sitemap/{m}'
+          'rewrite' => 'sitemap/{m}.xml'
     ),
     array( 
           'params' => '', 
-          'rewrite' => 'sitemap'
+          'rewrite' => 'sitemap.xml'
     )
 );
 

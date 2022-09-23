@@ -62,6 +62,10 @@ $sed_urlrewrite = array(
          'rule' => 'system/core/sitemap/sitemap.php?m=$1'
     ),
     array(
+         'cond' => '#^/sitemap/([a-zA-Z0-9]+).xml$#',
+         'rule' => 'system/core/sitemap/sitemap.php?m=$1'
+    ),	
+    array(
          'cond' => '#^/sitemap(/?)$#',
          'rule' => 'system/core/sitemap/sitemap.php'
     ),  
