@@ -8,7 +8,10 @@
 		<div class="post-item">  
 			<figure class="post-container">	  
 				<a class="post-img-link" href="{PAGE_ROW_URL}">
-					<img class="post-img" src="{PAGE_ROW_THUMB|crop_image(%s, 800, 600)}" />
+					<picture>
+						<source type="image/webp" srcset="{PAGE_ROW_THUMB|crop_image(%s, 800, 600, 0, 1)}">
+						<img class="post-img" src="{PAGE_ROW_THUMB|crop_image(%s, 800, 600)}" />
+					</picture>
 				</a>
 				<figcaption class="post-content">
 					<div class="post-info">

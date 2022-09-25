@@ -59,8 +59,10 @@
 								
 								<!-- BEGIN: LIST_ROW_THUMB -->
 								<a class="post-img-link" href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">
-									<!-- pseudo webp example <img class="post-img" src="{LIST_ROW_THUMB|crop_image(%s, 600, 500, 0, 1)}" alt="{LIST_ROW_TITLE}" /> -->
-									<img class="post-img" src="{LIST_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{LIST_ROW_TITLE}" />
+									<picture>
+										<source type="image/webp" srcset="{LIST_ROW_THUMB|crop_image(%s, 600, 500, 0, 1)}">
+										<img class="post-img" src="{LIST_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{LIST_ROW_TITLE}" />
+									</picture>
 								</a>
 								<!-- END: LIST_ROW_THUMB -->
 								

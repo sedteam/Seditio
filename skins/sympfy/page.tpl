@@ -31,9 +31,11 @@
 					
 					<!-- BEGIN: PAGE_THUMB -->
 					<div class="page-thumb">					
-						<figure class="post-container">	  
-							<!-- pseudo webp example <img class="post-img" src="{PAGE_THUMB|crop_image(%s, 865, 600, 0, 1)}" alt="{PAGE_SHORTTITLE}" /> -->
-							<img class="post-img" src="{PAGE_THUMB|crop_image(%s, 865, 600)}" alt="{PAGE_SHORTTITLE}" />
+						<figure class="post-container">	 
+							<picture>
+								<source type="image/webp" srcset="{PAGE_THUMB|crop_image(%s, 865, 600, 0, 1)}">
+								<img class="post-img" src="{PAGE_THUMB|crop_image(%s, 865, 600)}" alt="{PAGE_SHORTTITLE}" />
+							</picture>
 						</figure>						
 					</div>
 					<!-- END: PAGE_THUMB -->
@@ -84,7 +86,10 @@
 								<figure class="post-container">	  
 									<!-- BEGIN: OTHER_PAGES_ROW_THUMB -->
 										<a class="post-img-link" href="{OTHER_PAGES_ROW_URL}" data-page="{OTHER_PAGES_ROW_ID}" data-cat="{OTHER_PAGES_ROW_CAT}">
-											<img class="post-img" src="{OTHER_PAGES_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{OTHER_PAGES_ROW_TITLE}" />
+											<picture>
+												<source type="image/webp" srcset="{OTHER_PAGES_ROW_THUMB|crop_image(%s, 600, 500, 0, 1)}">
+												<img class="post-img" src="{OTHER_PAGES_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{OTHER_PAGES_ROW_TITLE}" />
+											</picture>											
 										</a>
 									<!-- END: OTHER_PAGES_ROW_THUMB -->
 									<figcaption class="post-content">
@@ -113,7 +118,7 @@
 						</div>
 						
 					</div>
-															
+
 				</div>
 				<!-- END: OTHER_PAGES -->					
 				
@@ -165,7 +170,10 @@
 									
 									<!-- BEGIN: SIMILARPAGES_ROW_THUMB -->
 									<a class="post-img-link" href="{SIMILARPAGES_ROW_URL}" data-page="{SIMILARPAGES_ROW_ID}" data-cat="{SIMILARPAGES_ROW_CAT}">
-										<img class="post-img" src="{SIMILARPAGES_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{SIMILARPAGES_ROW_TITLE}" />
+										<picture>
+											<source type="image/webp" srcset="{SIMILARPAGES_ROW_THUMB|crop_image(%s, 600, 500, 0, 1)}">
+											<img class="post-img" src="{SIMILARPAGES_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{SIMILARPAGES_ROW_TITLE}" />
+										</picture>	
 									</a>
 									<!-- END: SIMILARPAGES_ROW_THUMB -->
 
