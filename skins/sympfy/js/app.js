@@ -25,7 +25,7 @@ var seditio 				  	= [];
 			}			
 			$('html, body').animate({scrollTop:position}, 400);
 		}});
-	}	
+	};
 	
 	//ScrollBar Get Width
 	seditio.getScrollbar  = function() {

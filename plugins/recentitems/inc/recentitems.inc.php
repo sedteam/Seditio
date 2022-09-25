@@ -28,7 +28,7 @@ function sed_get_latestpages($limit, $mask)
 	
 	$res = '';
 	
-	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_ownerid, p.page_count, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
+	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_ownerid, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
 						FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid 
 						WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' 
 						ORDER BY p.page_date DESC LIMIT $limit");
@@ -53,7 +53,6 @@ function sed_get_latestpages($limit, $mask)
 				"LATEST_PAGES_ROW_AUTHOR" => sed_cc($row['user_name']),
 				"LATEST_PAGES_ROW_USERURL" => sed_url("users", "m=details&id=".$row['page_ownerid']),
 				"LATEST_PAGES_ROW_USER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
-				"LATEST_PAGES_ROW_COUNT" => $row['page_count'],
 				"LATEST_PAGES_ROW_COMMENTS_URL" => $row['page_pageurlcom'],
 				"LATEST_PAGES_ROW_COMMENTS_COUNT" => $row['page_comcount'],				
 				"LATEST_PAGES_ROW_AVATAR" => sed_build_userimage($row['user_avatar'])
@@ -331,11 +330,11 @@ function sed_get_latestpolls($limit, $mask)
 			if ($cfg['ajax']) 
 				{					
 				$onclick = "javascript:sedjs.ajax.bind({'url': '?ajax=1&a=send&id='+document.pollvote_".$poll_id.".id.value+'&vote='+document.pollvote_".$poll_id.".cvote_".$poll_id.".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx', 'loading': 'pollajx', 'formid':  'pollajx_".$poll_id."'});";					
-				$res .= "<div style=\"text-align:center;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
+				$res .= "<div style=\"text-align:center; margin-top:15px;\"><input type=\"button\" onClick=\"".$onclick."\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
 				}
 			else 
 				{
-				$res .= "<div style=\"text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
+				$res .= "<div style=\"text-align:center; margin-top:15px;\"><input type=\"submit\" class=\"submit btn\" value=\"".$L['Voteto']."\"></div>\n";
 				}
 			$res .= "</form>\n";
 			}

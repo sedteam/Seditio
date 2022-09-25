@@ -5604,6 +5604,4 @@ function sed_download_img($source_file, $dst_dir, $uid)
     return $dst_file;       
 }
 
-
-
 ?>

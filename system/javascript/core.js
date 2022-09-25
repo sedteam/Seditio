@@ -144,7 +144,7 @@ var sedjs = {
 		add.call(this,s.s);
 		map(hide,e);
 		map(show,w(id));
-	  }	
+	  };	
 	  stabs = function(s) {
 		var i, s=s||{}, o="cesdf".split(''); 
 		for(i in o) s[o[i]]=s[o[i]]||stabs.settings[o[i]];
@@ -152,7 +152,7 @@ var sedjs = {
 		  var t=this,o=t[0],a=[t[1],t[2],t[3],t[4]];
 		  if( !s.f || s.f.apply(o,a)!==false ) tab.apply(o,a);
 		  return false;
-		}
+		};
 		for(i=0; i<c.length; i++) {
 		  var x=0, e=[], a=[], h=[], t=c[i].getElementsByTagName("a");
 		  for(var j=0; j<t.length; j++)
@@ -168,7 +168,7 @@ var sedjs = {
 			a[j]['on'+s.e] = bind.call([a[j],h[j],a,e,s],f);
 		  if(typeof s.d=="number" && s.d>=0) tab.call(a[s.d],h[s.d],a,e,s);
 		}		
-	  }	
+	  };	
 	  
 	  stabs.settings = { c:"sedtabs", e:"click", s:"selected", d:0, f:false };
 	  stabs(settings);		
@@ -271,7 +271,7 @@ var sedjs = {
 					'update':"",
 					'loading':"",
 					'formid':""
-				}
+				};
 				for(var key in opt) {
 					if(user_options[key]) {
 						opt[key] = user_options[key];
@@ -279,7 +279,7 @@ var sedjs = {
 				}			
 				if(!opt.url) return;
 				var div = false;
-				if(opt.loading) {
+				if (opt.loading) {
 					div = document.createElement("div");
 					opt.loadingid = opt.loading;
 					var intElemOffsetHeight = Math.floor(document.getElementById(opt.loading).offsetHeight/2) + 16;
@@ -397,20 +397,20 @@ var sedjs = {
 			t.handle._parent = t;
 			t.resizearea._parent = t;
 			t.controls._parent = t;
-			t.onclose = function() { return true; } 
-			t.onmousedown = function() { sedjs.modal.setfocus(this); }
+			t.onclose = function() { return true; }; 
+			t.onmousedown = function() { sedjs.modal.setfocus(this); };
 			t.handle.onmousedown = sedjs.modal.setupdrag;
 			t.resizearea.onmousedown = sedjs.modal.setupdrag; 
 			t.controls.onclick = sedjs.modal.enablecontrols;
-			t.show = function() { sedjs.modal.show(this); }
-			t.hide = function() { sedjs.modal.hide(this); } 
-			t.close = function(){ sedjs.modal.close(this); }
-			t.setSize = function(w, h) { sedjs.modal.setSize(this, w, h); } 
-			t.moveTo = function(x, y) { sedjs.modal.moveTo(this, x, y); } 
-			t.isResize = function(bol) { sedjs.modal.isResize(this, bol); } 
-			t.isResize = function(bol) { sedjs.modal.isResize(this, bol); } 
-			t.isScrolling = function(bol) { sedjs.modal.isScrolling(this, bol); } 
-			t.load = function(contenttype, contentsource, title) { sedjs.modal.load(this, contenttype, contentsource, title); } 
+			t.show = function() { sedjs.modal.show(this); };
+			t.hide = function() { sedjs.modal.hide(this); } ;
+			t.close = function(){ sedjs.modal.close(this); };
+			t.setSize = function(w, h) { sedjs.modal.setSize(this, w, h); }; 
+			t.moveTo = function(x, y) { sedjs.modal.moveTo(this, x, y); }; 
+			t.isResize = function(bol) { sedjs.modal.isResize(this, bol); }; 
+			t.isResize = function(bol) { sedjs.modal.isResize(this, bol); };
+			t.isScrolling = function(bol) { sedjs.modal.isScrolling(this, bol); };
+			t.load = function(contenttype, contentsource, title) { sedjs.modal.load(this, contenttype, contentsource, title); }; 
 			this.tobjects[this.tobjects.length] = t;
 			return t; 
 		},
@@ -580,7 +580,7 @@ var sedjs = {
 					t.contentarea.style.visibility = "visible";
 				}
 				d.stop();
-			}
+			};
 			return false;
 		},
 		
@@ -932,7 +932,7 @@ var sedjs = {
 		}
 	}
 	
-}
+};
 
 function addLoadEvent(funct) {
   var oldonload = window.onload;
