@@ -56,7 +56,9 @@ $use_xhtml = ($cfg['plugin']['jevix']['use_xhtml'] == "yes") ? true : false;
 // Use for Administrators ?
 $use_admin = (($cfg['plugin']['jevix']['use_for_admin'] == "no") && ($usr['maingrp'] == 5)) ? false : true;
 
+$ext_link_enc = ($cfg['plugin']['jevix']['ext_link_enc'] == "yes") ? true : false;  
+
 // Use jevix only html mode
-$v = sed_jevix($v, $filter, $use_xhtml, $use_admin);
+$v = sed_jevix($v, $filter, $use_xhtml, $use_admin, $ext_link_enc);
 
 ?>

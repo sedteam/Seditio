@@ -145,6 +145,22 @@ if (!function_exists('set_magic_quotes_runtime'))
 		{
         return true;
 		}
+	}
+	
+/** 
+ * Add protocol to url
+ * 
+ * @param string $url Url
+ * @param string $scheme Protocol
+ * @return string 
+ */ 
+function sed_addhttp($url, $scheme = "http://")
+	{
+	if (!preg_match("~^(?:f|ht)tps?://~i", $url)) 
+		{
+		$url = empty(parse_url($url)['scheme']) ? $scheme . ltrim($url, '/') : $url;
+		}
+	return $url;
 	}	
 
 /** 
@@ -4920,6 +4936,30 @@ function sed_userisonline($id)
 	if (is_array($sed_usersonline))
 		{ $res = (in_array($id,$sed_usersonline)) ? TRUE : FALSE; }
 	return ($res);
+	}
+
+/** 
+ * Check valid base64 string
+ * 
+ * @param string $string Text encode base64
+ * @return bool 
+ */ 	
+function sed_valid_base64($string)
+	{
+	// Check if there are valid base64 characters
+	if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s)) return false;
+
+	// Decode the string in strict mode and check the results
+	$decoded = base64_decode($s, true);
+	if(false === $decoded) return false;
+
+	// if string returned contains not printable chars
+	if (0 < preg_match('/((?![[:graph:]])(?!\s)(?!\p{L}))./', $decoded, $matched)) return false;
+
+	// Encode the string again
+	if(base64_encode($decoded) != $s) return false;
+
+	return true;
 	}
 
 /** 

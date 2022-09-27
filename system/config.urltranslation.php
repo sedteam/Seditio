@@ -23,6 +23,15 @@ $sed_urltrans['install'] = array(
     )
 );
 
+/*  External URL redirect translation */                                               
+
+$sed_urltrans['go'] = array(
+    array( 
+          'params' => 'url=*', 
+          'rewrite' => 'go/?url={url}'
+    )
+);
+
 /*  RSS translation */                                               
 
 $sed_urltrans['rss'] = array(

@@ -16,6 +16,12 @@ Description=Url rewriting config
 
 $sed_urlrewrite = array(
 
+    /*  External URL redirect rewriting */
+    array(
+         'cond' => '#^/go/#',
+         'rule' => 'system/core/go/go.php'
+    ),	
+
     /*  Resizer rewriting */
     array(
          'cond' => '#^/datas/resized/(.+)#',

@@ -1,6 +1,33 @@
 <?php
 
-function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true) 
+function sed_external_link_encode($tag, $params, $content) 
+	{
+	global $cfg;
+
+	$href_params = parse_url($params['href']);
+	$is_external_link = !empty($href_params['host']) && !strstr($params['href'], parse_url($cfg['mainurl'], PHP_URL_HOST));
+
+	if ($is_external_link) 
+		{
+		$params['class']  = (isset($params['class']) ? $params['class'].' external_link' : 'external_link');
+		$params['target'] = '_blank';
+		$params['href']   = sed_url('go', 'url='.base64_encode($params['href']));
+		$params['rel']    = 'nofollow';
+		}
+
+	$tag_string = '<a'; 
+
+	foreach($params as $param => $value) 
+		{
+		if ($value != '') 
+			{ $tag_string.=' '.$param.'="'.$value.'"'; }
+		} 
+
+	$tag_string .= '>'.$content.'</a>'; 
+	return $tag_string; 
+    }
+
+function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true, $ext_link_enc = false) 
   {	
   if ($use_admin == false) return $text; //Disable Jevix for Admin	
 	
@@ -49,7 +76,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   		$jevix->cfgAllowTagParams('tr', array('height', 'class'));
   		$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
   		$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));    
-      // Establish the resolved parametres css styles for tags
+		// Establish the resolved parametres css styles for tags
   		$jevix->cfgSetTagStyleParams(array('span'), 
   			array(
   				'text-decoration'   =>  array('none', 'line-through', 'underline'),
@@ -61,7 +88,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   				'background-color'  =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i'            
   			)
   		);
-      // Allowed style for tags		
+		// Allowed style for tags		
   		$jevix->cfgSetTagStyleParams(array('p'), 
   			array(
   				'padding-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
@@ -71,7 +98,10 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   		);    		
   		// Establish parametres tags being the obligatory. Without them cuts out tag leaving contents.
   		$jevix->cfgSetTagParamsRequired('img', 'src');
-  		$jevix->cfgSetTagParamsRequired('a', 'href');    		
+  		$jevix->cfgSetTagParamsRequired('a', 'href');  
+		
+		if ($ext_link_enc) { $jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode'); }
+  		
   		// Establish tags which can contain tag the container
   		$jevix->cfgSetTagChilds('ul', array('li'), false, true);      
   		$jevix->cfgSetTagChilds('ol', array('li'), false, true);
@@ -138,7 +168,10 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
   		$jevix->cfgSetTagIsEmpty(array('a','i'));		
 		
 		$jevix->cfgSetTagParamsRequired('img', 'src');
-  		$jevix->cfgSetTagParamsRequired('a', 'href');    		
+  		$jevix->cfgSetTagParamsRequired('a', 'href');   
+
+		if ($ext_link_enc) { $jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode'); }
+ 		
   		$jevix->cfgSetTagChilds('ul', array('li'), false, true);      
   		$jevix->cfgSetTagChilds('ol', array('li'), false, true);			
   		$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));    
@@ -156,6 +189,8 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true)
 	$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
 	$jevix->cfgSetTagParamsRequired('a', 'href');    	
 	$jevix->cfgSetTagIsEmpty(array('a','i'));
+	
+	if ($ext_link_enc) { $jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode'); }
 
     break;
     /* ---- */    
@@ -269,7 +304,7 @@ class Jevix{
 	const TR_TAG_CALLBACK = 15;     
 	const TR_TAG_BLOCK_TYPE = 16;    
 	const TR_TAG_CALLBACK_FULL = 17;    
-  const TR_TAG_PARSE_STYLE = 20; 
+	const TR_TAG_PARSE_STYLE = 20; 
 
 	protected $chClasses = array(0=>512,1=>512,2=>512,3=>512,4=>512,5=>512,6=>512,7=>512,8=>512,9=>32,10=>66048,11=>512,12=>512,13=>66048,14=>512,15=>512,16=>512,17=>512,18=>512,19=>512,20=>512,21=>512,22=>512,23=>512,24=>512,25=>512,26=>512,27=>512,28=>512,29=>512,30=>512,31=>512,32=>32,97=>71,98=>71,99=>71,100=>71,101=>71,102=>71,103=>71,104=>71,105=>71,106=>71,107=>71,108=>71,109=>71,110=>71,111=>71,112=>71,113=>71,114=>71,115=>71,116=>71,117=>71,118=>71,119=>71,120=>71,121=>71,122=>71,65=>71,66=>71,67=>71,68=>71,69=>71,70=>71,71=>71,72=>71,73=>71,74=>71,75=>71,76=>71,77=>71,78=>71,79=>71,80=>71,81=>71,82=>71,83=>71,84=>71,85=>71,86=>71,87=>71,88=>71,89=>71,90=>71,1072=>11,1073=>11,1074=>11,1075=>11,1076=>11,1077=>11,1078=>11,1079=>11,1080=>11,1081=>11,1082=>11,1083=>11,1084=>11,1085=>11,1086=>11,1087=>11,1088=>11,1089=>11,1090=>11,1091=>11,1092=>11,1093=>11,1094=>11,1095=>11,1096=>11,1097=>11,1098=>11,1099=>11,1100=>11,1101=>11,1102=>11,1103=>11,1040=>11,1041=>11,1042=>11,1043=>11,1044=>11,1045=>11,1046=>11,1047=>11,1048=>11,1049=>11,1050=>11,1051=>11,1052=>11,1053=>11,1054=>11,1055=>11,1056=>11,1057=>11,1058=>11,1059=>11,1060=>11,1061=>11,1062=>11,1063=>11,1064=>11,1065=>11,1066=>11,1067=>11,1068=>11,1069=>11,1070=>11,1071=>11,48=>337,49=>337,50=>337,51=>337,52=>337,53=>337,54=>337,55=>337,56=>337,57=>337,34=>57345,39=>16385,46=>1281,44=>1025,33=>1025,63=>1281,58=>1025,59=>1281,1105=>11,1025=>11,47=>257,38=>257,37=>257,45=>257,95=>257,61=>257,43=>257,35=>257,124=>257,);
 
@@ -1013,7 +1048,7 @@ class Jevix{
 		}
 		
 		if (isset($tagRules[self::TR_TAG_CALLBACK_FULL])) {
-			$text = call_user_func($tagRules[self::TR_TAG_CALLBACK_FULL], $tag, $resParams);
+			$text = call_user_func($tagRules[self::TR_TAG_CALLBACK_FULL], $tag, $resParams, $content);
 		} else {
 			$text='<'.$tag;
 

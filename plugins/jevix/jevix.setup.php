@@ -32,6 +32,7 @@ Lock_members=W12345A
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 use_xhtml=01:select:yes,no:yes:Use XHTML standart
 use_for_admin=02:select:yes,no:yes:Use Jevix for Administrators
+ext_link_enc=03:select:yes,no:no:Nofollow and Base64 encode external link
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */
