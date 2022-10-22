@@ -32,7 +32,17 @@ $admintitle = $L['Comments'];
 if ($a == 'delete')
 	{
 	sed_check_xg();
+	
+	$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$id' LIMIT 1");
+	$row = sed_sql_fetchassoc($sql);
+
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+
+	if (mb_substr($row['com_code'], 0, 1) == 'p')
+		{
+		$page_id = mb_substr($row['com_code'], 1, 10);
+		$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=".sed_get_comcount($row['com_code'])." WHERE page_id=".$page_id);
+		}	
 	}
 
 $d = sed_import('d', 'G', 'INT');
