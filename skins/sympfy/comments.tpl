@@ -62,6 +62,7 @@
 	<form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 	<div class="boxed">	
     <h4>{PHP.skinlang.comments.Newcomment}</h4>
+		<a name="nc"></a>
 		{COMMENTS_FORM_TEXT}
 		<p><button type="submit" class="submit btn btn-big">{PHP.skinlang.comments.Send}</button></p>
 	</div>
