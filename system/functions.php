@@ -300,8 +300,8 @@ function sed_auth($area, $option, $mask='RWA')
 			}
 		else
 			{
-			$sys['auth_log'][] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.".".$option.".".$ml."=1" : $area.".".$option.".".$ml."=0";
-	 		$res[] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
+			$sys['auth_log'][] = ((isset($usr['auth'][$area][$option]) && $usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.".".$option.".".$ml."=1" : $area.".".$option.".".$ml."=0";
+	 		$res[] = ((isset($usr['auth'][$area][$option]) && $usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
 			}
 		}
 	if (count($res) == 1)

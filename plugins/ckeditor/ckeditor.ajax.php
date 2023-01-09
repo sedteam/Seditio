@@ -29,6 +29,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 require(SED_ROOT . '/system/config.extensions.php');
 
 $result_upload = array();
+$disp_errors = "";
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 
@@ -127,7 +128,6 @@ elseif (empty($disp_errors))
 		pfs_extension,
 		pfs_folderid,
 		pfs_title,
-		pfs_desc,
 		pfs_size,
 		pfs_count)
 	VALUES
@@ -137,7 +137,6 @@ elseif (empty($disp_errors))
 		'".sed_sql_prep($f_extension)."',
 		".(int)$folderid.",
 		'".sed_sql_prep($u_title)."',
-		'".sed_sql_prep($desc)."',
 		".(int)$u_size.",
 		0) ");
 

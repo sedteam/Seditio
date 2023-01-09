@@ -254,7 +254,7 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'ne
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpageurl", $L['Mypfs']) : '';
 $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
 
-$sys['sublocation'] = isset($newpagecat) ? $sed_cat[$newpagecat]['title'] : '';
+$sys['sublocation'] = (isset($newpagecat) && isset($sed_cat[$newpagecat])) ? $sed_cat[$newpagecat]['title'] : '';
 
 $out['subtitle'] = $L['pagadd_title'];
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
