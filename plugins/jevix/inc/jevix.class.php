@@ -40,7 +40,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 
       $jevix->cfgAllowTags(array(
       		'p','a','img','i','b','u','s','em','strong','strike','small',
-      		'nobr','li','ol','ul','sup','abbr','sub','acronym','h1', 'h2', 
+      		'nobr','li','ol','ul','sup','abbr','sub','acronym','h1', 'h2', 'button', 
       		'h3', 'h4', 'h5', 'h6','br','hr','pre','code','object','param','embed','adabracut',
       		'blockquote','iframe','span','div','table','tbody','thead','tfoot','tr','td','th'
   		));    
@@ -65,6 +65,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
   		$jevix->cfgAllowTagParams('abbr',	array('title'));
   		$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));		
   		$jevix->cfgAllowTagParams('div', array('class', 'id', 'style'));
+		$jevix->cfgAllowTagParams('button', array('class', 'id', 'style'));
   		$jevix->cfgAllowTagParams('h1', array('style'));
   		$jevix->cfgAllowTagParams('h2', array('style'));
   		$jevix->cfgAllowTagParams('h3', array('style'));

@@ -38,6 +38,8 @@ $cfg['plu_mask_slider'] = empty($cfg['plu_mask_slider']) ? "<div class=\"slide-i
 // %5\$s = Page first thumb
 // %6\$s = Date
 
+$cfg['plu_mask_pages_date'] = "<span class=\"sdate\">{d-m} {H:i}</span>";
+
 $slider = "<div id=\"slider\">";
 
 $pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
