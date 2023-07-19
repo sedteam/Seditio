@@ -106,27 +106,30 @@ function sed_resize($filename)
  */
 function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
 	{
-	if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) 
+	$resized_filename = '';
+	if (!empty($filename))
 		{
-		$file = $dirname . '/' . pathinfo($filename, PATHINFO_FILENAME);
-		} 
-	else 
-		{
-		$file = pathinfo($filename, PATHINFO_FILENAME);
-		}
-		
-	$ext = pathinfo($filename, PATHINFO_EXTENSION);
+		if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) 
+			{
+			$file = $dirname . '/' . pathinfo($filename, PATHINFO_FILENAME);
+			} 
+		else 
+			{
+			$file = pathinfo($filename, PATHINFO_FILENAME);
+			}
+			
+		$ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-	if ($width > 0 || $height > 0) 
-		{
-		$resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext. ($use_webp ? '.webp' : '');
-		} 
-	else 
-		{
-		// TODO fix this option does not work now
-		$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext. ($use_webp ? '.webp' : '');
+		if ($width > 0 || $height > 0) 
+			{
+			$resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext. ($use_webp ? '.webp' : '');
+			} 
+		else 
+			{
+			// TODO fix this option does not work now
+			$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext. ($use_webp ? '.webp' : '');
+			}
 		}
-
 	return $resized_filename;
 	}
 
