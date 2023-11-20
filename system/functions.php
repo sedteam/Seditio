@@ -2231,7 +2231,7 @@ function sed_diemaintenance()
 		  "MAINTENANCE_SUBTITLE" => sed_cc($cfg['subtitle']),
 		  "MAINTENANCE_REASON" => $cfg['maintenancereason'], 
 		  "MAINTENANCE_FORM_SEND" => sed_url("users", "m=auth&a=check&".$sys['url_redirect']),		  
-		  "MAINTENANCE_USER" => sed_textbox("rusername", $rusername, 24, 100),
+		  "MAINTENANCE_USER" => sed_textbox("rusername", "", 24, 100),
 		  "MAINTENANCE_PASSWORD" => sed_textbox("rpassword", "", 16, 32, "password", false, "password")
 	  ));   
 	  $t->parse("MAINTENANCE"); 
@@ -2787,7 +2787,7 @@ function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror=FALSE)
 		break;
 
 		default:
-		sed_diefatal('Unknown filter for a variable : <br />Var = '.$cv_v.'<br />Filter = '.$filter.' ?');
+		sed_diefatal('Unknown filter for a variable : <br />Var = '.$v.'<br />Filter = '.$filter.' ?');
 		break;
 		}
 
@@ -3641,7 +3641,7 @@ function sed_pfs_deleteall($userid)
 	if (!$userid)
 		{ return; }
 	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
-	$num = $num + sed_sql_affectedrows();
+	$num = sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
 	$num = $num + sed_sql_affectedrows();
 
@@ -4941,10 +4941,10 @@ function sed_userisonline($id)
 /** 
  * Check valid base64 string
  * 
- * @param string $string Text encode base64
+ * @param string $s Text encode base64
  * @return bool 
  */ 	
-function sed_valid_base64($string)
+function sed_valid_base64($s)
 	{
 	// Check if there are valid base64 characters
 	if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s)) return false;
