@@ -27,62 +27,55 @@ $request_uri = str_replace($subdir_uri, "", $request_uri);
 $vars_req = array();
 $params_req = "";
 
-if (($pos = strpos($request_uri, "?")) !== false) 
-{
-    $params_req = mb_substr($request_uri, $pos+1); 
-    $request_uri = mb_substr($request_uri, 0, $pos);
-    parse_str($params_req, $vars_req);
-    $params_req = "&".urldecode($params_req);   
+if (($pos = strpos($request_uri, "?")) !== false) {
+  $params_req = mb_substr($request_uri, $pos + 1);
+  $request_uri = mb_substr($request_uri, 0, $pos);
+  parse_str($params_req, $vars_req);
+  $params_req = "&" . urldecode($params_req);
 }
 
-foreach($sed_urlrewrite as $val)
-{
-    if(preg_match($val['cond'], $request_uri))
-    {         
-      $url = preg_replace($val['cond'], $val['rule'], $request_uri);         
-      
-      $url = urldecode($url);
-              
-      if (($pos = mb_strpos($url, "?")) !== false)
-       {
-          $params = mb_substr($url, $pos+1);
-          parse_str($params, $vars);
-          
-          $vars += $vars_req;
-          $params = $params.$params_req;          
-                            
-          $_GET += $vars;          
-          $_REQUEST += $vars;
-          //$GLOBALS += $vars;
-          $_SERVER["QUERY_STRING"] = $QUERY_STRING = $params;
-       }        
-    
-      $pos = mb_strpos($url, ".php");
-      $incl = mb_substr($url, 0, $pos+4);   
-     
-      include_once(SED_ROOT . '/' . $incl);
-      die();
+foreach ($sed_urlrewrite as $val) {
+  if (preg_match($val['cond'], $request_uri)) {
+    $url = preg_replace($val['cond'], $val['rule'], $request_uri);
+
+    $url = urldecode($url);
+
+    if (($pos = mb_strpos($url, "?")) !== false) {
+      $params = mb_substr($url, $pos + 1);
+      parse_str($params, $vars);
+
+      $vars += $vars_req;
+      $params = $params . $params_req;
+
+      $_GET += $vars;
+      $_REQUEST += $vars;
+      //$GLOBALS += $vars;
+      $_SERVER["QUERY_STRING"] = $QUERY_STRING = $params;
     }
+
+    $pos = mb_strpos($url, ".php");
+    $incl = mb_substr($url, 0, $pos + 4);
+
+    include_once(SED_ROOT . '/' . $incl);
+    die();
+  }
 }
 
 $module = @$_GET['module'];
 
-if (!empty($module))
-{
-	$system_core = array("install", "admin", "captcha", "resizer", "forums", "gallery", "index", "list", "message", "page", "pfs", "plug", "pm", "polls", "rss", "sitemap", "users", "view");
-	if (in_array($module, $system_core)) {
-		$system_incl_dir = ($module == "install") ? SED_ROOT . "/system/install/" : SED_ROOT . "/system/core/".$module."/";
-		include_once($system_incl_dir.$module.".php");
-		die();
-	}
+if (!empty($module)) {
+  $system_core = array("install", "admin", "captcha", "resizer", "forums", "gallery", "index", "list", "message", "page", "pfs", "plug", "pm", "polls", "rss", "sitemap", "users", "view");
+  if (in_array($module, $system_core)) {
+    $system_incl_dir = ($module == "install") ? SED_ROOT . "/system/install/" : SED_ROOT . "/system/core/" . $module . "/";
+    include_once($system_incl_dir . $module . ".php");
+    die();
+  }
 }
 
-if (str_replace("/", "", $request_uri) == "index.php") {	
-	header("Location: /", TRUE, 301);
-	exit();
+if (str_replace("/", "", $request_uri) == "index.php") {
+  header("Location: /", TRUE, 301);
+  exit();
 }
 
 header("HTTP/1.1 404 Not Found");
-exit; 
-   
-?>
+exit;
