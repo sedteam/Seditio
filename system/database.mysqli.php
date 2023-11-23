@@ -14,15 +14,18 @@ Description=Functions MySQLi driver
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+	die('Wrong URL.');
+}
 
 /* ------------------ */
 
 if (function_exists('mysqli_set_charset') === false) {
 
-   function mysqli_set_charset($conn_id, $charset){
-      return mysqli_query($conn_id, 'SET NAMES "'.$charset.'"');
-   }
+	function mysqli_set_charset($conn_id, $charset)
+	{
+		return mysqli_query($conn_id, 'SET NAMES "' . $charset . '"');
+	}
 }
 
 /** 
@@ -32,9 +35,10 @@ if (function_exists('mysqli_set_charset') === false) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return int Number of rows affected by the last INSERT, UPDATE, REPLACE or DELETE query.  
  */
-function sed_sql_affectedrows($conn_id = null) {  
-  global $connection_id;   
-  return is_null($conn_id) ? mysqli_affected_rows($connection_id) : mysqli_affected_rows($conn_id);
+function sed_sql_affectedrows($conn_id = null)
+{
+	global $connection_id;
+	return is_null($conn_id) ? mysqli_affected_rows($connection_id) : mysqli_affected_rows($conn_id);
 }
 
 /** 
@@ -44,9 +48,10 @@ function sed_sql_affectedrows($conn_id = null) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
-function sed_sql_close($conn_id = null) { 
-  global $connection_id; 
-  return is_null($conn_id) ? mysqli_close($connection_id) : mysqli_close($conn_id); 
+function sed_sql_close($conn_id = null)
+{
+	global $connection_id;
+	return is_null($conn_id) ? mysqli_close($connection_id) : mysqli_close($conn_id);
 }
 
 /** 
@@ -58,10 +63,11 @@ function sed_sql_close($conn_id = null) {
  * @param string $db The name of the database that is to be selected.     
  * @return resource Specified link identifier  
  */
-function sed_sql_connect($host, $user, $pass, $db) {
-	$conn_id = @mysqli_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
-	$select = @mysqli_select_db($conn_id, $db) or sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
-	return($conn_id);
+function sed_sql_connect($host, $user, $pass, $db)
+{
+	$conn_id = @mysqli_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />' . 'MySQL error : ' . sed_sql_error());
+	$select = @mysqli_select_db($conn_id, $db) or sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />' . 'MySQL error : ' . sed_sql_error());
+	return ($conn_id);
 }
 
 /** 
@@ -71,9 +77,10 @@ function sed_sql_connect($host, $user, $pass, $db) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return int Returns the error number from the last MySQL function, or 0 (zero) if no error occurred.  
  */
-function sed_sql_errno($conn_id = null) { 
-  global $connection_id; 
-  return is_null($conn_id) ? mysqli_errno($connection_id) : mysqli_errno($conn_id); 
+function sed_sql_errno($conn_id = null)
+{
+	global $connection_id;
+	return is_null($conn_id) ? mysqli_errno($connection_id) : mysqli_errno($conn_id);
 }
 
 /** 
@@ -83,9 +90,10 @@ function sed_sql_errno($conn_id = null) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return string Returns the error text from the last MySQL function, or '' (empty string) if no error occurred.  
  */
-function sed_sql_error($conn_id = null) { 
-  global $connection_id; 
-  return is_null($conn_id) ? mysqli_error($connection_id) : mysqli_error($conn_id); 
+function sed_sql_error($conn_id = null)
+{
+	global $connection_id;
+	return is_null($conn_id) ? mysqli_error($connection_id) : mysqli_error($conn_id);
 }
 
 /** 
@@ -94,8 +102,9 @@ function sed_sql_error($conn_id = null) {
  * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return array|bool Returns an array of strings that corresponds to the fetched row, or FALSE if there are no more rows.  
  */
-function sed_sql_fetcharray($res) {   
-  return (mysqli_fetch_array($res)); 
+function sed_sql_fetcharray($res)
+{
+	return (mysqli_fetch_array($res));
 }
 
 /** 
@@ -104,8 +113,9 @@ function sed_sql_fetcharray($res) {
  * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return array|bool Returns an associative array of strings that corresponds to the fetched row, or FALSE if there are no more rows.  
  */
-function sed_sql_fetchassoc($res) {     
-  return (mysqli_fetch_assoc($res)); 
+function sed_sql_fetchassoc($res)
+{
+	return (mysqli_fetch_assoc($res));
 }
 
 /** 
@@ -114,8 +124,9 @@ function sed_sql_fetchassoc($res) {
  * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return array|bool Returns an numerical array of strings that corresponds to the fetched row, or FALSE if there are no more rows.  
  */
-function sed_sql_fetchrow($res) {     
-  return (mysqli_fetch_row($res)); 
+function sed_sql_fetchrow($res)
+{
+	return (mysqli_fetch_row($res));
 }
 
 /** 
@@ -125,8 +136,10 @@ function sed_sql_fetchrow($res) {
  * @return Returns an object containing field information  
  */
 function sed_sql_fetchfield($res, $field_offset = 0)
-	{ return (mysqli_fetch_field($res)); }
-		
+{
+	return (mysqli_fetch_field($res));
+}
+
 /** 
  * Retrieves the number of fields from a query.
  *   
@@ -134,7 +147,9 @@ function sed_sql_fetchfield($res, $field_offset = 0)
  * @return Returns the number of fields in the result set resource on success or FALSE on failure.
  */
 function sed_sql_numfields($res)
-	{ return (mysqli_num_fields($res)); }	
+{
+	return (mysqli_num_fields($res));
+}
 
 /** 
  * Free result memory
@@ -142,8 +157,9 @@ function sed_sql_numfields($res)
  * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
-function sed_sql_freeresult($res) { 
-  return (mysqli_free_result($res)); 
+function sed_sql_freeresult($res)
+{
+	return (mysqli_free_result($res));
 }
 
 /** 
@@ -155,9 +171,10 @@ function sed_sql_freeresult($res) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return int|bool The ID generated for an AUTO_INCREMENT column by the previous query on success, 0 if the previous query does not generate an AUTO_INCREMENT value, or FALSE if no MySQL connection was established. 
  */
-function sed_sql_insertid($conn_id = null) { 
-  global $connection_id; 
-  return is_null($conn_id) ? mysqli_insert_id($connection_id) : mysqli_insert_id($conn_id);   
+function sed_sql_insertid($conn_id = null)
+{
+	global $connection_id;
+	return is_null($conn_id) ? mysqli_insert_id($connection_id) : mysqli_insert_id($conn_id);
 }
 
 /** 
@@ -168,12 +185,13 @@ function sed_sql_insertid($conn_id = null) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return string List tables in a MySQL database 
  */
-function sed_sql_listtables($res, $conn_id = null) { 
- global $connection_id, $cfg;
- $conn_id = is_null($conn_id) ? $connection_id : $conn_id; 
- $res = mysqli_query($conn_id, "SHOW TABLES FROM ".$res." "); 
- return($res);
-}  
+function sed_sql_listtables($res, $conn_id = null)
+{
+	global $connection_id, $cfg;
+	$conn_id = is_null($conn_id) ? $connection_id : $conn_id;
+	$res = mysqli_query($conn_id, "SHOW TABLES FROM " . $res . " ");
+	return ($res);
+}
 
 /** 
  * Get number of rows in result
@@ -185,8 +203,9 @@ function sed_sql_listtables($res, $conn_id = null) {
  * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return int|bool The number of rows in a result set on success or FALSE on failure.  
  */
-function sed_sql_numrows($res) {  
-  return (mysqli_num_rows($res)); 
+function sed_sql_numrows($res)
+{
+	return (mysqli_num_rows($res));
 }
 
 /** 
@@ -197,10 +216,11 @@ function sed_sql_numrows($res) {
  * @global resource $connection_id A link identifier returned by sed_sql_connect()
  * @return string Returns the escaped string.
  */
-function sed_sql_prep($res, $conn_id = null) {
-  global $connection_id; 
-  if (empty($res)) return($res);
-  return is_null($conn_id) ? mysqli_real_escape_string($connection_id, $res) : mysqli_real_escape_string($conn_id, $res);  
+function sed_sql_prep($res, $conn_id = null)
+{
+	global $connection_id;
+	if (empty($res)) return ($res);
+	return is_null($conn_id) ? mysqli_real_escape_string($connection_id, $res) : mysqli_real_escape_string($conn_id, $res);
 }
 
 /** 
@@ -213,32 +233,32 @@ function sed_sql_prep($res, $conn_id = null) {
  * @return mixed Returns a resource on success, or FALSE on error for SELECT, SHOW, DESCRIBE, EXPLAIN. Returns TRUE on success or FALSE on error for INSERT, UPDATE, DELETE, DROP
  */
 function sed_sql_query($query, $halterr = true, $conn_id = null)
-	{
+{
 	global $sys, $cfg, $usr, $connection_id;
 
-	$conn_id = is_null($conn_id) ? $connection_id : $conn_id; 
+	$conn_id = is_null($conn_id) ? $connection_id : $conn_id;
 
 	$sys['qcount'] = 0;
 	$sys['tcount'] = 0;
 	$sys['qcount']++;
 	$xtime = microtime();
-	
-	if ($halterr)
-		{ $result = mysqli_query($conn_id, $query) OR sed_diefatal('SQL error : '.sed_sql_error()); }
-	else
-		{ $result = mysqli_query($conn_id, $query); }
-    
-	$ytime = microtime();
-	$xtime = explode(' ',$xtime);
-	$ytime = explode(' ',$ytime);
-	$sys['tcount'] = $sys['tcount'] + $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
-	if ($cfg['devmode'])
-		{
-		$sys['devmode']['queries'][] = array ($sys['qcount'], $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query);
-		$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];
-		}
-	return($result);
+
+	if ($halterr) {
+		$result = mysqli_query($conn_id, $query) or sed_diefatal('SQL error : ' . sed_sql_error());
+	} else {
+		$result = mysqli_query($conn_id, $query);
 	}
+
+	$ytime = microtime();
+	$xtime = explode(' ', $xtime);
+	$ytime = explode(' ', $ytime);
+	$sys['tcount'] = $sys['tcount'] + $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
+	if ($cfg['devmode']) {
+		$sys['devmode']['queries'][] = array($sys['qcount'], $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query);
+		$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];
+	}
+	return ($result);
+}
 
 /** 
  * Get result data
@@ -250,10 +270,11 @@ function sed_sql_query($query, $halterr = true, $conn_id = null)
  * @param mixed $col The name or offset of the field being retrieved.  
  * @return string The contents of one cell from a MySQL result set on success, or FALSE on failure.
  */
-function sed_sql_result($res, $row, $col = 0) {  
-  mysqli_data_seek($res, $row);
-  $result = mysqli_fetch_array($res); 
-  return($result[$col]);
+function sed_sql_result($res, $row, $col = 0)
+{
+	mysqli_data_seek($res, $row);
+	$result = mysqli_fetch_array($res);
+	return ($result[$col]);
 }
 
 /** 
@@ -266,7 +287,9 @@ function sed_sql_result($res, $row, $col = 0) {
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
 function sed_sql_set_charset($conn_id, $charset)
-	{ return (mysqli_set_charset($conn_id, $charset)); }
+{
+	return (mysqli_set_charset($conn_id, $charset));
+}
 
 /** 
  * Returns count of rows in table.
@@ -275,9 +298,7 @@ function sed_sql_set_charset($conn_id, $charset)
  * @return int Count of rows in table.  
  */
 function sed_sql_rowcount($table)
-	{
+{
 	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table");
-	return(sed_sql_result($sqltmp, 0, "COUNT(*)"));
-	}
-
-?>
+	return (sed_sql_result($sqltmp, 0, "COUNT(*)"));
+}

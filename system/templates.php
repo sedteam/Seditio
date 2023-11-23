@@ -36,7 +36,8 @@ Description=Xtemplate class
  * Changelog: see changelog.txt
  */
 
-class XTemplate {
+class XTemplate
+{
 
 	public $filecontents = '';
 	public $blocks = array();
@@ -67,15 +68,15 @@ class XTemplate {
 	public $callback_preg = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\(.*?\))?';
 	public $allow_callbacks = true;
 	public $allowed_callbacks = array(
-	'strtoupper', 'strtolower', 'ucwords', 'ucfirst', 'strrev', 'str_word_count', 'strlen',
-	'str_replace', 'str_ireplace', 'preg_replace', 'strip_tags', 'stripcslashes', 'stripslashes', 'substr',
-	'str_pad', 'str_repeat', 'strtr', 'trim', 'ltrim', 'rtrim', 'nl2br', 'wordwrap', 'printf', 'sprintf',
-	'addslashes', 'addcslashes',
-	'htmlentities', 'html_entity_decode', 'htmlspecialchars', 'htmlspecialchars_decode',
-	'urlencode', 'urldecode',
-	'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
-	'number_format', 'money_format',
-	'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image'
+		'strtoupper', 'strtolower', 'ucwords', 'ucfirst', 'strrev', 'str_word_count', 'strlen',
+		'str_replace', 'str_ireplace', 'preg_replace', 'strip_tags', 'stripcslashes', 'stripslashes', 'substr',
+		'str_pad', 'str_repeat', 'strtr', 'trim', 'ltrim', 'rtrim', 'nl2br', 'wordwrap', 'printf', 'sprintf',
+		'addslashes', 'addcslashes',
+		'htmlentities', 'html_entity_decode', 'htmlspecialchars', 'htmlspecialchars_decode',
+		'urlencode', 'urldecode',
+		'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
+		'number_format', 'money_format',
+		'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image'
 	);
 
 	public $mainblock = 'main';
@@ -88,7 +89,8 @@ class XTemplate {
 	protected $_error = '';
 	protected $_autoreset = true;
 	protected $_ignore_missing_blocks = true;
-	public function __construct($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true) {
+	public function __construct($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true)
+	{
 
 		if (!is_array($options)) {
 			$options = array('file' => $options, 'path' => $tpldir, 'files' => $files, 'mainblock' => $mainblock, 'autosetup' => $autosetup);
@@ -104,7 +106,8 @@ class XTemplate {
 		$this->restart($options);
 	}
 
-	public function restart ($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true, $tag_start = '{', $tag_end = '}') {
+	public function restart($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true, $tag_start = '{', $tag_end = '}')
+	{
 
 		if (is_array($options)) {
 			foreach ($options as $option => $value) {
@@ -135,7 +138,6 @@ class XTemplate {
 			}
 
 			$this->filename = $file;
-
 		} else {
 			$this->filename = $options;
 		}
@@ -190,7 +192,8 @@ class XTemplate {
 		}
 	}
 
-	public function setup ($add_outer = false) {
+	public function setup($add_outer = false)
+	{
 
 		$this->tag_start_delim = preg_quote($this->tag_start_delim);
 		$this->tag_end_delim = preg_quote($this->tag_end_delim);
@@ -217,7 +220,8 @@ class XTemplate {
 	}
 
 
-	public function assign ($name, $val = '', $reset_array = true) {
+	public function assign($name, $val = '', $reset_array = true)
+	{
 
 		if (is_array($name) || is_object($name)) {
 
@@ -228,22 +232,22 @@ class XTemplate {
 		} elseif (is_array($val) || is_object($val)) {
 
 			// Clear the existing values
-    		if ($reset_array) {
-    			$this->vars[$name] = array();
-    		}
+			if ($reset_array) {
+				$this->vars[$name] = array();
+			}
 
-        	foreach ($val as $k => $v) {
+			foreach ($val as $k => $v) {
 
-        		$this->vars[$name][$k] = $v;
-        	}
-
+				$this->vars[$name][$k] = $v;
+			}
 		} else {
 
 			$this->vars[$name] = $val;
 		}
 	}
 
-	public function assign_file ($name, $val = '') {
+	public function assign_file($name, $val = '')
+	{
 
 		if (is_array($name)) {
 
@@ -257,21 +261,19 @@ class XTemplate {
 		}
 	}
 
-	public function parse ($bname) {
+	public function parse($bname)
+	{
 
 		if (isset($this->preparsed_blocks[$bname])) {
 
 			$copy = $this->preparsed_blocks[$bname];
-
 		} elseif (isset($this->blocks[$bname])) {
 
 			$copy = $this->blocks[$bname];
-
 		} elseif ($this->_ignore_missing_blocks) {
 
 			$this->_set_error("parse: blockname [$bname] does not exist");
 			return;
-
 		} else {
 
 			$this->_set_error("parse: blockname [$bname] does not exist");
@@ -298,7 +300,7 @@ class XTemplate {
 				$comment = array_pop($any_comments);
 			}
 			$v = rtrim(implode($this->comment_delim, $any_comments));
-      
+
 			if ($this->allow_callbacks) {
 				$callback_funcs = explode($this->callback_delim, $v);
 				$v = rtrim($callback_funcs[0]);
@@ -320,7 +322,6 @@ class XTemplate {
 
 					if ($nul == '') {
 						$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . $v . $this->tag_end_delim . $this->preg_delimiter . 'm', '', $copy);
-
 					} else {
 
 						$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . $v . $this->tag_end_delim . $this->preg_delimiter . 'm', "$nul", $copy);
@@ -328,7 +329,7 @@ class XTemplate {
 				} else {
 
 					switch (true) {
-						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) && preg_match($this->preg_delimiter . "\n$" .$this->preg_delimiter, $var):
+						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) && preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $var):
 							$var = mb_substr($var, 1, -1);
 							break;
 
@@ -364,7 +365,6 @@ class XTemplate {
 								if (defined($v1)) {
 
 									$var[$v1] = constant($v1);
-
 								} else {
 
 									$var[$v1] = null;
@@ -374,16 +374,15 @@ class XTemplate {
 							break;
 
 						case is_object($var):
-							 if (!isset($var->$v1) || (is_string($var->$v1) && mb_strlen($var->$v1) == 0)) {
+							if (!isset($var->$v1) || (is_string($var->$v1) && mb_strlen($var->$v1) == 0)) {
 								if (defined($v1)) {
 
 									$var->$v1 = constant($v1);
-
 								} else {
 
 									$var->$v1 = null;
 								}
-							 }
+							}
 							$var = $var->$v1;
 							break;
 					}
@@ -406,7 +405,7 @@ class XTemplate {
 									by comma or closing bracket
 									)|,?\s*?([\w(?<!\%)]+)[,|\)$]' . $this->preg_delimiter, $matches[1] . ')', $param_matches)) {
 									$parameters = $param_matches[0];
-								}							
+								}
 								if (count($parameters)) {
 									array_walk($parameters, array($this, 'trim_callback'));
 									if (($key = array_search('%s', $parameters)) !== false) {
@@ -433,7 +432,7 @@ class XTemplate {
 									$var = call_user_func_array($callback, $parameters);
 									unset($parameters);
 								} else {
-									$var = call_user_func($callback, isset($var)?$var:'');
+									$var = call_user_func($callback, isset($var) ? $var : '');
 								}
 							}
 						}
@@ -477,7 +476,8 @@ class XTemplate {
 		}
 	}
 
-	public function rparse ($bname) {
+	public function rparse($bname)
+	{
 
 		if (!empty($this->sub_blocks[$bname])) {
 
@@ -494,30 +494,34 @@ class XTemplate {
 		$this->parse($bname);
 	}
 
-	public function insert_loop ($bname, $var, $value = '') {
+	public function insert_loop($bname, $var, $value = '')
+	{
 
 		$this->assign($var, $value);
 		$this->parse($bname);
 	}
-	
-	public function compress ($out) {
-		$out = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/", "", $out);	
+
+	public function compress($out)
+	{
+		$out = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/", "", $out);
 		$out = str_replace(array("\r\n", "\r", "\n", "\t", "  ", "    ", "    "), "", $out);
 		return $out;
-	}	
+	}
 
-	public function array_loop ($bname, $var, &$values) {
+	public function array_loop($bname, $var, &$values)
+	{
 
 		if (is_array($values)) {
 
-			foreach($values as $v) {
+			foreach ($values as $v) {
 
 				$this->insert_loop($bname, $var, $v);
 			}
 		}
 	}
 
-	public function text ($bname = '') {
+	public function text($bname = '')
+	{
 
 		$text = '';
 
@@ -535,7 +539,7 @@ class XTemplate {
 				}
 			} elseif (!empty($this->tpldir)) {
 
-				$text .= realpath($this->tpldir. DIRECTORY_SEPARATOR . $this->filename);
+				$text .= realpath($this->tpldir . DIRECTORY_SEPARATOR . $this->filename);
 			} else {
 
 				$text .= $this->filename;
@@ -550,14 +554,18 @@ class XTemplate {
 		return $text;
 	}
 
-	public function out ($bname) {
-		$out = $this->text($bname);   
+	public function out($bname)
+	{
+		$out = $this->text($bname);
 		$out = preg_replace('/\s+$/m', '', $out); // fix Amro 04.11.2017
-		if ($this->compress_output) { $out = $this->compress($out); } 
+		if ($this->compress_output) {
+			$out = $this->compress($out);
+		}
 		echo trim($out);
 	}
 
-	public function out_file ($bname, $fname) {
+	public function out_file($bname, $fname)
+	{
 
 		if (!empty($bname) && !empty($fname) && is_writeable($fname)) {
 
@@ -567,45 +575,54 @@ class XTemplate {
 		}
 	}
 
-	public function reset ($bname) {
+	public function reset($bname)
+	{
 
 		$this->parsed_blocks[$bname] = '';
 	}
 
-	public function parsed ($bname) {
+	public function parsed($bname)
+	{
 
 		return (!empty($this->parsed_blocks[$bname]));
 	}
 
-	public function set_null_string($str, $varname = '') {
+	public function set_null_string($str, $varname = '')
+	{
 
 		$this->_null_string[$varname] = $str;
 	}
 
-	public function SetNullString ($str, $varname = '') {
+	public function SetNullString($str, $varname = '')
+	{
 		$this->set_null_string($str, $varname);
 	}
 
-	public function set_null_block ($str, $bname = '') {
+	public function set_null_block($str, $bname = '')
+	{
 
 		$this->_null_block[$bname] = $str;
 	}
 
-	public function SetNullBlock ($str, $bname = '') {
+	public function SetNullBlock($str, $bname = '')
+	{
 		$this->set_null_block($str, $bname);
 	}
 
-	public function set_autoreset () {
+	public function set_autoreset()
+	{
 
 		$this->_autoreset = true;
 	}
 
-	public function clear_autoreset () {
+	public function clear_autoreset()
+	{
 
 		$this->_autoreset = false;
 	}
 
-	public function scan_globals () {
+	public function scan_globals()
+	{
 
 		$GLOB = array();
 
@@ -645,7 +662,8 @@ class XTemplate {
 		$this->assign('PHP', $GLOB);
 	}
 
-	public function get_error () {
+	public function get_error()
+	{
 
 		$retval = false;
 
@@ -666,17 +684,17 @@ class XTemplate {
 		return $retval;
 	}
 
-	public function _maketree ($con, $parentblock='') {
+	public function _maketree($con, $parentblock = '')
+	{
 
 		$blocks = array();
 
-		$con2 = explode($this->block_start_delim, $con);  
+		$con2 = explode($this->block_start_delim, $con);
 
 		if (!empty($parentblock)) {
 
 			$block_names = explode('.', $parentblock);
 			$level = sizeof($block_names);
-
 		} else {
 
 			$block_names = array();
@@ -685,7 +703,7 @@ class XTemplate {
 
 		$patt = "(" . $this->block_start_word . "|" . $this->block_end_word . ")\s*(\w+)" . $this->comment_preg . "\s*" . $this->block_end_delim . "(.*)";
 
-		foreach($con2 as $k => $v) {
+		foreach ($con2 as $k => $v) {
 
 			$res = array();
 
@@ -700,13 +718,12 @@ class XTemplate {
 
 					$parent_name = implode('.', $block_names);
 					$block_names[++$level] = $block_name;
-					$cur_block_name=implode('.', $block_names);
+					$cur_block_name = implode('.', $block_names);
 					$this->block_parse_order[] = $cur_block_name;
 					$blocks[$cur_block_name] = isset($blocks[$cur_block_name]) ? $blocks[$cur_block_name] . $content : $content;
 					$blocks[$parent_name] .= str_replace('\\', '', $this->tag_start_delim) . '_BLOCK_.' . $cur_block_name . str_replace('\\', '', $this->tag_end_delim);
 					$this->sub_blocks[$parent_name][] = $cur_block_name;
 					$this->sub_blocks[$cur_block_name][] = '';
-
 				} else if (mb_strtoupper($block_word) == $this->block_end_word) {
 
 					unset($block_names[$level--]);
@@ -725,11 +742,12 @@ class XTemplate {
 				$blocks[$tmp] = isset($blocks[$tmp]) ? $blocks[$tmp] . $v : $v;
 			}
 		}
-     
-		return $blocks; 
+
+		return $blocks;
 	}
 
-	private function _assign_file_sub ($name, $val) {
+	private function _assign_file_sub($name, $val)
+	{
 
 		if (isset($this->filevar_parent[$name])) {
 
@@ -737,12 +755,11 @@ class XTemplate {
 
 				$val = $this->_r_getfile($val);
 
-				foreach($this->filevar_parent[$name] as $parent) {
+				foreach ($this->filevar_parent[$name] as $parent) {
 
 					if (isset($this->preparsed_blocks[$parent]) && !isset($this->filevars[$name])) {
 
 						$copy = $this->preparsed_blocks[$parent];
-
 					} elseif (isset($this->blocks[$parent])) {
 
 						$copy = $this->blocks[$parent];
@@ -771,7 +788,8 @@ class XTemplate {
 		$this->filevars[$name] = $val;
 	}
 
-	public function _store_filevar_parents ($blocks){
+	public function _store_filevar_parents($blocks)
+	{
 
 		$parents = array();
 
@@ -789,12 +807,14 @@ class XTemplate {
 		return $parents;
 	}
 
-	private function _set_error ($str)    {
+	private function _set_error($str)
+	{
 
 		$this->_error .= '* ' . $str . " *\n";
 	}
 
-	protected function _getfile ($file) {
+	protected function _getfile($file)
+	{
 
 		if (!isset($file)) {
 			$this->_set_error('!isset file name!' . $file);
@@ -823,7 +843,7 @@ class XTemplate {
 				}
 			} else {
 
-				$file = $this->tpldir. DIRECTORY_SEPARATOR . $file;
+				$file = $this->tpldir . DIRECTORY_SEPARATOR . $file;
 			}
 		}
 
@@ -836,7 +856,6 @@ class XTemplate {
 			if ($this->debug && $this->output_type == 'HTML') {
 				$file_text = '<!-- XTemplate debug CACHED: ' . realpath($file) . ' -->' . "\n" . $file_text;
 			}
-
 		} else {
 
 			if (is_file($file) && is_readable($file)) {
@@ -849,15 +868,13 @@ class XTemplate {
 						return '';
 					}
 
-					$file_text .= fread($fh,filesize($file));
+					$file_text .= fread($fh, filesize($file));
 					fclose($fh);
-
 				}
 
 				if ($this->debug && $this->output_type == 'HTML') {
 					$file_text = '<!-- XTemplate debug: ' . realpath($file) . ' -->' . "\n" . $file_text;
 				}
-
 			} elseif (str_replace('.', '', phpversion()) >= '430' && $file_text = @file_get_contents($file, true)) {
 
 				if ($file_text === false) {
@@ -874,7 +891,6 @@ class XTemplate {
 				if ($this->output_type == 'HTML') {
 					$file_text .= "<b>__XTemplate fatal error: file [$file] does not exist__</b>";
 				}
-
 			} elseif (!is_readable($file)) {
 
 				$this->_set_error("[" . realpath($file) . "] ($file) is not readable");
@@ -889,13 +905,14 @@ class XTemplate {
 		return $file_text;
 	}
 
-	public function _r_getfile ($file) {
+	public function _r_getfile($file)
+	{
 
 		$text = $this->_getfile($file);
 
 		$res = array();
 
-		while (preg_match($this->file_delim,$text,$res)) {
+		while (preg_match($this->file_delim, $text, $res)) {
 
 			$text2 = $this->_getfile($res[1]);
 			$text = preg_replace($this->preg_delimiter . preg_quote($res[0]) . $this->preg_delimiter, $text2, $text);
@@ -904,7 +921,8 @@ class XTemplate {
 		return $text;
 	}
 
-	protected function trim_callback (&$value) {
+	protected function trim_callback(&$value)
+	{
 		$value = preg_replace($this->preg_delimiter . "^.*(%s).*$" . $this->preg_delimiter, '\\1', trim($value));
 		$value = preg_replace($this->preg_delimiter . '^,?\s*?(.*?)[,|\)]?$' . $this->preg_delimiter, '\\1', trim($value));
 		$value = preg_replace($this->preg_delimiter . '^[\'|"]?(.*?)[\'|"]?$' . $this->preg_delimiter, '\\1', trim($value));
@@ -913,7 +931,8 @@ class XTemplate {
 		$value = preg_replace($this->preg_delimiter . '\\\,' . $this->preg_delimiter, ',', $value);
 	}
 
-	private function _add_outer_block () {
+	private function _add_outer_block()
+	{
 
 		$before = $this->block_start_delim . $this->block_start_word . ' ' . $this->mainblock . ' ' . $this->block_end_delim;
 		$after = $this->block_start_delim . $this->block_end_word . ' ' . $this->mainblock . ' ' . $this->block_end_delim;
@@ -921,7 +940,8 @@ class XTemplate {
 		$this->filecontents = $before . "\n" . $this->filecontents . "\n" . $after;
 	}
 
-	protected function _pre_var_dump ($args) {
+	protected function _pre_var_dump($args)
+	{
 
 		if ($this->debug) {
 			echo '<pre>';
@@ -930,7 +950,8 @@ class XTemplate {
 		}
 	}
 
-	protected function _ob_var_dump ($args) {
+	protected function _ob_var_dump($args)
+	{
 
 		if ($this->debug) {
 			ob_start();
@@ -939,5 +960,3 @@ class XTemplate {
 		}
 	}
 }
-
-?>
