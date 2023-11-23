@@ -4384,6 +4384,7 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 			}
 		}
 	}
+	return "";
 }
 
 /** 
