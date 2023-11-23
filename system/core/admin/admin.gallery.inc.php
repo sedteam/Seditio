@@ -14,7 +14,9 @@ Description=Administration panel
 [END_SED]
 ==================== */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+    die('Wrong URL.');
+}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['isadmin']);
@@ -26,12 +28,10 @@ $urlpaths[sed_url("admin", "m=gallery")] =  $L['Gallery'];
 
 $admintitle = $L['Gallery'];
 
-$t = new XTemplate(sed_skinfile('admin.gallery', false, true)); 
-		
-$t -> parse("ADMIN_GALLERY");
+$t = new XTemplate(sed_skinfile('admin.gallery', false, true));
+
+$t->parse("ADMIN_GALLERY");
 
 $t->assign("ADMIN_GALLERY_TITLE", $admintitle);
 
-$adminmain .= $t -> text("ADMIN_GALLERY");
-
-?>
+$adminmain .= $t->text("ADMIN_GALLERY");

@@ -26,19 +26,16 @@ require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_pm']);
 
-switch($m)
-	{
+switch ($m) {
 	case 'send':
-	require(SED_ROOT . '/system/core/pm/pm.send.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/pm/pm.send.inc.php');
+		break;
 
 	case 'edit':
-	require(SED_ROOT . '/system/core/pm/pm.edit.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/pm/pm.edit.inc.php');
+		break;
 
 	default:
-	require(SED_ROOT . '/system/core/pm/pm.inc.php');
-	break;
-	}
-
-?>
+		require(SED_ROOT . '/system/core/pm/pm.inc.php');
+		break;
+}

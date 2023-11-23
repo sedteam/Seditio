@@ -14,12 +14,17 @@ Description=Home page
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+	die('Wrong URL.');
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('index.first');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if (is_array($extp)) {
+	foreach ($extp as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
 /* ===== */
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('index', 'a');
@@ -35,8 +40,11 @@ $out['subtitle'] = sed_title('indextitle', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('index.main');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if (is_array($extp)) {
+	foreach ($extp as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -46,13 +54,14 @@ $t = new XTemplate($mskin);
 
 /* === Hook === */
 $extp = sed_getextplugins('index.tags');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include(SED_ROOT . '/plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */    
+if (is_array($extp)) {
+	foreach ($extp as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
 require(SED_ROOT . "/system/footer.php");
-
-?>

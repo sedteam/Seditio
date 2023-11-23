@@ -23,7 +23,9 @@ Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+	die('Wrong URL.');
+}
 
 $systemfiles[] = '*Core Router Launchers';
 
@@ -177,14 +179,14 @@ $systemfiles[] = 'system/upgrade/upgrade_177_178.php';
 
 $systemfiles[] = '*Default language files';
 
-$systemfiles[] = 'system/lang/'.$cfg['defaultlang'].'/admin.lang.php';
-$systemfiles[] = 'system/lang/'.$cfg['defaultlang'].'/main.lang.php';
-$systemfiles[] = 'system/lang/'.$cfg['defaultlang'].'/message.lang.php';
+$systemfiles[] = 'system/lang/' . $cfg['defaultlang'] . '/admin.lang.php';
+$systemfiles[] = 'system/lang/' . $cfg['defaultlang'] . '/main.lang.php';
+$systemfiles[] = 'system/lang/' . $cfg['defaultlang'] . '/message.lang.php';
 
 $systemfiles[] = '*Default skin files';
 
-$systemfiles[] = 'skins/'.$cfg['defaultskin'].'/'.$cfg['defaultskin'].'.'.$cfg['defaultlang'].'.lang.php';
-$systemfiles[] = 'skins/'.$cfg['defaultskin'].'/'.$cfg['defaultskin'].'.php';
+$systemfiles[] = 'skins/' . $cfg['defaultskin'] . '/' . $cfg['defaultskin'] . '.' . $cfg['defaultlang'] . '.lang.php';
+$systemfiles[] = 'skins/' . $cfg['defaultskin'] . '/' . $cfg['defaultskin'] . '.php';
 
 $skinfiles[] = 'comments.tpl';
 $skinfiles[] = 'footer.tpl';
@@ -274,41 +276,31 @@ $color[0] = "#bc6262";
 $color[1] = "#62bc6a";
 $plugin_body = '';
 
-foreach ($systemfiles as $file)
-	{
-	if (mb_substr($file,0, 1)=="*")
-		{
-		$plugin_body .= "</table><h4>".mb_substr($file,1, 255)." :</h4>";
+foreach ($systemfiles as $file) {
+	if (mb_substr($file, 0, 1) == "*") {
+		$plugin_body .= "</table><h4>" . mb_substr($file, 1, 255) . " :</h4>";
 		$plugin_body .= $table_header;;
-		}
-	else
-		{
+	} else {
 		$plugin_body .= "<tr>";
-		$plugin_body .= "<td>".$file."</td>";
+		$plugin_body .= "<td>" . $file . "</td>";
 
-		if (file_exists(SED_ROOT."/".$file))
-			{
+		if (file_exists(SED_ROOT . "/" . $file)) {
 			$info = sed_infoget($file);
-			if (!empty($info['Error']))
-				{
-				$plugin_body .= "<td colspan=\"4\">".$info['Error']."</td>";
-				}
-			else
-				{
-				$bgcolor = ($info['Version']==$cfg['version']) ? $color[1] : $color[0];
-				$plugin_body .= "<td>".$info['Type']."</td>";
-				$plugin_body .= "<td>".$info['Description']."</td>";
-				$plugin_body .= "<td style=\"background-color:".$bgcolor."!important; text-align:center;\">".$info['Version']."</td>";
-				$plugin_body .= "<td style=\"text-align:center;\">".$info['Updated']."</td>";
-				}
+			if (!empty($info['Error'])) {
+				$plugin_body .= "<td colspan=\"4\">" . $info['Error'] . "</td>";
+			} else {
+				$bgcolor = ($info['Version'] == $cfg['version']) ? $color[1] : $color[0];
+				$plugin_body .= "<td>" . $info['Type'] . "</td>";
+				$plugin_body .= "<td>" . $info['Description'] . "</td>";
+				$plugin_body .= "<td style=\"background-color:" . $bgcolor . "!important; text-align:center;\">" . $info['Version'] . "</td>";
+				$plugin_body .= "<td style=\"text-align:center;\">" . $info['Updated'] . "</td>";
 			}
-		else
-			{
+		} else {
 			$plugin_body .= "<td colspan=\"4\">File not found !</td>";
-			}
+		}
 		$plugin_body .= "</tr>";
-	  }
 	}
+}
 
 $plugin_body .= "</table>";
 
@@ -321,24 +313,20 @@ $plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";
 $plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Size (Bytes)</td>";
 $plugin_body .= "</tr>";
 
-foreach ($skinfiles as $file)
-	{
-	$file = "skins/".$skin."/".$file;
-    $plugin_body .= "<tr>";
-	$plugin_body .= "<td>".$file."</td>";
+foreach ($skinfiles as $file) {
+	$file = "skins/" . $skin . "/" . $file;
+	$plugin_body .= "<tr>";
+	$plugin_body .= "<td>" . $file . "</td>";
 
-	if (file_exists(SED_ROOT."/".$file))
-       {
-		$plugin_body .= "<td style=\"background-color:".$color[1]."!important; text-align:center;\">Present</td>";
-		$plugin_body .= "<td style=\"text-align:right;\">".@filesize($file)."</td>";
-       }
-    else
-       {
-       $plugin_body .= "<td style=\"background-color:".$color[0]."!important; text-align:center;\">Missing !</td>";
-       $plugin_body .= "<td style=\"text-align:right;\">0</td>";
-       }
-	$plugin_body .= "</tr>";
+	if (file_exists(SED_ROOT . "/" . $file)) {
+		$plugin_body .= "<td style=\"background-color:" . $color[1] . "!important; text-align:center;\">Present</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">" . @filesize($file) . "</td>";
+	} else {
+		$plugin_body .= "<td style=\"background-color:" . $color[0] . "!important; text-align:center;\">Missing !</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">0</td>";
 	}
+	$plugin_body .= "</tr>";
+}
 
 $plugin_body .= "</table>";
 
@@ -351,25 +339,19 @@ $plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";
 $plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Size (Bytes)</td>";
 $plugin_body .= "</tr>";
 
-foreach ($admskinfiles as $file)
-	{
-	$file = "system/adminskin/".$skin."/".$file;
-    $plugin_body .= "<tr>";
-	$plugin_body .= "<td>".$file."</td>";
+foreach ($admskinfiles as $file) {
+	$file = "system/adminskin/" . $skin . "/" . $file;
+	$plugin_body .= "<tr>";
+	$plugin_body .= "<td>" . $file . "</td>";
 
-	if (file_exists(SED_ROOT."/".$file))
-       {
-		$plugin_body .= "<td style=\"background-color:".$color[1]."!important; text-align:center;\">Present</td>";
-		$plugin_body .= "<td style=\"text-align:right;\">".@filesize($file)."</td>";
-       }
-    else
-       {
-       $plugin_body .= "<td style=\"background-color:".$color[0]."!important; text-align:center;\">Missing !</td>";
-       $plugin_body .= "<td style=\"text-align:right;\">0</td>";
-       }
-	$plugin_body .= "</tr>";
+	if (file_exists(SED_ROOT . "/" . $file)) {
+		$plugin_body .= "<td style=\"background-color:" . $color[1] . "!important; text-align:center;\">Present</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">" . @filesize($file) . "</td>";
+	} else {
+		$plugin_body .= "<td style=\"background-color:" . $color[0] . "!important; text-align:center;\">Missing !</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">0</td>";
 	}
+	$plugin_body .= "</tr>";
+}
 
 $plugin_body .= "</table>";
-
-?>

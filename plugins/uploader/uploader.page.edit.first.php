@@ -26,20 +26,17 @@ Order=11
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+  die('Wrong URL.');
+}
 
 $extraslot = $cfg['plugin']['uploader']['thumb_extra'];
-$rpageextra = 'rpage'.$extraslot;
+$rpageextra = 'rpage' . $extraslot;
 
 $imageuploader = sed_import('imageuploader', 'P', 'ARR');
-if (is_array($imageuploader) && count($imageuploader) > 0)
-  {
-    foreach ($imageuploader as $imagename)
-      {  
-      $rpageextra_arr[] = sed_import($imagename,'D','TXT');
-      }      
-    $_POST[$rpageextra] = implode(';', $rpageextra_arr);
+if (is_array($imageuploader) && count($imageuploader) > 0) {
+  foreach ($imageuploader as $imagename) {
+    $rpageextra_arr[] = sed_import($imagename, 'D', 'TXT');
   }
-
-
-?>
+  $_POST[$rpageextra] = implode(';', $rpageextra_arr);
+}

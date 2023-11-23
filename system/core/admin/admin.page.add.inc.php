@@ -14,7 +14,9 @@ Description=Pages
 [END_SED]
 ==================== */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+    die('Wrong URL.');
+}
 
 // ---------- Breadcrumbs
 $urlpaths = array();
@@ -24,5 +26,3 @@ $urlpaths[sed_url("admin", "m=page&s=add")] =  $L['addnewentry'];
 $admintitle = $L['addnewentry'];
 
 require(SED_ROOT . '/system/core/page/page.add.inc.php');
-
-?>

@@ -23,13 +23,12 @@ Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+	die('Wrong URL.');
+}
 
-if ($p == "skineditor")
-{
+if ($p == "skineditor") {
 	$init_codemirror = "<link rel=\"stylesheet\" href=\"plugins/skineditor/js/codemirror/lib/codemirror.css\">
 	<script src=\"plugins/skineditor/js/codemirror/lib/codemirror.js\"></script>";
 	$moremetas .= $init_codemirror;
 }
-
-?>

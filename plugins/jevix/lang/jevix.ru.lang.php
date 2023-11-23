@@ -17,5 +17,3 @@ Description=
 
 $L['cfg_use_xhtml'] = array("Использовать XHTML ?", "");
 $L['cfg_use_for_admin'] = array("Включить Jevix для администраторов", "");
-
-?>

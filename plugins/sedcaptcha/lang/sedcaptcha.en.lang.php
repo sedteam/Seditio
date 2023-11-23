@@ -17,5 +17,3 @@ Description=Plugin to protect the registration process with a Cool PHP Captcha.
 
 $L['plu_verification_failed'] = "Verificaion failed!";
 $L['plu_scaptcha_noties'] = "Can not read?";
-
-?>

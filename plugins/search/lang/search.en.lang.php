@@ -24,6 +24,3 @@ $L['plu_nofound'] = "Matches not found";
 
 $L['plu_allsections'] = "All sections";
 $L['plu_allcategories'] = "All categories";
-
-
-?>

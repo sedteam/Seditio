@@ -23,7 +23,7 @@ $L['install_step5'] = "Done";
 
 $L['install_language installation'] = "Language installation";
 $L['install_select_language installation'] = "Select the installation language";
-$L['install_title'] = "Seditio - Installation"; 
+$L['install_title'] = "Seditio - Installation";
 $L['install_build_config'] = "Building the configuration file ";
 $L['install_looks_chmod'] = "Looks like a success, silently trying to CHMOD the file as read-only...";
 $L['install_setting_mysql'] = "Setting up the SQL database...";
@@ -73,12 +73,12 @@ $L['install_email'] = "Email :";
 $L['install_doublecheck'] = "Double-check, it's important!";
 $L['install_country'] = "Country :";
 $L['install_validate'] = "Validate";
-$L['install_auto_installer'] = "This is the auto-installer for Seditio (build ".@$cfg['version'].")";
-$L['install_create_configfile'] = "It will create the configuration file <strong>".@$cfg['config_file']."</strong>, \n
+$L['install_auto_installer'] = "This is the auto-installer for Seditio (build " . @$cfg['version'] . ")";
+$L['install_create_configfile'] = "It will create the configuration file <strong>" . @$cfg['config_file'] . "</strong>, \n
 	         then will create and populate the tables in your MySQL database.<br /> \n
 	         Prior to running this tool, you have to create the database itself with your hosting panel, \n
 	         and all the PHP and system files have to be uploaded on your web host.<br />&nbsp<br /> \n
-	         In case something goes wrong during the installation process, delete the file <strong>".@$cfg['config_file']."</strong> with your FTP client, and re-open the web root URL in your browser.<br />&nbsp<br /> \n
+	         In case something goes wrong during the installation process, delete the file <strong>" . @$cfg['config_file'] . "</strong> with your FTP client, and re-open the web root URL in your browser.<br />&nbsp<br /> \n
 	         Right now, CHMOD 0777 any folder listed below that is not already writable, with your FTP client :<br />";
 $L['install_folder'] = "Folder";
 $L['install_writable'] = "Writable";
@@ -101,5 +101,3 @@ $L['install_available'] = "Available";
 $L['install_missing'] = "Missing ?";
 $L['install_refresh'] = "Refresh";
 $L['install_nextstep'] = "Next step";
-
-?>

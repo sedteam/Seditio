@@ -39,6 +39,6 @@ auto_popup_close=05:select:Yes,No:No:Close window after paste image/file
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

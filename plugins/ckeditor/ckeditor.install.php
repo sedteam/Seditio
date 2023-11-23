@@ -16,16 +16,13 @@ Description=
 
 ==================== */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+  die('Wrong URL.');
+}
 
-foreach($sed_groups as $k => $v)
-  {
-  if ($v['id']>3)
-    {
+foreach ($sed_groups as $k => $v) {
+  if ($v['id'] > 3) {
     //$value = ($v['id']==5) ? 'Extended' : 'Default';    
-    sed_config_add('plug', 'ckeditor', 99, 'ckeditor_grp'.$v['id'], 'select', 'Default', 'Default,Micro,Basic,Extended,Full', "Global toolbar for the group '".$v['title']);
-    }
+    sed_config_add('plug', 'ckeditor', 99, 'ckeditor_grp' . $v['id'], 'select', 'Default', 'Default,Micro,Basic,Extended,Full', "Global toolbar for the group '" . $v['title']);
   }
-
-  
-?>
+}

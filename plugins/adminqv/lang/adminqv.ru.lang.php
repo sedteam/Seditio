@@ -15,7 +15,9 @@ Description=
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}
 
 $L['plu_title'] = "Краткая статистика";
 
@@ -37,7 +39,3 @@ $L['plu_db_totalsize'] = "БД SQL, общий размер (KB)";
 $L['plu_db_fragmented'] = "БД SQL, фрагментировано (KB)";
 
 $L['plu_hitsmonth'] = "Просмотры за последние 7 дней";
-
-
-
-?>

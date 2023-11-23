@@ -26,22 +26,16 @@ require(SED_ROOT . '/system/common.php');
 
 $ref = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
-if (!empty($ref) && mb_strpos($ref, $sys['domain']) !== FALSE) 
-	{
+if (!empty($ref) && mb_strpos($ref, $sys['domain']) !== FALSE) {
 	$url = $_GET['url'];
-	if (sed_valid_base64($url))
-		{
+	if (sed_valid_base64($url)) {
 		$url = base64_decode($url);
-		}      
-	$url = sed_addhttp($url);      
+	}
+	$url = sed_addhttp($url);
 	header("Location: $url");
-	exit(); 
-	}
-else 
-	{
-	header("HTTP/1.1 301 Moved Permanently"); 
-	header("Location: ".$sys['abs_url']); 
-	exit();  
-	}
-
-?>
+	exit();
+} else {
+	header("HTTP/1.1 301 Moved Permanently");
+	header("Location: " . $sys['abs_url']);
+	exit();
+}

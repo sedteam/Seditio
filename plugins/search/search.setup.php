@@ -26,5 +26,3 @@ Auth_members=R
 Lock_members=W12345A
 [END_SED_EXTPLUGIN]
 ==================== */
-
-?>

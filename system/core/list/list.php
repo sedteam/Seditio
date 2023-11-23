@@ -26,11 +26,8 @@ require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_page']);
 
-switch($m)
-	{
+switch ($m) {
 	default:
-	require(SED_ROOT . '/system/core/list/list.inc.php');
-	break;
-	}
-
-?>
+		require(SED_ROOT . '/system/core/list/list.inc.php');
+		break;
+}

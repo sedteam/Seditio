@@ -1,12 +1,12 @@
 <!-- BEGIN: NEWS -->
 
 <div class="row row-flex">
-						
+
 	<!-- BEGIN: PAGE_ROW -->
 	<div class="col-xs-12 col-sm-6 col-md-4 post-col">
-	
-		<div class="post-item">  
-			<figure class="post-container">	  
+
+		<div class="post-item">
+			<figure class="post-container">
 				<a class="post-img-link" href="{PAGE_ROW_URL}">
 					<picture>
 						<source type="image/webp" srcset="{PAGE_ROW_THUMB|crop_image(%s, 800, 600, 0, 1)}">
@@ -30,25 +30,25 @@
 					</div>
 				</figcaption>
 			</figure>
-		</div>							
-		
+		</div>
+
 	</div>
-	<!-- END: PAGE_ROW -->	
-	
+	<!-- END: PAGE_ROW -->
+
 </div>
-  
+
 <!-- BEGIN: NEWS_PAGINATION_BM -->
 
 <div class="pagination-box">
 
 	<ul class="pagination">
 		<li class="page-item">{NEWS_PAGEPREV}</li>
-		{NEWS_PAGINATION}	
+		{NEWS_PAGINATION}
 		<li class="page-item">{NEWS_PAGENEXT}</li>
 	</ul>
 
-</div>	  
+</div>
 
 <!-- END: NEWS_PAGINATION_BM -->
-	
+
 <!-- END: NEWS -->

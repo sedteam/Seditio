@@ -26,7 +26,9 @@ Order=12
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+	die('Wrong URL.');
+}
 
 $openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';
 $openerparent_close = ($cfg['enablemodal']) ? 'window.parent.modal.close();' : 'window.close();';
@@ -37,12 +39,10 @@ $pfs_header1 .= "
 
 function upl_addimg(gfilepath, gid, gfile)
 	{ 
-	window.".$openerparent.".upl_insertimg(gfilepath, gfile);
-	".$openerparent_close."
+	window." . $openerparent . ".upl_insertimg(gfilepath, gfile);
+	" . $openerparent_close . "
 	}
 
 //-->
 </script>
 ";
-
-?>

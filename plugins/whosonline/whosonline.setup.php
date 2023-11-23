@@ -35,5 +35,3 @@ miniavatar_x=02:string::16:The size of a mini-avatars on the axis x, in pixels
 miniavatar_y=03:string::16:The size of a mini-avatars on the axis y, in pixels
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
-
-?>

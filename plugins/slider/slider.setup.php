@@ -36,6 +36,6 @@ maxslides=01:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Max slides displayed
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

@@ -23,7 +23,7 @@ $L['install_step5'] = "Готово";
 
 $L['install_language installation'] = "Язык установки";
 $L['install_select_language installation'] = "Выбор языка установки";
-$L['install_title'] = "Seditio - Установка"; 
+$L['install_title'] = "Seditio - Установка";
 $L['install_build_config'] = "Создание файла конфигурации ";
 $L['install_looks_chmod'] = "Похоже успешно, сейчас попробую выставить файлу CHMOD в режим #только для чтения#...";
 $L['install_setting_mysql'] = "Настройка SQL базы данных...";
@@ -73,12 +73,12 @@ $L['install_email'] = "Email :";
 $L['install_doublecheck'] = "Проверьте дважды, это важно!";
 $L['install_country'] = "Страна :";
 $L['install_validate'] = "Валидация";
-$L['install_auto_installer'] = "Это автоматический установщик для Seditio (версия ".@$cfg['version'].")";
-$L['install_create_configfile'] = "В процессе установки будет создан файл конфигурации <strong>".@$cfg['config_file']."</strong>, \n
+$L['install_auto_installer'] = "Это автоматический установщик для Seditio (версия " . @$cfg['version'] . ")";
+$L['install_create_configfile'] = "В процессе установки будет создан файл конфигурации <strong>" . @$cfg['config_file'] . "</strong>, \n
 	         после чего будут созданы таблицы в вашей MySQL базе.<br /> \n
 	         До запуска процесса установки вы должны создать базу данных на вашем хостинге, \n
 	         и все PHP и системные файлы должны быть загружены на ваш хост.<br />&nbsp<br /> \n
-	         В случае, если что-то пойдет не так в процессе установки, удалите файл <strong>".@$cfg['config_file']."</strong> с помощью FTP клиента, и снова запустите процесс установки.<br />&nbsp<br /> \n
+	         В случае, если что-то пойдет не так в процессе установки, удалите файл <strong>" . @$cfg['config_file'] . "</strong> с помощью FTP клиента, и снова запустите процесс установки.<br />&nbsp<br /> \n
 	         Сейчас вы должны установить атрибуты, CHMOD 0777 на все папки, перечисленные ниже, не доступные для записи :<br />";
 $L['install_folder'] = "Папка";
 $L['install_writable'] = "Доступно для записи";
@@ -101,5 +101,3 @@ $L['install_available'] = "Доступно";
 $L['install_missing'] = "Недоступно?";
 $L['install_refresh'] = "Обновить";
 $L['install_nextstep'] = "Следующий шаг";
-
-?>

@@ -1,37 +1,40 @@
-<!-- BEGIN: MAIN --> 
+<!-- BEGIN: MAIN -->
 <html>
+
 <head>
 	<base href="{PHP.sys.abs_url}" />
 	<title>#{MESSAGE_CODE} {MESSAGE_TITLE}</title>
 	{MESSAGE_REDIRECT}
 	<link href="skins/{PHP.skin}/css/service.message.css" type="text/css" rel="stylesheet">
 </head>
+
 <body>
 
-<main id="system">
-	
-	<div class="container">
+	<main id="system">
 
-		<div class="message-block">
-		   
-			<h1 class="message-code">{MESSAGE_CODE}</h1>
-			<h2 class="message-title">{MESSAGE_TITLE}</h2> 
+		<div class="container">
 
-			<div class="message-body"> 
-				{MESSAGE_BODY} 
+			<div class="message-block">
+
+				<h1 class="message-code">{MESSAGE_CODE}</h1>
+				<h2 class="message-title">{MESSAGE_TITLE}</h2>
+
+				<div class="message-body">
+					{MESSAGE_BODY}
+				</div>
+
+				<div class="message-go-home">
+					<a href="/" class="main-btn">{PHP.skinlang.message.gohome}</a>
+				</div>
+
 			</div>
 
-			<div class="message-go-home"> 
-				<a href="/" class="main-btn">{PHP.skinlang.message.gohome}</a>
-			</div>
-		 
-		</div> 
-		
-	</div> 
-	
-</main>
+		</div>
+
+	</main>
 
 </body>
+
 </html>
 
 <!-- END: MAIN -->

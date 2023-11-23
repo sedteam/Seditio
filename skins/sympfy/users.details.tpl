@@ -1,19 +1,19 @@
 <!-- BEGIN: MAIN -->
 
 <main id="system">
-	
+
 	<div class="container">
-	
+
 		<div class="section-title">
-		
-			{BREADCRUMBS}	
+
+			{BREADCRUMBS}
 
 			<h1>{USERS_DETAILS_SHORTTITLE}</h1>
-			
+
 			<div class="section-desc">
 				{USERS_DETAILS_SUBTITLE}
 			</div>
-			
+
 		</div>
 
 		<div class="section-body">
@@ -30,16 +30,16 @@
 					<div class="table-td" style="width:200px;">{PHP.skinlang.usersdetails.Sendprivatemessage}</div>
 					<div class="table-td">{USERS_DETAILS_PM}</div>
 				</div>
-			  
+
 				<div class="table-tr">
 					<div class="table-td">{PHP.skinlang.usersdetails.Userfirstname}</div>
 					<div class="table-td">{USERS_DETAILS_FIRSTNAME}</div>
-				</div>  
-			  
+				</div>
+
 				<div class="table-tr">
 					<div class="table-td">{PHP.skinlang.usersdetails.Userlastname}</div>
 					<div class="table-td">{USERS_DETAILS_LASTNAME}</div>
-				</div>    
+				</div>
 
 				<div class="table-tr">
 					<div class="table-td">{PHP.skinlang.usersdetails.Maingroup}</div>
@@ -95,11 +95,11 @@
 					<div class="table-td">{PHP.skinlang.usersdetails.Gender}</div>
 					<div class="table-td">{USERS_DETAILS_GENDER}</div>
 				</div>
-				
+
 				<div class="table-tr">
 					<div class="table-td">{USERS_DETAILS_INSTAGRAM_TITLE}</div>
 					<div class="table-td">{USERS_DETAILS_INSTAGRAM} {USERS_DETAILS_INSTAGRAM_MERA}</div>
-				</div>	
+				</div>
 
 				<div class="table-tr">
 					<div class="table-td">{PHP.skinlang.usersdetails.Signature}</div>
@@ -117,11 +117,11 @@
 				</div>
 
 			</div>
-			
+
 		</div>
 
 	</div>
-	
+
 </main>
 
 <!-- END: MAIN -->

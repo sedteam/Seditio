@@ -41,6 +41,6 @@ extra3=7:text:::Extra slot #3 / {PLUGIN_CONTACT_EXTRA2} in skins/.../plugin.stan
  
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

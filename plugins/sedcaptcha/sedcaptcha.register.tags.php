@@ -24,16 +24,18 @@ Order=10
 
 ==================== */
 
-if (!defined('SED_CODE')) { die("Wrong URL."); }
+if (!defined('SED_CODE')) {
+	die("Wrong URL.");
+}
 
 $captcha_register = $cfg['plugin']['sedcaptcha']['captcha_register'];
 
 if ($captcha_register == "yes") {
 
-	require_once("plugins/sedcaptcha/lang/sedcaptcha.".$usr['lang'].".lang.php");
+	require_once("plugins/sedcaptcha/lang/sedcaptcha." . $usr['lang'] . ".lang.php");
 
 	$verifyimg = "<img src=\"captcha/\" id=\"cha\" /><br />";
-	$verifyimg .= "<a href=\"".sed_url("users", "m=register", "#change")."\" id=\"change-image\" style=\"font-size:10px;\" name=\"change-image\">".$L['plu_scaptcha_noties']."</a>";
+	$verifyimg .= "<a href=\"" . sed_url("users", "m=register", "#change") . "\" id=\"change-image\" style=\"font-size:10px;\" name=\"change-image\">" . $L['plu_scaptcha_noties'] . "</a>";
 	$verifyimg .= "<script>
 		document.getElementById('change-image').addEventListener('click', function(event) { 
 			event.preventDefault(); 
@@ -41,7 +43,7 @@ if ($captcha_register == "yes") {
 			document.getElementById('captcha-form').focus(); 
 		});
 	</script>";
-	$verifyinput = "<input type=\"text\" name=\"".sed_generate_field_code()."\" id=\"captcha-form\" />";
+	$verifyinput = "<input type=\"text\" name=\"" . sed_generate_field_code() . "\" id=\"captcha-form\" />";
 
 	$t->assign(array(
 		"USERS_REGISTER_VERIFYIMG" => $verifyimg,
@@ -49,7 +51,4 @@ if ($captcha_register == "yes") {
 	));
 
 	$t->parse("MAIN.USERS_REGISTER_VERIFY");
-	
 }
-	
-?>

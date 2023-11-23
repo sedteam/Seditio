@@ -31,6 +31,6 @@ Lock_members=W12345A
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if ( !defined('SED_CODE') ) { die("Wrong URL."); }
-
-?>
+if (!defined('SED_CODE')) {
+    die("Wrong URL.");
+}

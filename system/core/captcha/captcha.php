@@ -23,5 +23,3 @@ require(SED_ROOT . '/system/functions.php');
 $cfg['font_dir'] = "datas/fonts/";
 $captcha_code = sed_generate_code();
 sed_captcha_image($captcha_code);
-
-?>

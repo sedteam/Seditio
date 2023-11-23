@@ -36,6 +36,6 @@ syntaxhighlight_theme=12:select:Default,Django,Eclipse,Emacs,FadeToGrey,Midnight
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

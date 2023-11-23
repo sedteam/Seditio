@@ -27,19 +27,16 @@ require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_page']);
 
-switch($m)
-	{
+switch ($m) {
 	case 'add':
-	require(SED_ROOT . '/system/core/page/page.add.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/page/page.add.inc.php');
+		break;
 
 	case 'edit':
-	require(SED_ROOT . '/system/core/page/page.edit.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/page/page.edit.inc.php');
+		break;
 
 	default:
-	require(SED_ROOT . '/system/core/page/page.inc.php');
-	break;
-	}
-
-?>
+		require(SED_ROOT . '/system/core/page/page.inc.php');
+		break;
+}

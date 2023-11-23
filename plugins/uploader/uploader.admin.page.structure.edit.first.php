@@ -24,19 +24,16 @@ Order=11
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+  die('Wrong URL.');
+}
 
 $rextra = 'rthumb';
 
 $imageuploader = sed_import('imageuploader', 'P', 'ARR');
-if (is_array($imageuploader) && count($imageuploader) > 0)
-  {
-    foreach ($imageuploader as $imagename)
-      {  
-      $rextra_arr[] = sed_import($imagename,'D','TXT');
-      }      
-    $_POST[$rextra] = implode(';', $rextra_arr);
+if (is_array($imageuploader) && count($imageuploader) > 0) {
+  foreach ($imageuploader as $imagename) {
+    $rextra_arr[] = sed_import($imagename, 'D', 'TXT');
   }
-
-
-?>
+  $_POST[$rextra] = implode(';', $rextra_arr);
+}

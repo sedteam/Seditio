@@ -44,6 +44,6 @@ smtp_debug=09:select:yes,no:yes:Use Debug with log file?
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

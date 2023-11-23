@@ -26,11 +26,6 @@ Order=10
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-
-
-
-
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

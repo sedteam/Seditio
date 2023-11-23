@@ -27,36 +27,34 @@ require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_gallery']);
 
-$gd_supported_sql = "('".implode("','", $cfg['gd_supported'])."')";
+$gd_supported_sql = "('" . implode("','", $cfg['gd_supported']) . "')";
 
 sed_dieifdisabled($cfg['disable_gallery']);
 
 $m = 'home';
 
-$v = sed_import('v','G','TXT');
-$f = sed_import('f','G','INT');
-$id = sed_import('id','G','INT');
+$v = sed_import('v', 'G', 'TXT');
+$f = sed_import('f', 'G', 'INT');
+$id = sed_import('id', 'G', 'INT');
 
-if ($f>0)
-	{ $m = 'browse'; }
+if ($f > 0) {
+	$m = 'browse';
+}
 
-if ($id>0)
-	{ $m = 'details'; }
+if ($id > 0) {
+	$m = 'details';
+}
 
-switch($m)
-	{
-  case 'details':
-	require(SED_ROOT . '/system/core/gallery/gallery.details.inc.php');
-	break;
+switch ($m) {
+	case 'details':
+		require(SED_ROOT . '/system/core/gallery/gallery.details.inc.php');
+		break;
 
 	case 'browse':
-	require(SED_ROOT . '/system/core/gallery/gallery.browse.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/gallery/gallery.browse.inc.php');
+		break;
 
 	default:
-	require(SED_ROOT . '/system/core/gallery/gallery.home.inc.php');
-	break;
-	}
-
-
-?>
+		require(SED_ROOT . '/system/core/gallery/gallery.home.inc.php');
+		break;
+}

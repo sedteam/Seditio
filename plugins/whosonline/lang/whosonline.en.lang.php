@@ -22,5 +22,3 @@ $L['plu_members'] = " registered member(s) online.";
 $L['plu_lastseen1'] = "Last seen";
 $L['plu_in'] = "in";
 $L['plu_visitor'] = "Visitor";
-
-?>

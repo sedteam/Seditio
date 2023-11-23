@@ -27,10 +27,7 @@ Order=10
 $captcha_auth = $cfg['plugin']['sedcaptcha']['captcha_auth'];
 
 if ($captcha_auth == "yes") {
-	
-	$verify = sed_verify_code();
-	$error_string .= (!empty($verify)) ? $verify."<br />" : "";
-	
-}
 
-?>
+	$verify = sed_verify_code();
+	$error_string .= (!empty($verify)) ? $verify . "<br />" : "";
+}

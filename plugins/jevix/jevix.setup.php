@@ -37,6 +37,6 @@ ext_link_enc=03:select:yes,no:no:Nofollow and Base64 encode external link
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

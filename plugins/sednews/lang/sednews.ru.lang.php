@@ -15,12 +15,11 @@ Description=
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}
 
 $L['sednews_title'] = "Новости Seditio";
 
 $L['cfg_rssfeed'] = array("URL адрес новостного RSS фида", "");
 $L['cfg_maxitems'] = array("Количество отображаемых записей", "");
-
-
-?>

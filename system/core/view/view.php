@@ -24,11 +24,8 @@ require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/datas/config.php');
 require(SED_ROOT . '/system/common.php');
 
-switch($m)
-	{
+switch ($m) {
 	default:
-	require(SED_ROOT . '/system/core/view/view.inc.php');
-	break;
-	}
-
-?>
+		require(SED_ROOT . '/system/core/view/view.inc.php');
+		break;
+}

@@ -17,5 +17,3 @@ Description=
 
 $L['cfg_category'] = array("Код родительской категории", "");
 $L['cfg_maxpages'] = array("Количество отображаемых страниц", "");
-
-?>

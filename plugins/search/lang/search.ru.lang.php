@@ -24,5 +24,3 @@ $L['plu_nofound'] = "Совпадений не найдено";
 
 $L['plu_allsections'] = "Все секции";
 $L['plu_allcategories'] = "Все категории";
-
-?>

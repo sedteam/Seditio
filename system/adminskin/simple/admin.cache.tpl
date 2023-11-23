@@ -1,16 +1,16 @@
 <!-- BEGIN: ADMIN_CACHE -->
 
 <div class="content-box">
-	<div class="content-box-header">					
-		<h3>{PHP.L.adm_internalcache}</h3>									
-		<div class="clear"></div>					
+	<div class="content-box-header">
+		<h3>{PHP.L.adm_internalcache}</h3>
+		<div class="clear"></div>
 	</div>
 
-	<div class="content-box-content"> 
+	<div class="content-box-content">
 
 		<p>
-			<a href="{CACHE_REFRESH_URL}">{PHP.L.Refresh}</a> | 
-			<a href="{CACHE_PURGE_URL}">{PHP.L.adm_purgeall}</a> | 
+			<a href="{CACHE_REFRESH_URL}">{PHP.L.Refresh}</a> |
+			<a href="{CACHE_PURGE_URL}">{PHP.L.adm_purgeall}</a> |
 			<a href="{CACHE_SHOWALL_URL}">{PHP.L.adm_showall}</a>
 		</p>
 
@@ -33,7 +33,7 @@
 				<td>{CACHE_LIST_VALUE}</td>
 			</tr>
 			<!-- END: CACHE_LIST -->
-			 
+
 			<tr>
 				<td colspan="3">&nbsp;</td>
 				<td style="text-align:right;">{CACHE_SIZE}</td>
@@ -43,7 +43,7 @@
 		</table>
 
 	</div>
-	
-</div>	
+
+</div>
 
 <!-- END: ADMIN_CACHE -->

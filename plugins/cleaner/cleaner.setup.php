@@ -30,7 +30,6 @@ Auth_members=R
 Lock_members=W12345A
 [END_SED_EXTPLUGIN]
 
-
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 trashcan=01:select:3,5,7,10,15,30,60,120:15:Remove the trashcan items after * days (0 to disable).
 userprune=05:select:0,1,2,3,4,5,6,7:2:Delete the user accounts not activated within * days (0 to disable).
@@ -43,6 +42,6 @@ pmold=07:select:0,15,30,60,120,180,365:365:Delete ALL the private messages older
 
 ==================== */
 
-if ( !defined('SED_CODE') ) { die("Wrong URL."); }
-
-?>
+if (!defined('SED_CODE')) {
+    die("Wrong URL.");
+}

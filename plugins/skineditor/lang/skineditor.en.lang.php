@@ -19,5 +19,3 @@ $L['plu_makbak'] = "Backup now";
 $L['plu_delbak'] = "Delete the backup";
 $L['plu_resbak'] = "Restore the backup";
 $L['plu_reopen'] = "Update and come back here";
-
-?>

@@ -8,16 +8,16 @@
 
 		<table class="cells striped">
 			<thead>
-			<tr>
-				<th class="coltop">{PHP.L.core_skin}</th>
-				<th class="coltop" width="200">{PHP.L.Preview}</th>
-				<th class="coltop">&nbsp;</th>
-				<th class="coltop">{PHP.L.Default}</th>
-				<th class="coltop">{PHP.L.Set}</th>
-			</tr>
+				<tr>
+					<th class="coltop">{PHP.L.core_skin}</th>
+					<th class="coltop" width="200">{PHP.L.Preview}</th>
+					<th class="coltop">&nbsp;</th>
+					<th class="coltop">{PHP.L.Default}</th>
+					<th class="coltop">{PHP.L.Set}</th>
+				</tr>
 			</thead>
 
-		<!-- BEGIN: SKIN_LIST -->
+			<!-- BEGIN: SKIN_LIST -->
 
 			<tr>
 				<td style="width:20%;"><strong>{SKIN_LIST_NAME}</strong></td>
@@ -27,7 +27,7 @@
 				<td style="text-align:center; vertical-align:middle; width:10%;">{SKIN_LIST_SET}</td>
 			</tr>
 
-		<!-- END: SKIN_LIST -->
+			<!-- END: SKIN_LIST -->
 
 		</table>
 

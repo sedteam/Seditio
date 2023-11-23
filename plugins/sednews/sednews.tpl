@@ -3,7 +3,7 @@
 <div class="tab-content content-table" id="tab1">
 
 	<div class="table cells striped resp-table no-label">
-	
+
 		<div class="table-body resp-table-body">
 
 			<!-- BEGIN: ADMIN_RSS_NEWS_ROW -->
@@ -19,9 +19,9 @@
 			<!-- END: ADMIN_RSS_NEWS_ROW -->
 
 		</div>
-	
+
 	</div>
-	
+
 </div>
-					
+
 <!-- END: ADMIN_RSS_NEWS -->

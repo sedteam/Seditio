@@ -26,22 +26,20 @@ require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_pfs']);
 
-switch($m)
-	{
+switch ($m) {
 	case 'view':
-	require(SED_ROOT . '/system/core/pfs/pfs.view.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/pfs/pfs.view.inc.php');
+		break;
 
 	case 'edit':
-	require(SED_ROOT . '/system/core/pfs/pfs.edit.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/pfs/pfs.edit.inc.php');
+		break;
 
 	case 'editfolder':
-	require(SED_ROOT . '/system/core/pfs/pfs.editfolder.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/pfs/pfs.editfolder.inc.php');
+		break;
 
 	default:
-	require(SED_ROOT . '/system/core/pfs/pfs.inc.php');
-	break;
-	}
-?>
+		require(SED_ROOT . '/system/core/pfs/pfs.inc.php');
+		break;
+}

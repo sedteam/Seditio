@@ -15,5 +15,3 @@ Description=Directory blocker
 ==================== */
 
 /* ==== Directory blocker ==== */
-
-?>

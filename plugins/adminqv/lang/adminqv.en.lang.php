@@ -15,7 +15,9 @@ Description=
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}
 
 $L['plu_title'] = "Administrator's QuickView";
 
@@ -37,7 +39,3 @@ $L['plu_db_totalsize'] = "SQL database, total size (KB)";
 $L['plu_db_fragmented'] = "SQL database, fragmented data size (KB)";
 
 $L['plu_hitsmonth'] = "Hits for the past 15 days";
-
-
-
-?>

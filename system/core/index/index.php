@@ -23,13 +23,10 @@ $z = 'index';
 require(SED_ROOT . '/system/functions.php');
 @include(SED_ROOT . '/datas/config.php');
 
-if (empty($cfg['mysqlhost']) && empty($cfg['mysqldb']))
-	{
+if (empty($cfg['mysqlhost']) && empty($cfg['mysqldb'])) {
 	sed_redirect(sed_url("install", "", "", true));
 	exit;
-	}
+}
 
 require(SED_ROOT . '/system/common.php');
 require(SED_ROOT . '/system/core/index/index.inc.php');
-
-?>

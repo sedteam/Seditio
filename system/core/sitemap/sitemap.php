@@ -25,5 +25,3 @@ require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/system/common.php');
 
 require(SED_ROOT . '/system/core/sitemap/sitemap.inc.php');
-
-?>

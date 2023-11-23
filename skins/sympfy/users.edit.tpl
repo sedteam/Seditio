@@ -1,19 +1,19 @@
 <!-- BEGIN: MAIN -->
 
 <main id="system">
-	
+
 	<div class="container">
-	
+
 		<div class="section-title">
-		
-			{BREADCRUMBS}	
+
+			{BREADCRUMBS}
 
 			<h1>{USERS_EDIT_SHORTTITLE}</h1>
-			
+
 			<div class="section-desc">
 				{USERS_EDIT_SUBTITLE}
 			</div>
-			
+
 		</div>
 
 		<div class="section-body">
@@ -28,9 +28,9 @@
 
 			<form action="{USERS_EDIT_SEND}" method="post" name="useredit">
 
-			<input type="hidden" name="id" value="{USERS_EDIT_ID}">
+				<input type="hidden" name="id" value="{USERS_EDIT_ID}">
 
-				<ul class="form responsive-form"> 
+				<ul class="form responsive-form">
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersedit.UserID}</label></div>
 						<div class="form-field">#{USERS_EDIT_ID}</div>
@@ -40,16 +40,16 @@
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Username}</label></div>
 						<div class="form-field">{USERS_EDIT_NAME}</div>
 					</li>
-				  
+
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Userfirstname}</label></div>
 						<div class="form-field">{USERS_EDIT_FIRSTNAME}</div>
 					</li>
-				  
+
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Userlastname}</label></div>
 						<div class="form-field">{USERS_EDIT_LASTNAME}</div>
-					</li>      
+					</li>
 
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Groupsmembership}</label></div>
@@ -133,11 +133,11 @@
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Gender}</label></div>
 						<div class="form-field">{USERS_EDIT_GENDER}</div>
 					</li>
-					
+
 					<li class="form-row">
 						<div class="form-label"><label>{USERS_EDIT_INSTAGRAM_TITLE}</label></div>
 						<div class="form-field">{USERS_EDIT_INSTAGRAM} {USERS_EDIT_INSTAGRAM_MERA}</div>
-					</li>	
+					</li>
 
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Signature}</label></div>
@@ -168,21 +168,21 @@
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Deletethisuser}</label></div>
 						<div class="form-field">{USERS_EDIT_DELETE}</div>
 					</li>
-					
+
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn">{PHP.skinlang.usersedit.Update}</button>		
+							<button type="submit" class="submit btn">{PHP.skinlang.usersedit.Update}</button>
 						</div>
 					</li>
 
 				</ul>
-				
+
 			</form>
 
 		</div>
 
 	</div>
-		
+
 </main>
 
 <!-- END: MAIN -->

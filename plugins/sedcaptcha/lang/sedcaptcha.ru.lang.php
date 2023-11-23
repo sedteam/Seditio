@@ -17,5 +17,3 @@ Description=Plugin to protect the registration process with a Cool PHP Captcha.
 
 $L['plu_verification_failed'] = "Неверно введено проверочное слово";
 $L['plu_scaptcha_noties'] = "Не можете прочитать?";
-
-?>

@@ -27,10 +27,8 @@ $L['plu_youremail'] = "Your email : ";
 $L['plu_request'] = "Request";
 $L['plu_loggedin1'] = "Welcome back, ";
 $L['plu_loggedin2'] = "you're now logged in.";
-$L['plu_loggedin3'] = "You may now go to your <a href=\"".sed_url("users", "m=profile")."\">profile</a>, and set yourself a new password.";
+$L['plu_loggedin3'] = "You may now go to your <a href=\"" . sed_url("users", "m=profile") . "\">profile</a>, and set yourself a new password.";
 $L['plu_email1'] = "You are receiving this email because you have (or someone pretending to be you has) requested an emergency link to log in at a site powered by the Seditio engine. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.\n\nYou may now log in with the link below, then follow instructions :";
 $L['plu_email2'] = "You're asked to enter the password recovery to our website. \r\nClick the link below to generate a new password. A new password will be sent to your e-mail.";
-$L['plu_email3'] = "In your request a new password. Change it as soon as possible and delete this email.\r\n\r\nYour new password: "; 
+$L['plu_email3'] = "In your request a new password. Change it as soon as possible and delete this email.\r\n\r\nYour new password: ";
 $L['plu_newpass'] = "Done!<br /><br />Soon you will receive a new password to access the site.";
-
-?>

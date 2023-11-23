@@ -23,9 +23,8 @@ Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+    die('Wrong URL.');
+}
 
 define('SED_DISABLE_XFORM', TRUE);
-
-
-?>

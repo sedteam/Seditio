@@ -76,7 +76,7 @@ $skinlang['forumstopics']['Newpostslocked'] = "Новые сообщения (т
 $skinlang['forumstopics']['Announcment'] = "Обьявление";
 $skinlang['forumstopics']['Movedoutofthissection'] = "Перенесена в другой раздел";
 $skinlang['forumstopics']['Newannouncment'] = "Новое обьявление";
-$skinlang['forumstopics']['Viewers'] = "Просматривают";	// New in v120
+$skinlang['forumstopics']['Viewers'] = "Просматривают";    // New in v120
 
 //header.tpl
 $skinlang['header']['Login'] = "Вход";
@@ -123,7 +123,7 @@ $skinlang['pageadd']['URL'] = "Ссылка на файл:";
 $skinlang['pageadd']['URLhint'] = "(Указать если \"Прикрепить файл\" = Да)";
 $skinlang['pageadd']['Filesize'] = "Размер файла (KB):";
 $skinlang['pageadd']['Filesizehint'] = "(Указать если \"Прикрепить файл\" = Да)";
-$skinlang['pageadd']['Formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"".sed_url("plug", "e=contact")."\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
+$skinlang['pageadd']['Formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"" . sed_url("plug", "e=contact") . "\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
 $skinlang['pageadd']['Submit'] = "Отправить";
 $skinlang['pageadd']['Publish'] = "Опубликовать"; // New v173
 $skinlang['pageadd']['Parsing'] = "Парсинг:"; // New v173
@@ -345,5 +345,3 @@ $skinlang['admintooltip']['pageeditoption'] = "Редактировать сво
 
 //service.message.tpl
 $skinlang['message']['gohome'] = "Вернуться на главную";
-
-?>

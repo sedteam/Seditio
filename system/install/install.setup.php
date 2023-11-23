@@ -14,7 +14,9 @@ Description=Install setup
 [END_SED]
 ==================== */
 
-if ( !defined('SED_CODE') || !defined('SED_INSTALL') ) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_INSTALL')) {
+	die('Wrong URL.');
+}
 
 $cfg['config_file'] = "datas/config.php";
 $cfg['data_root'] = "datas";
@@ -39,31 +41,25 @@ $rwfolders[] = "datas/users";
 
 
 function sed_selectbox_lang_install($check, $name)
-	{
+{
 	global $sed_languages, $sed_countries;
 
 	$handle = opendir("system/install/lang/");
-	while ($f = readdir($handle))
-		{
-		if ($f[0] != '.')
-			{ $langlist[] = $f; }
+	while ($f = readdir($handle)) {
+		if ($f[0] != '.') {
+			$langlist[] = $f;
 		}
+	}
 	closedir($handle);
 	sort($langlist);
 
 	$result = "<select name=\"$name\" size=\"1\">";
-	foreach ($langlist as $i => $x)
-		{
-		$selected = ($x==$check) ? "selected=\"selected\"" : '';
+	foreach ($langlist as $i => $x) {
+		$selected = ($x == $check) ? "selected=\"selected\"" : '';
 		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
-		$result .= "<option value=\"$x\" $selected>".$lng." (".$x.")</option>";
-		}
+		$result .= "<option value=\"$x\" $selected>" . $lng . " (" . $x . ")</option>";
+	}
 	$result .= "</select>";
 
-	return($result);
-	}
-
-
-
-       
-?>
+	return ($result);
+}

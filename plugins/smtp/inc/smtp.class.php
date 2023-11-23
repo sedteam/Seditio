@@ -4,14 +4,13 @@
  * Send email class using SMTP Authentication
  * @class Email
  */
- 
+
 class Email
 {
     const CRLF = "\r\n";
     const TLS = 'tcp';
     const SSL = 'ssl';
     const OK = 250;
-
     protected $server;
     protected $port;
     protected $localhost;
@@ -31,13 +30,12 @@ class Email
     protected $subject;
     protected $message_html = false;
     protected $message_text = false;
-    protected $message_attach = false;    
+    protected $message_attach = false;
     protected $log;
     protected $is_html;
     protected $tls = false;
     protected $protocol;
     protected $boundary = 'boundary';
-
 
     /**
      * Class constructor
@@ -191,31 +189,28 @@ class Email
             $this->setText($message);
         }
     }
-    
+
     // Function used to attach files to the message
-    public function setAttach($attach) {
-    	
-      if (file_exists($attach['file']))
-        {
-        $fp = fopen($attach['file'], "r");
-      	$str = fread($fp, filesize($attach['file']));
-      	$str = chunk_split(base64_encode($str));
-      	      
-      	$attach_file = "Content-disposition: attachment; filename=\"".$attach['name']."\"" . self::CRLF; 
-      	$attach_file .= "Content-Transfer-Encoding: base64" . self::CRLF;
-        $attach_file .= "Content-Type: ".$attach['type']."; name=\"".$attach['name']."\"" . self::CRLF . self::CRLF;
-        
-      	$attach_file .= $str;
-      
-      	$this->message_attach = $attach_file;
+    public function setAttach($attach)
+    {
+
+        if (file_exists($attach['file'])) {
+            $fp = fopen($attach['file'], "r");
+            $str = fread($fp, filesize($attach['file']));
+            $str = chunk_split(base64_encode($str));
+
+            $attach_file = "Content-disposition: attachment; filename=\"" . $attach['name'] . "\"" . self::CRLF;
+            $attach_file .= "Content-Transfer-Encoding: base64" . self::CRLF;
+            $attach_file .= "Content-Type: " . $attach['type'] . "; name=\"" . $attach['name'] . "\"" . self::CRLF . self::CRLF;
+
+            $attach_file .= $str;
+
+            $this->message_attach = $attach_file;
+        } else {
+            $this->message_attach = false;
         }
-      else 
-        {
-      	$this->message_attach = false;        
-        }
-    
-    }    
-    
+    }
+
 
     /**
      * Get log array
@@ -237,7 +232,7 @@ class Email
         if (empty($this->socket)) {
             return false;
         }
-        
+
         $this->log['SOCKET'] = $this->socket;
 
         $this->log['CONNECTION'] = $this->getResponse();
@@ -263,33 +258,30 @@ class Email
         $this->log['DATA'][1] = $this->sendCMD('DATA');
 
 
-        
+
         if ($this->message_html && $this->message_attach) {
-            
+
             $this->headers['Content-type'] = 'multipart/mixed; boundary="' . $this->boundary . '"';
             $data = '--' . $this->boundary . self::CRLF;
-            
+
             $data .= 'Content-type: text/html; charset=' . $this->charset . self::CRLF . self::CRLF;
             $data .= $this->message_html . self::CRLF . self::CRLF;
             $data .= '--' . $this->boundary . self::CRLF;
-            
+
             $data .= $this->message_attach . self::CRLF . self::CRLF;
-            $data .= '--' . $this->boundary . '--';          
-        } 
-        
-        elseif ($this->message_html && $this->message_text) {
-            
+            $data .= '--' . $this->boundary . '--';
+        } elseif ($this->message_html && $this->message_text) {
+
             $this->headers['Content-type'] = 'multipart/alternative; boundary="' . $this->boundary . '"';
             $data = '--' . $this->boundary . self::CRLF;
-            
+
             $data .= 'Content-type: text/plain; charset=' . $this->charset . self::CRLF . self::CRLF;
             $data .= $this->message_text . self::CRLF . self::CRLF;
             $data .= '--' . $this->boundary . self::CRLF;
-            
+
             $data .= 'Content-type: text/html; charset=' . $this->charset . self::CRLF . self::CRLF;
             $data .= $this->message_html . self::CRLF . self::CRLF;
             $data .= '--' . $this->boundary . '--';
-            
         } elseif ($this->message_html) {
             $this->headers['Content-type'] = 'text/html; charset=' . $this->charset;
             $data = $this->message_html;
@@ -391,5 +383,3 @@ class Email
         return $list;
     }
 }
-
-?>

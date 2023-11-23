@@ -8,15 +8,15 @@
 
 		<table class="cells striped">
 			<thead>
-			<tr>
-				<th class="coltop">{PHP.L.core_lang}</th>
-				<th class="coltop">{PHP.L.Code}</th>
-				<th class="coltop">{PHP.L.Description}</th>
-				<th class="coltop">{PHP.L.Default}</th>
-			</tr>
+				<tr>
+					<th class="coltop">{PHP.L.core_lang}</th>
+					<th class="coltop">{PHP.L.Code}</th>
+					<th class="coltop">{PHP.L.Description}</th>
+					<th class="coltop">{PHP.L.Default}</th>
+				</tr>
 			</thead>
 
-		<!-- BEGIN: LANG_LIST -->
+			<!-- BEGIN: LANG_LIST -->
 
 			<tr>
 				<td style="width:20%;"><strong>{LANG_LIST_NAME}</strong></td>
@@ -25,7 +25,7 @@
 				<td style="text-align:center; vertical-align:middle; width:10%;">{LANG_LIST_DEFAULT}</td>
 			</tr>
 
-		<!-- END: LANG_LIST -->
+			<!-- END: LANG_LIST -->
 
 		</table>
 

@@ -20,33 +20,30 @@ define('SED_FORUMS', TRUE);
 $location = 'Forums';
 $z = 'forums';
 
-require(SED_ROOT.'/system/functions.php');
-require(SED_ROOT.'/datas/config.php');
-require(SED_ROOT.'/system/common.php');
+require(SED_ROOT . '/system/functions.php');
+require(SED_ROOT . '/datas/config.php');
+require(SED_ROOT . '/system/common.php');
 
 sed_dieifdisabled($cfg['disable_forums']);
 
-switch($m)
-	{
+switch ($m) {
 	case 'topics':
-	require(SED_ROOT.'/system/core/forums/forums.topics.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/forums/forums.topics.inc.php');
+		break;
 
 	case 'posts':
-	require(SED_ROOT.'/system/core/forums/forums.posts.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/forums/forums.posts.inc.php');
+		break;
 
 	case 'editpost':
-	require(SED_ROOT.'/system/core/forums/forums.editpost.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/forums/forums.editpost.inc.php');
+		break;
 
 	case 'newtopic':
-	require(SED_ROOT.'/system/core/forums/forums.newtopic.inc.php');
-	break;
+		require(SED_ROOT . '/system/core/forums/forums.newtopic.inc.php');
+		break;
 
 	default:
-	require(SED_ROOT.'/system/core/forums/forums.inc.php');
-	break;
-	}
-
-?>
+		require(SED_ROOT . '/system/core/forums/forums.inc.php');
+		break;
+}

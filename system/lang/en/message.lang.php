@@ -34,7 +34,7 @@ $L['msg101_1'] = "No need, you're not logged.";
 $L['msg102_0'] = "User logged out";
 $L['msg102_1'] = "Done, you're logged out.";
 $L['msg104_0'] = "User logged";
-$L['msg104_1'] = "Welcome back ".$usr['name'].", you're now logged in.";
+$L['msg104_1'] = "Welcome back " . $usr['name'] . ", you're now logged in.";
 $L['msg105_0'] = "Registration done (1st step)";
 $L['msg105_1'] = "Please check your mailbox in few minutes,<br />and please confirm the registration process<br />by clicking the URL in the body of the message ...<br />Until this, your account is marked as 'Inactive' in the user list.";
 $L['msg106_0'] = "Registration completed";
@@ -107,7 +107,7 @@ $L['msg911_1'] = "An error occured while attempting to check this language pack.
 $L['msg915_0'] = "Error !";
 $L['msg915_1'] = "At least 1 field is empty.";
 $L['msg916_0'] = "Database updated";
-$L['msg916_1'] = "Done, database successfully updated.<br />Affected entries : ".(isset($num)?$num:'');
+$L['msg916_1'] = "Done, database successfully updated.<br />Affected entries : " . (isset($num) ? $num : '');
 $L['msg917_0'] = "Database updated";
 $L['msg917_1'] = "Done, database successfully updated.";
 $L['msg930_0'] = "Access denied";
@@ -120,5 +120,3 @@ $L['msg950_1'] = "An error occured, maybe a wrong URL ?";
 /* ======== Overall  ======== */
 
 $L['msgredir'] = "Redirecting...";
-
-?>

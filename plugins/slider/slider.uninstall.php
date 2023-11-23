@@ -16,7 +16,9 @@ Description=
 
 ==================== */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
+	die('Wrong URL.');
+}
 
 global $db_dic, $db_dic_items, $db_pages;
 
@@ -27,5 +29,3 @@ if ($did > 0) {
 	$sql = sed_sql_query("DELETE FROM $db_dic_items WHERE ditem_dicid = $did");
 	$sql = sed_sql_query("ALTER TABLE $db_pages DROP page_slider");
 }
-
-?>

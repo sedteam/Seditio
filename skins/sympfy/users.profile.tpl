@@ -1,19 +1,19 @@
 <!-- BEGIN: MAIN -->
 
 <main id="system">
-	
+
 	<div class="container">
-	
+
 		<div class="section-title">
-		
-			{BREADCRUMBS}	
+
+			{BREADCRUMBS}
 
 			<h1>{USERS_PROFILE_SHORTTITLE}</h1>
-			
+
 			<div class="section-desc">
 				{USERS_PROFILE_SUBTITLE}
 			</div>
-			
+
 		</div>
 
 		<div class="section-body">
@@ -30,21 +30,21 @@
 
 				<input type="hidden" name="userid" value="{USERS_PROFILE_ID}"><input type="hidden" name="curpassword" value="{USERS_PROFILE_PASSWORD}">
 
-				<ul class="form responsive-form"> 
+				<ul class="form responsive-form">
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Username}</label></div>
 						<div class="form-field">{USERS_PROFILE_NAME}</div>
 					</li>
-				  
+
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Userfirstname}</label></div>
 						<div class="form-field">{USERS_PROFILE_FIRSTNAME}</div>
-					</li>  
-				  
+					</li>
+
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Userlastname}</label></div>
 						<div class="form-field">{USERS_PROFILE_LASTNAME}</div>
-					</li> 
+					</li>
 
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Groupsmembership}</label></div>
@@ -137,7 +137,7 @@
 
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn">{PHP.skinlang.usersprofile.Update}</button>		
+							<button type="submit" class="submit btn">{PHP.skinlang.usersprofile.Update}</button>
 						</div>
 					</li>
 
@@ -146,8 +146,8 @@
 			</form>
 
 		</div>
-		
-	</div>	
+
+	</div>
 
 </main>
 

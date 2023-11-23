@@ -38,6 +38,6 @@ sim_category=03:text:::Categories. Separate by commas. If left this field empty,
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

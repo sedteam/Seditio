@@ -15,8 +15,8 @@ Description=
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}
 
 $L['sednews_title'] = "Seditio News";
-
-?>

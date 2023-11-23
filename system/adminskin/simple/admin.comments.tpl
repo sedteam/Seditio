@@ -1,20 +1,20 @@
 <!-- BEGIN: ADMIN_COMMENTS -->
 
 <div class="content-box">
-	<div class="content-box-header">					
-		<h3>{PHP.L.Comments}</h3>									
-		<div class="clear"></div>					
+	<div class="content-box-header">
+		<h3>{PHP.L.Comments}</h3>
+		<div class="clear"></div>
 	</div>
 
-	<div class="content-box-content"> 
-	
+	<div class="content-box-content">
+
 		<!-- BEGIN: COMMENTS_PAGINATION_TP -->
-		
+
 		<div class="paging">
 			<ul class="pagination">
-			  <li class="prev">{COMMENTS_PAGEPREV}</li>
-			  {COMMENTS_PAGINATION}
-			  <li class="next">{COMMENTS_PAGENEXT}</li>
+				<li class="prev">{COMMENTS_PAGEPREV}</li>
+				{COMMENTS_PAGINATION}
+				<li class="next">{COMMENTS_PAGENEXT}</li>
 			</ul>
 		</div>
 
@@ -53,15 +53,15 @@
 		</table>
 
 		<!-- BEGIN: COMMENTS_PAGINATION_BM -->
-		
+
 		<div class="paging">
 			<ul class="pagination">
-			  <li class="prev">{COMMENTS_PAGEPREV}</li>
-			  {COMMENTS_PAGINATION}
-			  <li class="next">{COMMENTS_PAGENEXT}</li>
+				<li class="prev">{COMMENTS_PAGEPREV}</li>
+				{COMMENTS_PAGINATION}
+				<li class="next">{COMMENTS_PAGENEXT}</li>
 			</ul>
 		</div>
 
 		<!-- END: COMMENTS_PAGINATION_BM -->
-	
+
 <!-- END: ADMIN_COMMENTS -->

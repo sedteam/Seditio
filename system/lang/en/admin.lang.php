@@ -22,9 +22,9 @@ Description=Admin panel
 /* ====== Core ====== */
 
 $L['core_main'] = "Main setup";
-$L['core_parser'] = "Parser"; 			// New in v120
-$L['core_rss'] = "RSS feeds"; 			// New in v173
-$L['core_dic'] = "Directories & Extra fields"; 			// New in v173
+$L['core_parser'] = "Parser";             // New in v120
+$L['core_rss'] = "RSS feeds";             // New in v173
+$L['core_dic'] = "Directories & Extra fields";             // New in v173
 $L['core_time'] = "Time and date";
 $L['core_skin'] = "Skins";
 $L['core_lang'] = "Languages";
@@ -57,7 +57,7 @@ $L['upg_upgradenotavail'] = "There's no upgrade available for these version numb
 $L['upg_manual'] = "If you prefer to manually upgrade the database, the SQL scripts are in the folder /docs/upgrade/.";       // New in v130
 $L['upg_success'] = "The upgrade was successful, click here to continue...";       // New in v130
 $L['upg_failure'] = "The upgrade failed, click here to continue...";       // New in v130
-$L['upg_force'] = "For some reasons, it may happen that the Seditio version number written in the SQL database is wrong. Below is a button to force the SQL version number, this will only tag the SQL database, it will NOT perform any other change.<br />Force the SQL version number to : ";	// New in v130
+$L['upg_force'] = "For some reasons, it may happen that the Seditio version number written in the SQL database is wrong. Below is a button to force the SQL version number, this will only tag the SQL database, it will NOT perform any other change.<br />Force the SQL version number to : ";    // New in v130
 
 /* ====== General ====== */
 
@@ -100,12 +100,12 @@ $L['adm_help_cache'] = "Not available";
 
 /* ====== Configuration ====== */
 
-$L['adm_help_config']= "Not available";
+$L['adm_help_config'] = "Not available";
 $L['cfg_adminemail'] = array("Administrator's email", "Required");
 $L['cfg_maintitle'] = array("Site title", "Main title for the website, required");
 $L['cfg_subtitle'] = array("Description", "Optional, will be displayed after the title of the site");
 $L['cfg_mainurl'] = array("Site URL", "With http://, and without ending slash !");
-$L['cfg_clustermode'] = array("Cluster of servers", "Set to yes if it's a load balanced setup.");			// New in v125
+$L['cfg_clustermode'] = array("Cluster of servers", "Set to yes if it's a load balanced setup.");            // New in v125
 $L['cfg_hostip'] = array("Server IP", "The IP of the server, optional.");
 $L['cfg_gzip'] = array("Gzip", "Gzip compression of the HTML output");
 $L['cfg_cache'] = array("Internal cache", "Keep it enabled for better performance");
@@ -178,21 +178,21 @@ $L['cfg_th_dimpriority'] = array("Thumbnails, resize by", "Default: Width");    
 $L['cfg_th_textsize'] = array("Thumbnails, size of the text", "");
 $L['cfg_pfs_filemask'] = array("File names based on pattern of time", "Generate file names on a pattern of time");  // New in sed172
 
-$L['cfg_disable_gallery'] = array("Disable the gallery", "");     	// New in v150
+$L['cfg_disable_gallery'] = array("Disable the gallery", "");         // New in v150
 $L['cfg_gallery_gcol'] = array("Number of columns for the galleries", "Default : 4");     // New in v150
-$L['cfg_gallery_bcol'] = array("Number of columns for the pictures", "Default : 6");    	// New in v150
-$L['cfg_gallery_logofile'] = array("Png/jpeg/Gif logo that will be added to all the new PFS images", "Leave empty to disable");    	// New in v150
-$L['cfg_gallery_logopos'] = array("Position of the logo in the PFS images", "Default : Bottom left");    	// New in v150
-$L['cfg_gallery_logotrsp'] = array("Merging level for the logo in %", "Default : 50");    	// New in v150
-$L['cfg_gallery_logojpegqual'] = array("Quality of the final image afer the logo is inserted, if it's a Jpeg", "Default : 90");    	// New in v150
-$L['cfg_gallery_imgmaxwidth'] = array("Max width in pixel for a picture displayed, if it's larger a sized-down copy will be processed", "");     	// New in v150
+$L['cfg_gallery_bcol'] = array("Number of columns for the pictures", "Default : 6");        // New in v150
+$L['cfg_gallery_logofile'] = array("Png/jpeg/Gif logo that will be added to all the new PFS images", "Leave empty to disable");        // New in v150
+$L['cfg_gallery_logopos'] = array("Position of the logo in the PFS images", "Default : Bottom left");        // New in v150
+$L['cfg_gallery_logotrsp'] = array("Merging level for the logo in %", "Default : 50");        // New in v150
+$L['cfg_gallery_logojpegqual'] = array("Quality of the final image afer the logo is inserted, if it's a Jpeg", "Default : 90");        // New in v150
+$L['cfg_gallery_imgmaxwidth'] = array("Max width in pixel for a picture displayed, if it's larger a sized-down copy will be processed", "");         // New in v150
 
 $L['cfg_pm_maxsize'] = array("Maximum length for messages", "Default: 10000 chars");
 $L['cfg_pm_allownotifications'] = array("Allow PM notifications by email", "");
 $L['cfg_disablehitstats'] = array("Disable hit statistics", "Referers and hits per day");
 $L['cfg_disablereg'] = array("Disable registration process", "Prevent users from registering new accounts");
 $L['cfg_disablewhosonline'] = array("Disable who's online", "Automatically enabled if you turn on the Shield");
-$L['cfg_defaultcountry'] = array("Default country for the new users", "2 letters country code");	// New in v130
+$L['cfg_defaultcountry'] = array("Default country for the new users", "2 letters country code");    // New in v130
 $L['cfg_forcedefaultskin'] = array("Force the default skin for all users", "");
 $L['cfg_forcedefaultlang'] = array("Force the default language for all users", "");
 $L['cfg_separator'] = array("Generic separator", "Default:>");
@@ -253,15 +253,15 @@ $L['cfg_disable_pm'] = array("Disable the private messages", "");
 $L['cfg_disable_ratings'] = array("Disable the ratings", "");
 $L['cfg_disable_page'] = array("Disable the pages", "");
 $L['cfg_disable_plug'] = array("Disable the plugins", "");
-$L['cfg_trash_prunedelay'] = array("Remove the items from the trash can after * days (Zero to keep forever)", ""); 	
-$L['cfg_trash_comment'] = array("Use the trash can for the comments", "");		
-$L['cfg_trash_forum'] = array("Use the trash can for the forums", "");		
-$L['cfg_trash_page'] = array("Use the trash can for the pages", "");		
-$L['cfg_trash_pm'] = array("Use the trash can for the private messages", "");		
+$L['cfg_trash_prunedelay'] = array("Remove the items from the trash can after * days (Zero to keep forever)", "");
+$L['cfg_trash_comment'] = array("Use the trash can for the comments", "");
+$L['cfg_trash_forum'] = array("Use the trash can for the forums", "");
+$L['cfg_trash_page'] = array("Use the trash can for the pages", "");
+$L['cfg_trash_pm'] = array("Use the trash can for the private messages", "");
 $L['cfg_trash_user'] = array("Use the trash can for the users", "");
 
-$L['cfg_parser_vid'] = array("Allow BBcodes for the videos", "");		// New in v120
-$L['cfg_parser_vid_autolink'] = array("Auto-link URLs to known video sites", "");						// New in v120
+$L['cfg_parser_vid'] = array("Allow BBcodes for the videos", "");        // New in v120
+$L['cfg_parser_vid_autolink'] = array("Auto-link URLs to known video sites", "");                        // New in v120
 $L['cfg_parsebbcodecom'] = array("Parse BBcode in comments and private messages", "");
 $L['cfg_parsebbcodepages'] = array("Parse BBcode in pages", "");
 $L['cfg_parsebbcodeusertext'] = array("Parse BBcode in user signature", "");
@@ -282,16 +282,16 @@ $L['cfg_homemetakeywords'] = array("Homepage meta keywords", "Optional, for SEO"
 
 /* ====== HTML Meta ====== */
 
-$L['cfg_defaulttitle'] = array("Default Title", "Available options: {MAINTITLE}, {SUBTITLE}");		//Sed 175
-$L['cfg_indextitle'] = array("Title for Homepage", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 179
-$L['cfg_listtitle'] = array("Title for lists of pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
-$L['cfg_pagetitle'] = array("Title for pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");		//Sed 175
-$L['cfg_forumstitle'] = array("Title for forums", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
-$L['cfg_userstitle'] = array("Title for users", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
-$L['cfg_pmtitle'] = array("Title for PM", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
-$L['cfg_gallerytitle'] = array("Title for gallery", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		//Sed 175
-$L['cfg_pfstitle'] = array("Title for PFS", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		///Sed 175
-$L['cfg_plugtitle'] = array("Title for plugins", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");		///Sed 175
+$L['cfg_defaulttitle'] = array("Default Title", "Available options: {MAINTITLE}, {SUBTITLE}");        //Sed 175
+$L['cfg_indextitle'] = array("Title for Homepage", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 179
+$L['cfg_listtitle'] = array("Title for lists of pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+$L['cfg_pagetitle'] = array("Title for pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");        //Sed 175
+$L['cfg_forumstitle'] = array("Title for forums", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+$L['cfg_userstitle'] = array("Title for users", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+$L['cfg_pmtitle'] = array("Title for PM", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+$L['cfg_gallerytitle'] = array("Title for gallery", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+$L['cfg_pfstitle'] = array("Title for PFS", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
+$L['cfg_plugtitle'] = array("Title for plugins", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 
 /* ====== Rss ====== */
 
@@ -303,7 +303,7 @@ $L['cfg_rss_timetolive'] = array("Cash time for RSS feed", "in seconds");
 $L['cfg_rss_defaultcode'] = array("Default RSS feed", "enter the category code");
 $L['cfg_rss_maxitems'] = array("The maximum number of rows in the RSS feed", "");
 
-$L['adm_help_config_rss'] = "Links to open RSS feeds: <br />".$cfg['mainurl']."/"."rss (by default, the output of news categories specified in the settings) <br /> ".$cfg['mainurl']."/"."rss/pages?c=XX (XX - Category code, the last pages of the category) <br />".$cfg['mainurl']."/"."rss/comments?id=XX (XX - ID page, comments page) <br />".$cfg['mainurl']."/"."rss/forums (latest posts from all sections of the forum) <br />".$cfg['mainurl']."/"."rss/forums?s=XX (XX - ID section, recent posts section) <br />".$cfg['mainurl']."/"."rss/forums?q=XX (XX - ID topic, recent posts in the topic) <br />".$cfg['mainurl']."/"."rss/forums?s=XX&q=YY (XX - ID section, YY - ID topic)";
+$L['adm_help_config_rss'] = "Links to open RSS feeds: <br />" . $cfg['mainurl'] . "/" . "rss (by default, the output of news categories specified in the settings) <br /> " . $cfg['mainurl'] . "/" . "rss/pages?c=XX (XX - Category code, the last pages of the category) <br />" . $cfg['mainurl'] . "/" . "rss/comments?id=XX (XX - ID page, comments page) <br />" . $cfg['mainurl'] . "/" . "rss/forums (latest posts from all sections of the forum) <br />" . $cfg['mainurl'] . "/" . "rss/forums?s=XX (XX - ID section, recent posts section) <br />" . $cfg['mainurl'] . "/" . "rss/forums?q=XX (XX - ID topic, recent posts in the topic) <br />" . $cfg['mainurl'] . "/" . "rss/forums?s=XX&q=YY (XX - ID section, YY - ID topic)";
 
 /* ====== Forums ====== */
 
@@ -315,13 +315,13 @@ $L['adm_countposts'] = "Count posts";
 $L['adm_autoprune'] = "Auto-prune topics after * days";
 $L['adm_postcounters'] = "Check the counters";
 $L['adm_help_forums'] = "Not available";
-$L['adm_forum_structure'] = "Structure of the forums (categories)";	
-$L['adm_forum_structure_cat'] = "Structure of the forums";	
-$L['adm_help_forums_structure'] = "Not available";	
-$L['adm_defstate'] = "Default state";	
-$L['adm_defstate_0'] = "Folded";	
+$L['adm_forum_structure'] = "Structure of the forums (categories)";
+$L['adm_forum_structure_cat'] = "Structure of the forums";
+$L['adm_help_forums_structure'] = "Not available";
+$L['adm_defstate'] = "Default state";
+$L['adm_defstate_0'] = "Folded";
 $L['adm_defstate_1'] = "Unfolded";
-$L['adm_parentcat'] = "Parent category";	// New in v172	
+$L['adm_parentcat'] = "Parent category";    // New in v172	
 
 /* ====== IP search ====== */
 
@@ -391,7 +391,7 @@ $L['adm_thumbnails'] = "Thumbnails";
 $L['adm_orphandbentries'] = "Orphan DB entries";
 $L['adm_orphanfiles'] = "Orphan files";
 $L['adm_delallthumbs'] = "Delete all thumbnails";
-$L['adm_rebuildallthumbs']= "Delete and rebuild all thumbnails";
+$L['adm_rebuildallthumbs'] = "Delete and rebuild all thumbnails";
 $L['adm_help_pfsthumbs'] = "Not available";
 $L['adm_help_check1'] = "Not available";
 $L['adm_help_check2'] = "Not available";
@@ -410,10 +410,10 @@ $L['adm_fileurl'] = "File URL";
 $L['adm_filesize'] = "File size";
 $L['adm_filecount'] = "File hit count";
 
-$L['adm_tpl_mode'] = "Template mode";	
-$L['adm_tpl_empty'] = "Default";	
-$L['adm_tpl_forced'] = "Same as";	
-$L['adm_tpl_parent'] = "Same as the parent category";	
+$L['adm_tpl_mode'] = "Template mode";
+$L['adm_tpl_empty'] = "Default";
+$L['adm_tpl_forced'] = "Same as";
+$L['adm_tpl_parent'] = "Same as the parent category";
 
 $L['adm_enablecomments'] = "Enable Comments";   // New v173
 $L['adm_enableratings'] = "Enable Ratings";     // New v173
@@ -448,10 +448,10 @@ $L['adm_hits'] = "Hits";
 $L['adm_check_ok'] = "Ok";
 $L['adm_check_missing'] = "Missing";
 $L['adm_ref_lowhits'] = "Purge entries where hits are lower than 5";
-$L['adm_maxhits'] = "Maximum hitcount was reached %1\$s, %2\$s pages displayed this day."; 
-$L['adm_byyear'] = "By year"; 		
-$L['adm_bymonth'] = "By month"; 	
-$L['adm_byweek'] = "By week"; 		
+$L['adm_maxhits'] = "Maximum hitcount was reached %1\$s, %2\$s pages displayed this day.";
+$L['adm_byyear'] = "By year";
+$L['adm_bymonth'] = "By month";
+$L['adm_byweek'] = "By week";
 
 /* ====== Ratings ====== */
 
@@ -461,7 +461,7 @@ $L['adm_help_ratings'] = "To reset a rating, simply delete it. It will be re-cre
 
 /* ====== Trash can ====== */
 
-$L['adm_help_trashcan'] = "Here are listed the items recently deleted by the users and moderators.<br />Note that restoring a forum topic will also restore all the posts that belongs to the topic.<br />And restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />&nbsp;<br />Wipe : Delete the item forever.<br />Restore : Put the item back in the live database."; 
+$L['adm_help_trashcan'] = "Here are listed the items recently deleted by the users and moderators.<br />Note that restoring a forum topic will also restore all the posts that belongs to the topic.<br />And restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />&nbsp;<br />Wipe : Delete the item forever.<br />Restore : Put the item back in the live database.";
 
 /* ====== Users ====== */
 
@@ -502,5 +502,3 @@ $L['adm_opt_unpauseall_explain'] = "This will un-pause (enable) all the parts of
 
 $L['adm_pm_totaldb'] = "Private messages in the database";
 $L['adm_pm_totalsent'] = "Total of private messages ever sent";
-
-?>

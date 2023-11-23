@@ -35,6 +35,6 @@ generate_password=01:select:yes,no:no:Generate a new password and send to the em
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

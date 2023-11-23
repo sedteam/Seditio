@@ -14,7 +14,9 @@ Description=Configuration builder
 [END_SED]
 ==================== */
 
-if ( !defined('SED_CODE') || !defined('SED_INSTALL') ) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_INSTALL')) {
+    die('Wrong URL.');
+}
 
 $cfg_data = "<?PHP\n\n/* ====================\n";
 $cfg_data .= "Seditio - Website engine\n";
@@ -22,11 +24,11 @@ $cfg_data .= "Copyright Neocrome & Seditio Team\n";
 $cfg_data .= "https://seditio.org\n";
 $cfg_data .= "[BEGIN_SED]\n";
 $cfg_data .= "File=datas/config.php\n";
-$cfg_data .= "Version=".$cfg['version']."\n";
-$cfg_data .= "Updated=".mb_strtolower(@date('Y-M-d'))."\n";
+$cfg_data .= "Version=" . $cfg['version'] . "\n";
+$cfg_data .= "Updated=" . mb_strtolower(@date('Y-M-d')) . "\n";
 $cfg_data .= "Type=Config\n";
 $cfg_data .= "Author=Seditio Team\n";
-$cfg_data .= "Description=Configuration file (Gen.:".@date('Y-M-d H:i:s').")\n";
+$cfg_data .= "Description=Configuration file (Gen.:" . @date('Y-M-d H:i:s') . ")\n";
 $cfg_data .= "[END_SED]\n";
 $cfg_data .= "==================== */\n";
 
@@ -34,17 +36,17 @@ $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// MySQL database parameters. Change to fit your host.\n";
 $cfg_data .= "// ========================\n";
 
-$cfg_data .= "\n\$cfg['mysqlhost'] = '".$mysqlhost."';			// Database host URL\n";
-$cfg_data .= "\$cfg['mysqluser'] = '".$mysqluser."';			// Database user\n";
-$cfg_data .= "\$cfg['mysqlpassword'] = '".$mysqlpassword."';	// Database password\n";
-$cfg_data .= "\$cfg['mysqldb'] = '".$mysqldb."';				// Database name\n";
+$cfg_data .= "\n\$cfg['mysqlhost'] = '" . $mysqlhost . "';			// Database host URL\n";
+$cfg_data .= "\$cfg['mysqluser'] = '" . $mysqluser . "';			// Database user\n";
+$cfg_data .= "\$cfg['mysqlpassword'] = '" . $mysqlpassword . "';	// Database password\n";
+$cfg_data .= "\$cfg['mysqldb'] = '" . $mysqldb . "';				// Database name\n";
 
 $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// Default skin and default language\n";
 $cfg_data .= "// ========================\n";
 
-$cfg_data .= "\n\$cfg['defaultskin'] = '".$defaultskin."';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/...\n";
-$cfg_data .= "\$cfg['defaultlang'] = '".$defaultlang."';	// Default language code\n";
+$cfg_data .= "\n\$cfg['defaultskin'] = '" . $defaultskin . "';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/...\n";
+$cfg_data .= "\$cfg['defaultlang'] = '" . $defaultlang . "';	// Default language code\n";
 $cfg_data .= "\$cfg['adminskin'] = 'sympfy';				// Default admin skin\n";
 
 $cfg_data .= "\n// ========================\n";
@@ -54,14 +56,14 @@ $cfg_data .= "// If you don't know, don't change.\n";
 $cfg_data .= "// TRUE = enabled / FALSE = disabled\n";
 $cfg_data .= "// ========================\n";
 
-$cfg_data .= "\n\$cfg['sqldbprefix'] = '".$sqldbprefix."';			// Database tables prefix\n";
-$cfg_data .= "\$cfg['sqldb'] = '".$sqldb."';  				// Type of the database connector driver, set 'mysql' or 'mysqli'.\n";
-$cfg_data .= "\$cfg['site_secret'] = '".$md_site_secret."'; 					// Site secret key\n";
+$cfg_data .= "\n\$cfg['sqldbprefix'] = '" . $sqldbprefix . "';			// Database tables prefix\n";
+$cfg_data .= "\$cfg['sqldb'] = '" . $sqldb . "';  				// Type of the database connector driver, set 'mysql' or 'mysqli'.\n";
+$cfg_data .= "\$cfg['site_secret'] = '" . $md_site_secret . "'; 					// Site secret key\n";
 $cfg_data .= "\$cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) default=3\n";
 $cfg_data .= "\$cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in on your server)\n";
 $cfg_data .= "\$cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed\n";
 
-$cfg_data .= "\$cfg['multihost'] = TRUE;            // Allow multiple host names for this site\n"; 
+$cfg_data .= "\$cfg['multihost'] = TRUE;            // Allow multiple host names for this site\n";
 
 $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// Name of MySQL tables\n";
@@ -105,5 +107,3 @@ $cfg_data .= "\$db_trash	 		= \$cfg['sqldbprefix'].'trash';\n";
 $cfg_data .= "\$db_users 			= \$cfg['sqldbprefix'].'users';\n";
 
 $cfg_data .= "\n?>";
-
-?>

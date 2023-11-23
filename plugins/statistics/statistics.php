@@ -23,30 +23,31 @@ Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
+if (!defined('SED_CODE') || !defined('SED_PLUG')) {
+	die('Wrong URL.');
+}
 
-$s = sed_import('s','G','TXT');
-$m = sed_import('m','G','TXT');
+$s = sed_import('s', 'G', 'TXT');
+$m = sed_import('m', 'G', 'TXT');
 
-if ($m == 'share')
-	{
+if ($m == 'share') {
 	$totaldbposts = sed_sql_rowcount($db_forum_posts);
 	$totaldbtopics = sed_sql_rowcount($db_forum_topics);
 	$totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-	$totaldbviews = sed_sql_result($totaldbviews,0,"SUM(fs_viewcount)");
+	$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
 	$sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-	$totaldbtopics += sed_sql_result($sql,0,"SUM(fs_topiccount_pruned)");
+	$totaldbtopics += sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
 	$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-	$totaldbposts += sed_sql_result($sql,0,"SUM(fs_postcount_pruned)");
+	$totaldbposts += sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
 	$output = "Seditio - Website engine<br />Copyright Neocrome & Seditio Team<br />";
 	$output .= "<a href=\"https://seditio.org\">https://seditio.org</a><br />";
-	$output .= "&nbsp;<br />[BEGIN_SED]<br />Title=".$cfg['maintitle']."<br />";
-	$output .= "Subtitle=".$cfg['subtitle']."<br />Version=".$cfg['version']."<br />";
-	$output .= "Pages=".sed_sql_rowcount($db_pages)."<br />Users=".sed_sql_rowcount($db_users)."<br />";
-	$output .= "Pms=".sed_stat_get('totalpms')."<br />Forum_views=".$totaldbviews."<br />";
-	$output .= "Forum_posts=".$totaldbposts."<br />Forum_topics=".$totaldbtopics."<br />[END_SED]<br />&nbsp;";
+	$output .= "&nbsp;<br />[BEGIN_SED]<br />Title=" . $cfg['maintitle'] . "<br />";
+	$output .= "Subtitle=" . $cfg['subtitle'] . "<br />Version=" . $cfg['version'] . "<br />";
+	$output .= "Pages=" . sed_sql_rowcount($db_pages) . "<br />Users=" . sed_sql_rowcount($db_users) . "<br />";
+	$output .= "Pms=" . sed_stat_get('totalpms') . "<br />Forum_views=" . $totaldbviews . "<br />";
+	$output .= "Forum_posts=" . $totaldbposts . "<br />Forum_topics=" . $totaldbtopics . "<br />[END_SED]<br />&nbsp;";
 	die($output);
-	}
+}
 
 $plugin_title = $L['plu_title'];
 
@@ -95,13 +96,12 @@ $row = sed_sql_fetchassoc($sql);
 $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
-if ($usr['id'] > 0)
-	{
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
+if ($usr['id'] > 0) {
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='" . $usr['id'] . "'");
 	$user_postscount = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='" . $usr['id'] . "'");
 	$user_topicscount = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='" . $usr['id'] . "'");
 	$user_comments = sed_sql_result($sql, 0, "COUNT(*)");
 
 	$t->assign(array(
@@ -110,35 +110,28 @@ if ($usr['id'] > 0)
 		"PLUGIN_STATISTICS_USER_COMMENTS" => $user_comments
 	));
 	$t->parse('MAIN.PLUGIN_STATISTICS_IS_USER');
-	}
-else
-	{
+} else {
 	$t->parse('MAIN.PLUGIN_STATISTICS_IS_NOT_USER');
-	}
+}
 
-if ($s == 'usercount')
-	{
+if ($s == 'usercount') {
 	$sql1 = sed_sql_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
 	$sql = sed_sql_query("CREATE TEMPORARY TABLE tmp1 SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country");
 	$sql = sed_sql_query("SELECT * FROM tmp1 WHERE 1 ORDER by usercount DESC");
 	$sql1 = sed_sql_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
-	}
-else
-	{
+} else {
 	$sql = sed_sql_query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ASC");
-	}
+}
 
 $sqltotal = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
 $totalusers = sed_sql_result($sqltotal, 0, "COUNT(*)");
 
 $ii = 0;
 
-while ($row = sed_sql_fetchassoc($sql))
-	{
+while ($row = sed_sql_fetchassoc($sql)) {
 	$country_code = $row['user_country'];
 
-	if (!empty($country_code) && $country_code != '00')
-		{
+	if (!empty($country_code) && $country_code != '00') {
 		$ii = $ii + $row['usercount'];
 		$t->assign(array(
 			"PLUGIN_STATISTICS_COUNTRY_FLAG" => sed_build_flag($country_code),
@@ -146,12 +139,12 @@ while ($row = sed_sql_fetchassoc($sql))
 			"PLUGIN_STATISTICS_COUNTRY_NAME" => sed_build_country($country_code)
 		));
 		$t->parse('MAIN.PLUGIN_STATISTICS_ROW_COUNTRY');
-		}
 	}
+}
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("plug", "e=statistics")] = $L['plu_title'];	
+$urlpaths[sed_url("plug", "e=statistics")] = $L['plu_title'];
 
 $t->assign(array(
 	"PLUGIN_STATISTICS_TITLE" => $L['plu_title'],
@@ -185,5 +178,3 @@ $t->assign(array(
 	"PLUGIN_STATISTICS_UNKNOWN_COUNT" => $totalusers - $ii,
 	"PLUGIN_STATISTICS_TOTALUSERS" => $totalusers
 ));
-
-?>

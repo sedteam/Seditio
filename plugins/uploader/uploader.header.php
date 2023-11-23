@@ -26,17 +26,13 @@ Order=10
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if (!defined('SED_CODE')) {
+	die('Wrong URL.');
+}
 
 global $usr;
 
-if ($usr['id'] > 0)
-	{      
-	$out['uploader_header'] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/uploader/css/uploader.css\"/>";	
+if ($usr['id'] > 0) {
+	$out['uploader_header'] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/uploader/css/uploader.css\"/>";
 	$t->assign("HEADER_UPLOADER", $out['uploader_header']);
-  }
-
-
-
-
-?>
+}

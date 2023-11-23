@@ -43,6 +43,6 @@ buildfilename=016:select:timestamp,autoincrement:autoincrement:Timestamp in the 
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-?>
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}

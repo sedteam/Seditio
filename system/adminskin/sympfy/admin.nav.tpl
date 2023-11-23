@@ -1,6 +1,7 @@
 <!-- BEGIN: ADMINMENU -->
 
-<ul id="main-nav"><!-- Accordion Menu -->
+<ul id="main-nav">
+	<!-- Accordion Menu -->
 
 	<li><a href="{ADMINMENU_URL}" class="nav-top-item no-submenu {ADMINMENU_URL_CLASS}"><i class="ic-home"></i> {PHP.L.Home}</a></li>
 

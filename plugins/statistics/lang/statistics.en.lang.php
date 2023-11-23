@@ -14,7 +14,6 @@ Description=
 [END_SED]
 ==================== */
 
-
 $L['plu_title'] = "Statistics";
 $L['plu_totalpagessince'] = "Total pages displayed since";
 $L['plu_maxwasreached'] = "Maximum hitcount was reached";
@@ -54,5 +53,3 @@ $L['plu_votespolls'] = "Votes for polls";
 $L['plu_usersfrom'] = "Members from this country";
 $L['plu_unknown'] = "Unknown or not set";
 $L['plu_total'] = "Total :";
-
-?>
