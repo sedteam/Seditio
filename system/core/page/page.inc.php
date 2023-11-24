@@ -245,7 +245,7 @@ if (is_array($extp)) {
 if ($m == 'print') {
 	sed_sendheaders();
 	$mskin = sed_skinfile(array('print.page', $sed_cat[$pag['page_cat']]['tpl']));
-} elseif (file_exists(sed_skinfile(array('page.alias', $pag['page_alias'])))) {
+} elseif (!empty($pag['page_alias']) && file_exists(sed_skinfile(array('page.alias', $pag['page_alias'])))) {
 	require(SED_ROOT . "/system/header.php");
 	$mskin = sed_skinfile(array('page.alias', $pag['page_alias']));
 } else {
