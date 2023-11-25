@@ -2550,15 +2550,15 @@ function sed_htmlmetas($description = '', $keywords = '', $contenttype = 'text/h
 	$keywords = (empty($keywords)) ? $cfg['metakeywords'] : htmlspecialchars($keywords);
 
 	$result = "
-		<base href=\"" . $sys['abs_url'] . "\" />
-		<meta http-equiv=\"content-type\" content=\"" . $contenttype . "; charset=" . $cfg['charset'] . "\" />
-		<meta name=\"description\" content=\"" . $description . "\" />
-		<meta name=\"keywords\" content=\"" . $keywords . "\" />
-		<meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
-		<meta http-equiv=\"pragma\" content=\"no-cache\" />
-		<meta http-equiv=\"cache-control\" content=\"no-cache\" />
-		<meta http-equiv=\"last-modified\" content=\"" . gmdate("D, d M Y H:i:s") . " GMT\" />
-		<link rel=\"shortcut icon\" href=\"favicon.ico\" />";
+	<base href=\"" . $sys['abs_url'] . "\" />
+	<meta http-equiv=\"content-type\" content=\"" . $contenttype . "; charset=" . $cfg['charset'] . "\" />
+	<meta name=\"description\" content=\"" . $description . "\" />
+	<meta name=\"keywords\" content=\"" . $keywords . "\" />
+	<meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
+	<meta http-equiv=\"pragma\" content=\"no-cache\" />
+	<meta http-equiv=\"cache-control\" content=\"no-cache\" />
+	<meta http-equiv=\"last-modified\" content=\"" . gmdate("D, d M Y H:i:s") . " GMT\" />
+	<link rel=\"shortcut icon\" href=\"favicon.ico\" />";
 	return ($result);
 }
 
