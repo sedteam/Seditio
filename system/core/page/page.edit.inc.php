@@ -314,7 +314,7 @@ $t->assign(array(
 	"PAGEEDIT_FORM_AUTHOR" => sed_textbox('rpageauthor', $pag['page_author'], 24, 32),
 	"PAGEEDIT_FORM_OWNERID" => sed_textbox('rpageownerid', $pag['page_ownerid'], 24, 32),
 	"PAGEEDIT_FORM_DATE" => $pag['page_date'] . " " . $usr['timetext'],
-	"PAGEEDIT_FORM_DATENOW" => sed_radiobox('checkbox', 'rpagedatenow', 1),
+	"PAGEEDIT_FORM_DATENOW" => sed_checkbox('rpagedatenow'),
 	"PAGEEDIT_FORM_BEGIN" => $pag['page_begin'] . " " . $usr['timetext'],
 	"PAGEEDIT_FORM_EXPIRE" => $pag['page_expire'] . " " . $usr['timetext'],
 	"PAGEEDIT_FORM_FILE" => $page_form_file,
