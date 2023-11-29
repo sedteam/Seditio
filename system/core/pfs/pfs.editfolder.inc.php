@@ -161,7 +161,7 @@ $t->assign(array(
 	"PFS_EDITFOLDER_DESC" => sed_textarea('rdesc', $pff_desc, 8, 56, 'Micro'),
 	"PFS_EDITFOLDER_DATE" => $pff_date,
 	"PFS_EDITFOLDER_UPDATE" => $pff_updated,
-	"PFS_EDITFOLDER_TYPE" => sed_radiobox("rtype", $rtype_arr, 0)
+	"PFS_EDITFOLDER_TYPE" => sed_radiobox("rtype", $rtype_arr, $pff_type)
 ));
 
 $t->parse("MAIN.PFS_EDITFOLDER");
