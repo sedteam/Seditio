@@ -47,6 +47,9 @@ unset($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smi
 $cfg['authmode'] = 3; 				// (1:cookies, 2:sessions, 3:cookies+sessions)
 $cfg['enablecustomhf'] = TRUE;		// To enable header.$location.tpl and footer.$location.tpl
 $cfg['devmode'] = FALSE;
+$cfg['sefurls'] = TRUE;
+$cfg['abs_url'] = TRUE;
+$cfg['redirmode'] = FALSE;
 $cfg['pfs_dir'] = 'datas/users/';
 $cfg['av_dir'] = 'datas/avatars/';
 $cfg['photos_dir'] = 'datas/photos/';
@@ -91,6 +94,7 @@ $out['subdesc'] = '';
 $out['subkeywords'] = '';
 $morejavascript = '';
 $moremetas = '';
+$sys['abs_url'] = '';
 $sys['sublocation'] = '';
 $error_string = '';
 $shield_hammer = 0;
