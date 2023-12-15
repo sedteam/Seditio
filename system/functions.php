@@ -833,14 +833,16 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$totallines = sed_sql_result($sql, 0, "COUNT(*)");
 			$totalpages = ceil($totallines / $cfg['maxcommentsperpage']);
 
-			if (($totalpages > 1) && $wd && ($cfg['commentsorder'] != "DESC")) {
-				$d = ($totalpages - 1) * $cfg['maxcommentsperpage'];
-			}
-
 			$currentpage = ceil($d / $cfg['maxcommentsperpage']) + 1;
 
 			$pagination = sed_pagination(sed_url($url_part, $url_params . $lurl), $d, $totallines, $cfg['maxcommentsperpage']);
 			list($pageprev, $pagenext) = sed_pagination_pn(sed_url($url_part, $url_params . $lurl), $d, $totallines, $cfg['maxcommentsperpage'], TRUE);
+
+			$t->assign(array(
+				"COMMENTS_PAGINATION" => $pagination,
+				"COMMENTS_PAGEPREV" => $pageprev,
+				"COMMENTS_PAGENEXT" => $pagenext
+			));
 
 			/* ===== */
 
@@ -927,14 +929,6 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			}
 		}
 		/* ===== */
-
-		/* ====== Pagination Sed 173 ======= */
-		$t->assign(array(
-			"COMMENTS_PAGINATION" => $pagination,
-			"COMMENTS_PAGEPREV" => $pageprev,
-			"COMMENTS_PAGENEXT" => $pagenext
-		));
-		/* ============== */
 
 		$t->parse("COMMENTS");
 		$res_display = $t->text("COMMENTS");
