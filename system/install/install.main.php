@@ -363,7 +363,7 @@ switch ($m) {
 
 	case 'home':
 
-		header("Location: /");
+		sed_redirect(sed_url("index", "", "", true));
 		exit;
 
 		break;

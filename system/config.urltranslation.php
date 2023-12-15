@@ -361,7 +361,7 @@ $sed_urltrans['page'] = array(
 $sed_urltrans['index'] = array(
       array(
             'params' => '',
-            'rewrite' => ''
+            'rewrite' => '/'
       )
 );
 
