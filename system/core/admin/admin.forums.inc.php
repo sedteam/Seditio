@@ -38,6 +38,11 @@ if (sed_auth('admin', 'a', 'A')) {
 	$t->parse("ADMIN_FORUMS.FORUMS_BUTTONS.FORUMS_BUTTONS_STRUCTURE");
 }
 
+if (!isset($sed_forums_str) && $cfg['disable_forums']) {
+	$sed_forums_str = sed_load_forum_structure();
+	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
+}
+
 $t->parse("ADMIN_FORUMS.FORUMS_BUTTONS");
 
 if ($n == 'edit') {
