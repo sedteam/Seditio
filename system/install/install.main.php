@@ -124,23 +124,7 @@ switch ($m) {
 
 		require(SED_ROOT . '/system/install/install.config.php');
 
-		$cfg_isup = TRUE;
-
-		if (!($fp = @fopen($cfg['config_file'], 'w'))) {
-			$cfg_isup = FALSE;
-		}
-
-		if (!(@fwrite($fp, $cfg_data))) {
-			$cfg_isup = FALSE;
-		}
-
-		@fclose($fp);
-
-		if ($cfg_isup) {
-			$cfg_size = filesize($cfg['config_file']);
-			$res .= "Size of the file : " . $cfg_size . " bytes.<br />";
-			$res .= "<span class=\"yes\">" . $L['install_looks_chmod'] . "</span>";
-			@chmod($cfg['config_file'], 0444);
+		if (is_writable($cfg['data_root']) && !file_exists($cfg['config_file'])) {
 
 			// ---------------------------------------
 
@@ -152,6 +136,16 @@ switch ($m) {
 			$connection_id = sed_sql_connect($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb);
 			$cfg['mysqldb'] = $sqldbprefix;
 			sed_sql_set_charset($connection_id, 'utf8');
+
+			$fp = @fopen($cfg['config_file'], 'w');
+			@fwrite($fp, $cfg_data);
+			@fclose($fp);
+
+			$cfg_size = filesize($cfg['config_file']);
+			$res .= "Size of the file : " . $cfg_size . " bytes.<br />";
+			$res .= "<span class=\"yes\">" . $L['install_looks_chmod'] . "</span>";
+			@chmod($cfg['config_file'], 0444);
+
 			require(SED_ROOT . '/system/install/install.database.php');
 
 			@define('SED_ADMIN', TRUE);
@@ -174,6 +168,9 @@ switch ($m) {
 			$ruseremail = sed_import('admin_email', 'P', 'TXT', 64, TRUE);
 			$rcountry = sed_import('admin_country', 'P', 'TXT');
 			$ip = $_SERVER['REMOTE_ADDR'];
+
+			$rusername = (empty($rusername)) ? "Admin" : $rusername;
+			$rpassword = (empty($rpassword)) ? "123456" : $rpassword;
 
 			$defgroup = 5;
 
