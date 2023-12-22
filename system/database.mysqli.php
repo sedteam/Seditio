@@ -33,8 +33,8 @@ if (function_exists('mysqli_set_charset') === false) {
 /** 
  * Gets the number of affected rows in a previous MySQL 
  *   
- * @param resource $conn_id The MySQL connection link identifier 
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier 
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return int Number of rows affected by the last INSERT, UPDATE, REPLACE or DELETE query.  
  */
 function sed_sql_affectedrows($conn_id = null)
@@ -46,8 +46,8 @@ function sed_sql_affectedrows($conn_id = null)
 /** 
  * Сloses the non-persistent connection to the MySQL server that's associated with the specified link identifier.
  * 
- * @param resource $conn_id The MySQL connection link identifier   
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier   
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
 function sed_sql_close($conn_id = null)
@@ -63,7 +63,7 @@ function sed_sql_close($conn_id = null)
  * @param string $user The username
  * @param string $pass The password
  * @param string $db The name of the database that is to be selected.     
- * @return resource Specified link identifier  
+ * @return mysqli|bool Specified link identifier  
  */
 function sed_sql_connect($host, $user, $pass, $db)
 {
@@ -75,8 +75,8 @@ function sed_sql_connect($host, $user, $pass, $db)
 /** 
  * Returns the error number from the last MySQL function.
  * 
- * @param resource $conn_id The MySQL connection link identifier    
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier    
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return int Returns the error number from the last MySQL function, or 0 (zero) if no error occurred.  
  */
 function sed_sql_errno($conn_id = null)
@@ -88,8 +88,8 @@ function sed_sql_errno($conn_id = null)
 /** 
  * Returns the error text from the last MySQL function.
  *   
- * @param resource $conn_id The MySQL connection link identifier  
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier  
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return string Returns the error text from the last MySQL function, or '' (empty string) if no error occurred.  
  */
 function sed_sql_error($conn_id = null)
@@ -101,7 +101,7 @@ function sed_sql_error($conn_id = null)
 /** 
  * Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return array|bool Returns an array of strings that corresponds to the fetched row, or FALSE if there are no more rows.  
  */
 function sed_sql_fetcharray($res)
@@ -112,7 +112,7 @@ function sed_sql_fetcharray($res)
 /** 
  * Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return array|bool Returns an associative array of strings that corresponds to the fetched row, or FALSE if there are no more rows.  
  */
 function sed_sql_fetchassoc($res)
@@ -123,7 +123,7 @@ function sed_sql_fetchassoc($res)
 /** 
  * Returns a numerical array that corresponds to the fetched row and moves the internal data pointer ahead.
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return array|bool Returns an numerical array of strings that corresponds to the fetched row, or FALSE if there are no more rows.  
  */
 function sed_sql_fetchrow($res)
@@ -134,8 +134,8 @@ function sed_sql_fetchrow($res)
 /** 
  * Returns an object containing field information. This function can be used to obtain information about fields in the provided query result.
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
- * @return Returns an object containing field information  
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @return resource|bool an object containing field information  
  */
 function sed_sql_fetchfield($res, $field_offset = 0)
 {
@@ -145,8 +145,8 @@ function sed_sql_fetchfield($res, $field_offset = 0)
 /** 
  * Retrieves the number of fields from a query.
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
- * @return Returns the number of fields in the result set resource on success or FALSE on failure.
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @return int the number of fields in the result set resource on success or FALSE on failure.
  */
 function sed_sql_numfields($res)
 {
@@ -156,7 +156,7 @@ function sed_sql_numfields($res)
 /** 
  * Free result memory
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
 function sed_sql_freeresult($res)
@@ -169,8 +169,8 @@ function sed_sql_freeresult($res)
  * 
  * Retrieves the ID generated for an AUTO_INCREMENT column by the previous query (usually INSERT).  
  *   
- * @param resource $conn_id The MySQL connection link identifier  
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier  
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return int|bool The ID generated for an AUTO_INCREMENT column by the previous query on success, 0 if the previous query does not generate an AUTO_INCREMENT value, or FALSE if no MySQL connection was established. 
  */
 function sed_sql_insertid($conn_id = null)
@@ -183,13 +183,13 @@ function sed_sql_insertid($conn_id = null)
  * Display a list tables in a MySQL database
  *  
  * @param string $res Selected database or command e.g. [db_name] [LIKE 'pattern' | WHERE expr]  
- * @param resource $conn_id The MySQL connection link identifier  
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier  
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return string List tables in a MySQL database 
  */
 function sed_sql_listtables($res, $conn_id = null)
 {
-	global $connection_id, $cfg;
+	global $connection_id;
 	$conn_id = is_null($conn_id) ? $connection_id : $conn_id;
 	$res = mysqli_query($conn_id, "SHOW TABLES FROM " . $res . " ");
 	return ($res);
@@ -202,7 +202,7 @@ function sed_sql_listtables($res, $conn_id = null)
  * for statements like SELECT or SHOW that return an actual result set. 
  * To retrieve the number of rows affected by a INSERT, UPDATE, REPLACE or DELETE query, use sed_sql_affectedrows().  
  *   
- * @param resource $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
+ * @param mysqli_result $res The result resource that is being evaluated. This result comes from a call to sed_sql_query(). 
  * @return int|bool The number of rows in a result set on success or FALSE on failure.  
  */
 function sed_sql_numrows($res)
@@ -214,8 +214,8 @@ function sed_sql_numrows($res)
  * Escapes a string for use in a mysql_query
  *  
  * @param string $res The string that is to be escaped.  
- * @param resource $conn_id The MySQL connection link identifier  
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier  
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return string Returns the escaped string.
  */
 function sed_sql_prep($res, $conn_id = null)
@@ -230,8 +230,8 @@ function sed_sql_prep($res, $conn_id = null)
  *  
  * @param string $query An SQL query
  * @param bool $halterr Show SQL error 
- * @param resource $conn_id The MySQL connection link identifier  
- * @global resource $connection_id A link identifier returned by sed_sql_connect()
+ * @param mysqli $conn_id The MySQL connection link identifier  
+ * @global mysqli $connection_id A link identifier returned by sed_sql_connect()
  * @return mixed Returns a resource on success, or FALSE on error for SELECT, SHOW, DESCRIBE, EXPLAIN. Returns TRUE on success or FALSE on error for INSERT, UPDATE, DELETE, DROP
  */
 function sed_sql_query($query, $halterr = true, $conn_id = null)
@@ -285,7 +285,7 @@ function sed_sql_result($res, $row, $col = 0)
  * Sets the default character set for the current connection. 
  *   
  * @param string $charset A valid character set name.
- * @param resource $conn_id The MySQL connection link identifier 
+ * @param mysqli $conn_id The MySQL connection link identifier 
  * @return bool Returns TRUE on success or FALSE on failure.  
  */
 function sed_sql_set_charset($conn_id, $charset)
@@ -297,7 +297,7 @@ function sed_sql_set_charset($conn_id, $charset)
  * Returns count of rows in table.
  *   
  * @param string $table Name of table.
- * @return int Count of rows in table.  
+ * @return string Count of rows in table.  
  */
 function sed_sql_rowcount($table)
 {

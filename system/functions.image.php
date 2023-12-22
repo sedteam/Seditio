@@ -179,7 +179,7 @@ function sed_get_resize_params($filename)
  * @param string $type
  * @param int $max_w maximum width
  * @param int $max_h maximum height
- * @param null $watermark
+ * @param string $watermark
  * @param int $watermark_offset_x
  * @param int $watermark_offset_y
  * @param int $watermark_opacity
@@ -389,12 +389,12 @@ function sed_image_constrain_gd(
 /**
  * Creation of previews by means of imagick
  *
- * @param resource $src_file source file
- * @param resource $dst_file result file
+ * @param string $src_file source file
+ * @param string $dst_file result file
  * @param string $type
  * @param int $max_w maximum width
  * @param int $max_h maximum height
- * @param null $watermark
+ * @param string $watermark
  * @param int $watermark_offset_x
  * @param int $watermark_offset_y
  * @param int $watermark_opacity
@@ -602,8 +602,8 @@ function sed_calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 
  *                if in doubt, use as you would imagecopy_alpha (i.e. keep
  *                opacity at 100%)
  *
- * @param resource $dst_im Destination image link resource
- * @param resource $src_im Source image link resource
+ * @param GdImage $dst_im Destination image link resource
+ * @param GdImage $src_im Source image link resource
  * @param int $dst_x x-coordinate of destination point
  * @param int $dst_y y-coordinate of destination point
  * @param int $src_x x-coordinate of source point

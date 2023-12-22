@@ -779,7 +779,6 @@ function sed_structure_delcat($id, $c)
 	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
 	sed_auth_clear('all');
 	sed_cache_clear('sed_cat');
-	return ($res);
 }
 
 /** 
@@ -887,7 +886,7 @@ function sed_trash_insert($dat, $db)
  * Restore an item from trash 
  * 
  * @param int $id Trash item ID 
- * @return bool      
+ * @return mixed      
  */
 function sed_trash_restore($id)
 {
@@ -904,7 +903,6 @@ function sed_trash_restore($id)
 			sed_trash_insert($res['tr_datas'], $db_com);
 			sed_log("Comment #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
 			return (TRUE);
-			break;
 
 		case 'forumpost':
 			global $db_forum_posts;
@@ -945,7 +943,6 @@ function sed_trash_restore($id)
 			sed_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
 			sed_forum_resync($res['tr_datas']['ft_sectionid']);
 			return (TRUE);
-			break;
 
 		case 'page':
 			global $db_pages, $db_structure;
@@ -959,24 +956,20 @@ function sed_trash_restore($id)
 				$sql = sed_sql_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='" . $res['tr_itemid'] . "'");
 			}
 			return (TRUE);
-			break;
 
 		case 'pm':
 			global $db_pm;
 			sed_trash_insert($res['tr_datas'], $db_pm);
 			sed_log("Private message #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
 			return (TRUE);
-			break;
 
 		case 'user':
 			global $db_users;
 			sed_trash_insert($res['tr_datas'], $db_users);
 			sed_log("User #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
 			return (TRUE);
-			break;
 
 		default:
 			return (FALSE);
-			break;
 	}
 }
