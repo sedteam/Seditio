@@ -32,6 +32,7 @@ $L['adm_code']['index'] = $L['Home'];
 $L['adm_code']['message'] = $L['Messages'];
 $L['adm_code']['page'] = $L['Pages'];
 $L['adm_code']['pfs'] = $L['PFS'];
+$L['adm_code']['gallery'] = $L['Gallery'];
 $L['adm_code']['plug'] = $L['Plugins'];
 $L['adm_code']['pm'] = $L['Private_Messages'];
 $L['adm_code']['polls'] = $L['Polls'];

@@ -18,7 +18,7 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
     die('Wrong URL.');
 }
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('gallery', 'a');
 sed_block($usr['isadmin']);
 
 // ---------- Breadcrumbs
