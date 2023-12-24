@@ -77,14 +77,14 @@ if (!empty($p)) {
 		$s = $row['fp_sectionid'];
 		$fp_posterid = $row['fp_posterid'];
 	} else {
-		sed_die();
+		sed_die(true, 404);
 	}
 } elseif (!empty($q)) {
 	$sql = sed_sql_query("SELECT ft_sectionid FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 	if ($row = sed_sql_fetchassoc($sql)) {
 		$s = $row['ft_sectionid'];
 	} else {
-		sed_die();
+		sed_die(true, 404);
 	}
 }
 
@@ -105,7 +105,7 @@ if ($row = sed_sql_fetchassoc($sql)) {
 		sed_redirect(sed_url("message", "msg=602", "", true));
 	}
 } else {
-	sed_die();
+	sed_die(true, 404);
 }
 
 $sql2 = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 2");

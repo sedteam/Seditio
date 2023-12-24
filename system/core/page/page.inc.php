@@ -49,7 +49,8 @@ if (!empty($al)) {
 		WHERE page_id='$id'");
 }
 
-sed_die(sed_sql_numrows($sql) == 0);
+sed_die((sed_sql_numrows($sql) == 0), 404);
+
 $pag = sed_sql_fetchassoc($sql);
 
 /* === Hook === */

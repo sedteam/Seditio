@@ -60,7 +60,7 @@ $filter_urlparams = (count($filter_urlparams_arr) > 0) ? "&" . implode('&', $fil
 $sql_where = (count($filter_sql) > 0) ? " AND " . implode(' AND ', $filter_sql) : " ";
 
 if (!array_key_exists($c, $sed_cat) && !($c == 'all')) {
-	sed_die();
+	sed_die(true, 404);
 }
 
 if ($c == 'all' || $c == 'system') {
@@ -123,7 +123,7 @@ if ($c == 'all') {
 		WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p'
 		$sql_where ORDER BY page_$s $w LIMIT $d," . $cfg['maxrowsperpage']);
 } else {
-	sed_die(empty($sed_cat[$c]['title']));
+	sed_die(empty($sed_cat[$c]['title']), 950);
 	if (($sed_cat[$c]['group']) && ($cfg['showpagesubcatgroup'] == 1)) {
 		$mtch = $sed_cat[$c]['path'] . ".";
 		$mtchlen = mb_strlen($mtch);

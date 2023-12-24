@@ -2070,26 +2070,23 @@ function sed_url_check($url)
  * @param bool $cond Really die? 
  * @return bool 
  */
-function sed_die($cond = TRUE, $notfound = FALSE)
+function sed_die($cond = TRUE, $code = '950')
 {
 	if ($cond) {
-		$msg = $notfound ? '404' : '950';
-		sed_die_message($msg);
+		sed_die_message($code);
 	}
 	return (FALSE);
 }
 
-function sed_die_message($code, $header = TRUE, $message_title = '', $message_body = '', $redirect = '')
+function sed_die_message($code, $message_title = '', $message_body = '', $redirect = '')
 {
 	global $L, $cfg, $sys, $usr, $lang;
 
-	$skin = $cfg['defaultskin'];
-	$mskin = "skins/" . $cfg['defaultskin'] . "/service.message.tpl";
-
+	$mskin = sed_skinfile(array($code, 'message')) ? sed_skinfile(array($code, 'message')) : sed_skinfile('service.message');
 	require(SED_ROOT . "/system/lang/$lang/message.lang.php");
 
 	// Determine response header 
-	static $msg_status = array(
+	$msg_status = array(
 		100 => '403 Forbidden',
 		101 => '200 OK',
 		102 => '200 OK',
@@ -2124,34 +2121,38 @@ function sed_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		951 => '503 Service Unavailable'
 	);
 
-	sed_sendheaders('text/html', $msg_status[$code]);
+	if (array_key_exists($code, $msg_status)) {
+		sed_sendheaders('text/html', $msg_status[$code]);
 
-	// Determine message title and body 
-	$title = empty($message_title) ? $L['msg' . $code . '_0'] : $message_title;
-	$body = empty($message_body) ? $L['msg' . $code . '_1'] : $message_body;
+		// Determine message title and body 
+		$title = empty($message_title) ? $L['msg' . $code . '_0'] : $message_title;
+		$body = empty($message_body) ? $L['msg' . $code . '_1'] : $message_body;
 
-	// Render the message page 
-	$redirect_meta = '';
-	if (!empty($redirect)) {
-		if (sed_url_check($redirect)) {
-			$redirect_meta = '<meta http-equiv="refresh" content="3; url=' . $redirect . '" />';
+		// Render the message page 
+		$redirect_meta = '';
+		if (!empty($redirect)) {
+			if (sed_url_check($redirect)) {
+				$redirect_meta = '<meta http-equiv="refresh" content="3; url=' . $redirect . '" />';
+			}
 		}
+
+		$t = new XTemplate($mskin);
+
+		$t->assign(array(
+			'MESSAGE_BASEHREF' => $sys['abs_url'],
+			'MESSAGE_CODE' => $code,
+			'MESSAGE_REDIRECT' => $redirect_meta,
+			'MESSAGE_TITLE' => $title,
+			'MESSAGE_BODY' => $body
+		));
+
+		$t->parse('MAIN');
+		$t->out('MAIN');
+
+		exit;
+	} else {
+		return (FALSE);
 	}
-
-	$t = new XTemplate($mskin);
-
-	$t->assign(array(
-		'MESSAGE_BASEHREF' => $sys['abs_url'],
-		'MESSAGE_CODE' => $code,
-		'MESSAGE_REDIRECT' => $redirect_meta,
-		'MESSAGE_TITLE' => $title,
-		'MESSAGE_BODY' => $body
-	));
-
-	$t->parse('MAIN');
-	$t->out('MAIN');
-
-	exit;
 }
 
 /** 

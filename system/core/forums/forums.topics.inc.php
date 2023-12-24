@@ -31,9 +31,6 @@ $vote = sed_import('vote', 'G', 'INT');
 
 sed_die(empty($s));
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
-sed_block($usr['auth_read']);
-
 function rev($sway)
 {
 	if ($sway == 'desc') {
@@ -79,7 +76,7 @@ if ($row = sed_sql_fetchassoc($sql)) {
 	$fs_postcount = $row['fs_postcount'];
 	$fs_viewcount = $row['fs_viewcount'];
 } else {
-	sed_die();
+	sed_die(true, 404);
 }
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
@@ -119,7 +116,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a)) {
 			$num = sed_sql_result($sql, 0, "COUNT(*)");
 
 			if ($num < 1 || $s == $ns) {
-				sed_die();
+				sed_die(true, 404);
 			}
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
