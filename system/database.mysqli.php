@@ -67,8 +67,10 @@ function sed_sql_close($conn_id = null)
  */
 function sed_sql_connect($host, $user, $pass, $db)
 {
-	$conn_id = @mysqli_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />' . 'MySQL error : ' . sed_sql_error());
-	$select = @mysqli_select_db($conn_id, $db) or sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />' . 'MySQL error : ' . sed_sql_error());
+	$conn_id = @mysqli_connect($host, $user, $pass, $db);
+	if (mysqli_connect_errno() || empty($db)) {
+		sed_diefatal('Connect failed. Please check your settings in the file datas/config.php. ' . mysqli_connect_error());
+	}
 	return ($conn_id);
 }
 
