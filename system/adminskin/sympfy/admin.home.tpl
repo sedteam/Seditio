@@ -40,8 +40,12 @@
 					<!-- BEGIN: ADMIN_RSS_NEWS_TAB -->
 					<li><a href="{PHP.sys.request_uri}#tab1" data-tabtitle="{ADMIN_RSS_NEWS_TAB_TITLE}">{ADMIN_RSS_NEWS_TAB_TITLE}</a></li>
 					<!-- END: ADMIN_RSS_NEWS_TAB -->
+					<!-- BEGIN: ADMIN_INFOS_TAB -->
 					<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.adm_infos}">{PHP.L.adm_infos}</a></li>
+					<!-- END: ADMIN_INFOS_TAB -->
+					<!-- BEGIN: ADMIN_UPG_TAB -->
 					<li><a href="{PHP.sys.request_uri}#tab3" data-tabtitle="{PHP.L.upg_upgrade}">{PHP.L.upg_upgrade}</a></li>
+					<!-- END: ADMIN_UPG_TAB -->
 				</ul>
 			</div>
 
@@ -53,6 +57,7 @@
 				</div>
 				<!-- END: ADMIN_RSS_NEWS_TABBODY -->
 
+				<!-- BEGIN: ADMIN_INFOS_TABBODY -->
 				<div class="tab-content content-table" id="tab2">
 
 					<div name="log" id="infos">
@@ -85,7 +90,9 @@
 					</div>
 
 				</div>
+				<!-- END: ADMIN_INFOS_TABBODY -->
 
+				<!-- BEGIN: ADMIN_UPG_TABBODY -->
 				<div class="tab-content content-table" id="tab3">
 
 					<form id="forcesqlversion" action="{UPG_FORCESQLVERSION_SEND}" method="post">
@@ -114,6 +121,7 @@
 					</form>
 
 				</div>
+				<!-- END: ADMIN_UPG_TABBODY -->
 
 			</div>
 

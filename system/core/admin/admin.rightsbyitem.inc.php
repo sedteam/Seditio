@@ -40,6 +40,8 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 $L['adm_code']['dic'] = $L['core_dic'];
 $L['adm_code']['menu'] = $L['core_menu'];
+$L['adm_code']['log'] = $L['Log'];
+$L['adm_code']['trash'] = $L['Trashcan'];
 
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem', false, true));
 

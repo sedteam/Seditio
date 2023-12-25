@@ -95,7 +95,7 @@ if ($sys['user_istopadmin']) {
 	$forcesql = $L['upg_force'];
 	$forcesql .= "<select name=\"forcesql\" size=\"1\">";
 
-	foreach ($cfg['versions_list'] as $i => $x) {
+	foreach ($cfg['versions_list'] as $x) {
 		$selected = ($x == $cfg['sqlversion']) ? "selected=\"selected\"" : '';
 		$forcesql .= "<option value=\"$x\" $selected>" . $x . "</option>";
 	}
@@ -107,6 +107,8 @@ if ($sys['user_istopadmin']) {
 		"UPG_STATUS" => ($status_ok) ? $out['ic_checked'] : $out['ic_warning'],
 		"UPG_FORCESQL" => $forcesql
 	));
+	$t->parse("ADMIN_HOME.ADMIN_UPG_TAB");
+	$t->parse("ADMIN_HOME.ADMIN_UPG_TABBODY");
 }
 
 $mysql_ver = sed_sql_query("SELECT VERSION() as mysql_version");
@@ -118,6 +120,9 @@ $t->assign(array(
 	"INFOS_OS" => (function_exists('php_uname')) ? @php_uname() : '',
 	"INFOS_MYSQL" => sed_sql_result($mysql_ver, 0, "mysql_version")
 ));
+
+$t->parse("ADMIN_HOME.ADMIN_INFOS_TAB");
+$t->parse("ADMIN_HOME.ADMIN_INFOS_TABBODY");
 
 $t->assign("ADMIN_HOME_TITLE", $admintitle);
 

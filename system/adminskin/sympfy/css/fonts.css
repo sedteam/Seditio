@@ -238,7 +238,8 @@
 .ic-circle-x:before {
   content: "\ea6a";
 }
-.ic-clock:before {
+.ic-clock:before,
+.ic-log:before {
   content: "\ea70";
 }
 .ic-cloud-download:before {

@@ -46,6 +46,8 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 $L['adm_code']['dic'] = $L['core_dic'];
 $L['adm_code']['menu'] = $L['core_menu'];
+$L['adm_code']['log'] = $L['Log'];
+$L['adm_code']['trash'] = $L['Trashcan'];
 
 $t = new XTemplate(sed_skinfile('admin.rights', false, true));
 
@@ -103,7 +105,7 @@ if (is_array($extp)) {
 
 $sql1 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	WHERE auth_groupid='$g' AND auth_code IN ('admin', 'comments', 'index', 'message', 'pfs', 'gallery', 'polls', 'pm', 'ratings', 'users', 'dic', 'menu')
+	WHERE auth_groupid='$g' AND auth_code IN ('admin', 'comments', 'index', 'message', 'pfs', 'gallery', 'polls', 'pm', 'ratings', 'users', 'dic', 'menu', 'trash', 'log')
 	ORDER BY auth_code ASC");
 
 sed_die(sed_sql_numrows($sql1) == 0);

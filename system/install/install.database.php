@@ -694,6 +694,20 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (106, 4, 'm
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (107, 5, 'menu', 'a', 255, 255, 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (108, 6, 'menu', 'a', 131, 0, 1);");
 
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (109, 1, 'log', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (110, 2, 'log', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (111, 3, 'log', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (112, 4, 'log', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (113, 5, 'log', 'a', 255, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (114, 6, 'log', 'a', 0, 0, 1);");
+
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (115, 1, 'trash', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (116, 2, 'trash', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (117, 3, 'trash', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (118, 4, 'trash', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (119, 5, 'trash', 'a', 255, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (120, 6, 'trash', 'a', 0, 0, 1);");
+
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(1, 0, 'Menu', '', 1, 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(2, 1, 'Home', '/', 2, 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(3, 1, 'Forums', 'forums/', 3, 1);");
