@@ -83,14 +83,14 @@
 						</li>
 						<!-- END: USERS_MENU -->
 
-						<!-- BEGIN: TOOLS_MENU -->
+						<!-- BEGIN: MANAGE_MENU -->
 						<li>
-							<a href="{ADMIN_MENU_TOOLS_URL}" class="nav-top-item no-submenu {ADMIN_MENU_TOOLS_URL_CLASS}">
+							<a href="{ADMIN_MENU_MANAGE_URL}" class="nav-top-item no-submenu {ADMIN_MENU_MANAGE_URL_CLASS}">
 								<span class="nav-icon"><i class="ic-tool"></i></span>
 								<span class="nav-title">{PHP.L.adm_manage}</span>
 							</a>
 						</li>
-						<!-- END: TOOLS_MENU -->
+						<!-- END: MANAGE_MENU -->
 
 						<!-- BEGIN: PLUGINS_MENU -->
 						<li>

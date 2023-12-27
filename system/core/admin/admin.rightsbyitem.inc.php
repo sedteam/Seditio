@@ -42,6 +42,7 @@ $L['adm_code']['dic'] = $L['core_dic'];
 $L['adm_code']['menu'] = $L['core_menu'];
 $L['adm_code']['log'] = $L['Log'];
 $L['adm_code']['trash'] = $L['Trashcan'];
+$L['adm_code']['manage'] = $L['adm_manage'];
 
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem', false, true));
 

@@ -1,8 +1,8 @@
-<!-- BEGIN: ADMIN_TOOLS -->
+<!-- BEGIN: ADMIN_MANAGE -->
 
 <div class="title">
 	<span><i class="ic-forums"></i></span>
-	<h2>{ADMIN_TOOLS_TITLE}</h2>
+	<h2>{ADMIN_MANAGE_TITLE}</h2>
 </div>
 
 <div class="row row-flex">
@@ -149,7 +149,7 @@
 
 </div>
 
-<!-- END: ADMIN_TOOLS -->
+<!-- END: ADMIN_MANAGE -->
 
 <!-- BEGIN: ADMIN_TOOL -->
 

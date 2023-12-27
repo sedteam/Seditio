@@ -220,7 +220,8 @@
 .ic-settings:before {
   content: "\eb20";
 }
-.ic-tool:before {
+.ic-tool:before,
+.ic-manage:before {
   content: "\eb40";
 }
 .ic-chart-candle:before {

@@ -64,7 +64,7 @@ $systemfiles[] = '*System';
 
 $systemfiles[] = 'system/common.php';
 $systemfiles[] = 'system/config.extensions.php';
-$systemfiles[] = 'system/database.mysql.php';
+$systemfiles[] = 'system/database.mysqli.php';
 $systemfiles[] = 'system/footer.php';
 $systemfiles[] = 'system/functions.admin.php';
 $systemfiles[] = 'system/functions.php';
@@ -107,7 +107,7 @@ $systemfiles[] = 'system/core/admin/admin.referers.inc.php';
 $systemfiles[] = 'system/core/admin/admin.rights.inc.php';
 $systemfiles[] = 'system/core/admin/admin.rightsbyitem.inc.php';
 $systemfiles[] = 'system/core/admin/admin.smilies.inc.php';
-$systemfiles[] = 'system/core/admin/admin.tools.inc.php';
+$systemfiles[] = 'system/core/admin/admin.manage.inc.php';
 $systemfiles[] = 'system/core/admin/admin.trashcan.inc.php';
 $systemfiles[] = 'system/core/admin/admin.upgrade.inc.php';
 $systemfiles[] = 'system/core/admin/admin.users.inc.php';
@@ -176,6 +176,8 @@ $systemfiles[] = 'system/upgrade/upgrade_172_173.php';
 $systemfiles[] = 'system/upgrade/upgrade_173_175.php';
 $systemfiles[] = 'system/upgrade/upgrade_175_178.php';
 $systemfiles[] = 'system/upgrade/upgrade_177_178.php';
+$systemfiles[] = 'system/upgrade/upgrade_178_179.php';
+$systemfiles[] = 'system/upgrade/upgrade_179_180.php';
 
 $systemfiles[] = '*Default language files';
 
@@ -257,7 +259,7 @@ $admskinfiles[] = 'admin.referers.tpl';
 $admskinfiles[] = 'admin.rights.tpl';
 $admskinfiles[] = 'admin.rightsbyitem.tpl';
 $admskinfiles[] = 'admin.smilies.tpl';
-$admskinfiles[] = 'admin.tools.tpl';
+$admskinfiles[] = 'admin.manage.tpl';
 $admskinfiles[] = 'admin.tpl';
 $admskinfiles[] = 'admin.trashcan.tpl';
 $admskinfiles[] = 'admin.upgrade.tpl';
