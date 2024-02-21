@@ -3264,7 +3264,7 @@ function sed_mail($fmail, $subject, $body, $headers = '', $param = '', $content 
 			$hdrs[] = "Content-type: text/" . $content . "; charset=" . $cfg['charset'];
 			$hdrs[] = "Content-Transfer-Encoding: 8bit";
 			$hdrs[] = "Date: " . date('r', $_SERVER['REQUEST_TIME']);
-			$hdrs[] = "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'];
+			$hdrs[] = "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">";
 			$hdrs[] = "From: =?" . $cfg['charset'] . "?B?" . base64_encode($cfg['maintitle']) . "?= <" . $cfg['adminemail'] . ">";
 			$hdrs[] = "Reply-To: <" . $cfg['adminemail'] . ">";
 			$hdrs[] = "X-Mailer: PHP/" . phpversion();
