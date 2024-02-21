@@ -238,13 +238,12 @@ function sed_sql_prep($res, $conn_id = null)
  */
 function sed_sql_query($query, $halterr = true, $conn_id = null)
 {
-	global $sys, $cfg, $usr, $connection_id;
+	global $sys, $cfg, $connection_id;
 
 	$conn_id = is_null($conn_id) ? $connection_id : $conn_id;
 
-	$sys['qcount'] = 0;
-	$sys['tcount'] = 0;
 	$sys['qcount']++;
+
 	$xtime = microtime();
 
 	if ($halterr) {

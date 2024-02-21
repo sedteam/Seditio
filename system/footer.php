@@ -146,12 +146,12 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
 	$out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">SQL query</td><td class=\"coltop\" style=\"width:10%;\">SQL Duration</td>";
 	$out['devmode'] .= "<td class=\"coltop\" style=\"width:10%;\">Timeline</td><td class=\"coltop\">Query</td></tr>";
 	$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
-	$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
+	$out['devmode'] .= "<td style=\"text-align:left;\">0.000 ms</td><td>&nbsp;</td></tr>";
 
 	foreach ($sys['devmode']['queries'] as $k => $i) {
 		$out['devmode'] .= "<tr><td>#" . $i[0] . " &nbsp;</td>";
-		$out['devmode'] .= "<td style=\"text-align:right;\">" . sprintf("%.3f", round($i[1] * 1000, 3)) . " ms</td>";
-		$out['devmode'] .= "<td style=\"text-align:right;\">" . sprintf("%.3f", round($sys['devmode']['timeline'][$k] * 1000, 3)) . " ms</td>";
+		$out['devmode'] .= "<td style=\"text-align:left;\">" . sprintf("%.3f", round($i[1] * 1000, 3)) . " ms</td>";
+		$out['devmode'] .= "<td style=\"text-align:left;\">" . sprintf("%.3f", round($sys['devmode']['timeline'][$k] * 1000, 3)) . " ms</td>";
 		$out['devmode'] .= "<td style=\"text-align:left;\">" . sed_cc($i[2]) . "</td></tr>";
 	}
 	$out['devmode'] .= "<tr><td>END</td><td><strong>Tot.: " . sprintf("%.3f", round($sys['tcount'] * 1000, 3)) . "ms</strong></td>";

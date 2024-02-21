@@ -96,6 +96,8 @@ $morejavascript = '';
 $moremetas = '';
 $sys['abs_url'] = '';
 $sys['sublocation'] = '';
+$sys['qcount'] = 0;
+$sys['tcount'] = 0;
 $error_string = '';
 $shield_hammer = 0;
 
