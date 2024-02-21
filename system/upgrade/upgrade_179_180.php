@@ -5,7 +5,7 @@ Seditio - Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
-File=upgrade_178_179.php
+File=upgrade_179_180.php
 Version=180
 Updated=2023-dec-27
 Type=Core.upgrade
@@ -71,11 +71,11 @@ $sqlqr = "INSERT INTO " . $cfg['sqldbprefix'] . "auth (auth_groupid, auth_code, 
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$adminmain .= "Adding auth right for manage<br />";
 $sqlqr = "INSERT INTO " . $cfg['sqldbprefix'] . "auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (1, 'manage', 'a', 0, 255, 1)";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$adminmain .= "Adding auth right for manage<br />";
 $sqlqr = "INSERT INTO " . $cfg['sqldbprefix'] . "auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (2, 'manage', 'a', 0, 255, 1)";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
