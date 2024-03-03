@@ -21,6 +21,12 @@ require(SED_ROOT . '/system/config.urlrewrite.php');
 
 $request_uri = $_SERVER['REQUEST_URI'];
 
+if (preg_match('/\/{2,}$/', $request_uri)) {
+  $new_uri = preg_replace('/\/{2,}$/', '/', $request_uri);
+  header('Location: ' . $new_uri, true, 301);
+  exit;
+}
+
 $subdir_uri = (mb_strlen(dirname($_SERVER['PHP_SELF'])) > 1) ? dirname($_SERVER['PHP_SELF']) : "";
 $request_uri = str_replace($subdir_uri, "", $request_uri);
 

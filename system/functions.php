@@ -4734,7 +4734,8 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 
 	$url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&amp;', $url);
 	$path = ($header || (isset($cfg['absurls']) && $cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';
-	return ($path . $url . $anchor);
+	$result_url = preg_replace('~(^|[^:])//+~', '\\1/', $path . $url . $anchor);
+	return ($result_url);
 }
 
 /** 
