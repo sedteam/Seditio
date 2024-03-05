@@ -2816,13 +2816,11 @@ function sed_infoget($file, $limiter = 'SED', $maxsize = 32768)
 		if ($end > $begin && $begin > 0) {
 			$lines = mb_substr($data, $begin + 8 + mb_strlen($limiter), $end - $begin - mb_strlen($limiter) - 8);
 			$lines = explode("\n", $lines);
-
-			foreach ($lines as $k => $line) {
-				$linex = explode("=", $line);
-				$ii = 1;
-				while (!empty($linex[$ii])) {
-					@$result[$linex[0]] .= trim($linex[$ii]);
-					$ii++;
+			foreach ($lines as $line) {
+				$line = ltrim($line, " */");
+				$linex = preg_split('/\s*\=\s*/', trim($line), 2);
+				if ($linex[0]) {
+					@$result[$linex[0]] = $linex[1];
 				}
 			}
 		} elseif (mb_substr(mb_strtolower($file), mb_strlen($file) - 12) == ".install.php") {
