@@ -33,6 +33,7 @@ $cfg_maxitems = 50;
 $sq = sed_import('sq', 'P', 'TXT');
 $a = sed_import('a', 'G', 'TXT');
 $checked_catarr = array();
+$checked_frmarr = array();
 
 $error_string = '';
 $total_items = 0;
@@ -64,6 +65,7 @@ if ($a == 'search') {
 				$sqlsections = '';
 			} else {
 				$sub = array();
+
 				foreach ($pag_sub as $i => $k) {
 					$k = sed_import($k, 'D', 'TXT');
 					$checked_catarr[] = $k;
@@ -111,6 +113,8 @@ if ($a == 'search') {
 				$sqlsections = '';
 			} else {
 				foreach ($frm_sub as $i => $k) {
+					$k = sed_import($k, 'D', 'TXT');
+					$checked_frmarr[] = $k;
 					$sections1[] = "s.fs_id='" . sed_sql_prep($k) . "'";
 				}
 				$sqlsections = "AND (" . implode(' OR ', $sections1) . ")";
@@ -147,17 +151,22 @@ if ($a == 'search') {
 }
 
 if (!$cfg['disable_page']) {
-	$page_cats = "<select multiple name=\"pag_sub[]\" size=\"5\">";
-	$page_cats .= "<option value=\"all\" selected=\"selected\">" . $L['plu_allcategories'] . "</option>";
 
+	$selectboxCatValues = array('all' => $L['plu_allcategories']);
 	foreach ($sed_cat as $i => $x) {
 		if ($i != 'all' && $i != 'system' && sed_auth('page', $i, 'R')) {
-			$selected = (count($checked_catarr) > 0 && in_array($i, $checked_catarr)) ? "selected=\"selected\"" : '';
-			$page_cats .= "<option value=\"" . $i . "\" $selected> " . $x['tpath'] . "</option>";
+			$selectboxCatValues[$i] = $x['tpath'];
 		}
 	}
 
-	$page_cats .= "</select>";
+	$checked_catarr = (empty($checked_catarr)) ? array('all') : $checked_catarr;
+
+	$additionalAttributes = array(
+		"multiple" => true,
+		"size" => 5
+	);
+
+	$page_cats = sed_selectbox($checked_catarr, "pag_sub[]", $selectboxCatValues, FALSE, TRUE, TRUE, $additionalAttributes, TRUE);
 
 	$t->assign("PLUGIN_SEARCH_FORM_PAGES", $page_cats);
 	$t->parse("MAIN.PLUGIN_SEARCH_FORM.PLUGIN_SEARCH_FORM_PAGES");
@@ -168,16 +177,23 @@ if (!$cfg['disable_forums']) {
 			LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
 			ORDER by fn_path ASC, fs_order ASC");
 
-	$forums_sections = "<select multiple name=\"frm_sub[]\" size=\"5\">";
-	$forums_sections .= "<option value=\"9999\" selected=\"selected\">" . $L['plu_allsections'] . "</option>";
+	$selectboxForumsValues = array('9999' => $L['plu_allsections']);
 
 	while ($row1 = sed_sql_fetchassoc($sql1)) {
 		if (sed_auth('forums', $row1['fs_id'], 'R')) {
-			$forums_sections .= "<option value=\"" . $row1['fs_id'] . "\">" . sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE) . "</option>";
+			$selectboxForumsValues[$row1['fs_id']] = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE);
 		}
 	}
 
-	$forums_sections .= "</select>";
+	$checked_frmarr = (empty($checked_frmarr)) ? array('9999') : $checked_frmarr;
+
+	$additionalAttributes = array(
+		"multiple" => true,
+		"size" => 5
+	);
+
+	$forums_sections = sed_selectbox($checked_frmarr, "frm_sub[]", $selectboxForumsValues, FALSE, TRUE, TRUE, $additionalAttributes, TRUE);
+
 	$t->assign("PLUGIN_SEARCH_FORM_FORUMS", $forums_sections);
 	$t->parse("MAIN.PLUGIN_SEARCH_FORM.PLUGIN_SEARCH_FORM_FORUMS");
 }
