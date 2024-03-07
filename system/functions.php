@@ -2918,68 +2918,95 @@ function sed_translit_seourl($value)
 }
 
 /** 
- * Creating input field text
+ * Renders a text input box 
  * 
- * @param string $name Name input tag 
- * @param string $value Value textarea tag
- * @param int $size Input size
- * @param int $maxlength Input max size
- * @param string $class Css class
- * @param bool $disabled Disabled flag 
- * @param string $type Input type  
- * @return string 
+ * @param string $name Input name attribute 
+ * @param string $value Initial input value 
+ * @param int $size Size of the input box 
+ * @param int $maxlength Maximum length of the input 
+ * @param string $class CSS class for styling 
+ * @param bool $disabled Disable the input (true or false) 
+ * @param string $type Input type (e.g., text, password) 
+ * @return string HTML representation of the text input 
  */
 
-function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text", $disabled = false, $type = "text")
+function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text", $disabled = false, $type = "text", $additionalAttributes = array())
 {
 	$add_disabled = ($disabled) ? " disabled=\"disabled\"" : "";
-	$res = "<input type=\"" . $type . "\" class=\"" . $class . "\" name=\"" . $name . "\" value=\"" . sed_cc($value) . "\" size=\"" . $size . "\" maxlength=\"" . $maxlength . "\"" . $add_disabled . " />";
+
+	$htmlAttributes = "";
+	foreach ($additionalAttributes as $attribute => $attrValue) {
+		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	}
+
+	$res = "<input type=\"" . $type . "\" class=\"" . $class . "\" name=\"" . $name . "\" value=\"" . sed_cc($value) . "\" size=\"" . $size . "\" maxlength=\"" . $maxlength . "\"" . $add_disabled . $htmlAttributes . " />";
+
 	return ($res);
 }
+
 
 function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255, $class = "text", $disabled = false)
 {
 	return sed_textbox($name, $value, $size, $maxlength, $class, $disabled, 'hidden');
 }
 
-/** 
- * Creating field textarea
- * 
- * @param string $name Name input tag 
- * @param string $value Value textarea tag
- * @param int $rows Count of rows
- * @param int $cols Count of cols
- * @param string $editor Toolbar for wysiwyg editor
- * @param bool $disabled Disabled flag  
- * @return string 
+/**
+ * Renders a textarea input element.
+ *
+ * @param string $name Name attribute for the textarea
+ * @param string $value Initial value for the textarea
+ * @param int $rows Number of rows for the textarea
+ * @param int $cols Number of columns for the textarea
+ * @param string $editor Editor type (e.g., "noeditor", "html", etc.)
+ * @param array $additionalAttributes Additional HTML attributes for the textarea
+ * @param bool $disabled Set to true to disable the textarea
+ * @return string HTML representation of the textarea
  */
-function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor")
+function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabled = FALSE, $additionalAttributes = array())
 {
 	global $cfg;
+
 	$rows = (empty($rows)) ? $cfg['textarea_default_height'] : $rows;
 	$cols = (empty($cols)) ? $cfg['textarea_default_width'] : $cols;
 
-	$res = "<textarea name=\"" . $name . "\" rows=\"" . $rows . "\" cols=\"" . $cols . "\" data-editor=\"" . $editor . "\">" . sed_cc(sed_checkmore($value, false), ENT_QUOTES) . "</textarea>";
-	return ($res);
+	$escapedValue = sed_cc(sed_checkmore($value, false), ENT_QUOTES);
+
+	$htmlAttributes = "";
+	foreach ($additionalAttributes as $attribute => $attrValue) {
+		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	}
+
+	$disabledAttr = ($disabled) ? ' disabled="disabled"' : '';
+
+	$res = "<textarea name=\"" . $name . "\" rows=\"" . $rows . "\" cols=\"" . $cols . "\" data-editor=\"" . $editor . "\"" . $htmlAttributes . $disabledAttr . ">" . $escapedValue . "</textarea>";
+
+	return $res;
 }
 
 /** 
- * Creating input field checkbox
+ * Renders a checkbox or a group of checkboxes 
  * 
- * @param string $name Name input tag 
- * @param string|array $data Value(s) checkbox input tag
- * @param string|array $check_data Checked value(s) checkbox input tag
- * @param bool $disabled Disabled flag  
- * @return string 
+ * @param string $name Checkbox name attribute 
+ * @param mixed $data Checkbox value or array of values (for multiple checkboxes) 
+ * @param mixed $check_data Checked value(s) 
+ * @param bool $disabled Disable the checkbox (true or false) 
+ * @return string HTML representation of the checkbox(es) 
  */
-function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE)
+
+function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE, $additionalAttributes = array())
 {
 	if (empty($data) || !is_array($data)) {
 		$val = (empty($data)) ? "1" : $data;
 
 		$checked = ($check_data) ? " checked" : "";
-		$disabled = ($disabled) ? " disabled" : "";
-		$result = "<span class=\"checkbox-item\"><input type=\"checkbox\" class=\"checkbox\" id=\"" . $name . "\" name=\"" . $name . "\"" . $checked . $disabled . " value=\"" . $val . "\" /><label for=\"" . $name . "\">&nbsp;</label></span>";
+		$disabledAttr = ($disabled) ? " disabled" : "";
+
+		$htmlAttributes = "";
+		foreach ($additionalAttributes as $attribute => $attrValue) {
+			$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+		}
+
+		$result = "<span class=\"checkbox-item\"><input type=\"checkbox\" class=\"checkbox\" id=\"" . $name . "\" name=\"" . $name . "\"" . $checked . $disabledAttr . " value=\"" . $val . "\"" . $htmlAttributes . " /><label for=\"" . $name . "\">&nbsp;</label></span>";
 	} else {
 		if (!is_array($data)) $data = explode(',', $data);
 		if (!is_array($check_data)) $check_data = explode(',', $check_data);
@@ -2987,11 +3014,14 @@ function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE)
 		$result = '';
 		foreach ($data as $key => $v) {
 			$jj++;
-			if (is_array($check_data) && in_array($key, $check_data)) {
-				$result .= '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="' . $name . "_" . $jj . '" name="' . $name . '[]' . '" value="' . $key . '" checked /><label for="' . $name . "_" . $jj . '">' . $v . '</label></span>';
-			} else {
-				$result .= '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="' . $name . "_" . $jj . '" name="' . $name . '[]' . '" value="' . $key . '"  /><label for="' . $name . "_" . $jj . '">' . $v . '</label></span>';
+			$isChecked = (is_array($check_data) && in_array($key, $check_data)) ? " checked" : "";
+
+			$htmlAttributes = "";
+			foreach ($additionalAttributes as $attribute => $attrValue) {
+				$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
 			}
+
+			$result .= '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="' . $name . "_" . $jj . '" name="' . $name . '[]' . '" value="' . $key . '"' . $isChecked . $htmlAttributes . ' /><label for="' . $name . "_" . $jj . '">' . $v . '</label></span>';
 		}
 	}
 	return ($result);
@@ -3691,41 +3721,50 @@ function sed_redirect($url, $base64 = false)
 }
 
 /** 
- * Renders a dropdown 
+ * Renders a dropdown/select box 
  * 
- * @param string $check Selected value 
- * @param string $name Dropdown name 
- * @param array $values Options available
- * @param bool $empty_option Insert first empty element ---  
- * @param bool $key_isvalue Use value & key from array $values, or only value (if false)  
- * @return string 
+ * @param string|array $check Selected value(s) or array of selected values for multiple select 
+ * @param string $name Select box name attribute 
+ * @param mixed $values Options available for the select box 
+ * @param bool $empty_option Insert first empty option (true or false) 
+ * @param bool $key_isvalue Use value & key from array $values, or only value (if false) 
+ * @param bool $isMultiple Allow multiple selection in the dropdown (true or false) 
+ * @param array $additionalAttributes Additional HTML attributes for the select box 
+ * @return string HTML representation of the select box 
  */
-function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalue = TRUE)
-{
-	$check = trim($check);
 
-	$isarray = FALSE;
-	if (is_array($values)) {
-		$isarray = TRUE;
-	} else {
+function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalue = TRUE, $isMultiple = FALSE, $additionalAttributes = array(), $disableSedCc = FALSE)
+{
+	$check = is_array($check) ? array_map('trim', $check) : trim($check);
+
+	$isArray = is_array($values);
+	if (!$isArray) {
 		$values = explode(',', $values);
 	}
 
-	$selected = (empty($check) || $check == "00") ? "selected=\"selected\"" : '';
-	if ($empty_option) {
-		$first_option = "<option value=\"\" $selected>---</option>";
-	} else {
-		$first_option = '';
+	$selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
+	$first_option = ($empty_option) ? "<option value=\"\" $selected>---</option>" : '';
+
+	$htmlAttributes = "";
+	foreach ($additionalAttributes as $attribute => $attrValue) {
+		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
 	}
-	$result =  "<select name=\"$name\" size=\"1\">" . $first_option;
+
+	$multipleAttr = ($isMultiple) ? ' multiple' : '';
+
+	$result = "<select name=\"$name\"" . $multipleAttr . $htmlAttributes . ">";
+	$result .= $first_option;
+
 	foreach ($values as $k => $x) {
 		$x = trim($x);
-		$v = ($isarray && $key_isvalue) ? $k : $x;
-		$selected = ($v == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$v\" $selected>" . sed_cc($x) . "</option>";
+		$v = ($isArray && $key_isvalue) ? $k : $x;
+		$selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
+		$optionValue = ($disableSedCc) ? $x : sed_cc($x);
+		$result .= "<option value=\"$v\" $selected>" . $optionValue . "</option>";
 	}
+
 	$result .= "</select>";
-	return ($result);
+	return $result;
 }
 
 /** 
