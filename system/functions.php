@@ -260,12 +260,26 @@ function sed_autogen_avatar($uid)
 }
 
 /**
- * Returns specific access permissions
+ * Checks user authorization for specific actions or options within a designated area.
  *
- * @param string $area Seditio area
- * @param string $option Option to access
- * @param string $mask Access mask
- * @return mixed
+ * This function is used to verify if the user has the required permissions
+ * for a specific action or option within a designated area of the system.
+ * The area can represent different sections, such as pages, user settings,
+ * or admin functionalities. The option parameter is flexible and can represent
+ * various specific actions, categories, identifiers, or the special keyword 'any'
+ * to check for any permission within the specified area.
+ *
+ * @param string $area   The area for which permissions are being checked (e.g., 'page', 'user', 'admin').
+ * @param string $option The specific action, category, identifier, or option for which permissions are being checked.
+ *                       Alternatively, use 'any' to check for any permission within the specified area.
+ * @param string $mask   The permission mask indicating the allowed actions ('R' - read, 'W' - write, 'A' - admin, custom options).
+ *
+ * @global array $sys   Global system settings array.
+ * @global array $usr   Global user information array.
+ *
+ * @return bool|array Returns a boolean value or an array of boolean values indicating whether the user has the required permissions:
+ *                   - If checking a single permission, returns a boolean value (TRUE if authorized, FALSE otherwise).
+ *                   - If checking multiple permissions or 'any', returns an array of boolean values for each permission.
  */
 function sed_auth($area, $option, $mask = 'RWA')
 {
@@ -2837,50 +2851,58 @@ function sed_infoget($file, $limiter = 'SED', $maxsize = 32768)
 	return ($result);
 }
 
-/** 
- * Creating input field radio item
- * 
- * @param string $name Name input tag 
- * @param string $value Value input tag
- * @param string $title Title for radio item 
- * @param string $id Title for radio item 
- * @param bool $checked Checked flag 
- * @return string 
+/**
+ * Creating a radio input item.
+ *
+ * @param string $name Name attribute for the radio input.
+ * @param string $value Value attribute for the radio input.
+ * @param string $label Label for the radio item.
+ * @param string $id ID attribute for the radio input.
+ * @param bool $checked Checked flag.
+ * @param string $onclick JavaScript code for the onclick event.
+ * @param array $additionalAttributes Additional HTML attributes for the input.
+ * @return string HTML representation of the radio input item.
  */
-function sed_radio_item($name, $value, $title = '', $id = '', $checked = false, $onclick = "")
+function sed_radio_item($name, $value, $label = '', $id = '', $checked = false, $onclick = '', $additionalAttributes = array())
 {
 	$id = (empty($id)) ? $name : $name . "_" . $id;
-	$checked = ($checked) ? " checked" : "";
+	$checked = ($checked === true) ? " checked" : "";
 	$onclick = ($onclick) ? " onclick=\"" . $onclick . "\"" : "";
-	$result = "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"" . $id . "\" name=\"" . $name . "\" value=\"" . $value . "\"" . $checked . $onclick . " /><label for=\"" . $id . "\">" . $title . "</label></span>";
-	return ($result);
+
+	$htmlAttributes = "";
+	foreach ($additionalAttributes as $attribute => $attrValue) {
+		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	}
+
+	$result = "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"" . $id . "\" name=\"" . $name . "\" value=\"" . $value . "\"" . $checked . $onclick . $htmlAttributes . " /><label for=\"" . $id . "\">" . $label . "</label></span>";
+
+	return $result;
 }
 
-/** 
- * Creating input field radio
- * 
- * @param string $name Name input tag 
- * @param string|array $data Value input tag
- * @param bool $check Checked flag  
- * @return string 
+/**
+ * Creating a radio input field.
+ *
+ * @param string $name Name attribute for the radio input.
+ * @param array|string $options Array of options or a comma-separated string.
+ * @param string $checked_val Checked radio value.
+ * @param array $additionalAttributes Additional HTML attributes for the input.
+ * @return string HTML representation of the radio input.
  */
-function sed_radiobox($name, $data, $check_data = '')
+function sed_radiobox($name, $options, $checked_val = '', $additionalAttributes = array())
 {
-	if (is_array($data)) {
-		$isarray = true;
-	} else {
-		$data = explode(',', $data);
+	if (!is_array($options)) {
+		$options = explode(',', $options);
 	}
 
 	$jj = 0;
 	$result = '';
-
-	foreach ($data as $key => $v) {
+	foreach ($options as $key => $value) {
 		$jj++;
-		$result .= ($key == $check_data) ? sed_radio_item($name, $key, $v, $jj, true) : sed_radio_item($name, $key, $v, $jj, false);
+		$checked_state = ($checked_val === (string)$key) ? true : false;
+		$result .= sed_radio_item($name, $key, $value, $jj, $checked_state, '', $additionalAttributes);
 	}
 
-	return ($result);
+	return $result;
 }
 
 /** 
@@ -2957,7 +2979,7 @@ function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255, $class 
  * @param string $value Initial value for the textarea
  * @param int $rows Number of rows for the textarea
  * @param int $cols Number of columns for the textarea
- * @param string $editor Editor type (e.g., "noeditor", "html", etc.)
+ * @param string $editor Editor type (e.g., "noeditor", "Micro", "Basic", "Extended", "Full" etc.)
  * @param array $additionalAttributes Additional HTML attributes for the textarea
  * @param bool $disabled Set to true to disable the textarea
  * @return string HTML representation of the textarea
