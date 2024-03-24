@@ -1,84 +1,76 @@
-(function ($) {
-	tooltip = $("<div class='adm-tooltip'></div>").appendTo($('body'));    
-	$(document).on('mouseleave', '.adm-tooltip', function(){tooltipcanclose=true;setTimeout("close_tooltip();", 300);});
-	$(document).on('mouseover', '.adm-tooltip', function(){tooltipcanclose=false;});
-	$('[data-page], [data-category], [data-config]').on('mouseover', show_tooltip);	
-})(jQuery);
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltip = document.createElement('div');
+    tooltip.className = 'adm-tooltip';
+    document.body.appendChild(tooltip);
 
-function show_tooltip()
-{
-    tooltipcanclose=false;
-    tooltip.show();
-    $(this).on('mouseleave', function(){tooltipcanclose=true;setTimeout("close_tooltip();", 500);});
+    var tooltipTimeout;
 
-    flip = !($(this).offset().left+tooltip.width()+25 < $('body').width());
+    document.addEventListener('mouseover', function(event) {
+        var from = event.relatedTarget || event.fromElement;
+        if (!tooltip.contains(from)) {
+            clearTimeout(tooltipTimeout);
+        }
+    });
 
-    tooltip.css('top',  $(this).outerHeight()/2 + 5 + $(this).offset().top + 'px');
-    tooltip.css('left', ($(this).offset().left + $(this).outerWidth()*0.5 - (flip ? tooltip.width()-40 : 0)  + 0) + 'px');
+    document.addEventListener('mouseout', function(event) {
+        var to = event.relatedTarget || event.toElement;
+        if (!tooltip.contains(to)) {
+            tooltipTimeout = setTimeout(closeTooltip, 300);
+        }
+    });
 
-    from = encodeURIComponent(window.location);
-    tooltipcontent = '';
+    var tooltipLinks = {
+        'data-page': function (id) {
+            return "<a href='page/edit?id=" + id + "' class=\"admin_tooltip_edit\">" + L.pageedit + "</a>" +
+                "<a href='page/add' class=\"admin_tooltip_add\">" + L.pageadd + "</a>";
+        },
+        'data-category': function (id) {
+            return "<a href='admin/page?mn=structure&n=options&id=" + id + "&return=" + encodeURIComponent(window.location) + "' class=\"admin_tooltip_edit\">" + L.pageeditcategory + "</a>";
+        },
+        'data-config': function (id) {
+            return "<a href='admin/config?n=edit&o=core&p=" + id + "&return=" + encodeURIComponent(window.location) + "' class=\"admin_tooltip_edit\">" + L.pageeditoption + "</a>";
+        }
+    };
 
-    if(id = $(this).attr('data-page'))
-    {
-        tooltipcontent = "<a href='page/edit?id="+id+"&r="+$(this).attr('data-cat')+"' class=admin_tooltip_edit>"+L.pageedit+"</a>";
-        tooltipcontent += "<a href='page/add?c="+$(this).attr('data-cat')+"' class=admin_tooltip_add>"+L.pageadd+"</a>";
-    }
+    var elements = document.querySelectorAll('[data-page], [data-category], [data-config]');
+    elements.forEach(function(element) {
+        element.addEventListener('mouseover', function(event) {
+            var id = element.getAttribute('data-page');
+            var category = element.getAttribute('data-category');
+            var config = element.getAttribute('data-config');
+            if (id) {
+                showTooltip(tooltipLinks['data-page'], id, element, tooltip);
+            } else if (category) {
+                showTooltip(tooltipLinks['data-category'], category, element, tooltip);
+            } else if (config) {
+                showTooltip(tooltipLinks['data-config'], config, element, tooltip);
+            }
+        });
+    });
+});
 
-    if(id = $(this).attr('data-category'))
-    {
-      tooltipcontent = "<a href='admin/page?mn=structure&n=options&id="+id+"&return="+from+"' class=admin_tooltip_edit>"+L.pageeditcategory+"</a>";
-    }
-
-    if(id = $(this).attr('data-config'))
-    {
-        tooltipcontent = "<a href='admin/config?n=edit&o=core&p="+id+"&return="+from+"' class=admin_tooltip_edit>"+L.pageeditoption+"</a>";
-    }
-
-    $('.adm-tooltip').html(tooltipcontent);
+function closeTooltip() {
+    var tooltip = document.querySelector('.adm-tooltip');
+    tooltip.style.display = 'none';
 }
 
-function close_tooltip()
-{
-    if(tooltipcanclose)
-    {
-        tooltipcanclose=false;
-        tooltip.hide();
+function showTooltip(tooltipLink, id, element, tooltip) {
+    var tooltipcontent = tooltipLink(id);
+
+    if (tooltipcontent !== '') {
+        tooltip.innerHTML = tooltipcontent;
+
+        var flip = !(element.getBoundingClientRect().left + tooltip.offsetWidth + 25 < document.body.offsetWidth);
+        var scrollY = window.scrollY || window.pageYOffset;
+        var scrollX = window.scrollX || window.pageXOffset;
+        var top = element.getBoundingClientRect().top + scrollY;
+        var left = element.getBoundingClientRect().left + scrollX;
+        
+        tooltip.style.top = top + element.offsetHeight / 2 + 5 + 'px';
+        tooltip.style.left = left + element.offsetWidth * 0.5 - (flip ? tooltip.offsetWidth - 40 : 0) + 'px';
+
+        tooltip.style.display = 'block';
+    } else {
+        tooltip.style.display = 'none';
     }
-}
-
-function ShowTooltip(i, content) {
-
-    tooltip = document.getElementById('adm-tooltip');
-
-    document.getElementById('adm-tooltip').innerHTML = content;
-    tooltip.style.display = 'block';
-
-    var xleft=0;
-    var xtop=0;
-    o = i;
-
-    do {
-        xleft += o.offsetLeft;
-        xtop  += o.offsetTop;
-
-    } while (o=o.offsetParent);
-
-    xwidth  = i.offsetWidth  ? i.offsetWidth  : i.style.pixelWidth;
-    xheight = i.offsetHeight ? i.offsetHeight : i.style.pixelHeight;
-
-    bwidth =  tooltip.offsetWidth  ? tooltip.offsetWidth  : tooltip.style.pixelWidth;
-
-    w = window;
-
-    xbody  = document.compatMode=='CSS1Compat' ? w.document.documentElement : w.document.body;
-    dwidth = xbody.clientWidth  ? xbody.clientWidth   : w.innerWidth;
-    bwidth = tooltip.offsetWidth ? tooltip.offsetWidth  : tooltip.style.pixelWidth;
-
-    flip = !( 25 + xleft + bwidth < dwidth);
-
-    tooltip.style.top  = xheight - 3 + xtop + 'px';
-    tooltip.style.left = (xleft - (flip ? bwidth : 0)  + 25) + 'px';
-
-    return false;
 }

@@ -145,6 +145,7 @@ if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($cfg['plugin']['news']['cat
 			"PAGE_ROW_CATPATH" => $catpath,
 			"PAGE_ROW_CATURL" => sed_url("list", "c=" . $pag['page_cat']),
 			"PAGE_ROW_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
+			"PAGE_ROW_CATID" => $sed_cat[$pag['page_cat']]['id'],
 			"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 			"PAGE_ROW_KEY" => sed_cc($pag['page_key']),
 			"PAGE_ROW_DESC" => sed_cc($pag['page_desc']),

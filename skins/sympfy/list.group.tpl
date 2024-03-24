@@ -8,7 +8,7 @@
 
 			{BREADCRUMBS}
 
-			<h1>{LIST_SHORTTITLE}</h1>
+			<h1 data-category="{LIST_ID}">{LIST_SHORTTITLE}</h1>
 
 		</div>
 
@@ -32,7 +32,7 @@
 					<div class="category-menu">
 						<ul>
 							<!-- BEGIN: LIST_ROWCAT -->
-							<li><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>
+							<li><a href="{LIST_ROWCAT_URL}" data-category="{LIST_ROWCAT_ID}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>
 							<!-- END: LIST_ROWCAT -->
 						</ul>
 					</div>
@@ -58,7 +58,7 @@
 							<figure class="post-container">
 
 								<!-- BEGIN: LIST_ROW_THUMB -->
-								<a class="post-img-link" href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">
+								<a class="post-img-link" href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}">
 									<picture>
 										<source type="image/webp" srcset="{LIST_ROW_THUMB|crop_image(%s, 600, 500, 0, 1)}">
 										<img class="post-img" src="{LIST_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{LIST_ROW_TITLE}" />
@@ -68,11 +68,11 @@
 
 								<figcaption class="post-content">
 									<div class="post-info">
-										<div class="post-category"><a href="{LIST_ROW_CATURL}">{LIST_ROW_CATTITLE}</a></div>
+										<div class="post-category"><a href="{LIST_ROW_CATURL}" data-category="{LIST_ROW_ID}">{LIST_ROW_CATTITLE}</a></div>
 										<div class="post-date">{LIST_ROW_DATE}</div>
 									</div>
 									<div class="post-title">
-										<h3><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">{LIST_ROW_TITLE}</a></h3>
+										<h3><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}">{LIST_ROW_TITLE}</a></h3>
 									</div>
 									<div class="post-desc">
 										<p>{LIST_ROW_DESC}</p>

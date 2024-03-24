@@ -8,7 +8,7 @@
 
 			{BREADCRUMBS}
 
-			<h1>{PAGE_SHORTTITLE}</h1>
+			<h1 data-page="{PAGE_ID}">{PAGE_SHORTTITLE}</h1>
 
 			<div class="page-info">
 				<div class="page-date"><i class="ic-clock"></i> {PAGE_DATE}</div>
