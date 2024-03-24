@@ -356,7 +356,7 @@ switch ($a) {
 					}
 
 					if (isset($plg_tools[$info['Code']]) && $plg_tools[$info['Code']]) {
-						$pl_url = sed_url("admin", "m=tools&p=" . $info['Code']);
+						$pl_url = sed_url("admin", "m=manage&p=" . $info['Code']);
 					} else {
 						$pl_url = (isset($plg_standalone[$info['Code']]) && $plg_standalone[$info['Code']]) ? sed_url("plug", "e=" . $info['Code']) : '';
 					}

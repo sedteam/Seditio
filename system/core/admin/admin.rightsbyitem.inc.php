@@ -96,7 +96,7 @@ switch ($ic) {
 
 	default:
 		$title = ($io == 'a') ? '' : $io;
-		$rurl = sed_url('admin', 'm=tools');
+		$rurl = sed_url('admin', 'm=manage');
 		break;
 }
 

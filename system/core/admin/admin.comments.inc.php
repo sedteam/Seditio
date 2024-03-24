@@ -21,12 +21,9 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('comments', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array(sed_url("admin", "m=tools"), $L['adm_manage']);
-$adminpath[] = array(sed_url("admin", "m=comments"), $L['Comments']);
-
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=tools")] = $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=manage")] = $L['adm_manage'];
 $urlpaths[sed_url("admin", "m=comments")] = $L['Comments'];
 
 $admintitle = $L['Comments'];

@@ -32,7 +32,7 @@ if (is_array($extp)) {
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
 $urlpaths[sed_url("admin", "m=smilies")] =  $L['Smilies'];
 
 $admintitle = $L['Smilies'];

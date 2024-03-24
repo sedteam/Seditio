@@ -28,7 +28,7 @@ $po = sed_import('po', 'G', 'TXT');
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
 $urlpaths[sed_url("admin", "m=polls")] =  $L['Polls'];
 
 $admintitle = $L['Polls'];

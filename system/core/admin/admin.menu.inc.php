@@ -26,7 +26,7 @@ $mid = sed_import('mid', 'G', 'INT');
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
 $urlpaths[sed_url("admin", "m=menu")] =  $L['core_menu'];
 
 $admintitle = $L['core_menu'];

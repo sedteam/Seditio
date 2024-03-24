@@ -23,7 +23,7 @@ sed_block($usr['isadmin']);
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=tools")] =  $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
 $urlpaths[sed_url("admin", "m=ratings")] =  $L['Ratings'];
 
 $admintitle = $L['Ratings'];
