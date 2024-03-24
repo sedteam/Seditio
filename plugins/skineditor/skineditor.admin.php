@@ -57,7 +57,7 @@ switch ($n) {
 		}
 
 		$info = sed_infoget($skininfo);
-		$adminpath[] = array(sed_url("admin", "m=tools&p=skineditor&sk=" . $sk), $info['Name']);
+		$adminpath[] = array(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk), $info['Name']);
 
 		if ($a == 'makbak') {
 			sed_check_xg();
@@ -107,8 +107,8 @@ switch ($n) {
 			$file_size = @filesize($skindir . $x);
 
 			$sx->assign(array(
-				"TPL_SKIN_LIST_ROW_EDIT" => "<a href=\"" . sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&f=" . $x) . "\">" . $out['ic_edit'] . "</a>",
-				"TPL_SKIN_LIST_ROW_EDITURL" => sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&f=" . $x),
+				"TPL_SKIN_LIST_ROW_EDIT" => "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $x) . "\">" . $out['ic_edit'] . "</a>",
+				"TPL_SKIN_LIST_ROW_EDITURL" => sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $x),
 				"TPL_SKIN_LIST_ROW_TPLFILE" => $x,
 				"TPL_SKIN_LIST_ROW_TPLSIZE" => $file_size
 			));
@@ -118,12 +118,12 @@ switch ($n) {
 			$bcf = (isset($backupfile[$xbak]) && $backupfile[$xbak]) ? TRUE : FALSE;
 
 			$sx->assign(array(
-				"TPL_SKIN_LIST_ROW_BACKUP" => ($bcf) ? "" : "<a href=\"" . sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=makbak&" . sed_xg()) . "\">" . $out['ic_checked'] . "</a>",
-				"TPL_SKIN_LIST_ROW_BACKUPURL" => ($bcf) ? "" : sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=makbak&" . sed_xg()),
-				"TPL_SKIN_LIST_ROW_DELETE_BACKUP" => ($bcf) ? "<a href=\"" . sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=delbak&" . sed_xg()) . "\">" . $out['ic_unchecked'] . "</a>" : "",
-				"TPL_SKIN_LIST_ROW_DELETE_BACKUPURL" => ($bcf) ? sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=delbak&" . sed_xg()) : "",
-				"TPL_SKIN_LIST_ROW_RESTORE_BACKUP" => ($bcf) ? "<a href=\"" . sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=resbak&" . sed_xg()) . "\">" . $out['ic_reset'] . "</a>" : "",
-				"TPL_SKIN_LIST_ROW_RESTORE_BACKUPURL" => ($bcf) ? sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=resbak&" . sed_xg()) : "",
+				"TPL_SKIN_LIST_ROW_BACKUP" => ($bcf) ? "" : "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=makbak&" . sed_xg()) . "\">" . $out['ic_checked'] . "</a>",
+				"TPL_SKIN_LIST_ROW_BACKUPURL" => ($bcf) ? "" : sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=makbak&" . sed_xg()),
+				"TPL_SKIN_LIST_ROW_DELETE_BACKUP" => ($bcf) ? "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=delbak&" . sed_xg()) . "\">" . $out['ic_unchecked'] . "</a>" : "",
+				"TPL_SKIN_LIST_ROW_DELETE_BACKUPURL" => ($bcf) ? sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=delbak&" . sed_xg()) : "",
+				"TPL_SKIN_LIST_ROW_RESTORE_BACKUP" => ($bcf) ? "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=resbak&" . sed_xg()) . "\">" . $out['ic_reset'] . "</a>" : "",
+				"TPL_SKIN_LIST_ROW_RESTORE_BACKUPURL" => ($bcf) ? sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=resbak&" . sed_xg()) : "",
 				"TPL_SKIN_LIST_ROW_XBACKUP" => ($bcf) ? $xbak : ""
 			));
 
@@ -154,7 +154,7 @@ switch ($n) {
 		}
 
 		$info = sed_infoget($skininfo);
-		$adminpath[] = array(sed_url("admin", "m=tools&p=skineditor&sk=" . $sk), $info['Name']);
+		$adminpath[] = array(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk), $info['Name']);
 
 		$editfile = SED_ROOT . "/skins/" . $sk . "/" . $f;
 
@@ -177,10 +177,10 @@ switch ($n) {
 
 				if ($file_isup) {
 					if ($b1) {
-						sed_redirect(sed_url("admin", "m=tools&p=skineditor&sk=" . $sk, "", true));
+						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true));
 						exit;
 					} else {
-						sed_redirect(sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&f=" . $f, "", true));
+						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f, "", true));
 						exit;
 					}
 				} else {
@@ -210,9 +210,9 @@ switch ($n) {
 			}
 
 			$sx->assign(array(
-				"TPL_SKIN_EDIT_SEND" => sed_url("admin", "m=tools&p=skineditor&sk=" . $sk . "&f=" . $f . "&a=update&" . sed_xg()),
+				"TPL_SKIN_EDIT_SEND" => sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f . "&a=update&" . sed_xg()),
 				"TPL_SKIN_EDIT_FILE" => $editfile,
-				"TPL_SKIN_EDIT_CHANCEL_URL" => sed_url("admin", "m=tools&p=skineditor&sk=" . $sk),
+				"TPL_SKIN_EDIT_CHANCEL_URL" => sed_url("admin", "m=manage&p=skineditor&sk=" . $sk),
 				"TPL_SKIN_EDIT_TEXTAREA" => "<textarea cols=\"96\" rows=\"16\" name=\"content\" id=\"content\" class=\"noeditor\">" . sed_cc($filecont, ENT_QUOTES) . "</textarea>",
 				"TPL_SKIN_EDIT_HMODE" => $hmode
 			));
@@ -242,8 +242,8 @@ switch ($n) {
 			$info = sed_infoget($skininfo);
 
 			$sx->assign(array(
-				"SKIN_LIST_ROW_EDIT" => "<a href=\"" . sed_url("admin", "m=tools&p=skineditor&sk=" . $x) . "\">" . $out['ic_edit'] . "</a>",
-				"SKIN_LIST_ROW_EDITURL" => sed_url("admin", "m=tools&p=skineditor&sk=" . $x),
+				"SKIN_LIST_ROW_EDIT" => "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $x) . "\">" . $out['ic_edit'] . "</a>",
+				"SKIN_LIST_ROW_EDITURL" => sed_url("admin", "m=manage&p=skineditor&sk=" . $x),
 				"SKIN_LIST_ROW_NAME" => $info['Name'],
 				"SKIN_LIST_ROW_CODE" => $x,
 				"SKIN_LIST_ROW_VERSION" => $info['Version'],
