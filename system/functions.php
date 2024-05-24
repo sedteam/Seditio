@@ -2898,7 +2898,7 @@ function sed_radiobox($name, $options, $checked_val = '', $additionalAttributes 
 	$result = '';
 	foreach ($options as $key => $value) {
 		$jj++;
-		$checked_state = ($checked_val === (string)$key) ? true : false;
+		$checked_state = ((string)$checked_val === (string)$key) ? true : false;
 		$result .= sed_radio_item($name, $key, $value, $jj, $checked_state, '', $additionalAttributes);
 	}
 

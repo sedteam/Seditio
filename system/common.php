@@ -629,7 +629,7 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
 		$sql2 = sed_sql_query("SELECT * FROM $db_dic_items");
 		if (sed_sql_numrows($sql2) > 0) {
 			while ($row2 = sed_sql_fetchassoc($sql2)) {
-				$term_code = (!empty($row2['ditem_code'])) ? $row2['ditem_code'] : $row2['ditem_id'];
+				$term_code = ($row2['ditem_code'] != "") ? $row2['ditem_code'] : $row2['ditem_id'];
 				$sed_dic[$sed_dicid_arr[$row2['ditem_dicid']]]['terms'][$term_code] = $row2['ditem_title'];
 				if (!empty($row2['ditem_defval'])) $sed_dic[$sed_dicid_arr[$row2['ditem_dicid']]]['term_default'] = $term_code;
 			}
