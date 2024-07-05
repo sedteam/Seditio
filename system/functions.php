@@ -5194,7 +5194,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 		$t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
 
 		$data[$rowname . '_' . $row['code']] = isset($data[$rowname . '_' . $row['code']]) ? $data[$rowname . '_' . $row['code']] : '';
-		$data[$rowname . '_' . $row['code']] = (empty($data[$rowname . '_' . $row['code']]) && !empty($row['term_default'])) ? $row['term_default'] : $data[$rowname . '_' . $row['code']];
+		$data[$rowname . '_' . $row['code']] = ($data[$rowname . '_' . $row['code']] == '' && !empty($row['term_default'])) ? $row['term_default'] : $data[$rowname . '_' . $row['code']];
 
 		switch ($row['type']) {
 			case 'textinput':
