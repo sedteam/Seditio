@@ -27,7 +27,7 @@ if (is_array($extp)) {
 }
 /* ===== */
 
-$out['bottomline'] = ($cfg['keepcrbottom']) ? $out['copyright'] : '';
+$out['bottomline'] = ($cfg['keepcrbottom']) ? $cfg['bottomline'] . " " . $out['copyright'] : $cfg['bottomline'];
 
 /* ======== Who's online (part 2) ======== */
 
