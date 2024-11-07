@@ -148,7 +148,7 @@ if ($a == 'upload') {
 		if (!empty($u_name)) {
 			$upl_stats = $u_name . " : ";
 
-			$u_title = sed_import($ntitle[$ii], 'D', 'TXT');   // New in Sed 170
+			$u_title = isset($ntitle[$ii]) ? sed_import($ntitle[$ii], 'D', 'TXT') : "";   // New in Sed 170
 			$desc = '';
 
 			$u_name = mb_strtolower($u_name);
