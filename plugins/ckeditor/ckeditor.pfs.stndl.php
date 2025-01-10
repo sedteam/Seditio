@@ -56,7 +56,11 @@ function addfile_pageurl(gfile)
 	{ 
 	" . $openerparent . ".document." . $c1 . "." . $c2 . ".value += gfile; " . $auto_popup_close . " 
 	}
-
+function addvideo(gfile)
+	{
+	var html = '<video controls=\"controls\"><source src=\"'+gfile+'\" type=\"video/mp4\"></video>';
+	window." . $openerparent . ".CKEDITOR.instances['" . $c2 . "'].insertHtml(html); " . $auto_popup_close . "
+	}
 //-->
 </script>
 ";

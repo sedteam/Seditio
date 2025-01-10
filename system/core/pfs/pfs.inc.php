@@ -508,6 +508,11 @@ while ($row = sed_sql_fetchassoc($sql)) {
 			$add_thumbnail .= "<a href=\"javascript:addthumb('" . $cfg['th_dir'] . $pfs_file . "', '" . $pfs_file . "')\" title=\"" . $L['pfs_insertasthumbnail'] . "\" class=\"btn-icon\">" . $out['ic_pastethumb'] . "</a>";
 			$add_image = "<a href=\"javascript:addpix('" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertasimage'] . "\" class=\"btn-icon\">" . $out['ic_pasteimage'] . "</a>";
 		}
+	} 
+	elseif (in_array($pfs_extension, $cfg['video_supported'])) {
+		if ($standalone) {
+			$add_video = "<a href=\"javascript:addvideo('" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertasvideo'] . "\" class=\"btn-icon\">" . $out['ic_pastevideo'] . "</a>";
+		}		
 	}
 
 	$add_file = ($standalone) ? "<a href=\"javascript:addfile('" . $pfs_file . "','" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertaslink'] . "\" class=\"btn-icon\">" . $out['ic_pastefile'] . "</a>" : '';
@@ -535,10 +540,10 @@ while ($row = sed_sql_fetchassoc($sql)) {
 		$t->parse("MAIN.PFS_FILES.PFS_LIST_FILES.PFS_LIST_FILES_ICON");
 	}
 
-	if (!empty($add_thumbnail) || !empty($add_image) || !empty($add_file) || !empty($stndl_icons_list)) {
+	if (!empty($add_thumbnail) || !empty($add_image) || !empty($add_file) || !empty($add_video) || !empty($stndl_icons_list)) {
 		$stndl_flag = true;
 		$t->assign(array(
-			"PFS_LIST_FILES_STNDL"  => (empty($stndl_icons_list)) ? $add_thumbnail . " " . $add_image . " " . $add_file : $stndl_icons_list
+			"PFS_LIST_FILES_STNDL"  => (empty($stndl_icons_list)) ? $add_thumbnail . " " . $add_image . " " . $add_video . " " .  $add_file : $stndl_icons_list
 		));
 		$t->parse("MAIN.PFS_FILES.PFS_LIST_FILES.PFS_LIST_FILES_STNDL");
 	}

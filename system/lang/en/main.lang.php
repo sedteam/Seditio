@@ -477,6 +477,8 @@ $L['pfs_insertasimage'] = "Insert as full size image"; // New in v175
 $L['pfs_insertaslink'] = "Insert as a link to the file"; // New in v175
 $L['pfs_multiuploading'] = "Multiple File Upload"; // New in v175
 
+$L['pfs_insertasvideo'] = "Insert as video"; // New in v180
+
 $L['pfs_setassample'] = "Set as sample";  // New in v150
 $L['pfs_addlogo'] = "Add the logo";  // New in v150
 $L['pfs_resize'] = "Resize if larger than %1\$s pixels";  // New in v150

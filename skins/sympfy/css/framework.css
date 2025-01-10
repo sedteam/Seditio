@@ -39,6 +39,9 @@ video {
   display: inline-block;
   vertical-align: baseline;
 }
+video {
+	max-width: 100%;
+}
 audio:not([controls]) {
   display: none;
   height: 0;
