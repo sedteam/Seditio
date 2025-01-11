@@ -330,7 +330,7 @@ switch ($mn) {
 			}
 		}
 
-
+		$termcount = array();
 		$sql = sed_sql_query("SELECT DISTINCT(ditem_dicid), COUNT(*) FROM $db_dic_items WHERE 1 GROUP BY ditem_dicid");
 
 		while ($row = sed_sql_fetchassoc($sql)) {
@@ -341,7 +341,7 @@ switch ($mn) {
 
 		while ($row = sed_sql_fetchassoc($sql)) {
 
-			if (isset($termcount[$row['dic_id']]) && $termcount[$row['dic_id']] < 1) {
+			if (!isset($termcount[$row['dic_id']])) {
 				$t->assign(array(
 					"DIC_LIST_DELETE_URL" => sed_url("admin", "m=dic&a=delete&did=" . $row['dic_id'])
 				));
@@ -371,7 +371,6 @@ switch ($mn) {
 					$i++;
 				}
 			}
-
 
 			$t->assign(array(
 				"DIC_LIST_ID" => $row['dic_id'],
