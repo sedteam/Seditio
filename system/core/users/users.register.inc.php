@@ -32,7 +32,7 @@ if ($cfg['disablereg']) {
 	exit;
 }
 
-if ($usr['id'] > 0) {
+if ($usr['id'] > 0 && !$usr['isadmin']) {
 	sed_redirect(sed_url("index"));
 	exit;
 }
