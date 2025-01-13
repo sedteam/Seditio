@@ -20,6 +20,8 @@ if (!defined('SED_CODE')) {
 
 $v = sed_import('v', 'G', 'ALP');
 
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
+
 if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel']) {
 	sed_diemaintenance();
 	exit;
@@ -27,6 +29,11 @@ if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel']) {
 
 if ($cfg['disablereg']) {
 	sed_redirect(sed_url("message", "msg=117", "", true));
+	exit;
+}
+
+if ($usr['id'] > 0) {
+	sed_redirect(sed_url("index"));
 	exit;
 }
 
