@@ -743,40 +743,39 @@ var sedjs = {
         }
     },
 
-    setActiveStyleSheet: function(title) {      
-        var i, a, main;      
+    setActiveStyleSheet: function(title) {
+        var i, a, main;
         for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) {         if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title"))         {                   a.disabled = true;                   if (a.getAttribute("title") == title) a.disabled = false;           }       }
+            (a = document.getElementsByTagName("link")[i]); i++) { if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) { a.disabled = true; if (a.getAttribute("title") == title) a.disabled = false; } }
     },
 
-    getActiveStyleSheet: function() {    
-        var i, a;      
+    getActiveStyleSheet: function() {
+        var i, a;
         for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++)     {             if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && !a.disabled)         return a.getAttribute("title");       }    
+            (a = document.getElementsByTagName("link")[i]); i++) { if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && !a.disabled) return a.getAttribute("title"); }
         return null;
     },
 
-    getPreferredStyleSheet: function() {      
-        var i, a;      
+    getPreferredStyleSheet: function() {
+        var i, a;
         for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++)     {             if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title"))         return a.getAttribute("title");       }      
+            (a = document.getElementsByTagName("link")[i]); i++) { if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title")) return a.getAttribute("title"); }
         return null;
     },
 
-    createCookie: function(name, value, days) {      
-        if (days)     {        
-            var date = new Date();        
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));        
-            var expires = "; expires=" + date.toGMTString();      
-        }      
-        else expires = "";      
+    createCookie: function(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
+        } else expires = "";
         document.cookie = name + "=" + value + expires + "; path=/";
     },
 
-    readCookie: function(name) {      
-        var nameEQ = name + "=";      
-        var ca = document.cookie.split(';');      
-        for (var i = 0; i < ca.length; i++)     {             var c = ca[i];             while (c.charAt(0) == ' ') c = c.substring(1, c.length);             if (c.indexOf(nameEQ) == 0)         return c.substring(nameEQ.length, c.length);       }      
+    readCookie: function(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) { var c = ca[i]; while (c.charAt(0) == ' ') c = c.substring(1, c.length); if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length); }
         return null;
     },
 
@@ -909,15 +908,15 @@ onloadfunct = function() {
     sedjs.autofiletitle();
     //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
     sedjs.getrel("sedthumb");
-    var cookie = sedjs.readCookie("style");  
-    var title = cookie ? cookie : sedjs.getPreferredStyleSheet();  
+    var cookie = sedjs.readCookie("style");
+    var title = cookie ? cookie : sedjs.getPreferredStyleSheet();
     sedjs.setActiveStyleSheet(title);
 };
 
 addLoadEvent(onloadfunct);
 
-window.onunload = function() {  
-    var title = sedjs.getActiveStyleSheet();  
+window.addEventListener('beforeunload', function(event) {
+    var title = sedjs.getActiveStyleSheet();
     sedjs.createCookie("style", title, 365);
-    //sedjs.modal.cleanup();
-};
+    // sedjs.modal.cleanup();
+});
