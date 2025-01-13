@@ -486,6 +486,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 	$add_thumbnail = '';
 	$add_image = '';
 	$add_file = '';
+	$add_video = '';
 
 	if ($pfs_extension != $pfs_realext); {
 		$sql1 = sed_sql_query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' ");
