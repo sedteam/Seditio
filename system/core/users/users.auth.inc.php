@@ -20,6 +20,11 @@ if (!defined('SED_CODE')) {
 
 $v = sed_import('v', 'G', 'H32');
 
+if ($usr['id'] > 0) {
+	sed_redirect(sed_url("index"));
+	exit;
+}
+
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.first');
 if (is_array($extp)) {

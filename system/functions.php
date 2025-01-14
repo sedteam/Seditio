@@ -1038,6 +1038,8 @@ function sed_build_email($email, $hide = false)
 	} elseif (!empty($email) && mb_strpos($email, '@') !== FALSE) {
 		$email = sed_cc($email);
 		$result = "<a href=\"mailto:" . $email . "\">" . $email . "</a>";
+	} else {
+		$result = $email;
 	}
 
 	return ($result);
