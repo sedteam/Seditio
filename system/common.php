@@ -314,7 +314,7 @@ if (defined('SED_PLUG') && !empty($_GET['e'])) {
 
 /* ======== Hooks for plugins (admin tools) ======== */
 
-if (defined('SED_ADMIN') && $m == 'tools' && !empty($_GET['p'])) {
+if (defined('SED_ADMIN') && $m == 'manage' && !empty($_GET['p'])) {
 	$extp = sed_getextplugins('common.tool.' . $_GET['p']);
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {

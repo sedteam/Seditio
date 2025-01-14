@@ -117,7 +117,7 @@ switch ($mn) {
 			"TERM_ADD_TITLE" => sed_textbox('ditemtitle', isset($ditemtitle) ? $ditemtitle : ''),
 			"TERM_ADD_CODE" => sed_textbox('ditemcode', isset($ditemcode) ? $ditemcode : ''),
 			"TERM_ADD_CHILDRENDIC" => sed_selectbox('', 'ditemchildren', $dic_list),
-			"TERM_ADD_DEFVAL" => sed_radiobox("ditemdefval", $sed_yesno, isset($ditemdefval) ? $ditemdefval : '')
+			"TERM_ADD_DEFVAL" => sed_radiobox("ditemdefval", $sed_yesno, isset($ditemdefval) ? $ditemdefval : 0)
 		));
 
 		$t->parse("ADMIN_DIC.DIC_TERMS");
