@@ -75,13 +75,13 @@ if (!empty($p)) {
 		require($path_lang_def);
 	}
 
-	if (file_exists($path_skin_alt)) {
+	if (!empty($path_skin_alt) && file_exists($path_skin_alt)) {
 		$path_skin = $path_skin_alt;
 		$autoassigntags = FALSE;
-	} elseif (file_exists($path_skin_def)) {
+	} elseif (!empty($path_skin_def) && file_exists($path_skin_def)) {
 		$path_skin = $path_skin_def;
 		$autoassigntags = FALSE;
-	} elseif (file_exists($path_skin_ntg)) {
+	} elseif (!empty($path_skin_ntg) && file_exists($path_skin_ntg)) {
 		$path_skin = $path_skin_ntg;
 		$autoassigntags = TRUE;
 	} else {
