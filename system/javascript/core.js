@@ -880,11 +880,9 @@ var sedjs = {
                 var filename = this.value;
                 var inputFileTitleName = this.name.replace('userfile', 'ntitle');
                 var k = filename.split('\\').pop().split('/').pop();
-                var a = k.split(".");
-                if (a.length === 1 || (a[0] === "" && a.length === 2)) {
-                    return "";
-                }
-                document.getElementsByName(inputFileTitleName)[0].value = a[0];
+                var lastDotIndex = k.lastIndexOf('.');
+                var title = (lastDotIndex === -1) ? k : k.substring(0, lastDotIndex);
+                document.getElementsByName(inputFileTitleName)[0].value = title;
             }
         }
     }
