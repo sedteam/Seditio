@@ -75,7 +75,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgAllowTagParams('tr', array('height', 'class'));
 			$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
 			$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
-			$jevix->cfgAllowTagParams('video', array('controls', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'poster' => '#link', 'preload' => '#text'));
+			$jevix->cfgAllowTagParams('video', array('controls', 'style', 'class', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'poster' => '#link', 'preload' => '#text'));
 			$jevix->cfgAllowTagParams('source', array('src' => '#link', 'type' => '#text'));
 			// Establish the resolved parametres css styles for tags
 			$jevix->cfgSetTagStyleParams(
@@ -114,7 +114,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagChilds('object', 'embed', false, false);
 			$jevix->cfgSetTagChilds('video', 'source', false, true);
 			// Establish tags which can be empty
-			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'iframe', 'source'));
+			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'iframe', 'source', 'video'));
 			// Establish attributes tags which will be automatically added
 			$jevix->cfgSetTagParamDefault('embed', 'wmode',	'opaque',	true);
 			// Establish autoreplacement

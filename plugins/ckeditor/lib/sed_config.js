@@ -2,7 +2,7 @@ CKEDITOR.editorConfig = function( config )
 {
 	config.toolbar = 'Basic';
 
-	config.extraPlugins = 'more';
+	config.extraPlugins = 'more,html5video';
 	
 	config.uploadUrl = 'plug/?ajx=ckeditor';
 	config.filebrowserUploadUrl = 'plug/?ajx=ckeditor&fl=filebrowser';
@@ -44,7 +44,7 @@ CKEDITOR.editorConfig = function( config )
 	['Cut','Copy','Paste','PasteText','PasteFromWord','-','SpellChecker'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-	['Link','Unlink','Anchor'], ['Image','Youtube','MediaEmbed'],  
+	['Link','Unlink','Anchor'], ['Image','Youtube','MediaEmbed','Html5video'],  
 	['Syntaxhighlight','More','Maximize', 'ShowBlocks'],['Templates','AddLayout'],['Source'],
 	'/',
 	['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],

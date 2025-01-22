@@ -58,7 +58,7 @@ function addfile_pageurl(gfile)
 	}
 function addvideo(gfile)
 	{
-	var html = '<video controls=\"controls\"><source src=\"'+gfile+'\" type=\"video/mp4\"></video>';
+	var html = '<div class=\"ckeditor-html5-video\" style=\"text-align: center;\"><video controls=\"controls\" src=\"'+gfile+'\"></video></div>';
 	window." . $openerparent . ".CKEDITOR.instances['" . $c2 . "'].insertHtml(html); " . $auto_popup_close . "
 	}
 //-->
