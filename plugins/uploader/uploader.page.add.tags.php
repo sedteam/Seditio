@@ -44,7 +44,7 @@ $maximum_uploads = $cfg['plugin']['uploader']['maximum_uploads'];
 $uploader = new XTemplate('plugins/uploader/uploader.tpl');
 
 $page_thumbs_array = isset($$newpageextra) ? trim($$newpageextra) : '';
-$preload_images = '';
+$preload_images = '[]';
 
 if (!empty($page_thumbs_array)) {
 	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') {
@@ -56,24 +56,25 @@ if (!empty($page_thumbs_array)) {
 		if ($imgfile && ($imgfile != '')) $preload_images_arr[] =  "'" . $imgfile . "'";
 	}
 	$preload_images = implode(',', $preload_images_arr);
-	$preload_images = (count($preload_images_arr) > 0) ? "sed_uploader_attach_images: [" . $preload_images . "]," : "";
+	$preload_images = (count($preload_images_arr) > 0) ? "[" . $preload_images . "]" : "[]";
 }
 
 $uploader->assign(array(
-	"UPLOADER_PRELOAD_IMAGES" => $preload_images,
-	"UPLOADER_PRELOAD_USE_SORTABLE" => $use_sortable,
-	"UPLOADER_PRELOAD_USE_DRAGNDROP" => $use_dragndrop,
-	"UPLOADER_PRELOAD_USE_ROTATION" => $use_rotation,
-	"UPLOADER_PRELOAD_MAXIMUM_UPLOADS" => $maximum_uploads,
-	"UPLOADER_PRELOAD_USERID" => $usr['id'],
-	"UPLOADER_PRELOAD_ACTION" => 'newpage',
-	"UPLOADER_PRELOAD_EXTRA" => $newpageextra,
-	"UPLOADER_PRELOAD_ISMODAL" => ($cfg['enablemodal']) ? 1 : 0
+	"UPLOADER_ATTACH_IMAGES" => $preload_images,
+	"UPLOADER_USE_SORTABLE" => $use_sortable,
+	"UPLOADER_USE_DRAGNDROP" => $use_dragndrop,
+	"UPLOADER_USE_ROTATION" => $use_rotation,
+	"UPLOADER_MAXIMUM_UPLOADS" => $maximum_uploads,
+	"UPLOADER_USERID" => $usr['id'],
+	"UPLOADER_ACTION" => 'newpage',
+	"UPLOADER_EXTRA" => $newpageextra,
+	"UPLOADER_ID" => $extraslot."_imageuploader",
+	"UPLOADER_ISMODAL" => ($cfg['enablemodal']) ? 1 : 0
 ));
 
 $uploader->parse("UPLOADER");
 
-$t->assign("PAGEADD_FORM_" . mb_strtoupper($extraslot), "<div id=\"uploader\"><div id=\"imageuploader\" sed_uploader=\"on\"></div></div>");
+$t->assign("PAGEADD_FORM_" . mb_strtoupper($extraslot), "<div id=\"uploader\"><div id=\"".$extraslot."_imageuploader\" sed_uploader=\"on\"></div></div>");
 
 $out['uploader_footer'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
 $out['uploader_footer'] .= $uploader->text("UPLOADER"); //in footer

@@ -33,7 +33,7 @@ if (!defined('SED_CODE')) {
 $extraslot = $cfg['plugin']['uploader']['thumb_extra'];
 $newpageextra = 'newpage' . $extraslot;
 
-$imageuploader = sed_import('imageuploader', 'P', 'ARR');
+$imageuploader = sed_import($extraslot.'_imageuploader', 'P', 'ARR');
 if (is_array($imageuploader) && count($imageuploader) > 0) {
   foreach ($imageuploader as $imagename) {
     $newpageextra_arr[] = sed_import($imagename, 'D', 'TXT');

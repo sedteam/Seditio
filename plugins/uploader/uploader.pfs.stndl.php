@@ -37,9 +37,9 @@ $pfs_header1 .= "
 <script type=\"text/javascript\">
 <!--
 
-function upl_addimg(gfilepath, gid, gfile)
+function upl_addimg(gfilepath, gid, gfile, uploaderId)
 	{ 
-	window." . $openerparent . ".upl_insertimg(gfilepath, gfile);
+	window." . $openerparent . ".upl_insertimg(gfilepath, gfile, uploaderId);
 	" . $openerparent_close . "
 	}
 
