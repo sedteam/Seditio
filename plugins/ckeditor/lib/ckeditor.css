@@ -1297,3 +1297,8 @@ blockquote cite:before {
 	width: 100%;
 	height: 100%;
 }
+
+.cke_editable img {
+    max-width: 100%;
+    height: auto;
+}

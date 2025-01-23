@@ -1,4 +1,5 @@
 <?PHP
+
 /* ====================
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
@@ -6,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.php
-Version=179
-Updated=2022-jul-18
+Version=180
+Updated=2025-jan-23
 Type=Plugin
 Author=Amro
 Description=

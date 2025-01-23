@@ -2,7 +2,7 @@ CKEDITOR.editorConfig = function( config )
 {
 	config.toolbar = 'Basic';
 
-	config.extraPlugins = 'more,html5video';
+	config.extraPlugins = 'more,html5video,imagepaste';
 	
 	config.uploadUrl = 'plug/?ajx=ckeditor';
 	config.filebrowserUploadUrl = 'plug/?ajx=ckeditor&fl=filebrowser';
