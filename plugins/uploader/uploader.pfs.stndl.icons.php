@@ -32,12 +32,13 @@ if (!defined('SED_CODE')) {
 
 $extraslot = $cfg['plugin']['uploader']['thumb_extra'];
 
-if (($c2 == "newpage" . $extraslot) || ($c2 == "rpage" . $extraslot) || ($c2 == "rthumb")) {
-
-	$uploaderId = ($c2 == "rthumb") ? "rthumb_imageuploader" : $extraslot . "_imageuploader";
-
-	$add_file = "<a href=\"javascript:upl_addimg('" . $cfg['th_dir'] . $pfs_file . "','" . $pfs_id . "','" . $pfs_file . "','" . $uploaderId . "');\" class=\"btn-icon\">" . $out['ic_pastefile'] . "</a>";
-	$add_thumbnail = "";
-	$add_image = "";
-	$pfs_icon = "<a href=\"javascript:upl_addimg('" . $cfg['th_dir'] . $pfs_file . "','" . $pfs_id . "','" . $pfs_file . "','" . $uploaderId . "');\"><img src=\"" . $cfg['th_dir'] . $pfs_file . "\" alt=\"" . $pfs_file . "\"></a>";
+if (in_array($pfs_extension, $cfg['gd_supported'])) {
+	if (($c2 == "newpage" . $extraslot) || ($c2 == "rpage" . $extraslot) || ($c2 == "rthumb")) {
+		$uploaderId = ($c2 == "rthumb") ? "rthumb_imageuploader" : $extraslot . "_imageuploader";
+		$add_file = "<a href=\"javascript:upl_addimg('" . $cfg['th_dir'] . $pfs_file . "','" . $pfs_id . "','" . $pfs_file . "','" . $uploaderId . "');\" class=\"btn-icon\">" . $out['ic_pastefile'] . "</a>";
+		$add_thumbnail = '';
+		$add_image = '';
+		$add_video = '';
+		$pfs_icon = "<a href=\"javascript:upl_addimg('" . $cfg['th_dir'] . $pfs_file . "','" . $pfs_id . "','" . $pfs_file . "','" . $uploaderId . "');\"><img src=\"" . $cfg['th_dir'] . $pfs_file . "\" alt=\"" . $pfs_file . "\"></a>";
+	}
 }
