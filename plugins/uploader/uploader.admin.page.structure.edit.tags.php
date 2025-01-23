@@ -6,8 +6,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.admin.page.structure.edit.tags.php
-Version=179
-Updated=2021-jun-19
+Version=180
+Updated=2025-jan-23
 Type=Plugin
 Author=Amro
 Description=
@@ -65,13 +65,13 @@ $uploader->assign(array(
 	"UPLOADER_USERID" => $usr['id'],
 	"UPLOADER_ACTION" => 'savestructure',
 	"UPLOADER_EXTRA" => $extraslot,
-	"UPLOADER_ID" => $extraslot."_imageuploader",
+	"UPLOADER_ID" => $extraslot . "_imageuploader",
 	"UPLOADER_ISMODAL" => ($cfg['enablemodal']) ? 1 : 0
 ));
 
 $uploader->parse("UPLOADER");
 
-$t->assign("STRUCTURE_UPDATE_THUMB", "<div id=\"uploader\"><div id=\"". $extraslot."_imageuploader\" sed_uploader=\"on\"></div></div>");
+$t->assign("STRUCTURE_UPDATE_THUMB", "<div id=\"uploader\"><div id=\"" . $extraslot . "_imageuploader\" sed_uploader=\"on\"></div></div>");
 
 $out['uploader_footer_admin'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
 $out['uploader_footer_admin'] .= $uploader->text("UPLOADER"); //в подвал

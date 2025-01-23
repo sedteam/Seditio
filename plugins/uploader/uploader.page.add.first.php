@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.page.add.first.php
-Version=179
-Updated=2021-jun-23
+Version=180
+Updated=2025-jan-23
 Type=Plugin
 Author=Amro
 Description=
@@ -33,7 +33,7 @@ if (!defined('SED_CODE')) {
 $extraslot = $cfg['plugin']['uploader']['thumb_extra'];
 $newpageextra = 'newpage' . $extraslot;
 
-$imageuploader = sed_import($extraslot.'_imageuploader', 'P', 'ARR');
+$imageuploader = sed_import($extraslot . '_imageuploader', 'P', 'ARR');
 if (is_array($imageuploader) && count($imageuploader) > 0) {
   foreach ($imageuploader as $imagename) {
     $newpageextra_arr[] = sed_import($imagename, 'D', 'TXT');

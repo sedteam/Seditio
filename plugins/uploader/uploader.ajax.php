@@ -6,8 +6,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.ajax.php
-Version=179
-Updated=2022-jun-29
+Version=180
+Updated=2025-jan-23
 Type=Plugin
 Author=Amro
 Description=

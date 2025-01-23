@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.page.edit.tags.php
-Version=179
-Updated=2021-jun-23
+Version=180
+Updated=2025-jan-23
 Type=Plugin
 Author=Amro
 Description=
@@ -70,13 +70,13 @@ $uploader->assign(array(
 	"UPLOADER_USERID" => $usr['id'],
 	"UPLOADER_ACTION" => 'updatepage',
 	"UPLOADER_EXTRA" => $rpageextra,
-	"UPLOADER_ID" => $extraslot."_imageuploader",
+	"UPLOADER_ID" => $extraslot . "_imageuploader",
 	"UPLOADER_ISMODAL" => ($cfg['enablemodal']) ? 1 : 0
 ));
 
 $uploader->parse("UPLOADER");
 
-$t->assign("PAGEEDIT_FORM_" . mb_strtoupper($extraslot), "<div id=\"uploader\"><div id=\"".$extraslot."_imageuploader\" sed_uploader=\"on\"></div></div>");
+$t->assign("PAGEEDIT_FORM_" . mb_strtoupper($extraslot), "<div id=\"uploader\"><div id=\"" . $extraslot . "_imageuploader\" sed_uploader=\"on\"></div></div>");
 
 $out['uploader_footer'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
 $out['uploader_footer'] .= $uploader->text("UPLOADER"); //in footer

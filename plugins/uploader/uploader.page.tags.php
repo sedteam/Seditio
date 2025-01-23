@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.page.tags.php
-Version=179
-Updated=2021-jun-23
+Version=180
+Updated=2025-jan-23
 Type=Plugin
 Author=Amro
 Description=
