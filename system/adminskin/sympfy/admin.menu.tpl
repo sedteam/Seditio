@@ -141,7 +141,7 @@
 
 	<div class="content-box-content content-table">
 
-		<form id="addmenus" action="{MENU_UPDATE_SEND}" method="post">
+		<form id="updatemenus" action="{MENU_UPDATE_SEND}" method="post">
 
 			<div class="table cells striped resp-table">
 

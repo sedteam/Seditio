@@ -21,6 +21,12 @@ $sed_urlrewrite = array(
           'cond' => '#^/go/#',
           'rule' => 'system/core/go/go.php'
      ),
+	 
+	 /*  Ajax rewriting */
+	 array(
+          'cond' => '#^/ajax(/?)$#',
+          'rule' => 'system/core/ajax/ajax.php'
+     ),
 
      /*  Resizer rewriting */
      array(
