@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=polls.php
 Version=180
-Updated=2022-jul-14
+Updated=2025-jan-25
 Type=Core
 Author=Seditio Team
 Description=Polls functions

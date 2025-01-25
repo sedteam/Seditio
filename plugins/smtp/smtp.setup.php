@@ -8,7 +8,7 @@ http://www.seditio.org
 [BEGIN_SED]
 File=plugins/smtp/smtp.setup.php
 Version=180
-Updated=2021-dec-06
+Updated=2025-jan-25
 Type=Plugin
 Author=Amro
 Description=

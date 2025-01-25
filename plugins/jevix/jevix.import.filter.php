@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/jevix/jevix.import.filter.php
 Version=180
-Updated=2012-may-22
+Updated=2025-jan-25
 Type=Plugin
 Author=Amro
 Description=

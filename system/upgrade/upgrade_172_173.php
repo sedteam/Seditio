@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=upgrade_172_173.php
 Version=180
-Updated=2012-oct-23
+Updated=2025-jan-25
 Type=Core.upgrade
 Author=Seditio Team
 Description=Database upgrade

@@ -8,7 +8,7 @@ https://www.seditio.org
 [BEGIN_SED]
 File=plugins/slider/slider.install.php
 Version=180
-Updated=2020-feb-26
+Updated=2025-jan-25
 Type=Plugin
 Author=Amro
 Description=

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/slider/slider.php
 Version=180
-Updated=2022-sep-20
+Updated=2025-jan-25
 Type=Plugin
 Author=Seditio Team
 Description=

@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=go/go.php
 Version=180
-Updated=2022-sep-27
+Updated=2025-jan-25
 Type=Core
 Author=Amro
 Description=External url redirect & check referer

@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.page.manager.php
 Version=180
-Updated=2015-may-24
+Updated=2025-jan-25
 Type=Core.admin
 Author=Seditio Team
 Description=Pages

@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=index.php
 Version=180
-Updated=2023-dec-14
+Updated=2025-jan-25
 Type=Core
 Author=Seditio Team
 Description=Home page loader

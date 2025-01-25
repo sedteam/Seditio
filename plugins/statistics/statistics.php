@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/statistics.php
 Version=180
-Updated=2022-aug-03
+Updated=2025-jan-25
 Type=Plugin
 Author=Seditio Team
 Description=

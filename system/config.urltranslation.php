@@ -7,7 +7,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/config.urlrewrite.php
 Version=180
-Updated=2013-sep-26
+Updated=2025-jan-25
 Type=Core
 Author=Seditio Team
 Description=Url translation config
