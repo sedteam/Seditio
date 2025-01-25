@@ -2509,21 +2509,23 @@ function sed_getcurrenturl()
 	return ($url);
 }
 
-/** 
- * Hashes a value with given salt. 
- * 
+/**
+ * Hashes a value with given salt using the specified algorithm.
+ *
  * @param  string $data Data to be hash-protected
- * @param  int $type Type algoritm hashing (1 - double md5 with salt, 2 - double md5 with salt & site secret, 3 - only md5)
- * @param  string $salt Hashing salt, usually a random value 
- * @return string $res Hashed value 
+ * @param  int $type Type of hashing algorithm (1 - double hash with salt, 2 - double hash with salt & site secret)
+ * @param  string $salt Hashing salt, usually a random value
+ * @param  string $algorithm The hashing algorithm to use (e.g., 'md5', 'sha256', 'sha512'). Default is 'md5'.
+ * @return string $res Hashed value
  */
-function sed_hash($data, $type = 1, $salt = '')
+function sed_hash($data, $type = 1, $salt = '', $algorithm = 'md5')
 {
 	global $cfg;
+
 	if (isset($cfg['site_secret']) && !empty($cfg['site_secret']) && ($type == 2)) {
-		$res = md5(md5($data) . $cfg['site_secret'] . $salt);
+		$res = hash($algorithm, hash($algorithm, $data) . $cfg['site_secret'] . $salt);
 	} else {
-		$res = ($type == 1) ?  md5(md5($data) . $salt) : md5($data);
+		$res = ($type == 1) ? hash($algorithm, hash($algorithm, $data) . $salt) : hash($algorithm, $data);
 	}
 
 	return $res;
