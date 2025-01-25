@@ -16,7 +16,6 @@ Description=Ajax Interface
 
 if (!defined('SED_CODE')) exit();
 
-define('SED_RESIZER', TRUE);
 $location = 'Ajax';
 $z = 'ajax';
 

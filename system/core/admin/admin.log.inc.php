@@ -63,8 +63,8 @@ foreach ($log_groups as $grp_code => $grp_name) {
 $group_select .= "</select>";
 
 $totallines = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-$pagination = sed_pagination(sed_url("admin", "m=log&n=" . $n), $d, $totallines, 10);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=log&n=" . $n), $d, $totallines, 10, TRUE);
+$pagination = sed_pagination(sed_url("admin", "m=log&n=" . $n), $d, $totallines, 100);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=log&n=" . $n), $d, $totallines, 100, TRUE);
 
 if ($n == 'all')
 	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, 100");
