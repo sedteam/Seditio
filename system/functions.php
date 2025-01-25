@@ -4166,22 +4166,26 @@ function sed_selectbox_users($to)
 	return ($result);
 }
 
-/** 
- * Sends standard HTTP headers and disables browser cache 
- * 
- * @return bool 
+/**
+ * Sends standard HTTP headers and disables browser cache
+ *
+ * @param string $content_type The content type of the response (default is 'text/html')
+ * @param string $response_code The HTTP response code (default is '200 OK')
+ * @return bool Always returns TRUE
  */
 function sed_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 {
+	// Determine the protocol (HTTP/1.1 or HTTP/2)
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	// Send the HTTP response code
 	header($protocol . ' ' . $response_code);
-	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
+	// Send headers to disable browser caching
+	header('Expires: Mon, 01 Apr 1974 00:00:00 GMT');
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-	header('Cache-Control: post-check=0,pre-check=0', FALSE);
-	header('Content-Type: ' . $content_type . '; charset=UTF-8');
-	header('Cache-Control: no-store,no-cache,must-revalidate');
-	header('Cache-Control: post-check=0,pre-check=0', FALSE);
+	header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: no-cache');
+	// Send the content type header
+	header('Content-Type: ' . $content_type . '; charset=UTF-8');
 	return TRUE;
 }
 
