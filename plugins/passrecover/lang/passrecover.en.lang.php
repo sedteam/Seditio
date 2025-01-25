@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.en.lang.php
-Version=179
+Version=180
 Updated=2006-jun-05
 Type=Plugin.standalone
 Author=Seditio Team

@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/adminqv/adminqv.setup.php
-Version=179
-Updated=2022-jul-15
+Version=180
+Updated=2025-jan-25
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=adminqv
 Name=Admin QuickView
 Description=Various statistics and informations for the home page of the administration panel
-Version=179
+Version=180
 Date=2010-feb-05
 Author=Seditio Team
 Copyright=

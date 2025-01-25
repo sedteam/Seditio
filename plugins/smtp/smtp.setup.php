@@ -7,7 +7,7 @@ http://www.neocrome.net
 http://www.seditio.org
 [BEGIN_SED]
 File=plugins/smtp/smtp.setup.php
-Version=179
+Version=180
 Updated=2021-dec-06
 Type=Plugin
 Author=Amro
@@ -18,7 +18,7 @@ Description=
 Code=smtp
 Name=SMTP Sender 2.0
 Description=SMTP mail sender for Seditio 17x
-Version=179
+Version=180
 Date=2021-dec-06
 Author=Amro
 Copyright=Amro

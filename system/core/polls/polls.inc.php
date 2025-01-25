@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=polls.php
-Version=179
+Version=180
 Updated=2022-jul-14
 Type=Core
 Author=Seditio Team

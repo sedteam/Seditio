@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/syntaxhighlight/syntaxhighlight.php
-Version=179
+Version=180
 Updated=2012-feb-16
 Type=Plugin
 Author=Amro

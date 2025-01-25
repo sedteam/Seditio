@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/jevix/jevix.import.filter.php
-Version=179
+Version=180
 Updated=2012-may-22
 Type=Plugin
 Author=Amro

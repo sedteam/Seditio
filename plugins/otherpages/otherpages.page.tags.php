@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/otherpages/otherpages.page.tags.php
-Version=179
+Version=180
 Updated=2013-jul-08
 Type=Plugin
 Author=Seditio Team

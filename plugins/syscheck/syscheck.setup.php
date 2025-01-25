@@ -6,8 +6,8 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.setup.php
-Version=179
-Updated=2022-jul-15
+Version=180
+Updated=2025-jan-25
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -17,7 +17,7 @@ Description=
 Code=syscheck
 Name=System check
 Description=Will check the versions of the PHP system files and TPL skin files
-Version=179
+Version=180
 Date=2010-feb-05
 Author=Seditio Team
 Copyright=

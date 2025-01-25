@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/lang/uploader.en.lang.php
-Version=179
+Version=180
 Updated=2021-jun-23
 Type=Plugin
 Author=Seditio Team

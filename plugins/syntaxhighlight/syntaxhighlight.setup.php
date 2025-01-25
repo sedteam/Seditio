@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/syntaxhighlight/syntaxhighlight.setup.php
-Version=179
+Version=180
 Updated=2022-aug-31
 Type=Plugin
 Author=Amro

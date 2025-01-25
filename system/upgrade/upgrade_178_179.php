@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=upgrade_178_179.php
-Version=179
+Version=180
 Updated=2022-jul-13
 Type=Core.upgrade
 Author=Seditio Team

@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=go/go.php
-Version=179
+Version=180
 Updated=2022-sep-27
 Type=Core
 Author=Amro

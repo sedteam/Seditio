@@ -6,7 +6,7 @@ http://seditio.org
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/sedcaptcha.register.tags.php
-Version=179
+Version=180
 Updated=2022-jun-09
 Type=Plugin
 Author=Amro

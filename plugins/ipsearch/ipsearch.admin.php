@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ipsearch/ipsearch.php
-Version=179
+Version=180
 Updated=2022-aug-03
 Type=Plugin
 Author=Seditio Team

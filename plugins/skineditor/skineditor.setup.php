@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/skineditor/skineditor.setup.php
-Version=179
+Version=180
 Updated=2022-jul-26
 Type=Plugin
 Author=Seditio Team
@@ -18,7 +18,7 @@ Description=
 Code=skineditor
 Name=Skin editor
 Description=Manage your templates files online
-Version=179
+Version=180
 Date=2022-jul-26
 Author=Seditio Team
 Copyright=

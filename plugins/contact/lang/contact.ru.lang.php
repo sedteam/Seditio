@@ -6,8 +6,8 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/lang/contact.ru.lang.php
-Version=179
-Updated=2022-jul-03
+Version=180
+Updated=2025-jan-25
 Type=
 Author=Seditio Team
 Description=Языковой файл для плагина формы обратной связи

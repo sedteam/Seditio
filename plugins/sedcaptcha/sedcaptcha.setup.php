@@ -6,7 +6,7 @@ http://seditio.org
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/sedcaptcha.setup.php
-Version=179
+Version=180
 Updated=2022-jun-09
 Type=Plugin
 Author=Amro
@@ -17,7 +17,7 @@ Description=Plugin to protect the registration process with a Cool PHP Captcha.
 Code=sedcaptcha
 Name=Sedcaptcha
 Description=Plugin to protect the registration process with a Cool PHP Captcha.
-Version=179
+Version=180
 Date=2022-jun-09
 Author=Amro
 Copyright=This plugin can be used for free.<br />Cool PHP Captcha is licensed under the GPLv3.

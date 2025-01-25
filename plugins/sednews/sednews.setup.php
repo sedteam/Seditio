@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/sednews/sednews.setup.php
-Version=179
-Updated=2022-jul-15
+Version=180
+Updated=2025-jan-25
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=sednews
 Name=Seditio News
 Description=Broadcasting Seditio news on the main page of the administration panel
-Version=179
+Version=180
 Date=2022-jul-15
 Author=Seditio Team
 Copyright=
