@@ -4,7 +4,7 @@
 <head>
 	<title>{PAGE_SHORTTITLE} - {PHP.L.Printversion}</title>
 	<base href="{PHP.sys.abs_url}" />
-	<link href="skins/{PHP.skin}/{PHP.skin}.print.css" type="text/css" rel="stylesheet" />
+	<link href="skins/{PHP.skin}/css/{PHP.skin}.print.css" type="text/css" rel="stylesheet" />
 	<link rel="canonical" href="{PHP.out.canonical_url}" />
 </head>
 
@@ -17,7 +17,7 @@
 			<div class="leftcolumn">
 
 				<div id="logo">
-					<a href="/" class="logos"><img src="skins/{PHP.skin}/img/logo.png" /></a>
+					<a href="/" class="logos"><img src="skins/{PHP.skin}/img/seditio.svg" /></a>
 					<div id="slogan">It's time will come soon!</div>
 				</div>
 
