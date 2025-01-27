@@ -5063,11 +5063,10 @@ function sed_extrafield_add($sql_table, $name, $type, $size)
 	$i = 0;
 	while ($i < sed_sql_numfields($fieldsres)) {
 		$column = sed_sql_fetchfield($fieldsres, $i);
-
-		// get column prefix in this table 
+		// get column prefix in this table
 		$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
-		preg_match("#.*?_$name$#", $column->name, $match);
-		if (isset($match[1]) && $match[1] != "") return false; // No adding - fields already exist 
+		preg_match("#.*?_" . preg_quote($name) . "$#", $column->name, $match);
+		if (isset($match[0]) && $match[0] != "") return false; // No adding - fields already exist
 		$i++;
 	}
 
@@ -5085,7 +5084,7 @@ function sed_extrafield_add($sql_table, $name, $type, $size)
 			$sqltype = "TEXT";
 			break;
 		case "int":
-			$sqltype = "VARCHAR(" . $size . ")";
+			$sqltype = "INT(" . $size . ")";
 			break;
 		case "tinyint":
 			$sqltype = "TINYINT(" . $size . ")";

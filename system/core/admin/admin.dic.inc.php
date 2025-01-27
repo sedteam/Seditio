@@ -210,18 +210,19 @@ switch ($mn) {
 			for ($i = 1; $i <= 255; $i++) {
 				$maxsize_arr[$i] = $i;
 			}
-
+			
+			$isset_column = "";
 			if (!empty($row['dic_extra_location'])) {
-				$i = 1;
 				$colname = $row['dic_code'];
 				$fieldsres = sed_sql_query("SELECT * FROM " . $cfg['sqldbprefix'] . $row['dic_extra_location'] . " LIMIT 1");
-				$isset_column = "";
+				$i = 1;
 				while ($i <= sed_sql_numfields($fieldsres)) {
 					$column = sed_sql_fetchfield($fieldsres, $i);
-					if (preg_match("#.*?_$colname$#", $column->name, $match)) {
-						$isset_column = ($match[0] != "") ? $match[0] : "";
+					if (preg_match("#.*?_" . preg_quote($colname) . "$#", $column->name, $match)) {
+						$isset_column = !empty($match[0]) ? $match[0] : "";
 						break;
 					}
+					$i++;
 				}
 			}
 
@@ -355,17 +356,16 @@ switch ($mn) {
 			$t->parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST.ADMIN_ACTIONS");
 
 			$dic_code = "<a href=\"" . sed_url('admin', 'm=dic&mn=extra&did=' . $row['dic_id']) . "\">" . $row['dic_code'] . "</a>";
-
+			
 			if (!empty($row['dic_extra_location'])) {
 				$i = 1;
 				$colname = $row['dic_code'];
 				$fieldsres = sed_sql_query("SELECT * FROM " . $cfg['sqldbprefix'] . $row['dic_extra_location'] . " LIMIT 1");
-				$isset_column = "";
 
 				while ($i <= sed_sql_numfields($fieldsres)) {
 					$column = sed_sql_fetchfield($fieldsres, $i);
-					if (preg_match("#.*?_$colname$#", $column->name, $match)) {
-						$dic_code .= ($match[0] != "") ? " <strong>(" . $column->table . "#" . $match[0] . ")</strong>" : "";
+					if (preg_match("#.*?_" . preg_quote($colname) . "$#", $column->name, $match)) {
+						$dic_code .= !empty($match[0]) ? " <strong>(" . $column->table . "#" . $match[0] . ")</strong>" : "";
 						break;
 					}
 					$i++;
