@@ -590,7 +590,7 @@ if (!isset($sed_forums_str) && !$cfg['disable_forums']) {
 
 /* ======== Directories ======== */
 
-$dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea');
+$dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput', 5 => 'textarea', 6 => 'multipleselect');
 $dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT', 'boolean' => 'BOL');
 
 if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
@@ -598,7 +598,7 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
 	$sql = sed_sql_query("SELECT * FROM $db_dic");
 	if (sed_sql_numrows($sql) > 0) {
 		while ($row = sed_sql_fetchassoc($sql)) {
-			if ($row['dic_type'] == 3 && $row['dic_extra_type'] != 'boolean') {
+			if ($row['dic_type'] == 3 && $row['dic_extra_type'] != 'boolean' || $row['dic_type'] == 6) {
 				$vartype = 'ARR';
 			} else {
 				$vartype = (!empty($row['dic_extra_type'])) ? $dic_var_type[$row['dic_extra_type']] : 'TXT';

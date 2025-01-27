@@ -3759,39 +3759,38 @@ function sed_redirect($url, $base64 = false)
  * @param array $additionalAttributes Additional HTML attributes for the select box 
  * @return string HTML representation of the select box 
  */
-
 function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalue = TRUE, $isMultiple = FALSE, $additionalAttributes = array(), $disableSedCc = FALSE)
 {
-	$check = is_array($check) ? array_map('trim', $check) : trim($check);
+    $check = is_array($check) ? array_map('trim', $check) : trim($check);
 
-	$isArray = is_array($values);
-	if (!$isArray) {
-		$values = explode(',', $values);
-	}
+    $isArray = is_array($values);
+    if (!$isArray) {
+        $values = explode(',', $values);
+    }
 
-	$selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
-	$first_option = ($empty_option) ? "<option value=\"\" $selected>---</option>" : '';
+    $selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
+    $first_option = ($empty_option) ? "<option value=\"\" " . (empty($check) ? $selected : '') . ">---</option>" : '';
 
-	$htmlAttributes = "";
-	foreach ($additionalAttributes as $attribute => $attrValue) {
-		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
-	}
+    $htmlAttributes = "";
+    foreach ($additionalAttributes as $attribute => $attrValue) {
+        $htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+    }
 
-	$multipleAttr = ($isMultiple) ? ' multiple' : '';
+    $multipleAttr = ($isMultiple) ? ' multiple' : '';
 
-	$result = "<select name=\"$name\"" . $multipleAttr . $htmlAttributes . ">";
-	$result .= $first_option;
+    $result = "<select name=\"$name\"" . $multipleAttr . $htmlAttributes . ">";
+    $result .= $first_option;
 
-	foreach ($values as $k => $x) {
-		$x = trim($x);
-		$v = ($isArray && $key_isvalue) ? $k : $x;
-		$selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
-		$optionValue = ($disableSedCc) ? $x : sed_cc($x);
-		$result .= "<option value=\"$v\" $selected>" . $optionValue . "</option>";
-	}
+    foreach ($values as $k => $x) {
+        $x = trim($x);
+        $v = ($isArray && $key_isvalue) ? $k : $x;
+        $selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
+        $optionValue = ($disableSedCc) ? $x : sed_cc($x);
+        $result .= "<option value=\"$v\" $selected>" . $optionValue . "</option>";
+    }
 
-	$result .= "</select>";
-	return $result;
+    $result .= "</select>";
+    return $result;
 }
 
 /** 
@@ -5215,6 +5214,11 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 			case "select":
 				$t2 = sed_selectbox($data[$rowname . '_' . $row['code']], $importrowname . $row['code'], $row['terms']);
 				break;
+				
+            case "multipleselect":
+                $t2_check = (!empty($data[$rowname . '_' . $row['code']])) ? explode(',', $data[$rowname . '_' . $row['code']]) : $data[$rowname . '_' . $row['code']];
+				$t2 = sed_selectbox($t2_check, $importrowname . $row['code'] . "[]", $row['terms'], true, true, true);
+                break;				
 
 			case "checkbox":
 				$t2 = sed_checkbox($importrowname . $row['code'], $row['terms'], $data[$rowname . '_' . $row['code']]);
@@ -5238,49 +5242,57 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
  */
 function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $getvalue = false)
 {
-	global $sed_dic;
+    global $sed_dic;
 
-	foreach ($extrafields as $i => $row) {
-		$t1 = $tpl_tag . '_' . strtoupper($row['code']);
-		$t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
-		$t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
-		$t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
+    foreach ($extrafields as $i => $row) {
+        $t1 = $tpl_tag . '_' . strtoupper($row['code']);
+        $t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
+        $t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
+        $t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
 
-		switch ($row['type']) {
-			case 'textinput':
-				$t2 = $data[$rowname . '_' . $row['code']];
-				break;
+        switch ($row['type']) {
+            case 'textinput':
+                $t2 = $data[$rowname . '_' . $row['code']];
+                break;
 
-			case "textarea":
-				$t2 = $data[$rowname . '_' . $row['code']];
-				break;
+            case "textarea":
+                $t2 = $data[$rowname . '_' . $row['code']];
+                break;
 
-			case "select":
-				$t2 = (isset($row['terms'][$data[$rowname . '_' . $row['code']]])) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
-				break;
+            case "select":
+                $t2 = (isset($row['terms'][$data[$rowname . '_' . $row['code']]])) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
+                break;
 
-			case "checkbox":
-				$data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
-				$res_arr = array();
-				foreach ($data_arr as $k => $v) {
-					$res_arr[] = $row['terms'][$v];
-				}
-				$t2 = implode(', ', $res_arr);
-				break;
+            case "checkbox":
+                $data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
+                $res_arr = array();
+                foreach ($data_arr as $k => $v) {
+                    $res_arr[] = $row['terms'][$v];
+                }
+                $t2 = implode(', ', $res_arr);
+                break;
 
-			case "radio":
-				$t2 = isset($row['terms'][$data[$rowname . '_' . $row['code']]]) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
-				break;
-		}
+            case "radio":
+                $t2 = isset($row['terms'][$data[$rowname . '_' . $row['code']]]) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
+                break;
 
-		$return_arr[$t1] = ($getvalue) ? $data[$rowname . '_' . $row['code']] : $t2;
-		$return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title'];
-		$return_arr[$t4] = $row['form_desc'];
-		$return_arr[$t5] = $row['mera'];
-	}
-	return $return_arr;
+            case "multipleselect":
+                $data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
+                $res_arr = array();
+                foreach ($data_arr as $k => $v) {
+                    $res_arr[] = $row['terms'][$v];
+                }
+                $t2 = implode(', ', $res_arr);
+                break;
+        }
+
+        $return_arr[$t1] = ($getvalue) ? $data[$rowname . '_' . $row['code']] : $t2;
+        $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title'];
+        $return_arr[$t4] = $row['form_desc'];
+        $return_arr[$t5] = $row['mera'];
+    }
+    return $return_arr;
 }
-
 
 
 /* ============== FLAGS AND COUNTRIES (ISO 3166) =============== */

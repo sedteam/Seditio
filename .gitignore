@@ -224,3 +224,4 @@ plugins/karma/*
 plugins/ogmetas/*
 plugins/feedback/*
 plugins/banstoplist/*
+system/database.pdo.php
