@@ -240,12 +240,20 @@ switch ($mn) {
 				$pagecount[$row['page_cat']] = $row['COUNT(*)'];
 			}
 
-			$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
-
 			$skinpath = SED_ROOT . "/skins/" . $skin . "/";
 
+			$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
+			$rows = array();
+			while ($data_rows = sed_sql_fetchassoc($sql)) {
+				$rows[] = $data_rows;
+			}
+
+			if ($cfg['structuresort']) {
+				usort($rows, 'sed_structure_sort');
+			}
+
 			$jj = 0;
-			while ($row = sed_sql_fetchassoc($sql)) {
+			foreach ($rows as $row) {
 				$jj++;
 				$structure_id = $row['structure_id'];
 				$structure_code = $row['structure_code'];

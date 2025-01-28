@@ -74,9 +74,8 @@ $cfg['version'] = '180';
 $cfg['versions_list'] = array(120, 121, 125, 126, 130, 150, 159, 160, 161, 162, 170, 171, 172, 173, 175, 177, 178, 179, 180);
 $cfg['group_colors'] = array('red', 'yellow', 'black', 'blue', 'white', 'green', 'gray', 'navy', 'darkmagenta', 'pink', 'cadetblue', 'linen', 'deepskyblue', 'inherit');
 $cfg['separator_symbol'] = "&raquo;";
-
+$cfg['structuresort'] = TRUE;
 $cfg['available_image_sizes'] = array(); // array("800x600", "400x300");
-
 $cfg['adminskin'] = "sympfy";
 
 /* Message type:  warning => w, error => e, success => s, info => i */
@@ -3138,7 +3137,16 @@ function sed_load_structure()
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
 
-	while ($row = sed_sql_fetchassoc($sql)) {
+	$rows = array();
+	while ($data_rows = sed_sql_fetchassoc($sql)) {
+		$rows[] = $data_rows;
+	}
+
+	if ($cfg['structuresort']) {
+		usort($rows, 'sed_structure_sort');
+	}
+
+	foreach ($rows as $row) {
 		if (!empty($row['structure_icon'])) {
 			$row['structure_icon_src'] = $row['structure_icon'];
 			$row['structure_icon'] = "<img src=\"" . $row['structure_icon'] . "\" alt=\"\" />";
@@ -3244,6 +3252,41 @@ function sed_load_forum_structure()
 	}
 
 	return ($res);
+}
+
+/**
+ * Function for natural sorting by splitting a specified field into parts.
+ *
+ * This function takes two associative arrays representing rows from the database
+ * and compares their values for a specified field using natural sorting. The
+ * field values are split into parts by dots, and each part is compared individually.
+ *
+ * @param array $a The first row from the database.
+ * @param array $b The second row from the database.
+ * @param string $field The field to compare. Default is 'structure_path'.
+ * @return int A negative, zero, or positive integer depending on whether the
+ *             first argument is considered to be respectively less than, equal
+ *             to, or greater than the second.
+ */
+function sed_structure_sort($a, $b, $field = 'structure_path')
+{
+	// Split the specified field into parts by dots
+	$a_parts = explode('.', $a[$field]);
+	$b_parts = explode('.', $b[$field]);
+
+	// Compare parts
+	for ($i = 0; $i < max(count($a_parts), count($b_parts)); $i++) {
+		// Get the value of the part or an empty string if the part does not exist
+		$a_value = isset($a_parts[$i]) ? $a_parts[$i] : '';
+		$b_value = isset($b_parts[$i]) ? $b_parts[$i] : '';
+
+		// Compare parts using natural sorting
+		if ($a_value != $b_value) {
+			return strnatcmp($a_value, $b_value);
+		}
+	}
+
+	return 0;
 }
 
 /** 
@@ -3761,36 +3804,36 @@ function sed_redirect($url, $base64 = false)
  */
 function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalue = TRUE, $isMultiple = FALSE, $additionalAttributes = array(), $disableSedCc = FALSE)
 {
-    $check = is_array($check) ? array_map('trim', $check) : trim($check);
+	$check = is_array($check) ? array_map('trim', $check) : trim($check);
 
-    $isArray = is_array($values);
-    if (!$isArray) {
-        $values = explode(',', $values);
-    }
+	$isArray = is_array($values);
+	if (!$isArray) {
+		$values = explode(',', $values);
+	}
 
-    $selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
-    $first_option = ($empty_option) ? "<option value=\"\" " . (empty($check) ? $selected : '') . ">---</option>" : '';
+	$selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
+	$first_option = ($empty_option) ? "<option value=\"\" " . (empty($check) ? $selected : '') . ">---</option>" : '';
 
-    $htmlAttributes = "";
-    foreach ($additionalAttributes as $attribute => $attrValue) {
-        $htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
-    }
+	$htmlAttributes = "";
+	foreach ($additionalAttributes as $attribute => $attrValue) {
+		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	}
 
-    $multipleAttr = ($isMultiple) ? ' multiple' : '';
+	$multipleAttr = ($isMultiple) ? ' multiple' : '';
 
-    $result = "<select name=\"$name\"" . $multipleAttr . $htmlAttributes . ">";
-    $result .= $first_option;
+	$result = "<select name=\"$name\"" . $multipleAttr . $htmlAttributes . ">";
+	$result .= $first_option;
 
-    foreach ($values as $k => $x) {
-        $x = trim($x);
-        $v = ($isArray && $key_isvalue) ? $k : $x;
-        $selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
-        $optionValue = ($disableSedCc) ? $x : sed_cc($x);
-        $result .= "<option value=\"$v\" $selected>" . $optionValue . "</option>";
-    }
+	foreach ($values as $k => $x) {
+		$x = trim($x);
+		$v = ($isArray && $key_isvalue) ? $k : $x;
+		$selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
+		$optionValue = ($disableSedCc) ? $x : sed_cc($x);
+		$result .= "<option value=\"$v\" $selected>" . $optionValue . "</option>";
+	}
 
-    $result .= "</select>";
-    return $result;
+	$result .= "</select>";
+	return $result;
 }
 
 /** 
@@ -5213,11 +5256,11 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 			case "select":
 				$t2 = sed_selectbox($data[$rowname . '_' . $row['code']], $importrowname . $row['code'], $row['terms']);
 				break;
-				
-            case "multipleselect":
-                $t2_check = (!empty($data[$rowname . '_' . $row['code']])) ? explode(',', $data[$rowname . '_' . $row['code']]) : $data[$rowname . '_' . $row['code']];
+
+			case "multipleselect":
+				$t2_check = (!empty($data[$rowname . '_' . $row['code']])) ? explode(',', $data[$rowname . '_' . $row['code']]) : $data[$rowname . '_' . $row['code']];
 				$t2 = sed_selectbox($t2_check, $importrowname . $row['code'] . "[]", $row['terms'], true, true, true);
-                break;				
+				break;
 
 			case "checkbox":
 				$t2 = sed_checkbox($importrowname . $row['code'], $row['terms'], $data[$rowname . '_' . $row['code']]);
@@ -5241,56 +5284,56 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
  */
 function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $getvalue = false)
 {
-    global $sed_dic;
+	global $sed_dic;
 
-    foreach ($extrafields as $i => $row) {
-        $t1 = $tpl_tag . '_' . strtoupper($row['code']);
-        $t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
-        $t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
-        $t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
+	foreach ($extrafields as $i => $row) {
+		$t1 = $tpl_tag . '_' . strtoupper($row['code']);
+		$t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
+		$t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
+		$t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
 
-        switch ($row['type']) {
-            case 'textinput':
-                $t2 = $data[$rowname . '_' . $row['code']];
-                break;
+		switch ($row['type']) {
+			case 'textinput':
+				$t2 = $data[$rowname . '_' . $row['code']];
+				break;
 
-            case "textarea":
-                $t2 = $data[$rowname . '_' . $row['code']];
-                break;
+			case "textarea":
+				$t2 = $data[$rowname . '_' . $row['code']];
+				break;
 
-            case "select":
-                $t2 = (isset($row['terms'][$data[$rowname . '_' . $row['code']]])) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
-                break;
+			case "select":
+				$t2 = (isset($row['terms'][$data[$rowname . '_' . $row['code']]])) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
+				break;
 
-            case "checkbox":
-                $data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
-                $res_arr = array();
-                foreach ($data_arr as $k => $v) {
-                    $res_arr[] = $row['terms'][$v];
-                }
-                $t2 = implode(', ', $res_arr);
-                break;
+			case "checkbox":
+				$data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
+				$res_arr = array();
+				foreach ($data_arr as $k => $v) {
+					$res_arr[] = $row['terms'][$v];
+				}
+				$t2 = implode(', ', $res_arr);
+				break;
 
-            case "radio":
-                $t2 = isset($row['terms'][$data[$rowname . '_' . $row['code']]]) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
-                break;
+			case "radio":
+				$t2 = isset($row['terms'][$data[$rowname . '_' . $row['code']]]) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
+				break;
 
-            case "multipleselect":
-                $data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
-                $res_arr = array();
-                foreach ($data_arr as $k => $v) {
-                    $res_arr[] = $row['terms'][$v];
-                }
-                $t2 = implode(', ', $res_arr);
-                break;
-        }
+			case "multipleselect":
+				$data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
+				$res_arr = array();
+				foreach ($data_arr as $k => $v) {
+					$res_arr[] = $row['terms'][$v];
+				}
+				$t2 = implode(', ', $res_arr);
+				break;
+		}
 
-        $return_arr[$t1] = ($getvalue) ? $data[$rowname . '_' . $row['code']] : $t2;
-        $return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title'];
-        $return_arr[$t4] = $row['form_desc'];
-        $return_arr[$t5] = $row['mera'];
-    }
-    return $return_arr;
+		$return_arr[$t1] = ($getvalue) ? $data[$rowname . '_' . $row['code']] : $t2;
+		$return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title'];
+		$return_arr[$t4] = $row['form_desc'];
+		$return_arr[$t5] = $row['mera'];
+	}
+	return $return_arr;
 }
 
 
