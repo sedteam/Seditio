@@ -5228,111 +5228,151 @@ function sed_extrafield_remove($sql_table, $name)
 	return TRUE;
 }
 
-/** 
- * Build extra field 
+/**
+ * Build extra fields for a given row.
+ *
+ * This function processes extra fields data for a given row, handling different types of fields
+ * such as text inputs, text areas, selects, checkboxes, radios, and multiple selects. It returns
+ * an array of processed data.
+ *
+ * @param string $rowname The name of the row.
+ * @param string $tpl_tag The template tag.
+ * @param array $extrafields The extra fields data.
+ * @param array $data The data to process.
+ * @param string $importrowname The name used for importing row data.
+ * @return array The processed extra fields data.
  */
 function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importrowname)
 {
 	global $sed_dic;
 
+	$return_arr = [];
+
 	foreach ($extrafields as $i => $row) {
+		// Construct template tags
 		$t1 = $tpl_tag . '_' . strtoupper($row['code']);
 		$t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
 		$t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
 		$t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
 
-		$data[$rowname . '_' . $row['code']] = isset($data[$rowname . '_' . $row['code']]) ? $data[$rowname . '_' . $row['code']] : '';
-		$data[$rowname . '_' . $row['code']] = ($data[$rowname . '_' . $row['code']] == '' && ($row['term_default'] != '')) ? $row['term_default'] : $data[$rowname . '_' . $row['code']];
+		// Get the field value or set a default if not present
+		$field_value = isset($data[$rowname . '_' . $row['code']]) ? $data[$rowname . '_' . $row['code']] : '';
+		if ($field_value == '' && $row['term_default'] != '') {
+			$field_value = $row['term_default'];
+		}
 
+		// Initialize $t2 based on the field type
 		switch ($row['type']) {
 			case 'textinput':
-				$t2 = sed_textbox($importrowname . $row['code'], $data[$rowname . '_' . $row['code']], $row['form_size'], $row['form_maxsize']);
+				$t2 = sed_textbox($importrowname . $row['code'], $field_value, $row['form_size'], $row['form_maxsize']);
 				break;
 
-			case "textarea":
-				$t2 = sed_textarea($importrowname . $row['code'], $data[$rowname . '_' . $row['code']], $row['form_rows'], $row['form_cols']);
+			case 'textarea':
+				$t2 = sed_textarea($importrowname . $row['code'], $field_value, $row['form_rows'], $row['form_cols']);
 				break;
 
-			case "select":
-				$t2 = sed_selectbox($data[$rowname . '_' . $row['code']], $importrowname . $row['code'], $row['terms']);
+			case 'select':
+				$t2 = sed_selectbox($field_value, $importrowname . $row['code'], $row['terms']);
 				break;
 
-			case "multipleselect":
-				$t2_check = (!empty($data[$rowname . '_' . $row['code']])) ? explode(',', $data[$rowname . '_' . $row['code']]) : $data[$rowname . '_' . $row['code']];
+			case 'multipleselect':
+				$t2_check = !empty($field_value) ? explode(',', $field_value) : $field_value;
 				$t2 = sed_selectbox($t2_check, $importrowname . $row['code'] . "[]", $row['terms'], true, true, true);
 				break;
 
-			case "checkbox":
-				$t2 = sed_checkbox($importrowname . $row['code'], $row['terms'], $data[$rowname . '_' . $row['code']]);
+			case 'checkbox':
+				$t2 = sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value);
 				break;
 
-			case "radio":
-				$t2 = sed_radiobox($importrowname . $row['code'], $row['terms'], $data[$rowname . '_' . $row['code']]);
+			case 'radio':
+				$t2 = sed_radiobox($importrowname . $row['code'], $row['terms'], $field_value);
+				break;
+
+			default:
+				$t2 = '';
 				break;
 		}
 
+		// Populate the return array
 		$return_arr[$t1] = $t2;
-		$return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title'];
+		$return_arr[$t3] = !empty($row['form_title']) ? $row['form_title'] : $row['title'];
 		$return_arr[$t4] = $row['form_desc'];
 		$return_arr[$t5] = $row['mera'];
 	}
+
 	return $return_arr;
 }
 
-/** 
- * Show extra field 
+/**
+ * Build extra fields data for a given row.
+ *
+ * This function processes extra fields data for a given row, handling different types of fields
+ * such as text inputs, text areas, selects, checkboxes, radios, and multiple selects. It returns
+ * an array of processed data.
+ *
+ * @param string $rowname The name of the row.
+ * @param string $tpl_tag The template tag.
+ * @param array $extrafields The extra fields data.
+ * @param array $data The data to process.
+ * @param bool $getvalue Whether to get the raw value or the processed value. Default is false.
+ * @return array The processed extra fields data.
  */
 function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $getvalue = false)
 {
 	global $sed_dic;
 
+	$return_arr = [];
+
 	foreach ($extrafields as $i => $row) {
 		$t1 = $tpl_tag . '_' . strtoupper($row['code']);
 		$t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
 		$t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
 		$t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
 
+		// Use isset to check if the key exists and provide a default value if it does not
+		$field_value = isset($data[$rowname . '_' . $row['code']]) ? $data[$rowname . '_' . $row['code']] : '';
+
 		switch ($row['type']) {
 			case 'textinput':
-				$t2 = $data[$rowname . '_' . $row['code']];
+			case 'textarea':
+				$t2 = $field_value;
 				break;
 
-			case "textarea":
-				$t2 = $data[$rowname . '_' . $row['code']];
+			case 'select':
+				$t2 = isset($row['terms'][$field_value]) ? $row['terms'][$field_value] : '';
 				break;
 
-			case "select":
-				$t2 = (isset($row['terms'][$data[$rowname . '_' . $row['code']]])) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
-				break;
-
-			case "checkbox":
-				$data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
-				$res_arr = array();
-				foreach ($data_arr as $k => $v) {
-					$res_arr[] = $row['terms'][$v];
+			case 'checkbox':
+			case 'multipleselect':
+				if (!empty($field_value)) {
+					$data_arr = explode(',', $field_value);
+					$res_arr = [];
+					foreach ($data_arr as $v) {
+						if (isset($row['terms'][$v])) {
+							$res_arr[] = $row['terms'][$v];
+						}
+					}
+					$t2 = implode(', ', $res_arr);
+				} else {
+					$t2 = '';
 				}
-				$t2 = implode(', ', $res_arr);
 				break;
 
-			case "radio":
-				$t2 = isset($row['terms'][$data[$rowname . '_' . $row['code']]]) ? $row['terms'][$data[$rowname . '_' . $row['code']]] : "";
+			case 'radio':
+				$t2 = isset($row['terms'][$field_value]) ? $row['terms'][$field_value] : '';
 				break;
 
-			case "multipleselect":
-				$data_arr = explode(',', $data[$rowname . '_' . $row['code']]);
-				$res_arr = array();
-				foreach ($data_arr as $k => $v) {
-					$res_arr[] = $row['terms'][$v];
-				}
-				$t2 = implode(', ', $res_arr);
+			default:
+				$t2 = '';
 				break;
 		}
 
-		$return_arr[$t1] = ($getvalue) ? $data[$rowname . '_' . $row['code']] : $t2;
-		$return_arr[$t3] = (!empty($row['form_title'])) ? $row['form_title'] : $row['title'];
+		$return_arr[$t1] = $getvalue ? $field_value : $t2;
+		$return_arr[$t3] = !empty($row['form_title']) ? $row['form_title'] : $row['title'];
 		$return_arr[$t4] = $row['form_desc'];
 		$return_arr[$t5] = $row['mera'];
 	}
+
 	return $return_arr;
 }
 
