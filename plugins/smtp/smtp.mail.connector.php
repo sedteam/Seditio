@@ -43,7 +43,7 @@ if ($smtp_active == 'yes') {
 	$smtp_from = $cfg['plugin']['smtp']['smtp_from'];
 	$smtp_from_title = $cfg['plugin']['smtp']['smtp_from_title'];
 	$smtp_from_title = (!empty($smtp_from_title)) ? $smtp_from_title : $cfg['maintitle'];
-	$smtp_ssl = ($cfg['plugin']['smtp']['smtp_ssl'] == 'yes') ? 'ssl' : '';
+	$smtp_tls = ($cfg['plugin']['smtp']['smtp_ssl'] == 'yes') ? 'tls' : '';
 	$smtp_connection_timeout = 30;
 	$smtp_response_timeout = 8;
 
@@ -55,7 +55,7 @@ if ($smtp_active == 'yes') {
 
 	$mail_type = ($c_content == 'plain') ? false : true;
 
-	$mail = new Email($smtp_host, $smtp_port, $smtp_connection_timeout, $smtp_response_timeout, $smtp_ssl);
+	$mail = new Email($smtp_host, $smtp_port, $smtp_connection_timeout, $smtp_response_timeout, $smtp_tls);
 
 	$mail->setLogin($smtp_login, $smtp_pass);
 	$mail->addTo($c_fmail, $c_fmail);
@@ -66,18 +66,17 @@ if ($smtp_active == 'yes') {
 
 	if (is_array($c_attach)) $mail->setAttach($c_attach);
 
-	if ($mail->send()) {
-		if ($smtp_debug == "yes") {
-			$log = $mail->getLog();
-			file_put_contents(SED_ROOT . '/plugins/smtp/log/log.txt', $log, FILE_APPEND | LOCK_EX);
-		}
+	$result_send = $mail->send();
+
+	if ($smtp_debug == "yes") {
+		$mail->setLog(SED_ROOT . '/plugins/smtp/log/log.txt');
+		$log = $mail->getLog();
+	}
+
+	if ($result_send) {
 		sed_stat_inc('totalmailsent');
 		return (TRUE);
 	} else {
-		if ($smtp_debug == "yes") {
-			$log = $mail->getLog();
-			file_put_contents(SED_ROOT . '/plugins/smtp/log/log.txt', $log, FILE_APPEND | LOCK_EX);
-		}
 		return (FALSE);
 	}
 }
