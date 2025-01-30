@@ -350,9 +350,10 @@ $mtchlvl = mb_substr_count($mtch, ".");
 foreach ($sed_cat as $i => $x) {
 	if (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl) {
 		$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
-			WHERE p.page_cat=s.structure_code
-			AND s.structure_path LIKE '" . $sed_cat[$i]['rpath'] . "%'
-			AND page_state=0 ");
+		WHERE p.page_cat=s.structure_code
+		AND (s.structure_path LIKE '" . $sed_cat[$i]['rpath'] . "' 
+		OR s.structure_path LIKE '" . $sed_cat[$i]['rpath'] . ".%') 
+		AND page_state=0");
 
 		$sub_count = sed_sql_result($sql4, 0, "COUNT(*)");
 
