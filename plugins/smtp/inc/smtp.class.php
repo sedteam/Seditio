@@ -8,9 +8,9 @@
 class Email
 {
     const CRLF = "\r\n";
-    const TLS = 'tcp';
-    const SSL = 'ssl';
+    const TLS = 'tls';
     const OK = 250;
+
     protected $server;
     protected $port;
     protected $localhost;
@@ -44,6 +44,8 @@ class Email
      * @param int $port
      * @param int $connection_timeout
      * @param int $response_timeout
+     * @param string $protocol
+     * @param bool $enable_logging
      */
     public function __construct($server, $port = 25, $connection_timeout = 30, $response_timeout = 8, $protocol = '')
     {
@@ -63,6 +65,9 @@ class Email
         $this->charset = 'utf-8';
         $this->boundary = sha1(microtime());
         $this->headers['MIME-Version'] = '1.0';
+
+        // Set protocol
+        $this->setProtocol($protocol);
     }
 
     /**
@@ -126,16 +131,16 @@ class Email
     }
 
     /**
-     * Set STMP Server protocol
+     * Set SMTP Server protocol
      * -- default value is null (no secure protocol)
      * @param string $protocol
      */
     public function setProtocol($protocol = '')
     {
+        $protocol = strtolower($protocol);
         if ($protocol == self::TLS) {
             $this->tls = true;
         }
-
         $this->protocol = $protocol;
     }
 
@@ -155,7 +160,7 @@ class Email
      */
     public function setSubject($subject)
     {
-        $this->subject = $subject;
+        $this->subject = $this->encodeHeader($subject);
     }
 
     /**
@@ -211,6 +216,19 @@ class Email
         }
     }
 
+    /**
+     * Set the path to the log file
+     * @param string $file_path
+     */
+    public function setLog($log_file_path)
+    {
+        if ($log_file_path) {
+            $message = print_r($this->log, true);
+            $date = date('Y-m-d H:i:s');
+            $message_log = sprintf("[%s] Log Message: %s \r\n", $date, $message);
+            file_put_contents($log_file_path,  $message_log . PHP_EOL, FILE_APPEND);
+        }
+    }
 
     /**
      * Get log array
@@ -233,16 +251,12 @@ class Email
             return false;
         }
 
-        $this->log['SOCKET'] = $this->socket;
-
         $this->log['CONNECTION'] = $this->getResponse();
         $this->log['HELLO'] = $this->sendCMD('EHLO ' . $this->localhost);
 
-        if ($this->tls) {
+        if ($this->tls && mb_strpos($this->log['HELLO'], 'STARTTLS') === false) {
             $this->log['STARTTLS'] = $this->sendCMD('STARTTLS');
-
             stream_socket_enable_crypto($this->socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-
             $this->log['HELLO 2'] = $this->sendCMD('EHLO ' . $this->localhost);
         }
 
@@ -256,8 +270,6 @@ class Email
         }
 
         $this->log['DATA'][1] = $this->sendCMD('DATA');
-
-
 
         if ($this->message_html && $this->message_attach) {
 
@@ -363,7 +375,7 @@ class Email
      */
     protected function formatAddress($address)
     {
-        return ($address[1] == '') ? $address[0] : '"' . $address[1] . '" <' . $address[0] . '>';
+        return ($address[1] == '') ? $address[0] : '"' . $this->encodeHeader($address[1]) . '" <' . $address[0] . '>';
     }
 
     /**
@@ -381,5 +393,15 @@ class Email
             $list .= $this->formatAddress($address);
         }
         return $list;
+    }
+
+    /**
+     * Encode header string according to RFC 2047
+     * @param $string
+     * @return string
+     */
+    protected function encodeHeader($string)
+    {
+        return '=?' . $this->charset . '?B?' . base64_encode($string) . '?=';
     }
 }
