@@ -16,10 +16,10 @@ Description=
 
 [BEGIN_SED_EXTPLUGIN]
 Code=smtp
-Name=SMTP Sender 2.0
+Name=SMTP Sender 3.0
 Description=SMTP mail sender for Seditio 17x
 Version=180
-Date=2021-dec-06
+Date=2025-jan-31
 Author=Amro
 Copyright=Amro
 Notes=
@@ -38,7 +38,7 @@ smtp_login=04:string::noreply@test.ru:SMTP login
 smtp_pass=05:string::ZdvXSikP:SMTP password
 smtp_from=06:string::noreply@test.ru:SMTP sender email
 smtp_from_title=07:string::RobotMail:Mail From title
-smtp_ssl=08:select:yes,no:yes:Use SSL?
+smtp_ssl=08:select:yes,no:yes:Use SSL (if no - TLC)?
 smtp_debug=09:select:yes,no:yes:Use Debug with log file?
 [END_SED_EXTPLUGIN_CONFIG]
 

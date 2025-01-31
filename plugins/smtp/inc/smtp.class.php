@@ -8,7 +8,8 @@
 class Email
 {
     const CRLF = "\r\n";
-    const TLS = 'tls';
+    const TLS = 'tcp';
+    const SSL = 'ssl';
     const OK = 250;
 
     protected $server;
@@ -20,32 +21,29 @@ class Email
     protected $password;
     protected $connect_timeout;
     protected $response_timeout;
-    protected $headers;
-    protected $content_type;
-    protected $from;
-    protected $to;
-    protected $cc;
-    protected $reply_to;
-    protected $bcc;
+    protected $headers = [];
+    protected $from = [];
+    protected $to = [];
+    protected $cc = [];
+    protected $reply_to = [];
+    protected $bcc = [];
     protected $subject;
-    protected $message_html = false;
-    protected $message_text = false;
-    protected $message_attach = false;
-    protected $log;
-    protected $is_html;
+    protected $message_text;
+    protected $message_html;
+    protected $attachments = [];
+    protected $log = [];
     protected $tls = false;
     protected $protocol;
-    protected $boundary = 'boundary';
+    protected $boundary;
+    protected $logFile = 'email.log';
 
     /**
-     * Class constructor
-     *  -- Set server name, port and timeout values
-     * @param $server
-     * @param int $port
-     * @param int $connection_timeout
-     * @param int $response_timeout
-     * @param string $protocol
-     * @param bool $enable_logging
+     * Email constructor.
+     * @param string $server SMTP server address
+     * @param int $port SMTP server port
+     * @param int $connection_timeout Connection timeout in seconds
+     * @param int $response_timeout Response timeout in seconds
+     * @param string $protocol Connection protocol (TLS, SSL, or empty for plain TCP)
      */
     public function __construct($server, $port = 25, $connection_timeout = 30, $response_timeout = 8, $protocol = '')
     {
@@ -54,66 +52,68 @@ class Email
         $this->localhost = $server;
         $this->connect_timeout = $connection_timeout;
         $this->response_timeout = $response_timeout;
-        $this->from = array();
-        $this->to = array();
-        $this->cc = array();
-        $this->bcc = array();
-        $this->log = array();
-        $this->reply_to = array();
-        $this->is_html = false;
         $this->protocol = $protocol;
         $this->charset = 'utf-8';
-        $this->boundary = sha1(microtime());
-        $this->headers['MIME-Version'] = '1.0';
-
-        // Set protocol
+        $this->boundary = md5(uniqid(time()));
         $this->setProtocol($protocol);
+
+        $this->headers['MIME-Version'] = '1.0';
+        $this->headers['X-Mailer'] = 'PHP/' . phpversion();
     }
 
     /**
-     * Add to recipient email address
-     * @param $address
-     * @param string $name
+     * Set the log file path
+     * @param string $path Path to the log file
+     */
+    public function setLogFile($path)
+    {
+        $this->logFile = $path;
+    }
+
+    /**
+     * Add a recipient to the email
+     * @param string $address Email address
+     * @param string $name Recipient name
      */
     public function addTo($address, $name = '')
     {
-        $this->to[] = array($address, $name);
+        $this->to[] = [$address, $name];
     }
 
     /**
-     * Add carbon copy email address
-     * @param $address
-     * @param string $name
+     * Add a CC recipient to the email
+     * @param string $address Email address
+     * @param string $name Recipient name
      */
     public function addCc($address, $name = '')
     {
-        $this->cc[] = array($address, $name);
+        $this->cc[] = [$address, $name];
     }
 
     /**
-     * Add blind carbon copy email address
-     * @param $address
-     * @param string $name
+     * Add a BCC recipient to the email
+     * @param string $address Email address
+     * @param string $name Recipient name
      */
     public function addBcc($address, $name = '')
     {
-        $this->bcc[] = array($address, $name);
+        $this->bcc[] = [$address, $name];
     }
 
     /**
-     * Add email reply to address
-     * @param $address
-     * @param string $name
+     * Add a reply-to address to the email
+     * @param string $address Email address
+     * @param string $name Recipient name
      */
     public function addReplyTo($address, $name = '')
     {
-        $this->reply_to[] = array($address, $name);
+        $this->reply_to[] = [$address, $name];
     }
 
     /**
-     * Set SMTP Login authentication
-     * @param $username
-     * @param $password
+     * Set the login credentials for the SMTP server
+     * @param string $username SMTP username
+     * @param string $password SMTP password
      */
     public function setLogin($username, $password)
     {
@@ -122,8 +122,8 @@ class Email
     }
 
     /**
-     * Get message character set
-     * @param $charset
+     * Set the charset for the email
+     * @param string $charset Charset (e.g., 'utf-8')
      */
     public function setCharset($charset)
     {
@@ -131,41 +131,41 @@ class Email
     }
 
     /**
-     * Set SMTP Server protocol
-     * -- default value is null (no secure protocol)
-     * @param string $protocol
+     * Set the protocol for the SMTP connection
+     * @param string $protocol Protocol (TLS, SSL, or empty for plain TCP)
      */
     public function setProtocol($protocol = '')
     {
-        $protocol = strtolower($protocol);
-        if ($protocol == self::TLS) {
+        if (strtoupper($protocol) === 'TLS') {
             $this->tls = true;
+            $this->protocol = 'tcp';
+        } else {
+            $this->protocol = strtolower($protocol);
         }
-        $this->protocol = $protocol;
     }
 
     /**
-     * Set from email address and/or name
-     * @param $address
-     * @param string $name
+     * Set the from address for the email
+     * @param string $address Email address
+     * @param string $name Sender name
      */
     public function setFrom($address, $name = '')
     {
-        $this->from = array($address, $name);
+        $this->from = [$address, $name];
     }
 
     /**
-     * Set email subject string
-     * @param $subject
+     * Set the subject of the email
+     * @param string $subject Email subject
      */
     public function setSubject($subject)
     {
-        $this->subject = $this->encodeHeader($subject);
+        $this->subject = $subject;
     }
 
     /**
-     * Set main HTML body message
-     * @param $message
+     * Set the plain text message for the email
+     * @param string $message Plain text message
      */
     public function setText($message)
     {
@@ -173,8 +173,8 @@ class Email
     }
 
     /**
-     * Set main text body message
-     * @param $message
+     * Set the HTML message for the email
+     * @param string $message HTML message
      */
     public function setHTML($message)
     {
@@ -182,226 +182,345 @@ class Email
     }
 
     /**
-     * Set main email body message
-     * @param $message
-     * @param bool $html
+     * Add an attachment to the email
+     * @param string $path Path to the file
+     * @param string $name Name of the file (optional)
      */
-    public function setMessage($message, $html = false)
+    public function addAttachment($path, $name = '')
     {
-        if ($html) {
-            $this->setHTML($message);
-        } else {
-            $this->setText($message);
-        }
-    }
-
-    // Function used to attach files to the message
-    public function setAttach($attach)
-    {
-
-        if (file_exists($attach['file'])) {
-            $fp = fopen($attach['file'], "r");
-            $str = fread($fp, filesize($attach['file']));
-            $str = chunk_split(base64_encode($str));
-
-            $attach_file = "Content-disposition: attachment; filename=\"" . $attach['name'] . "\"" . self::CRLF;
-            $attach_file .= "Content-Transfer-Encoding: base64" . self::CRLF;
-            $attach_file .= "Content-Type: " . $attach['type'] . "; name=\"" . $attach['name'] . "\"" . self::CRLF . self::CRLF;
-
-            $attach_file .= $str;
-
-            $this->message_attach = $attach_file;
-        } else {
-            $this->message_attach = false;
-        }
+        $this->attachments[] = [
+            'path' => $path,
+            'name' => $name ?: basename($path)
+        ];
     }
 
     /**
-     * Set the path to the log file
-     * @param string $file_path
-     */
-    public function setLog($log_file_path)
-    {
-        if ($log_file_path) {
-            $message = print_r($this->log, true);
-            $date = date('Y-m-d H:i:s');
-            $message_log = sprintf("[%s] Log Message: %s \r\n", $date, $message);
-            file_put_contents($log_file_path,  $message_log . PHP_EOL, FILE_APPEND);
-        }
-    }
-
-    /**
-     * Get log array
-     * -- contains commands and responses from SMTP server
-     * @return array
-     */
-    public function getLog()
-    {
-        return $this->log;
-    }
-
-    /**
-     * Send email to recipient via mail server
-     * @return bool
+     * Send the email
+     * @return bool True if the email was sent successfully, false otherwise
      */
     public function send()
     {
-        $this->socket = fsockopen($this->getServer(), $this->port, $error_number, $error_string, $this->connect_timeout);
-        if (empty($this->socket)) {
+        try {
+            $this->socket = stream_socket_client(
+                $this->getServerAddress(),
+                $errno,
+                $errstr,
+                $this->connect_timeout,
+                STREAM_CLIENT_CONNECT,
+                $this->createContext()
+            );
+
+            if (!$this->socket) {
+                throw new Exception("Connection failed: $errstr ($errno)");
+            }
+
+            $this->logResponse('CONNECT');
+
+            $this->ehlo();
+
+            if ($this->tls) {
+                $this->startTLS();
+                $this->ehlo();
+            }
+
+            $this->authenticate();
+            $this->setMailFrom();
+            $this->setRecipients();
+            $this->sendData();
+            $this->quit();
+
+            fclose($this->socket);
+            $this->writeLog();
+            return true;
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            $this->writeLog();
+            if ($this->socket) {
+                fclose($this->socket);
+            }
             return false;
         }
+    }
 
-        $this->log['CONNECTION'] = $this->getResponse();
-        $this->log['HELLO'] = $this->sendCMD('EHLO ' . $this->localhost);
+    /**
+     * Send the EHLO command to the SMTP server
+     */
+    protected function ehlo()
+    {
+        $this->sendCommand("EHLO {$this->localhost}");
+        $this->logResponse('EHLO');
+    }
 
-        if ($this->tls && mb_strpos($this->log['HELLO'], 'STARTTLS') === false) {
-            $this->log['STARTTLS'] = $this->sendCMD('STARTTLS');
-            stream_socket_enable_crypto($this->socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-            $this->log['HELLO 2'] = $this->sendCMD('EHLO ' . $this->localhost);
+    /**
+     * Start a TLS encrypted session
+     */
+    protected function startTLS()
+    {
+        $this->sendCommand('STARTTLS');
+        $this->logResponse('STARTTLS');
+
+        if (!stream_socket_enable_crypto($this->socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            throw new Exception("TLS handshake failed");
         }
+    }
 
-        $this->log['AUTH'] = $this->sendCMD('AUTH LOGIN');
-        $this->log['USERNAME'] = $this->sendCMD(base64_encode($this->username));
-        $this->log['PASSWORD'] = $this->sendCMD(base64_encode($this->password));
-        $this->log['MAIL_FROM'] = $this->sendCMD('MAIL FROM: <' . $this->from[0] . '>');
+    /**
+     * Authenticate with the SMTP server
+     */
+    protected function authenticate()
+    {
+        $this->sendCommand('AUTH LOGIN');
+        $this->logResponse('AUTH');
 
-        foreach (array_merge($this->to, $this->cc) as $address) {
-            $this->log['RECIPIENTS'][] = $this->sendCMD('RCPT TO: <' . $address[0] . '>');
+        $this->sendCommand(base64_encode($this->username));
+        $this->logResponse('USERNAME');
+
+        $this->sendCommand(base64_encode($this->password));
+        $this->logResponse('PASSWORD');
+    }
+
+    /**
+     * Set the MAIL FROM command
+     */
+    protected function setMailFrom()
+    {
+        $this->sendCommand("MAIL FROM: <{$this->from[0]}>");
+        $this->logResponse('MAIL_FROM');
+    }
+
+    /**
+     * Set the RCPT TO command for all recipients
+     */
+    protected function setRecipients()
+    {
+        $recipients = array_merge($this->to, $this->cc, $this->bcc);
+        foreach ($recipients as $address) {
+            $this->sendCommand("RCPT TO: <{$address[0]}>");
+            $this->logResponse('RCPT_TO');
         }
+    }
 
-        $this->log['DATA'][1] = $this->sendCMD('DATA');
+    /**
+     * Send the email data
+     */
+    protected function sendData()
+    {
+        $this->sendCommand('DATA');
+        $this->logResponse('DATA_INIT');
 
-        if ($this->message_html && $this->message_attach) {
+        $data = $this->buildHeaders() . self::CRLF . $this->buildBody();
+        $this->sendCommand($data . self::CRLF . '.');
+        $this->logResponse('DATA_SEND');
+    }
 
-            $this->headers['Content-type'] = 'multipart/mixed; boundary="' . $this->boundary . '"';
-            $data = '--' . $this->boundary . self::CRLF;
+    /**
+     * Send the QUIT command to the SMTP server
+     */
+    protected function quit()
+    {
+        $this->sendCommand('QUIT');
+        $this->logResponse('QUIT');
+    }
 
-            $data .= 'Content-type: text/html; charset=' . $this->charset . self::CRLF . self::CRLF;
-            $data .= $this->message_html . self::CRLF . self::CRLF;
-            $data .= '--' . $this->boundary . self::CRLF;
-
-            $data .= $this->message_attach . self::CRLF . self::CRLF;
-            $data .= '--' . $this->boundary . '--';
-        } elseif ($this->message_html && $this->message_text) {
-
-            $this->headers['Content-type'] = 'multipart/alternative; boundary="' . $this->boundary . '"';
-            $data = '--' . $this->boundary . self::CRLF;
-
-            $data .= 'Content-type: text/plain; charset=' . $this->charset . self::CRLF . self::CRLF;
-            $data .= $this->message_text . self::CRLF . self::CRLF;
-            $data .= '--' . $this->boundary . self::CRLF;
-
-            $data .= 'Content-type: text/html; charset=' . $this->charset . self::CRLF . self::CRLF;
-            $data .= $this->message_html . self::CRLF . self::CRLF;
-            $data .= '--' . $this->boundary . '--';
-        } elseif ($this->message_html) {
-            $this->headers['Content-type'] = 'text/html; charset=' . $this->charset;
-            $data = $this->message_html;
-        } else {
-            $this->headers['Content-type'] = 'text/plain; charset=' . $this->charset;
-            $data = $this->message_text;
+    /**
+     * Build the email headers
+     * @return string The headers as a string
+     */
+    protected function buildHeaders()
+    {
+        $this->prepareHeaders();
+        $headers = '';
+        foreach ($this->headers as $key => $value) {
+            $headers .= "$key: $value" . self::CRLF;
         }
+        return rtrim($headers);
+    }
 
+    /**
+     * Prepare the email headers
+     */
+    protected function prepareHeaders()
+    {
         $this->headers['From'] = $this->formatAddress($this->from);
         $this->headers['To'] = $this->formatAddressList($this->to);
+
         if (!empty($this->cc)) {
             $this->headers['Cc'] = $this->formatAddressList($this->cc);
-        }
-
-        if (!empty($this->bcc)) {
-            $this->headers['Bcc'] = $this->formatAddressList($this->bcc);
         }
 
         if (!empty($this->reply_to)) {
             $this->headers['Reply-To'] = $this->formatAddressList($this->reply_to);
         }
 
-        $this->headers['Subject'] = $this->subject;
+        $this->headers['Subject'] = $this->encodeHeader($this->subject);
         $this->headers['Date'] = date('r');
-        $headers = '';
-        foreach ($this->headers as $key => $val) {
-            $headers .= $key . ': ' . $val . self::CRLF;
+
+        if (!empty($this->attachments)) {
+            $this->headers['Content-Type'] = "multipart/mixed; boundary=\"{$this->boundary}\"";
+        } else {
+            $this->headers['Content-Type'] = $this->message_html ? "text/html; charset={$this->charset}" : "text/plain; charset={$this->charset}";
         }
-
-        $this->log['DATA'][2] = $this->sendCMD($headers . self::CRLF . $data . self::CRLF . '.');
-        $this->log['QUIT'] = $this->sendCMD('QUIT');
-        fclose($this->socket);
-        return substr($this->log['DATA'][2], 0, 3) == self::OK;
     }
 
     /**
-     * Get server url
-     * -- if set SMTP protocol then prepend it to server
-     * @return string
+     * Build the email body
+     * @return string The email body as a string
      */
-    protected function getServer()
+    protected function buildBody()
     {
-        return ($this->protocol) ? $this->protocol . '://' . $this->server : $this->server;
-    }
+        $body = '';
 
-    /**
-     * Get Mail Server response
-     * @return string
-     */
-    protected function getResponse()
-    {
-        stream_set_timeout($this->socket, $this->response_timeout);
-        $response = '';
-        while (($line = fgets($this->socket, 515)) != false) {
-            $response .= trim($line) . "\n";
-            if (substr($line, 3, 1) == ' ') {
-                break;
+        if (!empty($this->attachments)) {
+            $body .= "--{$this->boundary}" . self::CRLF;
+            $body .= "Content-Type: multipart/alternative; boundary=\"{$this->boundary}_alt\"" . self::CRLF . self::CRLF;
+
+            if ($this->message_html) {
+                $body .= "--{$this->boundary}_alt" . self::CRLF;
+                $body .= $this->encodeContent($this->message_text, 'text');
+                $body .= "--{$this->boundary}_alt" . self::CRLF;
+                $body .= $this->encodeContent($this->message_html, 'html');
+                $body .= "--{$this->boundary}_alt--" . self::CRLF;
+            } else {
+                $body .= "--{$this->boundary}_alt" . self::CRLF;
+                $body .= $this->encodeContent($this->message_text, 'text');
+                $body .= "--{$this->boundary}_alt--" . self::CRLF;
             }
+
+            foreach ($this->attachments as $attachment) {
+                $body .= "--{$this->boundary}" . self::CRLF;
+                $body .= "Content-Type: application/octet-stream; name=\"{$attachment['name']}\"" . self::CRLF;
+                $body .= "Content-Transfer-Encoding: base64" . self::CRLF;
+                $body .= "Content-Disposition: attachment; filename=\"{$attachment['name']}\"" . self::CRLF . self::CRLF;
+                $body .= chunk_split(base64_encode(file_get_contents($attachment['path']))) . self::CRLF;
+            }
+
+            $body .= "--{$this->boundary}--" . self::CRLF;
+        } else {
+            $body .= $this->encodeContent($this->message_html ?: $this->message_text, $this->message_html ? 'html' : 'text');
         }
-        return trim($response);
+
+        return $body;
     }
 
     /**
-     * Send command to mail server
-     * @param $cmd
-     * @return string
+     * Encode the email content
+     * @param string $content The content to encode
+     * @param string $type The content type ('text' or 'html')
+     * @return string The encoded content
      */
-    protected function sendCMD($cmd)
+    protected function encodeContent($content, $type)
     {
-        // TODO: Error checking
-        fputs($this->socket, $cmd . self::CRLF);
-        return $this->getResponse();
+        $contentType = $type === 'html'
+            ? "text/html; charset={$this->charset}"
+            : "text/plain; charset={$this->charset}";
+
+        return "Content-Type: $contentType" . self::CRLF
+            . "Content-Transfer-Encoding: base64" . self::CRLF . self::CRLF
+            . chunk_split(base64_encode($content)) . self::CRLF;
     }
 
     /**
-     * Format email address (with name)
-     * @param $address
-     * @return string
+     * Get the server address with the appropriate protocol prefix
+     * @return string The server address
+     */
+    protected function getServerAddress()
+    {
+        $prefix = $this->protocol === self::SSL ? 'ssl://' : 'tcp://';
+        return $prefix . $this->server . ':' . $this->port;
+    }
+
+    /**
+     * Create a stream context for the connection
+     * @return resource The stream context
+     */
+    protected function createContext()
+    {
+        return stream_context_create([
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ]);
+    }
+
+    /**
+     * Send a command to the SMTP server
+     * @param string $command The command to send
+     */
+    protected function sendCommand($command)
+    {
+        fwrite($this->socket, $command . self::CRLF);
+    }
+
+    /**
+     * Log the response from the SMTP server
+     * @param string $key The key to identify the response
+     */
+    protected function logResponse($key)
+    {
+        $response = '';
+        while ($line = fgets($this->socket, 515)) {
+            $response .= $line;
+            if (substr($line, 3, 1) === ' ') break;
+        }
+        $this->log[$key][] = rtrim($response);
+    }
+
+    /**
+     * Format an email address
+     * @param array $address The email address and name
+     * @return string The formatted email address
      */
     protected function formatAddress($address)
     {
-        return ($address[1] == '') ? $address[0] : '"' . $this->encodeHeader($address[1]) . '" <' . $address[0] . '>';
+        if (!empty($address[1])) {
+            $address[1] = $this->encodeHeader($address[1]);
+        }
+        return empty($address[1])
+            ? $address[0]
+            : "{$address[1]} <{$address[0]}>";
     }
 
     /**
-     * Format email address to list
-     * @param $addresses
-     * @return string
+     * Format a list of email addresses
+     * @param array $addresses The list of email addresses
+     * @return string The formatted list of email addresses
      */
     protected function formatAddressList($addresses)
     {
-        $list = '';
-        foreach ($addresses as $address) {
-            if ($list) {
-                $list .= ', ' . self::CRLF . "\t";
-            }
-            $list .= $this->formatAddress($address);
-        }
-        return $list;
+        return implode(', ', array_map([$this, 'formatAddress'], $addresses));
     }
 
     /**
-     * Encode header string according to RFC 2047
-     * @param $string
-     * @return string
+     * Encode a header value according to RFC 2047
+     * @param string $value The header value to encode
+     * @return string The encoded header value
      */
     protected function encodeHeader($string)
     {
         return '=?' . $this->charset . '?B?' . base64_encode($string) . '?=';
+    }
+
+    /**
+     * Log an error message
+     * @param string $message The error message
+     */
+    protected function logError($message)
+    {
+        $this->log['ERROR'][] = $message;
+    }
+
+    /**
+     * Write the log to the log file
+     */
+    protected function writeLog()
+    {
+        $logEntry = "[" . date('Y-m-d H:i:s') . "] Email Log\n";
+        foreach ($this->log as $key => $entries) {
+            $logEntry .= "$key:\n" . implode("\n", $entries) . "\n";
+        }
+        $logEntry .= str_repeat('-', 40) . "\n";
+        file_put_contents($this->logFile, $logEntry, FILE_APPEND);
     }
 }
