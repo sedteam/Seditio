@@ -885,8 +885,37 @@ var sedjs = {
                 document.getElementsByName(inputFileTitleName)[0].value = title;
             }
         }
-    }
+    },
 
+    /*= Spoiler content */
+    spoiler: function() {
+        // Function to toggle the visibility of the spoiler content
+        function toggleSpoilerContent(spoilerToggle) {
+            var spoilerContent = spoilerToggle.closest('.spoiler').querySelector('.spoiler-content');
+            var displayStyle = window.getComputedStyle(spoilerContent).display;
+
+            // Check the current display style of the spoiler content
+            if (displayStyle === 'none') {
+                // If the content is hidden, show it and update the toggle icon
+                spoilerContent.style.display = 'block';
+                spoilerToggle.classList.remove('hide-icon');
+                spoilerToggle.classList.add('show-icon');
+            } else {
+                // If the content is visible, hide it and update the toggle icon
+                spoilerContent.style.display = 'none';
+                spoilerToggle.classList.remove('show-icon');
+                spoilerToggle.classList.add('hide-icon');
+            }
+        }
+
+        // Find all elements with the class 'spoiler-toggle' and add a click event listener
+        var spoilerToggles = document.querySelectorAll('.spoiler-toggle');
+        spoilerToggles.forEach(function(spoilerToggle) {
+            spoilerToggle.addEventListener('click', function() {
+                toggleSpoilerContent(spoilerToggle);
+            });
+        });
+    }
 };
 
 function addLoadEvent(funct) {
@@ -904,6 +933,7 @@ function addLoadEvent(funct) {
 onloadfunct = function() {
     sedjs.sedtabs();
     sedjs.autofiletitle();
+    sedjs.spoiler();
     //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
     sedjs.getrel("sedthumb");
     var cookie = sedjs.readCookie("style");
