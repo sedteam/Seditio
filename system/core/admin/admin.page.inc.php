@@ -379,7 +379,16 @@ switch ($mn) {
 
 		$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");
 
-		while ($row = sed_sql_fetchassoc($sql)) {
+		$rows = array();
+		while ($data_rows = sed_sql_fetchassoc($sql)) {
+			$rows[] = $data_rows;
+		}
+
+		if ($cfg['structuresort']) {
+			usort($rows, 'sed_structure_sort');
+		}
+
+		foreach ($rows as $row) {
 			$structure_id = $row['structure_id'];
 			$structure_code = $row['structure_code'];
 			$structure_path = $row['structure_path'];
