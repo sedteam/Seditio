@@ -682,8 +682,8 @@ if (!$notlastpage && !$ft_state && $usr['id'] > 0 && $allowreplybox && $usr['aut
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', 80, 12, 'Basic') . " " . $pfs,
-		"FORUMS_POSTS_NEWPOST_TEXTONLY" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', 80, 12, 'Basic'),
+		"FORUMS_POSTS_NEWPOST_TEXT" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', 12, 80, 'Basic') . " " . $pfs,
+		"FORUMS_POSTS_NEWPOST_TEXTONLY" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', 12, 80, 'Basic'),
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
 

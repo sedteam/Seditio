@@ -64,23 +64,50 @@ if ($usr['maingrp'] > 3) {
 	/* ===== Init Ckeditor ===== */
 
 	$init_ck = "
-		<script type=\"text/javascript\">
-			var CkTextareas = Array(); CkTextareas['Micro'] = 150; CkTextareas['Basic'] = 200; CkTextareas['Extended'] = 400; CkTextareas['Full'] = 400;
-			function ckeditorReplace() { 
+	<script type=\"text/javascript\">
+		var CkTextareas = Array(); CkTextareas['Micro'] = 150; CkTextareas['Basic'] = 200; CkTextareas['Extended'] = 400; CkTextareas['Full'] = 600;
+		var toolbarHeight = 40; // Approximate height of the toolbar in pixels
+
+		function ckeditorReplace() {
 			var textareas = document.getElementsByTagName('textarea');
-			for (var i = 0; i < textareas.length; i++) { 
-			  if (CkTextareas[textareas[i].getAttribute('data-editor')] != undefined) {
-				CKEDITOR.timestamp='ABCD';
-				CKEDITOR.config.customConfig = '" . $ck_config . "';
-				CKEDITOR.config.baseHref = '" . $sys['abs_url'] . "';
-				CKEDITOR.replace(textareas[i], {toolbar: " . $ck_toolbar . ",  skin: '" . $ckeditor_skin . "',  language: '" . $ckeditor_lang . "', uiColor: '" . $ckeditor_color_toolbar . "', smiley_path: '/', smiley_images: " . $smiley_path . ", 
-				smiley_descriptions: " . $smiley_descriptions . ",         
-				height: CkTextareas[textareas[i].getAttribute('data-editor')]}); 
-			  }
-			  }}
-			if (window.addEventListener) { window.addEventListener('load', ckeditorReplace, false);
-			} else if (window.attachEvent) { window.attachEvent('onload', ckeditorReplace); } else { window.onload = ckeditorReplace; }  
-		</script>";
+			for (var i = 0; i < textareas.length; i++) {
+				var textarea = textareas[i];
+				var editorType = textarea.getAttribute('data-editor');
+				var rows = textarea.getAttribute('rows');
+				var height;
+
+				if (editorType && editorType !== 'noeditor' && CkTextareas[editorType] != undefined) {
+					if (rows) {
+						var lineHeight = 20; // Approximate line height in pixels
+						height = rows * lineHeight + toolbarHeight;
+					} else {
+						height = CkTextareas[editorType];
+					}
+
+					CKEDITOR.timestamp='ABCDF';
+					CKEDITOR.config.customConfig = '" . $ck_config . "';
+					CKEDITOR.config.baseHref = '" . $sys['abs_url'] . "';
+					CKEDITOR.replace(textarea, {
+						toolbar: " . $ck_toolbar . ",
+						skin: '" . $ckeditor_skin . "',
+						language: '" . $ckeditor_lang . "',
+						uiColor: '" . $ckeditor_color_toolbar . "',
+						smiley_path: '/',
+						smiley_images: " . $smiley_path . ",
+						smiley_descriptions: " . $smiley_descriptions . ",
+						height: height
+					});
+				}
+			}
+		}
+		if (window.addEventListener) {
+			window.addEventListener('load', ckeditorReplace, false);
+		} else if (window.attachEvent) {
+			window.attachEvent('onload', ckeditorReplace);
+		} else {
+			window.onload = ckeditorReplace;
+		}
+	</script>";
 	$moremetas .= "
-		<script src=\"plugins/ckeditor/lib/ckeditor.js?v=4\" type=\"text/javascript\"></script>" . $init_ck;
+	<script src=\"plugins/ckeditor/lib/ckeditor.js?v=4\" type=\"text/javascript\"></script>" . $init_ck;
 }

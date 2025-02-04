@@ -206,8 +206,8 @@ $t->assign(array(
 	"FORUMS_EDITPOST_SUBTITLE" => "#" . $fp_posterid . " " . $fp_postername . " - " . sed_build_date($cfg['dateformat'], $fp_updated) . " " . $usr['timetext'],
 	"FORUMS_EDITPOST_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_EDITPOST_SEND" => sed_url("forums", "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . sed_xg()),
-	"FORUMS_EDITPOST_TEXT" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic') . " " . $pfs,
-	"FORUMS_EDITPOST_TEXTONLY" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_width'], $cfg['textarea_default_height'], 'Basic'),
+	"FORUMS_EDITPOST_TEXT" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic') . " " . $pfs,
+	"FORUMS_EDITPOST_TEXTONLY" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic'),
 	"FORUMS_EDITPOST_TITLE" => sed_textbox('rtopictitle', $ft_title, 56, 64),
 	"FORUMS_EDITPOST_DESC" => sed_textbox('rtopicdesc', $ft_desc, 56, 64),
 	"FORUMS_EDITPOST_MYPFS" => $pfs
