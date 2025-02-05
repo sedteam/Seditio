@@ -45,6 +45,7 @@ unset($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smi
 // ALL the value below are DEFAULTS, change the value in datas/config.php if needed, NOT HERE.
 
 $cfg['authmode'] = 3; 				// (1:cookies, 2:sessions, 3:cookies+sessions)
+$cfg['authsecret'] = TRUE;			// Update the secret code upon every authorization
 $cfg['enablecustomhf'] = TRUE;		// To enable header.$location.tpl and footer.$location.tpl
 $cfg['devmode'] = FALSE;
 $cfg['sefurls'] = TRUE;

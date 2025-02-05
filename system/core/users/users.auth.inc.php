@@ -81,14 +81,19 @@ if ($a == 'check') {
 				}
 			}
 
-			$rmdpass_secret = md5(sed_unique(16)); // New sed171
-
 			$ruserid = $row['user_id'];
 			$rdefskin = $row['user_skin'];
-
-			sed_sql_query("UPDATE $db_users SET user_secret = '" . $rmdpass_secret . "', user_lastip='" . $usr['ip'] . "' WHERE user_id='" . $row['user_id'] . "' LIMIT 1");
-
-			if ($rcookiettl > 0 && ($cfg['authmode'] == 1 || $cfg['authmode'] == 3)) {
+			$rmdpass_secret = $row['user_secret'];
+			
+			if ($cfg['authsecret']) {
+				$rmdpass_secret = md5(sed_unique(16)); // New sed171
+				sed_sql_query("UPDATE $db_users SET user_secret = '" . $rmdpass_secret . "', user_lastip='" . $usr['ip'] . "' WHERE user_id='" . $row['user_id'] . "' LIMIT 1");
+			} else {
+				sed_sql_query("UPDATE $db_users SET user_lastip='" . $usr['ip'] . "' WHERE user_id='" . $row['user_id'] . "' LIMIT 1");
+				
+			}
+			
+			if ($cfg['authmode'] == 1 || $cfg['authmode'] == 3) {		
 				$rcookiettl = ($rcookiettl == 0) ? 604800 : $rcookiettl;
 				$rcookiettl = ($rcookiettl > $cfg['cookielifetime']) ? $cfg['cookielifetime'] : $rcookiettl;
 				$u = base64_encode("$ruserid:_:$rmdpass_secret:_:$rdefskin");
