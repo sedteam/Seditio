@@ -37,14 +37,17 @@ if ($m == 'pages') {
 		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 		sed_block($usr['isadmin']);
 		foreach ($sed_cat as $key => $val) {
-			$sys['catcode'] = $key;
-			$suggestion = new stdClass();
-			$suggestion->id = $val['id'];
-			$suggestion->title = $val['title'];
-			$suggestion->value = $val['title'];
-			$suggestion->url = sed_url("list", "c=" . $key);
-			$suggestion->data = $val;
-			$suggestions[] = $suggestion;
+			if (mb_stripos($val['title'], $query) !== false)
+				{
+				$sys['catcode'] = $key;
+				$suggestion = new stdClass();
+				$suggestion->id = $val['id'];
+				$suggestion->title = $val['title'];
+				$suggestion->value = $val['title'];
+				$suggestion->url = sed_url("list", "c=" . $key);
+				$suggestion->data = $val;
+				$suggestions[] = $suggestion;
+				}
 		}
 	} else {
 		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $c);
