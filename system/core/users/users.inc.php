@@ -18,6 +18,9 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
+$available_sort = array('id', 'name', 'maingrp', 'country', 'timezone', 'email', 'regdate', 'lastlog', 'logcount', 'location', 'occupation', 'birthdate', 'gender');
+$available_way = array('asc', 'desc');
+
 $id = sed_import('id', 'G', 'INT');
 $s = sed_import('s', 'G', 'ALP', 13);
 $w = sed_import('w', 'G', 'ALP', 4);
@@ -64,14 +67,14 @@ if (is_array($extp)) {
 }
 /* ===== */
 
-$forbid_sort = array('password', 'salt', 'secret', 'passtype', 'sid', 'lostpass');
-if (empty($s) || in_array(mb_strtolower($s), $forbid_sort)) {
+if ((!empty($s) && !in_array($s, $available_sort)) || empty($s)) {
 	$s = 'name';
 }
 
-if (empty($w)) {
+if ((!empty($w) && !in_array($w, $available_way)) || empty($w)) {
 	$w = 'asc';
 }
+
 if (empty($f)) {
 	$f = 'all';
 }
@@ -125,12 +128,12 @@ if ($f == 'search' && mb_strlen($y) > 1) {
 	}
 } elseif (mb_substr($f, 0, 8) == 'country_') {
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
+	$cn = isset($sed_countries[$cn]) ? $cn : '00';
 	$title .= $cfg['separator'] . " " . $L['Country'] . " '";
-	$title .= ($cn == '00') ? $L['None'] . "'" : $sed_countries[$cn] . "'";
-	$cn_code = ($cn == '00') ? '' : $cn;
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_country='$cn_code' $sql_where");
+	$title .= ($cn == '00') ? $L['None'] . "'" : $sed_countries[$cn] . "'";	
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_country='$cn' $sql_where");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_country='$cn_code' $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
+	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_country='$cn' $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
 } elseif ($f == 'all') {
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");

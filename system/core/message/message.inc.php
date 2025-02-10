@@ -159,8 +159,8 @@ switch ($msg) {
 	case '404':
 		$message = $L['msg404_0'];
 		$body = $L["msg404_1"];
-		$rd = 5;
-		$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
+		//$rd = 5;
+		//$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 		break;
 
 	case '500':

@@ -62,7 +62,11 @@ if (sed_auth('page', 'any', 'A')) {
 	}
 }
 
-sed_sendheaders();
+if (!empty($msg) && isset($cfg['msg_status'][$msg])) {
+	sed_sendheaders('text/html', $cfg['msg_status'][$msg]);
+} else {
+	sed_sendheaders();
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('header.main');

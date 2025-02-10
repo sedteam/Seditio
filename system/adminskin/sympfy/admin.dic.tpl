@@ -466,7 +466,7 @@
 				</div>
 
 				<div class="table-btn text-center">
-					<button type="submit" class="submit btn">{PHP.L.Update}</button>
+					<button type="submit" class="submit btn">{PHP.L.Add}</button>
 				</div>
 
 			</form>

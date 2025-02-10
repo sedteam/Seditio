@@ -88,6 +88,45 @@ $cfg['msgtype'] = array(
 
 $cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'info', 'w' => 'warning');
 
+// Determine response header 
+$cfg['msg_status'] = array(
+	100 => '403 Forbidden',
+	101 => '200 OK',
+	102 => '200 OK',
+	104 => '200 OK',
+	105 => '200 OK',
+	106 => '200 OK',
+	109 => '200 OK',
+	110 => '200 OK',
+	113 => '200 OK',
+	117 => '403 Forbidden',
+	118 => '200 OK',
+	151 => '403 Forbidden',
+	152 => '403 Forbidden',
+	153 => '403 Forbidden',
+	157 => '403 Forbidden',
+	300 => '200 OK',
+	400 => '400 Bad Request',
+	401 => '401 Authorization Required',
+	403 => '403 Forbidden',
+	404 => '404 Not Found',
+	500 => '500 Internal Server Error',
+	503 => '503 Service Unavailable',
+	602 => '403 Forbidden',
+	603 => '403 Forbidden',
+	900 => '503 Service Unavailable',
+	904 => '403 Forbidden',
+	907 => '404 Not Found',
+	911 => '404 Not Found',
+	915 => '200 OK',
+	916 => '200 OK',
+	920 => '200 OK',
+	930 => '403 Forbidden',
+	940 => '403 Forbidden',
+	950 => '403 Forbidden',
+	951 => '503 Service Unavailable'
+);
+
 /* ======== Empty default Var ======== */
 
 $out['notices'] = '';
@@ -1167,7 +1206,7 @@ function sed_build_group($grpid)
 {
 	global $sed_groups, $L;
 
-	if (empty($grpid)) {
+	if (empty($grpid) || !isset($sed_groups[$grpid])) {
 		$res = '';
 	} else {
 		if ($sed_groups[$grpid]['hidden']) {
@@ -2104,45 +2143,8 @@ function sed_die_message($code, $message_title = '', $message_body = '', $redire
 	$mskin = sed_skinfile(array($code, 'message')) ? sed_skinfile(array($code, 'message')) : sed_skinfile('service.message');
 	require(SED_ROOT . "/system/lang/$lang/message.lang.php");
 
-	// Determine response header 
-	$msg_status = array(
-		100 => '403 Forbidden',
-		101 => '200 OK',
-		102 => '200 OK',
-		105 => '200 OK',
-		106 => '200 OK',
-		109 => '200 OK',
-		117 => '403 Forbidden',
-		118 => '200 OK',
-		151 => '403 Forbidden',
-		152 => '403 Forbidden',
-		153 => '403 Forbidden',
-		157 => '403 Forbidden',
-		300 => '200 OK',
-		400 => '400 Bad Request',
-		401 => '401 Authorization Required',
-		403 => '403 Forbidden',
-		404 => '404 Not Found',
-		500 => '500 Internal Server Error',
-		503 => '503 Service Unavailable',
-		602 => '403 Forbidden',
-		603 => '403 Forbidden',
-		900 => '503 Service Unavailable',
-		904 => '403 Forbidden',
-		907 => '404 Not Found',
-		911 => '404 Not Found',
-		915 => '200 OK',
-		916 => '200 OK',
-		920 => '200 OK',
-		930 => '403 Forbidden',
-		940 => '403 Forbidden',
-		950 => '403 Forbidden',
-		951 => '503 Service Unavailable'
-	);
-
-	if (array_key_exists($code, $msg_status)) {
-		sed_sendheaders('text/html', $msg_status[$code]);
-
+	if (array_key_exists($code, $cfg['msg_status'])) {
+		sed_sendheaders('text/html', $cfg['msg_status'][$code]);
 		// Determine message title and body 
 		$title = empty($message_title) ? $L['msg' . $code . '_0'] : $message_title;
 		$body = empty($message_body) ? $L['msg' . $code . '_1'] : $message_body;
