@@ -22,27 +22,33 @@ CKEDITOR.plugins.add('imagepaste', {
                     var formData = new FormData();
                     formData.append('imageUrl', src);
 
-                    xhr.open('POST', uploadUrl, false);
+                    xhr.open('POST', uploadUrl, true);
                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhr.send('imageUrl=' + encodeURIComponent(src));
-
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.uploaded) {
-                            img.setAttribute('src', response.url);
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            try {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.uploaded) {
+                                    img.setAttribute('src', response.url);
+                                } else {
+                                    console.log('Error uploading image:', response.error.message);
+                                }
+                            } catch (e) {
+                                console.log('Invalid JSON response:', xhr.responseText);
+                            }
                         } else {
-                            console.error('Error uploading image:', response.error.message);
+                           console.log('Server error:', xhr.statusText);
                         }
-                    } else {
-                        console.error('Server error:', xhr.statusText);
-                    }
+                    };
+                    xhr.onerror = function() {
+                        console.log('Request failed');
+                    };
+                    xhr.send('imageUrl=' + encodeURIComponent(src));
                 }
             }
             evt.data.dataValue = tempDiv.innerHTML;
         });
     }
 });
-
-	
 	
 })();
