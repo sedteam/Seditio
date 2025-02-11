@@ -1,9 +1,11 @@
 CKEDITOR.editorConfig = function(config) {
     config.toolbar = 'Basic';
 
-    config.extraPlugins = 'more,html5video,imagepaste,spoiler';
+    config.extraPlugins = 'more,html5video,imagepaste,spoiler,internallink';
 
-    config.uploadUrl = 'plug/?ajx=ckeditor';
+    config.internallinkServiceURL = "/ajax/?m=pages";
+	
+	config.uploadUrl = 'plug/?ajx=ckeditor';
     config.filebrowserUploadUrl = 'plug/?ajx=ckeditor&fl=filebrowser';
 
     config.pasteUploadFileApi = 'plug/?ajx=ckeditor';
@@ -28,7 +30,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
         '/', ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
         ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'],
-        ['Link', 'Unlink', 'Anchor'],
+        ['Link', 'Unlink', 'Anchor', 'InternalLink'],
         ['Image', 'Youtube', 'MediaEmbed', 'Html5video'],
         ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'],
         '/', ['Styles', 'Format', 'Font', 'FontSize'],
@@ -42,7 +44,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SpellChecker'],
         ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat'],
         ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
-        ['Link', 'Unlink', 'Anchor'],
+        ['Link', 'Unlink', 'Anchor', 'InternalLink'],
         ['Image', 'Youtube', 'MediaEmbed', 'Html5video'],
         ['Syntaxhighlight', 'More', 'Maximize', 'ShowBlocks'],
         ['Templates', 'AddLayout', 'Spoiler'],

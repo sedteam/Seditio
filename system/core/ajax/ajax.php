@@ -31,7 +31,7 @@ $c = sed_import('c', 'G', 'TXT');
 
 $suggestions = array();
 
-if ($m == 'pages') {
+if ($m == 'pages' && !empty($query)) {
 	$sql_where = '';
 	if (empty($c)) {
 		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
