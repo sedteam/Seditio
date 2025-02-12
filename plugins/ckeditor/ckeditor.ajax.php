@@ -40,6 +40,7 @@ $result_upload = array();
 $disp_errors = "";
 $uploaded = 0;
 $filename = "";
+$imageUrl = "";
 
 // Get user permissions and group information
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
@@ -72,33 +73,35 @@ $u_type = isset($_FILES['upload']['type']) ? $_FILES['upload']['type'] : null;
 $u_name = isset($_FILES['upload']['name']) ? $_FILES['upload']['name'] : null;
 $u_size = isset($_FILES['upload']['size']) ? $_FILES['upload']['size'] : null;
 
-// Handle file upload through $_POST with image URL
-$imageUrl = isset($_POST['imageUrl']) ? $_POST['imageUrl'] : null;
+// Only for admin
+if ($usr['isadmin']) {
+	// Handle file upload through $_POST with image URL
+	$imageUrl = isset($_POST['imageUrl']) ? $_POST['imageUrl'] : null;
 
-// Determine the temporary directory
-$tmp_dir = ini_get('upload_tmp_dir') ?: sys_get_temp_dir();
+	// Determine the temporary directory
+	$tmp_dir = ini_get('upload_tmp_dir') ?: sys_get_temp_dir();
 
-if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
-    $imageData = file_get_contents($imageUrl);
-    if ($imageData === false) {
-        $disp_errors = "Failed to fetch image from URL";
-    } else {
-        $u_size = strlen($imageData);
-        $u_name = basename($imageUrl);
-		$extension_arr = explode(".", $u_name);
-		$f_extension = end($extension_arr);
-		if (in_array($f_extension, $cfg['gd_supported']))
-			{			
-			$u_tmp_name = tempnam($tmp_dir, 'CKE'); // Use the temporary directory for the temporary file
-			file_put_contents($u_tmp_name, $imageData);
+	if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+		$imageData = file_get_contents($imageUrl);
+		if ($imageData === false) {
+			$disp_errors = "Failed to fetch image from URL";
+		} else {
+			$u_size = strlen($imageData);
+			$u_name = basename($imageUrl);
+			$extension_arr = explode(".", $u_name);
+			$f_extension = end($extension_arr);
+			if (in_array($f_extension, $cfg['gd_supported'])) {			
+				$u_tmp_name = tempnam($tmp_dir, 'CKE'); // Use the temporary directory for the temporary file
+				file_put_contents($u_tmp_name, $imageData);
+				}
+			else {
+				$disp_errors = "Bad file extension. Not image.";
 			}
-		else {
-			$disp_errors = "Bad file extension. Not image.";
 		}
-    }
+	}
 }
 
-if (empty($disp_errors)) {
+if (empty($disp_errors) && !empty($u_name)) {
 	// Check file extension
 	$filename = sed_newname($usr['id']."-".$u_name, TRUE);
 
