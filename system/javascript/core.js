@@ -99,71 +99,179 @@ var sedjs = {
     based on Nanotabs - www.sunsean.com
     -------------------------------------*/
     sedtabs: function(settings) {
-        var gc = function(s) { return document.getElementsByClassName(s); };
-        if (!document.getElementsByClassName) {
-            var all = document.getElementsByTagName('*');
-            gc = function(c) {
-                var e = [];
-                c = ' ' + c + ' ';
-                for (var i = 0; i < all.length; i++)
-                    if ((' ' + all[i].className + ' ').indexOf(c) >= 0)
-                        e.push(all[i]);
-                return e;
+        // Polyfill for getElementsByClassName for older browsers
+        var getElementsByClass = function(className) {
+            if (document.getElementsByClassName) {
+                return document.getElementsByClassName(className);
             }
-        }
-        var w = function(id) { var d; return (d = document.getElementById(id)) && [d] || gc(id); },
-            bind = function(f) { var self = this; return function() { return f.apply(self, arguments); }; },
-            map = function(f, e, a) { for (var i = 0; i < e.length; i++) f.apply(e[i], a || []); },
-            add = function(c) {
-                this.className += c;
-                var tabtitle = this.getAttribute('data-tabtitle');
-                if (tabtitle && document.getElementsByClassName('tab-title') != null) { document.getElementsByClassName('tab-title')[0].innerText = tabtitle; }
-            },
-            remove = function(c) { this.className = this.className.replace(new RegExp("(^|\\s)" + c + "(\\s|$)", 'g'), ''); },
-            hide = function() { this.style.display = "none"; },
-            show = function() { this.style.display = "block"; };
-        var tab = function(id, a, e, s) {
-            map(remove, a, [s.s]);
-            add.call(this, s.s);
-            map(hide, e);
-            map(show, w(id));
+
+            // Fallback for browsers without getElementsByClassName
+            var allElements = document.getElementsByTagName('*');
+            var elements = [];
+            var targetClass = ' ' + className + ' ';
+
+            for (var i = 0; i < allElements.length; i++) {
+                var elementClass = ' ' + allElements[i].className + ' ';
+                if (elementClass.indexOf(targetClass) >= 0) {
+                    elements.push(allElements[i]);
+                }
+            }
+            return elements;
         };
-        stabs = function(s) {
-            var i, s = s || {},
-                o = "cesdf".split('');
-            for (i in o) s[o[i]] = s[o[i]] || stabs.settings[o[i]];
-            var c = w(s.c),
-                f = function() {
-                    var t = this,
-                        o = t[0],
-                        a = [t[1], t[2], t[3], t[4]];
-                    if (!s.f || s.f.apply(o, a) !== false) tab.apply(o, a);
-                    return false;
-                };
-            for (i = 0; i < c.length; i++) {
-                var x = 0,
-                    e = [],
-                    a = [],
-                    h = [],
-                    t = c[i].getElementsByTagName("a");
-                for (var j = 0; j < t.length; j++)
-                    if (t[j].href.match(/#tab/)) {
-                        h.push(t[j].href.split('#')[1]);
-                        if (typeof s.d == "string" && h[x] == s.d) s.d = x;
-                        a.push(t[j]);
-                        var g = w(h[x]);
-                        for (var k = 0; k < g.length; k++) e.push(g[k]);
-                        x++;
+
+        // Get element by ID or elements by class name
+        var getElementOrElements = function(identifier) {
+            var byId = document.getElementById(identifier);
+            return byId ? [byId] : getElementsByClass(identifier);
+        };
+
+        // Bind context to a function
+        var bindFunction = function(func) {
+            var context = this;
+            return function() {
+                return func.apply(context, arguments);
+            };
+        };
+
+        // Apply function to all elements in array
+        var applyToAllElements = function(func, elements, args) {
+            for (var i = 0; i < elements.length; i++) {
+                func.apply(elements[i], args || []);
+            }
+        };
+
+        // Class manipulation functions
+        var addClass = function(className) {
+            this.className += ' ' + className;
+            // Update tab title if data attribute exists
+            var tabTitle = this.getAttribute('data-tabtitle');
+            if (tabTitle && document.getElementsByClassName('tab-title')[0]) {
+                document.getElementsByClassName('tab-title')[0].textContent = tabTitle;
+            }
+        };
+
+        var removeClass = function(className) {
+            this.className = this.className.replace(
+                new RegExp('(^|\\s)' + className + '(\\s|$)', 'g'), ' '
+            ).trim();
+        };
+
+        // Visibility functions
+        var hideElement = function() { this.style.display = 'none'; };
+        var showElement = function() { this.style.display = 'block'; };
+
+        // Handle tab switching logic
+        var switchTab = function(tabId, tabLinks, tabContents, settings) {
+            // Remove active class from all tabs
+            applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
+            // Add active class to clicked tab
+            addClass.call(this, settings.selectedClass);
+
+            // Hide all tab contents
+            applyToAllElements(hideElement, tabContents);
+            // Show target tab content
+            applyToAllElements(showElement, getElementOrElements(tabId));
+        };
+
+        // Main tabs initialization function
+        var initTabs = function(config) {
+            var mergedConfig = config || {};
+            // Merge user settings with defaults
+            var defaultSettings = {
+                containerClass: 'sedtabs',
+                eventType: 'click',
+                selectedClass: 'selected',
+                defaultTabIndex: 0,
+                beforeSwitchCallback: false
+            };
+
+            // Override defaults with user settings
+            for (var key in defaultSettings) {
+                mergedConfig[key] = mergedConfig[key] || defaultSettings[key];
+            }
+
+            var tabContainers = getElementOrElements(mergedConfig.containerClass);
+
+            // Handle tab click functionality
+            var handleTabClick = function() {
+                var clickedTab = this;
+                var tabLinks = this.tabLinks;
+                var tabContents = this.tabContents;
+
+                // Execute callback if exists and check return value
+                if (!mergedConfig.beforeSwitchCallback ||
+                    mergedConfig.beforeSwitchCallback.apply(clickedTab, this.callbackArgs) !== false) {
+                    switchTab.apply(clickedTab, this.callbackArgs);
+                }
+                return false;
+            };
+
+            // Initialize each tab container
+            for (var i = 0; i < tabContainers.length; i++) {
+                var container = tabContainers[i];
+                var tabLinks = container.getElementsByTagName('a');
+                var tabIds = [];
+                var tabs = [];
+                var tabContents = [];
+
+                // Process each tab link
+                for (var j = 0; j < tabLinks.length; j++) {
+                    if (tabLinks[j].href.match(/#tab/)) {
+                        // Extract tab ID from href
+                        var tabId = tabLinks[j].href.split('#')[1];
+                        tabIds.push(tabId);
+
+                        // Set default tab if specified
+                        if (typeof mergedConfig.defaultTabIndex === 'string' &&
+                            tabId === mergedConfig.defaultTabIndex) {
+                            mergedConfig.defaultTabIndex = j;
+                        }
+
+                        tabs.push(tabLinks[j]);
+
+                        // Get associated content elements
+                        var contentElements = getElementOrElements(tabId);
+                        for (var k = 0; k < contentElements.length; k++) {
+                            tabContents.push(contentElements[k]);
+                        }
                     }
-                for (var j = 0; j < a.length; j++)
-                    a[j]['on' + s.e] = bind.call([a[j], h[j], a, e, s], f);
-                if (typeof s.d == "number" && s.d >= 0) tab.call(a[s.d], h[s.d], a, e, s);
+                }
+
+                // Attach click handlers to tabs
+                for (var j = 0; j < tabs.length; j++) {
+                    var callbackArgs = [
+                        tabIds[j], // Target tab ID
+                        tabs, // All tab links
+                        tabContents, // All tab content elements
+                        mergedConfig // Settings object
+                    ];
+
+                    // Store context for click handler
+                    tabs[j].tabLinks = tabs;
+                    tabs[j].tabContents = tabContents;
+                    tabs[j].callbackArgs = callbackArgs;
+
+                    // Attach event listener
+                    tabs[j]['on' + mergedConfig.eventType] =
+                        bindFunction.call(tabs[j], handleTabClick);
+                }
+
+                // Activate default tab
+                if (typeof mergedConfig.defaultTabIndex === 'number' &&
+                    mergedConfig.defaultTabIndex >= 0) {
+                    switchTab.call(
+                        tabs[mergedConfig.defaultTabIndex],
+                        tabIds[mergedConfig.defaultTabIndex],
+                        tabs,
+                        tabContents,
+                        mergedConfig
+                    );
+                }
             }
         };
 
-        stabs.settings = { c: "sedtabs", e: "click", s: "selected", d: 0, f: false };
-        stabs(settings);
-
+        // Initialize tabs with merged configuration
+        initTabs(settings);
     },
 
     /*= Get Attribute rel on links & start show thumb in modal window
