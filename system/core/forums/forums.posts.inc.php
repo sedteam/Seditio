@@ -524,7 +524,7 @@ if (!$cfg['disable_polls'] && $ft_poll > 0) {
 			$polls_info = $L['polls_notyetvoted'];
 
 			$ajax_send = sed_url("forums", "m=posts&q=$q&a=send&" . sed_xg() . "&poll=" . $ft_poll . "&vote=" . $po_id . "&ajax=1");
-			$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajax.bind({'url': '" . $ajax_send . "', 'format':  'text', 'method':  'POST', 'update':  'pollajx', 'loading': 'pollvotes', 'formid':  'pollvotes'});" : "";
+			$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajaxbind({'url': '" . $ajax_send . "', 'format':  'html', 'method':  'POST', 'update':  '#pollajx', 'loading': '#pollvotes', 'formid':  '#pollvotes'});" : "";
 
 			$xpoll->assign(array(
 				"POLL_BUTTON_ONCLICK" => $onclick,

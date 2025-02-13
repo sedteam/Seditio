@@ -189,7 +189,7 @@ if (empty($id) || $id == 'viewall') {
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
 		$po_text = sed_cc($row1['po_text']);
-		$percent = @round(100 * ($po_count / $totalvotes), 1);
+		$percent = ($totalvotes > 0) ? @round(100 * ($po_count / $totalvotes), 1) : 0;
 		$percentbar = floor($percent * 2.24);
 
 		$xpoll->assign(array(
@@ -214,7 +214,7 @@ if (empty($id) || $id == 'viewall') {
 		$polls_info = $L['polls_notyetvoted'];
 
 		$ajax_send = sed_url("polls", "a=send&" . sed_xg() . "&id=" . $id . $standalone_url . "&ajax=1");
-		$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajax.bind({'url': '" . $ajax_send . "', 'format':  'text', 'method':  'POST', 'update':  'pollajx', 'loading': 'pollvotes', 'formid':  'pollvotes'});" : "";
+		$onclick = ($cfg['ajax']) ? "event.preventDefault(); sedjs.ajaxbind({'url': '" . $ajax_send . "', 'format':  'html', 'method':  'POST', 'update':  '#pollajx', 'loading': '#pollvotes', 'formid':  '#pollvotes'});" : "";
 
 		$xpoll->assign(array(
 			"POLL_BUTTON_ONCLICK" => $onclick,

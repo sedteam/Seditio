@@ -78,383 +78,491 @@ var sedjs = {
     /*= Get base href
     -------------------------------------*/
     get_basehref: function() {
-        var loc = "";
-        var b = document.getElementsByTagName('base');
-        if (b && b[0] && b[0].href) {
-            if (b[0].href.substr(b[0].href.length - 1) == '/' && loc.charAt(0) == '/')
-                loc = loc.substr(1);
-            loc = b[0].href + loc;
-        }
-        return loc;
-    },
+		var loc = "";
+		var baseElement = document.querySelector('base');
+		if (baseElement && baseElement.href) {
+			if (baseElement.href.substr(baseElement.href.length - 1) === '/' && loc.charAt(0) === '/') {
+				loc = loc.substr(1);
+			}
+			loc = baseElement.href + loc;
+		}
+		return loc;
+	},
 
     /*= Toggle Block
     -------------------------------------*/
     toggleblock: function(id) {
-        var bl = document.getElementById(id);
-        if (bl.style.display == 'none') { bl.style.display = ''; } else { bl.style.display = 'none'; }
-    },
+		var block = document.querySelector('#' + id);
+		if (block) {
+			block.style.display = block.style.display === 'none' ? '' : 'none';
+		}
+	},
 
     /*= Seditio Tabs
     based on Nanotabs - www.sunsean.com
     -------------------------------------*/
     sedtabs: function(settings) {
-        // Polyfill for getElementsByClassName for older browsers
-        var getElementsByClass = function(className) {
-            if (document.getElementsByClassName) {
-                return document.getElementsByClassName(className);
-            }
+		
+		// Function to get elements by class or ID
+		var getElementOrElements = function(identifier) {
+			if (identifier.charAt(0) === '#') {
+				// If the identifier starts with #, it's an ID
+				var byId = document.querySelector(identifier);
+				return byId ? [byId] : [];
+			} else {
+				// Otherwise, it's a class
+				return document.querySelectorAll('.' + identifier);
+			}
+		};
 
-            // Fallback for browsers without getElementsByClassName
-            var allElements = document.getElementsByTagName('*');
-            var elements = [];
-            var targetClass = ' ' + className + ' ';
+		// Function to bind context to a function
+		var bindFunction = function(func) {
+			var context = this;
+			return function() {
+				return func.apply(context, arguments);
+			};
+		};
 
-            for (var i = 0; i < allElements.length; i++) {
-                var elementClass = ' ' + allElements[i].className + ' ';
-                if (elementClass.indexOf(targetClass) >= 0) {
-                    elements.push(allElements[i]);
-                }
-            }
-            return elements;
-        };
+		// Function to apply a function to all elements in an array
+		var applyToAllElements = function(func, elements, args) {
+			for (var i = 0; i < elements.length; i++) {
+				func.apply(elements[i], args || []);
+			}
+		};
 
-        // Get element by ID or elements by class name
-        var getElementOrElements = function(identifier) {
-            var byId = document.getElementById(identifier);
-            return byId ? [byId] : getElementsByClass(identifier);
-        };
+		// Functions to work with classes
+		var addClass = function(className) {
+			this.classList.add(className);
+			// Update the tab title if a data attribute exists
+			var tabTitle = this.getAttribute('data-tabtitle');
+			if (tabTitle && document.querySelector('.tab-title')) {
+				document.querySelector('.tab-title').textContent = tabTitle;
+			}
+		};
 
-        // Bind context to a function
-        var bindFunction = function(func) {
-            var context = this;
-            return function() {
-                return func.apply(context, arguments);
-            };
-        };
+		var removeClass = function(className) {
+			this.classList.remove(className);
+		};
 
-        // Apply function to all elements in array
-        var applyToAllElements = function(func, elements, args) {
-            for (var i = 0; i < elements.length; i++) {
-                func.apply(elements[i], args || []);
-            }
-        };
+		// Functions to manage visibility
+		var hideElement = function() { this.style.display = 'none'; };
+		var showElement = function() { this.style.display = 'block'; };
 
-        // Class manipulation functions
-        var addClass = function(className) {
-            this.className += ' ' + className;
-            // Update tab title if data attribute exists
-            var tabTitle = this.getAttribute('data-tabtitle');
-            if (tabTitle && document.getElementsByClassName('tab-title')[0]) {
-                document.getElementsByClassName('tab-title')[0].textContent = tabTitle;
-            }
-        };
+		// Logic to switch tabs
+		var switchTab = function(tabId, tabLinks, tabContents, settings) {
+			// Remove the active class from all tabs
+			applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
+			// Add the active class to the selected tab
+			addClass.call(this, settings.selectedClass);
 
-        var removeClass = function(className) {
-            this.className = this.className.replace(
-                new RegExp('(^|\\s)' + className + '(\\s|$)', 'g'), ' '
-            ).trim();
-        };
+			// Hide all tab contents
+			applyToAllElements(hideElement, tabContents);
+			// Show the content of the target tab
+			applyToAllElements(showElement, document.querySelectorAll('#' + tabId));
+		};
 
-        // Visibility functions
-        var hideElement = function() { this.style.display = 'none'; };
-        var showElement = function() { this.style.display = 'block'; };
+		// Main function to initialize tabs
+		var initTabs = function(config) {
+			var mergedConfig = config || {};
+			// Merge user settings with default settings
+			var defaultSettings = {
+				containerClass: 'sedtabs',
+				eventType: 'click',
+				selectedClass: 'selected',
+				defaultTabIndex: 0,
+				beforeSwitchCallback: false
+			};
 
-        // Handle tab switching logic
-        var switchTab = function(tabId, tabLinks, tabContents, settings) {
-            // Remove active class from all tabs
-            applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
-            // Add active class to clicked tab
-            addClass.call(this, settings.selectedClass);
+			// Override default settings with user settings
+			for (var key in defaultSettings) {
+				if (defaultSettings.hasOwnProperty(key)) {
+					mergedConfig[key] = mergedConfig[key] || defaultSettings[key];
+				}
+			}
 
-            // Hide all tab contents
-            applyToAllElements(hideElement, tabContents);
-            // Show target tab content
-            applyToAllElements(showElement, getElementOrElements(tabId));
-        };
+			var tabContainers = document.querySelectorAll('.' + mergedConfig.containerClass);
 
-        // Main tabs initialization function
-        var initTabs = function(config) {
-            var mergedConfig = config || {};
-            // Merge user settings with defaults
-            var defaultSettings = {
-                containerClass: 'sedtabs',
-                eventType: 'click',
-                selectedClass: 'selected',
-                defaultTabIndex: 0,
-                beforeSwitchCallback: false
-            };
+			// Handle tab click
+			var handleTabClick = function() {
+				var clickedTab = this;
+				var tabLinks = this.tabLinks;
+				var tabContents = this.tabContents;
 
-            // Override defaults with user settings
-            for (var key in defaultSettings) {
-                mergedConfig[key] = mergedConfig[key] || defaultSettings[key];
-            }
+				// Execute callback if it exists and check the return value
+				if (!mergedConfig.beforeSwitchCallback ||
+					mergedConfig.beforeSwitchCallback.apply(clickedTab, this.callbackArgs) !== false) {
+					switchTab.apply(clickedTab, this.callbackArgs);
+				}
+				return false;
+			};
 
-            var tabContainers = getElementOrElements(mergedConfig.containerClass);
+			// Initialize each tab container
+			for (var i = 0; i < tabContainers.length; i++) {
+				var container = tabContainers[i];
+				var tabLinks = container.querySelectorAll('a');
+				var tabIds = [];
+				var tabs = [];
+				var tabContents = [];
 
-            // Handle tab click functionality
-            var handleTabClick = function() {
-                var clickedTab = this;
-                var tabLinks = this.tabLinks;
-                var tabContents = this.tabContents;
+				// Handle each tab link
+				for (var j = 0; j < tabLinks.length; j++) {
+					if (tabLinks[j].href.match(/#tab/)) {
+						// Extract tab ID from href
+						var tabId = tabLinks[j].href.split('#')[1];
+						tabIds.push(tabId);
 
-                // Execute callback if exists and check return value
-                if (!mergedConfig.beforeSwitchCallback ||
-                    mergedConfig.beforeSwitchCallback.apply(clickedTab, this.callbackArgs) !== false) {
-                    switchTab.apply(clickedTab, this.callbackArgs);
-                }
-                return false;
-            };
+						// Set default tab if specified
+						if (typeof mergedConfig.defaultTabIndex === 'string' &&
+							tabId === mergedConfig.defaultTabIndex) {
+							mergedConfig.defaultTabIndex = j;
+						}
 
-            // Initialize each tab container
-            for (var i = 0; i < tabContainers.length; i++) {
-                var container = tabContainers[i];
-                var tabLinks = container.getElementsByTagName('a');
-                var tabIds = [];
-                var tabs = [];
-                var tabContents = [];
+						tabs.push(tabLinks[j]);
 
-                // Process each tab link
-                for (var j = 0; j < tabLinks.length; j++) {
-                    if (tabLinks[j].href.match(/#tab/)) {
-                        // Extract tab ID from href
-                        var tabId = tabLinks[j].href.split('#')[1];
-                        tabIds.push(tabId);
+						// Get related content elements
+						var contentElements = document.querySelectorAll('#' + tabId);
+						for (var k = 0; k < contentElements.length; k++) {
+							tabContents.push(contentElements[k]);
+						}
+					}
+				}
 
-                        // Set default tab if specified
-                        if (typeof mergedConfig.defaultTabIndex === 'string' &&
-                            tabId === mergedConfig.defaultTabIndex) {
-                            mergedConfig.defaultTabIndex = j;
-                        }
+				// Bind click handlers to tabs
+				for (var j = 0; j < tabs.length; j++) {
+					var callbackArgs = [
+						tabIds[j], // Target tab ID
+						tabs, // All tab links
+						tabContents, // All tab content elements
+						mergedConfig // Settings object
+					];
 
-                        tabs.push(tabLinks[j]);
+					// Save context for click handler
+					tabs[j].tabLinks = tabs;
+					tabs[j].tabContents = tabContents;
+					tabs[j].callbackArgs = callbackArgs;
 
-                        // Get associated content elements
-                        var contentElements = getElementOrElements(tabId);
-                        for (var k = 0; k < contentElements.length; k++) {
-                            tabContents.push(contentElements[k]);
-                        }
-                    }
-                }
+					// Bind event listener
+					tabs[j]['on' + mergedConfig.eventType] =
+						bindFunction.call(tabs[j], handleTabClick);
+				}
 
-                // Attach click handlers to tabs
-                for (var j = 0; j < tabs.length; j++) {
-                    var callbackArgs = [
-                        tabIds[j], // Target tab ID
-                        tabs, // All tab links
-                        tabContents, // All tab content elements
-                        mergedConfig // Settings object
-                    ];
+				// Activate the default tab
+				if (typeof mergedConfig.defaultTabIndex === 'number' &&
+					mergedConfig.defaultTabIndex >= 0) {
+					switchTab.call(
+						tabs[mergedConfig.defaultTabIndex],
+						tabIds[mergedConfig.defaultTabIndex],
+						tabs,
+						tabContents,
+						mergedConfig
+					);
+				}
+			}
+		};
 
-                    // Store context for click handler
-                    tabs[j].tabLinks = tabs;
-                    tabs[j].tabContents = tabContents;
-                    tabs[j].callbackArgs = callbackArgs;
-
-                    // Attach event listener
-                    tabs[j]['on' + mergedConfig.eventType] =
-                        bindFunction.call(tabs[j], handleTabClick);
-                }
-
-                // Activate default tab
-                if (typeof mergedConfig.defaultTabIndex === 'number' &&
-                    mergedConfig.defaultTabIndex >= 0) {
-                    switchTab.call(
-                        tabs[mergedConfig.defaultTabIndex],
-                        tabIds[mergedConfig.defaultTabIndex],
-                        tabs,
-                        tabContents,
-                        mergedConfig
-                    );
-                }
-            }
-        };
-
-        // Initialize tabs with merged configuration
-        initTabs(settings);
+		// Initialize tabs with merged configuration
+		initTabs(settings);
     },
 
     /*= Get Attribute rel on links & start show thumb in modal window
     -------------------------------------*/
     getrel: function(rel) {
-        var pagelinks = document.getElementsByTagName("a");
-        for (var i = 0; i < pagelinks.length; i++) {
-            if (pagelinks[i].getAttribute("rel") && pagelinks[i].getAttribute("rel") == rel) {
-                pagelinks[i].onclick = function() {
-                    var imglink = this.getAttribute("href");
-                    var imgtitle = "Picture";
-                    if (this.getAttribute("title")) {
-                        imgtitle = this.getAttribute("title");
-                    }
-                    var randid = imglink.replace(/[^a-z0-9]/gi, '');
-                    sedjs.modal.open('img-' + randid, 'image', imglink, imgtitle, 'resize=0,scrolling=0,center=1', 'load');
-                    return false;
-                }
-            }
-        }
+        var pageLinks = document.querySelectorAll('a[rel="' + rel + '"]');
+        Array.prototype.forEach.call(pageLinks, function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var imgLink = link.getAttribute('href');
+                var imgTitle = link.getAttribute('title') || 'Picture';
+                var randId = imgLink.replace(/[^a-z0-9]/gi, '');
+                sedjs.modal.open('img-' + randId, 'image', imgLink, imgTitle, 'resize=0,scrolling=0,center=1', 'load');
+            });
+        });
     },
+	
+	/*= Seditio Ajax functions
+	-------------------------------------*/
+	ajax: function(options) {
+		var settings = {
+			url: '',
+			method: 'GET',
+			data: null,
+			dataType: 'text',
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			headers: {},
+			timeout: 0,
+			cache: true,
+			async: true,
+			context: null,
+			beforeSend: null,
+			success: null,
+			error: null,
+			complete: null
+		};
 
-    /*= Seditio Ajax functions
-    -------------------------------------*/
-    ajax: {
-        getHTTPObject: function() {
-            var http = false;
-            if (typeof ActiveXObject != 'undefined') {
-                try { http = new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {
-                    try { http = new ActiveXObject("Microsoft.XMLHTTP"); } catch (E) { http = false; }
-                }
-            } else if (window.XMLHttpRequest) {
-                try { http = new XMLHttpRequest(); } catch (e) { http = false; }
-            }
-            return http;
-        },
-        load: function(url, callback, format, method, opt) {
-            var http = this.init();
-            if (!http || !url) return;
-            if (http.overrideMimeType) http.overrideMimeType('text/xml');
-            if (!method) method = "GET";
-            if (!format) format = "text";
-            if (!opt) opt = {};
-            format = format.toLowerCase();
-            method = method.toUpperCase();
-            var now = "uid=" + new Date().getTime();
-            url += (url.indexOf("?") + 1) ? "&" : "?";
-            url += now;
-            var parameters = null;
-            if (method == "POST") {
-                var postparams = '';
-                if (opt.formid) postparams = '&' + this.serialize(opt.formid);
-                var parts = url.split("\?");
-                //url = parts[0];
-                parameters = parts[1] + postparams;
-            }
-            http.open(method, url, true);
-            if (method == "POST") { http.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); }
-            var ths = this;
-            if (opt.handler) {
-                http.onreadystatechange = function() { opt.handler(http); };
-            } else {
-                http.onreadystatechange = function() {
-                    if (http.readyState == 4) {
-                        if (http.status == 200) {
-                            var result = "";
-                            if (http.responseText) result = http.responseText;
-                            if (format.charAt(0) == "j") {
-                                result = result.replace(/[\n\r]/g, "");
-                                result = eval('(' + result + ')');
+		// Merge options with defaults
+		for (var key in options) {
+			if (options.hasOwnProperty(key)) {
+				settings[key] = options[key];
+			}
+		}
 
-                            } else if (format.charAt(0) == "x") {
-                                result = http.responseXML;
-                            }
-                            if (callback) callback(result);
-                        } else {
-                            if (opt.loading) document.getElementById(opt.loadingid).removeChild(opt.loading);
+		// Create XHR object
+		var xhr = new XMLHttpRequest();
+		var timer;
+		var url = settings.url;
+		var method = settings.method.toUpperCase();
+		var isGet = method === 'GET';
 
-                            if (opt.onError) { opt.onError(http.status); }
-                        }
-                    }
-                }
-            }
-            http.send(parameters);
-        },
-        bind: function(user_options) {
-            var opt = {
-                'url': '',
-                'onSuccess': false,
-                'onError': false,
-                'format': "text",
-                'method': "GET",
-                'update': "",
-                'loading': "",
-                'formid': ""
-            };
-            for (var key in opt) {
-                if (user_options[key]) {
-                    opt[key] = user_options[key];
-                }
-            }
-            if (!opt.url) return;
-            var div = false;
-            if (opt.loading) {
-                div = document.createElement("div");
-                opt.loadingid = opt.loading;
-                var intElemOffsetHeight = Math.floor(document.getElementById(opt.loading).offsetHeight / 2) + 16;
-                var intElemOffsetWidth = Math.floor(document.getElementById(opt.loading).offsetWidth / 2) - 16;
-                div.setAttribute("style", "position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
-                div.setAttribute("class", "loading-indicator");
-                document.getElementById(opt.loading).appendChild(div);
-                opt.loading = div;
-            }
-            this.load(opt.url, function(data) {
-                if (opt.onSuccess) opt.onSuccess(data);
-                if (div) document.getElementById(opt.loadingid).removeChild(div);
-                if (opt.update && data != "") { document.getElementById(opt.update).innerHTML = data; }
-            }, opt.format, opt.method, opt);
-        },
-        serialize: function(formid) {
-            var form = document.getElementById(formid);
-            if (!form || form.nodeName !== "FORM") {
-                return;
-            }
-            var i, j, q = [];
-            for (i = form.elements.length - 1; i >= 0; i = i - 1) {
-                if (form.elements[i].name === "") {
-                    continue;
-                }
-                switch (form.elements[i].nodeName) {
-                    case 'INPUT':
-                        switch (form.elements[i].type) {
-                            case 'text':
-                            case 'hidden':
-                            case 'password':
-                            case 'button':
-                            case 'reset':
-                            case 'submit':
-                                q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
-                                break;
-                            case 'checkbox':
-                            case 'radio':
-                                if (form.elements[i].checked) {
-                                    q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
-                                }
-                                break;
-                            case 'file':
-                                break;
-                        }
-                        break;
-                    case 'TEXTAREA':
-                        q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
-                        break;
-                    case 'SELECT':
-                        switch (form.elements[i].type) {
-                            case 'select-one':
-                                q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
-                                break;
-                            case 'select-multiple':
-                                for (j = form.elements[i].options.length - 1; j >= 0; j = j - 1) {
-                                    if (form.elements[i].options[j].selected) {
-                                        q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].options[j].value));
-                                    }
-                                }
-                                break;
-                        }
-                        break;
-                    case 'BUTTON':
-                        switch (form.elements[i].type) {
-                            case 'reset':
-                            case 'submit':
-                            case 'button':
-                                q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
-                                break;
-                        }
-                        break;
-                }
-            }
-            return q.join("&");
-        },
-        init: function() { return this.getHTTPObject(); }
-    },
+		// Process data
+		if (typeof settings.data === 'object' && !(settings.data instanceof FormData)) {
+			settings.data = sedjs.serialization(settings.data);
+		}
 
+		// Add GET parameters to URL
+		if (isGet && settings.data) {
+			url += (url.indexOf('?') === -1 ? '?' : '&') + settings.data;
+		}
+
+		// Add cache buster
+		if (!settings.cache && isGet) {
+			url += (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now();
+		}
+
+		// Set up XHR
+		xhr.open(method, url, settings.async);
+
+		// Set headers
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		if (!isGet && !(settings.data instanceof FormData)) {
+			xhr.setRequestHeader('Content-Type', settings.contentType);
+		}
+		for (var header in settings.headers) {
+			xhr.setRequestHeader(header, settings.headers[header]);
+		}
+
+		// Timeout handling
+		if (settings.timeout > 0) {
+			timer = setTimeout(function() {
+				xhr.abort();
+				handleError('timeout', 'Request timed out');
+			}, settings.timeout);
+		}
+
+		// Before send callback
+		if (typeof settings.beforeSend === 'function') {
+			if (settings.beforeSend.call(settings.context, xhr, settings) === false) {
+				xhr.abort();
+				return xhr;
+			}
+		}
+
+		// Response handling
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4) {
+				clearTimeout(timer);
+				var status = xhr.status;
+				var response = parseResponse();
+
+				if (status >= 200 && status < 300 || status === 304) {
+					handleSuccess(response);
+				} else {
+					handleError(status, xhr.statusText);
+				}
+				handleComplete(response);
+			}
+		};
+
+		// Send request
+		xhr.send(isGet ? null : settings.data);
+
+		// Response parsing
+		function parseResponse() {
+			var response = xhr.responseText;
+
+			switch(settings.dataType.toLowerCase()) {
+				case 'json':
+					try { return JSON.parse(response); }
+					catch(e) { return response; }
+				case 'xml':
+					return xhr.responseXML;
+				case 'script':
+					(1,eval)(response);
+					return response;
+				default:
+					return response;
+			}
+		}
+
+		// Event handlers
+		function handleSuccess(response) {
+			if (typeof settings.success === 'function') {
+				settings.success.call(settings.context, response, xhr.status, xhr);
+			}
+		}
+
+		function handleError(status, error) {
+			if (typeof settings.error === 'function') {
+				settings.error.call(settings.context, xhr, status, error);
+			}
+		}
+
+		function handleComplete(response) {
+			if (typeof settings.complete === 'function') {
+				settings.complete.call(settings.context, xhr, status);
+			}
+		}
+
+		return xhr;
+	},
+
+	// Helper function for parameter serialization
+	serialization: function(data) {
+		var pairs = [];
+
+		function buildParams(prefix, obj) {
+			if (Array.isArray(obj)) {
+				obj.forEach(function(value, i) {
+					if (/\[\]$/.test(prefix)) {
+						add(prefix, value);
+					} else {
+						buildParams(prefix + '[' + (typeof value === 'object' ? i : '') + ']', value);
+					}
+				});
+			} else if (typeof obj === 'object') {
+				for (var key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						buildParams(prefix ? prefix + '[' + key + ']' : key, obj[key]);
+					}
+				}
+			} else {
+				add(prefix, obj);
+			}
+		}
+
+		function add(key, value) {
+			pairs.push(
+				encodeURIComponent(key) + '=' +
+				encodeURIComponent(value == null ? '' : value)
+			);
+		}
+
+		if (typeof data === 'object') {
+			buildParams('', data);
+		}
+
+		return pairs.join('&').replace(/%20/g, '+');
+	},
+
+	ajaxbind: function(userOptions) {
+		// Default settings
+		var defaults = {
+			url: '',
+			format: 'html',
+			method: 'POST',
+			update: null,
+			loading: null,
+			formid: null,
+			onSuccess: null,
+			onError: null
+		};
+
+		// Merge options with defaults
+		var options = Object.assign({}, defaults, userOptions);
+
+		// Get DOM elements
+		var formElement = options.formid ? document.querySelector(options.formid) : null;
+		var updateElement = options.update ? document.querySelector(options.update) : null;
+		var loadingElement = options.loading ? document.querySelector(options.loading) : null;
+
+		// Prepare data
+		var formData = new FormData();
+
+		if (formElement) {
+			console.log(formElement);
+			// Collect form data
+			var elements = formElement.elements;
+			for (var i = 0; i < elements.length; i++) {
+				var element = elements[i];
+				if (!element.name || element.disabled) continue;
+
+				// Handle different element types
+				if (element.type === 'file') {
+					Array.from(element.files).forEach(function(file) {
+						formData.append(element.name, file);
+					});
+				} else if (element.type === 'checkbox' || element.type === 'radio') {
+					if (element.checked) formData.append(element.name, element.value);
+				} else if (element.tagName === 'SELECT') {
+					if (element.multiple) {
+						Array.from(element.selectedOptions).forEach(function(opt) {
+							formData.append(element.name, opt.value);
+						});
+					} else {
+						formData.append(element.name, element.value);
+					}
+				} else {
+					formData.append(element.name, element.value);
+				}
+			}
+		}
+
+		// Create loading indicator
+		var loaderDiv = null;
+		if (loadingElement) {
+
+			loaderDiv = document.createElement("div");
+
+			// Calculate position for centering
+			var intElemOffsetHeight = Math.floor(loadingElement.offsetHeight / 2) + 16;
+			var intElemOffsetWidth = Math.floor(loadingElement.offsetWidth / 2) - 16;
+
+			// Set styles for the indicator
+			loaderDiv.setAttribute("style", "position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
+			loaderDiv.setAttribute("class", "loading-indicator");
+
+			// Add the indicator to the DOM
+			loadingElement.appendChild(loaderDiv);
+			options.loading = loaderDiv;
+		}
+
+		// Execute request
+		sedjs.ajax({
+			url: options.url,
+			method: options.method,
+			data: formData,
+			contentType: false,
+			processData: false,
+			dataType: options.format,
+			success: function(response) {
+				// Update content
+				if (updateElement) {
+					if (options.format === 'html') {
+						updateElement.innerHTML = response;
+					} else {
+						updateElement.textContent = response;
+					}
+				}
+
+				// User callback
+				if (typeof options.onSuccess === 'function') {
+					options.onSuccess(response);
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('AJAX Error:', status, error);
+				if (typeof options.onError === 'function') {
+					options.onError(xhr, status, error);
+				}
+			},
+			complete: function() {
+				// Hide loader
+				if (loaderDiv && loaderDiv.parentNode) {
+					loaderDiv.parentNode.removeChild(loaderDiv);
+				}
+			}
+		});
+	},
+	
     /*= Seditio Modal Windows functions
     based on DHTML Windows - www.dynamicdrive.com
     -------------------------------------*/
@@ -645,7 +753,7 @@ var sedjs = {
                 }
                 window.frames["_iframe-" + t.id].location.replace(contentsource);
             } else if (contenttype == "ajax") {
-                sedjs.ajax.bind({ url: contentsource, method: 'GET', update: 'area-' + t.id, loading: t.id });
+                sedjs.ajaxbind({ url: contentsource, method: 'GET', update: 'area-' + t.id, loading: t.id });
             }
             t.contentarea.datatype = contenttype;
         },
@@ -1023,7 +1131,7 @@ var sedjs = {
                 toggleSpoilerContent(spoilerToggle);
             });
         });
-    }
+    }	
 };
 
 function addLoadEvent(funct) {

@@ -292,7 +292,7 @@ function sed_get_latestpolls($limit, $mask)
 			$totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
 		} else {
 			$alreadyvoted = 0;
-			$res .= "<form name=\"pollvote_" . $poll_id . "\" action=\"javascript:sedjs.pollvote(document.pollvote_" . $poll_id . ".id.value, document.pollvote_" . $poll_id . ".cvote_" . $poll_id . ".value); window.location.reload();\" method=\"post\">"; // sed175      
+			$res .= "<form name=\"pollvote_" . $poll_id . "\" id=\"pollvote_" . $poll_id . "\" action=\"javascript:sedjs.pollvote(document.pollvote_" . $poll_id . ".id.value, document.pollvote_" . $poll_id . ".cvote_" . $poll_id . ".value); window.location.reload();\" method=\"post\">"; // sed175      
 		}
 
 		$res .= "<h5>" . $row_p['poll_text'] . "</h5>\n";
@@ -317,7 +317,7 @@ function sed_get_latestpolls($limit, $mask)
 			$res .= "<input type=\"hidden\" id=\"cvote_" . $poll_id . "\" name=\"cvote_" . $poll_id . "\" value=\"\">\n";
 			$res .= "<input type=\"hidden\" name=\"a\" value=\"send\">\n";
 			if ($cfg['ajax']) {
-				$onclick = "javascript:sedjs.ajax.bind({'url': '?ajax=1&a=send&id='+document.pollvote_" . $poll_id . ".id.value+'&vote='+document.pollvote_" . $poll_id . ".cvote_" . $poll_id . ".value, 'format':  'text', 'method':  'GET', 'update':  'pollajx', 'loading': 'pollajx', 'formid':  'pollajx_" . $poll_id . "'});";
+				$onclick = "javascript:sedjs.ajaxbind({'url': '?ajax=1&a=send&id='+document.pollvote_" . $poll_id . ".id.value+'&vote='+document.pollvote_" . $poll_id . ".cvote_" . $poll_id . ".value, 'format':  'html', 'method':  'GET', 'update':  '#pollajx', 'loading': '#pollajx', 'formid':  '#pollvote_" . $poll_id . "'});";
 				$res .= "<div style=\"text-align:center; margin-top:15px;\"><input type=\"button\" onClick=\"" . $onclick . "\" class=\"submit btn\" value=\"" . $L['Voteto'] . "\"></div>\n";
 			} else {
 				$res .= "<div style=\"text-align:center; margin-top:15px;\"><input type=\"submit\" class=\"submit btn\" value=\"" . $L['Voteto'] . "\"></div>\n";
