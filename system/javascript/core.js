@@ -78,190 +78,190 @@ var sedjs = {
     /*= Get base href
     -------------------------------------*/
     get_basehref: function() {
-		var loc = "";
-		var baseElement = document.querySelector('base');
-		if (baseElement && baseElement.href) {
-			if (baseElement.href.substr(baseElement.href.length - 1) === '/' && loc.charAt(0) === '/') {
-				loc = loc.substr(1);
-			}
-			loc = baseElement.href + loc;
-		}
-		return loc;
-	},
+        var loc = "";
+        var baseElement = document.querySelector('base');
+        if (baseElement && baseElement.href) {
+            if (baseElement.href.substr(baseElement.href.length - 1) === '/' && loc.charAt(0) === '/') {
+                loc = loc.substr(1);
+            }
+            loc = baseElement.href + loc;
+        }
+        return loc;
+    },
 
     /*= Toggle Block
     -------------------------------------*/
     toggleblock: function(id) {
-		var block = document.querySelector('#' + id);
-		if (block) {
-			block.style.display = block.style.display === 'none' ? '' : 'none';
-		}
-	},
+        var block = document.querySelector('#' + id);
+        if (block) {
+            block.style.display = block.style.display === 'none' ? '' : 'none';
+        }
+    },
 
     /*= Seditio Tabs
     based on Nanotabs - www.sunsean.com
     -------------------------------------*/
     sedtabs: function(settings) {
-		
-		// Function to get elements by class or ID
-		var getElementOrElements = function(identifier) {
-			if (identifier.charAt(0) === '#') {
-				// If the identifier starts with #, it's an ID
-				var byId = document.querySelector(identifier);
-				return byId ? [byId] : [];
-			} else {
-				// Otherwise, it's a class
-				return document.querySelectorAll('.' + identifier);
-			}
-		};
 
-		// Function to bind context to a function
-		var bindFunction = function(func) {
-			var context = this;
-			return function() {
-				return func.apply(context, arguments);
-			};
-		};
+        // Function to get elements by class or ID
+        var getElementOrElements = function(identifier) {
+            if (identifier.charAt(0) === '#') {
+                // If the identifier starts with #, it's an ID
+                var byId = document.querySelector(identifier);
+                return byId ? [byId] : [];
+            } else {
+                // Otherwise, it's a class
+                return document.querySelectorAll('.' + identifier);
+            }
+        };
 
-		// Function to apply a function to all elements in an array
-		var applyToAllElements = function(func, elements, args) {
-			for (var i = 0; i < elements.length; i++) {
-				func.apply(elements[i], args || []);
-			}
-		};
+        // Function to bind context to a function
+        var bindFunction = function(func) {
+            var context = this;
+            return function() {
+                return func.apply(context, arguments);
+            };
+        };
 
-		// Functions to work with classes
-		var addClass = function(className) {
-			this.classList.add(className);
-			// Update the tab title if a data attribute exists
-			var tabTitle = this.getAttribute('data-tabtitle');
-			if (tabTitle && document.querySelector('.tab-title')) {
-				document.querySelector('.tab-title').textContent = tabTitle;
-			}
-		};
+        // Function to apply a function to all elements in an array
+        var applyToAllElements = function(func, elements, args) {
+            for (var i = 0; i < elements.length; i++) {
+                func.apply(elements[i], args || []);
+            }
+        };
 
-		var removeClass = function(className) {
-			this.classList.remove(className);
-		};
+        // Functions to work with classes
+        var addClass = function(className) {
+            this.classList.add(className);
+            // Update the tab title if a data attribute exists
+            var tabTitle = this.getAttribute('data-tabtitle');
+            if (tabTitle && document.querySelector('.tab-title')) {
+                document.querySelector('.tab-title').textContent = tabTitle;
+            }
+        };
 
-		// Functions to manage visibility
-		var hideElement = function() { this.style.display = 'none'; };
-		var showElement = function() { this.style.display = 'block'; };
+        var removeClass = function(className) {
+            this.classList.remove(className);
+        };
 
-		// Logic to switch tabs
-		var switchTab = function(tabId, tabLinks, tabContents, settings) {
-			// Remove the active class from all tabs
-			applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
-			// Add the active class to the selected tab
-			addClass.call(this, settings.selectedClass);
+        // Functions to manage visibility
+        var hideElement = function() { this.style.display = 'none'; };
+        var showElement = function() { this.style.display = 'block'; };
 
-			// Hide all tab contents
-			applyToAllElements(hideElement, tabContents);
-			// Show the content of the target tab
-			applyToAllElements(showElement, document.querySelectorAll('#' + tabId));
-		};
+        // Logic to switch tabs
+        var switchTab = function(tabId, tabLinks, tabContents, settings) {
+            // Remove the active class from all tabs
+            applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
+            // Add the active class to the selected tab
+            addClass.call(this, settings.selectedClass);
 
-		// Main function to initialize tabs
-		var initTabs = function(config) {
-			var mergedConfig = config || {};
-			// Merge user settings with default settings
-			var defaultSettings = {
-				containerClass: 'sedtabs',
-				eventType: 'click',
-				selectedClass: 'selected',
-				defaultTabIndex: 0,
-				beforeSwitchCallback: false
-			};
+            // Hide all tab contents
+            applyToAllElements(hideElement, tabContents);
+            // Show the content of the target tab
+            applyToAllElements(showElement, document.querySelectorAll('#' + tabId));
+        };
 
-			// Override default settings with user settings
-			for (var key in defaultSettings) {
-				if (defaultSettings.hasOwnProperty(key)) {
-					mergedConfig[key] = mergedConfig[key] || defaultSettings[key];
-				}
-			}
+        // Main function to initialize tabs
+        var initTabs = function(config) {
+            var mergedConfig = config || {};
+            // Merge user settings with default settings
+            var defaultSettings = {
+                containerClass: 'sedtabs',
+                eventType: 'click',
+                selectedClass: 'selected',
+                defaultTabIndex: 0,
+                beforeSwitchCallback: false
+            };
 
-			var tabContainers = document.querySelectorAll('.' + mergedConfig.containerClass);
+            // Override default settings with user settings
+            for (var key in defaultSettings) {
+                if (defaultSettings.hasOwnProperty(key)) {
+                    mergedConfig[key] = mergedConfig[key] || defaultSettings[key];
+                }
+            }
 
-			// Handle tab click
-			var handleTabClick = function() {
-				var clickedTab = this;
-				var tabLinks = this.tabLinks;
-				var tabContents = this.tabContents;
+            var tabContainers = document.querySelectorAll('.' + mergedConfig.containerClass);
 
-				// Execute callback if it exists and check the return value
-				if (!mergedConfig.beforeSwitchCallback ||
-					mergedConfig.beforeSwitchCallback.apply(clickedTab, this.callbackArgs) !== false) {
-					switchTab.apply(clickedTab, this.callbackArgs);
-				}
-				return false;
-			};
+            // Handle tab click
+            var handleTabClick = function() {
+                var clickedTab = this;
+                var tabLinks = this.tabLinks;
+                var tabContents = this.tabContents;
 
-			// Initialize each tab container
-			for (var i = 0; i < tabContainers.length; i++) {
-				var container = tabContainers[i];
-				var tabLinks = container.querySelectorAll('a');
-				var tabIds = [];
-				var tabs = [];
-				var tabContents = [];
+                // Execute callback if it exists and check the return value
+                if (!mergedConfig.beforeSwitchCallback ||
+                    mergedConfig.beforeSwitchCallback.apply(clickedTab, this.callbackArgs) !== false) {
+                    switchTab.apply(clickedTab, this.callbackArgs);
+                }
+                return false;
+            };
 
-				// Handle each tab link
-				for (var j = 0; j < tabLinks.length; j++) {
-					if (tabLinks[j].href.match(/#tab/)) {
-						// Extract tab ID from href
-						var tabId = tabLinks[j].href.split('#')[1];
-						tabIds.push(tabId);
+            // Initialize each tab container
+            for (var i = 0; i < tabContainers.length; i++) {
+                var container = tabContainers[i];
+                var tabLinks = container.querySelectorAll('a');
+                var tabIds = [];
+                var tabs = [];
+                var tabContents = [];
 
-						// Set default tab if specified
-						if (typeof mergedConfig.defaultTabIndex === 'string' &&
-							tabId === mergedConfig.defaultTabIndex) {
-							mergedConfig.defaultTabIndex = j;
-						}
+                // Handle each tab link
+                for (var j = 0; j < tabLinks.length; j++) {
+                    if (tabLinks[j].href.match(/#tab/)) {
+                        // Extract tab ID from href
+                        var tabId = tabLinks[j].href.split('#')[1];
+                        tabIds.push(tabId);
 
-						tabs.push(tabLinks[j]);
+                        // Set default tab if specified
+                        if (typeof mergedConfig.defaultTabIndex === 'string' &&
+                            tabId === mergedConfig.defaultTabIndex) {
+                            mergedConfig.defaultTabIndex = j;
+                        }
 
-						// Get related content elements
-						var contentElements = document.querySelectorAll('#' + tabId);
-						for (var k = 0; k < contentElements.length; k++) {
-							tabContents.push(contentElements[k]);
-						}
-					}
-				}
+                        tabs.push(tabLinks[j]);
 
-				// Bind click handlers to tabs
-				for (var j = 0; j < tabs.length; j++) {
-					var callbackArgs = [
-						tabIds[j], // Target tab ID
-						tabs, // All tab links
-						tabContents, // All tab content elements
-						mergedConfig // Settings object
-					];
+                        // Get related content elements
+                        var contentElements = document.querySelectorAll('#' + tabId);
+                        for (var k = 0; k < contentElements.length; k++) {
+                            tabContents.push(contentElements[k]);
+                        }
+                    }
+                }
 
-					// Save context for click handler
-					tabs[j].tabLinks = tabs;
-					tabs[j].tabContents = tabContents;
-					tabs[j].callbackArgs = callbackArgs;
+                // Bind click handlers to tabs
+                for (var j = 0; j < tabs.length; j++) {
+                    var callbackArgs = [
+                        tabIds[j], // Target tab ID
+                        tabs, // All tab links
+                        tabContents, // All tab content elements
+                        mergedConfig // Settings object
+                    ];
 
-					// Bind event listener
-					tabs[j]['on' + mergedConfig.eventType] =
-						bindFunction.call(tabs[j], handleTabClick);
-				}
+                    // Save context for click handler
+                    tabs[j].tabLinks = tabs;
+                    tabs[j].tabContents = tabContents;
+                    tabs[j].callbackArgs = callbackArgs;
 
-				// Activate the default tab
-				if (typeof mergedConfig.defaultTabIndex === 'number' &&
-					mergedConfig.defaultTabIndex >= 0) {
-					switchTab.call(
-						tabs[mergedConfig.defaultTabIndex],
-						tabIds[mergedConfig.defaultTabIndex],
-						tabs,
-						tabContents,
-						mergedConfig
-					);
-				}
-			}
-		};
+                    // Bind event listener
+                    tabs[j]['on' + mergedConfig.eventType] =
+                        bindFunction.call(tabs[j], handleTabClick);
+                }
 
-		// Initialize tabs with merged configuration
-		initTabs(settings);
+                // Activate the default tab
+                if (typeof mergedConfig.defaultTabIndex === 'number' &&
+                    mergedConfig.defaultTabIndex >= 0) {
+                    switchTab.call(
+                        tabs[mergedConfig.defaultTabIndex],
+                        tabIds[mergedConfig.defaultTabIndex],
+                        tabs,
+                        tabContents,
+                        mergedConfig
+                    );
+                }
+            }
+        };
+
+        // Initialize tabs with merged configuration
+        initTabs(settings);
     },
 
     /*= Get Attribute rel on links & start show thumb in modal window
@@ -278,291 +278,290 @@ var sedjs = {
             });
         });
     },
-	
-	/*= Seditio Ajax functions
-	-------------------------------------*/
-	ajax: function(options) {
-		var settings = {
-			url: '',
-			method: 'GET',
-			data: null,
-			dataType: 'text',
-			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-			headers: {},
-			timeout: 0,
-			cache: true,
-			async: true,
-			context: null,
-			beforeSend: null,
-			success: null,
-			error: null,
-			complete: null
-		};
 
-		// Merge options with defaults
-		for (var key in options) {
-			if (options.hasOwnProperty(key)) {
-				settings[key] = options[key];
-			}
-		}
+    /*= Seditio Ajax functions
+    -------------------------------------*/
+    ajax: function(options) {
+        var settings = {
+            url: '',
+            method: 'GET',
+            data: null,
+            dataType: 'text',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            headers: {},
+            timeout: 0,
+            cache: true,
+            async: true,
+            context: null,
+            beforeSend: null,
+            success: null,
+            error: null,
+            complete: null
+        };
 
-		// Create XHR object
-		var xhr = new XMLHttpRequest();
-		var timer;
-		var url = settings.url;
-		var method = settings.method.toUpperCase();
-		var isGet = method === 'GET';
+        // Merge options with defaults
+        for (var key in options) {
+            if (options.hasOwnProperty(key)) {
+                settings[key] = options[key];
+            }
+        }
 
-		// Process data
-		if (typeof settings.data === 'object' && !(settings.data instanceof FormData)) {
-			settings.data = sedjs.serialization(settings.data);
-		}
+        // Create XHR object
+        var xhr = new XMLHttpRequest();
+        var timer;
+        var url = settings.url;
+        var method = settings.method.toUpperCase();
+        var isGet = method === 'GET';
 
-		// Add GET parameters to URL
-		if (isGet && settings.data) {
-			url += (url.indexOf('?') === -1 ? '?' : '&') + settings.data;
-		}
+        // Process data
+        if (typeof settings.data === 'object' && !(settings.data instanceof FormData)) {
+            settings.data = sedjs.serialization(settings.data);
+        }
 
-		// Add cache buster
-		if (!settings.cache && isGet) {
-			url += (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now();
-		}
+        // Add GET parameters to URL
+        if (isGet && settings.data) {
+            url += (url.indexOf('?') === -1 ? '?' : '&') + settings.data;
+        }
 
-		// Set up XHR
-		xhr.open(method, url, settings.async);
+        // Add cache buster
+        if (!settings.cache && isGet) {
+            url += (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now();
+        }
 
-		// Set headers
-		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-		if (!isGet && !(settings.data instanceof FormData)) {
-			xhr.setRequestHeader('Content-Type', settings.contentType);
-		}
-		for (var header in settings.headers) {
-			xhr.setRequestHeader(header, settings.headers[header]);
-		}
+        // Set up XHR
+        xhr.open(method, url, settings.async);
 
-		// Timeout handling
-		if (settings.timeout > 0) {
-			timer = setTimeout(function() {
-				xhr.abort();
-				handleError('timeout', 'Request timed out');
-			}, settings.timeout);
-		}
+        // Set headers
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        if (!isGet && !(settings.data instanceof FormData)) {
+            xhr.setRequestHeader('Content-Type', settings.contentType);
+        }
+        for (var header in settings.headers) {
+            xhr.setRequestHeader(header, settings.headers[header]);
+        }
 
-		// Before send callback
-		if (typeof settings.beforeSend === 'function') {
-			if (settings.beforeSend.call(settings.context, xhr, settings) === false) {
-				xhr.abort();
-				return xhr;
-			}
-		}
+        // Timeout handling
+        if (settings.timeout > 0) {
+            timer = setTimeout(function() {
+                xhr.abort();
+                handleError('timeout', 'Request timed out');
+            }, settings.timeout);
+        }
 
-		// Response handling
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4) {
-				clearTimeout(timer);
-				var status = xhr.status;
-				var response = parseResponse();
+        // Before send callback
+        if (typeof settings.beforeSend === 'function') {
+            if (settings.beforeSend.call(settings.context, xhr, settings) === false) {
+                xhr.abort();
+                return xhr;
+            }
+        }
 
-				if (status >= 200 && status < 300 || status === 304) {
-					handleSuccess(response);
-				} else {
-					handleError(status, xhr.statusText);
-				}
-				handleComplete(response);
-			}
-		};
+        // Response handling
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                clearTimeout(timer);
+                var status = xhr.status;
+                var response = parseResponse();
 
-		// Send request
-		xhr.send(isGet ? null : settings.data);
+                if (status >= 200 && status < 300 || status === 304) {
+                    handleSuccess(response);
+                } else {
+                    handleError(status, xhr.statusText);
+                }
+                handleComplete(response);
+            }
+        };
 
-		// Response parsing
-		function parseResponse() {
-			var response = xhr.responseText;
+        // Send request
+        xhr.send(isGet ? null : settings.data);
 
-			switch(settings.dataType.toLowerCase()) {
-				case 'json':
-					try { return JSON.parse(response); }
-					catch(e) { return response; }
-				case 'xml':
-					return xhr.responseXML;
-				case 'script':
-					(1,eval)(response);
-					return response;
-				default:
-					return response;
-			}
-		}
+        // Response parsing
+        function parseResponse() {
+            var response = xhr.responseText;
 
-		// Event handlers
-		function handleSuccess(response) {
-			if (typeof settings.success === 'function') {
-				settings.success.call(settings.context, response, xhr.status, xhr);
-			}
-		}
+            switch (settings.dataType.toLowerCase()) {
+                case 'json':
+                    try { return JSON.parse(response); } catch (e) { return response; }
+                case 'xml':
+                    return xhr.responseXML;
+                case 'script':
+                    (1, eval)(response);
+                    return response;
+                default:
+                    return response;
+            }
+        }
 
-		function handleError(status, error) {
-			if (typeof settings.error === 'function') {
-				settings.error.call(settings.context, xhr, status, error);
-			}
-		}
+        // Event handlers
+        function handleSuccess(response) {
+            if (typeof settings.success === 'function') {
+                settings.success.call(settings.context, response, xhr.status, xhr);
+            }
+        }
 
-		function handleComplete(response) {
-			if (typeof settings.complete === 'function') {
-				settings.complete.call(settings.context, xhr, status);
-			}
-		}
+        function handleError(status, error) {
+            if (typeof settings.error === 'function') {
+                settings.error.call(settings.context, xhr, status, error);
+            }
+        }
 
-		return xhr;
-	},
+        function handleComplete(response) {
+            if (typeof settings.complete === 'function') {
+                settings.complete.call(settings.context, xhr, status);
+            }
+        }
 
-	// Helper function for parameter serialization
-	serialization: function(data) {
-		var pairs = [];
+        return xhr;
+    },
 
-		function buildParams(prefix, obj) {
-			if (Array.isArray(obj)) {
-				obj.forEach(function(value, i) {
-					if (/\[\]$/.test(prefix)) {
-						add(prefix, value);
-					} else {
-						buildParams(prefix + '[' + (typeof value === 'object' ? i : '') + ']', value);
-					}
-				});
-			} else if (typeof obj === 'object') {
-				for (var key in obj) {
-					if (obj.hasOwnProperty(key)) {
-						buildParams(prefix ? prefix + '[' + key + ']' : key, obj[key]);
-					}
-				}
-			} else {
-				add(prefix, obj);
-			}
-		}
+    // Helper function for parameter serialization
+    serialization: function(data) {
+        var pairs = [];
 
-		function add(key, value) {
-			pairs.push(
-				encodeURIComponent(key) + '=' +
-				encodeURIComponent(value == null ? '' : value)
-			);
-		}
+        function buildParams(prefix, obj) {
+            if (Array.isArray(obj)) {
+                obj.forEach(function(value, i) {
+                    if (/\[\]$/.test(prefix)) {
+                        add(prefix, value);
+                    } else {
+                        buildParams(prefix + '[' + (typeof value === 'object' ? i : '') + ']', value);
+                    }
+                });
+            } else if (typeof obj === 'object') {
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        buildParams(prefix ? prefix + '[' + key + ']' : key, obj[key]);
+                    }
+                }
+            } else {
+                add(prefix, obj);
+            }
+        }
 
-		if (typeof data === 'object') {
-			buildParams('', data);
-		}
+        function add(key, value) {
+            pairs.push(
+                encodeURIComponent(key) + '=' +
+                encodeURIComponent(value == null ? '' : value)
+            );
+        }
 
-		return pairs.join('&').replace(/%20/g, '+');
-	},
+        if (typeof data === 'object') {
+            buildParams('', data);
+        }
 
-	ajaxbind: function(userOptions) {
-		// Default settings
-		var defaults = {
-			url: '',
-			format: 'html',
-			method: 'POST',
-			update: null,
-			loading: null,
-			formid: null,
-			onSuccess: null,
-			onError: null
-		};
+        return pairs.join('&').replace(/%20/g, '+');
+    },
 
-		// Merge options with defaults
-		var options = Object.assign({}, defaults, userOptions);
+    ajaxbind: function(userOptions) {
+        // Default settings
+        var defaults = {
+            url: '',
+            format: 'html',
+            method: 'POST',
+            update: null,
+            loading: null,
+            formid: null,
+            onSuccess: null,
+            onError: null
+        };
 
-		// Get DOM elements
-		var formElement = options.formid ? document.querySelector(options.formid) : null;
-		var updateElement = options.update ? document.querySelector(options.update) : null;
-		var loadingElement = options.loading ? document.querySelector(options.loading) : null;
+        // Merge options with defaults
+        var options = Object.assign({}, defaults, userOptions);
 
-		// Prepare data
-		var formData = new FormData();
+        // Get DOM elements
+        var formElement = options.formid ? document.querySelector(options.formid) : null;
+        var updateElement = options.update ? document.querySelector(options.update) : null;
+        var loadingElement = options.loading ? document.querySelector(options.loading) : null;
 
-		if (formElement) {
-			console.log(formElement);
-			// Collect form data
-			var elements = formElement.elements;
-			for (var i = 0; i < elements.length; i++) {
-				var element = elements[i];
-				if (!element.name || element.disabled) continue;
+        // Prepare data
+        var formData = new FormData();
 
-				// Handle different element types
-				if (element.type === 'file') {
-					Array.from(element.files).forEach(function(file) {
-						formData.append(element.name, file);
-					});
-				} else if (element.type === 'checkbox' || element.type === 'radio') {
-					if (element.checked) formData.append(element.name, element.value);
-				} else if (element.tagName === 'SELECT') {
-					if (element.multiple) {
-						Array.from(element.selectedOptions).forEach(function(opt) {
-							formData.append(element.name, opt.value);
-						});
-					} else {
-						formData.append(element.name, element.value);
-					}
-				} else {
-					formData.append(element.name, element.value);
-				}
-			}
-		}
+        if (formElement) {
+            console.log(formElement);
+            // Collect form data
+            var elements = formElement.elements;
+            for (var i = 0; i < elements.length; i++) {
+                var element = elements[i];
+                if (!element.name || element.disabled) continue;
 
-		// Create loading indicator
-		var loaderDiv = null;
-		if (loadingElement) {
+                // Handle different element types
+                if (element.type === 'file') {
+                    Array.from(element.files).forEach(function(file) {
+                        formData.append(element.name, file);
+                    });
+                } else if (element.type === 'checkbox' || element.type === 'radio') {
+                    if (element.checked) formData.append(element.name, element.value);
+                } else if (element.tagName === 'SELECT') {
+                    if (element.multiple) {
+                        Array.from(element.selectedOptions).forEach(function(opt) {
+                            formData.append(element.name, opt.value);
+                        });
+                    } else {
+                        formData.append(element.name, element.value);
+                    }
+                } else {
+                    formData.append(element.name, element.value);
+                }
+            }
+        }
 
-			loaderDiv = document.createElement("div");
+        // Create loading indicator
+        var loaderDiv = null;
+        if (loadingElement) {
 
-			// Calculate position for centering
-			var intElemOffsetHeight = Math.floor(loadingElement.offsetHeight / 2) + 16;
-			var intElemOffsetWidth = Math.floor(loadingElement.offsetWidth / 2) - 16;
+            loaderDiv = document.createElement("div");
 
-			// Set styles for the indicator
-			loaderDiv.setAttribute("style", "position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
-			loaderDiv.setAttribute("class", "loading-indicator");
+            // Calculate position for centering
+            var intElemOffsetHeight = Math.floor(loadingElement.offsetHeight / 2) + 16;
+            var intElemOffsetWidth = Math.floor(loadingElement.offsetWidth / 2) - 16;
 
-			// Add the indicator to the DOM
-			loadingElement.appendChild(loaderDiv);
-			options.loading = loaderDiv;
-		}
+            // Set styles for the indicator
+            loaderDiv.setAttribute("style", "position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
+            loaderDiv.setAttribute("class", "loading-indicator");
 
-		// Execute request
-		sedjs.ajax({
-			url: options.url,
-			method: options.method,
-			data: formData,
-			contentType: false,
-			processData: false,
-			dataType: options.format,
-			success: function(response) {
-				// Update content
-				if (updateElement) {
-					if (options.format === 'html') {
-						updateElement.innerHTML = response;
-					} else {
-						updateElement.textContent = response;
-					}
-				}
+            // Add the indicator to the DOM
+            loadingElement.appendChild(loaderDiv);
+            options.loading = loaderDiv;
+        }
 
-				// User callback
-				if (typeof options.onSuccess === 'function') {
-					options.onSuccess(response);
-				}
-			},
-			error: function(xhr, status, error) {
-				console.error('AJAX Error:', status, error);
-				if (typeof options.onError === 'function') {
-					options.onError(xhr, status, error);
-				}
-			},
-			complete: function() {
-				// Hide loader
-				if (loaderDiv && loaderDiv.parentNode) {
-					loaderDiv.parentNode.removeChild(loaderDiv);
-				}
-			}
-		});
-	},
-	
+        // Execute request
+        sedjs.ajax({
+            url: options.url,
+            method: options.method,
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: options.format,
+            success: function(response) {
+                // Update content
+                if (updateElement) {
+                    if (options.format === 'html') {
+                        updateElement.innerHTML = response;
+                    } else {
+                        updateElement.textContent = response;
+                    }
+                }
+
+                // User callback
+                if (typeof options.onSuccess === 'function') {
+                    options.onSuccess(response);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                if (typeof options.onError === 'function') {
+                    options.onError(xhr, status, error);
+                }
+            },
+            complete: function() {
+                // Hide loader
+                if (loaderDiv && loaderDiv.parentNode) {
+                    loaderDiv.parentNode.removeChild(loaderDiv);
+                }
+            }
+        });
+    },
+
     /*= Seditio Modal Windows functions
     based on DHTML Windows - www.dynamicdrive.com
     -------------------------------------*/
@@ -1131,7 +1130,7 @@ var sedjs = {
                 toggleSpoilerContent(spoilerToggle);
             });
         });
-    }	
+    }
 };
 
 function addLoadEvent(funct) {
