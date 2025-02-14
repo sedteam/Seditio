@@ -120,7 +120,11 @@ var sedjs = {
          * @param {string} mess - The message to display in the confirmation dialog.
          * @returns {boolean} Whether the user confirmed the action.
          */
-        if (confirm(mess)) { return true; } else { return false; }
+        if (confirm(mess)) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     /*= Get base href
@@ -195,8 +199,13 @@ var sedjs = {
             this.classList.remove(className);
         };
 
-        var hideElement = function() { this.style.display = 'none'; };
-        var showElement = function() { this.style.display = 'block'; };
+        var hideElement = function() {
+            this.style.display = 'none';
+        };
+
+        var showElement = function() {
+            this.style.display = 'block';
+        };
 
         var switchTab = function(tabId, tabLinks, tabContents, settings) {
             applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
@@ -406,7 +415,11 @@ var sedjs = {
 
             switch (settings.dataType.toLowerCase()) {
                 case 'json':
-                    try { return JSON.parse(response); } catch (e) { return response; }
+                    try {
+                        return JSON.parse(response);
+                    } catch (e) {
+                        return response;
+                    }
                 case 'xml':
                     return xhr.responseXML;
                 case 'script':
@@ -577,7 +590,7 @@ var sedjs = {
     },
 
     /*= Modal Windows functions
-    	-------------------------------------*/
+    -------------------------------------*/
     modal: {
         // Configuration parameters
         imagefiles: [ // Paths to control icons
@@ -592,7 +605,7 @@ var sedjs = {
         zIndexvalue: 1000, // Base z-index
         tobjects: [], // Storage for created windows
         lastactivet: {}, // Last active window
-		constrainToViewport: false, // Whether to constrain window movement within the viewport
+        constrainToViewport: false, // Whether to constrain window movement within the viewport
 
         /**
          * Initialize a new modal window.
@@ -633,19 +646,39 @@ var sedjs = {
             tElement.handle._parent = tElement;
             tElement.resizearea._parent = tElement;
             tElement.controls._parent = tElement;
-            tElement.onclose = function() { return true; };
-            tElement.onmousedown = function() { this.setfocus(tElement); }.bind(this);
+            tElement.onclose = function() {
+                return true;
+            };
+            tElement.onmousedown = function() {
+                this.setfocus(tElement);
+            }.bind(this);
             tElement.handle.onmousedown = this.setupdrag.bind(this, tElement);
             tElement.resizearea.onmousedown = this.setupdrag.bind(this, tElement);
             tElement.controls.onclick = this.enablecontrols.bind(this, tElement);
-            tElement.show = function() { this.show(tElement); }.bind(this);
-            tElement.hide = function() { this.hide(tElement); }.bind(this);
-            tElement.close = function() { this.close(tElement); }.bind(this);
-            tElement.setSize = function(w, h) { this.setSize(tElement, w, h); }.bind(this);
-            tElement.moveTo = function(x, y) { this.moveTo(tElement, x, y); }.bind(this);
-            tElement.isResize = function(bol) { this.isResize(tElement, bol); }.bind(this);
-            tElement.isScrolling = function(bol) { this.isScrolling(tElement, bol); }.bind(this);
-            tElement.load = function(contenttype, contentsource, title) { this.load(tElement, contenttype, contentsource, title); }.bind(this);
+            tElement.show = function() {
+                this.show(tElement);
+            }.bind(this);
+            tElement.hide = function() {
+                this.hide(tElement);
+            }.bind(this);
+            tElement.close = function() {
+                this.close(tElement);
+            }.bind(this);
+            tElement.setSize = function(w, h) {
+                this.setSize(tElement, w, h);
+            }.bind(this);
+            tElement.moveTo = function(x, y) {
+                this.moveTo(tElement, x, y);
+            }.bind(this);
+            tElement.isResize = function(bol) {
+                this.isResize(tElement, bol);
+            }.bind(this);
+            tElement.isScrolling = function(bol) {
+                this.isScrolling(tElement, bol);
+            }.bind(this);
+            tElement.load = function(contenttype, contentsource, title) {
+                this.load(tElement, contenttype, contentsource, title);
+            }.bind(this);
             this.tobjects.push(tElement);
             return tElement;
         },
@@ -777,8 +810,9 @@ var sedjs = {
                 return;
             }
             contenttype = contenttype.toLowerCase();
-            if (title)
+            if (title) {
                 t.handle.firstChild.nodeValue = title;
+            }
 
             switch (contenttype) {
                 case 'iframe':
@@ -939,7 +973,9 @@ var sedjs = {
         loadDiv: function(t, contentsource) {
             var inlinedivref = document.querySelector('#' + contentsource);
             t.contentarea.innerHTML = (inlinedivref.defaultHTML || inlinedivref.innerHTML);
-            if (!inlinedivref.defaultHTML) { inlinedivref.defaultHTML = inlinedivref.innerHTML; }
+            if (!inlinedivref.defaultHTML) {
+                inlinedivref.defaultHTML = inlinedivref.innerHTML;
+            }
             inlinedivref.innerHTML = "";
             inlinedivref.style.display = "none";
         },
@@ -983,10 +1019,11 @@ var sedjs = {
             var e = window.event || e;
             this.distancex = e.clientX - this.initmousex;
             this.distancey = e.clientY - this.initmousey;
-            if (etarget.className == "modal-handle")
+            if (etarget.className == "modal-handle") {
                 this.move(etarget._parent, e);
-            else if (etarget.className == "modal-resizearea")
+            } else if (etarget.className == "modal-resizearea") {
                 this.resize(etarget._parent, e);
+            }
             return false;
         },
 
@@ -1014,71 +1051,71 @@ var sedjs = {
             t.lastwidth = parseInt(t.style.width);
         },
 
-		/**
-		 * Move the modal window with constraints.
-		 * @param {HTMLElement} t - The modal window element to be moved.
-		 * @param {Event} e - The mouse event.
-		 */
-		move: function(t, e) {
-			this.getviewpoint(); // Update viewport data
+        /**
+         * Move the modal window with constraints.
+         * @param {HTMLElement} t - The modal window element to be moved.
+         * @param {Event} e - The mouse event.
+         */
+        move: function(t, e) {
+            this.getviewpoint(); // Update viewport data
 
-			var newLeft = this.distancex + this.initx;
-			var newTop = this.distancey + this.inity;
+            var newLeft = this.distancex + this.initx;
+            var newTop = this.distancey + this.inity;
 
-			if (this.constrainToViewport) {
-				// Horizontal constraints
-				var minX = this.scroll_left;
-				var maxX = this.scroll_left + this.docwidth - t.offsetWidth;
-				newLeft = Math.max(minX, Math.min(newLeft, maxX));
+            if (this.constrainToViewport) {
+                // Horizontal constraints
+                var minX = this.scroll_left;
+                var maxX = this.scroll_left + this.docwidth - t.offsetWidth;
+                newLeft = Math.max(minX, Math.min(newLeft, maxX));
 
-				// Vertical constraints
-				var minY = this.scroll_top;
-				var maxY = this.scroll_top + this.docheight - t.offsetHeight;
-				newTop = Math.max(minY, Math.min(newTop, maxY));
-			}
+                // Vertical constraints
+                var minY = this.scroll_top;
+                var maxY = this.scroll_top + this.docheight - t.offsetHeight;
+                newTop = Math.max(minY, Math.min(newTop, maxY));
+            }
 
-			t.style.left = newLeft + "px";
-			t.style.top = newTop + "px";
-		},
+            t.style.left = newLeft + "px";
+            t.style.top = newTop + "px";
+        },
 
-		/**
-		 * Move the modal window to a specific position with constraints.
-		 * @param {HTMLElement} t - The modal window element to be moved.
-		 * @param {string|number} x - The horizontal position. Use "middle" to center horizontally, or a number for a specific position.
-		 * @param {string|number} y - The vertical position. Use "middle" to center vertically, or a number for a specific position.
-		 */
-		moveTo: function(t, x, y) {
-			this.getviewpoint();
+        /**
+         * Move the modal window to a specific position with constraints.
+         * @param {HTMLElement} t - The modal window element to be moved.
+         * @param {string|number} x - The horizontal position. Use "middle" to center horizontally, or a number for a specific position.
+         * @param {string|number} y - The vertical position. Use "middle" to center vertically, or a number for a specific position.
+         */
+        moveTo: function(t, x, y) {
+            this.getviewpoint();
 
-			var newX, newY;
+            var newX, newY;
 
-			if (x === "middle") {
-				newX = this.scroll_left + Math.max(0, (this.docwidth - t.offsetWidth) / 2);
-			} else {
-				newX = this.scroll_left + parseInt(x);
-			}
+            if (x === "middle") {
+                newX = this.scroll_left + Math.max(0, (this.docwidth - t.offsetWidth) / 2);
+            } else {
+                newX = this.scroll_left + parseInt(x);
+            }
 
-			if (y === "middle") {
-				newY = this.scroll_top + Math.max(0, (this.docheight - t.offsetHeight) / 2);
-			} else {
-				newY = this.scroll_top + parseInt(y);
-			}
+            if (y === "middle") {
+                newY = this.scroll_top + Math.max(0, (this.docheight - t.offsetHeight) / 2);
+            } else {
+                newY = this.scroll_top + parseInt(y);
+            }
 
-			if (this.constrainToViewport) {
-				// Horizontal constraints
-				var minX = this.scroll_left;
-				var maxX = this.scroll_left + this.docwidth - t.offsetWidth;
-				newX = Math.max(minX, Math.min(newX, maxX));
+            if (this.constrainToViewport) {
+                // Horizontal constraints
+                var minX = this.scroll_left;
+                var maxX = this.scroll_left + this.docwidth - t.offsetWidth;
+                newX = Math.max(minX, Math.min(newX, maxX));
 
-				// Vertical constraints
-				var minY = this.scroll_top;
-				var maxY = this.scroll_top + this.docheight - t.offsetHeight;
-				newY = Math.max(minY, Math.min(newY, maxY));
-			}
+                // Vertical constraints
+                var minY = this.scroll_top;
+                var maxY = this.scroll_top + this.docheight - t.offsetHeight;
+                newY = Math.max(minY, Math.min(newY, maxY));
+            }
 
-			t.style.left = newX + "px";
-			t.style.top = newY + "px";
-		},
+            t.style.left = newX + "px";
+            t.style.top = newY + "px";
+        },
 
         /**
          * Resize the modal window.
@@ -1097,12 +1134,13 @@ var sedjs = {
          */
         enablecontrols: function(t, e) {
             var sourceobj = window.event ? window.event.srcElement : e.target;
-            if (/Minimize/i.test(sourceobj.getAttribute("title")))
+            if (/Minimize/i.test(sourceobj.getAttribute("title"))) {
                 this.minimize(sourceobj, t);
-            else if (/Restore/i.test(sourceobj.getAttribute("title")))
+            } else if (/Restore/i.test(sourceobj.getAttribute("title"))) {
                 this.restore(sourceobj, t);
-            else if (/Close/i.test(sourceobj.getAttribute("title")))
+            } else if (/Close/i.test(sourceobj.getAttribute("title"))) {
                 this.close(t);
+            }
             return false;
         },
 
@@ -1140,8 +1178,9 @@ var sedjs = {
             t.state = "fullview";
             t.style.display = "block";
             t.contentarea.style.display = "block";
-            if (t.resizeBool)
+            if (t.resizeBool) {
                 t.statusarea.style.display = "block";
+            }
             t.style.left = parseInt(t.lastx) + this.scroll_left + "px";
             t.style.top = parseInt(t.lasty) + this.scroll_top + "px";
             t.style.width = parseInt(t.lastwidth) + "px";
@@ -1164,12 +1203,14 @@ var sedjs = {
                 }
             }
             if (closewinbol) {
-                if (t.state != "minimized")
+                if (t.state != "minimized") {
                     this.rememberattrs(t);
-                if (window.frames["_iframe-" + t.id])
+                }
+                if (window.frames["_iframe-" + t.id]) {
                     window.frames["_iframe-" + t.id].location.replace("about:blank");
-                else
+                } else {
                     t.contentarea.innerHTML = "";
+                }
                 t.style.display = "none";
                 t.isClosed = true;
                 document.body.removeChild(t);
@@ -1183,17 +1224,20 @@ var sedjs = {
          * @param {number} value - The opacity value to set.
          */
         setopacity: function(targetobject, value) {
-            if (!targetobject)
+            if (!targetobject) {
                 return;
+            }
             if (targetobject.filters && targetobject.filters[0]) {
-                if (typeof targetobject.filters[0].opacity == "number")
+                if (typeof targetobject.filters[0].opacity == "number") {
                     targetobject.filters[0].opacity = value * 100;
-                else
+                } else {
                     targetobject.style.filter = "alpha(opacity=" + value * 100 + ")";
-            } else if (typeof targetobject.style.MozOpacity != "undefined")
+                }
+            } else if (typeof targetobject.style.MozOpacity != "undefined") {
                 targetobject.style.MozOpacity = value;
-            else if (typeof targetobject.style.opacity != "undefined")
+            } else if (typeof targetobject.style.opacity != "undefined") {
                 targetobject.style.opacity = value;
+            }
         },
 
         /**
@@ -1218,10 +1262,11 @@ var sedjs = {
                 alert("Modal Window has been closed, so nothing to show. Open/Create the window again.");
                 return;
             }
-            if (t.lastx)
+            if (t.lastx) {
                 this.restore(t.controls.firstChild, t);
-            else
+            } else {
                 t.style.display = "block";
+            }
             this.setfocus(t);
             t.state = "fullview";
         },
@@ -1251,10 +1296,11 @@ var sedjs = {
          */
         addEvent: function(target, functionref, tasktype) {
             var tasktype = (window.addEventListener) ? tasktype : "on" + tasktype;
-            if (target.addEventListener)
+            if (target.addEventListener) {
                 target.addEventListener(tasktype, functionref, false);
-            else if (target.attachEvent)
+            } else if (target.attachEvent) {
                 target.attachEvent(tasktype, functionref);
+            }
         },
 
         /**
@@ -1268,24 +1314,38 @@ var sedjs = {
         }
     },
 
-
     setActiveStyleSheet: function(title) {
         var i, a, main;
         for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) { if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) { a.disabled = true; if (a.getAttribute("title") == title) a.disabled = false; } }
+            (a = document.getElementsByTagName("link")[i]); i++) {
+            if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
+                a.disabled = true;
+                if (a.getAttribute("title") == title) {
+                    a.disabled = false;
+                }
+            }
+        }
     },
 
     getActiveStyleSheet: function() {
         var i, a;
         for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) { if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && !a.disabled) return a.getAttribute("title"); }
+            (a = document.getElementsByTagName("link")[i]); i++) {
+            if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && !a.disabled) {
+                return a.getAttribute("title");
+            }
+        }
         return null;
     },
 
     getPreferredStyleSheet: function() {
         var i, a;
         for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) { if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title")) return a.getAttribute("title"); }
+            (a = document.getElementsByTagName("link")[i]); i++) {
+            if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title")) {
+                return a.getAttribute("title");
+            }
+        }
         return null;
     },
 
@@ -1294,14 +1354,24 @@ var sedjs = {
             var date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             var expires = "; expires=" + date.toGMTString();
-        } else expires = "";
+        } else {
+            expires = "";
+        }
         document.cookie = name + "=" + value + expires + "; path=/";
     },
 
     readCookie: function(name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) { var c = ca[i]; while (c.charAt(0) == ' ') c = c.substring(1, c.length); if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length); }
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1, c.length);
+            }
+            if (c.indexOf(nameEQ) == 0) {
+                return c.substring(nameEQ.length, c.length);
+            }
+        }
         return null;
     },
 
@@ -1314,7 +1384,9 @@ var sedjs = {
     genSEF: function(from, to, allow_slashes) {
         var str = from.value.toLowerCase();
         var slash = "";
-        if (allow_slashes) slash = "\\/";
+        if (allow_slashes) {
+            slash = "\\/";
+        }
 
         var LettersFrom = "абвгдезиклмнопрстуфыэйхё";
         var LettersTo = "abvgdeziklmnoprstufyejxe";
@@ -1343,19 +1415,23 @@ var sedjs = {
 
         //transliterating
         var _str = "";
-        for (var x = 0; x < str.length; x++)
-            if ((index = LettersFrom.indexOf(str.charAt(x))) > -1)
+        for (var x = 0; x < str.length; x++) {
+            if ((index = LettersFrom.indexOf(str.charAt(x))) > -1) {
                 _str += LettersTo.charAt(index);
-            else
+            } else {
                 _str += str.charAt(x);
+            }
+        }
         str = _str;
 
         var _str = "";
-        for (var x = 0; x < str.length; x++)
-            if (BiLetters[str.charAt(x)])
+        for (var x = 0; x < str.length; x++) {
+            if (BiLetters[str.charAt(x)]) {
                 _str += BiLetters[str.charAt(x)];
-            else
+            } else {
                 _str += str.charAt(x);
+            }
+        }
         str = _str;
 
         str = str.replace(/j{2,}/g, "j");
@@ -1371,7 +1447,9 @@ var sedjs = {
         let elem = document.querySelectorAll(apo);
         let last = elem[elem.length - 1];
         let clone = last.cloneNode(true);
-        if (clone.querySelector('.poll-option-delete') == null) clone.innerHTML += delete_button;
+        if (clone.querySelector('.poll-option-delete') == null) {
+            clone.innerHTML += delete_button;
+        }
         let num = clone.querySelector('.num').innerHTML;
         clone.querySelector('.num').innerHTML = parseInt(num) + 1;
         clone.querySelector('input').value = '';
