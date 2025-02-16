@@ -51,7 +51,7 @@ To install Seditio you need the following server software pre-installed:
 
 <h2>Copyright</h2>
 
-<p>Copyright (c) 2011-2023, Seditio Team<br />
+<p>Copyright (c) 2011-2025, Seditio Team<br />
 Copyright (c) 2001-2011, Neocrome</p>
 
 <p>All rights reserved.</p>
