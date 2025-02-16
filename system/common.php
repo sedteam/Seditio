@@ -199,6 +199,7 @@ $usr['id'] = 0;
 $usr['sessionid'] = '';
 $usr['name'] = '';
 $usr['level'] = 0;
+$usr['maingrp'] = 0;
 $usr['lastvisit'] = 30000000000;
 $usr['lastlog'] = 0;
 $usr['timezone'] = empty($cfg['defaulttimezone']) ? 0 : $cfg['defaulttimezone'];
