@@ -1,0 +1,66 @@
+.sedtabs div.tabs {
+    display: none;
+}
+
+.sedtabs div.tabs:first-child {
+    display: block;
+}
+
+.tab-box {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    min-height: 100px;
+    clear: both;
+    padding: 15px 15px 15px 15px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.noborder {
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+ul.tabs {
+    margin: 0px;
+    padding: 0px;
+}
+
+ul.tabs li {
+    list-style: none;
+    display: inline;
+}
+
+ul.tabs li a {
+    float: left;
+    padding: 8px 25px 8px 25px;
+    text-decoration: none;
+    margin-right: 3px;
+    margin-bottom: -1px;
+}
+
+ul.tabs li a:hover {
+    color: #212121;
+}
+
+ul.tabs li a.selected {
+    background-color: #ffffff;
+    color: #282e32;
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #ffffff;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    background: rgba(237, 237, 237, 1);
+    background: -moz-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(237, 237, 237, 1)), color-stop(53%, rgba(246, 246, 246, 1)), color-stop(100%, rgba(255, 255, 255, 1)));
+    background: -webkit-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: -o-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to bottom, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=0);
+}

@@ -1,7 +1,7 @@
 CKEDITOR.editorConfig = function(config) {
     config.toolbar = 'Basic';
 
-    config.extraPlugins = 'more,html5video,imagepaste,spoiler,internallink';
+    config.extraPlugins = 'more,html5video,imagepaste,spoiler,internallink,tabber';
 
     config.internallinkServiceURL = "/ajax/?m=pages";
 	
@@ -37,7 +37,7 @@ CKEDITOR.editorConfig = function(config) {
         ['TextColor', 'BGColor'],
         ['Syntaxhighlight'],
         ['Maximize', 'ShowBlocks'],
-        ['More', 'Templates', 'AddLayout', 'Spoiler']
+        ['More', 'Templates', 'AddLayout', 'Spoiler', 'Tabber']
     ];
 
     config.toolbar_Extended = [
@@ -47,7 +47,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Link', 'Unlink', 'Anchor', 'InternalLink'],
         ['Image', 'Youtube', 'MediaEmbed', 'Html5video'],
         ['Syntaxhighlight', 'More', 'Maximize', 'ShowBlocks'],
-        ['Templates', 'AddLayout', 'Spoiler'],
+        ['Templates', 'AddLayout', 'Spoiler', 'Tabber'],
         ['Source'],
         '/', ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
         ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv'],

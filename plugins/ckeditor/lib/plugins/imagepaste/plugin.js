@@ -1,8 +1,9 @@
 /*
-Seditio - Website engine
-Copyright Neocrome & Seditio Team
-https://seditio.org
-*/
+ * Imagepaste plugin
+ * @author Tishov Alexander [info@avego.org]
+ * @copyright Tishov Alexander, Seditio Team 2025
+ *
+ */
 
 (function() {
 

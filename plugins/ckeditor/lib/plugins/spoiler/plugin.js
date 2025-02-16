@@ -1,3 +1,9 @@
+/*
+ * Spoiler - Spoiler plugin for Seditio
+ * @author Tishov Alexander [info@avego.org]
+ * @copyright Tishov Alexander, Seditio Team 2025
+ *
+ */
 CKEDITOR.plugins.add('spoiler', {
     lang: 'en,ru',
     icons: 'spoiler',

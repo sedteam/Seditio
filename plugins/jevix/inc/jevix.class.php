@@ -70,6 +70,9 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgAllowTagParams('h4', array('style'));
 			$jevix->cfgAllowTagParams('h5', array('style'));
 			$jevix->cfgAllowTagParams('h6', array('style'));
+			$jevix->cfgAllowTagParams('ul', array('class', 'id', 'style'));
+			$jevix->cfgAllowTagParams('ol', array('class', 'id', 'style'));
+			$jevix->cfgAllowTagParams('li', array('class', 'id', 'style'));
 			$jevix->cfgAllowTagParams('span', array('class', 'id', 'style'));
 			$jevix->cfgAllowTagParams('table', array('border', 'class', 'width', 'align', 'valign', 'style'));
 			$jevix->cfgAllowTagParams('tr', array('height', 'class'));
@@ -152,6 +155,9 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgAllowTagParams('h4', array('style'));
 			$jevix->cfgAllowTagParams('h5', array('style'));
 			$jevix->cfgAllowTagParams('h6', array('style'));
+			$jevix->cfgAllowTagParams('ul', array('class', 'id', 'style'));
+			$jevix->cfgAllowTagParams('ol', array('class', 'id', 'style'));
+			$jevix->cfgAllowTagParams('li', array('class', 'id', 'style'));
 			$jevix->cfgSetTagStyleParams(
 				array('span'),
 				array(
