@@ -2593,7 +2593,81 @@ function sed_html($text)
 	/* =====	
 	To implement the changes [spoiler] [/spoiler] [hidden] [/hidden] and etc.
   ===== */
+  
+	$text = sed_spoiler($text);
+  
 	return $text;
+}
+
+/**
+ * Processes HTML content to handle spoiler visibility based on user group and level.
+ *
+ * This function searches for `div` elements with the class `spoiler-content` or `hidden-content`
+ * and checks their `data-mingroup` and `data-minlevel` attributes to determine if the content
+ * should be displayed or hidden based on the current user's group and level.
+ *
+ * @param string $text The HTML content to process. This content may include spoiler
+ *                elements that need to be conditionally displayed or hidden.
+ *
+ * @return string The processed HTML content with spoiler visibility adjusted based
+ *                on the user's permissions. The structure of the `div` elements is
+ *                preserved, but their content is conditionally replaced with a message
+ *                if the user does not meet the visibility criteria.
+ *
+ */
+function sed_spoiler($text) {
+    global $cfg, $usr, $L;
+
+    // Regular expression to find spoilers with either class, considering the possible absence of one of the attributes
+    $pattern = '/<div class="(spoiler-content|hidden-content)"( data-mingroup="([^"]*)")?( data-minlevel="([^"]*)")?>(.*?)<\/div>/s';
+
+    // Callback function to process each found spoiler
+    $callback = function ($matches) use ($usr, $L) {
+        $mingroup = $matches[3] ?? '';
+        $minlevel = $matches[5] ?? '';
+        $content = $matches[6];
+        $class = $matches[1]; // Capture the class name
+
+        // Form the opening div string considering the presence of attributes
+        $divOpen = '<div class="' . $class . '"' .
+            (!empty($mingroup) ? ' data-mingroup="' . $mingroup . '"' : '') .
+            (!empty($minlevel) ? ' data-minlevel="' . $minlevel . '"' : '') .
+            '>';
+        $divClose = '</div>';
+
+        // Determine the group name
+        $groupName = !empty($mingroup) ? sed_build_group($mingroup) : '';
+
+        // Check conditions to display or hide the content
+        if (!empty($mingroup) && !empty($minlevel)) {
+            // Both attributes are set
+            if ($usr['maingrp'] == $mingroup && $usr['level'] >= $minlevel) {
+                return $divOpen . $content . $divClose;
+            } else {
+                return $divOpen . str_replace(['{groupName}', '{minlevel}'], [$groupName, $minlevel], $L['spoiler_locked_both']) . $divClose;
+            }
+        } elseif (!empty($mingroup)) {
+            // Only mingroup is set
+            if ($usr['maingrp'] == $mingroup) {
+                return $divOpen . $content . $divClose;
+            } else {
+                return $divOpen . str_replace('{groupName}', $groupName, $L['spoiler_locked_group']) . $divClose;
+            }
+        } elseif (!empty($minlevel)) {
+            // Only minlevel is set
+            if ($usr['level'] >= $minlevel) {
+                return $divOpen . $content . $divClose;
+            } else {
+                return $divOpen . str_replace('{minlevel}', $minlevel, $L['spoiler_locked_level']) . $divClose;
+            }
+        } else {
+            // Neither attribute is set
+            return $divOpen . $content . $divClose;
+        }
+    };
+
+    // Replace each match with the result of the callback function
+    return preg_replace_callback($pattern, $callback, $text);
 }
 
 /**

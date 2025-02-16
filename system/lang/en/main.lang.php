@@ -443,6 +443,12 @@ $L['lis_submitnew'] = "Submit a new entry";
 
 // It's in message.lang.php
 
+/* ====== Spoiler ====== */
+
+$L['spoiler_locked_both'] = "Hidden content available for group: {groupName} with level above {minlevel}";
+$L['spoiler_locked_group'] = "Hidden content available only for group: {groupName}";
+$L['spoiler_locked_level'] = "Hidden content available for users with a minimum access level of {minlevel}";
+
 /* ====== Pages ====== */
 
 $L['pag_catmissing'] = "The category code is missing";

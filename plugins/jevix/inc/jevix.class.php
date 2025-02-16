@@ -62,7 +62,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgAllowTagParams('acronym', array('title'));
 			$jevix->cfgAllowTagParams('abbr',	array('title'));
 			$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));
-			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style'));
+			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style', 'data-minlevel', 'data-mingroup'));
 			$jevix->cfgAllowTagParams('button', array('class', 'id', 'style'));
 			$jevix->cfgAllowTagParams('h1', array('style'));
 			$jevix->cfgAllowTagParams('h2', array('style'));
@@ -129,16 +129,17 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 		case 'medium':
 
 			$jevix->cfgAllowTags(array(
-				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small',
+				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 
 				'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'sub', 'acronym', 'h1', 'h2',
-				'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'blockquote', 'span'
+				'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'blockquote', 'span', 'div'
 			));
 			$jevix->cfgSetTagShort(array('br', 'img', 'hr'));
 			$jevix->cfgSetTagPreformatted(array('pre', 'code'));
 			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));
 			$jevix->cfgAllowTagParams('p', array('style'));
 			$jevix->cfgAllowTagParams('i', array('class'));
-			$jevix->cfgAllowTagParams('span', array('style'));
+			$jevix->cfgAllowTagParams('span', array('style', 'class', 'id'));
+			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style', 'data-minlevel', 'data-mingroup'));
 			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
 			$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));
 			$jevix->cfgAllowTagParams('pre',	array('class'));

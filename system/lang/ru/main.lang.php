@@ -442,6 +442,12 @@ $L['lis_submitnew'] = "Добавить новую запись";
 
 // It's in message.lang.php
 
+/* ====== Spoiler ====== */
+
+$L['spoiler_locked_both'] = "Скрытое содержимое доступно для группы: {groupName} с уровнем выше {minlevel}";
+$L['spoiler_locked_group'] = "Скрытое содержимое доступно только для группы: {groupName}";
+$L['spoiler_locked_level'] = "Скрытое содержимое доступно для пользователей с минимальным уровнем доступа {minlevel}";
+
 /* ====== Pages ====== */
 
 $L['pag_catmissing'] = "Отсутствует код категории";
