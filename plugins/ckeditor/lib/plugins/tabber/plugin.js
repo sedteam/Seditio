@@ -64,14 +64,14 @@ CKEDITOR.plugins.add('tabber', {
                 // HTML template for the tabs
                 var template =
                     '<div class="sedtabs">' +
-                        '<ul class="tabs">' +
-                            '<li><a href="#' + tabId1 + '" class="selected">' + editor.lang.tabber.tabtitle + ' 1</a></li>' +
-                            '<li><a href="#' + tabId2 + '">' + editor.lang.tabber.tabtitle + ' 2</a></li>' +
-                        '</ul>' +
-                        '<div class="tab-box">' +
-                            '<div id="' + tabId1 + '" class="tabs"><p>' + editor.lang.tabber.tabcontent + ' 1</p></div>' +
-                            '<div id="' + tabId2 + '" class="tabs"><p>' + editor.lang.tabber.tabcontent + ' 2</p></div>' +
-                        '</div>' +
+                    '<ul class="tabs">' +
+                    '<li><a href="#' + tabId1 + '" class="selected">' + editor.lang.tabber.tabtitle + ' 1</a></li>' +
+                    '<li><a href="#' + tabId2 + '">' + editor.lang.tabber.tabtitle + ' 2</a></li>' +
+                    '</ul>' +
+                    '<div class="tab-box">' +
+                    '<div id="' + tabId1 + '" class="tabs"><p>' + editor.lang.tabber.tabcontent + ' 1</p></div>' +
+                    '<div id="' + tabId2 + '" class="tabs"><p>' + editor.lang.tabber.tabcontent + ' 2</p></div>' +
+                    '</div>' +
                     '</div>';
 
                 // Inserting the template into the editor

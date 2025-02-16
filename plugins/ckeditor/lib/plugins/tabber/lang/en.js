@@ -1,4 +1,4 @@
-﻿CKEDITOR.plugins.setLang( 'tabber', 'en', {
+﻿CKEDITOR.plugins.setLang('tabber', 'en', {
     toolbar: 'Insert tabs',
     tabtitle: 'Tab',
     tabcontent: 'Tab content',
@@ -7,4 +7,4 @@
     removetab: 'Remove tab',
     tabbefore: 'Add tab before',
     tabafter: 'Add tab after'
-} );
+});

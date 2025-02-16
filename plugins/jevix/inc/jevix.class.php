@@ -132,7 +132,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 		case 'medium':
 
 			$jevix->cfgAllowTags(array(
-				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 
+				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small',
 				'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'sub', 'acronym', 'h1', 'h2',
 				'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'blockquote', 'span', 'div'
 			));

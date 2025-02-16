@@ -50,18 +50,21 @@ CKEDITOR.plugins.add('spoiler', {
                 contents: [{
                     id: 'tab-settings',
                     label: editor.lang.spoiler.settings,
-                    elements: [
-                        {
+                    elements: [{
                             type: 'select',
                             id: 'minlevel',
                             label: editor.lang.spoiler.minlevel,
-                            items: [['Not specified', '']].concat(Array.from({length: 100}, (_, i) => [i.toString(), i.toString()]))
+                            items: [
+                                ['Not specified', '']
+                            ].concat(Array.from({ length: 100 }, (_, i) => [i.toString(), i.toString()]))
                         },
                         {
                             type: 'select',
                             id: 'mingroup',
                             label: editor.lang.spoiler.mingroup,
-                            items: [['Not specified', '']].concat(Array.from({length: 7}, (_, i) => [(i + 4).toString(), (i + 4).toString()]))
+                            items: [
+                                ['Not specified', '']
+                            ].concat(Array.from({ length: 7 }, (_, i) => [(i + 4).toString(), (i + 4).toString()]))
                         }
                     ]
                 }],
@@ -88,9 +91,9 @@ CKEDITOR.plugins.add('spoiler', {
                         var selection = editor.getSelection();
                         var element = selection.getStartElement();
                         // Find the nearest spoiler among all parents
-						editor.spoilerElement = element.getAscendant(function(el) {
-							return el.type === CKEDITOR.NODE_ELEMENT && el.getName() === 'div' && el.hasClass('spoiler');
-						}, true);
+                        editor.spoilerElement = element.getAscendant(function(el) {
+                            return el.type === CKEDITOR.NODE_ELEMENT && el.getName() === 'div' && el.hasClass('spoiler');
+                        }, true);
                     }
 
                     if (editor.spoilerElement) {
@@ -172,9 +175,9 @@ CKEDITOR.plugins.add('spoiler', {
         editor.on('doubleclick', function(evt) {
             var element = evt.data.element;
             // Find the nearest parent spoiler
-			var spoilerDiv = element.getAscendant(function(el) {
-				return el.type === CKEDITOR.NODE_ELEMENT && el.getName() === 'div' && el.hasClass('spoiler');
-			}, true);
+            var spoilerDiv = element.getAscendant(function(el) {
+                return el.type === CKEDITOR.NODE_ELEMENT && el.getName() === 'div' && el.hasClass('spoiler');
+            }, true);
 
             if (spoilerDiv) {
                 evt.data.dialog = 'spoilerDialog';
