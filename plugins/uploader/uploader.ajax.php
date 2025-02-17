@@ -109,7 +109,7 @@ if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'] . $filename)) {
 	$filename = sed_newname($usr['id'] . "-" . time() . sed_unique(3) . "-" . $upl_filename, TRUE);
 }
 
-$allow_extension = array('gif', 'png', 'jpg', 'jpeg', 'bmp');
+$allow_extension = array('gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp');
 $extension_arr = explode(".", $filename);
 $f_extension = end($extension_arr);
 
@@ -121,7 +121,7 @@ if (in_array($f_extension, $allow_extension) == FALSE) {
 	$u_size = file_put_contents($cfg['pfs_dir'] . $filename, file_get_contents('php://input'));
 	$imgsize = @getimagesize($cfg['pfs_dir'] . $filename);
 
-	if (!isset($imgsize) || !isset($imgsize['mime']) || !in_array($imgsize['mime'], array('image/jpeg', 'image/png', 'image/gif'))) {
+	if (!isset($imgsize) || !isset($imgsize['mime']) || !in_array($imgsize['mime'], array('image/jpeg', 'image/png', 'image/gif', 'image/webp'))) {
 		$disp_errors = "File is not image!";
 		unlink($cfg['pfs_dir'] . $filename);
 	} elseif ((($pfs_totalsize + $u_size) > $maxtotal * 1024) || ($u_size > ($maxfile * 1024))) {

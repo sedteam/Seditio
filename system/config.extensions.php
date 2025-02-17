@@ -31,6 +31,7 @@ $sed_extensions[] = array('gif', 'Picture', 'gif');
 $sed_extensions[] = array('jpeg', 'Picture', 'jpg');
 $sed_extensions[] = array('jpg', 'Picture', 'jpg');
 $sed_extensions[] = array('png', 'Picture', 'png');
+$sed_extensions[] = array('webp', 'Picture', 'webp');
 $sed_extensions[] = array('ogg', 'Music', 'mp3');
 $sed_extensions[] = array('mp3', 'Music', 'mp3');
 $sed_extensions[] = array('wav', 'Music', 'wav');

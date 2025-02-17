@@ -18,8 +18,6 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-$cfg['allowed_extentions'] = array('png', 'gif', 'jpg', 'jpeg', 'ico');
-
 $cfg['watermark_offset_x'] = 8;
 $cfg['watermark_offset_y'] = 8;
 
@@ -198,10 +196,9 @@ function sed_image_constrain_gd(
 	$watermark_postition = '',
 	$use_webp = false
 ) {
-
 	global $cfg;
 
-	// todo put into settings
+	// Get quality setting
 	$quality = (!empty($cfg['th_jpeg_quality'])) ? $cfg['th_jpeg_quality'] : $cfg['quality'];
 
 	// Source image parameters
@@ -219,9 +216,8 @@ function sed_image_constrain_gd(
 		}
 	}
 
-	// Do I need to crop?
+	// If no need to crop, just copy the file
 	if (!$watermark && ($src_w <= $max_w) && ($src_h <= $max_h) && $type == 'resize') {
-		// No - just copy the file
 		if (!copy($src_file, $dst_file)) {
 			return false;
 		}
@@ -240,6 +236,9 @@ function sed_image_constrain_gd(
 			$src_img = imageCreateFromPng($src_file);
 			imagealphablending($src_img, true);
 			break;
+		case 'image/webp':
+			$src_img = imageCreateFromWebp($src_file);
+			break;
 		default:
 			return false;
 	}
@@ -253,7 +252,7 @@ function sed_image_constrain_gd(
 
 	$src_colors = imagecolorstotal($src_img);
 
-	// create destination image (indexed, if possible)
+	// Create destination image (indexed, if possible)
 	if ($src_colors > 0 && $src_colors <= 256) {
 		$dst_img = imagecreate($dst_w, $dst_h);
 	} else {
@@ -292,7 +291,7 @@ function sed_image_constrain_gd(
 		}
 	}
 
-	// re-sample the image with new sizes
+	// Resample the image with new sizes
 	if (!imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h)) {
 		return false;
 	}
@@ -302,8 +301,8 @@ function sed_image_constrain_gd(
 		$y0 = ($dst_h - $max_h) / 2;
 		$_dst_img = imagecreatetruecolor($max_w, $max_h);
 
-		imagealphablending($_dst_img, false); //Set the blending mode for an image  	
-		imagesavealpha($_dst_img, true); //Set the flag to save full alpha channel information  
+		imagealphablending($_dst_img, false); // Set the blending mode for an image
+		imagesavealpha($_dst_img, true); // Set the flag to save full alpha channel information
 
 		imagecopy(
 			$_dst_img,
@@ -359,7 +358,7 @@ function sed_image_constrain_gd(
 		sed_imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity);
 	}
 
-	// recalculate quality value for png image
+	// Recalculate quality value for PNG image
 	if ('image/png' === $src_type && !$use_webp) {
 		$quality = round(($quality / 100) * 10);
 		if ($quality < 1) {
@@ -381,6 +380,8 @@ function sed_image_constrain_gd(
 			imagealphablending($dst_img, true);
 			imagesavealpha($dst_img, true);
 			return ($use_webp) ? imagewebp($dst_img, $dst_file, $quality) : imagePng($dst_img, $dst_file, $quality);
+		case 'image/webp':
+			return imagewebp($dst_img, $dst_file, $quality);
 		default:
 			return false;
 	}
@@ -523,7 +524,7 @@ function sed_image_constrain_imagick(
 
 		if (isset($overlay) && is_object($overlay)) {
 			// $frame->compositeImage($overlay, $overlay_compose, $watermark_x, $watermark_y, imagick::COLOR_ALPHA);
-			$frame->compositeImage($overlay, imagick::COMPOSITE_OVER, $watermark_x, $watermark_y);
+			$frame->compositeImage($overlay, Imagick::COMPOSITE_OVER, $watermark_x, $watermark_y);
 		}
 	}
 
@@ -643,6 +644,7 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
 {
 	global $cfg;
 
+	// Determine the image type and create an image resource for the first image
 	switch ($img1_extension) {
 		case 'gif':
 			$img1 = imagecreatefromgif($img1_file);
@@ -652,11 +654,16 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
 			$img1 = imagecreatefrompng($img1_file);
 			break;
 
+		case 'webp':
+			$img1 = imagecreatefromwebp($img1_file);
+			break;
+
 		default:
 			$img1 = imagecreatefromjpeg($img1_file);
 			break;
 	}
 
+	// Determine the image type and create an image resource for the second image
 	switch ($img2_extension) {
 		case 'gif':
 			$img2 = imagecreatefromgif($img2_file);
@@ -664,6 +671,10 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
 
 		case 'png':
 			$img2 = imagecreatefrompng($img2_file);
+			break;
+
+		case 'webp':
+			$img2 = imagecreatefromwebp($img2_file);
 			break;
 
 		default:
@@ -676,6 +687,7 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
 	$img2_w = imagesx($img2);
 	$img2_h = imagesy($img2);
 
+	// Determine the position for merging the second image onto the first
 	switch ($position) {
 		case 'Top left':
 			$img2_x = 8;
@@ -705,6 +717,7 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
 
 	imagecopymerge($img1, $img2, $img2_x, $img2_y, 0, 0, $img2_w, $img2_h, $trsp);
 
+	// Save the merged image in the specified format
 	switch ($img1_extension) {
 		case 'gif':
 			imagegif($img1, $img1_file);
@@ -714,11 +727,16 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
 			imagepng($img1, $img1_file);
 			break;
 
+		case 'webp':
+			imagewebp($img1, $img1_file);
+			break;
+
 		default:
 			imagejpeg($img1, $img1_file, $jpegqual);
 			break;
 	}
 
+	// Free up memory
 	imagedestroy($img1);
 	imagedestroy($img2);
 }
@@ -740,6 +758,7 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
 
 	global $cfg;
 
+	// Determine the image type and create an image resource
 	switch ($extension) {
 		case 'gif':
 			$source = imagecreatefromgif($img_big);
@@ -747,6 +766,10 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
 
 		case 'png':
 			$source = imagecreatefrompng($img_big);
+			break;
+
+		case 'webp':
+			$source = imagecreatefromwebp($img_big);
 			break;
 
 		default:
@@ -766,8 +789,8 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
 		$new = imagecreatetruecolor($thumb_x, $thumb_y);
 	}
 
-	imagealphablending($new, false); //Set the blending mode for an image  
-	imagesavealpha($new, true); //Set the flag to save full alpha channel information    
+	imagealphablending($new, false); // Set the blending mode for an image
+	imagesavealpha($new, true); // Set the flag to save full alpha channel information
 
 	if ($cfg['th_amode'] == 'GD1') {
 		imagecopyresized($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
@@ -775,6 +798,7 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
 		imagecopyresampled($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
 	}
 
+	// Save the resized image in the specified format
 	switch ($extension) {
 		case 'gif':
 			imagegif($new, $img_small);
@@ -784,11 +808,16 @@ function sed_image_resize($img_big, $img_small, $small_x, $extension, $jpegquali
 			imagepng($new, $img_small);
 			break;
 
+		case 'webp':
+			imagewebp($new, $img_small);
+			break;
+
 		default:
 			imagejpeg($new, $img_small, $jpegquality);
 			break;
 	}
 
+	// Free up memory
 	imagedestroy($new);
 	imagedestroy($source);
 	return;
@@ -820,6 +849,7 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 
 	global $cfg;
 
+	// Determine the image type and create an image resource
 	switch ($extension) {
 		case 'gif':
 			$source = imagecreatefromgif($img_big);
@@ -829,14 +859,20 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			$source = imagecreatefrompng($img_big);
 			break;
 
+		case 'webp':
+			$source = imagecreatefromwebp($img_big);
+			break;
+
 		default:
 			$source = imagecreatefromjpeg($img_big);
 			break;
 	}
 
+	// Get the dimensions of the original image
 	$big_x = imagesx($source);
 	$big_y = imagesy($source);
 
+	// Calculate the dimensions of the thumbnail
 	if (!$keepratio) {
 		$thumb_x = $small_x;
 		$thumb_y = $small_y;
@@ -848,6 +884,7 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 		$thumb_y = $small_y;
 	}
 
+	// Create a new image resource for the thumbnail
 	if ($textsize == 0) {
 		if ($cfg['th_amode'] == 'GD1') {
 			$new = imagecreate($thumb_x + $bordersize * 2, $thumb_y + $bordersize * 2);
@@ -855,8 +892,8 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			$new = imagecreatetruecolor($thumb_x + $bordersize * 2, $thumb_y + $bordersize * 2);
 		}
 
-		imagealphablending($new, false); //Set the blending mode for an image  	
-		imagesavealpha($new, true); //Set the flag to save full alpha channel information  
+		imagealphablending($new, false); // Set the blending mode for an image
+		imagesavealpha($new, true); // Set the flag to save full alpha channel information
 
 		$background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
 		imagefilledrectangle($new, 0, 0, $thumb_x + $bordersize * 2, $thumb_y + $bordersize * 2, $background_color);
@@ -873,8 +910,8 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			$new = imagecreatetruecolor($thumb_x + $bordersize * 2, $thumb_y + $bordersize * 2 + floor($textsize * 3.5) + 6);
 		}
 
-		imagealphablending($new, false);  //Set the blending mode for an image    
-		imagesavealpha($new, true);  //Set the flag to save full alpha channel information
+		imagealphablending($new, false);  // Set the blending mode for an image
+		imagesavealpha($new, true);  // Set the flag to save full alpha channel information
 
 		$background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
 		imagefilledrectangle($new, 0, 0, $thumb_x + $bordersize * 2, $thumb_y + $bordersize * 2 + $textsize * 4 + 14, $background_color);
@@ -886,9 +923,11 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
 		}
 
+		// Add text to the image
 		imagestring($new, $textsize, $bordersize, $thumb_y + $bordersize + $textsize + 1, $big_x . "x" . $big_y . " " . $fsize . "kb", $text_color);
 	}
 
+	// Save the new image in the specified format
 	switch ($extension) {
 		case 'gif':
 			imagegif($new, $img_small);
@@ -898,11 +937,16 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 			imagepng($new, $img_small);
 			break;
 
+		case 'webp':
+			imagewebp($new, $img_small);
+			break;
+
 		default:
 			imagejpeg($new, $img_small, $jpegquality);
 			break;
 	}
 
+	// Free up memory
 	imagedestroy($new);
 	imagedestroy($source);
 	return;
@@ -921,7 +965,6 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
  * @param int $bordersize Border thickness  
  * @param string $dim_priority Resize priority dimension 
  */
-
 function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquality = "90", $type = "resize", $keepratio = FALSE, $dim_priority = "Width")
 {
 	global $cfg;
@@ -932,6 +975,7 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
 
 	$extension = @end(explode(".", $img_big));
 
+	// Determine the image type and create an image resource
 	switch ($extension) {
 		case 'gif':
 			$source = imagecreatefromgif($img_big);
@@ -939,6 +983,10 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
 
 		case 'png':
 			$source = imagecreatefrompng($img_big);
+			break;
+
+		case 'webp':
+			$source = imagecreatefromwebp($img_big);
 			break;
 
 		default:
@@ -949,6 +997,7 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
 	$big_x = imagesx($source);
 	$big_y = imagesy($source);
 
+	// Calculate the dimensions of the thumbnail
 	if (!$keepratio || $type == "crop") {
 		$thumb_x = $small_x;
 		$thumb_y = $small_y;
@@ -961,10 +1010,10 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
 	}
 
 	$new = imagecreatetruecolor($thumb_x, $thumb_y);
-	imagealphablending($new, false); //Set the blending mode for an image  	
-	imagesavealpha($new, true); //Set the flag to save full alpha channel information 	
+	imagealphablending($new, false); // Set the blending mode for an image
+	imagesavealpha($new, true); // Set the flag to save full alpha channel information
 
-	// crop
+	// Crop or resize the image
 	if ($type == "crop") {
 		$big_x_new = $big_y * $small_x / $small_y;
 		$big_y_new = $big_x * $small_y / $small_x;
@@ -975,12 +1024,11 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
 			$w_point = (($big_x - $big_x_new) / 2);
 			imagecopyresampled($new, $source, 0, 0, $w_point, 0, $thumb_x, $thumb_y, $big_x_new, $big_y);
 		}
-	}
-	// resize
-	else {
+	} else {
 		imagecopyresampled($new, $source, 0, 0, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
 	}
 
+	// Save the new image in the specified format
 	switch ($extension) {
 		case 'gif':
 			imagegif($new, $img_small);
@@ -990,11 +1038,16 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
 			imagepng($new, $img_small);
 			break;
 
+		case 'webp':
+			imagewebp($new, $img_small);
+			break;
+
 		default:
 			imagejpeg($new, $img_small, $jpegquality);
 			break;
 	}
 
+	// Free up memory
 	imagedestroy($new);
 	imagedestroy($source);
 	return;
@@ -1006,7 +1059,6 @@ function sed_sm_createthumb($img_big, $img_small, $small_x, $small_y, $jpegquali
  * @param string $image_source Original image path 
  * @param string $degree_lvl Degree level 
  */
-
 function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
 {
 	global $cfg;
@@ -1017,6 +1069,7 @@ function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
 
 	$extension = @end(explode(".", $image_source));
 
+	// Determine the image type and create an image resource
 	switch ($extension) {
 		case 'gif':
 			$source = imagecreatefromgif($image_source);
@@ -1026,17 +1079,22 @@ function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
 			$source = imagecreatefrompng($image_source);
 			break;
 
+		case 'webp':
+			$source = imagecreatefromwebp($image_source);
+			break;
+
 		default:
 			$source = imagecreatefromjpeg($image_source);
 			break;
 	}
 
 	$transColor = imagecolorallocatealpha($source, 255, 255, 255, 0);
-	$rotated_image = imagerotate($source, -90 * $degree_lvl, 0);
+	$rotated_image = imagerotate($source, -90 * $degree_lvl, $transColor);
 
-	imagealphablending($rotated_image, false); //Set the blending mode for an image  	
-	imagesavealpha($rotated_image, true); //Set the flag to save full alpha channel information	
+	imagealphablending($rotated_image, false); // Set the blending mode for an image
+	imagesavealpha($rotated_image, true); // Set the flag to save full alpha channel information
 
+	// Save the rotated image in the specified format
 	switch ($extension) {
 		case 'gif':
 			imagegif($rotated_image, $image_source);
@@ -1046,11 +1104,16 @@ function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
 			imagepng($rotated_image, $image_source);
 			break;
 
+		case 'webp':
+			imagewebp($rotated_image, $image_source);
+			break;
+
 		default:
 			imagejpeg($rotated_image, $image_source, $jpegquality);
 			break;
 	}
 
+	// Free up memory
 	imagedestroy($rotated_image);
 	imagedestroy($source);
 	return;

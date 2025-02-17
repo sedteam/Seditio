@@ -1,5 +1,5 @@
-(function ($) {
-    $.fn.sed_uploader = function (options) {
+(function($) {
+    $.fn.sed_uploader = function(options) {
         var settings = $.extend({
             sed_uploader: true,
             use_main: false,
@@ -24,7 +24,7 @@
             max_exceeded: "",
         }, options);
 
-        return this.each(function () {
+        return this.each(function() {
             var holdername = $(this);
             var uniqueId = holdername.attr('id');
 
@@ -46,7 +46,7 @@
 
             if (settings.use_sortable) {
                 holdername.sortable({
-                    update: function (event, ui) {
+                    update: function(event, ui) {
                         if (typeof settings.rearranged == 'function') {
                             settings.rearranged();
                         }
@@ -63,7 +63,7 @@
 
             holdername.disableSelection();
 
-            $(document).on("change", "." + uniqueId + "Input", function () {
+            $(document).on("change", "." + uniqueId + "Input", function() {
                 if (settings.hide_in_progress == true) {
                     if (parseInt(jQuery.data(holdername, 'currently_uploading')) == 1) return false;
                     jQuery.data(holdername, 'currently_uploading', 1);
@@ -87,7 +87,7 @@
                 changeMain(holdername, settings);
             }
 
-            holdername.on("click", ".picture_insert", function () {
+            holdername.on("click", ".picture_insert", function() {
                 var filename = $(this).parent().attr('filename');
                 var html = '<img src="datas/users/' + filename + '" alt="" />';
                 if (CKEDITOR.instances['rpagetext']) {
@@ -101,14 +101,14 @@
                 }
             });
 
-            holdername.on("click", ".picture_delete", function () {
+            holdername.on("click", ".picture_delete", function() {
                 jQuery.data(holdername, "already_uploaded", jQuery.data(holdername, "already_uploaded") - 1);
 
                 $.ajax({
                     url: "plug/?ajx=uploader&upl_delete=" + encodeURIComponent($(this).parent().attr('filename'))
                 });
 
-                $(this).parent().fadeOut("slow", function () {
+                $(this).parent().fadeOut("slow", function() {
                     $(this).remove();
                     holdername.parent().find('.upl_errors').text("");
 
@@ -126,12 +126,12 @@
                 }
             });
 
-            holdername.on("click", ".rotate_picture", function () {
+            holdername.on("click", ".rotate_picture", function() {
                 var context = this;
 
                 $.ajax({
                     url: "plug/?ajx=uploader&upl_rotate=" + encodeURIComponent($(this).parent().attr('filename')) + "&upl_degree_lvl=" + $(this).closest('.rotate_picture').attr('degree-lvl')
-                }).done(function (file_name) {
+                }).done(function(file_name) {
                     var $img = holdername.find("input[value^='" + file_name + "']").prev('img');
                     if (parseInt($(context).closest('.rotate_picture').attr('degree-lvl')) > 3) {
                         $(context).closest('.rotate_picture').attr('degree-lvl', 1);
@@ -144,16 +144,16 @@
 
             if (settings.use_dragndrop) {
                 var holder = document.getElementById(uniqueId + "DDArea");
-                holder.ondragover = function () {
+                holder.ondragover = function() {
                     holdername.find(".uploadButton").addClass("DragAndDropHover");
                     return false;
                 };
-                holder.ondragend = function () {
+                holder.ondragend = function() {
                     holdername.find(".uploadButton").removeClass("DragAndDropHover");
                     return false;
                 };
 
-                holder.ondrop = function (e) {
+                holder.ondrop = function(e) {
                     holdername.find(".uploadButton").removeClass("DragAndDropHover");
                     e.preventDefault();
                     sed_uploaderHandle(e.dataTransfer.files, holdername, settings);
@@ -185,7 +185,7 @@
             var re = /(?:\.([^.]+))?$/;
             var ext = re.exec(files[i].name)[1].toLowerCase();
 
-            if ((ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'gif') && jQuery.data(holder, "already_uploaded") <= settings.maximum_uploads) {
+            if ((ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'gif' || ext == 'webp') && jQuery.data(holder, "already_uploaded") <= settings.maximum_uploads) {
                 var clone = $("#" + holder.attr("id") + "_to_clone").find(".multibox").clone();
 
                 holder.append(clone);
@@ -197,6 +197,7 @@
     }
 
     window.counter = 0;
+
     function upload(file, clone, place, holder, settings) {
         if (settings.hide_on_exceed == true && parseInt(jQuery.data(holder, 'already_uploaded')) == parseInt(settings.maximum_uploads)) {
             holder.parent().find('.uploadButton').hide();
@@ -204,7 +205,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "plug/?ajx=uploader&upl_filename=" + encodeURIComponent(file.name), true);
         xhr.send(file);
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function() {
             var rotation_html = "";
             if (xhr.readyState == 4) {
                 var response = JSON.parse(xhr.responseText);
