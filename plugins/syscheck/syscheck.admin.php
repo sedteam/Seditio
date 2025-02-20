@@ -284,11 +284,11 @@ foreach ($syschecktitles as $key => $systitle) {
 
 	$plugin_body .= "<table class=\"cells striped\">";
 	$plugin_body .= "<tr>";
-	$plugin_body .= "<td class=\"coltop\" style=\"width:40%;\">File</td>";
+	$plugin_body .= "<td class=\"coltop\">File</td>";
 	$plugin_body .= "<td class=\"coltop\" style=\"width:15%;\">Type</td>";
 	$plugin_body .= "<td class=\"coltop\" style=\"width:25%;\">Description</td>";
-	$plugin_body .= "<td class=\"coltop\" style=\"width:8%;\">Version</td>";
-	$plugin_body .= "<td class=\"coltop\" style=\"width:12%;\">Date</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Version</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Date</td>";
 	$plugin_body .= "</tr>";
 
 	foreach ($systemfiles[$key] as $file) {
@@ -329,9 +329,9 @@ $plugin_body .= '<div class="content-box-content">';
 
 $plugin_body .= "<table class=\"cells striped\">";
 $plugin_body .= "<tr>";
-$plugin_body .= "<td class=\"coltop\" style=\"width:40%;\">Skin file</td>";
-$plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";
-$plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Size (Bytes)</td>";
+$plugin_body .= "<td class=\"coltop\">Skin file</td>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Found ?</td>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Size (Bytes)</td>";
 $plugin_body .= "</tr>";
 
 foreach ($skinfiles as $file) {
@@ -364,9 +364,9 @@ $plugin_body .= '<div class="content-box-content">';
 
 $plugin_body .= "<table class=\"cells striped\">";
 $plugin_body .= "<tr>";
-$plugin_body .= "<td class=\"coltop\" style=\"width:40%;\">Skin file</td>";
-$plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Found ?</td>";
-$plugin_body .= "<td class=\"coltop\" style=\"width:30%;\">Size (Bytes)</td>";
+$plugin_body .= "<td class=\"coltop\">Skin file</td>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Found ?</td>";
+$plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Size (Bytes)</td>";
 $plugin_body .= "</tr>";
 
 foreach ($admskinfiles as $file) {
