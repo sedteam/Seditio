@@ -229,16 +229,19 @@ pre {
 .icon {
     display: inline-block;
     text-align: center;
-    border: 1px solid #459300;
-    font-size: 15px !important;
+    border: 1px solid rgb(84 160 19);
+    color: #fff;
+    background: rgb(115 182 38);
+    font-size: 14px !important;
     cursor: pointer;
     -webkit-border-radius: 16px;
     -moz-border-radius: 16px;
     border-radius: 16px;
-    width: 28px;
-    height: 28px;
-    line-height: 23px;
-    margin: 6px 5px;
+    width: 30px;
+    height: 30px;
+    line-height: 26px;
+    margin: 2px 5px;
+    vertical-align: middle;
 }
 
 .icon i {

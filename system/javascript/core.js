@@ -1,14 +1,12 @@
 var sedjs = {
-    /*= Popup
-    -------------------------------------*/
+    /**
+     * Open a popup window or modal with specified content.
+     * @param {string} code - The code or identifier for the content to display.
+     * @param {number} w - The width of the popup window.
+     * @param {number} h - The height of the popup window.
+     * @param {boolean} modal - Whether to open the content in a modal window.
+     */
     popup: function(code, w, h, modal) {
-        /**
-         * Open a popup window or modal with specified content.
-         * @param {string} code - The code or identifier for the content to display.
-         * @param {number} w - The width of the popup window.
-         * @param {number} h - The height of the popup window.
-         * @param {boolean} modal - Whether to open the content in a modal window.
-         */
         if (!modal) {
             window.open(sedjs.get_basehref() + 'plug?o=' + code, '', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
         } else {
@@ -16,16 +14,14 @@ var sedjs = {
         }
     },
 
-    /*= PFS
-    -------------------------------------*/
+    /**
+     * Open a PFS (Personal File Storage) window or modal.
+     * @param {string} id - The user ID for the PFS.
+     * @param {string} c1 - Additional parameter for the PFS.
+     * @param {string} c2 - Additional parameter for the PFS.
+     * @param {boolean} modal - Whether to open the PFS in a modal window.
+     */
     pfs: function(id, c1, c2, modal) {
-        /**
-         * Open a PFS (Personal File Storage) window or modal.
-         * @param {string} id - The user ID for the PFS.
-         * @param {string} c1 - Additional parameter for the PFS.
-         * @param {string} c2 - Additional parameter for the PFS.
-         * @param {boolean} modal - Whether to open the PFS in a modal window.
-         */
         if (!modal) {
             window.open(sedjs.get_basehref() + 'pfs?userid=' + id + '&c1=' + c1 + '&c2=' + c2, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=990,height=600,left=32,top=16');
         } else {
@@ -33,16 +29,14 @@ var sedjs = {
         }
     },
 
-    /*= Help
-    -------------------------------------*/
+    /**
+     * Open a help window or modal with specified content.
+     * @param {string} rcode - The help code or identifier.
+     * @param {string} c1 - Additional parameter for the help content.
+     * @param {string} c2 - Additional parameter for the help content.
+     * @param {boolean} modal - Whether to open the help content in a modal window.
+     */
     help: function(rcode, c1, c2, modal) {
-        /**
-         * Open a help window or modal with specified content.
-         * @param {string} rcode - The help code or identifier.
-         * @param {string} c1 - Additional parameter for the help content.
-         * @param {string} c2 - Additional parameter for the help content.
-         * @param {boolean} modal - Whether to open the help content in a modal window.
-         */
         if (!modal) {
             window.open(sedjs.get_basehref() + 'plug?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, 'Help', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16');
         } else {
@@ -50,14 +44,12 @@ var sedjs = {
         }
     },
 
-    /*= Polls
-    -------------------------------------*/
+    /**
+     * Open a polls window or modal with specified content.
+     * @param {string} rcode - The poll code or identifier.
+     * @param {boolean} modal - Whether to open the polls content in a modal window.
+     */
     polls: function(rcode, modal) {
-        /**
-         * Open a polls window or modal with specified content.
-         * @param {string} rcode - The poll code or identifier.
-         * @param {boolean} modal - Whether to open the polls content in a modal window.
-         */
         if (!modal) {
             window.open(sedjs.get_basehref() + 'polls?stndl=1&id=' + rcode, 'Polls', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
         } else {
@@ -65,15 +57,13 @@ var sedjs = {
         }
     },
 
-    /*= Poll vote
-    -------------------------------------*/
+    /**
+     * Open a poll voting window or modal with specified content.
+     * @param {string} rcode - The poll code or identifier.
+     * @param {string} rvote - The vote identifier.
+     * @param {boolean} modal - Whether to open the poll voting content in a modal window.
+     */
     pollvote: function(rcode, rvote, modal) {
-        /**
-         * Open a poll voting window or modal with specified content.
-         * @param {string} rcode - The poll code or identifier.
-         * @param {string} rvote - The vote identifier.
-         * @param {boolean} modal - Whether to open the poll voting content in a modal window.
-         */
         if (!modal) {
             window.open(sedjs.get_basehref() + 'polls?a=send&stndl=1&id=' + rcode + '&vote=' + rvote, 'Polls', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
         } else {
@@ -81,16 +71,14 @@ var sedjs = {
         }
     },
 
-    /*= Picture show
-    -------------------------------------*/
+    /**
+     * Open a picture window or modal with specified content.
+     * @param {string} url - The URL of the picture.
+     * @param {number} sx - The width of the picture window.
+     * @param {number} sy - The height of the picture window.
+     * @param {boolean} modal - Whether to open the picture in a modal window.
+     */
     picture: function(url, sx, sy, modal) {
-        /**
-         * Open a picture window or modal with specified content.
-         * @param {string} url - The URL of the picture.
-         * @param {number} sx - The width of the picture window.
-         * @param {number} sy - The height of the picture window.
-         * @param {boolean} modal - Whether to open the picture in a modal window.
-         */
         if (!modal) {
             var ptop = (window.screen.height - 200) / 2;
             var pleft = (window.screen.width - 200) / 2;
@@ -102,24 +90,20 @@ var sedjs = {
         }
     },
 
-    /*= Redirect
-    -------------------------------------*/
+    /**
+     * Redirect the browser to a specified URL.
+     * @param {HTMLElement} url - The select element containing the URL options.
+     */
     redirect: function(url) {
-        /**
-         * Redirect the browser to a specified URL.
-         * @param {HTMLElement} url - The select element containing the URL options.
-         */
         location.href = url.options[url.selectedIndex].value;
     },
 
-    /*= Confirm action
-    -------------------------------------*/
+    /**
+     * Display a confirmation dialog with a specified message.
+     * @param {string} mess - The message to display in the confirmation dialog.
+     * @returns {boolean} Whether the user confirmed the action.
+     */
     confirmact: function(mess) {
-        /**
-         * Display a confirmation dialog with a specified message.
-         * @param {string} mess - The message to display in the confirmation dialog.
-         * @returns {boolean} Whether the user confirmed the action.
-         */
         if (confirm(mess)) {
             return true;
         } else {
@@ -127,13 +111,11 @@ var sedjs = {
         }
     },
 
-    /*= Get base href
-    -------------------------------------*/
+    /**
+     * Get the base href for the current page.
+     * @returns {string} The base href.
+     */
     get_basehref: function() {
-        /**
-         * Get the base href for the current page.
-         * @returns {string} The base href.
-         */
         var loc = "";
         var baseElement = document.querySelector('base');
         if (baseElement && baseElement.href) {
@@ -145,26 +127,22 @@ var sedjs = {
         return loc;
     },
 
-    /*= Toggle Block
-    -------------------------------------*/
+    /**
+     * Toggle the visibility of a block element.
+     * @param {string} id - The ID of the block element to toggle.
+     */
     toggleblock: function(id) {
-        /**
-         * Toggle the visibility of a block element.
-         * @param {string} id - The ID of the block element to toggle.
-         */
         var block = document.querySelector('#' + id);
         if (block) {
             block.style.display = block.style.display === 'none' ? '' : 'none';
         }
     },
 
-    /*= Tabs
-    -------------------------------------*/
+    /**
+     * Initialize Tabs functionality with specified settings.
+     * @param {Object} settings - The settings for the tab functionality.
+     */
     sedtabs: function(settings) {
-        /**
-         * Initialize tab functionality with specified settings.
-         * @param {Object} settings - The settings for the tab functionality.
-         */
         var getElementOrElements = function(identifier) {
             if (identifier.charAt(0) === '#') {
                 var byId = document.querySelector(identifier);
@@ -302,13 +280,11 @@ var sedjs = {
         initTabs(settings);
     },
 
-    /*= Get Attribute rel on links & start show thumb in modal window
-    -------------------------------------*/
+    /**
+     * Open a modal window with an image thumbnail when a link with a specific rel attribute is clicked.
+     * @param {string} rel - The rel attribute value to target.
+     */
     getrel: function(rel) {
-        /**
-         * Open a modal window with an image thumbnail when a link with a specific rel attribute is clicked.
-         * @param {string} rel - The rel attribute value to target.
-         */
         var pageLinks = document.querySelectorAll('a[rel="' + rel + '"]');
         Array.prototype.forEach.call(pageLinks, function(link) {
             link.addEventListener('click', function(event) {
@@ -321,14 +297,12 @@ var sedjs = {
         });
     },
 
-    /*= Ajax functions
-    -------------------------------------*/
+    /**
+     * Perform an AJAX request with specified options.
+     * @param {Object} options - The options for the AJAX request.
+     * @returns {XMLHttpRequest} The XMLHttpRequest object.
+     */
     ajax: function(options) {
-        /**
-         * Perform an AJAX request with specified options.
-         * @param {Object} options - The options for the AJAX request.
-         * @returns {XMLHttpRequest} The XMLHttpRequest object.
-         */
         var settings = {
             url: '',
             method: 'GET',
@@ -451,13 +425,12 @@ var sedjs = {
         return xhr;
     },
 
-    // Helper function for parameter serialization
+    /**
+     * Serialize an object into a query string.
+     * @param {Object} data - The data object to serialize.
+     * @returns {string} The serialized query string.
+     */
     serialization: function(data) {
-        /**
-         * Serialize an object into a query string.
-         * @param {Object} data - The data object to serialize.
-         * @returns {string} The serialized query string.
-         */
         var pairs = [];
 
         function buildParams(prefix, obj) {
@@ -494,11 +467,11 @@ var sedjs = {
         return pairs.join('&').replace(/%20/g, '+');
     },
 
+    /**
+     * Bind form data to an AJAX request.
+     * @param {Object} userOptions - The user options for the AJAX request.
+     */
     ajaxbind: function(userOptions) {
-        /**
-         * Bind form data to an AJAX request.
-         * @param {Object} userOptions - The user options for the AJAX request.
-         */
         var defaults = {
             url: '',
             format: 'html',
@@ -589,8 +562,9 @@ var sedjs = {
         });
     },
 
-    /*= Modal Windows functions
-    -------------------------------------*/
+    /**
+     * Modal Windows functions
+     */
     modal: {
         // Configuration parameters
         imagefiles: [ // Paths to control icons
@@ -1314,73 +1288,89 @@ var sedjs = {
         }
     },
 
+    /**
+     * Activates a stylesheet by its title.
+     * @param {string} title - The title attribute of the stylesheet to activate.
+     */
     setActiveStyleSheet: function(title) {
-        var i, a, main;
-        for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) {
-            if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
-                a.disabled = true;
-                if (a.getAttribute("title") == title) {
-                    a.disabled = false;
-                }
-            }
+        var links = document.querySelectorAll('link[rel*="style"][title]');
+        for (var i = 0; i < links.length; i++) {
+            links[i].disabled = links[i].getAttribute('title') !== title;
         }
     },
 
+    /**
+     * Gets the title of the currently active stylesheet.
+     * @returns {string|null} - The title of the active stylesheet, or null if none is active.
+     */
     getActiveStyleSheet: function() {
-        var i, a;
-        for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) {
-            if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && !a.disabled) {
-                return a.getAttribute("title");
-            }
-        }
-        return null;
+        var activeLink = document.querySelector('link[rel*="style"][title]:not([disabled])');
+        return activeLink ? activeLink.getAttribute('title') : null;
     },
 
+    /**
+     * Gets the title of the preferred stylesheet.
+     * @returns {string|null} - The title of the preferred stylesheet, or null if none is found.
+     */
     getPreferredStyleSheet: function() {
-        var i, a;
-        for (i = 0;
-            (a = document.getElementsByTagName("link")[i]); i++) {
-            if (a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title")) {
-                return a.getAttribute("title");
-            }
-        }
-        return null;
+        var preferredLink = document.querySelector('link[rel*="style"]:not([rel*="alt"])[title]');
+        return preferredLink ? preferredLink.getAttribute('title') : null;
     },
 
+    /**
+     * Creates a cookie with a specified name, value, and optional expiration in days.
+     * @param {string} name - The name of the cookie.
+     * @param {string} value - The value of the cookie.
+     * @param {number} [days] - The number of days until the cookie expires. If not provided, the cookie will be a session cookie.
+     *
+     * This function sets a cookie with the given name and value. If the 'days' parameter is provided,
+     * the cookie will have an expiration date set to the specified number of days from the current date.
+     * If 'days' is not provided, the cookie will be a session cookie, which expires when the browser is closed.
+     */
     createCookie: function(name, value, days) {
+        var date = new Date();
         if (days) {
-            var date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             var expires = "; expires=" + date.toGMTString();
-        } else {
-            expires = "";
         }
-        document.cookie = name + "=" + value + expires + "; path=/";
+        document.cookie = name + "=" + value + (expires || "") + "; path=/";
     },
 
+    /**
+     * Reads the value of a cookie by its name.
+     * @param {string} name - The name of the cookie.
+     * @returns {string|null} - The value of the cookie, or null if the cookie is not found.
+     */
     readCookie: function(name) {
         var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1, c.length);
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1, cookie.length);
             }
-            if (c.indexOf(nameEQ) == 0) {
-                return c.substring(nameEQ.length, c.length);
+            if (cookie.indexOf(nameEQ) === 0) {
+                return cookie.substring(nameEQ.length, cookie.length);
             }
         }
         return null;
     },
 
+    /**
+     * Combines the values of two anti-spam fields.
+     */
     antispam: function() {
         if (document.getElementById('anti1')) {
             document.getElementById('anti1').value += document.getElementById('anti2').value;
         }
     },
 
+    /**
+     * Generates a Search Engine Friendly (SEF) URL.
+     * @param {HTMLInputElement} from - The input element containing the original string.
+     * @param {HTMLInputElement} to - The input element where the SEF URL will be placed.
+     * @param {boolean} allow_slashes - Whether to allow slashes in the SEF URL.
+     */
     genSEF: function(from, to, allow_slashes) {
         var str = from.value.toLowerCase();
         var slash = "";
@@ -1433,38 +1423,55 @@ var sedjs = {
             }
         }
         str = _str;
-
         str = str.replace(/j{2,}/g, "j");
-
         str = str.replace(new RegExp("[^" + slash + "0-9a-z_\\-]+", "g"), "");
-
         to.value = str;
     },
 
-    /*= Add poll option */
+    /**
+     * Adds a new poll option to the poll.
+     * @param {string} apo - The CSS selector for the poll options container.
+     *
+     * This function clones the last poll option element, increments its number,
+     * clears its input value, and appends a delete button if not already present.
+     * The new option is then inserted after the last existing option.
+     */
     add_poll_option: function(apo) {
-        let delete_button = '<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>';
-        let elem = document.querySelectorAll(apo);
-        let last = elem[elem.length - 1];
-        let clone = last.cloneNode(true);
+        var delete_button = '<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>';
+        var elem = document.querySelectorAll(apo);
+        var last = elem[elem.length - 1];
+        var clone = last.cloneNode(true);
         if (clone.querySelector('.poll-option-delete') == null) {
             clone.innerHTML += delete_button;
         }
-        let num = clone.querySelector('.num').innerHTML;
+        var num = clone.querySelector('.num').innerHTML;
         clone.querySelector('.num').innerHTML = parseInt(num) + 1;
         clone.querySelector('input').value = '';
         clone.querySelector('input').setAttribute('name', 'poll_option[]');
         clone.querySelector('input').setAttribute('value', '');
-        last.after(clone);
+        last.parentNode.insertBefore(clone, last.nextSibling);
     },
 
-    /*= Remove poll option */
+
+    /**
+     * Removes a poll option from the poll.
+     * @param {HTMLElement} apo - The DOM element representing the poll option to be removed.
+     *
+     * This function removes the specified poll option element from the DOM.
+     */
     remove_poll_option: function(apo) {
-        let root = apo.parentNode;
+        var root = apo.parentNode;
         root.parentNode.removeChild(root);
     },
 
-    /*= Copy url from href */
+    /**
+     * Copies the URL from the href attribute of a link to the clipboard.
+     * @param {HTMLElement} el - The DOM element containing the href attribute with the URL to copy.
+     *
+     * This function prevents the default action, creates a temporary input element,
+     * sets its value to the URL, selects the input value, copies it to the clipboard,
+     * and then removes the temporary input element.
+     */
     copyurl: function(el) {
         event.preventDefault();
         var cpLink = el.getAttribute('href');
@@ -1476,9 +1483,15 @@ var sedjs = {
         document.body.removeChild(dummy);
     },
 
-    /*= Auto set file title from file name without extension */
+    /**
+     * Automatically sets the file title input field based on the selected file name, excluding the file extension.
+     *
+     * This function listens for changes on file input elements with the class 'file'.
+     * When a file is selected, it extracts the file name without the extension and sets it as the value
+     * of the corresponding file title input field.
+     */
     autofiletitle: function() {
-        var fileUpload = document.getElementsByClassName('file');
+        var fileUpload = document.querySelectorAll('.file');
         for (var i = 0; i < fileUpload.length; i++) {
             fileUpload[i].onchange = function() {
                 var filename = this.value;
@@ -1486,18 +1499,22 @@ var sedjs = {
                 var k = filename.split('\\').pop().split('/').pop();
                 var lastDotIndex = k.lastIndexOf('.');
                 var title = (lastDotIndex === -1) ? k : k.substring(0, lastDotIndex);
-                document.getElementsByName(inputFileTitleName)[0].value = title;
+                document.querySelector('[name="' + inputFileTitleName + '"]').value = title;
             }
         }
     },
 
-    /*= Spoiler content */
+    /**
+     * Toggles the visibility of spoiler content.
+     *
+     * This function adds click event listeners to elements with the class 'spoiler-toggle'.
+     * When clicked, it toggles the visibility of the associated spoiler content and updates the toggle icon.
+     */
     spoiler: function() {
         // Function to toggle the visibility of the spoiler content
         function toggleSpoilerContent(spoilerToggle) {
             var spoilerContent = spoilerToggle.closest('.spoiler').querySelector('.spoiler-content');
             var displayStyle = window.getComputedStyle(spoilerContent).display;
-
             // Check the current display style of the spoiler content
             if (displayStyle === 'none') {
                 // If the content is hidden, show it and update the toggle icon
@@ -1511,14 +1528,13 @@ var sedjs = {
                 spoilerToggle.classList.add('hide-icon');
             }
         }
-
         // Find all elements with the class 'spoiler-toggle' and add a click event listener
         var spoilerToggles = document.querySelectorAll('.spoiler-toggle');
-        spoilerToggles.forEach(function(spoilerToggle) {
-            spoilerToggle.addEventListener('click', function() {
-                toggleSpoilerContent(spoilerToggle);
+        for (var i = 0; i < spoilerToggles.length; i++) {
+            spoilerToggles[i].addEventListener('click', function() {
+                toggleSpoilerContent(this);
             });
-        });
+        }
     }
 };
 
