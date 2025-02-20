@@ -27,168 +27,169 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 	die('Wrong URL.');
 }
 
-$systemfiles[] = '*Core Router Launchers';
+$syschecktitles['launchers'] = 'Core Router Launchers';
 
-$systemfiles[] = 'system/core/admin/admin.php';
-$systemfiles[] = 'system/core/forums/forums.php';
-$systemfiles[] = 'system/core/gallery/gallery.php';
-$systemfiles[] = 'system/core/index/index.php';
-$systemfiles[] = 'system/core/list/list.php';
-$systemfiles[] = 'system/core/message/message.php';
-$systemfiles[] = 'system/core/page/page.php';
-$systemfiles[] = 'system/core/pfs/pfs.php';
-$systemfiles[] = 'system/core/plug/plug.php';
-$systemfiles[] = 'system/core/pm/pm.php';
-$systemfiles[] = 'system/core/polls/polls.php';
-$systemfiles[] = 'system/core/users/users.php';
-$systemfiles[] = 'system/core/view/view.php';
+$systemfiles['launchers'][] = 'system/core/admin/admin.php';
+$systemfiles['launchers'][] = 'system/core/forums/forums.php';
+$systemfiles['launchers'][] = 'system/core/gallery/gallery.php';
+$systemfiles['launchers'][] = 'system/core/index/index.php';
+$systemfiles['launchers'][] = 'system/core/list/list.php';
+$systemfiles['launchers'][] = 'system/core/message/message.php';
+$systemfiles['launchers'][] = 'system/core/page/page.php';
+$systemfiles['launchers'][] = 'system/core/pfs/pfs.php';
+$systemfiles['launchers'][] = 'system/core/plug/plug.php';
+$systemfiles['launchers'][] = 'system/core/pm/pm.php';
+$systemfiles['launchers'][] = 'system/core/polls/polls.php';
+$systemfiles['launchers'][] = 'system/core/users/users.php';
+$systemfiles['launchers'][] = 'system/core/view/view.php';
+$systemfiles['launchers'][] = 'system/core/captcha/captcha.php';
+$systemfiles['launchers'][] = 'system/core/resizer/resizer.php';
+$systemfiles['launchers'][] = 'system/core/sitemap/sitemap.php';
+$systemfiles['launchers'][] = 'system/core/rss/rss.php';
 
-$systemfiles[] = 'system/core/captcha/captcha.php';
-$systemfiles[] = 'system/core/resizer/resizer.php';
-$systemfiles[] = 'system/core/sitemap/sitemap.php';
-$systemfiles[] = 'system/core/rss/rss.php';
+$syschecktitles['config'] = 'Configuration and directory blockers';
 
-$systemfiles[] = '*Configuration and directory blockers';
+$systemfiles['config'][] = 'datas/config.default.php';
+$systemfiles['config'][] = 'datas/config.php';
+$systemfiles['config'][] = 'datas/index.php';
+$systemfiles['config'][] = 'datas/avatars/index.php';
+$systemfiles['config'][] = 'datas/defaultav/index.php';
+$systemfiles['config'][] = 'datas/photos/index.php';
+$systemfiles['config'][] = 'datas/signatures/index.php';
+$systemfiles['config'][] = 'datas/thumbs/index.php';
+$systemfiles['config'][] = 'datas/users/index.php';
 
-$systemfiles[] = 'datas/config.default.php';
-$systemfiles[] = 'datas/config.php';
-$systemfiles[] = 'datas/index.php';
-$systemfiles[] = 'datas/avatars/index.php';
-$systemfiles[] = 'datas/defaultav/index.php';
-$systemfiles[] = 'datas/photos/index.php';
-$systemfiles[] = 'datas/signatures/index.php';
-$systemfiles[] = 'datas/thumbs/index.php';
-$systemfiles[] = 'datas/users/index.php';
+$syschecktitles['system'] = 'System';
 
-$systemfiles[] = '*System';
+$systemfiles['system'][] = 'system/common.php';
+$systemfiles['system'][] = 'system/config.extensions.php';
+$systemfiles['system'][] = 'system/database.mysqli.php';
+$systemfiles['system'][] = 'system/footer.php';
+$systemfiles['system'][] = 'system/functions.admin.php';
+$systemfiles['system'][] = 'system/functions.php';
+$systemfiles['system'][] = 'system/header.php';
+$systemfiles['system'][] = 'system/index.php';
+$systemfiles['system'][] = 'system/templates.php';
 
-$systemfiles[] = 'system/common.php';
-$systemfiles[] = 'system/config.extensions.php';
-$systemfiles[] = 'system/database.mysqli.php';
-$systemfiles[] = 'system/footer.php';
-$systemfiles[] = 'system/functions.admin.php';
-$systemfiles[] = 'system/functions.php';
-$systemfiles[] = 'system/header.php';
-$systemfiles[] = 'system/index.php';
-$systemfiles[] = 'system/templates.php';
+$syschecktitles['core'] = 'Core features';
 
-$systemfiles[] = '*Core features';
+$systemfiles['core'][] = 'system/core/admin/admin.banlist.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.cache.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.comments.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.config.gallery.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.config.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.config.lang.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.config.skin.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.config.time.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.dic.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.footer.php';
+$systemfiles['core'][] = 'system/core/admin/admin.forums.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.forums.structure.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.gallery.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.header.php';
+$systemfiles['core'][] = 'system/core/admin/admin.hits.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.home.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.log.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.menu.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.page.add.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.page.edit.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.page.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.page.manager.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.pfs.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.php';
+$systemfiles['core'][] = 'system/core/admin/admin.plug.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.pm.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.polls.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.ratings.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.referers.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.rights.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.rightsbyitem.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.smilies.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.manage.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.trashcan.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.upgrade.inc.php';
+$systemfiles['core'][] = 'system/core/admin/admin.users.inc.php';
+$systemfiles['core'][] = 'system/core/captcha/captcha.php';
+$systemfiles['core'][] = 'system/core/forums/forums.editpost.inc.php';
+$systemfiles['core'][] = 'system/core/forums/forums.inc.php';
+$systemfiles['core'][] = 'system/core/forums/forums.php';
+$systemfiles['core'][] = 'system/core/forums/forums.newtopic.inc.php';
+$systemfiles['core'][] = 'system/core/forums/forums.posts.inc.php';
+$systemfiles['core'][] = 'system/core/forums/forums.topics.inc.php';
+$systemfiles['core'][] = 'system/core/gallery/gallery.browse.inc.php';
+$systemfiles['core'][] = 'system/core/gallery/gallery.details.inc.php';
+$systemfiles['core'][] = 'system/core/gallery/gallery.home.inc.php';
+$systemfiles['core'][] = 'system/core/index/index.inc.php';
+$systemfiles['core'][] = 'system/core/index/index.php';
+$systemfiles['core'][] = 'system/core/list/list.inc.php';
+$systemfiles['core'][] = 'system/core/list/list.php';
+$systemfiles['core'][] = 'system/core/message/message.inc.php';
+$systemfiles['core'][] = 'system/core/message/message.php';
+$systemfiles['core'][] = 'system/core/page/page.add.inc.php';
+$systemfiles['core'][] = 'system/core/page/page.edit.inc.php';
+$systemfiles['core'][] = 'system/core/page/page.inc.php';
+$systemfiles['core'][] = 'system/core/page/page.php';
+$systemfiles['core'][] = 'system/core/pfs/pfs.edit.inc.php';
+$systemfiles['core'][] = 'system/core/pfs/pfs.editfolder.inc.php';
+$systemfiles['core'][] = 'system/core/pfs/pfs.inc.php';
+$systemfiles['core'][] = 'system/core/pfs/pfs.php';
+$systemfiles['core'][] = 'system/core/pfs/pfs.view.inc.php';
+$systemfiles['core'][] = 'system/core/plug/plug.inc.php';
+$systemfiles['core'][] = 'system/core/plug/plug.php';
+$systemfiles['core'][] = 'system/core/pm/pm.edit.inc.php';
+$systemfiles['core'][] = 'system/core/pm/pm.inc.php';
+$systemfiles['core'][] = 'system/core/pm/pm.php';
+$systemfiles['core'][] = 'system/core/pm/pm.send.inc.php';
+$systemfiles['core'][] = 'system/core/polls/polls.inc.php';
+$systemfiles['core'][] = 'system/core/polls/polls.php';
+$systemfiles['core'][] = 'system/core/resizer/resizer.php';
+$systemfiles['core'][] = 'system/core/rss/rss.inc.php';
+$systemfiles['core'][] = 'system/core/rss/rss.php';
+$systemfiles['core'][] = 'system/core/sitemap/sitemap.inc.php';
+$systemfiles['core'][] = 'system/core/sitemap/sitemap.php';
+$systemfiles['core'][] = 'system/core/users/users.auth.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.details.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.edit.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.logout.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.profile.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.register.inc.php';
+$systemfiles['core'][] = 'system/core/view/view.inc.php';
+$systemfiles['core'][] = 'system/core/users/users.php';
 
-$systemfiles[] = 'system/core/admin/admin.banlist.inc.php';
-$systemfiles[] = 'system/core/admin/admin.cache.inc.php';
-$systemfiles[] = 'system/core/admin/admin.comments.inc.php';
-$systemfiles[] = 'system/core/admin/admin.config.gallery.inc.php';
-$systemfiles[] = 'system/core/admin/admin.config.inc.php';
-$systemfiles[] = 'system/core/admin/admin.config.lang.inc.php';
-$systemfiles[] = 'system/core/admin/admin.config.skin.inc.php';
-$systemfiles[] = 'system/core/admin/admin.config.time.inc.php';
-$systemfiles[] = 'system/core/admin/admin.dic.inc.php';
-$systemfiles[] = 'system/core/admin/admin.footer.php';
-$systemfiles[] = 'system/core/admin/admin.forums.inc.php';
-$systemfiles[] = 'system/core/admin/admin.forums.structure.inc.php';
-$systemfiles[] = 'system/core/admin/admin.gallery.inc.php';
-$systemfiles[] = 'system/core/admin/admin.header.php';
-$systemfiles[] = 'system/core/admin/admin.hits.inc.php';
-$systemfiles[] = 'system/core/admin/admin.home.inc.php';
-$systemfiles[] = 'system/core/admin/admin.inc.php';
-$systemfiles[] = 'system/core/admin/admin.log.inc.php';
-$systemfiles[] = 'system/core/admin/admin.menu.inc.php';
-$systemfiles[] = 'system/core/admin/admin.page.add.inc.php';
-$systemfiles[] = 'system/core/admin/admin.page.edit.inc.php';
-$systemfiles[] = 'system/core/admin/admin.page.inc.php';
-$systemfiles[] = 'system/core/admin/admin.page.manager.inc.php';
-$systemfiles[] = 'system/core/admin/admin.pfs.inc.php';
-$systemfiles[] = 'system/core/admin/admin.php';
-$systemfiles[] = 'system/core/admin/admin.plug.inc.php';
-$systemfiles[] = 'system/core/admin/admin.pm.inc.php';
-$systemfiles[] = 'system/core/admin/admin.polls.inc.php';
-$systemfiles[] = 'system/core/admin/admin.ratings.inc.php';
-$systemfiles[] = 'system/core/admin/admin.referers.inc.php';
-$systemfiles[] = 'system/core/admin/admin.rights.inc.php';
-$systemfiles[] = 'system/core/admin/admin.rightsbyitem.inc.php';
-$systemfiles[] = 'system/core/admin/admin.smilies.inc.php';
-$systemfiles[] = 'system/core/admin/admin.manage.inc.php';
-$systemfiles[] = 'system/core/admin/admin.trashcan.inc.php';
-$systemfiles[] = 'system/core/admin/admin.upgrade.inc.php';
-$systemfiles[] = 'system/core/admin/admin.users.inc.php';
-$systemfiles[] = 'system/core/captcha/captcha.php';
-$systemfiles[] = 'system/core/forums/forums.editpost.inc.php';
-$systemfiles[] = 'system/core/forums/forums.inc.php';
-$systemfiles[] = 'system/core/forums/forums.php';
-$systemfiles[] = 'system/core/forums/forums.newtopic.inc.php';
-$systemfiles[] = 'system/core/forums/forums.posts.inc.php';
-$systemfiles[] = 'system/core/forums/forums.topics.inc.php';
-$systemfiles[] = 'system/core/gallery/gallery.browse.inc.php';
-$systemfiles[] = 'system/core/gallery/gallery.details.inc.php';
-$systemfiles[] = 'system/core/gallery/gallery.home.inc.php';
-$systemfiles[] = 'system/core/index/index.inc.php';
-$systemfiles[] = 'system/core/index/index.php';
-$systemfiles[] = 'system/core/list/list.inc.php';
-$systemfiles[] = 'system/core/list/list.php';
-$systemfiles[] = 'system/core/message/message.inc.php';
-$systemfiles[] = 'system/core/message/message.php';
-$systemfiles[] = 'system/core/page/page.add.inc.php';
-$systemfiles[] = 'system/core/page/page.edit.inc.php';
-$systemfiles[] = 'system/core/page/page.inc.php';
-$systemfiles[] = 'system/core/page/page.php';
-$systemfiles[] = 'system/core/pfs/pfs.edit.inc.php';
-$systemfiles[] = 'system/core/pfs/pfs.editfolder.inc.php';
-$systemfiles[] = 'system/core/pfs/pfs.inc.php';
-$systemfiles[] = 'system/core/pfs/pfs.php';
-$systemfiles[] = 'system/core/pfs/pfs.view.inc.php';
-$systemfiles[] = 'system/core/plug/plug.inc.php';
-$systemfiles[] = 'system/core/plug/plug.php';
-$systemfiles[] = 'system/core/pm/pm.edit.inc.php';
-$systemfiles[] = 'system/core/pm/pm.inc.php';
-$systemfiles[] = 'system/core/pm/pm.php';
-$systemfiles[] = 'system/core/pm/pm.send.inc.php';
-$systemfiles[] = 'system/core/polls/polls.inc.php';
-$systemfiles[] = 'system/core/polls/polls.php';
-$systemfiles[] = 'system/core/resizer/resizer.php';
-$systemfiles[] = 'system/core/rss/rss.inc.php';
-$systemfiles[] = 'system/core/rss/rss.php';
-$systemfiles[] = 'system/core/sitemap/sitemap.inc.php';
-$systemfiles[] = 'system/core/sitemap/sitemap.php';
-$systemfiles[] = 'system/core/users/users.auth.inc.php';
-$systemfiles[] = 'system/core/users/users.details.inc.php';
-$systemfiles[] = 'system/core/users/users.edit.inc.php';
-$systemfiles[] = 'system/core/users/users.inc.php';
-$systemfiles[] = 'system/core/users/users.logout.inc.php';
-$systemfiles[] = 'system/core/users/users.profile.inc.php';
-$systemfiles[] = 'system/core/users/users.register.inc.php';
-$systemfiles[] = 'system/core/view/view.inc.php';
-$systemfiles[] = 'system/core/users/users.php';
+$syschecktitles['install'] = 'Installation and upgrade';
 
-$systemfiles[] = '*Installation and upgrade';
+$systemfiles['install'][] = 'system/install/install.php';
+$systemfiles['install'][] = 'system/install/install.config.php';
+$systemfiles['install'][] = 'system/install/install.database.php';
+$systemfiles['install'][] = 'system/install/install.main.php';
+$systemfiles['install'][] = 'system/install/install.setup.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_125_130.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_126_130.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_130_150.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_150_160.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_160_171.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_171_172.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_172_173.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_173_175.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_175_178.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_177_178.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_178_179.php';
+$systemfiles['install'][] = 'system/upgrade/upgrade_179_180.php';
 
-$systemfiles[] = 'system/install/install.php';
-$systemfiles[] = 'system/install/install.config.php';
-$systemfiles[] = 'system/install/install.database.php';
-$systemfiles[] = 'system/install/install.main.php';
-$systemfiles[] = 'system/install/install.setup.php';
-$systemfiles[] = 'system/upgrade/upgrade_125_130.php';
-$systemfiles[] = 'system/upgrade/upgrade_126_130.php';
-$systemfiles[] = 'system/upgrade/upgrade_130_150.php';
-$systemfiles[] = 'system/upgrade/upgrade_150_160.php';
-$systemfiles[] = 'system/upgrade/upgrade_160_171.php';
-$systemfiles[] = 'system/upgrade/upgrade_171_172.php';
-$systemfiles[] = 'system/upgrade/upgrade_172_173.php';
-$systemfiles[] = 'system/upgrade/upgrade_173_175.php';
-$systemfiles[] = 'system/upgrade/upgrade_175_178.php';
-$systemfiles[] = 'system/upgrade/upgrade_177_178.php';
-$systemfiles[] = 'system/upgrade/upgrade_178_179.php';
-$systemfiles[] = 'system/upgrade/upgrade_179_180.php';
+$syschecktitles['lang'] = 'Default language files';
 
-$systemfiles[] = '*Default language files';
+$systemfiles['lang'][] = 'system/lang/' . $cfg['defaultlang'] . '/admin.lang.php';
+$systemfiles['lang'][] = 'system/lang/' . $cfg['defaultlang'] . '/main.lang.php';
+$systemfiles['lang'][] = 'system/lang/' . $cfg['defaultlang'] . '/message.lang.php';
 
-$systemfiles[] = 'system/lang/' . $cfg['defaultlang'] . '/admin.lang.php';
-$systemfiles[] = 'system/lang/' . $cfg['defaultlang'] . '/main.lang.php';
-$systemfiles[] = 'system/lang/' . $cfg['defaultlang'] . '/message.lang.php';
+$syschecktitles['skin'] = 'Default skin files';
 
-$systemfiles[] = '*Default skin files';
+$systemfiles['skin'][] = 'skins/' . $cfg['defaultskin'] . '/' . $cfg['defaultskin'] . '.' . $cfg['defaultlang'] . '.lang.php';
+$systemfiles['skin'][] = 'skins/' . $cfg['defaultskin'] . '/' . $cfg['defaultskin'] . '.php';
 
-$systemfiles[] = 'skins/' . $cfg['defaultskin'] . '/' . $cfg['defaultskin'] . '.' . $cfg['defaultlang'] . '.lang.php';
-$systemfiles[] = 'skins/' . $cfg['defaultskin'] . '/' . $cfg['defaultskin'] . '.php';
+//Default skin files
 
 $skinfiles[] = 'comments.tpl';
 $skinfiles[] = 'footer.tpl';
@@ -225,6 +226,8 @@ $skinfiles[] = 'users.edit.tpl';
 $skinfiles[] = 'users.profile.tpl';
 $skinfiles[] = 'users.register.tpl';
 $skinfiles[] = 'users.tpl';
+
+//Default admin skin files
 
 $admskinfiles[] = 'admin.banlist.tpl';
 $admskinfiles[] = 'admin.breadcrumbs.tpl';
@@ -265,24 +268,31 @@ $admskinfiles[] = 'admin.trashcan.tpl';
 $admskinfiles[] = 'admin.upgrade.tpl';
 $admskinfiles[] = 'admin.users.tpl';
 
-$table_header = "<table class=\"cells striped\">";
-$table_header .= "<tr>";
-$table_header .= "<td class=\"coltop\" style=\"width:40%;\">File</td>";
-$table_header .= "<td class=\"coltop\" style=\"width:15%;\">Type</td>";
-$table_header .= "<td class=\"coltop\" style=\"width:25%;\">Description</td>";
-$table_header .= "<td class=\"coltop\" style=\"width:8%;\">Version</td>";
-$table_header .= "<td class=\"coltop\" style=\"width:12%;\">Date</td>";
-$table_header .= "</tr>";
-
 $color[0] = "#bc6262";
 $color[1] = "#62bc6a";
+
 $plugin_body = '';
 
-foreach ($systemfiles as $file) {
-	if (mb_substr($file, 0, 1) == "*") {
-		$plugin_body .= "</table><h4>" . mb_substr($file, 1, 255) . " :</h4>";
-		$plugin_body .= $table_header;;
-	} else {
+foreach ($syschecktitles as $key => $systitle) {
+
+	$plugin_body .= '<div class="content-box">';
+	$plugin_body .= '<div class="content-box-header">';
+	$plugin_body .= '<h3>' . $systitle . '</h3>';
+	$plugin_body .= '</div>';
+
+	$plugin_body .= '<div class="content-box-content">';
+
+	$plugin_body .= "<table class=\"cells striped\">";
+	$plugin_body .= "<tr>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:40%;\">File</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:15%;\">Type</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:25%;\">Description</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:8%;\">Version</td>";
+	$plugin_body .= "<td class=\"coltop\" style=\"width:12%;\">Date</td>";
+	$plugin_body .= "</tr>";
+
+	foreach ($systemfiles[$key] as $file) {
+
 		$plugin_body .= "<tr>";
 		$plugin_body .= "<td>" . $file . "</td>";
 
@@ -302,11 +312,20 @@ foreach ($systemfiles as $file) {
 		}
 		$plugin_body .= "</tr>";
 	}
+
+	$plugin_body .= "</table>";
+
+	$plugin_body .= "</div>";
+	$plugin_body .= "</div>";
 }
 
-$plugin_body .= "</table>";
+$plugin_body .= '<div class="content-box">';
 
-$plugin_body .= "<h4>Skin files (templates) :</h4>";
+$plugin_body .= '<div class="content-box-header">';
+$plugin_body .= '<h3>Skin files (templates) :</h3>';
+$plugin_body .= '</div>';
+
+$plugin_body .= '<div class="content-box-content">';
 
 $plugin_body .= "<table class=\"cells striped\">";
 $plugin_body .= "<tr>";
@@ -332,7 +351,16 @@ foreach ($skinfiles as $file) {
 
 $plugin_body .= "</table>";
 
-$plugin_body .= "<h4>Admin Skin files (templates) :</h4>";
+$plugin_body .= "</div>";
+$plugin_body .= "</div>";
+
+$plugin_body .= '<div class="content-box">';
+
+$plugin_body .= '<div class="content-box-header">';
+$plugin_body .= '<h3>Admin Skin files (templates) :</h3>';
+$plugin_body .= '</div>';
+
+$plugin_body .= '<div class="content-box-content">';
 
 $plugin_body .= "<table class=\"cells striped\">";
 $plugin_body .= "<tr>";
@@ -357,3 +385,6 @@ foreach ($admskinfiles as $file) {
 }
 
 $plugin_body .= "</table>";
+
+$plugin_body .= "</div>";
+$plugin_body .= "</div>";

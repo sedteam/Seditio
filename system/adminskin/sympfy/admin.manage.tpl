@@ -158,18 +158,8 @@
 	<h2>{TOOL_TITLE}</h2>
 </div>
 
-<div class="content-box">
-
-	<div class="content-box-header">
-		<h3><i class="ic-codesandbox"></i> {TOOL_TITLE}</h3>
-	</div>
-
-	<div class="content-box-content">
-		<!-- BEGIN: TOOL_BODY_LIST -->
-		{TOOL_BODY}
-		<!-- END: TOOL_BODY_LIST -->
-	</div>
-
-</div>
+<!-- BEGIN: TOOL_BODY_LIST -->
+{TOOL_BODY}
+<!-- END: TOOL_BODY_LIST -->
 
 <!-- END: ADMIN_TOOL -->

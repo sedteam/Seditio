@@ -29,7 +29,13 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-$plugin_body = '';
+$plugin_body = '<div class="content-box">';
+
+$plugin_body .= '<div class="content-box-header">';
+$plugin_body .= '<h3><i class="ic-codesandbox"></i> Mass Move Topics</h3>';
+$plugin_body .= '</div>';
+
+$plugin_body .= '<div class="content-box-content">';
 
 $sourceid = sed_import('sourceid', 'P', 'INT');
 $targetid = sed_import('targetid', 'P', 'INT');
@@ -61,7 +67,9 @@ if ($a == 'move') {
 	$plugin_body .= "<form id=\"massmovetopics\" action=\"" . sed_url("admin", "m=tools&p=massmovetopics&a=move") . "\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells striped\"><tr><td style=\"width:33%;\">";
 	$plugin_body .= "Move all the topics and posts from the section :</td><td>" . $select_source . "</td></tr><tr><td>";
-	$plugin_body .= "... to the section :</td><td>" . $select_target . "</td></tr></table>";
-	$plugin_body .= "<input type=\"submit\" class=\"submit btn\" value=\"" . $L['Move'] . "\" />";
+	$plugin_body .= "... to the section :</td><td>" . $select_target . "</td></tr>";
+	$plugin_body .= "<tr><td colspan=\"2\"><div class=\"text-center\"><input type=\"submit\" class=\"submit btn\" value=\"" . $L['Move'] . "\" /></div></td></tr></table>";
 	$plugin_body .= "</form>";
 }
+
+$plugin_body .= "</div></div>";
