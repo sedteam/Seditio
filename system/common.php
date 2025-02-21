@@ -584,7 +584,7 @@ if ((!isset($sed_cat) || !$sed_cat) && !$cfg['disable_page']) {
 
 /* ======== Forums ======== */
 
-if (!isset($sed_forums_str) && !$cfg['disable_forums']) {
+if ((!isset($sed_forums_str) || !$sed_forums_str) && !$cfg['disable_forums']) {
 	$sed_forums_str = sed_load_forum_structure();
 	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
 }
