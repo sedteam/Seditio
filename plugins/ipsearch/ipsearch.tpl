@@ -1,40 +1,37 @@
 <!-- BEGIN: IPSEARCH -->
 
-<h4>{PHP.L.adm_searchthisuser}:</h4>
+<div class="content-box">
 
-<form id="search" action="{IPSEARCH_FORM_SEND}" method="post">
-	{IPSEARCH_FORM_IPFIELD}
-	<button type="submit" class="submit btn" />{PHP.L.Search}</button>
-</form>
+	<div class="content-box-header">
+		<h3><i class="ic-codesandbox"></i> {PHP.L.adm_searchthisuser}</h3>
+	</div>
 
-<!-- BEGIN: IPSEARCH_RESULTS -->
+	<div class="content-box-content">
 
-<p>{PHP.L.adm_dnsrecord}: {IPSEARCH_RESULT_DNS}</p>
+		<form id="search" action="{IPSEARCH_FORM_SEND}" method="post">
+			{IPSEARCH_FORM_IPFIELD}
+			<button type="submit" class="submit btn">{PHP.L.Search}</button>
+		</form>
 
-<p>Found {IPSEARCH_RESULT_TOTALMATCHES1} matche(s) for {IPSEARCH_RESULT_IPMASK1}:</p>
+		<!-- BEGIN: IPSEARCH_RESULTS -->
 
-<ul class="arrow_list">
-	<!-- BEGIN: IPSEARCH_IPMASK1 -->
-	<li>{IPSEARCH_IPMASK1}: {IPSEARCH_LASTIP_IPMASK1}</li>
-	<!-- END: IPSEARCH_IPMASK1 -->
-</ul>
+			<p>{PHP.L.adm_dnsrecord}: {IPSEARCH_RESULT_DNS}</p>
 
-<p>Found {IPSEARCH_RESULT_TOTALMATCHES2} match(es) for {IPSEARCH_RESULT_IPMASK2}.*:</p>
+			<!-- BEGIN: IPSEARCH_IPMASK -->
+			<p>Found {IPSEARCH_RESULT_TOTALMATCHES} match(es) for {IPSEARCH_RESULT_IPMASK}:</p>
 
-<ul class="arrow_list">
-	<!-- BEGIN: IPSEARCH_IPMASK2 -->
-	<li>{IPSEARCH_IPMASK2}: {IPSEARCH_LASTIP_IPMASK2}</li>
-	<!-- END: IPSEARCH_IPMASK2 -->
-</ul>
+			<ul class="arrow_list">
+				<!-- BEGIN: IPSEARCH_IPMASK_RESULTS -->
+				<li>{IPSEARCH_IPMASK}: {IPSEARCH_LASTIP_IPMASK}</li>
+				<!-- END: IPSEARCH_IPMASK_RESULTS -->
+			</ul>
+			
+			<!-- END: IPSEARCH_IPMASK -->
 
-<p>Found {IPSEARCH_RESULT_TOTALMATCHES3} matche(s) for {IPSEARCH_RESULT_IPMASK3}.*.*:</p>
+		<!-- END: IPSEARCH_RESULTS -->
 
-<ul class="arrow_list">
-	<!-- BEGIN: IPSEARCH_IPMASK3 -->
-	<li>{IPSEARCH_IPMASK3}: {IPSEARCH_LASTIP_IPMASK3}</li>
-	<!-- END: IPSEARCH_IPMASK3 -->
-</ul>
+	</div>
 
-<!-- END: IPSEARCH_RESULTS -->
+</div>
 
 <!-- END: IPSEARCH -->

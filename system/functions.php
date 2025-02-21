@@ -1270,7 +1270,7 @@ function sed_build_groupsms($userid, $edit = false, $maingrp = 0)
 function sed_build_ipsearch($ip)
 {
 	if (!empty($ip)) {
-		$result = "<a href=\"" . sed_url("admin", "m=tools&p=ipsearch&a=search&id=" . $ip . "&" . sed_xg()) . "\">" . $ip . "</a>";
+		$result = "<a href=\"" . sed_url("admin", "m=manage&p=ipsearch&a=search&id=" . $ip . "&" . sed_xg()) . "\">" . $ip . "</a>";
 	}
 	return ($result);
 }
@@ -2010,6 +2010,51 @@ function sed_check_xp()
 	return ($sk);
 }
 
+/**
+ * Checks if the user's IP address is banned.
+ *
+ * This function checks if the user's IP address is present in the banlist database.
+ * It supports both IPv4 and IPv6 addresses.
+ *
+ * @param string $userip The user's IP address.
+ * @return void Outputs a message and terminates execution if the IP is banned.
+ */
+function sed_check_banlist($userip)
+{
+	global $db_banlist, $sys, $cfg;
+
+	// Determine if the IP is IPv4 or IPv6
+	if (strpos($userip, ':') !== false) {
+		// Handle IPv6
+		$userip_parts = explode(':', $userip);
+		$ipmasks = [
+			$userip,                                                 // Full IPv6 address
+			implode(':', array_slice($userip_parts, 0, 7)) . ':*',  // First 7 groups
+			implode(':', array_slice($userip_parts, 0, 6)) . ':*:*', // First 6 groups
+			implode(':', array_slice($userip_parts, 0, 5)) . ':*:*:*', // First 5 groups
+			implode(':', array_slice($userip_parts, 0, 4)) . ':*:*:*:*', // First 4 groups
+		];
+		$ipmasks = "('" . implode("','", $ipmasks) . "')";
+	} else {
+		// Handle IPv4
+		$userip_parts = explode('.', $userip);
+		$ipmasks = "('" . $userip_parts[0] . "." . $userip_parts[1] . "." . $userip_parts[2] . "." . $userip_parts[3] . "','" . $userip_parts[0] . "." . $userip_parts[1] . "." . $userip_parts[2] . ".*','" . $userip_parts[0] . "." . $userip_parts[1] . ".*.*','" . $userip_parts[0] . ".*.*.*')";
+	}
+
+	$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN " . $ipmasks, 'Common/banlist/check');
+
+	if (sed_sql_numrows($sql) > 0) {
+		$row = sed_sql_fetchassoc($sql);
+		if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0) {
+			$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='" . $row['banlist_id'] . "' LIMIT 1");
+		} else {
+			$disp = "Your IP is banned.<br />Reason: " . $row['banlist_reason'] . "<br />Until: ";
+			$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']) . " GMT" : "Never expire.";
+			sed_diefatal($disp);
+		}
+	}
+}
+
 /** 
  * Forward and backward replacement tag HR to comment
  * 
@@ -2509,6 +2554,49 @@ function sed_getcurrenturl()
 	}
 
 	return ($url);
+}
+
+/**
+ * Retrieves the user's IP address from the server environment.
+ *
+ * This function checks various server headers to determine the user's IP address.
+ * It is particularly useful when the site is behind a proxy server or load balancer,
+ * as these headers may contain the original IP address of the client.
+ *
+ * The function supports both IPv4 and IPv6 addresses and validates the IP address
+ * using PHP's filter_var function. If no valid IP address is found in the headers,
+ * it returns '0.0.0.0'.
+ *
+ * @return string The user's IP address or '0.0.0.0' if not found.
+ */
+function sed_get_userip()
+{
+	// Headers that might contain the user's IP address
+	$headers = [
+		'HTTP_X_CLUSTER_CLIENT_IP',
+		'HTTP_X_FORWARDED_FOR',
+		'HTTP_X_FORWARDED',
+		'HTTP_FORWARDED_FOR',
+		'HTTP_FORWARDED',
+		'HTTP_X_REAL_IP',
+		'REMOTE_ADDR'
+	];
+
+	foreach ($headers as $header) {
+		if (isset($_SERVER[$header])) {
+			// Split addresses if there are multiple (e.g., in the case of HTTP_X_FORWARDED_FOR)
+			$ipAddresses = explode(',', $_SERVER[$header]);
+			// Return the first address in the list
+			$ip = trim($ipAddresses[0]);
+			// Check if the address is a valid IPv4 or IPv6
+			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
+				return $ip;
+			}
+		}
+	}
+
+	// If none of the headers contain a valid IP address, return '0.0.0.0'
+	return '0.0.0.0';
 }
 
 /**

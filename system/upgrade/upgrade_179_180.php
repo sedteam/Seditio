@@ -96,6 +96,35 @@ $sqlqr = "INSERT INTO " . $cfg['sqldbprefix'] . "auth (auth_groupid, auth_code, 
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+// IPv6 support
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "banlist MODIFY banlist_ip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "com MODIFY com_authorip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_posts MODIFY fp_posterip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "logger MODIFY log_ip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "online MODIFY online_ip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "polls_voters MODIFY pv_userip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "users MODIFY user_lastip VARCHAR(45)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to 180...<br />";

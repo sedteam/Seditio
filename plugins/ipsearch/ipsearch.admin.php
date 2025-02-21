@@ -32,14 +32,14 @@ if (!defined('SED_CODE')) {
 $ipx = new XTemplate(SED_ROOT . '/plugins/ipsearch/ipsearch.tpl');
 
 $ipx->assign(array(
-  "IPSEARCH_FORM_SEND" => sed_url('admin', 'm=tools&p=ipsearch&a=search&' . sed_xg()),
-  "IPSEARCH_FORM_IPFIELD" => sed_textbox('id', $id, 16, 16)
+  "IPSEARCH_FORM_SEND" => sed_url('admin', 'm=manage&p=ipsearch&a=search&' . sed_xg()),
+  "IPSEARCH_FORM_IPFIELD" => sed_textbox('id', $id, 45, 45)
 ));
 
 if ($a == 'search') {
   sed_check_xg();
-  $id_g = sed_import('id', 'G', 'TXT', 15);
-  $id_p = sed_import('id', 'P', 'TXT', 15);
+  $id_g = sed_import('id', 'G', 'TXT', 45);
+  $id_p = sed_import('id', 'P', 'TXT', 45);
 
   if (!empty($id_g)) {
     $id = $id_g;
@@ -47,60 +47,56 @@ if ($a == 'search') {
     $id = $id_p;
   }
 
-  $userip = explode(".", $id);
-  if (count($userip) != 4 || mb_strlen($userip[0]) > 3 || mb_strlen($userip[1]) > 3 || mb_strlen($userip[2]) > 3 || mb_strlen($userip[3]) > 3) {
-    sed_die();
+  // Determine if the IP is IPv4 or IPv6
+  if (strpos($id, ':') !== false) {
+    // Handle IPv6
+    $userip = explode(':', $id);
+    $ipmasks = [
+      $id,                                                 // Full IPv6 address
+      implode(':', array_slice($userip, 0, 7)) . ':*',     // First 7 groups
+      implode(':', array_slice($userip, 0, 6)) . ':*:*',   // First 6 groups
+      implode(':', array_slice($userip, 0, 5)) . ':*:*:*', // First 5 groups
+    ];
+  } else {
+    // Handle IPv4
+    $userip = explode('.', $id);
+    if (count($userip) != 4 || mb_strlen($userip[0]) > 3 || mb_strlen($userip[1]) > 3 || mb_strlen($userip[2]) > 3 || mb_strlen($userip[3]) > 3) {
+      sed_die();
+    }
+    $ipmasks = [
+      $id,                                                 // Full IPv4 address
+      $userip[0] . "." . $userip[1] . "." . $userip[2],    // First 3 groups
+      $userip[0] . "." . $userip[1],                       // First 2 groups
+    ];
   }
-
-  $ipmask1 = $userip[0] . "." . $userip[1] . "." . $userip[2] . "." . $userip[3];
-  $ipmask2 = $userip[0] . "." . $userip[1] . "." . $userip[2];
-  $ipmask3 = $userip[0] . "." . $userip[1];
 
   $res_host = @gethostbyaddr($id);
   $res_dns = ($res_host == $id) ? 'Unknown' : $res_host;
 
-  $sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip = '$ipmask1' ");
-  $totalmatches1 = sed_sql_numrows($sql);
+  foreach ($ipmasks as $index => $ipmask) {
+    $sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask%' ");
+    $totalmatches = sed_sql_numrows($sql);
 
-  while ($row = sed_sql_fetchassoc($sql)) {
+    while ($row = sed_sql_fetchassoc($sql)) {
+      $ipx->assign(array(
+        "IPSEARCH_IPMASK" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+        "IPSEARCH_LASTIP_IPMASK" => sed_build_ipsearch($row['user_lastip'])
+      ));
+      $ipx->parse("IPSEARCH.IPSEARCH_RESULTS.IPSEARCH_IPMASK.IPSEARCH_IPMASK_RESULTS");
+    }
+
     $ipx->assign(array(
-      "IPSEARCH_IPMASK1" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
-      "IPSEARCH_LASTIP_IPMASK1" => sed_build_ipsearch($row['user_lastip'])
+      "IPSEARCH_RESULT_TOTALMATCHES" => $totalmatches,
+      "IPSEARCH_RESULT_IPMASK" => $ipmask
     ));
-    $ipx->parse("IPSEARCH.IPSEARCH_RESULTS.IPSEARCH_IPMASK1");
-  }
 
-  $sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
-  $totalmatches2 = sed_sql_numrows($sql);
-
-  while ($row = sed_sql_fetchassoc($sql)) {
-    $ipx->assign(array(
-      "IPSEARCH_IPMASK2" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
-      "IPSEARCH_LASTIP_IPMASK2" => sed_build_ipsearch($row['user_lastip'])
-    ));
-    $ipx->parse("IPSEARCH.IPSEARCH_RESULTS.IPSEARCH_IPMASK2");
-  }
-
-  $sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
-  $totalmatches3 = sed_sql_numrows($sql);
-
-  while ($row = sed_sql_fetchassoc($sql)) {
-    $ipx->assign(array(
-      "IPSEARCH_IPMASK3" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
-      "IPSEARCH_LASTIP_IPMASK3" => sed_build_ipsearch($row['user_lastip'])
-    ));
-    $ipx->parse("IPSEARCH.IPSEARCH_RESULTS.IPSEARCH_IPMASK3");
+    $ipx->parse("IPSEARCH.IPSEARCH_RESULTS.IPSEARCH_IPMASK");
   }
 
   $ipx->assign(array(
-    "IPSEARCH_RESULT_DNS" => $res_dns,
-    "IPSEARCH_RESULT_TOTALMATCHES1" => $totalmatches1,
-    "IPSEARCH_RESULT_IPMASK1" => $ipmask1,
-    "IPSEARCH_RESULT_TOTALMATCHES2" => $totalmatches2,
-    "IPSEARCH_RESULT_IPMASK2" => $ipmask2,
-    "IPSEARCH_RESULT_TOTALMATCHES3" => $totalmatches3,
-    "IPSEARCH_RESULT_IPMASK3" => $ipmask3
+    "IPSEARCH_RESULT_DNS" => $res_dns
   ));
+
   $ipx->parse("IPSEARCH.IPSEARCH_RESULTS");
 }
 

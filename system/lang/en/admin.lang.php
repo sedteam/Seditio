@@ -91,7 +91,12 @@ $L['adm_tool_name'] = "Tool name";  // New in v178
 $L['adm_ipmask'] = "IP mask";
 $L['adm_emailmask'] = "Email mask";
 $L['adm_neverexpire'] = "Never expire";
-$L['adm_help_banlist'] = "Samples for IP masks :194.31.13.41 , 194.31.13.* , 194.31.*.* , 194.*.*.*<br />Samples for email masks : @hotmail.com, @yahoo (Wildcards are not supported)<br />A single entry can contain one IP mask or one email mask or both.<br />IPs are filtered for each and every page displayed, and email masks at user registration only.";
+$L['adm_help_banlist'] = "Samples for IP masks:<br />
+- IPv4: 194.31.13.41, 194.31.13.*, 194.31.*.*, 194.*.*.*<br />
+- IPv6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334, 2001:0db8:85a3:0000:0000:8a2e:0370:*, 2001:0db8:85a3:0000:0000:*:*, 2001:0db8:85a3:*:*:*:*
+<br />Samples for email masks: @hotmail.com, @yahoo (Wildcards are not supported)
+<br />A single entry can contain one IP mask or one email mask or both.
+<br />IPs are filtered for each and every page displayed, and email masks at user registration only.";
 
 /* ====== Cache ====== */
 

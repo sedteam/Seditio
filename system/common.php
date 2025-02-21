@@ -64,19 +64,7 @@ $online_timedout = $sys['now'] - $cfg['timedout'];
 $cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 $cfg['css'] = $cfg['defaultskin'];
 
-if ($cfg['clustermode'])  //Fix 175
-{
-	if (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-	elseif (isset($_SERVER['HTTP_X_REAL_IP'])) $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
-	elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-	else $usr['ip'] = $_SERVER['REMOTE_ADDR'];
-} else {
-	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
-}
-if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip']))  //Fix 175
-{
-	$usr['ip'] = '0.0.0.0';
-}
+$usr['ip'] = sed_get_userip();
 
 $cfg['mobile_client'] = sed_mobile_detect();
 $sys['unique'] = sed_unique(16);
@@ -147,21 +135,7 @@ if ($cfg['cache']) {
 
 /* ======== Check the banlist ======== */
 
-$userip = explode('.', $usr['ip']);
-$ipmasks = "('" . $userip[0] . "." . $userip[1] . "." . $userip[2] . "." . $userip[3] . "','" . $userip[0] . "." . $userip[1] . "." . $userip[2] . ".*','" . $userip[0] . "." . $userip[1] . ".*.*','" . $userip[0] . ".*.*.*')";
-
-$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN " . $ipmasks, 'Common/banlist/check');
-
-if (sed_sql_numrows($sql) > 0) {
-	$row = sed_sql_fetchassoc($sql);
-	if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0) {
-		$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='" . $row['banlist_id'] . "' LIMIT 1");
-	} else {
-		$disp = "Your IP is banned.<br />Reason: " . $row['banlist_reason'] . "<br />Until: ";
-		$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']) . " GMT" : "Never expire.";
-		sed_diefatal($disp);
-	}
-}
+sed_check_banlist($usr['ip']);
 
 /* ======== Groups ======== */
 

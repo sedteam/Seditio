@@ -37,7 +37,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "auth (
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "banlist (
   banlist_id int(11) NOT NULL auto_increment,
-  banlist_ip varchar(15) NOT NULL default '',
+  banlist_ip varchar(45) NOT NULL default '',
   banlist_email varchar(64) NOT NULL default '',
   banlist_reason varchar(64) NOT NULL default '',
   banlist_expire int(11) default '0',
@@ -58,7 +58,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "com (
   com_code varchar(16) NOT NULL default '',
   com_author varchar(24) NOT NULL default '',
   com_authorid int(11) default NULL,
-  com_authorip varchar(15) NOT NULL default '',
+  com_authorip varchar(45) NOT NULL default '',
   com_text text NOT NULL,
   com_text_ishtml tinyint(1) DEFAULT '1',
   com_date int(11) NOT NULL default '0',
@@ -136,7 +136,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "forum_posts (
   fp_updater varchar(24) NOT NULL default '0',
   fp_text text NOT NULL,
   fp_text_ishtml tinyint(1) DEFAULT '1',
-  fp_posterip varchar(15) NOT NULL default '',
+  fp_posterip varchar(45) NOT NULL default '',
   fp_rating tinyint(1) DEFAULT '0',
   PRIMARY KEY  (fp_id),
   UNIQUE KEY fp_topicid (fp_topicid,fp_id),
@@ -240,7 +240,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "groups_users (
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "logger (
   log_id mediumint(11) NOT NULL auto_increment,
   log_date int(11) NOT NULL default '0',
-  log_ip varchar(15) NOT NULL default '',
+  log_ip varchar(45) NOT NULL default '',
   log_name varchar(24) NOT NULL default '',
   log_group varchar(4) NOT NULL default 'def',
   log_text varchar(255) NOT NULL default '',
@@ -249,7 +249,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "logger (
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "online (
   online_id int(11) NOT NULL auto_increment,
-  online_ip varchar(15) NOT NULL default '',
+  online_ip varchar(45) NOT NULL default '',
   online_name varchar(24) NOT NULL default '',
   online_lastseen int(11) NOT NULL default '0',
   online_location varchar(32) NOT NULL default '',
@@ -375,7 +375,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "polls_voters (
   pv_id mediumint(8) unsigned NOT NULL auto_increment,
   pv_pollid mediumint(8) NOT NULL default '0',
   pv_userid mediumint(8) NOT NULL default '0',
-  pv_userip varchar(15) NOT NULL default '',
+  pv_userip varchar(45) NOT NULL default '',
   PRIMARY KEY  (pv_id),
   KEY pv_pollid (pv_pollid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
@@ -486,7 +486,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "users (
   user_regdate int(11) NOT NULL default '0',
   user_lastlog int(11) NOT NULL default '0',
   user_lastvisit int(11) NOT NULL default '0',
-  user_lastip varchar(16) NOT NULL default '',
+  user_lastip varchar(45) NOT NULL default '',
   user_logcount int(11) unsigned NOT NULL default '0',
   user_postcount int(11) default '0',
   user_sid char(32) NOT NULL default '',

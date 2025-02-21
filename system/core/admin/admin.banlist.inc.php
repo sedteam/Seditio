@@ -45,8 +45,24 @@ if ($a == 'update') {
 	$nbanlistreason = sed_sql_prep(sed_import('nbanlistreason', 'P', 'TXT'));
 	$nexpire = sed_import('nexpire', 'P', 'INT');
 
+	// Check IPv4 format
 	$nbanlistip_cnt = explode('.', $nbanlistip);
-	$nbanlistip = (count($nbanlistip_cnt) == 4) ? $nbanlistip : '';
+	if (count($nbanlistip_cnt) == 4) {
+		$nbanlistip_valid = true;
+	} else {
+		// Check IPv6 format
+		$nbanlistip_cnt = explode(':', $nbanlistip);
+		if (count($nbanlistip_cnt) <= 8) {
+			$nbanlistip_valid = true;
+		} else {
+			$nbanlistip_valid = false;
+		}
+	}
+
+	// If the IP is not valid, set it to an empty string
+	if (!$nbanlistip_valid) {
+		$nbanlistip = '';
+	}
 
 	if ($nexpire > 0) {
 		$nexpire += $sys['now'];
@@ -80,7 +96,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 		"BANLIST_EDIT_SEND_URL" => sed_url("admin", "m=banlist&a=update&id=" . $banlist_id . "&" . sed_xg()),
 		"BANLIST_EDIT_DELETE_URL" => sed_url("admin", "m=banlist&a=delete&id=" . $banlist_id . "&" . sed_xg()),
 		"BANLIST_EDIT_EXPIRE" => ($banlist_expire > 0) ? date($cfg['dateformat'], $banlist_expire) . " GMT" : $L['adm_neverexpire'],
-		"BANLIST_EDIT_IP" => sed_textbox('rbanlistip', $banlist_ip, 14, 16),
+		"BANLIST_EDIT_IP" => sed_textbox('rbanlistip', $banlist_ip, 45, 45),
 		"BANLIST_EDIT_EMAIL_MASK" => sed_textbox('rbanlistemail', $banlist_email, 24, 64),
 		"BANLIST_EDIT_REASON" => sed_textbox('rbanlistreason', $banlist_reason, 48, 64)
 	));
@@ -97,7 +113,7 @@ $expire_arr = array(
 $t->assign(array(
 	"BANLIST_ADD_SEND_URL" => sed_url("admin", "m=banlist&a=add&" . sed_xg()),
 	"BANLIST_ADD_NEXPIRE" => sed_selectbox(0, 'nexpire', $expire_arr, false),
-	"BANLIST_ADD_IP" => sed_textbox('nbanlistip', isset($nbanlistip) ? $nbanlistip : '', 14, 16),
+	"BANLIST_ADD_IP" => sed_textbox('nbanlistip', isset($nbanlistip) ? $nbanlistip : '', 45, 45),
 	"BANLIST_ADD_EMAIL_MASK" => sed_textbox('nbanlistemail', isset($nbanlistemail) ? $nbanlistemail : '', 24, 64),
 	"BANLIST_ADD_REASON" => sed_textbox('nbanlistreason', isset($nbanlistreason) ? $nbanlistreason : '', 48, 64)
 ));
