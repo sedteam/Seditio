@@ -577,7 +577,7 @@ if (!$cfg['disablehitstats']) {
 
 /* ======== Categories ======== */
 
-if (!isset($sed_cat) && !$cfg['disable_page']) {
+if ((!isset($sed_cat) || !$sed_cat) && !$cfg['disable_page']) {
 	$sed_cat = sed_load_structure();
 	sed_cache_store('sed_cat', $sed_cat, 3600);
 }
