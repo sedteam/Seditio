@@ -120,7 +120,7 @@ if ($s == 'usercount') {
 	$sql = sed_sql_query("SELECT * FROM tmp1 WHERE 1 ORDER by usercount DESC");
 	$sql1 = sed_sql_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
 } else {
-	$sql = sed_sql_query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ASC");
+	$sql = sed_sql_query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ORDER BY user_country ASC");
 }
 
 $sqltotal = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
