@@ -62,6 +62,7 @@ if (!empty($p)) {
 		}
 	}
 } elseif (!empty($e)) {
+
 	$path_lang_def	= SED_ROOT . "/plugins/$e/lang/$e.en.lang.php";
 	$path_lang_alt	= SED_ROOT . "/plugins/$e/lang/$e.$lang.lang.php";
 
@@ -156,6 +157,16 @@ if (!empty($p)) {
 
 	require(SED_ROOT . "/system/footer.php");
 } elseif (!empty($o)) {
+
+	$path_lang_def	= SED_ROOT . "/plugins/$o/lang/$o.en.lang.php";
+	$path_lang_alt	= SED_ROOT . "/plugins/$o/lang/$o.$lang.lang.php";
+
+	if (file_exists($path_lang_alt)) {
+		require($path_lang_alt);
+	} elseif (file_exists($path_lang_def)) {
+		require($path_lang_def);
+	}
+
 	$extp = array();
 	if (is_array($sed_plugins) && isset($sed_plugins['popup'])) {
 		foreach ($sed_plugins['popup'] as $i => $k) {
