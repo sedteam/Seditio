@@ -5,12 +5,14 @@ var sedjs = {
      * @param {number} w - The width of the popup window.
      * @param {number} h - The height of the popup window.
      * @param {boolean} modal - Whether to open the content in a modal window.
+     * @param {string} title - The title of the window or modal.
      */
-    popup: function(code, w, h, modal) {
+    popup: function(code, w, h, modal, title) {
+        title = title || 'popup';
         if (!modal) {
-            window.open(sedjs.get_basehref() + 'plug?o=' + code, '', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
+            window.open(sedjs.get_basehref() + 'plug?o=' + code, title, 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
         } else {
-            window.modal = sedjs.modal.open('popup', 'iframe', sedjs.get_basehref() + 'plug?o=' + code, "Popup", 'width=' + w + 'px,height=' + h + 'px,resize=1,scrolling=1,center=1', 'load');
+            window.modal = sedjs.modal.open('popup', 'iframe', sedjs.get_basehref() + 'plug?o=' + code, title, 'width=' + w + 'px,height=' + h + 'px,resize=1,scrolling=1,center=1', 'load');
         }
     },
 
@@ -20,12 +22,14 @@ var sedjs = {
      * @param {string} c1 - Additional parameter for the PFS.
      * @param {string} c2 - Additional parameter for the PFS.
      * @param {boolean} modal - Whether to open the PFS in a modal window.
+     * @param {string} title - The title of the window or modal.
      */
-    pfs: function(id, c1, c2, modal) {
+    pfs: function(id, c1, c2, modal, title) {
+        title = title || 'PFS';
         if (!modal) {
-            window.open(sedjs.get_basehref() + 'pfs?userid=' + id + '&c1=' + c1 + '&c2=' + c2, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=990,height=600,left=32,top=16');
+            window.open(sedjs.get_basehref() + 'pfs?userid=' + id + '&c1=' + c1 + '&c2=' + c2, title, 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=990,height=600,left=32,top=16');
         } else {
-            window.modal = sedjs.modal.open("pfs", "iframe", sedjs.get_basehref() + 'pfs?userid=' + id + '&c1=' + c1 + '&c2=' + c2, "PFS", "width=990px,height=600px,resize=1,scrolling=1,center=1", "load");
+            window.modal = sedjs.modal.open("pfs", "iframe", sedjs.get_basehref() + 'pfs?userid=' + id + '&c1=' + c1 + '&c2=' + c2, title, "width=990px,height=600px,resize=1,scrolling=1,center=1", "load");
         }
     },
 
@@ -35,12 +39,14 @@ var sedjs = {
      * @param {string} c1 - Additional parameter for the help content.
      * @param {string} c2 - Additional parameter for the help content.
      * @param {boolean} modal - Whether to open the help content in a modal window.
+     * @param {string} title - The title of the window or modal.
      */
-    help: function(rcode, c1, c2, modal) {
+    help: function(rcode, c1, c2, modal, title) {
+        title = title || 'Help';
         if (!modal) {
-            window.open(sedjs.get_basehref() + 'plug?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, 'Help', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16');
+            window.open(sedjs.get_basehref() + 'plug?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, title, 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16');
         } else {
-            window.modal = sedjs.modal.open("help", "iframe", sedjs.get_basehref() + 'plug?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, "Help", "width=500px,height=520px,resize=1,scrolling=1,center=1", "load");
+            window.modal = sedjs.modal.open("help", "iframe", sedjs.get_basehref() + 'plug?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, title, "width=500px,height=520px,resize=1,scrolling=1,center=1", "load");
         }
     },
 
@@ -48,12 +54,14 @@ var sedjs = {
      * Open a polls window or modal with specified content.
      * @param {string} rcode - The poll code or identifier.
      * @param {boolean} modal - Whether to open the polls content in a modal window.
+     * @param {string} title - The title of the window or modal.
      */
-    polls: function(rcode, modal) {
+    polls: function(rcode, modal, title) {
+        title = title || 'Polls';
         if (!modal) {
-            window.open(sedjs.get_basehref() + 'polls?stndl=1&id=' + rcode, 'Polls', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
+            window.open(sedjs.get_basehref() + 'polls?stndl=1&id=' + rcode, title, 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
         } else {
-            window.modal = sedjs.modal.open("polls", "iframe", sedjs.get_basehref() + 'polls?stndl=1&id=' + rcode, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");
+            window.modal = sedjs.modal.open("polls", "iframe", sedjs.get_basehref() + 'polls?stndl=1&id=' + rcode, title, "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");
         }
     },
 
@@ -62,12 +70,14 @@ var sedjs = {
      * @param {string} rcode - The poll code or identifier.
      * @param {string} rvote - The vote identifier.
      * @param {boolean} modal - Whether to open the poll voting content in a modal window.
+     * @param {string} title - The title of the window or modal.
      */
-    pollvote: function(rcode, rvote, modal) {
+    pollvote: function(rcode, rvote, modal, title) {
+        title = title || 'Polls';
         if (!modal) {
-            window.open(sedjs.get_basehref() + 'polls?a=send&stndl=1&id=' + rcode + '&vote=' + rvote, 'Polls', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
+            window.open(sedjs.get_basehref() + 'polls?a=send&stndl=1&id=' + rcode + '&vote=' + rvote, title, 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
         } else {
-            window.modal = sedjs.modal.open("pollvote", "iframe", sedjs.get_basehref() + 'polls?a=send&stndl=1&id=' + rcode + '&vote=' + rvote, "Polls", "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");
+            window.modal = sedjs.modal.open("pollvote", "iframe", sedjs.get_basehref() + 'polls?a=send&stndl=1&id=' + rcode + '&vote=' + rvote, title, "width=610px,height=450px,resize=1,scrolling=1,center=1", "load");
         }
     },
 
@@ -77,16 +87,18 @@ var sedjs = {
      * @param {number} sx - The width of the picture window.
      * @param {number} sy - The height of the picture window.
      * @param {boolean} modal - Whether to open the picture in a modal window.
+     * @param {string} title - The title of the window or modal.
      */
-    picture: function(url, sx, sy, modal) {
+    picture: function(url, sx, sy, modal, title) {
+        title = title || 'Picture';
         if (!modal) {
             var ptop = (window.screen.height - 200) / 2;
             var pleft = (window.screen.width - 200) / 2;
-            window.open(sedjs.get_basehref() + 'pfs?m=view&v=' + url, 'Picture', 'toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width=' + sx + ',height=' + sy + ',left=' + pleft + ',top=' + ptop + '');
+            window.open(sedjs.get_basehref() + 'pfs?m=view&v=' + url, title, 'toolbar=0,location=0,status=0, directories=0,menubar=0,resizable=1,scrollbars=yes,width=' + sx + ',height=' + sy + ',left=' + pleft + ',top=' + ptop + '');
         } else {
             var imglink = 'datas/users/' + url;
             var randid = imglink.replace(/[^a-z0-9]/gi, '');
-            window.modal = sedjs.modal.open('img-' + randid, 'image', imglink, 'Picture', 'resize=0, scrolling=0, center=1', 'load');
+            window.modal = sedjs.modal.open('img-' + randid, 'image', imglink, title, 'resize=0, scrolling=0, center=1', 'load');
         }
     },
 

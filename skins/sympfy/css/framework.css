@@ -1506,22 +1506,23 @@ input::placeholder { color: #bbbdbf; }
 }
 
 blockquote {
-	color: #999999;
-	font-style: italic;
-	margin: 0.5em 0 1em;
-	padding: 0.25em 50px;
-	line-height: 1.45;
-	position: relative;
+    color: #999999;
+    font-style: italic;
+    margin: 0.5em 0 1em;
+    padding: 20px 8px 5px 40px;
+    border: 1px dotted #ccc;
+    line-height: 1.45;
+    position: relative;
 }
 
 blockquote:before {
-	display: block;
-	content: "\201C";
-	font-size: 80px;
-	position: absolute;
-	left: -10px;
-	top: -20px;
-	color: #cccccc;
+    display: block;
+    content: "\201C";
+    font-size: 80px;
+    position: absolute;
+    left: -1px;
+    top: -20px;
+    color: #cccccc;
 }
 
 blockquote cite {

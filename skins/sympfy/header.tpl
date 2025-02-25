@@ -10,7 +10,7 @@
 	<link href="skins/{PHP.skin}/css/fonts.css" type="text/css" rel="stylesheet" />
 	<link href="skins/{PHP.skin}/css/plugins.css" type="text/css" rel="stylesheet" />
 	<link href="skins/{PHP.skin}/css/cms.css" type="text/css" rel="stylesheet" />
-	<link href="skins/{PHP.skin}/css/sympfy.css" type="text/css" rel="stylesheet" />
+	<link href="skins/{PHP.skin}/css/{PHP.skin}.css" type="text/css" rel="stylesheet" />
 	<link href="skins/{PHP.skin}/css/responsive.css" type="text/css" rel="stylesheet" />
 	<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 	{HEADER_UPLOADER}
