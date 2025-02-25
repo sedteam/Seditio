@@ -3152,9 +3152,10 @@ function sed_textbox_hidden($name, $value, $size = 56, $maxlength = 255, $class 
  * @param string $editor Editor type (e.g., "noeditor", "Micro", "Basic", "Extended", "Full" etc.)
  * @param array $additionalAttributes Additional HTML attributes for the textarea
  * @param bool $disabled Set to true to disable the textarea
+ * @param string $class CSS class for styling 
  * @return string HTML representation of the textarea
  */
-function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabled = FALSE, $additionalAttributes = array())
+function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabled = FALSE, $class = "textarea", $additionalAttributes = array())
 {
 	global $cfg;
 
@@ -3170,7 +3171,7 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabl
 
 	$disabledAttr = ($disabled) ? ' disabled="disabled"' : '';
 
-	$res = "<textarea name=\"" . $name . "\" rows=\"" . $rows . "\" cols=\"" . $cols . "\" data-editor=\"" . $editor . "\"" . $htmlAttributes . $disabledAttr . ">" . $escapedValue . "</textarea>";
+	$res = "<textarea name=\"" . $name . "\" class=\"" . $class . "\" rows=\"" . $rows . "\" cols=\"" . $cols . "\" data-editor=\"" . $editor . "\"" . $htmlAttributes . $disabledAttr . ">" . $escapedValue . "</textarea>";
 
 	return $res;
 }
