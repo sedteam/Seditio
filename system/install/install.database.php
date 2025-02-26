@@ -18,8 +18,8 @@ if (!defined('SED_CODE') || !defined('SED_INSTALL')) {
   die('Wrong URL.');
 }
 
-$cfg['mysqlcollate'] = "utf8_unicode_ci";
-$cfg['mysqlcharset'] = "utf8";
+$cfg['mysqlcollate'] = "utf8mb4_unicode_ci";
+$cfg['mysqlcharset'] = "utf8mb4";
 $cfg['mysqlengine'] = "MyISAM";
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "auth (
@@ -41,7 +41,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "banlist (
   banlist_email varchar(64) NOT NULL default '',
   banlist_reason varchar(64) NOT NULL default '',
   banlist_expire int(11) default '0',
-  PRIMARY KEY  (banlist_id),
+  PRIMARY KEY (banlist_id),
   KEY banlist_ip (banlist_ip)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -50,7 +50,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "cache (
   c_expire int(11) NOT NULL default '0',
   c_auto tinyint(1) NOT NULL default '1',
   c_value text,
-  PRIMARY KEY  (c_name)
+  PRIMARY KEY (c_name)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "com (
@@ -65,7 +65,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "com (
   com_count int(11) NOT NULL default '0',
   com_rating tinyint(1) DEFAULT '0',
   com_isspecial tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (com_id),
+  PRIMARY KEY (com_id),
   KEY com_code (com_code)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -77,7 +77,9 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "config (
   config_type tinyint(2) NOT NULL default '0',
   config_value text NOT NULL,
   config_default varchar(255) NOT NULL default '',
-  config_text varchar(255) NOT NULL default ''
+  config_text varchar(255) NOT NULL default '',
+  UNIQUE INDEX unique_config_owner_cat_name (config_owner, config_cat, config_name),
+  INDEX idx_config_cat_name (config_cat, config_name)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "core (
@@ -110,7 +112,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "dic (
   dic_extra_size smallint(5) NOT NULL default '0',
   KEY dic_code (dic_code), 
   KEY dic_parent (dic_parent),
-  PRIMARY KEY  (dic_id)
+  PRIMARY KEY (dic_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "dic_items (
@@ -138,7 +140,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "forum_posts (
   fp_text_ishtml tinyint(1) DEFAULT '1',
   fp_posterip varchar(45) NOT NULL default '',
   fp_rating tinyint(1) DEFAULT '0',
-  PRIMARY KEY  (fp_id),
+  PRIMARY KEY (fp_id),
   UNIQUE KEY fp_topicid (fp_topicid,fp_id),
   KEY fp_updated (fp_creation)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
@@ -168,7 +170,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "forum_sections (
   fs_postcount mediumint(8) NOT NULL default '0',
   fs_postcount_pruned int(11) default '0',
   fs_viewcount mediumint(8) NOT NULL default '0',
-  PRIMARY KEY  (fs_id),
+  PRIMARY KEY (fs_id),
   KEY fs_order (fs_order)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -181,7 +183,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "forum_structure (
   fn_desc varchar(255) NOT NULL default '',
   fn_icon varchar(128) NOT NULL default '',
   fn_defstate tinyint(1) NOT NULL default '1',
-  PRIMARY KEY  (fn_id)
+  PRIMARY KEY (fn_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "forum_topics (
@@ -224,7 +226,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "groups (
   grp_pfs_maxfile int(11) NOT NULL default '0',
   grp_pfs_maxtotal int(11) NOT NULL default '0',
   grp_ownerid int(11) NOT NULL default '0',
-  PRIMARY KEY  (grp_id)
+  PRIMARY KEY (grp_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "groups_users (
@@ -244,7 +246,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "logger (
   log_name varchar(24) NOT NULL default '',
   log_group varchar(4) NOT NULL default 'def',
   log_text varchar(255) NOT NULL default '',
-  PRIMARY KEY  (log_id)
+  PRIMARY KEY (log_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "online (
@@ -258,7 +260,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "online (
   online_shield int(11) NOT NULL default '0',
   online_action varchar(32) NOT NULL default '',
   online_hammer tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (online_id),
+  PRIMARY KEY (online_id),
   KEY online_lastseen (online_lastseen)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -291,7 +293,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "pages (
   page_seo_keywords varchar(255) default NULL, 
   page_seo_h1 varchar(255) default NULL, 
   page_thumb varchar(255) NOT NULL default '',
-  PRIMARY KEY  (page_id),
+  PRIMARY KEY (page_id),
   KEY page_cat (page_cat)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -306,7 +308,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "pfs (
   pfs_desc text NOT NULL,
   pfs_size int(11) NOT NULL default '0',
   pfs_count int(11) NOT NULL default '0',
-  PRIMARY KEY  (pfs_id),
+  PRIMARY KEY (pfs_id),
   KEY pfs_userid (pfs_userid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -320,7 +322,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "pfs_folders (
   pff_type tinyint(1) NOT NULL default '0',
   pff_sample int(11) NOT NULL default '0',
   pff_count int(11) NOT NULL default '0',
-  PRIMARY KEY  (pff_id),
+  PRIMARY KEY (pff_id),
   KEY pff_userid (pff_userid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -345,7 +347,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "pm (
   pm_touserid int(11) NOT NULL default '0',
   pm_title varchar(64) NOT NULL default '0',
   pm_text text NOT NULL,
-  PRIMARY KEY  (pm_id),
+  PRIMARY KEY (pm_id),
   KEY pm_fromuserid (pm_fromuserid),
   KEY pm_touserid (pm_touserid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
@@ -358,7 +360,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "polls (
   poll_text varchar(255) NOT NULL default '',
   poll_ownerid int(11) NOT NULL default '0',
   poll_code varchar(16) NOT NULL default '',
-  PRIMARY KEY  (poll_id),
+  PRIMARY KEY (poll_id),
   KEY poll_creationdate (poll_creationdate)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -367,7 +369,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "polls_options (
   po_pollid mediumint(8) unsigned NOT NULL default '0',
   po_text varchar(128) NOT NULL default '',
   po_count mediumint(8) unsigned NOT NULL default '0',
-  PRIMARY KEY  (po_id),
+  PRIMARY KEY (po_id),
   KEY po_pollid (po_pollid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -376,7 +378,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "polls_voters (
   pv_pollid mediumint(8) NOT NULL default '0',
   pv_userid mediumint(8) NOT NULL default '0',
   pv_userip varchar(45) NOT NULL default '',
-  PRIMARY KEY  (pv_id),
+  PRIMARY KEY (pv_id),
   KEY pv_pollid (pv_pollid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -385,7 +387,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "rated (
   rated_code varchar(16) default NULL,
   rated_userid int(11) default NULL,
   rated_value tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (rated_id),
+  PRIMARY KEY (rated_id),
   KEY rated_code (rated_code)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -396,15 +398,16 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "ratings (
   rating_average decimal(5,2) NOT NULL default '0.00',
   rating_creationdate int(11) NOT NULL default '0',
   rating_text varchar(128) NOT NULL default '',
-  PRIMARY KEY  (rating_id),
+  PRIMARY KEY (rating_id),
   KEY rating_code (rating_code)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "referers (
+  ref_id int(11) NOT NULL auto_increment,
   ref_url varchar(255) NOT NULL default '',
   ref_date int(11) unsigned NOT NULL default '0',
   ref_count int(11) NOT NULL default '0',
-  PRIMARY KEY  (ref_url)
+  PRIMARY KEY (ref_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "smilies (
@@ -413,13 +416,13 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "smilies (
   smilie_image varchar(128) NOT NULL default '',
   smilie_text varchar(32) NOT NULL default '',
   smilie_order smallint(5) unsigned NOT NULL default '0',
-  PRIMARY KEY  (smilie_id)
+  PRIMARY KEY (smilie_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "stats (
   stat_name varchar(32) NOT NULL default '',
   stat_value int(11) NOT NULL default '0',
-  PRIMARY KEY  (stat_name)
+  PRIMARY KEY (stat_name)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "structure (
@@ -440,7 +443,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "structure (
   structure_seo_desc varchar(255) default NULL,
   structure_seo_keywords varchar(255) default NULL, 
   structure_seo_h1 varchar(255) default NULL, 
-  PRIMARY KEY  (structure_id)
+  PRIMARY KEY (structure_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "trash (
@@ -451,7 +454,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "trash (
   tr_itemid varchar(24) NOT NULL default '',
   tr_trashedby int(11) NOT NULL default '0',
   tr_datas mediumblob,
-  PRIMARY KEY  (tr_id)
+  PRIMARY KEY (tr_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "users (

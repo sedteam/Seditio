@@ -25,7 +25,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 require(SED_ROOT . '/system/database.' . $cfg['sqldb'] . '.php');
 $connection_id = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
-sed_sql_set_charset($connection_id, 'utf8');
+sed_sql_set_charset($connection_id, 'utf8mb4');
 
 mb_internal_encoding('UTF-8'); // New v171
 

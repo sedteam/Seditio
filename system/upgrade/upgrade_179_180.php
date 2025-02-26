@@ -125,6 +125,29 @@ $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "users MODIFY user_lastip VARCHA
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$sqlqr = "CREATE UNIQUE INDEX unique_config_owner_cat_name ON " . $cfg['sqldbprefix'] . "config (config_owner, config_cat, config_name)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "CREATE INDEX idx_config_cat_name ON " . $cfg['sqldbprefix'] . "config (config_cat, config_name)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "referers DROP PRIMARY KEY";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "referers ADD ref_id INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (ref_id)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+foreach ($sed_dbnames as $table_name) {
+	$table_name = $cfg['sqldbprefix'] . $table_name;	
+	$sqlqr = "ALTER TABLE " . $table_name . " CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+	$adminmain .= sed_cc($sqlqr) . "<br />";
+	$sql = sed_sql_query($sqlqr);
+}
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to 180...<br />";

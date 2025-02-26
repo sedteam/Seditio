@@ -143,7 +143,7 @@ $shield_hammer = 0;
 
 /* ======== Names of the SQL tables ========= */
 
-$sed_dbnames = array('auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'extra_fields', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'parser', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
+$sed_dbnames = array('auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
 
 foreach ($sed_dbnames as $k => $i) {
 	$j = 'db_' . $i;
