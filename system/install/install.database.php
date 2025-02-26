@@ -20,13 +20,13 @@ if (!defined('SED_CODE') || !defined('SED_INSTALL')) {
 
 $cfg['mysqlcollate'] = "utf8mb4_unicode_ci";
 $cfg['mysqlcharset'] = "utf8mb4";
-$cfg['mysqlengine'] = "MyISAM";
+$cfg['mysqlengine'] = "InnoDB";
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "auth (
   auth_id mediumint(8) NOT NULL auto_increment,
   auth_groupid int(11) NOT NULL default '0',
-  auth_code varchar(255) NOT NULL default '',
-  auth_option varchar(255) NOT NULL default '',
+  auth_code varchar(190) NOT NULL default '',
+  auth_option varchar(190) NOT NULL default '',
   auth_rights tinyint(1) unsigned NOT NULL default '0',
   auth_rights_lock tinyint(1) unsigned NOT NULL default '0',
   auth_setbyuserid int(11) unsigned NOT NULL default '0',
@@ -96,7 +96,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "core (
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "dic (
   dic_id mediumint(8) NOT NULL auto_increment,
   dic_title varchar(255) NOT NULL default '',
-  dic_code varchar(255) NOT NULL default '',
+  dic_code varchar(190) NOT NULL default '',
   dic_type tinyint(1) default '0',
   dic_values text NOT NULL,
   dic_parent mediumint(8) NOT NULL default '0',
@@ -267,7 +267,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "online (
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "pages (
   page_id int(11) unsigned NOT NULL auto_increment,
   page_state tinyint(1) unsigned NOT NULL default '0',
-  page_cat varchar(255) default NULL,
+  page_cat varchar(190) default NULL,
   page_key varchar(16) default NULL,
   page_title varchar(255) default NULL,
   page_desc varchar(255) default NULL,
@@ -427,8 +427,8 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "stats (
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "structure (
   structure_id mediumint(8) NOT NULL auto_increment,
-  structure_code varchar(255) NOT NULL default '',
-  structure_path varchar(255) NOT NULL default '',
+  structure_code varchar(190) NOT NULL default '',
+  structure_path varchar(190) NOT NULL default '',
   structure_tpl varchar(64) NOT NULL default '',
   structure_title varchar(100) NOT NULL default '',
   structure_desc varchar(255) NOT NULL default '',

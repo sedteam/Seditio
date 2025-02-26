@@ -15,7 +15,7 @@ Description=Database upgrade
 ==================== */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
-    die('Wrong URL.');
+	die('Wrong URL.');
 }
 
 $adminmain .= "Clearing the internal SQL cache...<br />";
@@ -142,8 +142,27 @@ $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
 foreach ($sed_dbnames as $table_name) {
-	$table_name = $cfg['sqldbprefix'] . $table_name;	
+	$table_name = $cfg['sqldbprefix'] . $table_name;
 	$sqlqr = "ALTER TABLE " . $table_name . " CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+	$adminmain .= sed_cc($sqlqr) . "<br />";
+	$sql = sed_sql_query($sqlqr);
+}
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "auth DROP KEY auth_code, ADD KEY auth_code (auth_code(190))";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic DROP KEY dic_code, ADD KEY dic_code (dic_code(190))";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages DROP KEY page_cat, ADD KEY page_cat (page_cat(190))";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+foreach ($sed_dbnames as $table_name) {
+	$table_name = $cfg['sqldbprefix'] . $table_name;
+	$sqlqr = "ALTER TABLE " . $table_name . " ENGINE=InnoDB";
 	$adminmain .= sed_cc($sqlqr) . "<br />";
 	$sql = sed_sql_query($sqlqr);
 }
