@@ -51,7 +51,7 @@
 
 </main>
 
-<!-- BEGIN: POLLS_STANDALONE_HEADER -->
+<!-- BEGIN: POLLS_STANDALONE_FOOTER -->
 
 <script src="skins/{PHP.skin}/js/jquery.min.js"></script>
 <script src="skins/{PHP.skin}/js/jquery.plugins.min.js"></script>
@@ -59,6 +59,6 @@
 
 {POLLS_STANDALONE_FOOTER}
 
-<!-- END: POLLS_STANDALONE_HEADER -->
+<!-- END: POLLS_STANDALONE_FOOTER -->
 
 <!-- END: MAIN -->

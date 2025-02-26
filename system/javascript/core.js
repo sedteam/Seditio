@@ -8,7 +8,7 @@ var sedjs = {
      * @param {string} title - The title of the window or modal.
      */
     popup: function(code, w, h, modal, title) {
-        title = title || 'popup';
+        title = title || 'Popup';
         if (!modal) {
             window.open(sedjs.get_basehref() + 'plug?o=' + code, title, 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
         } else {
@@ -1547,7 +1547,41 @@ var sedjs = {
                 toggleSpoilerContent(this);
             });
         }
-    }
+    },
+    /**
+     * closealert - Adds click event listeners to specified elements to fade out and slide up their parent elements.
+     *
+     * @param {string} [elements] - A CSS selector for the elements to which the click event listeners should be added.
+     *                              If not provided, defaults to elements with the classes '.close', '.alert-close', and '.fn-close'.
+     *
+     * Usage:
+     * - Default Classes: sedjs.closealert();
+     * - Custom Classes: sedjs.closealert('.custom-close');
+     */	
+	closealert: function(elements) {
+        // Define default classes if elements is not provided
+        var targets = elements || '.close, .alert-close, .fn-close';
+
+        // Select elements based on the targets
+        document.querySelectorAll(targets).forEach(function(element) {
+            element.addEventListener('click', function(event) {
+                event.preventDefault();
+                var parent = this.parentElement;
+
+                // Fade out the parent element
+                parent.style.transition = 'opacity 0.4s';
+                parent.style.opacity = 0;
+
+                // Slide up the parent element after fading out
+                setTimeout(function() {
+                    parent.style.transition = 'height 0.4s';
+                    parent.style.height = 0;
+                    parent.style.overflow = 'hidden';
+                    parent.style.display = 'none';   				
+                }, 400);
+            });
+        });
+    }	
 };
 
 function addLoadEvent(funct) {
@@ -1566,6 +1600,7 @@ onloadfunct = function() {
     sedjs.sedtabs();
     sedjs.autofiletitle();
     sedjs.spoiler();
+	sedjs.closealert();
     //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
     sedjs.getrel("sedthumb");
     var cookie = sedjs.readCookie("style");
