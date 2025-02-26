@@ -136,7 +136,8 @@ if ($usr['id'] > 0) {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 
 	if (sed_auth('admin', 'a', 'A')) {
-		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'");
+		$order_field = (sed_stat_get("version") >= 180) ? " ORDER BY config_id ASC" : "";
+		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'".$order_field);
 		$config_menu = "<ul>";
 
 		while ($row = sed_sql_fetchassoc($sql)) {

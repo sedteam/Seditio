@@ -133,6 +133,10 @@ $sqlqr = "CREATE INDEX idx_config_cat_name ON " . $cfg['sqldbprefix'] . "config 
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "config ADD config_id INT(8) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (config_id)";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "referers DROP PRIMARY KEY";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);

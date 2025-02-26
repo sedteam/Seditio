@@ -70,6 +70,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "com (
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "config (
+  config_id mediumint(8) NOT NULL auto_increment,
   config_owner varchar(24) NOT NULL default 'core',
   config_cat varchar(24) NOT NULL default '',
   config_order char(2) NOT NULL default '00',
@@ -78,6 +79,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "config (
   config_value text NOT NULL,
   config_default varchar(255) NOT NULL default '',
   config_text varchar(255) NOT NULL default '',
+  PRIMARY KEY (config_id),
   UNIQUE INDEX unique_config_owner_cat_name (config_owner, config_cat, config_name),
   INDEX idx_config_cat_name (config_cat, config_name)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
