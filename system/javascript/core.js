@@ -1557,8 +1557,8 @@ var sedjs = {
      * Usage:
      * - Default Classes: sedjs.closealert();
      * - Custom Classes: sedjs.closealert('.custom-close');
-     */	
-	closealert: function(elements) {
+     */
+    closealert: function(elements) {
         // Define default classes if elements is not provided
         var targets = elements || '.close, .alert-close, .fn-close';
 
@@ -1577,11 +1577,11 @@ var sedjs = {
                     parent.style.transition = 'height 0.4s';
                     parent.style.height = 0;
                     parent.style.overflow = 'hidden';
-                    parent.style.display = 'none';   				
+                    parent.style.display = 'none';
                 }, 400);
             });
         });
-    }	
+    }
 };
 
 function addLoadEvent(funct) {
@@ -1600,7 +1600,7 @@ onloadfunct = function() {
     sedjs.sedtabs();
     sedjs.autofiletitle();
     sedjs.spoiler();
-	sedjs.closealert();
+    sedjs.closealert();
     //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
     sedjs.getrel("sedthumb");
     var cookie = sedjs.readCookie("style");
