@@ -15,8 +15,8 @@
 
 {FOOTER_DEVMODE}
 
-<script src="system/adminskin/{PHP.cfg.adminskin}/js/jquery.min.js"></script>
-<script src="system/adminskin/{PHP.cfg.adminskin}/js/jquery.plugins.js"></script>
+<script src="system/adminskin/{PHP.cfg.adminskin}/js/sedadmin.js"></script>
+<script src="system/adminskin/{PHP.cfg.adminskin}/js/autocomplete.js"></script>
 <script src="system/adminskin/{PHP.cfg.adminskin}/js/app.js"></script>
 
 <!-- BEGIN: USER -->

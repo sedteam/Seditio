@@ -73,5 +73,6 @@ $uploader->parse("UPLOADER");
 
 $t->assign("STRUCTURE_UPDATE_THUMB", "<div id=\"uploader\"><div id=\"" . $extraslot . "_imageuploader\" sed_uploader=\"on\"></div></div>");
 
-$out['uploader_footer_admin'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
-$out['uploader_footer_admin'] .= $uploader->text("UPLOADER"); //в подвал
+$out['uploader_footer_admin'] = "<script src=\"system/adminskin/" . $cfg['adminskin'] . "/js/jquery.min.js\" type=\"text/javascript\"></script>";
+$out['uploader_footer_admin'] .= "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
+$out['uploader_footer_admin'] .= $uploader->text("UPLOADER"); //in footer
