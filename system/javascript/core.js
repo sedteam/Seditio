@@ -1,5 +1,86 @@
 var sedjs = {
     /**
+     * Execute a function when the DOM is fully loaded.
+     * @param {Function} fn - The function to execute when DOM is ready.
+     */
+    ready: function(fn) {
+        if (typeof fn !== 'function') return;
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            return fn();
+        }
+        document.addEventListener('DOMContentLoaded', fn, false);
+    },
+
+    /**
+     * Extend an object with one or more source objects.
+     * @param {Object} out - The target object to extend (defaults to {}).
+     * @param {...Object} sources - One or more source objects to merge into the target.
+     * @returns {Object} The extended object.
+     */
+    extend: function(out) {
+        out = out || {};
+        for (var i = 1; i < arguments.length; i++) {
+            if (!arguments[i]) continue;
+            for (var key in arguments[i]) {
+                if (arguments[i].hasOwnProperty(key)) {
+                    out[key] = arguments[i][key];
+                }
+            }
+        }
+        return out;
+    },
+
+    /**
+     * Check if an element has a specific class.
+     * @param {HTMLElement} el - The DOM element to check.
+     * @param {string} cls - The class name to look for.
+     * @returns {boolean} True if the element has the class, false otherwise.
+     */
+    hasClass: function(el, cls) {
+        if (!el || !cls) return false;
+        return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    },
+
+    /**
+     * Add a class to an element if it doesn't already have it.
+     * @param {HTMLElement} el - The DOM element to modify.
+     * @param {string} cls - The class name to add.
+     */
+    addClass: function(el, cls) {
+        if (!el || !cls) return;
+        if (!this.hasClass(el, cls)) {
+            el.className = el.className ? el.className + ' ' + cls : cls;
+        }
+    },
+
+    /**
+     * Remove a class from an element if it has it.
+     * @param {HTMLElement} el - The DOM element to modify.
+     * @param {string} cls - The class name to remove.
+     */
+    removeClass: function(el, cls) {
+        if (!el || !cls) return;
+        if (this.hasClass(el, cls)) {
+            var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+            el.className = el.className.replace(reg, ' ').trim();
+        }
+    },
+
+    /**
+     * Toggle a class on an element (add if absent, remove if present).
+     * @param {HTMLElement} el - The DOM element to modify.
+     * @param {string} cls - The class name to toggle.
+     */
+    toggleClass: function(el, cls) {
+        if (!el || !cls) return;
+        if (this.hasClass(el, cls)) {
+            this.removeClass(el, cls);
+        } else {
+            this.addClass(el, cls);
+        }
+    },
+
+    /**
      * Open a popup window or modal with specified content.
      * @param {string} code - The code or identifier for the content to display.
      * @param {number} w - The width of the popup window.
@@ -103,7 +184,7 @@ var sedjs = {
     },
 
     /**
-     * Redirect the browser to a specified URL.
+     * Redirect the browser to a specified URL from a select element.
      * @param {HTMLElement} url - The select element containing the URL options.
      */
     redirect: function(url) {
@@ -178,7 +259,7 @@ var sedjs = {
         };
 
         var addClass = function(className) {
-            this.classList.add(className);
+            sedjs.addClass(this, className);
             var tabTitle = this.getAttribute('data-tabtitle');
             if (tabTitle && document.querySelector('.tab-title')) {
                 document.querySelector('.tab-title').textContent = tabTitle;
@@ -186,7 +267,7 @@ var sedjs = {
         };
 
         var removeClass = function(className) {
-            this.classList.remove(className);
+            sedjs.removeClass(this, className);
         };
 
         var hideElement = function() {
@@ -205,20 +286,13 @@ var sedjs = {
         };
 
         var initTabs = function(config) {
-            var mergedConfig = config || {};
-            var defaultSettings = {
+            var mergedConfig = sedjs.extend({
                 containerClass: 'sedtabs',
                 eventType: 'click',
                 selectedClass: 'selected',
                 defaultTabIndex: 0,
                 beforeSwitchCallback: false
-            };
-
-            for (var key in defaultSettings) {
-                if (defaultSettings.hasOwnProperty(key)) {
-                    mergedConfig[key] = mergedConfig[key] || defaultSettings[key];
-                }
-            }
+            }, config);
 
             var tabContainers = document.querySelectorAll('.' + mergedConfig.containerClass);
 
@@ -315,7 +389,7 @@ var sedjs = {
      * @returns {XMLHttpRequest} The XMLHttpRequest object.
      */
     ajax: function(options) {
-        var settings = {
+        var settings = sedjs.extend({
             url: '',
             method: 'GET',
             data: null,
@@ -330,13 +404,7 @@ var sedjs = {
             success: null,
             error: null,
             complete: null
-        };
-
-        for (var key in options) {
-            if (options.hasOwnProperty(key)) {
-                settings[key] = options[key];
-            }
-        }
+        }, options);
 
         var xhr = new XMLHttpRequest();
         var timer;
@@ -494,8 +562,7 @@ var sedjs = {
             onSuccess: null,
             onError: null
         };
-
-        var options = Object.assign({}, defaults, userOptions);
+        var options = sedjs.extend({}, defaults, userOptions);
 
         var formElement = options.formid ? document.querySelector(options.formid) : null;
         var updateElement = options.update ? document.querySelector(options.update) : null;
@@ -535,7 +602,7 @@ var sedjs = {
             var intElemOffsetHeight = Math.floor(loadingElement.offsetHeight / 2) + 16;
             var intElemOffsetWidth = Math.floor(loadingElement.offsetWidth / 2) - 16;
             loaderDiv.setAttribute("style", "position:absolute; margin-top:-" + intElemOffsetHeight + "px; margin-left:" + intElemOffsetWidth + "px;");
-            loaderDiv.setAttribute("class", "loading-indicator");
+            sedjs.addClass(loaderDiv, "loading-indicator");
             loadingElement.appendChild(loaderDiv);
             options.loading = loaderDiv;
         }
@@ -601,7 +668,7 @@ var sedjs = {
         init: function(t) {
             var domwindow = document.createElement("div");
             domwindow.id = t;
-            domwindow.className = "sed_modal";
+            sedjs.addClass(domwindow, "sed_modal");
 
             var domwindowdata = [
                 '<div class="modal-handle">',
@@ -830,7 +897,7 @@ var sedjs = {
         manageLoader: function(t, show, isImage) {
             if (show) {
                 var loaderDiv = document.createElement("div");
-                loaderDiv.setAttribute("class", "loading-indicator");
+                sedjs.addClass(loaderDiv, "loading-indicator");
 
                 if (isImage) {
                     loaderDiv.setAttribute("style", "position:absolute;");
@@ -1043,18 +1110,16 @@ var sedjs = {
          * @param {Event} e - The mouse event.
          */
         move: function(t, e) {
-            this.getviewpoint(); // Update viewport data
+            this.getviewpoint();
 
             var newLeft = this.distancex + this.initx;
             var newTop = this.distancey + this.inity;
 
             if (this.constrainToViewport) {
-                // Horizontal constraints
                 var minX = this.scroll_left;
                 var maxX = this.scroll_left + this.docwidth - t.offsetWidth;
                 newLeft = Math.max(minX, Math.min(newLeft, maxX));
 
-                // Vertical constraints
                 var minY = this.scroll_top;
                 var maxY = this.scroll_top + this.docheight - t.offsetHeight;
                 newTop = Math.max(minY, Math.min(newTop, maxY));
@@ -1067,8 +1132,8 @@ var sedjs = {
         /**
          * Move the modal window to a specific position with constraints.
          * @param {HTMLElement} t - The modal window element to be moved.
-         * @param {string|number} x - The horizontal position. Use "middle" to center horizontally, or a number for a specific position.
-         * @param {string|number} y - The vertical position. Use "middle" to center vertically, or a number for a specific position.
+         * @param {string|number} x - The horizontal position ("middle" or number).
+         * @param {string|number} y - The vertical position ("middle" or number).
          */
         moveTo: function(t, x, y) {
             this.getviewpoint();
@@ -1088,12 +1153,10 @@ var sedjs = {
             }
 
             if (this.constrainToViewport) {
-                // Horizontal constraints
                 var minX = this.scroll_left;
                 var maxX = this.scroll_left + this.docwidth - t.offsetWidth;
                 newX = Math.max(minX, Math.min(newX, maxX));
 
-                // Vertical constraints
                 var minY = this.scroll_top;
                 var maxY = this.scroll_top + this.docheight - t.offsetHeight;
                 newY = Math.max(minY, Math.min(newY, maxY));
@@ -1313,7 +1376,7 @@ var sedjs = {
 
     /**
      * Gets the title of the currently active stylesheet.
-     * @returns {string|null} - The title of the active stylesheet, or null if none is active.
+     * @returns {string|null} The title of the active stylesheet, or null if none is active.
      */
     getActiveStyleSheet: function() {
         var activeLink = document.querySelector('link[rel*="style"][title]:not([disabled])');
@@ -1322,7 +1385,7 @@ var sedjs = {
 
     /**
      * Gets the title of the preferred stylesheet.
-     * @returns {string|null} - The title of the preferred stylesheet, or null if none is found.
+     * @returns {string|null} The title of the preferred stylesheet, or null if none is found.
      */
     getPreferredStyleSheet: function() {
         var preferredLink = document.querySelector('link[rel*="style"]:not([rel*="alt"])[title]');
@@ -1333,11 +1396,7 @@ var sedjs = {
      * Creates a cookie with a specified name, value, and optional expiration in days.
      * @param {string} name - The name of the cookie.
      * @param {string} value - The value of the cookie.
-     * @param {number} [days] - The number of days until the cookie expires. If not provided, the cookie will be a session cookie.
-     *
-     * This function sets a cookie with the given name and value. If the 'days' parameter is provided,
-     * the cookie will have an expiration date set to the specified number of days from the current date.
-     * If 'days' is not provided, the cookie will be a session cookie, which expires when the browser is closed.
+     * @param {number} [days] - The number of days until the cookie expires (optional).
      */
     createCookie: function(name, value, days) {
         var date = new Date();
@@ -1351,7 +1410,7 @@ var sedjs = {
     /**
      * Reads the value of a cookie by its name.
      * @param {string} name - The name of the cookie.
-     * @returns {string|null} - The value of the cookie, or null if the cookie is not found.
+     * @returns {string|null} The value of the cookie, or null if the cookie is not found.
      */
     readCookie: function(name) {
         var nameEQ = name + "=";
@@ -1410,12 +1469,10 @@ var sedjs = {
 
         str = str.toLowerCase();
 
-        //here we replace ъ/ь
         str = str.replace(
             new RegExp("(ь|ъ)([" + Vowel + "])", "g"), "j$2");
         str = str.replace(/(ь|ъ)/g, "");
 
-        //transliterating
         var _str = "";
         for (var x = 0; x < str.length; x++) {
             if ((index = LettersFrom.indexOf(str.charAt(x))) > -1) {
@@ -1443,10 +1500,6 @@ var sedjs = {
     /**
      * Adds a new poll option to the poll.
      * @param {string} apo - The CSS selector for the poll options container.
-     *
-     * This function clones the last poll option element, increments its number,
-     * clears its input value, and appends a delete button if not already present.
-     * The new option is then inserted after the last existing option.
      */
     add_poll_option: function(apo) {
         var delete_button = '<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>';
@@ -1464,12 +1517,9 @@ var sedjs = {
         last.parentNode.insertBefore(clone, last.nextSibling);
     },
 
-
     /**
      * Removes a poll option from the poll.
      * @param {HTMLElement} apo - The DOM element representing the poll option to be removed.
-     *
-     * This function removes the specified poll option element from the DOM.
      */
     remove_poll_option: function(apo) {
         var root = apo.parentNode;
@@ -1479,10 +1529,6 @@ var sedjs = {
     /**
      * Copies the URL from the href attribute of a link to the clipboard.
      * @param {HTMLElement} el - The DOM element containing the href attribute with the URL to copy.
-     *
-     * This function prevents the default action, creates a temporary input element,
-     * sets its value to the URL, selects the input value, copies it to the clipboard,
-     * and then removes the temporary input element.
      */
     copyurl: function(el) {
         event.preventDefault();
@@ -1497,10 +1543,6 @@ var sedjs = {
 
     /**
      * Automatically sets the file title input field based on the selected file name, excluding the file extension.
-     *
-     * This function listens for changes on file input elements with the class 'file'.
-     * When a file is selected, it extracts the file name without the extension and sets it as the value
-     * of the corresponding file title input field.
      */
     autofiletitle: function() {
         var fileUpload = document.querySelectorAll('.file');
@@ -1518,61 +1560,47 @@ var sedjs = {
 
     /**
      * Toggles the visibility of spoiler content.
-     *
-     * This function adds click event listeners to elements with the class 'spoiler-toggle'.
-     * When clicked, it toggles the visibility of the associated spoiler content and updates the toggle icon.
      */
     spoiler: function() {
-        // Function to toggle the visibility of the spoiler content
         function toggleSpoilerContent(spoilerToggle) {
-            var spoilerContent = spoilerToggle.closest('.spoiler').querySelector('.spoiler-content');
-            var displayStyle = window.getComputedStyle(spoilerContent).display;
-            // Check the current display style of the spoiler content
-            if (displayStyle === 'none') {
-                // If the content is hidden, show it and update the toggle icon
+            var spoiler = spoilerToggle.closest('.spoiler');
+            var spoilerContent = spoiler.querySelector('.spoiler-content');
+            var isHidden = window.getComputedStyle(spoilerContent).display === 'none';
+
+            if (isHidden) {
+                // Спойлер закрыт, открываем его
                 spoilerContent.style.display = 'block';
-                spoilerToggle.classList.remove('hide-icon');
-                spoilerToggle.classList.add('show-icon');
+                sedjs.removeClass(spoilerToggle, 'show-icon');
+                sedjs.addClass(spoilerToggle, 'hide-icon');
             } else {
-                // If the content is visible, hide it and update the toggle icon
+                // Спойлер открыт, закрываем его
                 spoilerContent.style.display = 'none';
-                spoilerToggle.classList.remove('show-icon');
-                spoilerToggle.classList.add('hide-icon');
+                sedjs.removeClass(spoilerToggle, 'hide-icon');
+                sedjs.addClass(spoilerToggle, 'show-icon');
             }
         }
-        // Find all elements with the class 'spoiler-toggle' and add a click event listener
+
         var spoilerToggles = document.querySelectorAll('.spoiler-toggle');
-        for (var i = 0; i < spoilerToggles.length; i++) {
-            spoilerToggles[i].addEventListener('click', function() {
+        spoilerToggles.forEach(function(toggle) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
                 toggleSpoilerContent(this);
             });
-        }
+        });
     },
+
     /**
-     * closealert - Adds click event listeners to specified elements to fade out and slide up their parent elements.
-     *
+     * Adds click event listeners to specified elements to fade out and slide up their parent elements.
      * @param {string} [elements] - A CSS selector for the elements to which the click event listeners should be added.
-     *                              If not provided, defaults to elements with the classes '.close', '.alert-close', and '.fn-close'.
-     *
-     * Usage:
-     * - Default Classes: sedjs.closealert();
-     * - Custom Classes: sedjs.closealert('.custom-close');
      */
     closealert: function(elements) {
-        // Define default classes if elements is not provided
         var targets = elements || '.close, .alert-close, .fn-close';
-
-        // Select elements based on the targets
         document.querySelectorAll(targets).forEach(function(element) {
             element.addEventListener('click', function(event) {
                 event.preventDefault();
                 var parent = this.parentElement;
-
-                // Fade out the parent element
                 parent.style.transition = 'opacity 0.4s';
                 parent.style.opacity = 0;
-
-                // Slide up the parent element after fading out
                 setTimeout(function() {
                     parent.style.transition = 'height 0.4s';
                     parent.style.height = 0;
@@ -1581,37 +1609,369 @@ var sedjs = {
                 }, 400);
             });
         });
+    },
+
+    /**
+     * Sortable functionality for drag-and-drop reordering of elements.
+     * @param {HTMLElement} element - The container element for sortable items.
+     * @param {Object} options - Configuration options for sortable behavior.
+     */
+    sortable: function(element, options) {
+        // Merge default settings with user-provided options
+        var settings = sedjs.extend({
+            items: ':not(.disabled)', // Selector for sortable items
+            handle: null, // Selector for the drag handle (optional)
+            connectWith: null, // Selector for connected sortable lists (optional)
+            placeholder: 'sortable-placeholder', // Class name for the placeholder
+            tolerance: 'pointer', // Tolerance mode: 'pointer' or 'intersect'
+            disabled: false, // Whether the sortable is disabled initially
+            axis: null, // Restrict movement to 'x' or 'y' axis (null for both)
+            revert: false, // Whether to animate revert on cancel
+            start: null, // Callback when dragging starts
+            sort: null, // Callback during dragging
+            change: null, // Callback when position changes
+            beforeStop: null, // Callback before dragging stops
+            stop: null, // Callback after dragging stops
+            update: null, // Callback after order is updated
+            receive: null // Callback when item is received from another list
+        }, options);
+
+        // Get all sortable items within the container
+        var items = Array.prototype.slice.call(element.querySelectorAll(settings.items))
+            .filter(function(item) {
+                return !sedjs.hasClass(item, 'disabled'); // Exclude disabled items
+            });
+        var dragItem = null; // Currently dragged item
+        var placeholder = null; // Placeholder element during drag
+        var connectedLists = []; // Array of connected sortable containers
+        var orderChanged = false; // Flag to track if order has changed
+
+        /**
+         * Initialize the sortable functionality.
+         */
+        function init() {
+            if (settings.connectWith) {
+                connectedLists = Array.prototype.slice.call(
+                    document.querySelectorAll(settings.connectWith)
+                );
+            }
+            bindEvents();
+            if (settings.disabled) {
+                disable();
+            }
+        }
+
+        /**
+         * Bind drag-and-drop events to sortable items.
+         */
+        function bindEvents() {
+            items.forEach(function(item) {
+                var dragElement = settings.handle ?
+                    item.querySelector(settings.handle) || item : item;
+
+                dragElement.draggable = true;
+                dragElement.style.cursor = 'move';
+
+                dragElement.addEventListener('dragstart', handleDragStart);
+                dragElement.addEventListener('dragover', handleDragOver);
+                dragElement.addEventListener('dragenter', handleDragEnter);
+                dragElement.addEventListener('dragleave', handleDragLeave);
+                dragElement.addEventListener('drop', handleDrop);
+                dragElement.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        /**
+         * Handle the start of dragging an item.
+         * @param {Event} e - The dragstart event.
+         */
+        function handleDragStart(e) {
+            var target = getItem(e.target);
+            if (!target) return;
+
+            dragItem = target;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', target.outerHTML);
+
+            // Remove any existing placeholders
+            var existingPlaceholders = element.querySelectorAll('.' + settings.placeholder);
+            existingPlaceholders.forEach(function(ph) {
+                if (ph.parentNode) ph.parentNode.removeChild(ph);
+            });
+
+            placeholder = document.createElement(dragItem.tagName);
+            sedjs.addClass(placeholder, settings.placeholder);
+            placeholder.style.height = dragItem.offsetHeight + 'px';
+
+            dragItem.style.opacity = '0.5';
+            dragItem.parentNode.insertBefore(placeholder, dragItem.nextSibling);
+            orderChanged = false; // Reset order change flag
+
+            // Prevent link interaction during drag
+            var links = dragItem.querySelectorAll('a');
+            links.forEach(function(link) {
+                link.style.pointerEvents = 'none';
+            });
+
+            if (settings.start) {
+                settings.start(e, { item: dragItem });
+            }
+        }
+
+        /**
+         * Handle dragging over an item (required for drop to work).
+         * @param {Event} e - The dragover event.
+         */
+        function handleDragOver(e) {
+            e.preventDefault(); // Necessary to allow dropping
+            e.dataTransfer.dropEffect = 'move';
+
+            if (settings.sort) {
+                settings.sort(e, { item: dragItem });
+            }
+        }
+
+        /**
+         * Handle entering a potential drop target.
+         * @param {Event} e - The dragenter event.
+         */
+        function handleDragEnter(e) {
+            var target = getItem(e.target) || getClosest(e.target, settings.connectWith);
+            if (!target || target === dragItem || target === placeholder) return;
+
+            var rect = target.getBoundingClientRect();
+            var isVertical = !settings.axis || settings.axis === 'y';
+            var isHorizontal = settings.axis === 'x';
+
+            var shouldInsertBefore = settings.tolerance === 'pointer' ?
+                (isVertical ? e.clientY < rect.top + rect.height / 2 :
+                    e.clientX < rect.left + rect.width / 2) :
+                (isVertical ? rect.top < dragItem.getBoundingClientRect().top :
+                    rect.left < dragItem.getBoundingClientRect().left);
+
+            var parent = target.parentNode;
+            if (shouldInsertBefore) {
+                parent.insertBefore(placeholder, target);
+            } else {
+                parent.insertBefore(placeholder, target.nextSibling);
+            }
+
+            orderChanged = true; // Mark that order has changed
+
+            if (settings.change) {
+                settings.change(e, { item: dragItem, placeholder: placeholder });
+            }
+        }
+
+        /**
+         * Handle leaving a potential drop target (currently empty).
+         * @param {Event} e - The dragleave event.
+         */
+        function handleDragLeave(e) {}
+
+        /**
+         * Handle dropping an item.
+         * @param {Event} e - The drop event.
+         */
+        function handleDrop(e) {
+            e.preventDefault();
+            console.log('Drop event triggered'); // Debug to confirm drop works
+            if (!dragItem || !placeholder) return; // Prevent errors if dragItem or placeholder is missing
+
+            var dropTarget = placeholder.parentNode;
+
+            if (settings.beforeStop) {
+                settings.beforeStop(e, { item: dragItem });
+            }
+
+            // Insert the dragged item before the placeholder
+            dropTarget.insertBefore(dragItem, placeholder);
+            // Remove the placeholder from the DOM
+            if (placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+
+            var isReceived = dropTarget !== element;
+            if (isReceived && settings.receive) {
+                settings.receive(e, { item: dragItem, sender: element });
+            }
+
+            // Trigger update if order has changed
+            if (orderChanged && settings.update) {
+                settings.update(e, { item: dragItem });
+            }
+
+            // Reset styles and variables
+            dragItem.style.opacity = '1';
+            var links = dragItem.querySelectorAll('a');
+            links.forEach(function(link) {
+                link.style.pointerEvents = 'auto';
+            });
+            placeholder = null;
+            orderChanged = false;
+        }
+
+        /**
+         * Handle the end of dragging (mouse release).
+         * @param {Event} e - The dragend event.
+         */
+        function handleDragEnd(e) {
+            if (!dragItem) return; // Prevent execution if dragItem is missing
+
+            dragItem.style.opacity = '1';
+
+            // Restore link interaction
+            var links = dragItem.querySelectorAll('a');
+            links.forEach(function(link) {
+                link.style.pointerEvents = 'auto';
+            });
+
+            if (settings.revert && placeholder) {
+                revertAnimation();
+            } else {
+                // If drop didn't happen but order changed, update here
+                if (orderChanged && settings.update) {
+                    if (placeholder && placeholder.parentNode) {
+                        placeholder.parentNode.insertBefore(dragItem, placeholder);
+                        placeholder.parentNode.removeChild(placeholder);
+                    }
+                    settings.update(e, { item: dragItem });
+                }
+                cleanup();
+            }
+
+            if (settings.stop) {
+                settings.stop(e, { item: dragItem });
+            }
+        }
+
+        /**
+         * Animate the dragged item back to its original position if revert is enabled.
+         */
+        function revertAnimation() {
+            var startPos = dragItem.getBoundingClientRect();
+            var endPos = placeholder.getBoundingClientRect();
+
+            dragItem.style.transition = 'all 0.3s';
+            dragItem.style.transform = 'translate(' +
+                (endPos.left - startPos.left) + 'px, ' +
+                (endPos.top - startPos.top) + 'px)';
+
+            setTimeout(function() {
+                dragItem.style.transition = '';
+                dragItem.style.transform = '';
+                cleanup();
+            }, 300);
+        }
+
+        /**
+         * Clean up after dragging by removing the placeholder.
+         */
+        function cleanup() {
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.removeChild(placeholder);
+            }
+            placeholder = null; // Clear placeholder only
+            orderChanged = false; // Reset order change flag
+        }
+
+        /**
+         * Get the sortable item from an event target.
+         * @param {HTMLElement} element - The element to check.
+         * @returns {HTMLElement|null} The matching item or null.
+         */
+        function getItem(element) {
+            return getClosest(element, settings.items);
+        }
+
+        /**
+         * Find the closest ancestor matching a selector.
+         * @param {HTMLElement} element - The starting element.
+         * @param {string} selector - The CSS selector to match.
+         * @returns {HTMLElement|null} The closest matching element or null.
+         */
+        function getClosest(element, selector) {
+            while (element) {
+                if (element.matches && element.matches(selector)) return element;
+                element = element.parentNode;
+            }
+            return null;
+        }
+
+        /**
+         * Disable the sortable functionality.
+         */
+        function disable() {
+            settings.disabled = true;
+            items.forEach(function(item) {
+                var dragElement = settings.handle ?
+                    item.querySelector(settings.handle) || item : item;
+                dragElement.draggable = false;
+                dragElement.style.cursor = 'default';
+            });
+        }
+
+        /**
+         * Enable the sortable functionality.
+         */
+        function enable() {
+            settings.disabled = false;
+            bindEvents();
+        }
+
+        /**
+         * Destroy the sortable instance, removing all events.
+         */
+        function destroy() {
+            items.forEach(function(item) {
+                var dragElement = settings.handle ?
+                    item.querySelector(settings.handle) || item : item;
+                dragElement.draggable = false;
+                dragElement.style.cursor = '';
+                var clone = dragElement.cloneNode(true);
+                dragElement.parentNode.replaceChild(clone, dragElement);
+            });
+        }
+
+        // Polyfills for older browsers
+        if (!Array.prototype.forEach) {
+            Array.prototype.forEach = function(callback, thisArg) {
+                for (var i = 0; i < this.length; i++) {
+                    callback.call(thisArg, this[i], i, this);
+                }
+            };
+        }
+
+        if (!Element.prototype.matches) {
+            Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+        }
+
+        // Start the sortable functionality
+        init();
+
+        // Return public methods
+        return {
+            disable: disable,
+            enable: enable,
+            destroy: destroy
+        };
     }
 };
 
-function addLoadEvent(funct) {
-    var oldonload = window.onload;
-    if (typeof window.onload != 'function') {
-        window.onload = funct;
-    } else {
-        window.onload = function() {
-            oldonload();
-            funct();
-        }
-    }
-}
-
-onloadfunct = function() {
+// Initialize functions when DOM is ready
+sedjs.ready(function() {
     sedjs.sedtabs();
     sedjs.autofiletitle();
     sedjs.spoiler();
     sedjs.closealert();
-    //	sedjs.sedtabs({c:"sedtabs2", e:"click", s:"selected", d:0, f:false });  //Example other tab conteiner
     sedjs.getrel("sedthumb");
     var cookie = sedjs.readCookie("style");
     var title = cookie ? cookie : sedjs.getPreferredStyleSheet();
     sedjs.setActiveStyleSheet(title);
-};
+});
 
-addLoadEvent(onloadfunct);
-
+// Save stylesheet preference before unloading the page
 window.addEventListener('beforeunload', function(event) {
     var title = sedjs.getActiveStyleSheet();
     sedjs.createCookie("style", title, 365);
-    // sedjs.modal.cleanup();
 });
