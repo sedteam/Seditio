@@ -596,6 +596,18 @@ var sedjs = {
             }
         }
 
+        if (options.method.toUpperCase() === 'POST' && options.url) {
+            var urlParts = options.url.split('?');
+            var baseUrl = urlParts[0];
+            if (urlParts.length > 1) {
+                var urlParams = new URLSearchParams(urlParts[1]);
+                urlParams.forEach(function(value, key) {
+                    formData.append(key, value);
+                });
+                //options.url = baseUrl;
+            }
+        }
+
         var loaderDiv = null;
         if (loadingElement) {
             loaderDiv = document.createElement("div");

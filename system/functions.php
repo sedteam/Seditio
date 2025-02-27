@@ -1470,7 +1470,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 
 	$res = "<div class=\"rating-box\" id=\"rat-" . $code . "\"><ul class=\"rating s" . $rating_cntround . "\">\n";
 	for ($i = 1; $i <= 10; $i++) {
-		$onclick = "javascript:sedjs.ajax.bind({'url': '" . sed_url($url_part, $url_params . "&ratings=1&display=1&ina=send&ajax=1&newrate=" . $i . "&" . sed_xg()) . "', 'format':  'text', 'method':  'POST', 'update':  'rat-" . $code . "', 'loading': 'rat-" . $code . "'});";
+		$onclick = "javascript:sedjs.ajaxbind({'url': '" . sed_url($url_part, $url_params . "&ratings=1&display=1&ina=send&ajax=1&newrate=" . $i . "&" . sed_xg()) . "', 'format':  'html', 'method':  'POST', 'update':  '#rat-" . $code . "', 'loading': '#rat-" . $code . "'});";
 		$res .= "<li class=\"s" . $i . "\"><a href=\"javascript:void(0);\" onClick=\"" . $onclick . "\" title=\"" . $i . " - " . $L['rat_choice' . $i] . "\">" . $i . " - " . $L['rat_choice' . $i] . "</a></li>\n";
 	}
 	$res .= "</ul></div>";
