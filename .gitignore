@@ -226,4 +226,4 @@ plugins/feedback/*
 plugins/banstoplist/*
 system/database.pdo.php
 plugins/hybridauth/*
-plugins/smtp/log/log.txt
+plugins/smtp/log/*
