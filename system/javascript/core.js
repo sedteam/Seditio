@@ -385,124 +385,170 @@ var sedjs = {
 
     /**
      * Perform an AJAX request with specified options.
-     * @param {Object} options - The options for the AJAX request.
-     * @returns {XMLHttpRequest} The XMLHttpRequest object.
+     * @param {Object} options - The options for the AJAX request, including URL, method, data, etc.
+     * @returns {XMLHttpRequest} The XMLHttpRequest object used for the request.
      */
     ajax: function(options) {
+        // Merge default settings with provided options
         var settings = sedjs.extend({
-            url: '',
-            method: 'GET',
-            data: null,
-            dataType: 'text',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            headers: {},
-            timeout: 0,
-            cache: true,
-            async: true,
-            context: null,
-            beforeSend: null,
-            success: null,
-            error: null,
-            complete: null
+            url: '', // Target URL for the request
+            method: 'GET', // HTTP method (e.g., GET, POST)
+            data: null, // Data to send (e.g., FormData, File, or object)
+            dataType: 'text', // Expected response type (e.g., 'json', 'xml', 'text')
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // Default Content-Type header
+            processData: true, // Whether to process data before sending (e.g., serialize objects)
+            headers: {}, // Custom headers to include in the request
+            timeout: 0, // Timeout in milliseconds (0 = no timeout)
+            cache: true, // Whether to allow caching for GET requests
+            async: true, // Whether the request should be asynchronous
+            context: null, // Context for callback functions
+            beforeSend: null, // Callback before the request is sent
+            success: null, // Callback on successful response
+            error: null, // Callback on error
+            complete: null // Callback when request is completed
         }, options);
 
+        // Create a new XMLHttpRequest object
         var xhr = new XMLHttpRequest();
-        var timer;
-        var url = settings.url;
-        var method = settings.method.toUpperCase();
-        var isGet = method === 'GET';
+        var timer; // Timer for request timeout
+        var url = settings.url; // Request URL
+        var method = settings.method.toUpperCase(); // Normalize method to uppercase
+        var isGet = method === 'GET'; // Flag indicating if this is a GET request
 
-        if (typeof settings.data === 'object' && !(settings.data instanceof FormData)) {
-            settings.data = sedjs.serialization(settings.data);
+        // Process the data if required and not FormData
+        if (settings.processData && typeof settings.data === 'object' && !(settings.data instanceof FormData)) {
+            settings.data = sedjs.serialization(settings.data); // Serialize object to query string
         }
 
+        // Append data to URL for GET requests
         if (isGet && settings.data) {
-            url += (url.indexOf('?') === -1 ? '?' : '&') + settings.data;
+            url += (url.indexOf('?') === -1 ? '?' : '&') + settings.data; // Add data as query parameters
         }
 
+        // Prevent caching for GET requests if cache is disabled
         if (!settings.cache && isGet) {
-            url += (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now();
+            url += (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now(); // Add timestamp to URL
         }
 
+        // Initialize the request
         xhr.open(method, url, settings.async);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        if (!isGet && !(settings.data instanceof FormData)) {
-            xhr.setRequestHeader('Content-Type', settings.contentType);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // Indicate AJAX request
+
+        // Set Content-Type header based on data type and settings
+        if (!isGet) {
+            if (settings.data instanceof FormData) {
+                // For FormData: Only set Content-Type if explicitly provided (not false)
+                if (settings.contentType !== false) {
+                    xhr.setRequestHeader('Content-Type', settings.contentType);
+                }
+            } else if (settings.data && typeof settings.data === 'object' && settings.data.type) {
+                // For raw File: Use file.type (e.g., 'image/png') if contentType is false, else use provided
+                if (settings.contentType === false) {
+                    xhr.setRequestHeader('Content-Type', settings.data.type || 'application/octet-stream');
+                } else {
+                    xhr.setRequestHeader('Content-Type', settings.contentType);
+                }
+            } else if (settings.contentType !== false) {
+                // For other data: Use specified contentType unless explicitly disabled
+                xhr.setRequestHeader('Content-Type', settings.contentType);
+            }
         }
+
+        // Apply custom headers from settings
         for (var header in settings.headers) {
             xhr.setRequestHeader(header, settings.headers[header]);
         }
 
+        // Set up timeout if specified
         if (settings.timeout > 0) {
             timer = setTimeout(function() {
-                xhr.abort();
-                handleError('timeout', 'Request timed out');
+                xhr.abort(); // Cancel request on timeout
+                handleError('timeout', 'Request timed out'); // Trigger error callback
             }, settings.timeout);
         }
 
+        // Execute beforeSend callback if provided
         if (typeof settings.beforeSend === 'function') {
             if (settings.beforeSend.call(settings.context, xhr, settings) === false) {
-                xhr.abort();
+                xhr.abort(); // Abort if beforeSend returns false
                 return xhr;
             }
         }
 
+        // Handle state changes of the request
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                clearTimeout(timer);
+            if (xhr.readyState === 4) { // Request completed
+                clearTimeout(timer); // Clear timeout
                 var status = xhr.status;
-                var response = parseResponse();
+                var response = parseResponse(); // Parse response based on dataType
 
                 if (status >= 200 && status < 300 || status === 304) {
-                    handleSuccess(response);
+                    handleSuccess(response); // Success for 2xx or 304 status
                 } else {
-                    handleError(status, xhr.statusText);
+                    handleError(status, xhr.statusText); // Error for other statuses
                 }
-                handleComplete(response);
+                handleComplete(response); // Always call complete callback
             }
         };
 
+        // Send the request with data (null for GET)
         xhr.send(isGet ? null : settings.data);
 
+        /**
+         * Parse the response based on the specified dataType.
+         * @returns {string|Object|Document} Parsed response (JSON, XML, or raw text).
+         */
         function parseResponse() {
             var response = xhr.responseText;
-
             switch (settings.dataType.toLowerCase()) {
                 case 'json':
                     try {
-                        return JSON.parse(response);
+                        return JSON.parse(response); // Parse as JSON
                     } catch (e) {
-                        return response;
+                        return response; // Fallback to raw text on error
                     }
                 case 'xml':
-                    return xhr.responseXML;
+                    return xhr.responseXML; // Return XML document
                 case 'script':
-                    (1, eval)(response);
+                    (1, eval)(response); // Execute as script
                     return response;
                 default:
-                    return response;
+                    return response; // Return raw text
             }
         }
 
+        /**
+         * Handle successful response.
+         * @param {string|Object|Document} response - The parsed response.
+         */
         function handleSuccess(response) {
             if (typeof settings.success === 'function') {
                 settings.success.call(settings.context, response, xhr.status, xhr);
             }
         }
 
+        /**
+         * Handle request error.
+         * @param {number} status - HTTP status code.
+         * @param {string} error - Error message.
+         */
         function handleError(status, error) {
             if (typeof settings.error === 'function') {
                 settings.error.call(settings.context, xhr, status, error);
             }
         }
 
+        /**
+         * Handle request completion (success or error).
+         * @param {string|Object|Document} response - The parsed response.
+         */
         function handleComplete(response) {
             if (typeof settings.complete === 'function') {
                 settings.complete.call(settings.context, xhr, status);
             }
         }
 
-        return xhr;
+        return xhr; // Return the XMLHttpRequest object for external control
     },
 
     /**
@@ -1580,12 +1626,10 @@ var sedjs = {
             var isHidden = window.getComputedStyle(spoilerContent).display === 'none';
 
             if (isHidden) {
-                // Спойлер закрыт, открываем его
                 spoilerContent.style.display = 'block';
                 sedjs.removeClass(spoilerToggle, 'show-icon');
                 sedjs.addClass(spoilerToggle, 'hide-icon');
             } else {
-                // Спойлер открыт, закрываем его
                 spoilerContent.style.display = 'none';
                 sedjs.removeClass(spoilerToggle, 'hide-icon');
                 sedjs.addClass(spoilerToggle, 'show-icon');
@@ -1648,15 +1692,13 @@ var sedjs = {
             receive: null // Callback when item is received from another list
         }, options);
 
-        // Get all sortable items within the container
-        var items = Array.prototype.slice.call(element.querySelectorAll(settings.items))
-            .filter(function(item) {
-                return !sedjs.hasClass(item, 'disabled'); // Exclude disabled items
-            });
         var dragItem = null; // Currently dragged item
         var placeholder = null; // Placeholder element during drag
         var connectedLists = []; // Array of connected sortable containers
         var orderChanged = false; // Flag to track if order has changed
+        var items = []; // Array of current sortable items
+        var observer = null; // MutationObserver instance for modern browsers
+        var intervalId = null; // ID for setInterval fallback in older browsers
 
         /**
          * Initialize the sortable functionality.
@@ -1667,30 +1709,121 @@ var sedjs = {
                     document.querySelectorAll(settings.connectWith)
                 );
             }
+            updateItems(); // Initial population of items
             bindEvents();
+            setupDynamicCheck(); // Set up dynamic DOM checking
             if (settings.disabled) {
                 disable();
             }
         }
 
         /**
-         * Bind drag-and-drop events to sortable items.
+         * Update the list of sortable items based on the current DOM state.
+         * @returns {boolean} Whether the items list has changed.
+         */
+        function updateItems() {
+            var allItems = element.querySelectorAll(settings.items);
+            var newItems = [];
+            for (var i = 0; i < allItems.length; i++) {
+                if (!sedjs.hasClass(allItems[i], 'disabled')) {
+                    newItems.push(allItems[i]);
+                }
+            }
+
+            // Check if items have changed
+            var itemsChanged = newItems.length !== items.length;
+            if (!itemsChanged) {
+                for (var i = 0; i < newItems.length; i++) {
+                    if (newItems[i] !== items[i]) {
+                        itemsChanged = true;
+                        break;
+                    }
+                }
+            }
+
+            items = newItems;
+            return itemsChanged;
+        }
+
+        /**
+         * Bind drag-and-drop events to current sortable items.
          */
         function bindEvents() {
-            items.forEach(function(item) {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
                 var dragElement = settings.handle ?
                     item.querySelector(settings.handle) || item : item;
 
-                dragElement.draggable = true;
-                dragElement.style.cursor = 'move';
+                if (!dragElement.draggable) { // Avoid re-binding if already set
+                    dragElement.draggable = true;
+                    dragElement.style.cursor = 'move';
+                    dragElement.ondragstart = handleDragStart;
+                    dragElement.ondragover = handleDragOver;
+                    dragElement.ondragenter = handleDragEnter;
+                    dragElement.ondragleave = handleDragLeave;
+                    dragElement.ondrop = handleDrop;
+                    dragElement.ondragend = handleDragEnd;
+                }
+            }
+        }
 
-                dragElement.addEventListener('dragstart', handleDragStart);
-                dragElement.addEventListener('dragover', handleDragOver);
-                dragElement.addEventListener('dragenter', handleDragEnter);
-                dragElement.addEventListener('dragleave', handleDragLeave);
-                dragElement.addEventListener('drop', handleDrop);
-                dragElement.addEventListener('dragend', handleDragEnd);
-            });
+        /**
+         * Remove drag-and-drop events from current sortable items.
+         */
+        function unbindEvents() {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var dragElement = settings.handle ?
+                    item.querySelector(settings.handle) || item : item;
+
+                dragElement.draggable = false;
+                dragElement.style.cursor = '';
+                dragElement.ondragstart = null;
+                dragElement.ondragover = null;
+                dragElement.ondragenter = null;
+                dragElement.ondragleave = null;
+                dragElement.ondrop = null;
+                dragElement.ondragend = null;
+            }
+        }
+
+        /**
+         * Set up dynamic checking for DOM changes, preferring MutationObserver if available.
+         */
+        function setupDynamicCheck() {
+            if (window.MutationObserver) {
+                // Use MutationObserver for modern browsers (IE11+)
+                observer = new MutationObserver(function(mutations) {
+                    for (var i = 0; i < mutations.length; i++) {
+                        var mutation = mutations[i];
+                        if (mutation.addedNodes.length || mutation.removedNodes.length) {
+                            var itemsChanged = updateItems();
+                            if (itemsChanged && !settings.disabled) {
+                                unbindEvents();
+                                bindEvents();
+                            }
+                        }
+                    }
+                });
+                observer.observe(element, {
+                    childList: true, // Watch for addition/removal of child elements
+                    subtree: true // Watch the entire subtree
+                });
+            } else {
+                // Fallback to setInterval for older browsers (e.g., IE9)
+                var lastChildCount = element.children.length;
+                intervalId = setInterval(function() {
+                    var currentChildCount = element.children.length;
+                    if (currentChildCount !== lastChildCount) {
+                        var itemsChanged = updateItems();
+                        if (itemsChanged && !settings.disabled) {
+                            unbindEvents();
+                            bindEvents();
+                        }
+                        lastChildCount = currentChildCount;
+                    }
+                }, 500); // Check every 500ms (adjustable)
+            }
         }
 
         /**
@@ -1705,11 +1838,12 @@ var sedjs = {
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/html', target.outerHTML);
 
-            // Remove any existing placeholders
             var existingPlaceholders = element.querySelectorAll('.' + settings.placeholder);
-            existingPlaceholders.forEach(function(ph) {
-                if (ph.parentNode) ph.parentNode.removeChild(ph);
-            });
+            for (var i = 0; i < existingPlaceholders.length; i++) {
+                if (existingPlaceholders[i].parentNode) {
+                    existingPlaceholders[i].parentNode.removeChild(existingPlaceholders[i]);
+                }
+            }
 
             placeholder = document.createElement(dragItem.tagName);
             sedjs.addClass(placeholder, settings.placeholder);
@@ -1717,13 +1851,12 @@ var sedjs = {
 
             dragItem.style.opacity = '0.5';
             dragItem.parentNode.insertBefore(placeholder, dragItem.nextSibling);
-            orderChanged = false; // Reset order change flag
+            orderChanged = false;
 
-            // Prevent link interaction during drag
             var links = dragItem.querySelectorAll('a');
-            links.forEach(function(link) {
-                link.style.pointerEvents = 'none';
-            });
+            for (var i = 0; i < links.length; i++) {
+                links[i].style.pointerEvents = 'none';
+            }
 
             if (settings.start) {
                 settings.start(e, { item: dragItem });
@@ -1735,9 +1868,8 @@ var sedjs = {
          * @param {Event} e - The dragover event.
          */
         function handleDragOver(e) {
-            e.preventDefault(); // Necessary to allow dropping
+            e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
-
             if (settings.sort) {
                 settings.sort(e, { item: dragItem });
             }
@@ -1749,7 +1881,7 @@ var sedjs = {
          */
         function handleDragEnter(e) {
             var target = getItem(e.target) || getClosest(e.target, settings.connectWith);
-            if (!target || target === dragItem || target === placeholder) return;
+            if (!target || target === dragItem || target === placeholder || !placeholder) return;
 
             var rect = target.getBoundingClientRect();
             var isVertical = !settings.axis || settings.axis === 'y';
@@ -1762,13 +1894,14 @@ var sedjs = {
                     rect.left < dragItem.getBoundingClientRect().left);
 
             var parent = target.parentNode;
-            if (shouldInsertBefore) {
-                parent.insertBefore(placeholder, target);
-            } else {
-                parent.insertBefore(placeholder, target.nextSibling);
+            if (parent && placeholder) {
+                if (shouldInsertBefore) {
+                    parent.insertBefore(placeholder, target);
+                } else {
+                    parent.insertBefore(placeholder, target.nextSibling);
+                }
+                orderChanged = true;
             }
-
-            orderChanged = true; // Mark that order has changed
 
             if (settings.change) {
                 settings.change(e, { item: dragItem, placeholder: placeholder });
@@ -1787,8 +1920,7 @@ var sedjs = {
          */
         function handleDrop(e) {
             e.preventDefault();
-            console.log('Drop event triggered'); // Debug to confirm drop works
-            if (!dragItem || !placeholder) return; // Prevent errors if dragItem or placeholder is missing
+            if (!dragItem || !placeholder) return;
 
             var dropTarget = placeholder.parentNode;
 
@@ -1796,9 +1928,7 @@ var sedjs = {
                 settings.beforeStop(e, { item: dragItem });
             }
 
-            // Insert the dragged item before the placeholder
             dropTarget.insertBefore(dragItem, placeholder);
-            // Remove the placeholder from the DOM
             if (placeholder.parentNode) {
                 placeholder.parentNode.removeChild(placeholder);
             }
@@ -1808,17 +1938,15 @@ var sedjs = {
                 settings.receive(e, { item: dragItem, sender: element });
             }
 
-            // Trigger update if order has changed
             if (orderChanged && settings.update) {
                 settings.update(e, { item: dragItem });
             }
 
-            // Reset styles and variables
             dragItem.style.opacity = '1';
             var links = dragItem.querySelectorAll('a');
-            links.forEach(function(link) {
-                link.style.pointerEvents = 'auto';
-            });
+            for (var i = 0; i < links.length; i++) {
+                links[i].style.pointerEvents = 'auto';
+            }
             placeholder = null;
             orderChanged = false;
         }
@@ -1828,20 +1956,17 @@ var sedjs = {
          * @param {Event} e - The dragend event.
          */
         function handleDragEnd(e) {
-            if (!dragItem) return; // Prevent execution if dragItem is missing
+            if (!dragItem) return;
 
             dragItem.style.opacity = '1';
-
-            // Restore link interaction
             var links = dragItem.querySelectorAll('a');
-            links.forEach(function(link) {
-                link.style.pointerEvents = 'auto';
-            });
+            for (var i = 0; i < links.length; i++) {
+                links[i].style.pointerEvents = 'auto';
+            }
 
             if (settings.revert && placeholder) {
                 revertAnimation();
             } else {
-                // If drop didn't happen but order changed, update here
                 if (orderChanged && settings.update) {
                     if (placeholder && placeholder.parentNode) {
                         placeholder.parentNode.insertBefore(dragItem, placeholder);
@@ -1866,7 +1991,7 @@ var sedjs = {
 
             dragItem.style.transition = 'all 0.3s';
             dragItem.style.transform = 'translate(' +
-                (endPos.left - startPos.left) + 'px, ' +
+                (endPos.left - startPos.left) + 'px,' +
                 (endPos.top - startPos.top) + 'px)';
 
             setTimeout(function() {
@@ -1883,8 +2008,8 @@ var sedjs = {
             if (placeholder && placeholder.parentNode) {
                 placeholder.parentNode.removeChild(placeholder);
             }
-            placeholder = null; // Clear placeholder only
-            orderChanged = false; // Reset order change flag
+            placeholder = null;
+            orderChanged = false;
         }
 
         /**
@@ -1897,17 +2022,33 @@ var sedjs = {
         }
 
         /**
-         * Find the closest ancestor matching a selector.
+         * Find the closest ancestor matching a selector (IE9 polyfill).
          * @param {HTMLElement} element - The starting element.
          * @param {string} selector - The CSS selector to match.
          * @returns {HTMLElement|null} The closest matching element or null.
          */
         function getClosest(element, selector) {
             while (element) {
-                if (element.matches && element.matches(selector)) return element;
+                if (matchesSelector(element, selector)) return element;
                 element = element.parentNode;
             }
             return null;
+        }
+
+        /**
+         * Polyfill for matches (IE9).
+         * @param {HTMLElement} element - The element to test.
+         * @param {string} selector - The CSS selector to match.
+         * @returns {boolean} Whether the element matches the selector.
+         */
+        function matchesSelector(element, selector) {
+            if (element.matches) return element.matches(selector);
+            if (element.msMatchesSelector) return element.msMatchesSelector(selector);
+            var nodes = element.parentNode.querySelectorAll(selector);
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i] === element) return true;
+            }
+            return false;
         }
 
         /**
@@ -1915,12 +2056,7 @@ var sedjs = {
          */
         function disable() {
             settings.disabled = true;
-            items.forEach(function(item) {
-                var dragElement = settings.handle ?
-                    item.querySelector(settings.handle) || item : item;
-                dragElement.draggable = false;
-                dragElement.style.cursor = 'default';
-            });
+            unbindEvents();
         }
 
         /**
@@ -1928,34 +2064,23 @@ var sedjs = {
          */
         function enable() {
             settings.disabled = false;
+            updateItems();
             bindEvents();
         }
 
         /**
-         * Destroy the sortable instance, removing all events.
+         * Destroy the sortable instance, removing all events and observers.
          */
         function destroy() {
-            items.forEach(function(item) {
-                var dragElement = settings.handle ?
-                    item.querySelector(settings.handle) || item : item;
-                dragElement.draggable = false;
-                dragElement.style.cursor = '';
-                var clone = dragElement.cloneNode(true);
-                dragElement.parentNode.replaceChild(clone, dragElement);
-            });
-        }
-
-        // Polyfills for older browsers
-        if (!Array.prototype.forEach) {
-            Array.prototype.forEach = function(callback, thisArg) {
-                for (var i = 0; i < this.length; i++) {
-                    callback.call(thisArg, this[i], i, this);
-                }
-            };
-        }
-
-        if (!Element.prototype.matches) {
-            Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+            unbindEvents();
+            if (observer) {
+                observer.disconnect();
+                observer = null;
+            }
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
         }
 
         // Start the sortable functionality
@@ -1965,7 +2090,14 @@ var sedjs = {
         return {
             disable: disable,
             enable: enable,
-            destroy: destroy
+            destroy: destroy,
+            update: function() {
+                var itemsChanged = updateItems();
+                if (itemsChanged && !settings.disabled) {
+                    unbindEvents();
+                    bindEvents();
+                }
+            }
         };
     }
 };
