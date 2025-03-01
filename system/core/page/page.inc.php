@@ -25,7 +25,6 @@ $id = sed_import('id', 'G', 'INT');
 $al = sed_sql_prep(sed_import('al', 'G', 'TXT'));
 $r = sed_import('r', 'G', 'ALP');
 $c = sed_import('c', 'G', 'TXT');
-$pg = sed_import('pg', 'G', 'INT');
 
 $comments = sed_import('comments', 'G', 'BOL');
 $ratings = sed_import('ratings', 'G', 'BOL');
@@ -67,7 +66,6 @@ $sys['catcode'] = $pag['page_cat']; //new in v175
 $pag['page_date'] = sed_build_date($cfg['dateformat'], $pag['page_date']);
 $pag['page_begin'] = sed_build_date($cfg['dateformat'], $pag['page_begin']);
 $pag['page_expire'] = sed_build_date($cfg['dateformat'], $pag['page_expire']);
-$pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . $pag['page_id']) : sed_url("page", "al=" . $pag['page_alias']);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
@@ -123,54 +121,10 @@ if (!$usr['isadmin'] || $cfg['disablehitstats']) {
 	$sql = sed_sql_query("UPDATE $db_pages SET page_count='" . $pag['page_count'] . "' WHERE page_id='" . $pag['page_id'] . "'");
 }
 
-// Multitabs, modify in Sed v175
-
-$pag['page_tabs'] = explode('[newpage]', $pag['page_text'], 99);
-$pag['page_totaltabs'] = count($pag['page_tabs']);
-
-if ($pag['page_totaltabs'] > 1) {
-	if (empty($pag['page_tabs'][0])) {
-		$remove = array_shift($pag['page_tabs']);
-		$pag['page_totaltabs']--;
-	}
-	$pag['page_tab'] = ($pag['page_tab'] > $pag['page_totaltabs']) ? 1 : $pag['page_tab'];
-	$pag['page_tabtitles'] = array();
-	$pag['page_tabselect'] .= "<select name=\"tabjump\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
-
-	for ($i = 0; $i < $pag['page_totaltabs']; $i++) {
-		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
-		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
-
-		if ($p2 > $p1 && $p1 < 4) {
-			$pag['page_tabtitle'][$i] = mb_substr($pag['page_tabs'][$i], $p1 + 7, ($p2 - $p1) - 7);
-			if ($i == $pag['page_tab']) {
-				$pag['page_tabs'][$i] = trim(str_replace('[title]' . $pag['page_tabtitle'][$i] . '[/title]', '', $pag['page_tabs'][$i]));
-			}
-		} else {
-			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
-		}
-
-		$tab_url = empty($pag['page_alias']) ? sed_url("page", "id=" . $pag['page_id'] . "&pg=" . $i) : sed_url("page", "al=" . $pag['page_alias'] . "&pg=" . ($i + 1));
-
-		$pag['page_tabtitles'][] .= "<a href=\"" . $tab_url . "\">" . ($i + 1) . ". " . $pag['page_tabtitle'][$i] . "</a>";
-		$pag['page_tabs'][$i] = trim(str_replace('[newpage]', '', $pag['page_tabs'][$i]));
-		$selected = ($i == $pag['page_tab']) ? "selected=\"selected\"" : '';
-		$pag['page_tabselect'] .= "<option $selected value=\"" . $tab_url . "\">" . ($i + 1) . " - " . $pag['page_tabtitle'][$i] . "</option>";
-	}
-
-	$pag['page_tabtitles'] = implode('<br />', $pag['page_tabtitles']);
-	$pag['page_text'] = $pag['page_tabs'][$pag['page_tab']];
-	$pag['page_tabselect'] .= "</select>";
-
-	$pag['page_tabnav'] = sed_pagination($pag['page_pageurl'], $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
-	list($pag['page_tabprev'], $pag['page_tabnext']) = sed_pagination_pn($pag['page_pageurl'], $pag['page_tab'], $pag['page_totaltabs'], 1, true, 'pg');
-}
-
 $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
 
 $pag['page_fulltitle'] = empty($catpath) ? "" : $catpath . " " . $cfg['separator'] . " ";
 $pag['page_fulltitle'] .= "<a href=\"" . $pag['page_pageurl'] . "\">" . $pag['page_title'] . "</a>";
-$pag['page_fulltitle'] .= ($pag['page_totaltabs'] > 1 && !empty($pag['page_tabtitle'][$pag['page_tab']])) ? " (" . $pag['page_tabtitle'][$pag['page_tab']] . ")" : '';
 
 $item_code = 'p' . $pag['page_id'];
 
@@ -319,18 +273,6 @@ if (count($page_thumbs_array) > 0) {
 	$t->parse("MAIN.PAGE_THUMB");
 } else {
 	$t->assign("PAGE_THUMB", sed_cc($pag['page_thumb']));
-}
-
-if ($pag['page_totaltabs'] > 1) {
-	$t->assign(array(
-		"PAGE_MULTI_TABNAV" => $pag['page_tabnav'],
-		"PAGE_MULTI_TABTITLES" => $pag['page_tabtitles'],
-		"PAGE_MULTI_MAXTAB" => $pag['page_totaltabs'],
-		"PAGE_MULTI_SELECT" => $pag['page_tabselect'],
-		"PAGE_MULTI_PREV" => $pag['page_tabprev'],
-		"PAGE_MULTI_NEXT" => $pag['page_tabnext']
-	));
-	$t->parse("MAIN.PAGE_MULTI");
 }
 
 if ($usr['isadmin']) {
