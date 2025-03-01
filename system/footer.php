@@ -75,7 +75,8 @@ $t->assign(array(
 	"FOOTER_COPYRIGHT" => $out['copyright'],
 	"FOOTER_LOGSTATUS" => $out['logstatus'],
 	"FOOTER_PMREMINDER" => $out['pmreminder'],
-	"FOOTER_ADMINPANEL" => $out['adminpanel']
+	"FOOTER_ADMINPANEL" => $out['adminpanel'],
+	"FOOTER_JAVASCRIPT" => $out['javascript']
 ));
 
 /* === Hook === */

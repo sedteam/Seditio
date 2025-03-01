@@ -64,7 +64,6 @@ if ($usr['maingrp'] > 3) {
 	/* ===== Init Ckeditor ===== */
 
 	$init_ck = "
-	<script type=\"text/javascript\">
 		var CkTextareas = Array(); CkTextareas['Micro'] = 150; CkTextareas['Basic'] = 200; CkTextareas['Extended'] = 400; CkTextareas['Full'] = 600;
 		var toolbarHeight = 40; // Approximate height of the toolbar in pixels
 
@@ -107,7 +106,8 @@ if ($usr['maingrp'] > 3) {
 		} else {
 			window.onload = ckeditorReplace;
 		}
-	</script>";
-	$moremetas .= "
-	<script src=\"plugins/ckeditor/lib/ckeditor.js?v=4\" type=\"text/javascript\"></script>" . $init_ck;
+		";
+	
+	sed_add_javascript('plugins/ckeditor/lib/ckeditor.js?v=4', true);
+	sed_add_javascript($init_ck);	
 }

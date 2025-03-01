@@ -15,6 +15,7 @@
 
 {FOOTER_DEVMODE}
 
+{FOOTER_JAVASCRIPT}
 <script src="system/adminskin/{PHP.cfg.adminskin}/js/sedadmin.js"></script>
 <script src="system/adminskin/{PHP.cfg.adminskin}/js/autocomplete.js"></script>
 <script src="system/adminskin/{PHP.cfg.adminskin}/js/app.js"></script>

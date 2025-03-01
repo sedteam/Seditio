@@ -17,8 +17,8 @@ Description=
 [BEGIN_SED_EXTPLUGIN]
 Code=uploader
 Part=loaderUp
-File=uploader.header
-Hooks=header.tags
+File=uploader.header.first
+Hooks=header.first
 Tags=
 Minlevel=0
 Order=10
@@ -30,9 +30,7 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-global $usr;
+sed_add_css('plugins/uploader/css/uploader.css', true);
+sed_add_javascript('plugins/uploader/js/uploader.js', true);
 
-if ($usr['id'] > 0) {
-	$out['uploader_header'] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"plugins/uploader/css/uploader.css\"/>";
-	$t->assign("HEADER_UPLOADER", $out['uploader_header']);
-}
+

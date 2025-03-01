@@ -18,6 +18,8 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
+sed_add_javascript('system/javascript/core.js', true);
+
 /* === Hook === */
 $extp = sed_getextplugins('header.first');
 if (is_array($extp)) {
@@ -30,7 +32,13 @@ if (is_array($extp)) {
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'] . ' ' . $usr['name'] : $L['hea_youarenotlogged'];
 $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"" . sed_url("users") . "\">" . $L['hea_users'] . "</a>" : '';
 $out['metas'] = sed_htmlmetas($out['subdesc'], $out['subkeywords']) . $moremetas;
-$out['compopup'] = sed_javascript($morejavascript);
+
+sed_add_javascript($morejavascript);
+$out['javascript'] = sed_javascript();
+
+sed_add_css($morecss);
+$out['css'] = sed_css();
+
 $out['pmreminder'] = '';
 $out['adminpanel'] = '';
 
@@ -89,9 +97,8 @@ $t->assign(array(
 	"HEADER_TITLE" => $out['subtitle'],
 	"HEADER_METAS" => $out['metas'],
 	"HEADER_DOCTYPE" => $cfg['doctype'],
-	"HEADER_CSS" => $cfg['css'],
+	"HEADER_CSS" => $out['css'],
 	"HEADER_CANONICAL_URL" => $out['canonical_url'], // New in 175
-	"HEADER_COMPOPUP" => $out['compopup'],
 	"HEADER_LOGSTATUS" => $out['logstatus'],
 	"HEADER_WHOSONLINE" => $out['whosonline'],
 	"HEADER_TOPLINE" => $cfg['topline'],

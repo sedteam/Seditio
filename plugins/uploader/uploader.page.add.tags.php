@@ -76,8 +76,5 @@ $uploader->parse("UPLOADER");
 
 $t->assign("PAGEADD_FORM_" . mb_strtoupper($extraslot), "<div id=\"uploader\"><div id=\"" . $extraslot . "_imageuploader\" sed_uploader=\"on\"></div></div>");
 
-$out['uploader_footer'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
-$out['uploader_footer'] .= $uploader->text("UPLOADER"); //in footer
-
-$out['uploader_footer_admin'] = "<script src=\"plugins/uploader/js/uploader.js\" type=\"text/javascript\"></script>";
-$out['uploader_footer_admin'] .= $uploader->text("UPLOADER"); //in footer
+$out['uploader_footer'] = $uploader->text("UPLOADER"); //in footer
+$out['uploader_footer_admin'] = $uploader->text("UPLOADER"); //in footer

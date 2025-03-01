@@ -40,7 +40,7 @@ require(SED_ROOT . '/system/templates.php');
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-unset($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_parser, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount);
+unset($warnings, $moremetas, $morejavascript, $morecss, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_parser, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount);
 
 // ALL the value below are DEFAULTS, change the value in datas/config.php if needed, NOT HERE.
 
@@ -133,6 +133,7 @@ $out['notices'] = '';
 $out['subdesc'] = '';
 $out['subkeywords'] = '';
 $morejavascript = '';
+$morecss = '';
 $moremetas = '';
 $sys['abs_url'] = '';
 $sys['sublocation'] = '';
@@ -2077,6 +2078,70 @@ function sed_checkmore($text = '', $more = false)
 	return ($text);
 }
 
+/**
+ * Adds CSS to the global collection, either as a file path or inline code
+ *
+ * @param string $css CSS content or file path
+ * @param bool $is_file Whether to treat $css as a file path (true) or inline CSS (false)
+ */
+function sed_add_css($css = '', $is_file = false)
+{
+    global $sed_css_collection; // Global array to store CSS
+
+    if (empty($css)) {
+        return;
+    }
+
+    // Initialize the array if it doesn't exist
+    if (!isset($sed_css_collection)) {
+        $sed_css_collection = array('files' => array(), 'inline' => array());
+    }
+
+    // Add CSS to the appropriate category
+    if ($is_file) {
+        // Ensure the file is added only once
+        if (!in_array($css, $sed_css_collection['files'])) {
+            $sed_css_collection['files'][] = $css;
+        }
+    } else {
+        $sed_css_collection['inline'][] = $css;
+    }
+}
+
+/**
+ * Outputs all collected CSS as <link> and <style> tags
+ *
+ * @return string
+ */
+function sed_css()
+{
+    global $sed_css_collection;
+    $result = '';
+
+    // Return empty string if collection is empty or doesn't exist
+    if (empty($sed_css_collection)) {
+        return $result;
+    }
+
+    // Process external files (<link>)
+    if (!empty($sed_css_collection['files'])) {
+        foreach ($sed_css_collection['files'] as $file) {
+            $result .= '<link href="' . $file . '" type="text/css" rel="stylesheet" />' . "\n";
+        }
+    }
+
+    // Process inline CSS (<style>)
+    if (!empty($sed_css_collection['inline'])) {
+        $result .= '<style type="text/css">' . "\n";
+        foreach ($sed_css_collection['inline'] as $inline_css) {
+            $result .= $inline_css . "\n";
+        }
+        $result .= '</style>' . "\n";
+    }
+
+    return $result;
+}
+
 /** 
  * Truncates a string 
  * 
@@ -3275,17 +3340,67 @@ function sed_is_bot()
 	return false;
 }
 
-/** 
- * Outputs standard javascript 
- * 
- * @param string $more Extra javascript 
- * @return string 
+/**
+ * Outputs all collected JavaScript as <script> tags
+ *
+ * @return string
  */
-function sed_javascript($more = '')
+function sed_javascript()
 {
-	$result = "<script type=\"text/javascript\" src=\"system/javascript/core.js\"></script>\n";
-	$result .= (!empty($more)) ? "<script type=\"text/javascript\">\n" . $more . "\n</script>\n" : '';
-	return ($result);
+    global $sed_js_collection;
+    $result = '';
+
+    // Return empty string if collection is empty or doesn't exist
+    if (empty($sed_js_collection)) {
+        return $result;
+    }
+
+    // Process external files (<script src>)
+    if (!empty($sed_js_collection['files'])) {
+        foreach ($sed_js_collection['files'] as $file) {
+            $result .= '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
+        }
+    }
+
+    // Process inline JavaScript (<script>)
+    if (!empty($sed_js_collection['inline'])) {
+        $result .= '<script type="text/javascript">' . "\n";
+        foreach ($sed_js_collection['inline'] as $inline_js) {
+            $result .= $inline_js . "\n";
+        }
+        $result .= '</script>' . "\n";
+    }
+
+    return $result;
+}
+/**
+ * Adds JavaScript to the global collection, either as a file path or inline code
+ *
+ * @param string $js JavaScript content or file path
+ * @param bool $is_file Whether to treat $js as a file path (true) or inline JS (false)
+ */
+function sed_add_javascript($js = '', $is_file = false)
+{
+    global $sed_js_collection; // Global array to store JavaScript
+
+    if (empty($js)) {
+        return;
+    }
+
+    // Initialize the array if it doesn't exist
+    if (!isset($sed_js_collection)) {
+        $sed_js_collection = array('files' => array(), 'inline' => array());
+    }
+
+    // Add JavaScript to the appropriate category
+    if ($is_file) {
+        // Ensure the file is added only once
+        if (!in_array($js, $sed_js_collection['files'])) {
+            $sed_js_collection['files'][] = $js;
+        }
+    } else {
+        $sed_js_collection['inline'][] = $js;
+    }
 }
 
 /** 

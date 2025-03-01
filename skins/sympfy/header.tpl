@@ -4,7 +4,6 @@
 <head>
 	<title>{HEADER_TITLE}</title>
 	{HEADER_METAS}
-	{HEADER_COMPOPUP}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="skins/{PHP.skin}/css/framework.css" type="text/css" rel="stylesheet" />
 	<link href="skins/{PHP.skin}/css/fonts.css" type="text/css" rel="stylesheet" />
@@ -13,7 +12,7 @@
 	<link href="skins/{PHP.skin}/css/{PHP.skin}.css" type="text/css" rel="stylesheet" />
 	<link href="skins/{PHP.skin}/css/responsive.css" type="text/css" rel="stylesheet" />
 	<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
-	{HEADER_UPLOADER}
+	{HEADER_CSS}
 </head>
 
 <body>
