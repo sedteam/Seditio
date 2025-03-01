@@ -2,7 +2,7 @@
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Seditio Team
+Copyright Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=plugins/syntaxhighlight/syntaxhighlight.setup.php
@@ -15,10 +15,10 @@ Description=
 
 [BEGIN_SED_EXTPLUGIN]
 Code=syntaxhighlight
-Name=Syntaxhighlight 1.1
+Name=Syntaxhighlight 3
 Description=Syntaxhighlight for Seditio 
-Version=160
-Date=2022-aug-31
+Version=180
+Date=2025-mar-01
 Author=Amro
 Copyright=Amro
 Notes=
@@ -31,7 +31,8 @@ Installer_skip=1
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
-syntaxhighlight_theme=12:select:Default,Django,Eclipse,Emacs,FadeToGrey,Midnight,RDark:Default:Theme Syntaxhighlight
+syntaxhighlight_theme=1:select:Default,Django,Eclipse,Emacs,FadeToGrey,Midnight,RDark:Default:Theme Syntaxhighlight
+syntaxhighlight_version=2:select:2,3:3:Version Syntaxhighlight
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */
