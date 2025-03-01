@@ -1,21 +1,14 @@
 <!-- BEGIN: UPLOADER -->
 
 <script>
-
-function upl_insertimg(nfilepath, nfile, uploaderId) {
-    // Append a new image box to the uploader element
-    $('#' + uploaderId).append('<div class="multibox file" style="cursor: move;" id="' + nfile + '" filename="' + nfile + '"><div class="picture_delete"></div><img src="' + nfilepath + '" alt="" onerror="this.src=\'plugins/uploader/images/no-image.jpg\'" class="picture_uploaded"><input type="hidden" value="' + nfile + '" name="' + uploaderId + '[]"></div>');
-}
-
-$(document).ready(function () {
-    // Object with settings for each uploader element
-    var uploaderSettings = {
-        {UPLOADER_ID}: {
+    sedjs.ready(function() {
+        var uploaderSettings = {
+            '{UPLOADER_ID}': {
             attach_images: {UPLOADER_ATTACH_IMAGES},
             userid: {UPLOADER_USERID},
             c1: '{UPLOADER_ACTION}',
             c2: '{UPLOADER_EXTRA}'
-        },
+        }
         /* Examle for other field
 		imageuploader2: {
             attach_images: [], // Empty array or specific images for the second element
@@ -23,10 +16,9 @@ $(document).ready(function () {
             c1: 'updatepage1',
             c2: 'rpagethumb1'
         }
-		*/
+		*/		
     };
 
-    // Common settings for all uploader elements
     var commonSettings = {
         sed_uploader: true,
         path: 'plugins/uploader',
@@ -38,28 +30,57 @@ $(document).ready(function () {
         use_rotation: true,
         maximum_uploads: 100,
         add_image: 'plugins/uploader/images/add.png',
-        add_label: '{PHP.L.upl_upload_images}',
-        main_changed: function (filename) {
+        add_label: '{PHP.L.upl_upload_images}', // Assuming this is a placeholder for "Upload images"
+        main_changed: function(filename) {
             var field_name = this.field_name;
-            // Remove only the element with id 'mainlabel-images' in the context of the current element
-            $('#' + field_name).parent().find("#mainlabel-images").remove();
-            $('#' + field_name).parent().find("[filename='" + filename + "']").append("<div id='mainlabel-images' class='maintext'>{PHP.L.upl_mainimage}</div>");
+            var parent = document.getElementById(field_name).parentNode;
+            var existing = parent.querySelector('#mainlabel-images');
+            if (existing) existing.parentNode.removeChild(existing);
+            var mainBox = parent.querySelector('[filename="' + filename + '"]');
+            if (mainBox) {
+                var label = document.createElement('div');
+                label.id = 'mainlabel-images';
+                label.className = 'maintext';
+                label.textContent = '{PHP.L.upl_mainimage}'; // Assuming this is a placeholder for "Main image"
+                mainBox.appendChild(label);
+            }
         }
     };
 
-    // Initialize each uploader element
-    $.each(uploaderSettings, function (uploaderId, settings) {
-        $('#' + uploaderId).sed_uploader($.extend({}, commonSettings, settings));
+    for (var uploaderId in uploaderSettings) {
+        if (uploaderSettings.hasOwnProperty(uploaderId)) {
+            var element = document.getElementById(uploaderId);
+            if (element) {
+                var settings = sedjs.extend({}, commonSettings, uploaderSettings[uploaderId]);
+                new SedUploader(element, settings);
 
-        // Check if the element with class 'uploadButton' exists
-        var uploadButton = $('#' + uploaderId).parent().find(".uploadButton");
-        if (uploadButton.length > 0) {
-            // Add the "Choose from PFS" button with unique parameters
-            uploadButton.after("<div class=\"multibox uploadButton uploadPfs\" onclick=\"javascript:sedjs.pfs('" + settings.userid + "','" + settings.c1 + "','" + settings.c2 + "',1);\"><img src=\"plugins/uploader/images/add.png\"/><br /><br />{PHP.L.upl_choose_from_pfs}</div>");
+                // Use the wrapper to find elements after replacement
+                var wrapper = document.getElementById(uploaderId + '_wrapper');
+                if (wrapper) {
+                    var uploadButton = wrapper.querySelector('.uploadButton');
+                    if (uploadButton) {
+                        var pfsButton = document.createElement('div');
+                        pfsButton.className = 'multibox uploadButton uploadPfs';
+                        pfsButton.innerHTML = '<img src="plugins/uploader/images/add.png"/><br/><br/>{PHP.L.upl_choose_from_pfs}'; // Assuming this is a placeholder for "Choose from PFS"
+                        pfsButton.onclick = function() {
+                            sedjs.pfs(
+                                uploaderSettings[uploaderId].userid,
+                                uploaderSettings[uploaderId].c1,
+                                uploaderSettings[uploaderId].c2,
+                                true
+                            );
+                        };
+                        uploadButton.parentNode.insertBefore(pfsButton, uploadButton.nextSibling);
+                    }
+                } else {
+                    console.error('Wrapper #' + uploaderId + '_wrapper not found after initialization');
+                }
+            } else {
+                console.error('Element with ID ' + uploaderId + ' not found in DOM');
+            }
         }
+    }
     });
-});
-
 </script>
 
 <!-- END: UPLOADER -->
