@@ -144,57 +144,15 @@ $shield_hammer = 0;
 
 /* ======== Names of the SQL tables ========= */
 
-$sed_dbnames = array('auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
+$sed_dbnames = array(
+	'auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'forum_sections', 'forum_structure', 'forum_topics',
+	'forum_posts', 'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options',
+	'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users'
+);
 
 foreach ($sed_dbnames as $k => $i) {
 	$j = 'db_' . $i;
 	$$j = $cfg['sqldbprefix'] . $i;
-}
-
-// For compatibility with PHP < 5.2 
-
-if (PHP_VERSION < '5.2.0') {
-	function mb_stripos($haystack, $needle, $offset = 0)
-	{
-		return stripos($haystack, $needle, $offset);
-	}
-
-	function mb_stristr($haystack, $needle)
-	{
-		return stristr($haystack, $needle);
-	}
-
-	function mb_strripos($haystack, $needle, $offset = 0)
-	{
-		return strripos($haystack, $needle, $offset);
-	}
-
-	function mb_strstr($haystack, $needle)
-	{
-		return strstr($haystack, $needle);
-	}
-}
-/* ------------------ */
-
-if (!function_exists('str_split')) {
-	function str_split($txt, $length = 1)
-	{
-		if ($length < 1) {
-			return (FALSE);
-		}
-		$res = array();
-		for ($i = 0; $i < mb_strlen($txt); $i += $length) {
-			$res[] = mb_substr($txt, $i, $length);
-		}
-		return ($res);
-	}
-}
-
-if (!function_exists('set_magic_quotes_runtime')) {
-	function set_magic_quotes_runtime($new_setting)
-	{
-		return true;
-	}
 }
 
 /** 
@@ -2086,26 +2044,26 @@ function sed_checkmore($text = '', $more = false)
  */
 function sed_add_css($css = '', $is_file = false)
 {
-    global $sed_css_collection; // Global array to store CSS
+	global $sed_css_collection; // Global array to store CSS
 
-    if (empty($css)) {
-        return;
-    }
+	if (empty($css)) {
+		return;
+	}
 
-    // Initialize the array if it doesn't exist
-    if (!isset($sed_css_collection)) {
-        $sed_css_collection = array('files' => array(), 'inline' => array());
-    }
+	// Initialize the array if it doesn't exist
+	if (!isset($sed_css_collection)) {
+		$sed_css_collection = array('files' => array(), 'inline' => array());
+	}
 
-    // Add CSS to the appropriate category
-    if ($is_file) {
-        // Ensure the file is added only once
-        if (!in_array($css, $sed_css_collection['files'])) {
-            $sed_css_collection['files'][] = $css;
-        }
-    } else {
-        $sed_css_collection['inline'][] = $css;
-    }
+	// Add CSS to the appropriate category
+	if ($is_file) {
+		// Ensure the file is added only once
+		if (!in_array($css, $sed_css_collection['files'])) {
+			$sed_css_collection['files'][] = $css;
+		}
+	} else {
+		$sed_css_collection['inline'][] = $css;
+	}
 }
 
 /**
@@ -2115,31 +2073,31 @@ function sed_add_css($css = '', $is_file = false)
  */
 function sed_css()
 {
-    global $sed_css_collection;
-    $result = '';
+	global $sed_css_collection;
+	$result = '';
 
-    // Return empty string if collection is empty or doesn't exist
-    if (empty($sed_css_collection)) {
-        return $result;
-    }
+	// Return empty string if collection is empty or doesn't exist
+	if (empty($sed_css_collection)) {
+		return $result;
+	}
 
-    // Process external files (<link>)
-    if (!empty($sed_css_collection['files'])) {
-        foreach ($sed_css_collection['files'] as $file) {
-            $result .= '<link href="' . $file . '" type="text/css" rel="stylesheet" />' . "\n";
-        }
-    }
+	// Process external files (<link>)
+	if (!empty($sed_css_collection['files'])) {
+		foreach ($sed_css_collection['files'] as $file) {
+			$result .= '<link href="' . $file . '" type="text/css" rel="stylesheet" />' . "\n";
+		}
+	}
 
-    // Process inline CSS (<style>)
-    if (!empty($sed_css_collection['inline'])) {
-        $result .= '<style type="text/css">' . "\n";
-        foreach ($sed_css_collection['inline'] as $inline_css) {
-            $result .= $inline_css . "\n";
-        }
-        $result .= '</style>' . "\n";
-    }
+	// Process inline CSS (<style>)
+	if (!empty($sed_css_collection['inline'])) {
+		$result .= '<style type="text/css">' . "\n";
+		foreach ($sed_css_collection['inline'] as $inline_css) {
+			$result .= $inline_css . "\n";
+		}
+		$result .= '</style>' . "\n";
+	}
 
-    return $result;
+	return $result;
 }
 
 /** 
@@ -3347,31 +3305,31 @@ function sed_is_bot()
  */
 function sed_javascript()
 {
-    global $sed_js_collection;
-    $result = '';
+	global $sed_js_collection;
+	$result = '';
 
-    // Return empty string if collection is empty or doesn't exist
-    if (empty($sed_js_collection)) {
-        return $result;
-    }
+	// Return empty string if collection is empty or doesn't exist
+	if (empty($sed_js_collection)) {
+		return $result;
+	}
 
-    // Process external files (<script src>)
-    if (!empty($sed_js_collection['files'])) {
-        foreach ($sed_js_collection['files'] as $file) {
-            $result .= '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
-        }
-    }
+	// Process external files (<script src>)
+	if (!empty($sed_js_collection['files'])) {
+		foreach ($sed_js_collection['files'] as $file) {
+			$result .= '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
+		}
+	}
 
-    // Process inline JavaScript (<script>)
-    if (!empty($sed_js_collection['inline'])) {
-        $result .= '<script type="text/javascript">' . "\n";
-        foreach ($sed_js_collection['inline'] as $inline_js) {
-            $result .= $inline_js . "\n";
-        }
-        $result .= '</script>' . "\n";
-    }
+	// Process inline JavaScript (<script>)
+	if (!empty($sed_js_collection['inline'])) {
+		$result .= '<script type="text/javascript">' . "\n";
+		foreach ($sed_js_collection['inline'] as $inline_js) {
+			$result .= $inline_js . "\n";
+		}
+		$result .= '</script>' . "\n";
+	}
 
-    return $result;
+	return $result;
 }
 /**
  * Adds JavaScript to the global collection, either as a file path or inline code
@@ -3381,26 +3339,26 @@ function sed_javascript()
  */
 function sed_add_javascript($js = '', $is_file = false)
 {
-    global $sed_js_collection; // Global array to store JavaScript
+	global $sed_js_collection; // Global array to store JavaScript
 
-    if (empty($js)) {
-        return;
-    }
+	if (empty($js)) {
+		return;
+	}
 
-    // Initialize the array if it doesn't exist
-    if (!isset($sed_js_collection)) {
-        $sed_js_collection = array('files' => array(), 'inline' => array());
-    }
+	// Initialize the array if it doesn't exist
+	if (!isset($sed_js_collection)) {
+		$sed_js_collection = array('files' => array(), 'inline' => array());
+	}
 
-    // Add JavaScript to the appropriate category
-    if ($is_file) {
-        // Ensure the file is added only once
-        if (!in_array($js, $sed_js_collection['files'])) {
-            $sed_js_collection['files'][] = $js;
-        }
-    } else {
-        $sed_js_collection['inline'][] = $js;
-    }
+	// Add JavaScript to the appropriate category
+	if ($is_file) {
+		// Ensure the file is added only once
+		if (!in_array($js, $sed_js_collection['files'])) {
+			$sed_js_collection['files'][] = $js;
+		}
+	} else {
+		$sed_js_collection['inline'][] = $js;
+	}
 }
 
 /** 
