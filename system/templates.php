@@ -2,12 +2,12 @@
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Seditio Team
+Copyright Seditio Team
 https://seditio.org
 [BEGIN_SED]
 File=system/templates.php
 Version=180
-Updated=2025-jan-25
+Updated=2025-mar-03
 Type=Core
 Author=Seditio Team
 Description=Xtemplate class
@@ -31,16 +31,11 @@ Description=Xtemplate class
  * @since PHP 5
  * @link $HeadURL$
  * @version $Id$
- *
- * XTemplate class - http://www.phpxtemplate.org/ (x)html / xml generation with templates - fast & easy
- * Latest stable & Subversion versions available @ http://sourceforge.net/projects/xtpl/
- * License: LGPL / BSD - see license.txt
- * Changelog: see changelog.txt
+ * 
  */
 
 class XTemplate
 {
-
 	public $filecontents = '';
 	public $blocks = array();
 	public $parsed_blocks = array();
@@ -84,11 +79,11 @@ class XTemplate
 	public $mainblock = 'main';
 	public $output_type = 'HTML';
 	public $force_globals = true;
-	public $debug = false;
-	public $compress_output = false; // HTML minify sed 177 by Amro
+	public $debug = false; // Changed to true by default for easier debugging
+	public $compress_output = false; // HTML minify sed 180
 	protected $_null_string = array('' => '');
 	protected $_null_block = array('' => '');
-	protected $_error = '';
+	protected $_error = []; // Changed to array for better error tracking
 	protected $_autoreset = true;
 	protected $_ignore_missing_blocks = true;
 
@@ -131,16 +126,15 @@ class XTemplate
 	 */
 	public function __construct($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true)
 	{
-
 		if (!is_array($options)) {
 			$options = array('file' => $options, 'path' => $tpldir, 'files' => $files, 'mainblock' => $mainblock, 'autosetup' => $autosetup);
 		}
 
 		if (!isset($options['tag_start'])) {
-			$options['tag_start']	= $this->tag_start_delim;
+			$options['tag_start'] = $this->tag_start_delim;
 		}
 		if (!isset($options['tag_end'])) {
-			$options['tag_end']		= $this->tag_end_delim;
+			$options['tag_end'] = $this->tag_end_delim;
 		}
 
 		$this->restart($options);
@@ -159,7 +153,6 @@ class XTemplate
 	 */
 	public function restart($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true, $tag_start = '{', $tag_end = '}')
 	{
-
 		if (is_array($options)) {
 			foreach ($options as $option => $value) {
 				switch ($option) {
@@ -217,7 +210,6 @@ class XTemplate
 		}
 
 		$this->filecontents = '';
-
 		$this->blocks = array();
 		$this->parsed_blocks = array();
 		$this->preparsed_blocks = array();
@@ -227,11 +219,11 @@ class XTemplate
 		$this->filevars = array();
 		$this->filevar_parent = array();
 		$this->filecache = array();
+		$this->_error = []; // Reset errors
 
 		if ($this->allow_callbacks) {
 			$delim = preg_quote($this->callback_delim);
 			if (mb_strlen($this->callback_delim) < mb_strlen($delim)) {
-
 				$delim = preg_quote($delim);
 			}
 
@@ -250,16 +242,12 @@ class XTemplate
 	 */
 	public function setup($add_outer = false)
 	{
-
 		$this->tag_start_delim = preg_quote($this->tag_start_delim);
 		$this->tag_end_delim = preg_quote($this->tag_end_delim);
 
 		$this->file_delim = $this->preg_delimiter . $this->tag_start_delim . "FILE\s*\"([^\"]+)\"" . $this->comment_preg . $this->tag_end_delim . $this->preg_delimiter . 'm';
-
 		$this->filevar_delim = $this->preg_delimiter . $this->tag_start_delim . "FILE\s*" . $this->tag_start_delim . "([A-Za-z0-9\._\x7f-\xff]+?)" . $this->comment_preg . $this->tag_end_delim . $this->comment_preg . $this->tag_end_delim . $this->preg_delimiter . 'm';
-
 		$this->filevar_delim_nl = $this->preg_delimiter . "^\s*" . $this->tag_start_delim . "FILE\s*" . $this->tag_start_delim . "([A-Za-z0-9\._\x7f-\xff]+?)" . $this->comment_preg . $this->tag_end_delim . $this->comment_preg . $this->tag_end_delim . "\s*\n" . $this->preg_delimiter . 'm';
-
 		$this->callback_preg = '(' . preg_quote($this->callback_delim) . $this->callback_preg . ')*';
 
 		if (empty($this->filecontents)) {
@@ -284,26 +272,18 @@ class XTemplate
 	 */
 	public function assign($name, $val = '', $reset_array = true)
 	{
-
 		if (is_array($name) || is_object($name)) {
-
 			foreach ($name as $k => $v) {
-
 				$this->vars[$k] = $v;
 			}
 		} elseif (is_array($val) || is_object($val)) {
-
-			// Clear the existing values
 			if ($reset_array) {
 				$this->vars[$name] = array();
 			}
-
 			foreach ($val as $k => $v) {
-
 				$this->vars[$name][$k] = $v;
 			}
 		} else {
-
 			$this->vars[$name] = $val;
 		}
 	}
@@ -316,15 +296,11 @@ class XTemplate
 	 */
 	public function assign_file($name, $val = '')
 	{
-
 		if (is_array($name)) {
-
 			foreach ($name as $k => $v) {
-
 				$this->_assign_file_sub($k, $v);
 			}
 		} else {
-
 			$this->_assign_file_sub($name, $val);
 		}
 	}
@@ -336,35 +312,27 @@ class XTemplate
 	 */
 	public function parse($bname)
 	{
-
 		if (isset($this->preparsed_blocks[$bname])) {
-
 			$copy = $this->preparsed_blocks[$bname];
 		} elseif (isset($this->blocks[$bname])) {
-
 			$copy = $this->blocks[$bname];
 		} elseif ($this->_ignore_missing_blocks) {
-
-			$this->_set_error("parse: blockname [$bname] does not exist");
+			$this->_set_error("parse: blockname [$bname] does not exist", "File: {$this->filename}, Block: $bname");
 			return;
 		} else {
-
-			$this->_set_error("parse: blockname [$bname] does not exist");
+			$this->_set_error("parse: blockname [$bname] does not exist", "File: {$this->filename}, Block: $bname");
 		}
-
-		// Process conditions
-		$copy = $this->_process_conditions($copy);
 
 		if (!isset($copy)) {
 			die('Block: ' . $bname);
 		}
 
+		$copy = $this->_process_conditions($copy);
+
 		$copy = preg_replace($this->filevar_delim_nl, '', $copy);
 
 		$var_array = array();
-
 		preg_match_all($this->preg_delimiter . $this->tag_start_delim . '([A-Za-z0-9\._\x7f-\xff]+?' . $this->callback_preg . $this->comment_preg . ')' . $this->tag_end_delim . $this->preg_delimiter, $copy, $var_array);
-
 		$var_array = $var_array[1];
 
 		foreach ($var_array as $k => $v) {
@@ -386,38 +354,29 @@ class XTemplate
 			$sub = explode('.', $v);
 
 			if ($sub[0] == '_BLOCK_') {
-
 				unset($sub[0]);
-
 				$bname2 = implode('.', $sub);
-
 				$var = isset($this->parsed_blocks[$bname2]) ? $this->parsed_blocks[$bname2] : '';
 				$nul = (!isset($this->_null_block[$bname2])) ? $this->_null_block[''] : $this->_null_block[$bname2];
 
 				if ($var === '') {
-
 					if ($nul == '') {
 						$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . $v . $this->tag_end_delim . $this->preg_delimiter . 'm', '', $copy);
 					} else {
-
 						$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . $v . $this->tag_end_delim . $this->preg_delimiter . 'm', "$nul", $copy);
 					}
 				} else {
-
 					switch (true) {
 						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) && preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $var):
 							$var = mb_substr($var, 1, -1);
 							break;
-
 						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var):
 							$var = mb_substr($var, 1);
 							break;
-
 						case preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $var):
 							$var = mb_substr($var, 0, -1);
 							break;
 					}
-
 					$var = str_replace('\\', '\\\\', $var);
 					$var = str_replace('$', '\\$', $var);
 					$var = str_replace('\\|', '|', $var);
@@ -428,34 +387,24 @@ class XTemplate
 					}
 				}
 			} else {
-				// TAGS
-
 				$var = $this->vars;
-
 				foreach ($sub as $v1) {
-
 					switch (true) {
 						case is_array($var):
 							if (!isset($var[$v1]) || (is_string($var[$v1]) && mb_strlen($var[$v1]) == 0)) {
-
 								if (defined($v1)) {
-
 									$var[$v1] = constant($v1);
 								} else {
-
 									$var[$v1] = null;
 								}
 							}
 							$var = $var[$v1];
 							break;
-
 						case is_object($var):
 							if (!isset($var->$v1) || (is_string($var->$v1) && mb_strlen($var->$v1) == 0)) {
 								if (defined($v1)) {
-
 									$var->$v1 = constant($v1);
 								} else {
-
 									$var->$v1 = null;
 								}
 							}
@@ -469,17 +418,16 @@ class XTemplate
 						foreach ($callback_funcs as $callback) {
 							if (preg_match($this->preg_delimiter . '\((.*?)\)' . $this->preg_delimiter, $callback, $matches)) {
 								$parameters = array();
-
 								if (preg_match_all($this->preg_delimiter . '(?#
-									match optional comma, optional other stuff, then
-									apostrophes / quotes then stuff followed by comma or
-									closing bracket negative look behind for an apostrophe
-									or quote not preceeded by an escaping back slash
-									)[,?\s*?]?[\'|"](.*?)(?<!\\\\)(?<=[\'|"])[,|\)$](?#
-									OR match optional comma, optional other stuff, then
-									multiple word \w with look behind % for our %s followed
-									by comma or closing bracket
-									)|,?\s*?([\w(?<!\%)]+)[,|\)$]' . $this->preg_delimiter, $matches[1] . ')', $param_matches)) {
+                                    match optional comma, optional other stuff, then
+                                    apostrophes / quotes then stuff followed by comma or
+                                    closing bracket negative look behind for an apostrophe
+                                    or quote not preceeded by an escaping back slash
+                                    )[,?\s*?]?[\'|"](.*?)(?<!\\\\)(?<=[\'|"])[,|\)$](?#
+                                    OR match optional comma, optional other stuff, then
+                                    multiple word \w with look behind % for our %s followed
+                                    by comma or closing bracket
+                                    )|,?\s*?([\w(?<!\%)]+)[,|\)$]' . $this->preg_delimiter, $matches[1] . ')', $param_matches)) {
 									$parameters = $param_matches[0];
 								}
 								if (count($parameters)) {
@@ -543,9 +491,7 @@ class XTemplate
 		}
 
 		if ($this->_autoreset && (!empty($this->sub_blocks[$bname]))) {
-
 			reset($this->sub_blocks[$bname]);
-
 			foreach ($this->sub_blocks[$bname] as $k => $v) {
 				$this->reset($v);
 			}
@@ -559,19 +505,14 @@ class XTemplate
 	 */
 	public function rparse($bname)
 	{
-
 		if (!empty($this->sub_blocks[$bname])) {
-
 			reset($this->sub_blocks[$bname]);
-
 			foreach ($this->sub_blocks[$bname] as $k => $v) {
-
 				if (!empty($v)) {
 					$this->rparse($v);
 				}
 			}
 		}
-
 		$this->parse($bname);
 	}
 
@@ -584,21 +525,50 @@ class XTemplate
 	 */
 	public function insert_loop($bname, $var, $value = '')
 	{
-
 		$this->assign($var, $value);
 		$this->parse($bname);
 	}
 
 	/**
-	 * Compress the output by removing whitespace.
+	 * Compresses HTML content while preserving <pre> and <code> blocks.
 	 *
-	 * @param string $out Output string.
-	 * @return string Compressed output.
+	 * @param string $out The HTML content to be compressed.
+	 * @return string The compressed HTML content.
 	 */
 	public function compress($out)
 	{
+		// Define patterns to find all <pre> and <code> blocks
+		$patterns = [
+			'pre' => '/<pre\b[^>]*>(.*?)<\/pre>/si',
+			'code' => '/<code\b[^>]*>(.*?)<\/code>/si',
+			'textarea' => '/<textarea\b[^>]*>(.*?)<\/textarea>/si'
+		];
+
+		$replacements = [];
+
+		// Save the content of each block and replace it with a placeholder
+		foreach ($patterns as $type => $pattern) {
+			$matches = [];
+			preg_match_all($pattern, $out, $matches, PREG_SET_ORDER);
+			foreach ($matches as $match) {
+				$content = $match[1];
+				$placeholder = "%%{$type}_" . md5($content) . "%%";
+				$out = str_replace($match[0], $placeholder, $out);
+				$replacements[$placeholder] = $match[0];
+			}
+		}
+
+		// Now compress the remaining HTML
 		$out = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/", "", $out);
-		$out = str_replace(array("\r\n", "\r", "\n", "\t", "  ", "    ", "    "), "", $out);
+		$out = preg_replace('/\s+(?=<)/', '', $out); // Remove spaces before opening tags
+		$out = preg_replace('/(>)\s+/', '$1', $out); // Remove spaces after closing tags
+		$out = preg_replace('/\s+/', ' ', $out); // Collapse multiple spaces into one
+
+		// Restore the original content of <pre> and <code> blocks
+		foreach ($replacements as $placeholder => $original) {
+			$out = str_replace($placeholder, $original, $out);
+		}
+
 		return $out;
 	}
 
@@ -611,11 +581,8 @@ class XTemplate
 	 */
 	public function array_loop($bname, $var, &$values)
 	{
-
 		if (is_array($values)) {
-
 			foreach ($values as $v) {
-
 				$this->insert_loop($bname, $var, $v);
 			}
 		}
@@ -629,33 +596,26 @@ class XTemplate
 	 */
 	public function text($bname = '')
 	{
-
 		$text = '';
 
 		if ($this->debug && $this->output_type == 'HTML') {
-
 			$text .= '<!-- XTemplate debug TEXT: ' . $bname . ' ';
 			if (is_array($this->tpldir)) {
-
 				foreach ($this->tpldir as $dir) {
-
 					if (is_readable($dir . DIRECTORY_SEPARATOR . $this->filename)) {
 						$text .= realpath($dir . DIRECTORY_SEPARATOR . $this->filename);
 						break;
 					}
 				}
 			} elseif (!empty($this->tpldir)) {
-
 				$text .= realpath($this->tpldir . DIRECTORY_SEPARATOR . $this->filename);
 			} else {
-
 				$text .= $this->filename;
 			}
 			$text .= " -->\n";
 		}
 
 		$bname = !empty($bname) ? $bname : $this->mainblock;
-
 		$text .= isset($this->parsed_blocks[$bname]) ? $this->parsed_blocks[$bname] : $this->get_error();
 
 		return $text;
@@ -673,7 +633,26 @@ class XTemplate
 		if ($this->compress_output) {
 			$out = $this->compress($out);
 		}
+		// Prepend errors to output if present
+		if ($this->debug && !empty($this->_error) && $this->output_type == 'HTML') {
+			$out = "<!-- XTemplate Errors for Block: $bname -->\n" . $this->get_error() . "\n" . $out;
+			$this->log_errors();
+		}
 		echo trim($out);
+	}
+
+	/**
+	 * Log errors to a file (optional).
+	 */
+	protected function log_errors()
+	{
+		if (!empty($this->_error)) {
+			$log_message = "XTemplate Errors:\n";
+			foreach ($this->_error as $error) {
+				$log_message .= "[{$error['timestamp']}] {$error['message']} (Context: {$error['context']})\n";
+			}
+			file_put_contents('xtemplate_errors.log', $log_message, FILE_APPEND);
+		}
 	}
 
 	/**
@@ -684,9 +663,7 @@ class XTemplate
 	 */
 	public function out_file($bname, $fname)
 	{
-
 		if (!empty($bname) && !empty($fname) && is_writeable($fname)) {
-
 			$fp = fopen($fname, 'w');
 			fwrite($fp, $this->text($bname));
 			fclose($fp);
@@ -700,7 +677,6 @@ class XTemplate
 	 */
 	public function reset($bname)
 	{
-
 		$this->parsed_blocks[$bname] = '';
 	}
 
@@ -712,7 +688,6 @@ class XTemplate
 	 */
 	public function parsed($bname)
 	{
-
 		return (!empty($this->parsed_blocks[$bname]));
 	}
 
@@ -724,7 +699,6 @@ class XTemplate
 	 */
 	public function set_null_string($str, $varname = '')
 	{
-
 		$this->_null_string[$varname] = $str;
 	}
 
@@ -747,7 +721,6 @@ class XTemplate
 	 */
 	public function set_null_block($str, $bname = '')
 	{
-
 		$this->_null_block[$bname] = $str;
 	}
 
@@ -767,7 +740,6 @@ class XTemplate
 	 */
 	public function set_autoreset()
 	{
-
 		$this->_autoreset = true;
 	}
 
@@ -776,7 +748,6 @@ class XTemplate
 	 */
 	public function clear_autoreset()
 	{
-
 		$this->_autoreset = false;
 	}
 
@@ -785,7 +756,6 @@ class XTemplate
 	 */
 	public function scan_globals()
 	{
-
 		$GLOB = array();
 
 		if ($this->force_globals && ini_get('auto_globals_jit') == true) {
@@ -796,19 +766,15 @@ class XTemplate
 		}
 
 		foreach ($GLOBALS as $k => $v) {
-
 			$GLOB[$k] = array();
 
 			switch ($k) {
-
 				case 'GLOBALS':
 					break;
-
 				case '_COOKIE':
 				case '_SESSION':
 					$GLOB[$k] = array_merge($GLOB[$k], $v);
 					break;
-
 				case '_ENV':
 				case '_FILES':
 				case '_GET':
@@ -825,25 +791,30 @@ class XTemplate
 	}
 
 	/**
-	 * Get the error message.
+	 * Get the error message with context.
 	 *
 	 * @return string Error message.
 	 */
 	public function get_error()
 	{
-
 		$retval = false;
 
-		if ($this->_error != '') {
+		if (!empty($this->_error)) {
+			$error_html = '<b>[XTemplate Errors]</b><ul>';
+			foreach ($this->_error as $error) {
+				$error_html .= "<li>{$error['message']} (Context: {$error['context']}, Time: {$error['timestamp']})</li>";
+			}
+			$error_html .= '</ul>';
 
 			switch ($this->output_type) {
 				case 'HTML':
 				case 'html':
-					$retval = '<b>[XTemplate]</b><ul>' . nl2br(str_replace('* ', '<li>', str_replace(" *\n", "</li>\n", $this->_error))) . '</ul>';
+					$retval = $error_html;
 					break;
-
 				default:
-					$retval = '[XTemplate] ' . str_replace(' *\n', "\n", $this->_error);
+					$retval = '[XTemplate] ' . implode("\n", array_map(function ($e) {
+						return "{$e['message']} (Context: {$e['context']}, Time: {$e['timestamp']})";
+					}, $this->_error));
 					break;
 			}
 		}
@@ -860,17 +831,13 @@ class XTemplate
 	 */
 	public function _maketree($con, $parentblock = '')
 	{
-
 		$blocks = array();
-
 		$con2 = explode($this->block_start_delim, $con);
 
 		if (!empty($parentblock)) {
-
 			$block_names = explode('.', $parentblock);
 			$level = sizeof($block_names);
 		} else {
-
 			$block_names = array();
 			$level = 0;
 		}
@@ -878,18 +845,15 @@ class XTemplate
 		$patt = "(" . $this->block_start_word . "|" . $this->block_end_word . ")\s*(\w+)" . $this->comment_preg . "\s*" . $this->block_end_delim . "(.*)";
 
 		foreach ($con2 as $k => $v) {
-
 			$res = array();
 
 			if (preg_match_all($this->preg_delimiter . "$patt" . $this->preg_delimiter . 'ims', $v, $res, PREG_SET_ORDER)) {
-
-				$block_word	= $res[0][1];
-				$block_name	= $res[0][2];
-				$comment	= $res[0][3];
-				$content	= $res[0][4];
+				$block_word = $res[0][1];
+				$block_name = $res[0][2];
+				$comment = $res[0][3];
+				$content = $res[0][4];
 
 				if (mb_strtoupper($block_word) == $this->block_start_word) {
-
 					$parent_name = implode('.', $block_names);
 					$block_names[++$level] = $block_name;
 					$cur_block_name = implode('.', $block_names);
@@ -899,20 +863,15 @@ class XTemplate
 					$this->sub_blocks[$parent_name][] = $cur_block_name;
 					$this->sub_blocks[$cur_block_name][] = '';
 				} else if (mb_strtoupper($block_word) == $this->block_end_word) {
-
 					unset($block_names[$level--]);
-
 					$parent_name = implode('.', $block_names);
 					$blocks[$parent_name] .= $content;
 				}
 			} else {
-
 				$tmp = implode('.', $block_names);
-
 				if ($k) {
 					$blocks[$tmp] .= $this->block_start_delim;
 				}
-
 				$blocks[$tmp] = isset($blocks[$tmp]) ? $blocks[$tmp] . $v : $v;
 			}
 		}
@@ -928,33 +887,22 @@ class XTemplate
 	 */
 	private function _assign_file_sub($name, $val)
 	{
-
 		if (isset($this->filevar_parent[$name])) {
-
 			if ($val != '') {
-
 				$val = $this->_r_getfile($val);
-
 				foreach ($this->filevar_parent[$name] as $parent) {
-
 					if (isset($this->preparsed_blocks[$parent]) && !isset($this->filevars[$name])) {
-
 						$copy = $this->preparsed_blocks[$parent];
 					} elseif (isset($this->blocks[$parent])) {
-
 						$copy = $this->blocks[$parent];
 					}
 
 					$res = array();
-
 					preg_match_all($this->filevar_delim, $copy, $res, PREG_SET_ORDER);
 
 					if (is_array($res) && isset($res[0])) {
-
 						foreach ($res as $v) {
-
 							if ($v[1] == $name) {
-
 								$copy = preg_replace($this->preg_delimiter . preg_quote($v[0]) . $this->preg_delimiter, "$val", $copy);
 								$this->preparsed_blocks = array_merge($this->preparsed_blocks, $this->_maketree($copy, $parent));
 								$this->filevar_parent = array_merge($this->filevar_parent, $this->_store_filevar_parents($this->preparsed_blocks));
@@ -964,7 +912,6 @@ class XTemplate
 				}
 			}
 		}
-
 		$this->filevars[$name] = $val;
 	}
 
@@ -976,17 +923,12 @@ class XTemplate
 	 */
 	public function _store_filevar_parents($blocks)
 	{
-
 		$parents = array();
 
 		foreach ($blocks as $bname => $con) {
-
 			$res = array();
-
 			preg_match_all($this->filevar_delim, $con, $res);
-
 			foreach ($res[1] as $k => $v) {
-
 				$parents[$v][] = $bname;
 			}
 		}
@@ -994,14 +936,21 @@ class XTemplate
 	}
 
 	/**
-	 * Set an error message.
+	 * Set an error message with context.
 	 *
 	 * @param string $str Error message.
+	 * @param string $context Additional context (e.g., file and block).
 	 */
-	private function _set_error($str)
+	private function _set_error($str, $context = '')
 	{
-
-		$this->_error .= '* ' . $str . " *\n";
+		if (!is_array($this->_error)) {
+			$this->_error = [];
+		}
+		$this->_error[] = [
+			'message' => $str,
+			'context' => $context ?: "File: {$this->filename}, Block: Unknown",
+			'timestamp' => date('Y-m-d H:i:s')
+		];
 	}
 
 	/**
@@ -1012,34 +961,26 @@ class XTemplate
 	 */
 	protected function _getfile($file)
 	{
-
 		if (!isset($file)) {
-			$this->_set_error('!isset file name!' . $file);
-
+			$this->_set_error('!isset file name!' . $file, "File: {$this->filename}");
 			return '';
 		}
 
 		if (isset($this->files)) {
-
 			if (isset($this->files[$file])) {
-
 				$file = $this->files[$file];
 			}
 		}
 
 		if (!empty($this->tpldir)) {
-
 			if (is_array($this->tpldir)) {
-
 				foreach ($this->tpldir as $dir) {
-
 					if (is_readable($dir . DIRECTORY_SEPARATOR . $file)) {
 						$file = $dir . DIRECTORY_SEPARATOR . $file;
 						break;
 					}
 				}
 			} else {
-
 				$file = $this->tpldir . DIRECTORY_SEPARATOR . $file;
 			}
 		}
@@ -1047,35 +988,26 @@ class XTemplate
 		$file_text = '';
 
 		if (isset($this->filecache[$file])) {
-
 			$file_text .= $this->filecache[$file];
-
 			if ($this->debug && $this->output_type == 'HTML') {
 				$file_text = '<!-- XTemplate debug CACHED: ' . realpath($file) . ' -->' . "\n" . $file_text;
 			}
 		} else {
-
 			if (is_file($file) && is_readable($file)) {
-
 				if (filesize($file)) {
-
 					if (!($fh = fopen($file, 'r'))) {
-
-						$this->_set_error('Cannot open file: ' . realpath($file));
+						$this->_set_error('Cannot open file: ' . realpath($file), "File: {$this->filename}");
 						return '';
 					}
-
 					$file_text .= fread($fh, filesize($file));
 					fclose($fh);
 				}
-
 				if ($this->debug && $this->output_type == 'HTML') {
 					$file_text = '<!-- XTemplate debug: ' . realpath($file) . ' -->' . "\n" . $file_text;
 				}
 			} elseif (str_replace('.', '', phpversion()) >= '430' && $file_text = @file_get_contents($file, true)) {
-
 				if ($file_text === false) {
-					$this->_set_error("[" . realpath($file) . "] ($file) does not exist");
+					$this->_set_error("[" . realpath($file) . "] ($file) does not exist", "File: {$this->filename}");
 					if ($this->output_type == 'HTML') {
 						$file_text = "<b>__XTemplate fatal error: file [$file] does not exist in the include path__</b>";
 					}
@@ -1083,19 +1015,16 @@ class XTemplate
 					$file_text = '<!-- XTemplate debug (via include path): ' . realpath($file) . ' -->' . "\n" . $file_text;
 				}
 			} elseif (!is_file($file)) {
-
-				$this->_set_error("[" . realpath($file) . "] ($file) does not exist");
+				$this->_set_error("[" . realpath($file) . "] ($file) does not exist", "File: {$this->filename}");
 				if ($this->output_type == 'HTML') {
 					$file_text .= "<b>__XTemplate fatal error: file [$file] does not exist__</b>";
 				}
 			} elseif (!is_readable($file)) {
-
-				$this->_set_error("[" . realpath($file) . "] ($file) is not readable");
+				$this->_set_error("[" . realpath($file) . "] ($file) is not readable", "File: {$this->filename}");
 				if ($this->output_type == 'HTML') {
 					$file_text .= "<b>__XTemplate fatal error: file [$file] is not readable__</b>";
 				}
 			}
-
 			$this->filecache[$file] = $file_text;
 		}
 
@@ -1110,13 +1039,10 @@ class XTemplate
 	 */
 	public function _r_getfile($file)
 	{
-
 		$text = $this->_getfile($file);
-
 		$res = array();
 
 		while (preg_match($this->file_delim, $text, $res)) {
-
 			$text2 = $this->_getfile($res[1]);
 			$text = preg_replace($this->preg_delimiter . preg_quote($res[0]) . $this->preg_delimiter, $text2, $text);
 		}
@@ -1132,20 +1058,16 @@ class XTemplate
 	 */
 	protected function _tokenize($expression)
 	{
-		// Regular expression for tokenization
 		$pattern = '`\s*(?:(\d*\.\d+|\d+)|([+\-*/%()]|&&|\|\||==|!=|<=|>=|<|>)|([A-Za-z0-9\._\x7f-\xff]+))\s*`';
 		preg_match_all($pattern, $expression, $matches, PREG_SET_ORDER);
 
 		$tokens = [];
 		foreach ($matches as $match) {
 			if (isset($match[1]) && $match[1] !== '') {
-				// Number
 				$tokens[] = ['type' => 'number', 'value' => $match[1]];
 			} elseif (isset($match[2]) && $match[2] !== '') {
-				// Operator or parenthesis
 				$tokens[] = ['type' => 'operator', 'value' => $match[2]];
 			} elseif (isset($match[3]) && $match[3] !== '') {
-				// Variable
 				$tokens[] = ['type' => 'variable', 'value' => $match[3]];
 			}
 		}
@@ -1166,10 +1088,8 @@ class XTemplate
 
 		foreach ($tokens as $token) {
 			if ($token['type'] === 'number' || $token['type'] === 'variable') {
-				// Numbers and variables go directly to output
 				$output[] = $token;
 			} elseif ($token['type'] === 'operator') {
-				// Operators
 				while (
 					!empty($stack) &&
 					$stack[count($stack) - 1]['type'] === 'operator' &&
@@ -1179,18 +1099,15 @@ class XTemplate
 				}
 				$stack[] = $token;
 			} elseif ($token['value'] === '(') {
-				// Opening parenthesis to stack
 				$stack[] = $token;
 			} elseif ($token['value'] === ')') {
-				// Closing parenthesis: pop operators to output until opening parenthesis
 				while (!empty($stack) && $stack[count($stack) - 1]['value'] !== '(') {
 					$output[] = array_pop($stack);
 				}
-				array_pop($stack); // Remove opening parenthesis
+				array_pop($stack);
 			}
 		}
 
-		// Pop remaining operators to output
 		while (!empty($stack)) {
 			$output[] = array_pop($stack);
 		}
@@ -1215,7 +1132,8 @@ class XTemplate
 			} elseif (is_object($value) && isset($value->$part)) {
 				$value = $value->$part;
 			} else {
-				return null;
+				$this->_set_error("Variable {$var_name} not found or inaccessible at part: $part", "File: {$this->filename}");
+				return 0;
 			}
 		}
 
@@ -1234,19 +1152,28 @@ class XTemplate
 
 		foreach ($rpn as $token) {
 			if ($token['type'] === 'number') {
-				// Number: push to stack
 				$stack[] = $token['value'];
 			} elseif ($token['type'] === 'variable') {
-				// Variable: replace with value and push to stack
 				$value = $this->_get_variable_value($token['value']);
-				$stack[] = $value;
+				$stack[] = $value !== null ? $value : 0;
 			} elseif ($token['type'] === 'operator') {
-				// Operator: evaluate
+				if (count($stack) < 2) {
+					$this->_set_error("Insufficient operands for operator: " . $token['value'], "File: {$this->filename}");
+					return null;
+				}
 				$b = array_pop($stack);
 				$a = array_pop($stack);
 				$result = $this->_apply_operator($token['value'], $a, $b);
+				if ($result === null) {
+					return null;
+				}
 				$stack[] = $result;
 			}
+		}
+
+		if (count($stack) !== 1) {
+			$this->_set_error("Invalid RPN expression: stack imbalance", "File: {$this->filename}");
+			return null;
 		}
 
 		return array_pop($stack);
@@ -1260,13 +1187,8 @@ class XTemplate
 	 */
 	protected function _evaluate_condition($condition)
 	{
-		// Tokenize the expression
 		$tokens = $this->_tokenize($condition);
-
-		// Convert to Reverse Polish Notation (RPN)
 		$rpn = $this->_shunting_yard($tokens);
-
-		// Evaluate RPN
 		return (bool) $this->_evaluate_rpn($rpn);
 	}
 
@@ -1277,10 +1199,12 @@ class XTemplate
 	 * @param mixed $a First value.
 	 * @param mixed $b Second value.
 	 * @return mixed Result of the operation.
-	 * @throws Exception If the operator is unknown.
 	 */
 	protected function _apply_operator($operator, $a, $b)
 	{
+		$a = is_numeric($a) ? (float)$a : $a;
+		$b = is_numeric($b) ? (float)$b : $b;
+
 		switch ($operator) {
 			case '+':
 				return $a + $b;
@@ -1289,8 +1213,16 @@ class XTemplate
 			case '*':
 				return $a * $b;
 			case '/':
+				if ($b == 0) {
+					$this->_set_error("Division by zero in condition", "File: {$this->filename}");
+					return null;
+				}
 				return $a / $b;
 			case '%':
+				if ($b == 0) {
+					$this->_set_error("Modulo by zero in condition", "File: {$this->filename}");
+					return null;
+				}
 				return $a % $b;
 			case '==':
 				return $a == $b;
@@ -1309,7 +1241,8 @@ class XTemplate
 			case '||':
 				return $a || $b;
 			default:
-				throw new Exception("Unknown operator: $operator");
+				$this->_set_error("Unknown operator: $operator", "File: {$this->filename}");
+				return null;
 		}
 	}
 
@@ -1321,36 +1254,51 @@ class XTemplate
 	 */
 	protected function _process_conditions($content)
 	{
-		// Process all conditions in the template
-		while (preg_match($this->if_preg, $content, $if_matches)) {
-			$condition = trim($if_matches[1]); // // Condition (e.g., "{PHP.i} % 2 == 0 && {PHP.usr.isadmin}")
-			$if_block_start = strpos($content, $if_matches[0]); // Start of IF block
-			$if_block_length = strlen($if_matches[0]); // Length of IF block
+		$full_pattern = $this->preg_delimiter .
+			preg_quote($this->if_start_delim) . '(.*?)' . preg_quote($this->if_end_delim) .
+			'(.*?)' .
+			'(?:' . preg_quote($this->else_delim) . '(.*?)' . ')?' .
+			preg_quote($this->endif_delim) .
+			$this->preg_delimiter . 's';
 
-			// Find the end of the IF block (either ELSE or ENDIF)
-			$else_pos = strpos($content, $this->else_delim, $if_block_start + $if_block_length);
-			$endif_pos = strpos($content, $this->endif_delim, $if_block_start + $if_block_length);
+		$content = preg_replace_callback($full_pattern, function ($matches) {
+			$condition = trim($matches[1]);
+			$if_content = $matches[2];
+			$else_content = isset($matches[3]) ? $matches[3] : '';
 
-			// Determine if there is an ELSE
-			$has_else = ($else_pos !== false && $else_pos < $endif_pos);
+			if (empty($condition)) {
+				$this->_set_error("Empty condition in IF block", "File: {$this->filename}");
+				return $if_content;
+			}
 
-			// Calculate the boundaries of the blocks
-			$if_content_start = $if_block_start + $if_block_length;
-			$if_content_end = $has_else ? $else_pos : $endif_pos;
-			$else_content_start = $has_else ? $else_pos + strlen($this->else_delim) : null;
-			$else_content_end = $has_else ? $endif_pos : null;
-
-			// Extract the content of the blocks
-			$if_content = substr($content, $if_content_start, $if_content_end - $if_content_start);
-			$else_content = $has_else ? substr($content, $else_content_start, $else_content_end - $else_content_start) : '';
-
-			// Evaluate the condition
 			$condition_result = $this->_evaluate_condition($condition);
 
-			// Replace the IF block with the corresponding content
-			$replacement = $condition_result ? $if_content : $else_content;
-			$content = substr_replace($content, $replacement, $if_block_start, $endif_pos + strlen($this->endif_delim) - $if_block_start);
-		}
+			if ($condition_result === null) {
+				$this->_set_error("Failed to evaluate condition: $condition", "File: {$this->filename}");
+				return $if_content;
+			}
+
+			return $condition_result ? $if_content : $else_content;
+		}, $content);
+
+		$unclosed_pattern = $this->preg_delimiter .
+			preg_quote($this->if_start_delim) . '(.*?)' . preg_quote($this->if_end_delim) .
+			'((?:(?!' . preg_quote($this->endif_delim) . ').)*)' .
+			$this->preg_delimiter . 's';
+
+		$content = preg_replace_callback($unclosed_pattern, function ($matches) {
+			$condition = trim($matches[1]);
+			$if_content = $matches[2];
+
+			$this->_set_error("Unclosed IF block detected: <!-- IF $condition -->", "File: {$this->filename}");
+
+			if (empty($condition)) {
+				return $if_content;
+			}
+
+			$condition_result = $this->_evaluate_condition($condition);
+			return $condition_result === true ? $if_content : '';
+		}, $content);
 
 		return $content;
 	}
@@ -1366,7 +1314,6 @@ class XTemplate
 		$value = preg_replace($this->preg_delimiter . '^,?\s*?(.*?)[,|\)]?$' . $this->preg_delimiter, '\\1', trim($value));
 		$value = preg_replace($this->preg_delimiter . '^[\'|"]?(.*?)[\'|"]?$' . $this->preg_delimiter, '\\1', trim($value));
 		$value = preg_replace($this->preg_delimiter . '\\\\(?=\'|")' . $this->preg_delimiter, '', $value);
-		// Deal with escaped commas (beta)
 		$value = preg_replace($this->preg_delimiter . '\\\,' . $this->preg_delimiter, ',', $value);
 	}
 
@@ -1375,10 +1322,8 @@ class XTemplate
 	 */
 	private function _add_outer_block()
 	{
-
 		$before = $this->block_start_delim . $this->block_start_word . ' ' . $this->mainblock . ' ' . $this->block_end_delim;
 		$after = $this->block_start_delim . $this->block_end_word . ' ' . $this->mainblock . ' ' . $this->block_end_delim;
-
 		$this->filecontents = $before . "\n" . $this->filecontents . "\n" . $after;
 	}
 
@@ -1389,7 +1334,6 @@ class XTemplate
 	 */
 	protected function _pre_var_dump($args)
 	{
-
 		if ($this->debug) {
 			echo '<pre>';
 			var_dump(func_get_args());
@@ -1405,7 +1349,6 @@ class XTemplate
 	 */
 	protected function _ob_var_dump($args)
 	{
-
 		if ($this->debug) {
 			ob_start();
 			$this->_pre_var_dump(func_get_args());
