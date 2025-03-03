@@ -2,8 +2,8 @@
 
 Seditio is a modular content management system and content management framework powered by PHP and MySQL.
 
-The engine distinguishes itself from other content management systems by keeping the HTML code completely separate from the PHP. 
-This allows graphic designers to create skins without having to know much PHP. Seditio can be skinned by editing pre-made skins 
+The engine distinguishes itself from other content management systems by keeping the HTML code completely separate from the PHP.
+This allows graphic designers to create skins without having to know much PHP. Seditio can be skinned by editing pre-made skins
 supplied by the community, or easily making one's own by creating a template, and simply substituting for the TPL tags.
 
 <h2>Requirements</h2>
@@ -58,7 +58,7 @@ Copyright (c) 2001-2011, Neocrome</p>
 
 <h2>License</h2>
 
-<p>Seditio is free software; you can redistribute it and/or modify it under the terms of the 3-clause BSD License (or New-BSD) 
-as published by Regents of the University of California.</p>
+<p>Seditio is free software; you can redistribute it and/or modify it under the terms 
+of the BSD 3-Clause License ("BSD New" or "BSD Simplified") as published by Regents of the University of California.</p>
 
-<p>BSD 3-clause License</p>
+<p><a href="https://github.com/sedteam/Seditio/blob/master/LICENSE">BSD 3-Clause License</a></p>

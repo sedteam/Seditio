@@ -12,12 +12,11 @@
 
 					<h3>About</h3>
 
-					<p>Seditio is open source software licensed under the LGPL-3.0. The license permits the
-						free use of the software even for commercial projects.</p>
+					<p>Seditio is open source software licensed under the BSD 3-Clause License.
+						The license permits the free use of the software even for commercial projects.</p>
 
-					<p>You can track the development of Seditio on GitHub and you are welcome to join in
-						if you want. If you think you have found a security problem in Seditio, please report it
-						responsibly according to our security policy.</p>
+					<p>You can track the development of Seditio on GitHub and you are welcome to join in if you want.
+						If you think you have found a security problem in Seditio, please report it responsibly according to our security policy.</p>
 
 				</div>
 				<div class="footer-menu-col">
