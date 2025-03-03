@@ -896,10 +896,30 @@ ul.rating li.s10 a:hover {
     visibility: hidden;
     background-color: white;
     box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s;
+}
+
+.sed_modal.image-modal {
+    border: none;
+    background: none;
+    box-shadow: none;
+    position: fixed;
+    visibility: visible;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: none;
+    transition: opacity 0.3s;
 }
 
 .modal-handle {
-    /*CSS for Drag Handle*/
     padding: 7px;
     text-indent: 3px;
     font: bold 14px Arial;
@@ -920,29 +940,62 @@ ul.rating li.s10 a:hover {
 }
 
 .modal-handle .modal-controls {
-    /*CSS for controls (min, close etc) within Drag Handle*/
     position: absolute;
     right: 1px;
     top: 2px;
-    cursor: hand;
     cursor: pointer;
     margin: 5px 5px 0 0;
 }
 
 * html .modal-handle {
-    /*IE6 and below CSS hack. Width must be set to 100% in order for opaque title bar to render*/
     width: 100%;
 }
 
 .modal-contentarea {
-    /*CSS for Content Display Area div*/
     background-color: white;
     color: black;
     height: 150px;
     padding: 2px;
     overflow: auto;
-    visibility: visible!important;
-    /* sed178 */
+    visibility: visible !important;
+}
+
+.sed_modal.image-modal .modal-contentarea {
+    padding: 0;
+    background: none;
+    height: auto;
+    overflow: hidden;
+}
+
+.sed_modal.image-modal .modal-contentarea .close-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    z-index: 1002;
+    /* Ensure it stays above the image */
+}
+
+
+/* Hover effect for better UX */
+
+.sed_modal.image-modal .modal-contentarea .close-image:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-contentarea img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
 }
 
 .modal-contentarea iframe {
@@ -950,10 +1003,8 @@ ul.rating li.s10 a:hover {
 }
 
 .modal-statusarea {
-    /*CSS for Status Bar div (includes resizearea)*/
     background-color: #F8F8F8;
     height: 13px;
-    /*height of resize image*/
     -webkit-border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
     -moz-border-radius-bottomright: 5px;
@@ -963,7 +1014,6 @@ ul.rating li.s10 a:hover {
 }
 
 .modal-resizearea {
-    /*CSS for Resize Area itself*/
     float: right;
     width: 13px;
     height: 13px;
@@ -1174,22 +1224,25 @@ ul.admin-buttons li {
 
 .ckeditor-html5-video,
 .video-container {
-	position: relative;
-	width: 100%;
-	max-width: 100%;
-	height: 0;
-	padding-bottom: 56.25%; /* 16:9 aspect ratio */
-	overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    /* 16:9 aspect ratio */
+    overflow: hidden;
 }
 
 .ckeditor-html5-video video,
 .video-container video {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
+
+
 /*-------------------------*/
 
 
@@ -1203,7 +1256,7 @@ ul.admin-buttons li {
     border: 1px solid #ebe1e1;
     border-radius: 30px;
     margin-bottom: 24px;
-	position:relative;
+    position: relative;
 }
 
 .spoiler .spoiler-title {
@@ -1218,7 +1271,7 @@ ul.admin-buttons li {
 
 .spoiler .spoiler-title p {
     padding: 0;
-	margin: 0;
+    margin: 0;
 }
 
 .spoiler-toggle {

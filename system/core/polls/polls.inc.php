@@ -116,6 +116,10 @@ $out['subtitle'] = sed_title('polltitle', $title_tags, $title_data);
 if ($standalone) {
 	sed_sendheaders();
 
+	sed_add_javascript('system/javascript/core.js', true);
+	sed_add_javascript($morejavascript);
+	sed_add_css($morecss);
+
 	/* === Hook === */
 	$extp = sed_getextplugins('polls.stndl');
 	if (is_array($extp)) {
@@ -126,9 +130,10 @@ if ($standalone) {
 	/* ===== */
 
 	$polls_header1 = $cfg['doctype'] . "\n<html>\n<head>
-	<title>" . $cfg['maintitle'] . "</title>" . sed_htmlmetas() . $moremetas . sed_javascript($morejavascript);
+	<title>" . $cfg['maintitle'] . "</title>" . sed_htmlmetas() . $moremetas . sed_css();
 	$polls_header2 = "</head>\n<body>";
-	$polls_footer = "</body>\n</html>";
+	$polls_footer1 = sed_javascript();
+	$polls_footer2 = "</body>\n</html>";
 
 	$mskin = sed_skinfile(array('polls', 'standalone'));
 	$t = new XTemplate($mskin);
@@ -136,7 +141,8 @@ if ($standalone) {
 	$t->assign(array(
 		"POLLS_STANDALONE_HEADER1" => $polls_header1,
 		"POLLS_STANDALONE_HEADER2" => $polls_header2,
-		"POLLS_STANDALONE_FOOTER" => $polls_footer
+		"POLLS_STANDALONE_FOOTER1" => $polls_footer1,
+		"POLLS_STANDALONE_FOOTER2" => $polls_footer2
 	));
 
 	$t->parse("MAIN.POLLS_STANDALONE_HEADER");

@@ -342,10 +342,9 @@ $out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
 if ($standalone) {
 	sed_sendheaders();
 
-	$pfs_header1 = $cfg['doctype'] . "\n<html>\n<head>
-	<title>" . $cfg['maintitle'] . "</title>" . sed_htmlmetas() . $moremetas . sed_javascript($morejavascript);
-	$pfs_header2 = "</head>\n<body>";
-	$pfs_footer = "</body>\n</html>";
+	sed_add_javascript('system/javascript/core.js', true);
+	sed_add_javascript($morejavascript);
+	sed_add_css($morecss);
 
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.stndl');
@@ -356,13 +355,20 @@ if ($standalone) {
 	}
 	/* ===== */
 
+	$pfs_header1 = $cfg['doctype'] . "\n<html>\n<head>
+	<title>" . $cfg['maintitle'] . "</title>" . sed_htmlmetas() . $moremetas . sed_css();
+	$pfs_header2 = "</head>\n<body>";
+	$pfs_footer1 = sed_javascript();
+	$pfs_footer2 = "</body>\n</html>";
+
 	$mskin = sed_skinfile(array('pfs', 'standalone'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
 		"PFS_STANDALONE_HEADER2" => $pfs_header2,
-		"PFS_STANDALONE_FOOTER" => $pfs_footer
+		"PFS_STANDALONE_FOOTER1" => $pfs_footer1,
+		"PFS_STANDALONE_FOOTER2" => $pfs_footer2
 	));
 
 	$t->parse("MAIN.PFS_STANDALONE_HEADER");

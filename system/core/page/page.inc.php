@@ -48,7 +48,13 @@ if (!empty($al)) {
 		WHERE page_id='$id'");
 }
 
-sed_die((sed_sql_numrows($sql) == 0), 404);
+if (sed_sql_numrows($sql) == 0) {
+	if (!empty($al) && array_key_exists($al, $sed_cat)) {
+		sed_redirect(sed_url("list", "c=" . $al, "", true));
+	} else {
+		sed_die((sed_sql_numrows($sql) == 0), 404);
+	}
+}
 
 $pag = sed_sql_fetchassoc($sql);
 

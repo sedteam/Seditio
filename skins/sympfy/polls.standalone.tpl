@@ -53,11 +53,11 @@
 
 <!-- BEGIN: POLLS_STANDALONE_FOOTER -->
 
+{POLLS_STANDALONE_FOOTER1}
 <script src="skins/{PHP.skin}/js/jquery.min.js"></script>
 <script src="skins/{PHP.skin}/js/jquery.plugins.min.js"></script>
 <script src="skins/{PHP.skin}/js/app.js"></script>
-
-{POLLS_STANDALONE_FOOTER}
+{POLLS_STANDALONE_FOOTER2}
 
 <!-- END: POLLS_STANDALONE_FOOTER -->
 

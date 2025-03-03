@@ -33,11 +33,7 @@ $openerparent_close = ($cfg['enablemodal']) ? 'window.parent.modal.close();' : '
 
 $auto_popup_close = ($cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes") ? $openerparent_close : "";
 
-$pfs_header1 = $cfg['doctype'] . "<html>
-<head>
-<title>" . $cfg['maintitle'] . "</title>" . sed_htmlmetas() . sed_javascript($morejavascript) . $moremetas . "
-<script type=\"text/javascript\">
-<!--
+$init_ck = "
 function addthumb(thmb, image)
 	{ 
 	var html = '<a href=\"" . $cfg['pfs_dir'] . "'+image+'\" rel=\"" . $cfg['th_rel'] . "\"><img src=\"'+thmb+'\" alt=\"\" /></a>'; 
@@ -62,6 +58,7 @@ function addvideo(gfile)
 	var html = '<div class=\"ckeditor-html5-video\" style=\"text-align: center;\"><video controls=\"controls\" src=\"'+gfile+'\"></video></div>';
 	window." . $openerparent . ".CKEDITOR.instances['" . $c2 . "'].insertHtml(html); " . $auto_popup_close . "
 	}
-//-->
-</script>
 ";
+
+sed_add_javascript('plugins/ckeditor/lib/ckeditor.js?v=4', true);
+sed_add_javascript($init_ck);

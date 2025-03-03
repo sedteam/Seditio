@@ -374,11 +374,11 @@
 
 <!-- BEGIN: PFS_STANDALONE_FOOTER -->
 
+{PFS_STANDALONE_FOOTER1}
 <script src="skins/{PHP.skin}/js/jquery.min.js"></script>
 <script src="skins/{PHP.skin}/js/jquery.plugins.min.js"></script>
 <script src="skins/{PHP.skin}/js/app.js"></script>
-
-{PFS_STANDALONE_FOOTER}
+{PFS_STANDALONE_FOOTER2}
 
 <!-- END: PFS_STANDALONE_FOOTER -->
 

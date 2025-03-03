@@ -33,16 +33,12 @@ if (!defined('SED_CODE')) {
 $openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';
 $openerparent_close = ($cfg['enablemodal']) ? 'window.parent.modal.close();' : 'window.close();';
 
-$pfs_header1 .= "
-<script type=\"text/javascript\">
-<!--
-
+$upl_addimg = "
 function upl_addimg(gfilepath, gid, gfile, uploaderId)
 	{ 
 	window." . $openerparent . ".upl_insertimg(gfilepath, gfile, uploaderId);
 	" . $openerparent_close . "
 	}
-
-//-->
-</script>
 ";
+
+sed_add_javascript($upl_addimg);
