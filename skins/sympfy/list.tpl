@@ -68,7 +68,7 @@
 
 								<figcaption class="post-content">
 									<div class="post-info">
-										<div class="post-category"><a href="{LIST_ROW_CATURL}"  data-category="{LIST_ROW_ID}">{LIST_ROW_CATTITLE}</a></div>
+										<div class="post-category"><a href="{LIST_ROW_CATURL}" data-category="{LIST_ROW_ID}">{LIST_ROW_CATTITLE}</a></div>
 										<div class="post-date">{LIST_ROW_DATE}</div>
 									</div>
 									<div class="post-title">
