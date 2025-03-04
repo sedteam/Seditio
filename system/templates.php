@@ -1155,7 +1155,7 @@ class XTemplate
 	 */
 	protected function _tokenize($expression)
 	{
-		$pattern = '`\s*(?:(\d*\.\d+|\d+)|([+\-*/%()]|&&|\|\||==|!=|<=|>=|<|>)|([A-Za-z0-9\._\x7f-\xff]+))\s*`';
+		$pattern = '`\s*(?:(\d*\.\d+|\d+)|([+\-*/%()]|&&|\|\||==|!=|<=|>=|<|>)|(?:' . preg_quote($this->tag_start_delim) . ')?([A-Za-z0-9\._\x7f-\xff]+)(?:' . preg_quote($this->tag_end_delim) . ')?)\s*`';
 		preg_match_all($pattern, $expression, $matches, PREG_SET_ORDER);
 
 		$tokens = [];
@@ -1165,7 +1165,8 @@ class XTemplate
 			} elseif (isset($match[2]) && $match[2] !== '') {
 				$tokens[] = ['type' => 'operator', 'value' => $match[2]];
 			} elseif (isset($match[3]) && $match[3] !== '') {
-				$tokens[] = ['type' => 'variable', 'value' => $match[3]];
+				$var_name = trim($match[0], $this->tag_start_delim . $this->tag_end_delim . " \t\n\r\0\x0B");
+				$tokens[] = ['type' => 'variable', 'value' => $var_name];
 			}
 		}
 
