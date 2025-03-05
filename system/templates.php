@@ -28,155 +28,354 @@ Description=Xtemplate class
  * @since PHP 5
  * @link $HeadURL$
  * @version $Id$
+ * 
+ * Latest stable & Subversion versions available @ https://github.com/sedteam/Xtemplate
  */
 class XTemplate
 {
-	/** @var string Main file contents */
+	/**
+	 * Raw contents of the template file
+	 *
+	 * @var string Main file contents
+	 */
 	public $filecontents = '';
 
-	/** @var array Template blocks */
+	/**
+	 * Unparsed blocks
+	 *
+	 * @var array Template blocks
+	 */
 	public $blocks = array();
 
-	/** @var array Parsed blocks */
+	/**
+	 * Parsed blocks
+	 *
+	 * @var array Parsed blocks
+	 */
 	public $parsed_blocks = array();
 
-	/** @var array Pre-parsed blocks */
+	/**
+	 * Preparsed blocks (for file includes)
+	 *
+	 * @var array Pre-parsed blocks
+	 */
 	public $preparsed_blocks = array();
 
-	/** @var array Block parsing order */
+	/**
+	 * Block parsing order for recursive parsing
+	 * (Sometimes reverse :)
+	 *
+	 * @var array Block parsing order
+	 */
 	public $block_parse_order = array();
 
-	/** @var array Sub-blocks hierarchy */
+	/**
+	 * Store sub-block names
+	 * (For fast resetting)
+	 *
+	 * @var array Sub-blocks hierarchy
+	 */
 	public $sub_blocks = array();
 
-	/** @var array Assigned variables */
+	/**
+	 * Variables array
+	 *
+	 * @var array Assigned variables
+	 */
 	public $vars = array();
 
-	/** @var array Assigned file variables */
+	/**
+	 * File variables array
+	 *
+	 * @var array Assigned file variables
+	 */
 	public $filevars = array();
 
-	/** @var array File variable parents */
+	/**
+	 * Filevars' parent block
+	 *
+	 * @var array File variable parents
+	 */
 	public $filevar_parent = array();
 
-	/** @var array File content cache */
+	/**
+	 * File caching during duration of script
+	 * e.g. files only cached to speed {FILE "filename"} repeats
+	 *
+	 * @var array File content cache
+	 */
 	public $filecache = array();
 
-	/** @var string Template directory */
+	/**
+	 * Location of template files
+	 *
+	 * @var string Template directory
+	 */
 	public $tpldir = '';
 
-	/** @var array|null Array of file paths */
+	/**
+	 * Filenames lookup table
+	 *
+	 * @var array|null Array of file paths
+	 */
 	public $files = null;
 
-	/** @var string Current template filename */
+	/**
+	 * Template filename
+	 *
+	 * @var string Current template filename
+	 */
 	public $filename = '';
 
-	/** @var string Regular expression delimiter */
+	// NEW: Added in Seditio version for regex delimiter customization
+	/**
+	 * Delimiter used in preg regular expressions
+	 *
+	 * @var string Regular expression delimiter
+	 */
 	public $preg_delimiter = '`';
 
-	/** @var string File include delimiter pattern */
+	// moved to setup method so uses the tag_start & end_delims
+	/**
+	 * RegEx for file includes
+	 *
+	 * "/\{FILE\s*\"([^\"]+)\"\s*\}/m";
+	 *
+	 * @var string File include delimiter pattern
+	 */
 	public $file_delim = '';
 
-	/** @var string File variable delimiter pattern */
+	/**
+	 * RegEx for file include variable
+	 *
+	 * "/\{FILE\s*\{([A-Za-z0-9\._]+?)\}\s*\}/m";
+	 *
+	 * @var string File variable delimiter pattern
+	 */
 	public $filevar_delim = '';
 
-	/** @var string File variable delimiter pattern with newline */
+	/**
+	 * RegEx for file includes with newlines
+	 *
+	 * "/^\s*\{FILE\s*\{([A-Za-z0-9\._]+?)\}\s*\}\s*\n/m";
+	 *
+	 * @var string File variable delimiter pattern with newline
+	 */
 	public $filevar_delim_nl = '';
 
-	/** @var string Block start delimiter */
-	public $block_start_delim = '<!-- ';
+	/**
+	 * Template block start delimiter
+	 *
+	 * @var string Block start delimiter
+	 */
+	public $block_start_delim = '<!--';
 
-	/** @var string Block end delimiter */
+	/**
+	 * Template block end delimiter
+	 *
+	 * @var string Block end delimiter
+	 */
 	public $block_end_delim = '-->';
 
-	/** @var string Block start keyword */
+	/**
+	 * Template block start word
+	 *
+	 * @var string Block start keyword
+	 */
 	public $block_start_word = 'BEGIN:';
 
-	/** @var string Block end keyword */
+	/**
+	 * Template block end word
+	 *
+	 * The last 3 properties and this make the delimiters look like:
+	 * @example <!-- BEGIN: block_name -->
+	 * if you use the default syntax.
+	 *
+	 * @var string Block end keyword
+	 */
 	public $block_end_word = 'END:';
 
-	/** @var string Tag start delimiter */
+	/**
+	 * Template tag start delimiter
+	 *
+	 * This makes the delimiters look like:
+	 * @example {tagname}
+	 * if you use the default syntax.
+	 *
+	 * @var string Tag start delimiter
+	 */
 	public $tag_start_delim = '{';
 
-	/** @var string Tag end delimiter */
+	/**
+	 * Template tag end delimiter
+	 *
+	 * This makes the delimiters look like:
+	 * @example {tagname}
+	 * if you use the default syntax.
+	 *
+	 * @var string Tag end delimiter
+	 */
 	public $tag_end_delim = '}';
 
-	/** @var string Comment delimiter */
-	public $comment_delim = '#';
-
-	/** @var string Comment pattern */
+	/**
+	 * Regular expression element for comments within tags and blocks
+	 *
+	 * @example {tagname#My Comment}
+	 * @example {tagname #My Comment}
+	 * @example <!-- BEGIN: blockname#My Comment -->
+	 * @example <!-- BEGIN: blockname #My Comment -->
+	 *
+	 * @var string Comment pattern
+	 */
 	public $comment_preg = '( ?#.*?)?';
 
-	/** @var string Callback delimiter */
+	// NEW: Added in Seditio version for callback delimiters and regex
+	/**
+	 * Delimiter used for callback functions in tags
+	 *
+	 * @var string Comment delimiter
+	 */
+	public $comment_delim = '#';
+
+	// NEW: Added in Seditio version for callback delimiters
+	/**
+	 * Delimiter used to separate callback functions in tags
+	 *
+	 * @var string Callback delimiter
+	 */
 	public $callback_delim = '|';
 
-	/** @var string Callback pattern */
+	// NEW: Added in Seditio version for callback support
+	/**
+	 * Regular expression pattern for callback functions
+	 *
+	 * @var string Callback pattern
+	 */
 	public $callback_preg = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\(.*?\))?';
 
-	/** @var bool Enable callbacks */
+	// NEW: Added in Seditio version to enable/disable callbacks
+	/**
+	 * Flag to allow callback functions in templates
+	 *
+	 * @var bool Enable callbacks
+	 */
 	public $allow_callbacks = true;
 
-	/** @var array Allowed callback functions */
-	public $allowed_callbacks = array(
+	// NEW: Added in Seditio version to define allowed callback functions
+	/**
+	 * Array of allowed callback functions
+	 *
+	 * @var array Allowed callback functions
+	 */
+	public $allowed_callbacks = [
+		// Simple string modifiers
 		'strtoupper', 'strtolower', 'ucwords', 'ucfirst', 'strrev', 'str_word_count', 'strlen',
+		// String replacement modifiers
 		'str_replace', 'str_ireplace', 'preg_replace', 'strip_tags', 'stripcslashes', 'stripslashes', 'substr',
 		'str_pad', 'str_repeat', 'strtr', 'trim', 'ltrim', 'rtrim', 'nl2br', 'wordwrap', 'printf', 'sprintf',
 		'addslashes', 'addcslashes',
+		// Encoding / decoding modifiers
 		'htmlentities', 'html_entity_decode', 'htmlspecialchars', 'htmlspecialchars_decode',
 		'urlencode', 'urldecode',
+		// Date / time modifiers
 		'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
+		// Number modifiers
 		'number_format', 'money_format',
+		// Miscellaneous modifiers
 		'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image'
-	);
+	];
 
-	/** @var string Main block name */
+	/**
+	 * Default main template block name
+	 *
+	 * @var string Main block name
+	 */
 	public $mainblock = 'main';
 
-	/** @var string Output type (e.g., 'HTML') */
+	/**
+	 * Script output type
+	 *
+	 * @var string Output type (e.g., 'HTML')
+	 */
 	public $output_type = 'HTML';
 
-	/** @var bool Force global variables */
+	// NEW: Added in Seditio version to force global variable initialization
+	/**
+	 * Flag to force initialization of global variables even with JIT enabled
+	 *
+	 * @var bool Force global variables
+	 */
 	public $force_globals = true;
 
-	/** @var bool Enable HTML compression */
+	// NEW: Added in Seditio version for HTML output compression
+	/**
+	 * Flag to enable HTML output compression (minification)
+	 *
+	 * @var bool Enable HTML compression
+	 */
 	public $compress_output = false;
 
-	/** @var array Default null string */
+	/**
+	 * Null string for unassigned vars
+	 *
+	 * @var array Default null string
+	 */
 	protected $_null_string = array('' => '');
 
-	/** @var array Default null block */
+	/**
+	 * Null string for unassigned blocks
+	 *
+	 * @var array Default null block
+	 */
 	protected $_null_block = array('' => '');
 
-	/** @var array Error storage */
+	/**
+	 * Errors
+	 *
+	 * @var array Error storage
+	 */
 	protected $_error = [];
 
-	/** @var bool Auto-reset sub-blocks */
+	/**
+	 * Auto-reset sub blocks
+	 *
+	 * @var bool Auto-reset sub-blocks
+	 */
 	protected $_autoreset = true;
 
-	/** @var bool Ignore missing blocks */
+	/**
+	 * Set to FALSE to generate errors if a non-existent blocks is referenced
+	 *
+	 * @author NW
+	 * @since 2002/10/17
+	 * @var bool Ignore missing blocks
+	 */
 	protected $_ignore_missing_blocks = true;
 
-	/** @var string IF condition start delimiter */
-	public $if_start_delim = '<!-- IF ';
+	/**
+	 * Keyword for starting an IF condition
+	 * @var string
+	 */
+	public $if_delim = 'IF';
 
-	/** @var string IF condition end delimiter */
-	public $if_end_delim = ' -->';
+	/**
+	 * Keyword for ELSE
+	 * @var string
+	 */
+	public $else_delim = 'ELSE';
 
-	/** @var string ELSE delimiter */
-	public $else_delim = '<!-- ELSE -->';
+	/**
+	 * Keyword for ending an IF condition
+	 * @var string
+	 */
+	public $endif_delim = 'ENDIF';
 
-	/** @var string ENDIF delimiter */
-	public $endif_delim = '<!-- ENDIF -->';
-
-	/** @var string IF condition pattern */
-	public $if_preg = '`<!-- IF (.*?) -->`';
-
-	/** @var string ELSE pattern */
-	public $else_preg = '`<!-- ELSE -->`';
-
-	/** @var string ENDIF pattern */
-	public $endif_preg = '`<!-- ENDIF -->`';
-
-	/** @var array Operator precedence for RPN evaluation */
+	// NEW: Added in 2025 version for RPN evaluation
+	/**
+	 * Operator precedence for RPN evaluation
+	 *
+	 * @var array Operator precedence for RPN evaluation
+	 */
 	protected $operator_precedence = [
 		'&&' => 2,
 		'||' => 2,
@@ -193,26 +392,42 @@ class XTemplate
 		'%' => 6,
 	];
 
-	/** @var bool Enable debugging */
+	/**
+	 * Debug mode
+	 *
+	 * @var bool Enable debugging
+	 */
 	public $debug = false;
 
-	/** @var string Error handling mode ('log', 'display', 'both', 'none') */
+	// NEW: Added in 2025 version for error handling
+	/**
+	 * Error handling mode ('log', 'display', 'both', 'none')
+	 *
+	 * @var string Error handling mode
+	 */
 	protected $_error_handling = 'display';
 
-	/** @var string Error log file name */
+	// NEW: Added in 2025 version for error logging
+	/**
+	 * Error log file name
+	 *
+	 * @var string Error log file name
+	 */
 	protected $_error_log_file = 'xtemplate_errors.log';
 
 	/**
 	 * Constructor for the XTemplate class.
 	 *
-	 * @param mixed $options Options array or filename
+	 * @param mixed $options Options array or filename (can include 'file', 'path', 'files', 'mainblock', 'autosetup', 'tag_start', 'tag_end')
 	 * @param string $tpldir Template directory
 	 * @param array|null $files Array of files
 	 * @param string $mainblock Main block name
 	 * @param bool $autosetup Automatically setup the template
+	 * @return XTemplate
 	 */
 	public function __construct($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true)
 	{
+		// NEW: Seditio version accepts an options array or string, with additional handling
 		if (!is_array($options)) {
 			$options = array('file' => $options, 'path' => $tpldir, 'files' => $files, 'mainblock' => $mainblock, 'autosetup' => $autosetup);
 		}
@@ -228,9 +443,16 @@ class XTemplate
 	}
 
 	/**
-	 * Restart the template engine with new options.
+	 * Restart the class - allows one instantiation with several files processed by restarting
+	 * e.g. $xtpl = new XTemplate('file1.xtpl');
+	 * $xtpl->parse('main');
+	 * $xtpl->out('main');
+	 * $xtpl->restart('file2.xtpl');
+	 * $xtpl->parse('main');
+	 * $xtpl->out('main');
+	 * (Added in response to sf:641407 feature request)
 	 *
-	 * @param mixed $options Options array or filename
+	 * @param mixed $options Options array or filename (can include 'file', 'path', 'files', 'mainblock', 'autosetup', 'tag_start', 'tag_end', 'callbacks', 'debug', 'error_handling', 'error_log_file')
 	 * @param string $tpldir Template directory
 	 * @param array|null $files Array of files
 	 * @param string $mainblock Main block name
@@ -240,6 +462,7 @@ class XTemplate
 	 */
 	public function restart($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true, $tag_start = '{', $tag_end = '}')
 	{
+		// NEW: Seditio version processes options as an array or string with extended functionality
 		if (is_array($options)) {
 			foreach ($options as $option => $value) {
 				switch ($option) {
@@ -254,6 +477,7 @@ class XTemplate
 					case 'debug':
 						$this->debug = $value;
 						break;
+						// NEW: Added in 2025 version for error handling customization
 					case 'error_handling':
 						$this->_error_handling = in_array($value, ['log', 'display', 'both', 'none']) ? $value : 'none';
 						break;
@@ -310,6 +534,7 @@ class XTemplate
 		$this->filecache = array();
 		$this->_error = []; // Reset errors
 
+		// NEW: Seditio version adds callback regex preparation
 		if ($this->allow_callbacks) {
 			$delim = preg_quote($this->callback_delim);
 			if (mb_strlen($this->callback_delim) < mb_strlen($delim)) {
@@ -324,15 +549,17 @@ class XTemplate
 	}
 
 	/**
-	 * Setup the template engine.
+	 * setup - the elements that were previously in the constructor
 	 *
-	 * @param bool $add_outer Add outer block
+	 * @param bool $add_outer If true is passed when called, it adds an outer main block to the file
 	 */
 	public function setup($add_outer = false)
 	{
 		$this->tag_start_delim = preg_quote($this->tag_start_delim);
 		$this->tag_end_delim = preg_quote($this->tag_end_delim);
 
+		// Setup the file delimiters
+		// NEW: Seditio version uses preg_delimiter for regex patterns
 		$this->file_delim = $this->preg_delimiter . $this->tag_start_delim . "FILE\s*\"([^\"]+)\"" . $this->comment_preg . $this->tag_end_delim . $this->preg_delimiter . 'm';
 		$this->filevar_delim = $this->preg_delimiter . $this->tag_start_delim . "FILE\s*" . $this->tag_start_delim . "([A-Za-z0-9\._\x7f-\xff]+?)" . $this->comment_preg . $this->tag_end_delim . $this->comment_preg . $this->tag_end_delim . $this->preg_delimiter . 'm';
 		$this->filevar_delim_nl = $this->preg_delimiter . "^\s*" . $this->tag_start_delim . "FILE\s*" . $this->tag_start_delim . "([A-Za-z0-9\._\x7f-\xff]+?)" . $this->comment_preg . $this->tag_end_delim . $this->comment_preg . $this->tag_end_delim . "\s*\n" . $this->preg_delimiter . 'm';
@@ -351,8 +578,30 @@ class XTemplate
 		$this->scan_globals();
 	}
 
+	/***************************************************************************/
+	/***[ public stuff ]********************************************************/
+	/***************************************************************************/
+
 	/**
-	 * Assign a variable to the template.
+	 * assign a variable
+	 *
+	 * @example Simplest case:
+	 * @example $xtpl->assign('name', 'value');
+	 * @example {name} in template
+	 *
+	 * @example Array assign:
+	 * @example $xtpl->assign(array('name' => 'value', 'name2' => 'value2'));
+	 * @example {name} {name2} in template
+	 *
+	 * @example Value as array assign:
+	 * @example $xtpl->assign('name', array('key' => 'value', 'key2' => 'value2'));
+	 * @example {name.key} {name.key2} in template
+	 *
+	 * @example Reset array:
+	 * @example $xtpl->assign('name', array('key' => 'value', 'key2' => 'value2'));
+	 * @example // Other code then:
+	 * @example $xtpl->assign('name', array('key3' => 'value3'), false);
+	 * @example {name.key} {name.key2} {name.key3} in template
 	 *
 	 * @param mixed $name Variable name or array of variables
 	 * @param mixed $val Variable value
@@ -360,6 +609,7 @@ class XTemplate
 	 */
 	public function assign($name, $val = '', $reset_array = true)
 	{
+		// NEW: Seditio version adds support for objects in addition to arrays
 		if (is_array($name) || is_object($name)) {
 			foreach ($name as $k => $v) {
 				$this->vars[$k] = $v;
@@ -377,7 +627,7 @@ class XTemplate
 	}
 
 	/**
-	 * Assign a file to the template.
+	 * assign a file variable
 	 *
 	 * @param mixed $name File variable name or array of file variables
 	 * @param mixed $val File variable value
@@ -394,7 +644,7 @@ class XTemplate
 	}
 
 	/**
-	 * Parse a block in the template.
+	 * parse a block
 	 *
 	 * @param string $bname Block name
 	 */
@@ -405,6 +655,13 @@ class XTemplate
 		} elseif (isset($this->blocks[$bname])) {
 			$copy = $this->blocks[$bname];
 		} elseif ($this->_ignore_missing_blocks) {
+			// ------------------------------------------------------
+			// NW : 17 Oct 2002. Added default of ignore_missing_blocks
+			//      to allow for generalised processing where some
+			//      blocks may be removed from the HTML without the
+			//      processing code needing to be altered.
+			// ------------------------------------------------------
+			// JRC: 3/1/2003 added set error to ignore missing functionality
 			$this->_set_error("parse: blockname [$bname] does not exist", "File: {$this->filename}, Block: $bname");
 			return;
 		} else {
@@ -415,15 +672,18 @@ class XTemplate
 			die('Block: ' . $bname);
 		}
 
+		// NEW: 2025 version processes IF/ELSE/ENDIF conditions
 		$copy = $this->_process_conditions($copy);
 		$copy = preg_replace($this->filevar_delim_nl, '', $copy);
 
 		$var_array = array();
+		// NEW: Seditio version uses preg_delimiter and adds callback support in regex
 		preg_match_all($this->preg_delimiter . $this->tag_start_delim . '([A-Za-z0-9\._\x7f-\xff]+?' . $this->callback_preg . $this->comment_preg . ')' . $this->tag_end_delim . $this->preg_delimiter, $copy, $var_array);
 		$var_array = $var_array[1];
 
 		foreach ($var_array as $k => $v) {
 			$orig_v = $v;
+			// NEW: Seditio version uses comment_delim instead of # directly
 			$comment = '';
 			$any_comments = explode($this->comment_delim, $v);
 			if (count($any_comments) > 1) {
@@ -431,6 +691,7 @@ class XTemplate
 			}
 			$v = rtrim(implode($this->comment_delim, $any_comments));
 
+			// NEW: Seditio version adds callback function processing
 			if ($this->allow_callbacks) {
 				$callback_funcs = explode($this->callback_delim, $v);
 				$v = rtrim($callback_funcs[0]);
@@ -452,6 +713,7 @@ class XTemplate
 						$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . $v . $this->tag_end_delim . $this->preg_delimiter . 'm', "$nul", $copy);
 					}
 				} else {
+					// NEW: Seditio version uses mb_substr instead of substr for multibyte support
 					switch (true) {
 						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) && preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $var):
 							$var = mb_substr($var, 1, -1);
@@ -475,6 +737,7 @@ class XTemplate
 			} else {
 				$var = $this->vars;
 				foreach ($sub as $v1) {
+					// NEW: Seditio version adds object support and uses mb_strlen
 					switch (true) {
 						case is_array($var):
 							if (!isset($var[$v1]) || (is_string($var[$v1]) && mb_strlen($var[$v1]) == 0)) {
@@ -499,6 +762,7 @@ class XTemplate
 					}
 				}
 
+				// NEW: Seditio version adds callback function execution
 				if ($this->allow_callbacks) {
 					if (is_array($callback_funcs) && !empty($callback_funcs)) {
 						foreach ($callback_funcs as $callback) {
@@ -552,6 +816,7 @@ class XTemplate
 				$nul = (!isset($this->_null_string[$v])) ? ($this->_null_string[""]) : ($this->_null_string[$v]);
 				$var = (!isset($var)) ? $nul : $var;
 
+				// NEW: Seditio version adds special handling for string variables
 				if (is_string($var)) {
 					if ($var === '') {
 						$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . preg_quote($orig_v) . $this->tag_end_delim . $this->preg_delimiter . 'm', '', $copy);
@@ -585,7 +850,7 @@ class XTemplate
 	}
 
 	/**
-	 * Recursively parse a block in the template.
+	 * returns the parsed text for a block, including all sub-blocks.
 	 *
 	 * @param string $bname Block name
 	 */
@@ -603,7 +868,7 @@ class XTemplate
 	}
 
 	/**
-	 * Insert a loop into the template.
+	 * inserts a loop ( call assign & parse )
 	 *
 	 * @param string $bname Block name
 	 * @param string $var Variable name
@@ -623,6 +888,7 @@ class XTemplate
 	 */
 	public function compress($out)
 	{
+		// NEW: 2025 version enhances compression by preserving <pre>, <code>, and <textarea> blocks
 		$patterns = [
 			'pre' => '/<pre\b[^>]*>(.*?)<\/pre>/si',
 			'code' => '/<code\b[^>]*>(.*?)<\/code>/si',
@@ -654,7 +920,7 @@ class XTemplate
 	}
 
 	/**
-	 * Loop through an array and insert into the template.
+	 * parses a block for every set of data in the values array
 	 *
 	 * @param string $bname Block name
 	 * @param string $var Variable name
@@ -670,7 +936,7 @@ class XTemplate
 	}
 
 	/**
-	 * Get the text of a block.
+	 * returns the parsed text for a block
 	 *
 	 * @param string $bname Block name
 	 * @return string Block text or error message if block is not found and debug is enabled
@@ -680,6 +946,7 @@ class XTemplate
 		$text = '';
 
 		if ($this->debug && $this->output_type == 'HTML') {
+			// NEW: Seditio version enhances debug output with more detailed path info
 			$text .= '<!-- XTemplate debug TEXT: ' . $bname . ' ';
 			if (is_array($this->tpldir)) {
 				foreach ($this->tpldir as $dir) {
@@ -706,19 +973,20 @@ class XTemplate
 	}
 
 	/**
-	 * Output the text of a block.
+	 * prints the parsed text
 	 *
 	 * @param string $bname Block name
 	 */
 	public function out($bname)
 	{
 		$out = $this->text($bname);
+		// NEW: Seditio version adds trimming and optional compression
 		$out = preg_replace('/\s+$/m', '', $out);
 		if ($this->compress_output) {
 			$out = $this->compress($out);
 		}
+		// NEW: 2025 version adds error handling output
 		if ($this->debug && !empty($this->_error)) {
-
 			switch ($this->_error_handling) {
 				case 'display':
 					$out = "<!-- XTemplate Errors for Block: $bname -->\n" . $this->get_error() . "\n" . $out;
@@ -740,6 +1008,8 @@ class XTemplate
 
 	/**
 	 * Log errors to a file.
+	 *
+	 * @return void
 	 */
 	protected function log_errors()
 	{
@@ -753,7 +1023,7 @@ class XTemplate
 	}
 
 	/**
-	 * Output the text of a block to a file.
+	 * prints the parsed text to a specified file
 	 *
 	 * @param string $bname Block name
 	 * @param string $fname File name
@@ -768,7 +1038,7 @@ class XTemplate
 	}
 
 	/**
-	 * Reset a block.
+	 * resets the parsed text
 	 *
 	 * @param string $bname Block name
 	 */
@@ -778,7 +1048,7 @@ class XTemplate
 	}
 
 	/**
-	 * Check if a block has been parsed.
+	 * returns true if block was parsed, false if not
 	 *
 	 * @param string $bname Block name
 	 * @return bool True if parsed, false otherwise
@@ -789,7 +1059,7 @@ class XTemplate
 	}
 
 	/**
-	 * Set the null string for a variable.
+	 * sets the string to replace in case the var was not assigned
 	 *
 	 * @param string $str Null string
 	 * @param string $varname Variable name
@@ -800,10 +1070,11 @@ class XTemplate
 	}
 
 	/**
-	 * Set the null string for a variable (alias).
+	 * Backwards compatibility only
 	 *
 	 * @param string $str Null string
 	 * @param string $varname Variable name
+	 * @deprecated Change to set_null_string to keep in with rest of naming convention
 	 */
 	public function SetNullString($str, $varname = '')
 	{
@@ -811,7 +1082,7 @@ class XTemplate
 	}
 
 	/**
-	 * Set the null block for a block.
+	 * sets the string to replace in case the block was not parsed
 	 *
 	 * @param string $str Null block
 	 * @param string $bname Block name
@@ -822,10 +1093,11 @@ class XTemplate
 	}
 
 	/**
-	 * Set the null block for a block (alias).
+	 * Backwards compatibility only
 	 *
 	 * @param string $str Null block
 	 * @param string $bname Block name
+	 * @deprecated Change to set_null_block to keep in with rest of naming convention
 	 */
 	public function SetNullBlock($str, $bname = '')
 	{
@@ -833,7 +1105,9 @@ class XTemplate
 	}
 
 	/**
-	 * Enable auto-reset for blocks.
+	 * sets AUTORESET to 1. (default is 1)
+	 * if set to 1, parse() automatically resets the parsed blocks' sub blocks
+	 * (for multiple level blocks)
 	 */
 	public function set_autoreset()
 	{
@@ -841,7 +1115,9 @@ class XTemplate
 	}
 
 	/**
-	 * Disable auto-reset for blocks.
+	 * sets AUTORESET to 0. (default is 1)
+	 * if set to 1, parse() automatically resets the parsed blocks' sub blocks
+	 * (for multiple level blocks)
 	 */
 	public function clear_autoreset()
 	{
@@ -849,10 +1125,11 @@ class XTemplate
 	}
 
 	/**
-	 * Scan for global variables and assign them.
+	 * scans global variables and assigns to PHP array
 	 */
 	public function scan_globals()
 	{
+		// NEW: Seditio version enhances global scanning with force_globals and specific handling
 		$GLOB = array();
 
 		if ($this->force_globals && ini_get('auto_globals_jit') == true) {
@@ -888,15 +1165,17 @@ class XTemplate
 	}
 
 	/**
-	 * Get the formatted error message with context.
+	 * gets error condition / string
 	 *
 	 * @return string|bool Error message or false if no errors
 	 */
 	public function get_error()
 	{
+		// JRC: 3/1/2003 Added output wrapper and detection of output type for error message output
 		$retval = false;
 
 		if (!empty($this->_error)) {
+			// NEW: 2025 version enhances error output with timestamp and context
 			$error_html = '<b>[XTemplate Errors]</b><ul>';
 			foreach ($this->_error as $error) {
 				$error_html .= "<li>{$error['message']} (Context: {$error['context']}, Time: {$error['timestamp']})</li>";
@@ -919,8 +1198,14 @@ class XTemplate
 		return $retval;
 	}
 
+	/***************************************************************************/
+	/***[ private stuff ]*******************************************************/
+	/***************************************************************************/
+
 	/**
-	 * Create a tree structure from the template content.
+	 * generates the array containing to-be-parsed stuff:
+	 * $blocks["main"],$blocks["main.table"],$blocks["main.table.row"], etc.
+	 * also builds the reverse parse order.
 	 *
 	 * @param string $con Template content
 	 * @param string $parentblock Parent block name
@@ -939,17 +1224,20 @@ class XTemplate
 			$level = 0;
 		}
 
+		// JRC 06/04/2005 Added block comments (on BEGIN or END) <!-- BEGIN: block_name#Comments placed here -->
 		$patt = "(" . $this->block_start_word . "|" . $this->block_end_word . ")\s*(\w+)" . $this->comment_preg . "\s*" . $this->block_end_delim . "(.*)";
 
 		foreach ($con2 as $k => $v) {
 			$res = array();
 
+			// NEW: Seditio version uses preg_delimiter in pattern matching
 			if (preg_match_all($this->preg_delimiter . "$patt" . $this->preg_delimiter . 'ims', $v, $res, PREG_SET_ORDER)) {
 				$block_word = $res[0][1];
 				$block_name = $res[0][2];
 				$comment = $res[0][3];
 				$content = $res[0][4];
 
+				// NEW: Seditio version uses mb_strtoupper instead of strtoupper
 				if (mb_strtoupper($block_word) == $this->block_start_word) {
 					$parent_name = implode('.', $block_names);
 					$block_names[++$level] = $block_name;
@@ -1000,6 +1288,7 @@ class XTemplate
 					if (is_array($res) && isset($res[0])) {
 						foreach ($res as $v) {
 							if ($v[1] == $name) {
+								// NEW: Seditio version uses preg_delimiter in replacement
 								$copy = preg_replace($this->preg_delimiter . preg_quote($v[0]) . $this->preg_delimiter, "$val", $copy);
 								$this->preparsed_blocks = array_merge($this->preparsed_blocks, $this->_maketree($copy, $parent));
 								$this->filevar_parent = array_merge($this->filevar_parent, $this->_store_filevar_parents($this->preparsed_blocks));
@@ -1013,7 +1302,7 @@ class XTemplate
 	}
 
 	/**
-	 * Store file variable parents.
+	 * store container block's name for file variables
 	 *
 	 * @param array $blocks Blocks array
 	 * @return array File variable parents
@@ -1040,6 +1329,8 @@ class XTemplate
 	 */
 	private function _set_error($str, $context = '')
 	{
+		// JRC: 3/1/2003 Made to append the error messages
+		// NEW: 2025 version stores errors as an array with timestamp and context
 		if (!is_array($this->_error)) {
 			$this->_error = [];
 		}
@@ -1048,10 +1339,11 @@ class XTemplate
 			'context' => $context ?: "File: {$this->filename}, Block: Unknown",
 			'timestamp' => date('Y-m-d H:i:s')
 		];
+		// JRC: 3/1/2003 Removed trigger error, use this externally if you want it eg. trigger_error($xtpl->get_error())
 	}
 
 	/**
-	 * Get the content of a file (internal).
+	 * returns the contents of a file
 	 *
 	 * @param string $file File name
 	 * @return string File content
@@ -1086,6 +1378,7 @@ class XTemplate
 
 		if (isset($this->filecache[$file])) {
 			$file_text .= $this->filecache[$file];
+			// NEW: Seditio version enhances debug output for cached files
 			if ($this->debug && $this->output_type == 'HTML') {
 				$file_text = '<!-- XTemplate debug CACHED: ' . realpath($file) . ' -->' . "\n" . $file_text;
 			}
@@ -1105,6 +1398,7 @@ class XTemplate
 			} elseif (str_replace('.', '', phpversion()) >= '430' && $file_text = @file_get_contents($file, true)) {
 				if ($file_text === false) {
 					$this->_set_error("[" . realpath($file) . "] ($file) does not exist", "File: {$this->filename}");
+					// NEW: Seditio version adjusts error output based on output_type
 					if ($this->output_type == 'HTML') {
 						$file_text = "<b>__XTemplate fatal error: file [$file] does not exist in the include path__</b>";
 					}
@@ -1129,7 +1423,7 @@ class XTemplate
 	}
 
 	/**
-	 * Recursively get the content of a file with includes.
+	 * recursively gets the content of a file with {FILE "filename.tpl"} directives
 	 *
 	 * @param string $file File name
 	 * @return string File content
@@ -1139,6 +1433,7 @@ class XTemplate
 		$text = $this->_getfile($file);
 		$res = array();
 
+		// NEW: Seditio version uses preg_delimiter in file inclusion
 		while (preg_match($this->file_delim, $text, $res)) {
 			$text2 = $this->_getfile($res[1]);
 			$text = preg_replace($this->preg_delimiter . preg_quote($res[0]) . $this->preg_delimiter, $text2, $text);
@@ -1147,6 +1442,22 @@ class XTemplate
 		return $text;
 	}
 
+	// NEW: Seditio version adds trim_callback for processing callback parameters
+	/**
+	 * Trims and processes callback parameters
+	 *
+	 * @param string $value Callback parameter
+	 */
+	protected function trim_callback(&$value)
+	{
+		$value = preg_replace($this->preg_delimiter . "^.*(%s).*$" . $this->preg_delimiter, '\\1', trim($value));
+		$value = preg_replace($this->preg_delimiter . '^,?\s*?(.*?)[,|\)]?$' . $this->preg_delimiter, '\\1', trim($value));
+		$value = preg_replace($this->preg_delimiter . '^[\'|"]?(.*?)[\'|"]?$' . $this->preg_delimiter, '\\1', trim($value));
+		$value = preg_replace($this->preg_delimiter . '\\\\(?=\'|")' . $this->preg_delimiter, '', $value);
+		$value = preg_replace($this->preg_delimiter . '\\\,' . $this->preg_delimiter, ',', $value);
+	}
+
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Tokenize an expression for condition evaluation.
 	 *
@@ -1155,7 +1466,7 @@ class XTemplate
 	 */
 	protected function _tokenize($expression)
 	{
-		$pattern = '`\s*(?:(\d*\.\d+|\d+)|([+\-*/%()]|&&|\|\||==|!=|<=|>=|<|>)|(?:' . preg_quote($this->tag_start_delim) . ')?([A-Za-z0-9\._\x7f-\xff]+)(?:' . preg_quote($this->tag_end_delim) . ')?)\s*`';
+		$pattern = '`\s*(?:(\d*\.\d+|\d+)|([+\-*/%()]|&&|\s*\|\|\s*|==|!=|<=|>=|<|>)|(?:"([^"]*)")|(?:\'([^\']*)\')|([A-Za-z0-9\._\x7f-\xff]+))\s*`';
 		preg_match_all($pattern, $expression, $matches, PREG_SET_ORDER);
 
 		$tokens = [];
@@ -1163,16 +1474,20 @@ class XTemplate
 			if (isset($match[1]) && $match[1] !== '') {
 				$tokens[] = ['type' => 'number', 'value' => $match[1]];
 			} elseif (isset($match[2]) && $match[2] !== '') {
-				$tokens[] = ['type' => 'operator', 'value' => $match[2]];
+				$tokens[] = ['type' => 'operator', 'value' => trim($match[2])]; // Убираем пробелы из оператора
 			} elseif (isset($match[3]) && $match[3] !== '') {
-				$var_name = trim($match[0], $this->tag_start_delim . $this->tag_end_delim . " \t\n\r\0\x0B");
-				$tokens[] = ['type' => 'variable', 'value' => $var_name];
+				$tokens[] = ['type' => 'string', 'value' => $match[3]];
+			} elseif (isset($match[4]) && $match[4] !== '') {
+				$tokens[] = ['type' => 'string', 'value' => $match[4]];
+			} elseif (isset($match[5]) && $match[5] !== '') {
+				$tokens[] = ['type' => 'variable', 'value' => $match[5]];
 			}
 		}
 
 		return $tokens;
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Convert tokens to Reverse Polish Notation (RPN) using Shunting Yard algorithm.
 	 *
@@ -1181,38 +1496,71 @@ class XTemplate
 	 */
 	protected function _shunting_yard($tokens)
 	{
-		$output = [];
-		$stack = [];
+		$output = []; // Output queue for RPN
+		$stack = [];  // Operator stack
 
 		foreach ($tokens as $token) {
-			if ($token['type'] === 'number' || $token['type'] === 'variable') {
+			// Handle operands (numbers, variables, strings) by adding them directly to output
+			if ($token['type'] === 'number' || $token['type'] === 'variable' || $token['type'] === 'string') {
 				$output[] = $token;
 			} elseif ($token['type'] === 'operator') {
-				while (
-					!empty($stack) &&
-					$stack[count($stack) - 1]['type'] === 'operator' &&
-					$this->operator_precedence[$stack[count($stack) - 1]['value']] >= $this->operator_precedence[$token['value']]
-				) {
-					$output[] = array_pop($stack);
+				if ($token['value'] === '(') {
+					// Push opening parenthesis onto the stack
+					$stack[] = $token;
+				} elseif ($token['value'] === ')') {
+					// Pop operators from stack to output until matching '(' is found
+					while (!empty($stack) && $stack[count($stack) - 1]['value'] !== '(') {
+						$output[] = array_pop($stack);
+					}
+					if (!empty($stack) && $stack[count($stack) - 1]['value'] === '(') {
+						// Remove the matching '(' from the stack
+						array_pop($stack);
+					} else {
+						// Error: no matching opening parenthesis
+						$this->_set_error("Mismatched parentheses: no matching opening parenthesis", "File: {$this->filename}");
+						return [];
+					}
+				} else {
+					// Handle other operators (e.g., +, -, *, /, ==, &&, ||)
+					while (
+						!empty($stack) &&
+						$stack[count($stack) - 1]['type'] === 'operator' &&
+						$stack[count($stack) - 1]['value'] !== '(' && // Skip if top is '('
+						isset($this->operator_precedence[$stack[count($stack) - 1]['value']]) && // Check if top operator has precedence
+						isset($this->operator_precedence[$token['value']]) && // Check if current operator has precedence
+						$this->operator_precedence[$stack[count($stack) - 1]['value']] >= $this->operator_precedence[$token['value']]
+					) {
+						$output[] = array_pop($stack);
+					}
+					// Push the current operator onto the stack
+					$stack[] = $token;
 				}
-				$stack[] = $token;
-			} elseif ($token['value'] === '(') {
-				$stack[] = $token;
-			} elseif ($token['value'] === ')') {
-				while (!empty($stack) && $stack[count($stack) - 1]['value'] !== '(') {
-					$output[] = array_pop($stack);
-				}
-				array_pop($stack);
 			}
 		}
 
+		// Empty the stack into output, checking for unmatched parentheses
 		while (!empty($stack)) {
-			$output[] = array_pop($stack);
+			$top = array_pop($stack);
+			if ($top['value'] === '(') {
+				// Error: unclosed parenthesis found
+				$this->_set_error("Mismatched parentheses: unclosed parenthesis", "File: {$this->filename}");
+				return [];
+			}
+			$output[] = $top;
+		}
+
+		// Debug: Log the resulting RPN expression
+		if ($this->debug) {
+			$rpn_str = implode(' ', array_map(function ($t) {
+				return $t['value'];
+			}, $output));
+			error_log("RPN for expression: $rpn_str");
 		}
 
 		return $output;
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Get the value of a variable.
 	 *
@@ -1238,6 +1586,7 @@ class XTemplate
 		return $value;
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Evaluate Reverse Polish Notation (RPN).
 	 *
@@ -1250,6 +1599,8 @@ class XTemplate
 
 		foreach ($rpn as $token) {
 			if ($token['type'] === 'number') {
+				$stack[] = (float)$token['value']; // Явно приводим к числу
+			} elseif ($token['type'] === 'string') {
 				$stack[] = $token['value'];
 			} elseif ($token['type'] === 'variable') {
 				$value = $this->_get_variable_value($token['value']);
@@ -1277,6 +1628,7 @@ class XTemplate
 		return array_pop($stack);
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Evaluate a condition.
 	 *
@@ -1290,6 +1642,7 @@ class XTemplate
 		return (bool) $this->_evaluate_rpn($rpn);
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Apply an operator to two values.
 	 *
@@ -1344,6 +1697,7 @@ class XTemplate
 		}
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Process conditions in the template content recursively.
 	 *
@@ -1355,77 +1709,62 @@ class XTemplate
 	 */
 	protected function _process_conditions($content)
 	{
-		// Tokenize the content into parts: IF blocks, ELSE, ENDIF, and plain text
 		$tokens = [];
 		$pos = 0;
 		$length = mb_strlen($content);
 
-		while ($pos < $length) {
-			$if_start = mb_strpos($content, $this->if_start_delim, $pos);
-			$else_pos = mb_strpos($content, $this->else_delim, $pos);
-			$endif_pos = mb_strpos($content, $this->endif_delim, $pos);
+		$if_full_delim = $this->block_start_delim . ' ' . $this->if_delim . ' ';  // <!-- IF 
+		$else_full_delim = $this->block_start_delim . ' ' . $this->else_delim . ' ' . $this->block_end_delim;  // <!-- ELSE -->
+		$endif_full_delim = $this->block_start_delim . ' ' . $this->endif_delim . ' ' . $this->block_end_delim;  // <!-- ENDIF -->
 
-			// No more conditions found
-			if ($if_start === false && $else_pos === false && $endif_pos === false) {
+		while ($pos < $length) {
+			$if_start = mb_strpos($content, $if_full_delim, $pos);
+			$else_pos = mb_strpos($content, $else_full_delim, $pos);
+			$endif_pos = mb_strpos($content, $endif_full_delim, $pos);
+
+			$next_positions = array_filter([
+				'if' => $if_start !== false ? $if_start : null,
+				'else' => $else_pos !== false ? $else_pos : null,
+				'endif' => $endif_pos !== false ? $endif_pos : null
+			], function ($val) {
+				return $val !== null;
+			});
+
+			if (empty($next_positions)) {
 				$tokens[] = mb_substr($content, $pos);
 				break;
 			}
 
-			// Find the earliest delimiter
-			$next_pos = $length;
-			if ($if_start !== false && $if_start < $next_pos) $next_pos = $if_start;
-			if ($else_pos !== false && $else_pos < $next_pos) $next_pos = $else_pos;
-			if ($endif_pos !== false && $endif_pos < $next_pos) $next_pos = $endif_pos;
+			$next_pos = min($next_positions);
+			$next_type = array_search($next_pos, $next_positions);
 
-			// Add text before the delimiter
 			if ($pos < $next_pos) {
 				$tokens[] = mb_substr($content, $pos, $next_pos - $pos);
 			}
 
-			// Process the delimiter
-			if ($next_pos === $if_start) {
-				$if_end = mb_strpos($content, $this->if_end_delim, $if_start);
+			if ($next_type === 'if') {
+				$if_end = mb_strpos($content, $this->block_end_delim, $if_start);
 				if ($if_end === false) {
+					$this->_set_error("Unclosed IF block detected, start at position: $if_start", "File: {$this->filename}");
 					$tokens[] = mb_substr($content, $if_start);
 					break;
 				}
-				$condition = mb_substr($content, $if_start + mb_strlen($this->if_start_delim), $if_end - ($if_start + mb_strlen($this->if_start_delim)));
+				$condition = mb_substr($content, $if_start + mb_strlen($if_full_delim), $if_end - ($if_start + mb_strlen($if_full_delim)));
 				$tokens[] = ['type' => 'if', 'condition' => trim($condition)];
-				$pos = $if_end + mb_strlen($this->if_end_delim);
-			} elseif ($next_pos === $else_pos) {
+				$pos = $if_end + mb_strlen($this->block_end_delim);
+			} elseif ($next_type === 'else') {
 				$tokens[] = ['type' => 'else'];
-				$pos = $else_pos + mb_strlen($this->else_delim);
-			} elseif ($next_pos === $endif_pos) {
+				$pos = $else_pos + mb_strlen($else_full_delim);
+			} elseif ($next_type === 'endif') {
 				$tokens[] = ['type' => 'endif'];
-				$pos = $endif_pos + mb_strlen($this->endif_delim);
+				$pos = $endif_pos + mb_strlen($endif_full_delim);
 			}
 		}
 
-		// Process tokens recursively
-		$result = $this->_process_tokens($tokens);
-
-		// Check for unclosed IF blocks at the top level
-		$nesting = 0;
-		$last_unclosed_condition = null;
-		foreach ($tokens as $token) {
-			if (is_array($token) && $token['type'] === 'if') {
-				$nesting++;
-				$last_unclosed_condition = $token['condition']; // Track the last IF condition
-			} elseif (is_array($token) && $token['type'] === 'endif') {
-				$nesting--;
-				if ($nesting < 0) {
-					$nesting = 0; // Reset if too many ENDIFs
-				}
-				$last_unclosed_condition = null; // Clear if closed
-			}
-		}
-		if ($nesting > 0 && $last_unclosed_condition !== null) {
-			$this->_set_error("Unclosed IF block detected: <!-- IF {$last_unclosed_condition} -->", "File: {$this->filename}");
-		}
-
-		return $result;
+		return $this->_process_tokens($tokens);
 	}
 
+	// NEW: Added in 2025 version for conditional logic
 	/**
 	 * Process an array of tokens to evaluate conditions.
 	 *
@@ -1510,21 +1849,7 @@ class XTemplate
 	}
 
 	/**
-	 * Trim callback parameters.
-	 *
-	 * @param string $value Callback parameter
-	 */
-	protected function trim_callback(&$value)
-	{
-		$value = preg_replace($this->preg_delimiter . "^.*(%s).*$" . $this->preg_delimiter, '\\1', trim($value));
-		$value = preg_replace($this->preg_delimiter . '^,?\s*?(.*?)[,|\)]?$' . $this->preg_delimiter, '\\1', trim($value));
-		$value = preg_replace($this->preg_delimiter . '^[\'|"]?(.*?)[\'|"]?$' . $this->preg_delimiter, '\\1', trim($value));
-		$value = preg_replace($this->preg_delimiter . '\\\\(?=\'|")' . $this->preg_delimiter, '', $value);
-		$value = preg_replace($this->preg_delimiter . '\\\,' . $this->preg_delimiter, ',', $value);
-	}
-
-	/**
-	 * Add an outer block to the template content (internal).
+	 * add an outer block delimiter set useful for rtfs etc - keeps them editable in word
 	 */
 	private function _add_outer_block()
 	{
@@ -1534,7 +1859,7 @@ class XTemplate
 	}
 
 	/**
-	 * Debug var_dump output (internal).
+	 * Debug function - var_dump wrapped in '<pre></pre>' tags
 	 *
 	 * @param mixed $args Arguments to var_dump
 	 */
@@ -1548,10 +1873,10 @@ class XTemplate
 	}
 
 	/**
-	 * Debug var_dump with output buffering (internal).
+	 * Debug function with output buffering
 	 *
 	 * @param mixed $args Arguments to var_dump
-	 * @return string Output of var_dump
+	 * @return string|null Output of var_dump or null if debug is off
 	 */
 	protected function _ob_var_dump($args)
 	{
