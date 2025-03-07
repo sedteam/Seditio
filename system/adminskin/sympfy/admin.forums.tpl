@@ -27,7 +27,7 @@
 
 <div class="clear"></div>
 
-<!-- END: USERS_BUTTONS -->
+<!-- END: FORUMS_BUTTONS -->
 
 <!-- BEGIN: FS_UPDATE -->
 
