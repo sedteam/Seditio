@@ -252,6 +252,9 @@ if ($usr['id'] == 0) {
 	$usr['lang'] = $cfg['defaultlang'];
 }
 
+if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
+	XTemplate::configure(['debug' => true]);
+}
 
 /* ======== GET imports ======== */
 

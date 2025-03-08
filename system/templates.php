@@ -1848,28 +1848,53 @@ class XtplDebugger
      * @param string|null $block The specific block to display (optional).
      * @return string The HTML-formatted debug output.
      */
-    public static function display($file, $block = null)
-    {
-        $output = "<h1>$file</h1>";		
-		$blocks = $block && isset(self::$data[$file][$block]) ? array($block => self::$data[$file][$block]) : (isset(self::$data[$file]) ? self::$data[$file] : array());
+	public static function display($file = null, $block = null)
+	{
+		if ($file === null) {
+			$output = '';
+			foreach (self::$data as $fileName => $blocks) {
+				$output .= "<h1>$fileName</h1>";
+				foreach ($blocks as $blockName => $tags) {
+					$block_path = $fileName . ' / ' . str_replace('.', ' / ', $blockName);
+					$output .= "<h2>$block_path</h2><ul>";
+					ksort($tags);
+					foreach ($tags as $key => $val) {
+						if (is_array($val)) {
+							foreach ($val as $key2 => $val2) {
+								$output .= XTemplate::debugVar($key . '.' . $key2, $val2);
+							}
+						} else {
+							$output .= XTemplate::debugVar($key, $val);
+						}
+					}
+					$output .= "</ul>";
+				}
+			}
+			return $output;
+		}
 
-        foreach ($blocks as $blockName => $tags) {
-            $block_path = $file . ' / ' . str_replace('.', ' / ', $blockName);
-            $output .= "<h2>$block_path</h2><ul>";
-            ksort($tags);
-            foreach ($tags as $key => $val) {
-                if (is_array($val)) {
-                    foreach ($val as $key2 => $val2) {
-                        $output .= XTemplate::debugVar($key . '.' . $key2, $val2);
-                    }
-                } else {
-                    $output .= XTemplate::debugVar($key, $val);
-                }
-            }
-            $output .= "</ul>";
-        }
-        return $output;
-    }
+		$output = "<h1>$file</h1>";
+		$blocks = $block && isset(self::$data[$file][$block]) 
+			? [$block => self::$data[$file][$block]] 
+			: (isset(self::$data[$file]) ? self::$data[$file] : []);
+
+		foreach ($blocks as $blockName => $tags) {
+			$block_path = $file . ' / ' . str_replace('.', ' / ', $blockName);
+			$output .= "<h2>$block_path</h2><ul>";
+			ksort($tags);
+			foreach ($tags as $key => $val) {
+				if (is_array($val)) {
+					foreach ($val as $key2 => $val2) {
+						$output .= XTemplate::debugVar($key . '.' . $key2, $val2);
+					}
+				} else {
+					$output .= XTemplate::debugVar($key, $val);
+				}
+			}
+			$output .= "</ul>";
+		}
+		return $output;
+	}
 
     /**
      * Clears all collected debug data.

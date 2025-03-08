@@ -105,7 +105,7 @@ $out['creationtime'] = (!$cfg['disablesysinfos']) ? $L['foo_created'] . ' ' . $s
 $out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'] . ': ' . round($sys['tcount'], 3) . ' ' . $L['foo_seconds'] . ' - ' . $L['foo_sqlqueries'] . ': ' . $sys['qcount'] . ' - ' . $L['foo_sqlaverage'] . ': ' . round(($sys['tcount'] / $sys['qcount']), 5) . ' ' . $L['foo_seconds'] : '';
 
 if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
-
+	
 	$out['devmode'] = "<h2>Dev-mode :</h2>";
 	$out['devmode'] .= "<div class=\"sedtabs\" style=\"color:#000; margin:0 0 20px 0\">";
 	$out['devmode'] .= "<ul class=\"tabs\">";
@@ -195,6 +195,13 @@ if (sed_auth('admin', 'a', 'A')) {
 
 $t->parse("FOOTER");
 $t->out("FOOTER");
+
+/* TODO
+if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
+	$XtemplatesDebug = XtplDebugger::display();
+	echo $XtemplatesDebug;
+}
+*/
 
 @ob_end_flush();
 @ob_end_flush();
