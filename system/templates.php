@@ -31,24 +31,115 @@ Description=Xtemplate SE class
  * Copyright (c) 2001-2008, Neocrome
  *
  * @package API - XTemplate SE
- * @version 1.1.0
+ * @version 1.2.0
  * @license BSD 3-Clause License
  */
 class XTemplate
 {
+    // Instance properties
+    /** @var string $filename Path to the template file */
     public $filename = '';
+    /** @var array $vars Associative array of assigned variables */
     public $vars = array();
+    /** @var array $blocks Array of parsed template blocks */
     protected $blocks = array();
+    /** @var array $displayed_blocks Tracks blocks displayed for debugging */
     protected $displayed_blocks = array();
+    /** @var array $index Index mapping block names to their paths */
     protected $index = array();
+    /** @var array|null $tags Cached array of tags used in the template */
     protected $tags = null;
+    /** @var bool $cacheEnabled Global flag for enabling/disabling caching */
     protected static $cacheEnabled = false;
+    /** @var string $cacheDir Directory path for cache storage */
     protected static $cacheDir = '';
+    /** @var bool $debug Instance-specific debug mode flag */
     public $debug = false;
+    /** @var bool $debugOutput Instance-specific debug output flag */
     public $debugOutput = false;
+    /** @var bool $cleanupEnabled Global flag for enabling/disabling HTML cleanup */
     private static $cleanupEnabled = false;
+    /** @var bool $found Flag indicating if blocks were found during compilation */
     private $found = false;
+    /** @var XtplCache|null $cache Cache handler instance */
     private $cache = null;
+    /** @var bool $defaultDebug Default debug mode for new instances */
+    protected static $defaultDebug = false;
+    /** @var bool $defaultDebugOutput Default debug output for new instances */
+    protected static $defaultDebugOutput = false;
+
+    // New properties for function filter management
+    /**
+     * @var string $functionFilterMode Defines the mode for filtering function calls:
+     *  - 'all': All functions are allowed (default, matches current behavior).
+     *  - 'whitelist': Only functions in $allowedFunctions are permitted.
+     *  - 'blacklist': Functions in $disallowedFunctions are blocked, others are allowed.
+     */
+    public static $functionFilterMode = 'whitelist';
+
+    /**
+     * @var array $allowedFunctions List of functions permitted in 'whitelist' mode.
+     */
+    public static $allowedFunctions = [
+		'strtoupper', 'strtolower', 'ucwords', 'ucfirst', 'strrev', 'str_word_count', 'strlen',
+		'str_replace', 'str_ireplace', 'preg_replace', 'strip_tags', 'stripcslashes', 'stripslashes', 'substr',
+		'str_pad', 'str_repeat', 'strtr', 'trim', 'ltrim', 'rtrim', 'nl2br', 'wordwrap', 'printf', 'sprintf',
+		'addslashes', 'addcslashes',
+		'htmlentities', 'html_entity_decode', 'htmlspecialchars', 'htmlspecialchars_decode',
+		'urlencode', 'urldecode',
+		'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
+		'number_format', 'money_format',
+		'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image', 'sed_onlydigits'
+	];
+
+    /**
+     * @var array $disallowedFunctions List of functions blocked in 'blacklist' mode.
+     * Default includes common dangerous functions for security.
+     */
+    public static $disallowedFunctions = [
+        'eval', 'system', 'exec', 'shell_exec', 'passthru', 'proc_open', 'popen', 'phpinfo', 'unlink'
+    ];
+
+    /**
+     * Configures global settings for XTemplate instances. Must be called before creating instances.
+     *
+     * @param array $settings Associative array of settings:
+     *                        - 'cacheEnabled' (bool): Enable/disable caching.
+     *                        - 'cacheDir' (string): Cache storage directory path.
+     *                        - 'debug' (bool): Enable/disable debug mode for all instances.
+     *                        - 'debugOutput' (bool): Enable/disable debug output for all instances.
+     *                        - 'cleanupEnabled' (bool): Enable/disable HTML cleanup.
+     *                        - 'functionFilterMode' (string): Mode for function filtering.
+     *                        - 'allowedFunctions' (array): Functions allowed in whitelist mode.
+     *                        - 'disallowedFunctions' (array): Functions blocked in blacklist mode.
+     */
+    public static function configure(array $settings = [])
+    {
+        // Use current static property values as defaults, override with provided settings
+        $currentSettings = [
+            'cacheEnabled' => self::$cacheEnabled,
+            'cacheDir' => self::$cacheDir,
+            'debug' => self::$defaultDebug,
+            'debugOutput' => self::$defaultDebugOutput,
+            'cleanupEnabled' => self::$cleanupEnabled,
+            'functionFilterMode' => self::$functionFilterMode,
+            'allowedFunctions' => self::$allowedFunctions,
+            'disallowedFunctions' => self::$disallowedFunctions,
+        ];
+
+        // Merge user-provided settings with current values
+        $settings = array_merge($currentSettings, $settings);
+
+        // Apply settings to static properties
+        self::$cacheEnabled = $settings['cacheEnabled'];
+        self::$cacheDir = $settings['cacheDir'];
+        self::$defaultDebug = $settings['debug'];
+        self::$defaultDebugOutput = $settings['debugOutput'];
+        self::$cleanupEnabled = $settings['cleanupEnabled'];
+        self::$functionFilterMode = $settings['functionFilterMode'];
+        self::$allowedFunctions = $settings['allowedFunctions'];
+        self::$disallowedFunctions = $settings['disallowedFunctions'];
+    }
 
     /**
      * Constructs an XTemplate instance, optionally initializing with a template file path.
@@ -57,6 +148,10 @@ class XTemplate
      */
     public function __construct($path = null)
     {
+        // Set default values for instance properties
+        $this->debug = self::$defaultDebug;
+        $this->debugOutput = self::$defaultDebugOutput;
+
         if (self::$cacheEnabled) {
             $this->cache = new XtplCache(self::$cacheDir);
         }
@@ -1391,48 +1486,58 @@ class XtplLoop extends XtplBlock
 
 class XtplVar
 {
+    /** @var string $name Base name of the variable (e.g., "VAR" in "VAR.key|func") */
     protected $name = '';
+    /** @var array|null $keys Array of nested keys (e.g., ["key1", "key2"] in "VAR.key1.key2") */
     protected $keys = null;
+    /** @var array|null $callbacks Array of filter functions to apply (e.g., ["func" => ["arg1"]]) */
     protected $callbacks = null;
+    /** @var XtplExpr|null $expression Expression object if the variable is an expression */
     protected $expression = null;
 
     /**
-     * Constructs an XtplVar instance by parsing a variable or expression text.
+     * Constructs an XtplVar instance by parsing a variable or expression string.
      *
-     * @param string $text The variable or expression text to parse.
+     * @param string $text The variable or expression text to parse (e.g., "VAR|func" or "expr + expr").
      */
     public function __construct($text)
     {
+        // Check if the text is an expression (e.g., "VAR1 + VAR2")
         if (preg_match('#^([\w\.]+)\s*([-+*/%])\s*([\w\.]+)$#', $text, $matches)) {
             $this->name = 'expr';
             $this->expression = new XtplExpr($text);
         } else {
+            // Handle filters (e.g., "VAR|func(arg1, arg2)")
             if (mb_strpos($text, '|') !== false) {
+                // Split the text into variable and filter chain, preserving special {PHP|} cases
                 $chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
                 array_walk($chain, function (&$val) {
                     $val = str_replace('{PHP#$%&!', '{PHP|', $val);
                 });
-                $text = array_shift($chain);
+                $text = array_shift($chain); // Extract the variable name
                 foreach ($chain as $cbk) {
+                    // Parse function calls with arguments
                     if (mb_strpos($cbk, '(') !== false && preg_match('/(\w+)\s*\(((?>.|\n)*)\)/', $cbk, $mt)) {
                         $args = XTemplate::tokenize(trim($mt[2]), array(',', ' ', "\n", "\r", "\t"), false);
                         $args = array_map('XTemplate::parseArgument', $args);
                         $this->callbacks[] = array(
-                            'name' => $mt[1],
-                            'args' => $args,
+                            'name' => $mt[1], // Function name
+                            'args' => $args,  // Arguments
                         );
                     } else {
+                        // Simple filter without arguments (e.g., "VAR|trim")
                         $this->callbacks[] = str_replace('()', '', $cbk);
                     }
                 }
             }
 
+            // Handle nested keys (e.g., "VAR.key1.key2")
             if (mb_strpos($text, '.') !== false) {
                 $keys = explode('.', $text);
                 $text = array_shift($keys);
                 $this->keys = $keys;
             }
-            $this->name = $text;
+            $this->name = $text; // Store the base variable name
         }
     }
 
@@ -1453,7 +1558,7 @@ class XtplVar
     /**
      * Converts the variable to a string representation, including keys and callbacks.
      *
-     * @return string The string representation of the variable.
+     * @return string The string representation of the variable (e.g., "{VAR|func(arg)}").
      */
     public function __toString()
     {
@@ -1516,19 +1621,23 @@ class XtplVar
 
     /**
      * Evaluates the variable or expression using the provided template.
+     * Applies function filters based on the configured mode (all, whitelist, blacklist).
      *
-     * @param XTemplate|null $tpl The template instance to use for evaluation (optional).
-     * @return mixed|null The evaluated value or null if not resolvable.
+     * @param XTemplate|null $tpl The template instance for variable resolution (optional).
+     * @return mixed|null The evaluated value or null if unresolved; returns string representation if a function is blocked.
      */
     public function evaluate($tpl = null)
     {
+        // Handle expressions (e.g., "VAR1 + VAR2")
         if ($this->name === 'expr' && isset($this->expression)) {
             $val = $this->expression->evaluate($tpl);
         } else {
             $var = null;
+            // Special case: access to global PHP variables
             if ($this->name === 'PHP') {
                 $var = $GLOBALS;
             } elseif (!empty($tpl)) {
+                // Initialize variable if not set
                 if (!isset($tpl->vars[$this->name])) {
                     $tpl->vars[$this->name] = null;
                 }
@@ -1538,6 +1647,7 @@ class XtplVar
                 }
             }
 
+            // Resolve nested keys (e.g., "VAR.key1.key2")
             if ($this->keys) {
                 $keys = $this->keys;
                 $last_key = array_pop($keys);
@@ -1560,9 +1670,11 @@ class XtplVar
             }
         }
 
+        // Process function filters (e.g., "VAR|func(arg1)")
         if ($this->callbacks) {
             foreach ($this->callbacks as $func) {
                 if (is_array($func)) {
+                    // Process arguments for functions with parameters
                     array_walk(
                         $func['args'],
                         array($this, 'processCallbackArgument'),
@@ -1572,6 +1684,7 @@ class XtplVar
                     $f = $func['name'];
                     $a = $func['args'];
 
+                    // Replace %s placeholder with the current value
                     foreach ($a as &$arg) {
                         if (is_string($arg) && $arg === '%s' && isset($val)) {
                             $arg = $val;
@@ -1579,10 +1692,31 @@ class XtplVar
                     }
                     unset($arg);
 
+                    // Check if the function exists
                     if (!function_exists($f)) {
                         return $this->__toString();
                     }
 
+                    // Apply function filter mode logic
+                    switch (XTemplate::$functionFilterMode) {
+                        case 'whitelist':
+                            // Only allow functions in the whitelist
+                            if (!in_array($f, XTemplate::$allowedFunctions)) {
+                                return $this->__toString(); // Return string if not allowed
+                            }
+                            break;
+                        case 'blacklist':
+                            // Block functions in the blacklist
+                            if (in_array($f, XTemplate::$disallowedFunctions)) {
+                                return $this->__toString(); // Return string if disallowed
+                            }
+                            break;
+                        case 'all':
+                            // No restrictions, all functions allowed
+                            break;
+                    }
+
+                    // Call the function with the appropriate number of arguments
                     switch (count($a)) {
                         case 0:
                             $val = $f();
@@ -1604,11 +1738,31 @@ class XtplVar
                             break;
                     }
                 } elseif ($func == 'dump') {
+                    // Special case: dump function for debugging
                     $val = $this->dump(isset($val) ? $val : null);
                 } else {
+                    // Simple filter without arguments (e.g., "VAR|trim")
                     if (!function_exists($func)) {
                         return $this->__toString();
                     }
+
+                    // Apply function filter mode logic for simple filters
+                    switch (XTemplate::$functionFilterMode) {
+                        case 'whitelist':
+                            if (!in_array($func, XTemplate::$allowedFunctions)) {
+                                return $this->__toString(); // Return string if not allowed
+                            }
+                            break;
+                        case 'blacklist':
+                            if (in_array($func, XTemplate::$disallowedFunctions)) {
+                                return $this->__toString(); // Return string if disallowed
+                            }
+                            break;
+                        case 'all':
+                            // No restrictions, all functions allowed
+                            break;
+                    }
+
                     $val = (array_key_exists('val', get_defined_vars())) ? $func($val) : $func();
                 }
             }
@@ -1696,8 +1850,8 @@ class XtplDebugger
      */
     public static function display($file, $block = null)
     {
-        $output = "<h1>$file</h1>";
-        $blocks = $block && isset(self::$data[$file][$block]) ? array($block => self::$data[$file][$block]) : (self::$data[$file] ?? array());
+        $output = "<h1>$file</h1>";		
+		$blocks = $block && isset(self::$data[$file][$block]) ? array($block => self::$data[$file][$block]) : (isset(self::$data[$file]) ? self::$data[$file] : array());
 
         foreach ($blocks as $blockName => $tags) {
             $block_path = $file . ' / ' . str_replace('.', ' / ', $blockName);
