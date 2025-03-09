@@ -34,10 +34,7 @@ require(SED_ROOT . '/system/install/lang/' . $langinstall . '/install.' . $langi
 
 /* === === === */
 
-
 require(SED_ROOT . '/system/install/install.setup.php');
-
-@set_magic_quotes_runtime(0);
 
 mb_internal_encoding('UTF-8');
 
