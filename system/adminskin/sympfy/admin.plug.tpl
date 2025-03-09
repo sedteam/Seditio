@@ -300,7 +300,7 @@
 
 <!-- END: PLUG_DETAILS -->
 
-<!-- BEGIN: PLUG_LISTING-->
+<!-- BEGIN: PLUG_LISTING -->
 
 <div class="content-box">
 	<div class="content-box-header">
@@ -326,9 +326,9 @@
 
 			<div class="table-body resp-table-body">
 
-				<!-- BEGIN: PLUG_LIST-->
+				<!-- BEGIN: PLUG_LIST -->
 
-				<!-- BEGIN: PLUG_LIST_ERROR-->
+				<!-- BEGIN: PLUG_LIST_ERROR -->
 
 				<div class="table-row resp-table-row">
 
@@ -342,7 +342,7 @@
 
 				</div>
 
-				<!-- END: PLUG_LIST_ERROR-->
+				<!-- END: PLUG_LIST_ERROR -->
 
 				<div class="table-row resp-table-row">
 
@@ -353,20 +353,20 @@
 					<div class="table-td text-left resp-table-td plug-version" data-label="{PHP.L.Version}">{PLUG_LIST_VERSION}</div>
 					<div class="table-td text-left resp-table-td plug-status" data-label="{PHP.L.Status} ({PHP.L.Parts})">{PLUG_LIST_STATUS} {PLUG_LIST_PARTS_COUNT}</div>
 					<div class="table-td text-center resp-table-td plug-config" data-label="{PHP.L.Configuration}">
-						<!-- BEGIN: PLUG_LIST_CONFIG-->
+						<!-- BEGIN: PLUG_LIST_CONFIG -->
 						<a href="{PLUG_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
-						<!-- END: PLUG_LIST_CONFIG-->
+						<!-- END: PLUG_LIST_CONFIG -->
 					</div>
 					<div class="table-td text-center resp-table-td plug-right" data-label="{PHP.L.Rights}"><a href="{PLUG_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a></div>
 					<div class="table-td text-center resp-table-td plug-open" data-label="{PHP.L.Open}">
-						<!-- BEGIN: PLUG_LIST_OPEN-->
+						<!-- BEGIN: PLUG_LIST_OPEN -->
 						<a href="{PLUG_LIST_OPEN_URL}"><i class="ic-arrow-right"></i></a>
-						<!-- END: PLUG_LIST_OPEN-->
+						<!-- END: PLUG_LIST_OPEN -->
 					</div>
 
 				</div>
 
-				<!-- END: PLUG_LIST-->
+				<!-- END: PLUG_LIST -->
 
 			</div>
 
@@ -422,9 +422,9 @@
 
 </div>
 
-<!-- END: PLUG_LISTING-->
+<!-- END: PLUG_LISTING -->
 
-<!-- BEGIN: PLUG_UN_INSTALL-->
+<!-- BEGIN: PLUG_UN_INSTALL -->
 
 <div class="content-box">
 
@@ -442,7 +442,7 @@
 
 </div>
 
-<!-- END: PLUG_UN_INSTALL-->
+<!-- END: PLUG_UN_INSTALL -->
 
 
 <!-- END: ADMIN_PLUG -->

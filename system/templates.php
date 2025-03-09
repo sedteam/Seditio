@@ -1500,46 +1500,53 @@ class XtplVar
      *
      * @param string $text The variable or expression text to parse (e.g., "VAR|func" or "expr + expr").
      */
-    public function __construct($text)
-    {
-        // Check if the text is an expression (e.g., "VAR1 + VAR2")
-        if (preg_match('#^([\w\.]+)\s*([-+*/%])\s*([\w\.]+)$#', $text, $matches)) {
-            $this->name = 'expr';
-            $this->expression = new XtplExpr($text);
-        } else {
-            // Handle filters (e.g., "VAR|func(arg1, arg2)")
-            if (mb_strpos($text, '|') !== false) {
-                // Split the text into variable and filter chain, preserving special {PHP|} cases
-                $chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
-                array_walk($chain, function (&$val) {
-                    $val = str_replace('{PHP#$%&!', '{PHP|', $val);
-                });
-                $text = array_shift($chain); // Extract the variable name
-                foreach ($chain as $cbk) {
-                    // Parse function calls with arguments
-                    if (mb_strpos($cbk, '(') !== false && preg_match('/(\w+)\s*\(((?>.|\n)*)\)/', $cbk, $mt)) {
-                        $args = XTemplate::tokenize(trim($mt[2]), array(',', ' ', "\n", "\r", "\t"), false);
-                        $args = array_map('XTemplate::parseArgument', $args);
-                        $this->callbacks[] = array(
-                            'name' => $mt[1], // Function name
-                            'args' => $args,  // Arguments
-                        );
-                    } else {
-                        // Simple filter without arguments (e.g., "VAR|trim")
-                        $this->callbacks[] = str_replace('()', '', $cbk);
-                    }
-                }
-            }
+	public function __construct($text)
+	{
+		// Check if the input string is an arithmetic expression
+		// The regex ensures the string contains at least two operands separated by an arithmetic operator (+, -, *, /, %)
+		// and allows for additional operands and operators (e.g., "2 + 3 + 8" or "{VAR} + 5")
+		// Operands can be numbers, words, dot-separated paths (e.g., "ITEMS.0.price"), or variables in braces (e.g., "{VAR}")
+		if (preg_match('#^\s*[\d\w\.\{\}]+\s*[\+\-\*/%]\s*[\d\w\.\{\}]+\s*(?:[\+\-\*/%]\s*[\d\w\.\{\}]+)*\s*$#', $text)) {
+			// If matched, treat the string as an expression and delegate parsing to XtplExpr
+			$this->name = 'expr';
+			$this->expression = new XtplExpr($text);
+		} else {
+			// If not an arithmetic expression, process the string as a variable with optional filters and keys
+			// Handle filters (e.g., "VAR|func(arg1, arg2)")
+			if (mb_strpos($text, '|') !== false) {
+				// Split the text into variable and filter chain, preserving special {PHP|} cases
+				$chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
+				array_walk($chain, function (&$val) {
+					$val = str_replace('{PHP#$%&!', '{PHP|', $val);
+				});
+				$text = array_shift($chain); // Extract the base variable name
+				foreach ($chain as $cbk) {
+					// Parse function calls with arguments (e.g., "func(arg1, arg2)")
+					if (mb_strpos($cbk, '(') !== false && preg_match('/(\w+)\s*\(((?>.|\n)*)\)/', $cbk, $mt)) {
+						$args = XTemplate::tokenize(trim($mt[2]), array(',', ' ', "\n", "\r", "\t"), false);
+						$args = array_map('XTemplate::parseArgument', $args);
+						$this->callbacks[] = array(
+							'name' => $mt[1], // Function name
+							'args' => $args,  // Arguments
+						);
+					} else {
+						// Simple filter without arguments (e.g., "trim")
+						$this->callbacks[] = str_replace('()', '', $cbk);
+					}
+				}
+			}
 
-            // Handle nested keys (e.g., "VAR.key1.key2")
-            if (mb_strpos($text, '.') !== false) {
-                $keys = explode('.', $text);
-                $text = array_shift($keys);
-                $this->keys = $keys;
-            }
-            $this->name = $text; // Store the base variable name
-        }
-    }
+			// Handle nested keys (e.g., "VAR.key1.key2")
+			if (mb_strpos($text, '.') !== false) {
+				$keys = explode('.', $text);
+				$text = array_shift($keys); // Base variable name
+				$this->keys = $keys;        // Array of nested keys
+			}
+
+			// Store the base variable name (e.g., "VAR")
+			$this->name = $text;
+		}
+	}
 
     /**
      * Gets a property value if it exists.
