@@ -1,11 +1,11 @@
 /*-------------------------------------------------------
 *
-*   Copyright (c) 2011-2022, Seditio Team
+*   Copyright (c) 2011-2025, Seditio Team
 *   Copyright (c) 2001-2011, Neocrome
 *
 *--------------------------------------------------------*/
 
-Seditio 178
+Seditio 180
 
 INSTALLATION
 
