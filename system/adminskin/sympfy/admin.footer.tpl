@@ -20,10 +20,6 @@
 <script src="system/adminskin/{PHP.cfg.adminskin}/js/autocomplete.js"></script>
 <script src="system/adminskin/{PHP.cfg.adminskin}/js/app.js"></script>
 
-<!-- BEGIN: USER -->
-{PHP.out.uploader_footer_admin}
-<!-- END: USER -->
-
 </body>
 
 </html>

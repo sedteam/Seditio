@@ -1,6 +1,5 @@
 <!-- BEGIN: UPLOADER -->
 
-<script>
     sedjs.ready(function() {
         var uploaderSettings = {
             '{UPLOADER_ID}': {
@@ -81,6 +80,5 @@
         }
     }
     });
-</script>
 
 <!-- END: UPLOADER -->

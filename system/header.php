@@ -34,7 +34,6 @@ $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"" . sed_url("users
 $out['metas'] = sed_htmlmetas($out['subdesc'], $out['subkeywords']) . $moremetas;
 
 sed_add_javascript($morejavascript);
-$out['javascript'] = sed_javascript();
 
 sed_add_css($morecss);
 $out['css'] = sed_css();

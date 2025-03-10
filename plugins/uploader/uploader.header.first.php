@@ -32,5 +32,3 @@ if (!defined('SED_CODE')) {
 
 sed_add_css('plugins/uploader/css/uploader.css', true);
 sed_add_javascript('plugins/uploader/js/uploader.js', true);
-
-

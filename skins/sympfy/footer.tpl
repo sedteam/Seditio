@@ -96,7 +96,6 @@
 <script src="skins/{PHP.skin}/js/app.js"></script>
 
 <!-- BEGIN: USER -->
-{PHP.out.uploader_footer}
 <script>
 	var L = {};
 	L.pageadd = "{PHP.skinlang.admintooltip.pageadd}";

@@ -28,6 +28,7 @@ if (is_array($extp)) {
 /* ===== */
 
 $out['bottomline'] = ($cfg['keepcrbottom']) ? $cfg['bottomline'] . " " . $out['copyright'] : $cfg['bottomline'];
+$out['javascript'] = sed_javascript();
 
 /* ======== Who's online (part 2) ======== */
 

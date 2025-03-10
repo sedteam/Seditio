@@ -73,5 +73,4 @@ $uploader->parse("UPLOADER");
 
 $t->assign("STRUCTURE_UPDATE_THUMB", "<div id=\"uploader\"><div id=\"" . $extraslot . "_imageuploader\" sed_uploader=\"on\"></div></div>");
 
-$out['uploader_footer_admin'] = $uploader->text("UPLOADER"); //in footer
-
+sed_add_javascript($uploader->text("UPLOADER"));
