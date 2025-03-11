@@ -526,11 +526,13 @@ if (!$cfg['disablehitstats']) {
 
 	if (
 		!empty($sys['referer'])
-		&& mb_stripos($sys['referer'], $cfg['mainurl']) === FALSE
-		&& mb_stripos($sys['referer'], $cfg['hostip']) === FALSE
-		&& mb_stripos($sys['referer'], $sys['httphost']) === FALSE
-		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === FALSE
-		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === FALSE
+		&& !(
+			(!empty($cfg['mainurl']) && mb_stripos($sys['referer'], $cfg['mainurl']) !== FALSE)
+			|| (!empty($cfg['hostip']) && mb_stripos($sys['referer'], $cfg['hostip']) !== FALSE)
+			|| (!empty($sys['httphost']) && mb_stripos($sys['referer'], $sys['httphost']) !== FALSE)
+			|| (!empty($cfg['mainurl']) && mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) !== FALSE)
+			|| (!empty($cfg['mainurl']) && mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) !== FALSE)
+		)
 	) {
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_referers WHERE ref_url = '" . sed_sql_prep($sys['referer']) . "'");
 		$count = sed_sql_result($sql, 0, "COUNT(*)");
