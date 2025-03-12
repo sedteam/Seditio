@@ -57,8 +57,12 @@ function sed_resize($filename)
 	list($original_file, $type, $width, $height, $set_watermark, $use_webp) = sed_get_resize_params($filename);
 	$size = $width . 'x' . $height;
 
+	//Check available image resolutions
 	if (!is_array($cfg['available_image_sizes'])) {
-		$cfg['available_image_sizes'] = (!empty($cfg['available_image_sizes'])) ? explode('|', $cfg['available_image_sizes']) : array();
+		if (!empty($cfg['available_image_sizes'])) {
+			$cfg['available_image_sizes'] = mb_strtolower(str_replace(' ', '', $cfg['available_image_sizes']));
+			$cfg['available_image_sizes'] = (!empty($cfg['available_image_sizes'])) ? explode(',', $cfg['available_image_sizes']) : array();
+		}	
 	}
 
 	$check_ais = (count($cfg['available_image_sizes']) > 0) ? in_array($size, $cfg['available_image_sizes']) : TRUE;

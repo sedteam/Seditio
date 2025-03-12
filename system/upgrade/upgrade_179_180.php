@@ -164,6 +164,12 @@ $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages DROP KEY page_cat, ADD KE
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$adminmain .= "Adding the 'available_image_sizes' new config into the core<br />";
+$sqlqr = "INSERT INTO " . $cfg['sqldbprefix'] . "config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)
+VALUES ('core', 'pfs', '03', 'available_image_sizes', 1, '', '')";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 foreach ($sed_dbnames as $table_name) {
 	$table_name = $cfg['sqldbprefix'] . $table_name;
 	$sqlqr = "ALTER TABLE " . $table_name . " ENGINE=InnoDB";

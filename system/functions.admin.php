@@ -459,6 +459,7 @@ function sed_loadconfigmap()
 	$result[] = array('page', '06', 'genseourls', 3, '1', '');   // New in v178
 	$result[] = array('pfs', '01', 'disable_pfs', 3, '0', '');
 	$result[] = array('pfs', '02', 'pfs_filemask', 3, '0', '');
+	$result[] = array('pfs', '03', 'available_image_sizes', 1, '', '');
 	// $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
 	$result[] = array('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled', 'GD1', 'GD2'));
 	$result[] = array('pfs', '10', 'th_x', 2, '112', '');

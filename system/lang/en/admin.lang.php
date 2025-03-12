@@ -183,6 +183,8 @@ $L['cfg_th_dimpriority'] = array("Thumbnails, resize by", "Default: Width");    
 $L['cfg_th_textsize'] = array("Thumbnails, size of the text", "");
 $L['cfg_pfs_filemask'] = array("File names based on pattern of time", "Generate file names on a pattern of time");  // New in sed172
 
+$L['cfg_available_image_sizes'] = array("Available image resolutions", "Listed with commas, no spaces. Example: 120x80,800x600");  // New in sed180
+
 $L['cfg_disable_gallery'] = array("Disable the gallery", "");         // New in v150
 $L['cfg_gallery_gcol'] = array("Number of columns for the galleries", "Default : 4");     // New in v150
 $L['cfg_gallery_bcol'] = array("Number of columns for the pictures", "Default : 6");        // New in v150
