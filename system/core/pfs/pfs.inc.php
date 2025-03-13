@@ -478,8 +478,6 @@ if ($f > 0) {
 
 $files_count = sed_sql_numrows($sql);
 $movebox = (empty($f)) ? sed_selectbox_folders($userid, "/", "") : sed_selectbox_folders($userid, "$f", "");
-$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'], 0, 2)), hexdec(mb_substr($cfg['th_colortext'], 2, 2)), hexdec(mb_substr($cfg['th_colortext'], 4, 2)));
-$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'], 0, 2)), hexdec(mb_substr($cfg['th_colorbg'], 2, 2)), hexdec(mb_substr($cfg['th_colorbg'], 4, 2)));
 $pfs_foldersize = 0;
 $stndl_flag = false;
 
