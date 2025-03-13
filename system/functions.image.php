@@ -799,68 +799,122 @@ function sed_image_merge($img1_file, $img1_extension, $img2_file, $img2_extensio
     );
 }
 
-/** 
- * Simple Rotate Image
- * 
- * @param string $image_source Original image path 
- * @param string $degree_lvl Degree level 
+/**
+ * Rotates an image using either GD or Imagick based on configuration.
+ *
+ * @param string $image_source Path to the original image file.
+ * @param int $degree_lvl Rotation level (number of 90-degree increments, e.g., 1 = 90°, 2 = 180°).
+ * @param int $jpegquality JPEG/WebP quality percentage (0-100, default 90).
+ * @return bool True on success, false on failure.
  */
-function sed_rotateimage($image_source, $degree_lvl, $jpegquality = "90")
+function sed_rotateimage($image_source, $degree_lvl, $jpegquality = 90)
 {
     global $cfg;
 
-    if (!function_exists('gd_info')) {
-        return;
+    // Normalize paths to absolute using SED_ROOT
+    $image_source = (strpos($image_source, SED_ROOT) === 0) ? $image_source : SED_ROOT . '/' . ltrim($image_source, '/');
+
+    // Validate input
+    if (!file_exists($image_source)) {
+        return false;
     }
 
-    $extension = @end(explode(".", $image_source));
+    $extension = strtolower(pathinfo($image_source, PATHINFO_EXTENSION));
+    $quality = min(100, max(0, (int)$jpegquality)); // Ensure quality is within 0-100
 
-    // Determine the image type and create an image resource
-    switch ($extension) {
-        case 'gif':
-            $source = imagecreatefromgif($image_source);
-            break;
+    // Use Imagick if available and configured
+    if (class_exists('Imagick') && ($cfg['th_amode'] == 'Imagick')) {
+        // Imagick rotation
+        $image = new Imagick();
+        if (!$image->readImage($image_source)) {
+            return false;
+        }
 
-        case 'png':
-            $source = imagecreatefrompng($image_source);
-            break;
+        // Rotate image (positive degrees for Imagick)
+        $image->rotateImage(new ImagickPixel('none'), -90 * $degree_lvl);
 
-        case 'webp':
-            $source = imagecreatefromwebp($image_source);
-            break;
+        // Set compression quality
+        $image->setImageCompressionQuality($quality);
 
-        default:
-            $source = imagecreatefromjpeg($image_source);
-            break;
+        // Save based on extension
+        switch ($extension) {
+            case 'gif':
+                $image->setImageFormat('gif');
+                break;
+            case 'png':
+                $image->setImageFormat('png');
+                break;
+            case 'webp':
+                $image->setImageFormat('webp');
+                break;
+            default:
+                $image->setImageFormat('jpeg');
+                break;
+        }
+
+        $result = $image->writeImage($image_source);
+        $image->destroy();
+        return $result;
+    } else {
+        // GD rotation (fallback)
+        if (!function_exists('gd_info')) {
+            return false;
+        }
+
+        // Load image based on type
+        switch ($extension) {
+            case 'gif':
+                $source = imagecreatefromgif($image_source);
+                break;
+            case 'png':
+                $source = imagecreatefrompng($image_source);
+                break;
+            case 'webp':
+                $source = imagecreatefromwebp($image_source);
+                break;
+            default:
+                $source = imagecreatefromjpeg($image_source);
+                break;
+        }
+
+        if (!$source) {
+            return false;
+        }
+
+        // Rotate with transparency
+        $transColor = imagecolorallocatealpha($source, 255, 255, 255, 127);
+        $rotated_image = imagerotate($source, -90 * $degree_lvl, $transColor);
+
+        if (!$rotated_image) {
+            imagedestroy($source);
+            return false;
+        }
+
+        // Preserve transparency for PNG and WebP
+        imagealphablending($rotated_image, false);
+        imagesavealpha($rotated_image, true);
+
+        // Save based on extension
+        switch ($extension) {
+            case 'gif':
+                $result = imagegif($rotated_image, $image_source);
+                break;
+            case 'png':
+                $quality = round(($quality / 100) * 10); // Convert 0-100 to 0-9 scale
+                $quality = max(0, min(9, $quality)); // PNG compression: 0 (best) to 9 (worst)
+                $result = imagepng($rotated_image, $image_source, $quality);
+                break;
+            case 'webp':
+                $result = imagewebp($rotated_image, $image_source, $quality);
+                break;
+            default:
+                $result = imagejpeg($rotated_image, $image_source, $quality);
+                break;
+        }
+
+        // Clean up
+        imagedestroy($rotated_image);
+        imagedestroy($source);
+        return $result;
     }
-
-    $transColor = imagecolorallocatealpha($source, 255, 255, 255, 0);
-    $rotated_image = imagerotate($source, -90 * $degree_lvl, $transColor);
-
-    imagealphablending($rotated_image, false); // Set the blending mode for an image
-    imagesavealpha($rotated_image, true); // Set the flag to save full alpha channel information
-
-    // Save the rotated image in the specified format
-    switch ($extension) {
-        case 'gif':
-            imagegif($rotated_image, $image_source);
-            break;
-
-        case 'png':
-            imagepng($rotated_image, $image_source);
-            break;
-
-        case 'webp':
-            imagewebp($rotated_image, $image_source);
-            break;
-
-        default:
-            imagejpeg($rotated_image, $image_source, $jpegquality);
-            break;
-    }
-
-    // Free up memory
-    imagedestroy($rotated_image);
-    imagedestroy($source);
-    return;
 }
