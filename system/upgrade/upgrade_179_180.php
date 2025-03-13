@@ -177,6 +177,22 @@ foreach ($sed_dbnames as $table_name) {
 	$sql = sed_sql_query($sqlqr);
 }
 
+$sqlqr = "DELETE FROM " . $cfg['sqldbprefix'] . "config WHERE config_cat='pfs' AND config_name='th_border'";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "DELETE FROM " . $cfg['sqldbprefix'] . "config WHERE config_cat='pfs' AND config_name='th_colorbg'";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "DELETE FROM " . $cfg['sqldbprefix'] . "config WHERE config_cat='pfs' AND config_name='th_colortext'";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "DELETE FROM " . $cfg['sqldbprefix'] . "config WHERE config_cat='pfs' AND config_name='th_textsize'";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to 180...<br />";

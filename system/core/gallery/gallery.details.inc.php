@@ -87,7 +87,18 @@ $pfs['pfs_img'] = "<img src=\"" . $cfg['pfs_dir'] . $pfs['pfs_file'] . "\" alt=\
 
 if ($pfs['pfs_imgsize'][0] > $cfg['gallery_imgmaxwidth']) {
 	if (!file_exists($cfg['res_dir'] . $pfs['pfs_file'])) {
-		sed_image_resize($pfs['pfs_fullfile'], $cfg['res_dir'] . $pfs['pfs_file'], $cfg['gallery_imgmaxwidth'], $pfs['pfs_extension'], 90);
+		sed_image_process(
+			$pfs['pfs_fullfile'],                      		// $source
+			$cfg['res_dir'] . $pfs['pfs_file'],             // $dest (overwrite source)
+			$cfg['gallery_imgmaxwidth'],   					// $width
+			0,                                              // $height (auto)
+			$cfg['th_keepratio'],                           // $keepratio (only if resizing)
+			'resize',                                       // $type
+			'Width',                                        // $dim_priority
+			$cfg['gallery_logojpegqual'],                   // $quality
+			false,                   						// $set_watermark
+			false                                           // $preserve_source
+		);		
 	}
 
 	if (file_exists($cfg['res_dir'] . $pfs['pfs_file'])) {

@@ -182,7 +182,19 @@ if (in_array($f_extension, $allow_extension) == FALSE) {
 			0) ");
 
 		$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='" . $sys['now'] . "' WHERE pff_id='$folderid'");
-		sed_sm_createthumb($cfg['pfs_dir'] . $filename, $cfg['th_dir'] . $filename, $cfg['th_x'], $cfg['th_y'], $cfg['th_jpeg_quality'], "resize", TRUE);
+
+		sed_image_process(
+			$cfg['pfs_dir'] . $filename,  // $source
+			$cfg['th_dir'] . $filename,   // $dest
+			$cfg['th_x'],                 // $width
+			$cfg['th_y'],                 // $height
+			$cfg['th_keepratio'],         // $keepratio
+			'resize',                     // $type
+			$cfg['th_dimpriority'],       // $dim_priority
+			$cfg['th_jpeg_quality'],      // $quality
+			false,                        // $set_watermark
+			false                         // $preserve_source
+		);
 	}
 }
 

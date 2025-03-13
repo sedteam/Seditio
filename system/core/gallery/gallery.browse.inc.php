@@ -92,33 +92,18 @@ while ($pfs = sed_sql_fetchassoc($sql)) {
 	$pfs['pfs_filesize'] = floor($pfs['pfs_size'] / 1024);
 
 	if (($pfs['pfs_extension'] == 'jpg' || $pfs['pfs_extension'] == 'jpeg' || $pfs['pfs_extension'] == 'png') && $cfg['th_amode'] != 'Disabled') {
-		if (!file_exists($cfg['th_dir'] . $pfs['pfs_file']) && file_exists($cfg['pfs_dir'] . $pfs['pfs_file'])) {
-			$pfs['th_colortext'] = array(
-				hexdec(mb_substr($cfg['th_colortext'], 0, 2)),
-				hexdec(mb_substr($cfg['th_colortext'], 2, 2)),
-				hexdec(mb_substr($cfg['th_colortext'], 4, 2))
-			);
-
-			$pfs['th_colorbg'] = array(
-				hexdec(mb_substr($cfg['th_colorbg'], 0, 2)),
-				hexdec(mb_substr($cfg['th_colorbg'], 2, 2)),
-				hexdec(mb_substr($cfg['th_colorbg'], 4, 2))
-			);
-
-			sed_createthumb(
-				$cfg['pfs_dir'] . $pfs['pfs_file'],
-				$cfg['th_dir'] . $pfs['pfs_file'],
-				$cfg['th_x'],
-				$cfg['th_y'],
-				$cfg['th_keepratio'],
-				$pfs['pfs_extension'],
-				$pfs['pfs_file'],
-				$pfs['pfs_filesize'],
-				$pfs['th_colortext'],
-				$cfg['th_textsize'],
-				$pfs['th_colorbg'],
-				$cfg['th_border'],
-				$cfg['th_jpeg_quality']
+		if (!file_exists($cfg['th_dir'] . $pfs['pfs_file']) && file_exists($cfg['pfs_dir'] . $pfs['pfs_file'])) {			
+			sed_image_process(
+				$cfg['pfs_dir'] . $pfs['pfs_file'],   	// $source
+				$cfg['th_dir'] . $pfs['pfs_file'],    	// $dest
+				$cfg['th_x'],                 			// $width
+				$cfg['th_y'],                 			// $height
+				$cfg['th_keepratio'],         			// $keepratio
+				'resize',                     			// $type
+				$cfg['th_dimpriority'],       			// $dim_priority
+				$cfg['th_jpeg_quality'],      			// $quality
+				false,                        			// $set_watermark
+				false                         			// $preserve_source
 			);
 		}
 	}
