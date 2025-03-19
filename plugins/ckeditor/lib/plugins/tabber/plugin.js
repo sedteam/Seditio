@@ -4,11 +4,12 @@
  * @copyright Tishov Alexander, Seditio Team 2025
  *
  */
+(function() {
 CKEDITOR.plugins.add('tabber', {
     // Indicates that the plugin supports high-resolution screens
     hidpi: true,
     // Supported languages
-    lang: 'en,ru',
+    lang: [ 'en', 'ru' ],
     // Plugin icon
     icons: 'tabber',
     // Plugin initialization
@@ -17,8 +18,8 @@ CKEDITOR.plugins.add('tabber', {
         function cssEscape(str) {
             return str.replace(/([!"#$%&'()*+,\-./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
         }
-
-        // Adding a button to the editor's toolbar
+		
+		// Adding a button to the editor's toolbar
         editor.ui.addButton('Tabber', {
             // Command executed when the button is clicked
             command: 'addTabCmd',
@@ -265,3 +266,4 @@ CKEDITOR.plugins.add('tabber', {
         }
     }
 });
+})();

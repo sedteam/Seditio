@@ -1,5 +1,6 @@
 ﻿CKEDITOR.plugins.setLang('tabber', 'en', {
     toolbar: 'Insert tabs',
+	title: 'Tabs',
     tabtitle: 'Tab',
     tabcontent: 'Tab content',
     newtabtitle: 'New tab',

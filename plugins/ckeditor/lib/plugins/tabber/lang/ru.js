@@ -1,4 +1,4 @@
-﻿CKEDITOR.plugins.setLang('tabber', 'en', {
+﻿CKEDITOR.plugins.setLang('tabber', 'ru', {
     toolbar: 'Вставить вкладки',
     title: 'Вкладки',
     tabtitle: 'Вкладка',
