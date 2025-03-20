@@ -494,6 +494,11 @@ table.cells tr:nth-child(even) {
     line-height: 1.35em;
 }
 
+.table-td p:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 .td-top {
     vertical-align: top;
 }
@@ -534,6 +539,31 @@ table.cells tr:nth-child(even) {
     position: absolute;
     vertical-align: middle;
     padding: 0.5em 0.8em;
+}
+
+.table-with-border {
+    display: table;
+    border-spacing: 0;
+}
+
+.table-with-border .table-th {
+    border-top: 1px solid #e7e7e7;
+    border-left: 1px solid #e7e7e7;
+}
+
+.table-with-border .table-td {
+    border-top: 1px solid #e7e7e7;
+    border-left: 1px solid #e7e7e7;
+}
+
+.table-with-border .table-tr:last-child .table-th,
+.table-with-border .table-tr:last-child .table-td {
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.table-with-border .table-th:last-child,
+.table-with-border .table-td:last-child {
+    border-right: 1px solid #e7e7e7;
 }
 
 

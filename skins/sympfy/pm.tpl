@@ -22,56 +22,78 @@
 				{PM_INBOX} &nbsp; &nbsp; {PM_ARCHIVES} &nbsp; &nbsp; {PM_SENTBOX} &nbsp; &nbsp; {PM_SENDNEWPM}
 			</div>
 
-			<table class="cells striped">
+
+			<div class="table cells striped resp-table">
 
 				<!-- BEGIN: PM_TITLE -->
 
-				<tr>
-					<td class="coltop" style="width:16px;">{PHP.skinlang.pm.State}</td>
-					<td class="coltop">{PHP.skinlang.pm.Sender}</td>
-					<td class="coltop" style="width:40%;">{PHP.skinlang.pm.SubjectClick}</td>
-					<td class="coltop" style="width:176px;">{PHP.skinlang.pm.Date}</td>
-					<td class="coltop" style="width:72px;">{PHP.skinlang.pm.Action}</td>
-				</tr>
+				<div class="table-head resp-table-head">
 
+					<div class="table-row resp-table-row">
+						<div class="table-th coltop text-left" style="width:16px;">{PHP.skinlang.pm.State}</div>
+						<div class="table-th coltop text-center" style="width:10%;">{PHP.skinlang.pm.Sender}</div>
+						<div class="table-th coltop text-left">{PHP.skinlang.pm.SubjectClick}</div>
+						<div class="table-th coltop text-center" style="width:176px;">{PHP.skinlang.pm.Date}</div>
+						<div class="table-th coltop text-center" style="width:80px;"></div>
+					</div>
+
+				</div>
 
 				<!-- END: PM_TITLE -->
 
 				<!-- BEGIN: PM_TITLE_SENTBOX -->
 
-				<tr>
-					<td class="coltop" style="width:16px;">{PHP.skinlang.pm.State}</td>
-					<td class="coltop">{PHP.skinlang.pm.Recipient}</td>
-					<td class="coltop" style="width:40%;">{PHP.skinlang.pm.SubjectClick}</td>
-					<td class="coltop" style="width:176px; text-align:center;">{PHP.skinlang.pm.Date}</td>
-					<td class="coltop" style="width:72px; text-align:center;">{PHP.skinlang.pm.Action}</td>
-				</tr>
+				<div class="table-head resp-table-head">
+
+					<div class="table-row resp-table-row">
+						<div class="table-th coltop text-left" style="width:16px;">{PHP.skinlang.pm.State}</div>
+						<div class="table-th coltop text-center" style="width:10%;">{PHP.skinlang.pm.Recipient}</div>
+						<div class="table-th coltop text-left">{PHP.skinlang.pm.SubjectClick}</div>
+						<div class="table-th coltop text-center" style="width:176px;">{PHP.skinlang.pm.Date}</div>
+						<div class="table-th coltop text-center" style="width:80px;"></div>
+					</div>
+
+				</div>
 
 				<!-- END: PM_TITLE_SENTBOX -->
 
-				<!-- BEGIN: PM_ROW -->
+				<div class="table-body resp-table-body">
 
-				<tr>
-					<td style="width:16px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
-					<td class="{PM_ROW_ODDEVEN}">{PM_ROW_FROMORTOUSER}</td>
-					<td class="{PM_ROW_ODDEVEN}"><strong>{PM_ROW_TITLE}</strong></td>
-					<td style="width:112px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
-					<td style="width:112px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
-				</tr>
+					<!-- BEGIN: PM_ROW -->
 
-				<!-- END: PM_ROW -->
+					<div class="table-row resp-table-row">
 
-				<!-- BEGIN: PM_ROW_EMPTY -->
+						<div class="table-td text-left resp-table-td" data-label="{PHP.skinlang.pm.State}">
+							{PM_ROW_ICON_STATUS}
+						</div>
+						<div class="table-td text-left resp-table-td" data-label="{PHP.skinlang.pm.Recipient}">
+							{PM_ROW_FROMORTOUSER}
+						</div>
+						<div class="table-td text-left resp-table-td" data-label="{PHP.skinlang.pm.SubjectClick}">
+							<strong>{PM_ROW_TITLE}</strong>
+						</div>
+						<div class="table-td text-center resp-table-td" data-label="{PHP.skinlang.pm.Date}">
+							{PM_ROW_DATE}
+						</div>
+						<div class="table-td text-center resp-table-td" data-label="{PHP.skinlang.pm.Date}">
+							{PM_ROW_ICON_ACTION}
+						</div>
 
-				<tr>
-					<td colspan="5" style="padding:16px;">
-						{PHP.skinlang.pm.Nomessages}
-					</td>
-				</tr>
+					</div>
 
-				<!-- END: PM_ROW_EMPTY -->
+					<!-- END: PM_ROW -->
 
-			</table>
+				</div>
+
+			</div>
+
+			<!-- BEGIN: PM_ROW_EMPTY -->
+
+			<div class="pm-empty">
+				{PHP.skinlang.pm.Nomessages}
+			</div>
+
+			<!-- END: PM_ROW_EMPTY -->
 
 			<div class="pagination-box">
 
@@ -89,13 +111,40 @@
 
 			<!-- BEGIN: PM_DETAILS -->
 
-			{PHP.skinlang.pm.Subject} : <strong>{PM_ROW_TITLE}</strong><br />
-			{PHP.skinlang.pm.Sender} : {PM_ROW_FROMUSER} / {PHP.skinlang.pm.Recipient} : {PM_ROW_TOUSER} / {PHP.skinlang.pm.Date} : {PM_ROW_DATE}
-			&nbsp; &nbsp; {PHP.skinlang.pm.Action} : {PM_ROW_ICON_ACTION}
+			<div class="table-cells table-with-border">
 
-			<div class="block">
-				{PM_ROW_TEXT}
+				<div class="table-tr">
+					<div class="table-td" style="width:200px;">{PHP.skinlang.pm.Subject} </div>
+					<div class="table-td"><strong>{PM_ROW_TITLE}</strong></div>
+				</div>
+				<div class="table-tr">
+					<div class="table-td">{PHP.skinlang.pm.Sender}</div>
+					<div class="table-td">{PM_ROW_FROMUSER}</div>
+				</div>
+				<div class="table-tr">
+					<div class="table-td">{PHP.skinlang.pm.Recipient}</div>
+					<div class="table-td">{PM_ROW_TOUSER}</div>
+				</div>
+				<div class="table-tr">
+					<div class="table-td">{PHP.skinlang.pm.Date}</div>
+					<div class="table-td">{PM_ROW_DATE}</div>
+				</div>
+				<div class="table-tr">
+					<div class="table-td">{PHP.skinlang.pm.Message}</div>
+					<div class="table-td">
+						<div class="pm-message">
+							{PM_ROW_TEXT}
+						</div>
+					</div>
+				</div>
+				<div class="table-tr">
+					<div class="table-td">{PHP.skinlang.pm.Action}</div>
+					<div class="table-td">{PM_ROW_ICON_ACTION}</div>
+				</div>
+
 			</div>
+
+
 
 			<!-- END: PM_DETAILS -->
 
