@@ -85,7 +85,12 @@ $sed_urlrewrite = array(
           'cond' => '#^/sitemap.xml$#',
           'rule' => 'system/core/sitemap/sitemap.php'
      ),
-
+	 
+	 /*  Robots rewriting */
+     array(
+          'cond' => '#^/robots.txt$#',
+          'rule' => 'system/core/plug/plug.php?e=robots'
+     ),	 
      /*  Poll rewriting */
      array(
           'cond' => '#^/polls/([a-zA-Z0-9]+)(/?)$#',

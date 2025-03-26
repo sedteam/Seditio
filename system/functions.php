@@ -3111,6 +3111,55 @@ function sed_rel2abs($text)
 	return $text;
 }
 
+
+/**
+ * Generates the content of robots.txt dynamically
+ * Uses a global array $sed_robots_collection to store rules and allows additional rules via $cfg['robots'].
+ * Supports a no-index option via the $noindex parameter to block site indexing.
+ *
+ * @param bool $noindex If true, blocks indexing of the entire site with "Disallow: /"
+ * @return string The generated robots.txt content as a string
+ */
+function sed_generate_robots($noindex = false) {
+    global $cfg, $sys, $sed_robots_collection;
+
+    if (!isset($sed_robots_collection)) {
+        $sed_robots_collection = array();
+    }
+	
+	// Check if no-index option is enabled via parameter
+    if ($noindex === true) {
+        // If no-index is enabled, override all rules with a full disallow
+        $robots_content = "User-agent: *\n";
+        $robots_content .= "Disallow: /\n";
+        return $robots_content;
+    }	
+
+    $base_rules = array(
+        "User-agent: *",
+        "Disallow: /cgi-bin",    
+        "Disallow: /plugins",   
+        "Disallow: /system",
+        "Disallow: /resize"
+    );
+
+    if (!empty($cfg['robots']) && is_array($cfg['robots'])) {
+        $sed_robots_collection = array_merge($sed_robots_collection, $cfg['robots']);
+    }
+
+    $sed_robots_collection = array_merge($base_rules, $sed_robots_collection);
+
+    $robots_content = '';
+
+    if (!empty($sed_robots_collection) && is_array($sed_robots_collection)) {
+        foreach ($sed_robots_collection as $rule) {
+            $robots_content .= "$rule\n"; 
+        }
+    }
+
+    return $robots_content;
+}
+
 /** 
  * Translit seo url
  * 
