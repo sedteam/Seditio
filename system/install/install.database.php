@@ -293,7 +293,9 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "pages (
   page_seo_title varchar(255) default NULL,
   page_seo_desc varchar(255) default NULL,
   page_seo_keywords varchar(255) default NULL, 
-  page_seo_h1 varchar(255) default NULL, 
+  page_seo_h1 varchar(255) default NULL,
+  page_seo_index tinyint(1) unsigned NOT NULL default '1',
+  page_seo_follow tinyint(1) unsigned NOT NULL default '1', 
   page_thumb varchar(255) NOT NULL default '',
   PRIMARY KEY (page_id),
   KEY page_cat (page_cat)
@@ -445,6 +447,8 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "structure (
   structure_seo_desc varchar(255) default NULL,
   structure_seo_keywords varchar(255) default NULL, 
   structure_seo_h1 varchar(255) default NULL, 
+  structure_seo_index tinyint(1) unsigned NOT NULL default '1',
+  structure_seo_follow tinyint(1) unsigned NOT NULL default '1', 
   PRIMARY KEY (structure_id)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
@@ -734,4 +738,4 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "polls_options VALUES(1,
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "polls_options VALUES(2, 1, 'No', 0);");
 
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "pages VALUES
-(1, 0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"/admin/\">Administration panel</a>, tab <a href=\"admin/config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"https://seditio.org/doc/\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"https://seditio.org/forums/\">discussion forums</a>.', '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '', '');");
+(1, 0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running !<br />\r\n<br />\r\nThe next step is to go in the <a href=\"/admin/\">Administration panel</a>, tab <a href=\"admin/config\">Configuration</a>, and there tweak the settings for the system.<br />\r\nYou''ll find more instructions and tutorials in the <a href=\"https://seditio.org/doc/\">Documentation page for Seditio at Seditio.org</a>, and technical support in our <a href=\"https://seditio.org/forums/\">discussion forums</a>.', '', '', 1, 1263945600, 1263942000, 1861959600, 0, '', '', 38, 1, 1, 0.00, 0, 0, '', '', '', '', '', 1, 1, '');");

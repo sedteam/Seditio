@@ -591,6 +591,10 @@ $L['rss_lastcomments'] = "Recent Comments"; // New in v173
 $L['mt_title'] = "Title"; // New in v175
 $L['mt_description'] = "Meta description"; // New in v175
 $L['mt_keywords'] = "Meta keywords"; // New in v175
+$L['mt_index'] = "Indexing"; // New in v180
+$L['mt_follow'] = "Weight passing"; // New in v180
+$L['mt_index_help'] = "0 = No indexing, 1 = Allow indexing (default)"; // New in v180
+$L['mt_follow_help'] = "0 = No weight passing, 1 = Allow weight passing (default)"; // New in v180
 
 /* ====== Captcha Errors ====== */
 $L['captcha_error_many_incorrect'] = "You have entered too many incorrect captchas! Contact your administrator for help!";

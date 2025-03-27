@@ -71,6 +71,9 @@ if ($a == 'update') {
 	$rpageseokeywords = sed_import('rpageseokeywords', 'P', 'TXT');
 	$rpageseoh1 = sed_import('rpageseoh1', 'P', 'TXT');
 
+	$rpageseoindex = sed_import('rpageseoindex', 'P', 'BOL');
+	$rpageseofollow = sed_import('rpageseofollow', 'P', 'BOL');
+
 	$rpageallowcomments = sed_import('rpageallowcomments', 'P', 'BOL');
 	$rpageallowratings = sed_import('rpageallowratings', 'P', 'BOL');
 
@@ -184,6 +187,8 @@ if ($a == 'update') {
 				page_seo_desc = '" . sed_sql_prep($rpageseodesc) . "',				
 				page_seo_keywords = '" . sed_sql_prep($rpageseokeywords) . "',
 				page_seo_h1 = '" . sed_sql_prep($rpageseoh1) . "',
+				page_seo_index = '$rpageseoindex',
+				page_seo_follow = '$rpageseofollow',								
 				page_thumb = '" . sed_sql_prep($rpagethumb) . "'" . $ssql_extra . "          				
 				WHERE page_id='$id'");
 
@@ -311,6 +316,8 @@ $t->assign(array(
 	"PAGEEDIT_FORM_SEODESC" => sed_textbox('rpageseodesc', $pag['page_seo_desc']),
 	"PAGEEDIT_FORM_SEOKEYWORDS" => sed_textbox('rpageseokeywords', $pag['page_seo_keywords']),
 	"PAGEEDIT_FORM_SEOH1" => sed_textbox('rpageseoh1', $pag['page_seo_h1']),
+	"PAGEEDIT_FORM_SEOINDEX" => sed_checkbox("rpageseoindex", "", $pag['page_seo_index']),
+	"PAGEEDIT_FORM_SEOFOLLOW" => sed_checkbox("rpageseofollow", "", $pag['page_seo_follow']),
 	"PAGEEDIT_FORM_AUTHOR" => sed_textbox('rpageauthor', $pag['page_author'], 24, 32),
 	"PAGEEDIT_FORM_OWNERID" => sed_textbox('rpageownerid', $pag['page_ownerid'], 24, 32),
 	"PAGEEDIT_FORM_DATE" => $pag['page_date'] . " " . $usr['timetext'],

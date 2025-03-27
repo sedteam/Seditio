@@ -193,6 +193,22 @@ $sqlqr = "DELETE FROM " . $cfg['sqldbprefix'] . "config WHERE config_cat='pfs' A
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages ADD page_seo_index tinyint(1) unsigned NOT NULL default '1' AFTER page_seo_h1";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages ADD page_seo_follow tinyint(1) unsigned NOT NULL default '1' AFTER page_seo_index";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_index tinyint(1) unsigned NOT NULL default '1' AFTER structure_seo_h1";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_follow tinyint(1) unsigned NOT NULL default '1' AFTER structure_seo_index";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to 180...<br />";

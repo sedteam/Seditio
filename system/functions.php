@@ -132,6 +132,8 @@ $cfg['msg_status'] = array(
 $out['notices'] = '';
 $out['subdesc'] = '';
 $out['subkeywords'] = '';
+$out['robots_index'] = 1;
+$out['robots_follow'] = 1;
 $morejavascript = '';
 $morecss = '';
 $moremetas = '';
@@ -2668,30 +2670,40 @@ function sed_hextorgb($colour)
 	return array('r' => $r, 'g' => $g, 'b' => $b);
 }
 
-/** 
- * Generation meta tags, base href & favicon link 
- * 
- * @param  string $description Value meta decription
- * @param  string $keywords Value meta keywords
- * @return string $result
+/**
+ * Generates HTML meta tags for the page head section.
+ *
+ * This function constructs a block of HTML meta tags including content type, description, keywords,
+ * robots directives (index/noindex, follow/nofollow), and other standard tags. It uses global
+ * configuration and system variables to populate default values where applicable.
+ *
+ * @param string $description Page description. Defaults to $cfg['subtitle'] if empty.
+ * @param string $keywords Comma-separated list of keywords. Defaults to $cfg['metakeywords'] if empty.
+ * @param int $robots_index Indexing directive: 1 = 'index' (default), 0 = 'noindex'.
+ * @param int $robots_follow Link following directive: 1 = 'follow' (default), 0 = 'nofollow'.
+ * @param string $contenttype Content type of the page. Defaults to 'text/html'.
+ * @return string HTML string containing meta tags and base href.
  */
-function sed_htmlmetas($description = '', $keywords = '', $contenttype = 'text/html')
+function sed_htmlmetas($description = '', $keywords = '', $robots_index = 1, $robots_follow = 1, $contenttype = 'text/html')
 {
 	global $cfg, $sys;
 
 	$description = (empty($description)) ? $cfg['subtitle'] : htmlspecialchars($description);
 	$keywords = (empty($keywords)) ? $cfg['metakeywords'] : htmlspecialchars($keywords);
 
-	$result = "
-	<base href=\"" . $sys['abs_url'] . "\" />
-	<meta http-equiv=\"content-type\" content=\"" . $contenttype . "; charset=" . $cfg['charset'] . "\" />
-	<meta name=\"description\" content=\"" . $description . "\" />
-	<meta name=\"keywords\" content=\"" . $keywords . "\" />
-	<meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
-	<meta http-equiv=\"pragma\" content=\"no-cache\" />
-	<meta http-equiv=\"cache-control\" content=\"no-cache\" />
-	<meta http-equiv=\"last-modified\" content=\"" . gmdate("D, d M Y H:i:s") . " GMT\" />
-	<link rel=\"shortcut icon\" href=\"favicon.ico\" />";
+	// Define robots directives
+	$robots_index = ($robots_index == 1) ? 'index' : 'noindex';
+	$robots_follow = ($robots_follow == 1) ? 'follow' : 'nofollow';
+	$robots = "$robots_index, $robots_follow";
+
+	$result = "<base href=\"" . $sys['abs_url'] . "\" />
+    <meta http-equiv=\"content-type\" content=\"" . $contenttype . "; charset=" . $cfg['charset'] . "\" />
+    <meta name=\"description\" content=\"" . $description . "\" />
+    <meta name=\"keywords\" content=\"" . $keywords . "\" />
+    <meta name=\"robots\" content=\"" . $robots . "\" />
+    <meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
+    <meta http-equiv=\"last-modified\" content=\"" . gmdate("D, d M Y H:i:s") . " GMT\" />
+    <link rel=\"shortcut icon\" href=\"favicon.ico\" />";
 	return ($result);
 }
 
@@ -3120,44 +3132,45 @@ function sed_rel2abs($text)
  * @param bool $noindex If true, blocks indexing of the entire site with "Disallow: /"
  * @return string The generated robots.txt content as a string
  */
-function sed_generate_robots($noindex = false) {
-    global $cfg, $sys, $sed_robots_collection;
+function sed_generate_robots($noindex = false)
+{
+	global $cfg, $sys, $sed_robots_collection;
 
-    if (!isset($sed_robots_collection)) {
-        $sed_robots_collection = array();
-    }
-	
+	if (!isset($sed_robots_collection)) {
+		$sed_robots_collection = array();
+	}
+
 	// Check if no-index option is enabled via parameter
-    if ($noindex === true) {
-        // If no-index is enabled, override all rules with a full disallow
-        $robots_content = "User-agent: *\n";
-        $robots_content .= "Disallow: /\n";
-        return $robots_content;
-    }	
+	if ($noindex === true) {
+		// If no-index is enabled, override all rules with a full disallow
+		$robots_content = "User-agent: *\n";
+		$robots_content .= "Disallow: /\n";
+		return $robots_content;
+	}
 
-    $base_rules = array(
-        "User-agent: *",
-        "Disallow: /cgi-bin",    
-        "Disallow: /plugins",   
-        "Disallow: /system",
-        "Disallow: /resize"
-    );
+	$base_rules = array(
+		"User-agent: *",
+		"Disallow: /cgi-bin",
+		"Disallow: /plugins",
+		"Disallow: /system",
+		"Disallow: /resize"
+	);
 
-    if (!empty($cfg['robots']) && is_array($cfg['robots'])) {
-        $sed_robots_collection = array_merge($sed_robots_collection, $cfg['robots']);
-    }
+	if (!empty($cfg['robots']) && is_array($cfg['robots'])) {
+		$sed_robots_collection = array_merge($sed_robots_collection, $cfg['robots']);
+	}
 
-    $sed_robots_collection = array_merge($base_rules, $sed_robots_collection);
+	$sed_robots_collection = array_merge($base_rules, $sed_robots_collection);
 
-    $robots_content = '';
+	$robots_content = '';
 
-    if (!empty($sed_robots_collection) && is_array($sed_robots_collection)) {
-        foreach ($sed_robots_collection as $rule) {
-            $robots_content .= "$rule\n"; 
-        }
-    }
+	if (!empty($sed_robots_collection) && is_array($sed_robots_collection)) {
+		foreach ($sed_robots_collection as $rule) {
+			$robots_content .= "$rule\n";
+		}
+	}
 
-    return $robots_content;
+	return $robots_content;
 }
 
 /** 
@@ -3459,7 +3472,7 @@ function sed_load_structure()
 		} else {
 			$path[$row['structure_path']] = $row['structure_code'];
 			$tpath[$row['structure_path']] = $row['structure_title'];
-			$spath = ""; //new sed175
+			$spath = "";
 		}
 
 		$order = explode('.', $row['structure_order']);
@@ -3468,7 +3481,7 @@ function sed_load_structure()
 			'id' => $row['structure_id'],
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
-			'spath' => $spath, //new sed175
+			'spath' => $spath,
 			'rpath' => $row['structure_path'],
 			'tpl' => $row['structure_tpl'],
 			'title' => $row['structure_title'],
@@ -3480,6 +3493,8 @@ function sed_load_structure()
 			'seo_title' => $row['structure_seo_title'],
 			'seo_desc' => $row['structure_seo_desc'],
 			'seo_keywords' => $row['structure_seo_keywords'],
+			'seo_index' => $row['structure_seo_index'],
+			'seo_follow' => $row['structure_seo_follow'],
 			'group' => $row['structure_group'],
 			'allowcomments' => $row['structure_allowcomments'],
 			'allowratings' => $row['structure_allowratings'],

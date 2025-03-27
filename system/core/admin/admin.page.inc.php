@@ -75,6 +75,9 @@ switch ($mn) {
 				$rseokeywords = sed_import('rseokeywords', 'P', 'TXT');
 				$rseoh1 =  sed_import('rseoh1', 'P', 'TXT');
 
+				$rseoindex = sed_import('rseoindex', 'P', 'BOL');
+				$rseofollow = sed_import('rseofollow', 'P', 'BOL');
+
 				$rallowcomments = sed_import('rallowcomments', 'P', 'BOL');  //New v173
 				$rallowratings = sed_import('rallowratings', 'P', 'BOL');  //New v173
 
@@ -98,6 +101,8 @@ switch ($mn) {
 				structure_seo_desc = '" . sed_sql_prep($rseodesc) . "',
 				structure_seo_keywords = '" . sed_sql_prep($rseokeywords) . "',
 				structure_seo_h1 = '" . sed_sql_prep($rseoh1) . "',
+				structure_seo_index = '" . sed_sql_prep($rseoindex) . "',
+				structure_seo_follow = '" . sed_sql_prep($rseofollow) . "',
     			structure_allowcomments = '" . sed_sql_prep($rallowcomments) . "',
     			structure_allowratings = '" . sed_sql_prep($rallowratings) . "',
     			structure_group = '" . $rgroup . "'
@@ -140,6 +145,9 @@ switch ($mn) {
 			$structure_seo_keywords = $row['structure_seo_keywords'];
 			$structure_seo_h1 = $row['structure_seo_h1'];
 
+			$structure_seo_index = $row['structure_seo_index'];
+			$structure_seo_follow = $row['structure_seo_follow'];
+
 			$structure_allowcomments = $row['structure_allowcomments'];
 			$structure_allowratings = $row['structure_allowratings'];
 
@@ -171,8 +179,6 @@ switch ($mn) {
 			}
 			$st_tpl .= "</select><br/>";
 
-			$st_group = sed_checkbox("rgroup", "", $structure_group);
-
 			$pfs = sed_build_pfs($usr['id'], 'savestructure', 'rstext', $L['Mypfs']);
 			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, 'savestructure', 'rstext', $L['SFS']) : '';
 
@@ -188,8 +194,10 @@ switch ($mn) {
 				"STRUCTURE_UPDATE_SEODESC" => sed_textbox('rseodesc', $structure_seo_desc, 64, 255),
 				"STRUCTURE_UPDATE_SEOKEYWORDS" => sed_textbox('rseokeywords', $structure_seo_keywords, 64, 255),
 				"STRUCTURE_UPDATE_SEOH1" => sed_textbox('rseoh1', $structure_seo_h1, 64, 255),
+				"STRUCTURE_UPDATE_SEOINDEX" => sed_checkbox("rseoindex", "", $structure_seo_index),
+				"STRUCTURE_UPDATE_SEOFOLLOW" => sed_checkbox("rseofollow", "", $structure_seo_follow),
 				"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended') . " " . $pfs,
-				"STRUCTURE_UPDATE_GROUP" => $st_group,
+				"STRUCTURE_UPDATE_GROUP" => sed_checkbox("rgroup", "", $structure_group),
 				"STRUCTURE_UPDATE_TPL" => $st_tpl,
 				"STRUCTURE_UPDATE_ALLOWCOMMENTS" => $form_allowcomments,
 				"STRUCTURE_UPDATE_ALLOWRATINGS" => $form_allowratings,

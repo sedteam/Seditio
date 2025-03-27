@@ -592,6 +592,10 @@ $L['rss_lastcomments'] = 'Последние комментарии';	// New in 
 $L['mt_title'] = "Тег title"; // New in v175
 $L['mt_description'] = "Meta-тег description"; // New in v175
 $L['mt_keywords'] = "Meta-тег keywords"; // New in v175
+$L['mt_index'] = "Индексация"; // New in v180
+$L['mt_follow'] = "Передача веса"; // New in v180
+$L['mt_index_help'] = "0 = Не индексировать, 1 = Разрешить индексацию (по умолчанию)"; // New in v180
+$L['mt_follow_help'] = "0 = Не передавать вес, 1 = Передавать вес (по умолчанию)"; // New in v180
 
 /* ====== Captcha Errors ====== */
 $L['captcha_error_many_incorrect'] = "Вы ввели слишком много неверных капчей! Обратитесь за помощью к администратору!";

@@ -107,6 +107,22 @@
 						<div class="form-field">{STRUCTURE_UPDATE_SEOKEYWORDS}</div>
 					</li>
 
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.mt_index} :</label></div>
+						<div class="form-field">
+							{STRUCTURE_UPDATE_SEOINDEX}
+							<div class="help">{PHP.L.mt_index_help}</div>
+						</div>
+					</li>
+
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.mt_follow} :</label></div>
+						<div class="form-field">
+							{STRUCTURE_UPDATE_SEOFOLLOW}
+							<div class="help">{PHP.L.mt_follow_help}</div>
+						</div>
+					</li>
+
 				</ul>
 
 			</div>

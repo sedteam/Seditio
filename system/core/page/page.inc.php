@@ -176,6 +176,9 @@ $out['subtitle'] = sed_title('pagetitle', $title_tags, $title_data);
 $out['subkeywords'] = $pag['page_seo_keywords'];
 $out['canonical_url'] = ($cfg['absurls']) ? $pag['page_pageurl'] : $sys['abs_url'] . $pag['page_pageurl'];
 
+$out['robots_index'] = $pag['page_seo_index'];
+$out['robots_follow'] = $pag['page_seo_follow'];
+
 // ---------- Breadcrumbs
 $urlpaths = array();
 sed_build_list_bc($pag['page_cat']);

@@ -213,6 +213,9 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = $sed_cat[$c]['title'];
 $out['subdesc'] = $sed_cat[$c]['desc'];
 
+$out['robots_index'] = $sed_cat[$c]['seo_index'];
+$out['robots_follow'] = $sed_cat[$c]['seo_follow'];
+
 /* ===== */
 $sys['catcode'] = $c;
 $out['canonical_url'] = ($cfg['absurls']) ? sed_url("list", "c=" . $c . "&d=" . $d) : $sys['abs_url'] . sed_url("list", "c=" . $c . "&d=" . $d);

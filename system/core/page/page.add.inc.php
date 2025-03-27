@@ -83,6 +83,9 @@ if ($a == 'add') {
 	$newpageseokeywords = sed_import('newpageseokeywords', 'P', 'TXT');
 	$newpageseoh1 = sed_import('newpageseoh1', 'P', 'TXT');
 
+	$newpageseoindex = sed_import('newpageseoindex', 'P', 'BOL');
+	$newpageseofollow = sed_import('newpageseofollow', 'P', 'BOL');
+
 	$newpageallowcomments = sed_import('newpageallowcomments', 'P', 'BOL');
 	$newpageallowratings = sed_import('newpageallowratings', 'P', 'BOL');
 
@@ -150,6 +153,8 @@ if ($a == 'add') {
 			page_seo_desc,
 			page_seo_keywords,
 			page_seo_h1,
+			page_seo_index,
+			page_seo_follow,
 			page_thumb" . $ssql_extra_columns . "
 			)
 			VALUES
@@ -174,7 +179,9 @@ if ($a == 'add') {
 			'" . sed_sql_prep($newpageseotitle) . "',
 			'" . sed_sql_prep($newpageseodesc) . "',			
 			'" . sed_sql_prep($newpageseokeywords) . "',  
-			'" . sed_sql_prep($newpageseoh1) . "', 			
+			'" . sed_sql_prep($newpageseoh1) . "', 	
+			" . (int)$newpageseoindex . ", 	
+			" . (int)$newpageseofollow . ", 			
 			'" . sed_sql_prep($newpagethumb) . "'" . $ssql_extra_values . ")");
 
 		/* === Hook === */
@@ -233,6 +240,8 @@ if (($a == 'clone') && ($id > 0)) {
 	$newpageseodesc = $row1['page_seo_desc'];
 	$newpageseokeywords = $row1['page_seo_keywords'];
 	$newpageseoh1 = $row1['page_seo_h1'];
+	$newpageseoindex = $row1['page_seo_index'];
+	$newpageseofollow = $row1['page_seo_follow'];
 
 	if (count($extrafields) > 0) {
 		foreach ($extrafields as $row) {
@@ -321,6 +330,8 @@ $t->assign(array(
 	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', isset($newpageseodesc) ? $newpageseodesc : ''),
 	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', isset($newpageseokeywords) ? $newpageseokeywords : ''),
 	"PAGEADD_FORM_SEOH1" => sed_textbox('newpageseoh1', isset($newpageseoh1) ? $newpageseoh1 : ''),
+	"PAGEADD_FORM_SEOINDEX" => sed_checkbox("newpageseoindex", "", isset($newpageseoindex) ? $newpageseoindex : 1),
+	"PAGEADD_FORM_SEOFOLLOW" => sed_checkbox("newpageseofollow", "", isset($newpageseofollow) ? $newpageseofollow : 1),
 	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', isset($newpagethumb) ? $newpagethumb : ''),
 	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', isset($newpageauthor) ? $newpageauthor : '', 16, 24),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),
