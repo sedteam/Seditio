@@ -20,7 +20,7 @@ if (!defined('SED_CODE') || !defined('SED_INSTALL')) {
 
 $cfg['mysqlcollate'] = "utf8mb4_unicode_ci";
 $cfg['mysqlcharset'] = "utf8mb4";
-$cfg['mysqlengine'] = "InnoDB";
+$cfg['mysqlengine'] = version_compare(sed_sql_version(), '5.6', '>=') ? "InnoDB" : "MyISAM";
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "auth (
   auth_id mediumint(8) NOT NULL auto_increment,
@@ -518,10 +518,10 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "menu (
   KEY menu_pid (menu_pid)
 ) ENGINE=" . $cfg['mysqlengine'] . " DEFAULT CHARSET=" . $cfg['mysqlcharset'] . " COLLATE=" . $cfg['mysqlcollate'] . ";");
 
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (1, 'articles', '1', '', 'Articles', '', '', '', 1 ,'title.asc', 1, 1, '', '', '', '', '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', '',  0 ,'title.asc', 1, 1, '', '', '', '', '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', '',  0 ,'title.asc', 1, 1, '', '', '', '', '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (4, 'news', '2', '', 'News', '', '', '', 0 ,'date.desc', 1, 1, '', '', '', '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (1, 'articles', '1', '', 'Articles', '', '', '', 1 ,'title.asc', 1, 1, '', '', '', '', '', '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (2, 'sample1', '1.1', '', 'Sample category 1', 'Description for the Sample category 1', '', '',  0 ,'title.asc', 1, 1, '', '', '', '', '', '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (3, 'sample2', '1.2', '', 'Sample category 2', 'Description for the Sample category 2', '', '',  0 ,'title.asc', 1, 1, '', '', '', '', '', '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "structure VALUES (4, 'news', '2', '', 'News', '', '', '', 0 ,'date.desc', 1, 1, '', '', '', '', '', '', '');");
 
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 0, 'General chat.', 'system/img/admin/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 0, 'Various and off-topic.', 'system/img/admin/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0);");

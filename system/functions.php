@@ -2736,7 +2736,6 @@ function sed_html($text)
  *                on the user's permissions. The structure of the `div` elements is
  *                preserved, but their content is conditionally replaced with a message
  *                if the user does not meet the visibility criteria.
- *
  */
 function sed_spoiler($text)
 {
@@ -2745,10 +2744,11 @@ function sed_spoiler($text)
 	// Regular expression to find spoilers with either class, considering the possible absence of one of the attributes
 	$pattern = '#<div class="(spoiler-content|hidden-content)"( data-mingroup="([^"]*)")?( data-minlevel="([^"]*)")?>(.*?)<\/div>#s';
 
-	// Callback function to process each found spoiler
-	$callback = function ($matches) use ($usr, $L) {
-		$mingroup = $matches[3] ?? '';
-		$minlevel = $matches[5] ?? '';
+	$callback = function ($matches) {
+		global $usr, $L;
+
+		$mingroup = isset($matches[3]) ? $matches[3] : '';
+		$minlevel = isset($matches[5]) ? $matches[5] : '';
 		$content = $matches[6];
 		$class = $matches[1]; // Capture the class name
 
@@ -2768,21 +2768,33 @@ function sed_spoiler($text)
 			if ($usr['maingrp'] == $mingroup && $usr['level'] >= $minlevel) {
 				return $divOpen . $content . $divClose;
 			} else {
-				return $divOpen . str_replace(['{groupName}', '{minlevel}'], [$groupName, $minlevel], $L['spoiler_locked_both']) . $divClose;
+				return $divOpen . str_replace(
+					array('{groupName}', '{minlevel}'),
+					array($groupName, $minlevel),
+					$L['spoiler_locked_both']
+				) . $divClose;
 			}
 		} elseif (!empty($mingroup)) {
 			// Only mingroup is set
 			if ($usr['maingrp'] == $mingroup) {
 				return $divOpen . $content . $divClose;
 			} else {
-				return $divOpen . str_replace('{groupName}', $groupName, $L['spoiler_locked_group']) . $divClose;
+				return $divOpen . str_replace(
+					'{groupName}',
+					$groupName,
+					$L['spoiler_locked_group']
+				) . $divClose;
 			}
 		} elseif (!empty($minlevel)) {
 			// Only minlevel is set
 			if ($usr['level'] >= $minlevel) {
 				return $divOpen . $content . $divClose;
 			} else {
-				return $divOpen . str_replace('{minlevel}', $minlevel, $L['spoiler_locked_level']) . $divClose;
+				return $divOpen . str_replace(
+					'{minlevel}',
+					$minlevel,
+					$L['spoiler_locked_level']
+				) . $divClose;
 			}
 		} else {
 			// Neither attribute is set

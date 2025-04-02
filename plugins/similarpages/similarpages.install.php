@@ -2,8 +2,8 @@
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
+Copyright Neocrome & Seditio Team
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/similarpages/similarpages.install.php
@@ -17,9 +17,13 @@ Description=
 ==================== */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
-    die('Wrong URL.');
+	die('Wrong URL.');
 }
 
 global $db_pages;
 
-$sql_alter_index = sed_sql_query("ALTER TABLE $db_pages ADD FULLTEXT (page_title)");
+$table_status = sed_sql_table_status($db_pages);
+
+if (version_compare(sed_sql_version(), '5.6', '>=') || $table_status['Engine'] == 'MyISAM') {
+	$sql_alter_index = sed_sql_query("ALTER TABLE $db_pages ADD FULLTEXT (page_title)");
+}

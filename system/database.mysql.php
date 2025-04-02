@@ -277,3 +277,32 @@ function sed_sql_rowcount($table)
 	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table");
 	return (mysql_result($sqltmp, 0, "COUNT(*)"));
 }
+
+/**
+ * Retrieves the MySQL server version.
+ *
+ * This function executes a SQL query to fetch the version of the MySQL server
+ * and returns the version as a string.
+ *
+ * @return string The version of the MySQL server.
+ */
+function sed_sql_version()
+{
+	$mysql_version_sql = sed_sql_query("SELECT VERSION() as mysql_version");
+	return (mysql_result($mysql_version_sql, 0, "mysql_version"));
+}
+
+/**
+ * Retrieves the status of a specified table.
+ *
+ * This function executes a SQL query to fetch the status information of the specified table
+ * and returns the status as an associative array.
+ *
+ * @param string $table The name of the table to retrieve the status for.
+ * @return array The status information of the table as an associative array.
+ */
+function sed_sql_table_status($table)
+{
+	$sql_status = sed_sql_query("SHOW TABLE STATUS LIKE '$table'");
+	return (sed_sql_fetchassoc($sql_status));
+}
