@@ -67,6 +67,14 @@ if ($a == 'archive') {
 	$sql = sed_sql_query("UPDATE $db_pm SET pm_state=2 WHERE pm_id='$id'");
 	sed_redirect(sed_url("pm", "", "", true));
 	exit;
+} elseif ($a == 'index') {
+	if ($pm_touserid != $usr['id'] || $pm_state < 2) {
+		sed_redirect(sed_url("message", "msg=550", "", true));
+		exit;
+	}
+	$sql = sed_sql_query("UPDATE $db_pm SET pm_state=1 WHERE pm_id='$id'");
+	sed_redirect(sed_url("pm", "", "", true));
+	exit;
 } elseif ($a == 'delete') {
 	if (($pm_state > 0 && $pm_touserid != $usr['id']) || ($pm_state == 0 && $pm_fromuserid != $usr['id'])) {
 		sed_redirect(sed_url("message", "msg=950", "", true));

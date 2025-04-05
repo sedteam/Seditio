@@ -223,7 +223,8 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj < $cfg['maxrowsperpage'])) {
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"" . sed_url("pm", "m=send&to=" . $row['pm_fromuserid'] . "&q=" . $row['pm_id']) . "\">" . $out['ic_pm_reply'] . "</a> <a href=\"" . sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f) . "\">" . $out['ic_pm_trashcan'] . "</a>";
+		$row['pm_icon_action'] = "<a href=\"" . sed_url("pm", "m=send&to=" . $row['pm_fromuserid'] . "&q=" . $row['pm_id']) . "\">" . $out['ic_pm_reply'] . "</a> <a href=\"" . sed_url("pm", "m=edit&a=index&" . sed_xg() . "&id=" . $row['pm_id']) . "\">" . $out['ic_pm_archive'] . "</a>";
+		$row['pm_icon_action'] .= " <a href=\"" . sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f) . "\">" . $out['ic_pm_trashcan'] . "</a>";
 	} else {
 		$pm_fromuserid = $row['pm_fromuserid'];
 		$pm_fromuser = sed_cc($row['pm_fromuser']);
