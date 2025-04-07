@@ -357,7 +357,8 @@ $L['adm_dic_term_edit'] = "Edit term from directory";
 $L['adm_dic_children'] = "Children directory";
 
 $L['adm_dic_mera'] = "Unit";
-$L['adm_dic_values'] = "List of values for directory";
+
+$L['adm_dic_values'] = "Values ​​for select, radio, checkbox";
 
 $L['adm_dic_form_title'] = "Title for form element";
 $L['adm_dic_form_desc'] = "Text for form element";
@@ -373,7 +374,7 @@ $L['adm_dic_extra_location'] = "Name of table";
 $L['adm_dic_extra_type'] = "Data type of field";
 $L['adm_dic_extra_size'] = "Length of field";
 
-$L['adm_dic_comma_separat'] = "(values comma separated)";
+$L['adm_dic_comma_separat'] = "(comma separated)";
 
 $L['adm_help_dic'] = ""; //Need add
 

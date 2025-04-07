@@ -4128,7 +4128,7 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
 	}
 
 	$selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
-	$first_option = ($empty_option) ? "<option value=\"\" " . (empty($check) ? $selected : '') . ">---</option>" : '';
+	$first_option = ($empty_option) ? "<option value=\"\" " . (($check == '') ? $selected : '') . ">---</option>" : '';
 
 	$htmlAttributes = "";
 	foreach ($additionalAttributes as $attribute => $attrValue) {
@@ -5576,6 +5576,8 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 		if ($field_value == '' && $row['term_default'] != '') {
 			$field_value = $row['term_default'];
 		}
+
+		$row['terms'] = (count($row['terms']) < 1 && !empty($row['values'])) ? explode(',', $row['values']) : $row['terms'];
 
 		// Initialize $t2 based on the field type
 		switch ($row['type']) {

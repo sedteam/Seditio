@@ -359,7 +359,8 @@ $L['adm_dic_term_edit'] = "Редактирование термина из сп
 $L['adm_dic_children'] = "Дочерний справочник";
 
 $L['adm_dic_mera'] = "Единица измерения";
-$L['adm_dic_values'] = "Значения справочника";
+
+$L['adm_dic_values'] = "Значения для select, radio, checkbox";
 
 $L['adm_dic_form_title'] = "Заголовок для элемента формы";
 $L['adm_dic_form_desc'] = "Подпись для элемента формы";
@@ -375,7 +376,7 @@ $L['adm_dic_extra_location'] = "Наименование таблицы";
 $L['adm_dic_extra_type'] = "Тип данных поля";
 $L['adm_dic_extra_size'] = "Длина поля";
 
-$L['adm_dic_comma_separat'] = "(значения, разделенные через запятую)";
+$L['adm_dic_comma_separat'] = "(разделенные через запятую)";
 
 $L['adm_help_dic'] = ""; //Need add
 
