@@ -88,23 +88,6 @@ if (preg_match("#{redir:(.*?)}#", $pag['page_text'], $find_out)) {
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='" . $pag['page_id'] . "'");
 	sed_redirect($redir);
 	exit;
-} elseif (preg_match("#{include:([a-zA-Z0-9_.\-]+)}#", $pag['page_text'], $find_out)) {
-	$pag['page_text'] = sed_readraw('datas/html/' . trim(mb_substr($find_out[1], 0, 255)));
-} elseif (preg_match("#{plugin:([a-z0-9]+)}#", $pag['page_text'], $find_out)) {
-	define('SED_PLUG', TRUE);
-	$plug = $find_out[1];
-	$path_plug = SED_ROOT . 'plugins/' . $plug . '/' . $plug . '.php';
-	$path_lang_def = SED_ROOT . "plugins/$plug/lang/$plug.en.lang.php";
-	$path_lang_alt = SED_ROOT . "plugins/$plug/lang/$plug.$lang.lang.php";
-	if (file_exists($path_lang_alt)) {
-		require($path_lang_alt);
-	} elseif (file_exists($path_lang_def)) {
-		require($path_lang_def);
-	}
-	if (file_exists($path_plug)) {
-		include($path_plug);
-	}
-	$pag['page_text'] = str_replace($find_out[0], $plugin_body, $pag['page_text']);
 }
 
 if ($pag['page_file'] && $a == 'dl') {
