@@ -18,5 +18,3 @@ Description=
 $L['upl_mainimage'] = "По-умолчанию";
 $L['upl_upload_images'] = "Загрузить изображения";
 $L['upl_choose_from_pfs'] = "Выбрать из PFS";
-
-?>

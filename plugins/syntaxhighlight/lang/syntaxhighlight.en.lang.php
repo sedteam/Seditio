@@ -6,7 +6,7 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=plugins/syntaxhighlight/lang/syntaxhighlight.ru.lang.php
+File=plugins/syntaxhighlight/lang/syntaxhighlight.en.lang.php
 Version=180
 Updated=2025-feb-16
 Type=Plugin
@@ -16,4 +16,4 @@ Description=
 
 ==================== */
 
-$L['cfg_syntaxhighlight_theme'] = array("Цветовая тема Syntaxhighlight", "");
+$L['cfg_syntaxhighlight_theme'] = array("Syntaxhighlight color theme", "");

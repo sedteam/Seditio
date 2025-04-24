@@ -10,7 +10,7 @@ File=plugins/whosonline/lang/whosonline.ru.lang.php
 Version=180
 Updated=2025-jan-25
 Type=
-Author=Seditio Team (Translated - Antar)
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

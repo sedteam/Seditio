@@ -2,8 +2,8 @@
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Russian Seditio Team 
-http://www.neocrome.net http://ldu.ru
+Copyright Neocrome & Seditio Team
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/lang/sedcaptcha.ru.lang.php
@@ -11,7 +11,7 @@ Version=180
 Updated=2025-jan-25
 Type=Plugin
 Author=Amro
-Description=Plugin to protect the registration process with a Cool PHP Captcha.
+Description=
 [END_SED]
 ==================== */
 

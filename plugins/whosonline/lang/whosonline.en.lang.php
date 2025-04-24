@@ -4,6 +4,7 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
+
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.en.lang.php
 Version=180

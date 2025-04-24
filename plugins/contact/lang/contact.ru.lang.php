@@ -10,7 +10,7 @@ Version=180
 Updated=2025-jan-25
 Type=
 Author=Seditio Team
-Description=Языковой файл для плагина формы обратной связи
+Description=
 [END_SED]
 ==================== */
 

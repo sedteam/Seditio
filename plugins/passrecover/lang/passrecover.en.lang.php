@@ -14,7 +14,6 @@ Description=
 [END_SED]
 ==================== */
 
-
 $L['plu_title'] = "Password recovery";
 
 $L['plu_explain1'] = "1 : Enter your email address and the verification code, and we will email instructions to you on how to reset your password.";

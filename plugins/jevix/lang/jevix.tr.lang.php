@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
@@ -6,16 +6,14 @@ Copyright Neocrome & Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=plugins/lang/skineditor.en.lang.php
+File=plugins/jevix/lang/jevix.tr.lang.php
 Version=180
 Updated=2025-jan-25
-Type=
+Type=Plugin
 Author=Seditio Team
 Description=
 [END_SED]
 ==================== */
 
-$L['plu_makbak'] = "Backup now";
-$L['plu_delbak'] = "Delete the backup";
-$L['plu_resbak'] = "Restore the backup";
-$L['plu_reopen'] = "Update and come back here";
+$L['cfg_use_xhtml'] = array("XHTML kullanılsın mı?", "");
+$L['cfg_use_for_admin'] = array("Yöneticiler için Jevix etkinleştirilsin mi?", "");

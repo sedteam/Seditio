@@ -4,8 +4,9 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
+
 [BEGIN_SED]
-File=plugins/lang/statistics.en.lang.php
+File=plugins/statistics/lang/statistics.en.lang.php
 Version=180
 Updated=2025-jan-25
 Type=

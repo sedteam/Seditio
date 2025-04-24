@@ -6,7 +6,7 @@ File=plugins/search/lang/search.ru.lang.php
 Version=180
 Updated=2025-jan-25
 Type=
-Author=Seditio Team, Translated by Amro - http://seditio.org
+Author=Seditio Team
 Description=
 [END_SED]
 ==================== */

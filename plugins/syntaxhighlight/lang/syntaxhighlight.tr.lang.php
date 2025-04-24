@@ -16,4 +16,4 @@ Description=
 
 ==================== */
 
-$L['cfg_syntaxhighlight_theme'] = array("Цветовая тема Syntaxhighlight", "");
+$L['cfg_syntaxhighlight_theme'] = array("Sözdizimi vurgulama tema rengi", "");

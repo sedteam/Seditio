@@ -4,6 +4,7 @@
 Seditio - Website engine
 Copyright Neocrome & Seditio Team
 https://seditio.org
+
 [BEGIN_SED]
 File=plugins/lang/skineditor.ru.lang.php
 Version=180
@@ -13,7 +14,6 @@ Author=Seditio Team
 Description=
 [END_SED]
 ==================== */
-
 
 $L['plu_makbak'] = "Сделать бэкап";
 $L['plu_delbak'] = "Удалить бэкап";

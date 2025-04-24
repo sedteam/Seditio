@@ -2,11 +2,11 @@
 
 /* ====================
 Seditio - Website engine
-Copyright Seditio Team
+Copyright Neocrome & Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=plugins/uploader/lang/uploader.en.lang.php
+File=plugins/news/lang/news.en.lang.php
 Version=180
 Updated=2025-jan-25
 Type=Plugin
@@ -15,6 +15,5 @@ Description=
 [END_SED]
 ==================== */
 
-$L['upl_mainimage'] = "Default";
-$L['upl_upload_images'] = "Upload images";
-$L['upl_choose_from_pfs'] = "Choose from PFS";
+$L['cfg_category'] = array("Parent category code", "");
+$L['cfg_maxpages'] = array("Number of displayed pages", "");
