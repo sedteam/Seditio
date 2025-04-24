@@ -268,17 +268,6 @@ $L['cfg_trash_page'] = array("Разрешить использование ко
 $L['cfg_trash_pm'] = array("Разрешить использование корзины для личных сообщений", "");        // New in v110
 $L['cfg_trash_user'] = array("Разрешить использование корзины для пользователей", "");        // New in v110
 
-$L['cfg_parser_vid'] = array("Разрешить BB-коды для видео-файлов", "");                // New in v120
-$L['cfg_parser_vid_autolink'] = array("Автоматическя обработка ссылок на известные видео-сайты", "");     // New in v120
-$L['cfg_parsebbcodecom'] = array("Парсить BB-коды в комментриях и личных сообщениях", "");
-$L['cfg_parsebbcodepages'] = array("Парсить BB-коды в страницах", "");
-$L['cfg_parsebbcodeusertext'] = array("Парсить BB-коды в подписях пользователей", "");
-$L['cfg_parsebbcodeforums'] = array("Парсить BB-коды в форумах", "");
-$L['cfg_parsesmiliescom'] = array("Парсить смайлики в комментариях и личных сообщениях", "");
-$L['cfg_parsesmiliespages'] = array("Парсить смайлики в страницах", "");
-$L['cfg_parsesmiliesusertext'] = array("Парсить смайлики в подписях пользователей", "");
-$L['cfg_parsesmiliesforums'] = array("Парсить смайлики в форумах", "");
-
 $L['cfg_color_group'] = array("Раскрашивать пользователей по группам", "По-умолчанию: Нет, для лучшей производительности");    // New in v175
 
 $L['cfg_ajax'] = array("Включить AJAX", "");  // New in v175

@@ -267,17 +267,6 @@ $L['cfg_trash_page'] = array("Use the trash can for the pages", "");
 $L['cfg_trash_pm'] = array("Use the trash can for the private messages", "");
 $L['cfg_trash_user'] = array("Use the trash can for the users", "");
 
-$L['cfg_parser_vid'] = array("Allow BBcodes for the videos", "");        // New in v120
-$L['cfg_parser_vid_autolink'] = array("Auto-link URLs to known video sites", "");                        // New in v120
-$L['cfg_parsebbcodecom'] = array("Parse BBcode in comments and private messages", "");
-$L['cfg_parsebbcodepages'] = array("Parse BBcode in pages", "");
-$L['cfg_parsebbcodeusertext'] = array("Parse BBcode in user signature", "");
-$L['cfg_parsebbcodeforums'] = array("Parse BBcode in forums", "");
-$L['cfg_parsesmiliescom'] = array("Parse smilies in comments and private messages", "");
-$L['cfg_parsesmiliespages'] = array("Parse smilies in pages", "");
-$L['cfg_parsesmiliesusertext'] = array("Parse smilies in user signature", "");
-$L['cfg_parsesmiliesforums'] = array("Parse smilies in forums", "");
-
 $L['cfg_color_group'] = array("Colorize group of users", "Default: No, for better performance");  // New in v175
 
 $L['cfg_ajax'] = array("Enable AJAX", "");  // New in v175
