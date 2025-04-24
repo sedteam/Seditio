@@ -81,23 +81,27 @@ class XTemplate
      * @var array $allowedFunctions List of functions permitted in 'whitelist' mode.
      */
     public static $allowedFunctions = [
-		'strtoupper', 'strtolower', 'ucwords', 'ucfirst', 'strrev', 'str_word_count', 'strlen',
-		'str_replace', 'str_ireplace', 'preg_replace', 'strip_tags', 'stripcslashes', 'stripslashes', 'substr',
-		'str_pad', 'str_repeat', 'strtr', 'trim', 'ltrim', 'rtrim', 'nl2br', 'wordwrap', 'printf', 'sprintf',
-		'addslashes', 'addcslashes',
-		'htmlentities', 'html_entity_decode', 'htmlspecialchars', 'htmlspecialchars_decode',
-		'urlencode', 'urldecode',
-		'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
-		'number_format', 'money_format',
-		'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image', 'sed_onlydigits'
-	];
+        'strtoupper', 'strtolower', 'ucwords', 'ucfirst', 'strrev', 'str_word_count', 'strlen',
+        'str_replace', 'str_ireplace', 'preg_replace', 'strip_tags', 'stripcslashes', 'stripslashes', 'substr',
+        'str_pad', 'str_repeat', 'strtr', 'trim', 'ltrim', 'rtrim', 'nl2br', 'wordwrap', 'printf', 'sprintf',
+        'addslashes', 'addcslashes',
+        'htmlentities', 'html_entity_decode', 'htmlspecialchars', 'htmlspecialchars_decode',
+        'urlencode', 'urldecode',
+        'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
+        'number_format', 'money_format',
+        'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image', 'sed_onlydigits'
+    ];
 
     /**
      * @var array $disallowedFunctions List of functions blocked in 'blacklist' mode.
      * Default includes common dangerous functions for security.
      */
     public static $disallowedFunctions = [
-        'eval', 'system', 'exec', 'shell_exec', 'passthru', 'proc_open', 'popen', 'phpinfo', 'unlink'
+        'eval', 'system', 'exec', 'shell_exec', 'passthru', 'proc_open', 'popen', 'phpinfo', 'unlink',
+        'fopen', 'file_put_contents', 'readfile', 'chmod', 'chown', 'chgrp', 'file_get_contents', 'file',
+        'fsockopen', 'pfsockopen', 'curl_exec', 'curl_multi_exec', 'parse_ini_file', 'show_source', 'ini_set',
+        'ini_get', 'ob_start', 'ob_end_flush', 'ob_get_clean', 'ob_get_contents', 'getimagesize', 'set_time_limit',
+        'assert', 'proc_terminate', 'proc_close', 'stream_socket_server', 'stream_socket_accept', 'proc_nice', 'dl'
     ];
 
     /**
@@ -1500,53 +1504,53 @@ class XtplVar
      *
      * @param string $text The variable or expression text to parse (e.g., "VAR|func" or "expr + expr").
      */
-	public function __construct($text)
-	{
-		// Check if the input string is an arithmetic expression
-		// The regex ensures the string contains at least two operands separated by an arithmetic operator (+, -, *, /, %)
-		// and allows for additional operands and operators (e.g., "2 + 3 + 8" or "{VAR} + 5")
-		// Operands can be numbers, words, dot-separated paths (e.g., "ITEMS.0.price"), or variables in braces (e.g., "{VAR}")
-		if (preg_match('#^\s*[\d\w\.\{\}]+\s*[\+\-\*/%]\s*[\d\w\.\{\}]+\s*(?:[\+\-\*/%]\s*[\d\w\.\{\}]+)*\s*$#', $text)) {
-			// If matched, treat the string as an expression and delegate parsing to XtplExpr
-			$this->name = 'expr';
-			$this->expression = new XtplExpr($text);
-		} else {
-			// If not an arithmetic expression, process the string as a variable with optional filters and keys
-			// Handle filters (e.g., "VAR|func(arg1, arg2)")
-			if (mb_strpos($text, '|') !== false) {
-				// Split the text into variable and filter chain, preserving special {PHP|} cases
-				$chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
-				array_walk($chain, function (&$val) {
-					$val = str_replace('{PHP#$%&!', '{PHP|', $val);
-				});
-				$text = array_shift($chain); // Extract the base variable name
-				foreach ($chain as $cbk) {
-					// Parse function calls with arguments (e.g., "func(arg1, arg2)")
-					if (mb_strpos($cbk, '(') !== false && preg_match('/(\w+)\s*\(((?>.|\n)*)\)/', $cbk, $mt)) {
-						$args = XTemplate::tokenize(trim($mt[2]), array(',', ' ', "\n", "\r", "\t"), false);
-						$args = array_map('XTemplate::parseArgument', $args);
-						$this->callbacks[] = array(
-							'name' => $mt[1], // Function name
-							'args' => $args,  // Arguments
-						);
-					} else {
-						// Simple filter without arguments (e.g., "trim")
-						$this->callbacks[] = str_replace('()', '', $cbk);
-					}
-				}
-			}
+    public function __construct($text)
+    {
+        // Check if the input string is an arithmetic expression
+        // The regex ensures the string contains at least two operands separated by an arithmetic operator (+, -, *, /, %)
+        // and allows for additional operands and operators (e.g., "2 + 3 + 8" or "{VAR} + 5")
+        // Operands can be numbers, words, dot-separated paths (e.g., "ITEMS.0.price"), or variables in braces (e.g., "{VAR}")
+        if (preg_match('#^\s*[\d\w\.\{\}]+\s*[\+\-\*/%]\s*[\d\w\.\{\}]+\s*(?:[\+\-\*/%]\s*[\d\w\.\{\}]+)*\s*$#', $text)) {
+            // If matched, treat the string as an expression and delegate parsing to XtplExpr
+            $this->name = 'expr';
+            $this->expression = new XtplExpr($text);
+        } else {
+            // If not an arithmetic expression, process the string as a variable with optional filters and keys
+            // Handle filters (e.g., "VAR|func(arg1, arg2)")
+            if (mb_strpos($text, '|') !== false) {
+                // Split the text into variable and filter chain, preserving special {PHP|} cases
+                $chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
+                array_walk($chain, function (&$val) {
+                    $val = str_replace('{PHP#$%&!', '{PHP|', $val);
+                });
+                $text = array_shift($chain); // Extract the base variable name
+                foreach ($chain as $cbk) {
+                    // Parse function calls with arguments (e.g., "func(arg1, arg2)")
+                    if (mb_strpos($cbk, '(') !== false && preg_match('/(\w+)\s*\(((?>.|\n)*)\)/', $cbk, $mt)) {
+                        $args = XTemplate::tokenize(trim($mt[2]), array(',', ' ', "\n", "\r", "\t"), false);
+                        $args = array_map('XTemplate::parseArgument', $args);
+                        $this->callbacks[] = array(
+                            'name' => $mt[1], // Function name
+                            'args' => $args,  // Arguments
+                        );
+                    } else {
+                        // Simple filter without arguments (e.g., "trim")
+                        $this->callbacks[] = str_replace('()', '', $cbk);
+                    }
+                }
+            }
 
-			// Handle nested keys (e.g., "VAR.key1.key2")
-			if (mb_strpos($text, '.') !== false) {
-				$keys = explode('.', $text);
-				$text = array_shift($keys); // Base variable name
-				$this->keys = $keys;        // Array of nested keys
-			}
+            // Handle nested keys (e.g., "VAR.key1.key2")
+            if (mb_strpos($text, '.') !== false) {
+                $keys = explode('.', $text);
+                $text = array_shift($keys); // Base variable name
+                $this->keys = $keys;        // Array of nested keys
+            }
 
-			// Store the base variable name (e.g., "VAR")
-			$this->name = $text;
-		}
-	}
+            // Store the base variable name (e.g., "VAR")
+            $this->name = $text;
+        }
+    }
 
     /**
      * Gets a property value if it exists.
@@ -1855,53 +1859,53 @@ class XtplDebugger
      * @param string|null $block The specific block to display (optional).
      * @return string The HTML-formatted debug output.
      */
-	public static function display($file = null, $block = null)
-	{
-		if ($file === null) {
-			$output = '';
-			foreach (self::$data as $fileName => $blocks) {
-				$output .= "<h1>$fileName</h1>";
-				foreach ($blocks as $blockName => $tags) {
-					$block_path = $fileName . ' / ' . str_replace('.', ' / ', $blockName);
-					$output .= "<h2>$block_path</h2><ul>";
-					ksort($tags);
-					foreach ($tags as $key => $val) {
-						if (is_array($val)) {
-							foreach ($val as $key2 => $val2) {
-								$output .= XTemplate::debugVar($key . '.' . $key2, $val2);
-							}
-						} else {
-							$output .= XTemplate::debugVar($key, $val);
-						}
-					}
-					$output .= "</ul>";
-				}
-			}
-			return $output;
-		}
+    public static function display($file = null, $block = null)
+    {
+        if ($file === null) {
+            $output = '';
+            foreach (self::$data as $fileName => $blocks) {
+                $output .= "<h1>$fileName</h1>";
+                foreach ($blocks as $blockName => $tags) {
+                    $block_path = $fileName . ' / ' . str_replace('.', ' / ', $blockName);
+                    $output .= "<h2>$block_path</h2><ul>";
+                    ksort($tags);
+                    foreach ($tags as $key => $val) {
+                        if (is_array($val)) {
+                            foreach ($val as $key2 => $val2) {
+                                $output .= XTemplate::debugVar($key . '.' . $key2, $val2);
+                            }
+                        } else {
+                            $output .= XTemplate::debugVar($key, $val);
+                        }
+                    }
+                    $output .= "</ul>";
+                }
+            }
+            return $output;
+        }
 
-		$output = "<h1>$file</h1>";
-		$blocks = $block && isset(self::$data[$file][$block]) 
-			? [$block => self::$data[$file][$block]] 
-			: (isset(self::$data[$file]) ? self::$data[$file] : []);
+        $output = "<h1>$file</h1>";
+        $blocks = $block && isset(self::$data[$file][$block])
+            ? [$block => self::$data[$file][$block]]
+            : (isset(self::$data[$file]) ? self::$data[$file] : []);
 
-		foreach ($blocks as $blockName => $tags) {
-			$block_path = $file . ' / ' . str_replace('.', ' / ', $blockName);
-			$output .= "<h2>$block_path</h2><ul>";
-			ksort($tags);
-			foreach ($tags as $key => $val) {
-				if (is_array($val)) {
-					foreach ($val as $key2 => $val2) {
-						$output .= XTemplate::debugVar($key . '.' . $key2, $val2);
-					}
-				} else {
-					$output .= XTemplate::debugVar($key, $val);
-				}
-			}
-			$output .= "</ul>";
-		}
-		return $output;
-	}
+        foreach ($blocks as $blockName => $tags) {
+            $block_path = $file . ' / ' . str_replace('.', ' / ', $blockName);
+            $output .= "<h2>$block_path</h2><ul>";
+            ksort($tags);
+            foreach ($tags as $key => $val) {
+                if (is_array($val)) {
+                    foreach ($val as $key2 => $val2) {
+                        $output .= XTemplate::debugVar($key . '.' . $key2, $val2);
+                    }
+                } else {
+                    $output .= XTemplate::debugVar($key, $val);
+                }
+            }
+            $output .= "</ul>";
+        }
+        return $output;
+    }
 
     /**
      * Clears all collected debug data.
