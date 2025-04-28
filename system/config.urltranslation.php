@@ -430,6 +430,7 @@ function sed_get_section(&$args, &$section)
 
 function sed_get_forums_urltrans(&$args, &$section)
 {
-      $url = (isset($args['al']) && !empty($args['al'])) ? "-" . sed_translit_seourl($args['al']) : "";
+      global $cfg;
+      $url = (isset($args['al']) && !empty($args['al']) && $cfg['forumsefurls']) ? "-" . sed_translit_seourl($args['al']) : "";
       return $url;
 }

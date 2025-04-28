@@ -49,6 +49,7 @@ $cfg['authsecret'] = TRUE;			// Update the secret code upon every authorization
 $cfg['enablecustomhf'] = TRUE;		// To enable header.$location.tpl and footer.$location.tpl
 $cfg['devmode'] = FALSE;
 $cfg['sefurls'] = TRUE;
+$cfg['forumsefurls'] = TRUE;		// Enable new forum sefurls
 $cfg['abs_url'] = TRUE;
 $cfg['redirmode'] = FALSE;
 $cfg['pfs_dir'] = 'datas/users/';
