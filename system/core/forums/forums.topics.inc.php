@@ -314,7 +314,7 @@ $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 /**/
 
 /* ===== */
-$out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums", "m=topics&s=" . $s . "&d=" . $d) : $sys['abs_url'] . sed_url("forums", "m=topics&s=" . $s . "&d=" . $d);
+$out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&d=" . $d) : $sys['abs_url'] . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&d=" . $d);
 /* ===== */
 
 /* === Hook === */
@@ -331,8 +331,8 @@ require(SED_ROOT . "/system/header.php");
 $mskin = sed_skinfile(array('forums', 'topics', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-$pages = sed_pagination(sed_url("forums", "m=topics&s=" . $s . "&o=" . $o . "&w=" . $w), $d, $totaltopics, $cfg['maxtopicsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=topics&s=" . $s . "&o=" . $o . "&w=" . $w), $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
+$pages = sed_pagination(sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=" . $o . "&w=" . $w), $d, $totaltopics, $cfg['maxtopicsperpage']);
+list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=" . $o . "&w=" . $w), $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
 
 $toptitle = "<a href=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</a> " . $cfg['separator'] . " " . sed_build_forums($s, $fs_title, $fs_category, TRUE, $parentcat);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
@@ -362,12 +362,12 @@ $t->assign(array(
 	"FORUMS_TOPICS_NEWTOPICPOLLURL" => sed_url("forums", "m=newtopic&s=" . $s . "&poll=1"),
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
 	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
-	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&o=title&w=" . rev($w)) . "\">" . $L['Topics'] . " " . cursort($o == 'title', $w) . "</a>",
-	"FORUMS_TOPICS_TITLE_VIEWS" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&o=viewcount&w=" . rev($w)) . "\">" . $L['Views'] . " " . cursort($o == 'viewcount', $w) . "</a>",
-	"FORUMS_TOPICS_TITLE_POSTS" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&o=postcount&w=" . rev($w)) . "\">" . $L['Posts'] . " " . cursort($o == 'postcount', $w) . "</a>",
-	"FORUMS_TOPICS_TITLE_REPLIES" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&o=postcount&w=" . rev($w)) . "\">" . $L['Replies'] . " " . cursort($o == 'postcount', $w) . "</a>",
-	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&o=creationdate&w=" . rev($w)) . "\">" . $L['Started'] . " " . cursort($o == 'creationdate', $w) . "</a>",
-	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&o=updated&w=" . rev($w)) . "\">" . $L['Lastpost'] . " " . cursort($o == 'updated', $w) . "</a>"
+	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=title&w=" . rev($w)) . "\">" . $L['Topics'] . " " . cursort($o == 'title', $w) . "</a>",
+	"FORUMS_TOPICS_TITLE_VIEWS" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=viewcount&w=" . rev($w)) . "\">" . $L['Views'] . " " . cursort($o == 'viewcount', $w) . "</a>",
+	"FORUMS_TOPICS_TITLE_POSTS" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=postcount&w=" . rev($w)) . "\">" . $L['Posts'] . " " . cursort($o == 'postcount', $w) . "</a>",
+	"FORUMS_TOPICS_TITLE_REPLIES" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=postcount&w=" . rev($w)) . "\">" . $L['Replies'] . " " . cursort($o == 'postcount', $w) . "</a>",
+	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=creationdate&w=" . rev($w)) . "\">" . $L['Started'] . " " . cursort($o == 'creationdate', $w) . "</a>",
+	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"" . sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=updated&w=" . rev($w)) . "\">" . $L['Lastpost'] . " " . cursort($o == 'updated', $w) . "</a>"
 ));
 
 /* === Hook - Part1 : Set === */
@@ -404,7 +404,7 @@ while ($fsn = sed_sql_fetchassoc($sql2)) {
 		}
 
 		if ($fsn['fs_lt_id'] > 0) {
-			$fsn['lastpost'] = ($usr['id'] > 0 && $fsn['fs_lt_date'] > $usr['lastvisit'] && $fsn['fs_lt_posterid'] != $usr['id']) ? "<a href=\"" . sed_url("forums", "m=posts&q=" . $fsn['fs_lt_id'] . "&n=unread", "#unread") . "\">" : "<a href=\"" . sed_url("forums", "m=posts&q=" . $fsn['fs_lt_id'] . "&n=last", "#bottom") . "\">";
+			$fsn['lastpost'] = ($usr['id'] > 0 && $fsn['fs_lt_date'] > $usr['lastvisit'] && $fsn['fs_lt_posterid'] != $usr['id']) ? "<a href=\"" . sed_url("forums", "m=posts&q=" . $fsn['fs_lt_id'] . "&al=" . $fsn['fs_lt_title'] . "&n=unread", "#unread") . "\">" : "<a href=\"" . sed_url("forums", "m=posts&q=" . $fsn['fs_lt_id'] . "&al=" . $fsn['fs_lt_title'] . "&n=last", "#bottom") . "\">";
 			$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32) . "</a>";
 		} else {
 			$fsn['lastpost'] = '&nbsp;';
@@ -448,7 +448,7 @@ while ($fsn = sed_sql_fetchassoc($sql2)) {
 			"FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
 			"FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
 			"FORUMS_SECTIONS_ROW_VIEWERS" => $sed_sections_vw_cur,
-			"FORUMS_SECTIONS_ROW_URL" => sed_url("forums", "m=topics&s=" . $fsn['fs_id']),
+			"FORUMS_SECTIONS_ROW_URL" => sed_url("forums", "m=topics&s=" . $fsn['fs_id'] . "&al=" . $fsn['fs_title']),
 			"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsn['fs_lt_date'],
 			"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsn['fs_lt_postername'],
 			"FORUMS_SECTIONS_ROW_LASTPOST" => $fsn['lastpost'],
@@ -493,11 +493,11 @@ while ($row = sed_sql_fetchassoc($sql)) {
 		$row['ft_replycount'] = "&nbsp;";
 		$row['ft_viewcount'] = "&nbsp;";
 		$row['ft_lastpostername'] = "&nbsp;";
-		$row['ft_lastposturl'] = "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_movedto'] . "&n=last", "#bottom") . "\">" . $out['ic_arrow_follow'] . "</a> " . $L['Moved'];
+		$row['ft_lastposturl'] = "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_movedto'] . "&al=" . $row['ft_title'] . "&n=last", "#bottom") . "\">" . $out['ic_arrow_follow'] . "</a> " . $L['Moved'];
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'], $sys['now_offset']);
 	} else {
-		$row['ft_url'] = sed_url("forums", "m=posts&q=" . $row['ft_id']);
-		$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&n=unread", "#unread") . "\">" . $out['ic_arrow_unread'] . "</a>" : "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&n=last", "#bottom") . "\">" . $out['ic_arrow_follow'] . "</a>";
+		$row['ft_url'] = sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&al=" . $row['ft_title']);
+		$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&al=" . $row['ft_title'] . "&n=unread", "#unread") . "\">" . $out['ic_arrow_unread'] . "</a>" : "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&al=" . $row['ft_title'] . "&n=last", "#bottom") . "\">" . $out['ic_arrow_follow'] . "</a>";
 		$row['ft_lastposturl'] .= " " . sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated']);
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'], $sys['now_offset']);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
@@ -535,7 +535,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 		$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
 		$row['ft_pages'] = $L['Pages'] . ":";
 		for ($a = 1; $a <= $row['ft_maxpages']; $a++) {
-			$row['ft_pages'] .= (is_int($a / 5) || $a < 10 || $a == $row['ft_maxpages']) ? " <a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&d=" . ($a - 1) * $cfg['maxtopicsperpage']) . "\">" . $a . "</a>" : '';
+			$row['ft_pages'] .= (is_int($a / 5) || $a < 10 || $a == $row['ft_maxpages']) ? " <a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&al=" . $row['ft_title'] . "&d=" . ($a - 1) * $cfg['maxtopicsperpage']) . "\">" . $a . "</a>" : '';
 		}
 	}
 

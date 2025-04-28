@@ -148,6 +148,8 @@
 					<button type="submit" class="submit btn">{PHP.L.Update}</button>
 				</div>
 
+			</form>
+
 		</div>
 
 		<div class="tab-content" id="tab2">

@@ -1116,14 +1116,16 @@ function sed_build_forums_bc($sectionid, $title, $category, $parentcat = false)
 	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
 
 	foreach ($pathcodes as $k => $x) {
-		$urlpaths[sed_url("forums", "c=" . $x, "#" . $x)] = sed_cc($sed_forums_str[$x]['title']);
+		$title = sed_cc($sed_forums_str[$x]['title']);
+		$urlpaths[sed_url("forums", "c=" . $x, "#" . $x)] = $title;
 	}
 
 	if (is_array($parentcat)) {
-		$urlpaths[sed_url("forums", "m=topics&s=" . $parentcat['sectionid'])] = sed_cc($parentcat['title']);
+		$title = sed_cc($parentcat['title']);
+		$urlpaths[sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $title)] = $title;
 	}
-
-	$urlpaths[sed_url("forums", "m=topics&s=" . $sectionid)] = sed_cc($title);
+	$title = sed_cc($title);
+	$urlpaths[sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title)] = $title;
 }
 
 /** 
@@ -2190,7 +2192,6 @@ function sed_url_check($url)
 	global $sys;
 	return preg_match('`^' . preg_quote($sys['scheme'] . '://') . '([\w\p{L}\.\-]+\.)?' . preg_quote($sys['domain']) . '`ui', $url);
 }
-
 
 /** 
  * Terminates script execution and performs redirect 
@@ -5084,35 +5085,41 @@ function sed_verify_code()
 	} else return sed_error_msg($L['captcha_error_hacker_go_home']);
 }
 
-/** 
- * Transforms parameters into URL by following user-defined rules into $sed_urltran
- * 
- * @param string $section Site area or script name 
- * @param mixed $params URL parameters as array or parameter string 
- * @param string $anchor URL postfix, e.g. anchor 
- * @param bool $header Set this TRUE if the url will be used in HTTP header rather than body output
- * @param bool $enableamp Set this TRUE if the URL you want to disable the replacement & to &amp;
- * @return string 
+/**
+ * Transforms parameters into URL by following user-defined rules in $sed_urltrans
+ *
+ * @param string $section Site area or script name
+ * @param mixed $params URL parameters as array or parameter string
+ * @param string $anchor URL postfix, e.g., anchor
+ * @param bool $header Set this TRUE if the URL will be used in HTTP header rather than body output
+ * @param bool $enableamp Set this TRUE to disable the replacement of & with &
+ * @return string
  */
 function sed_url($section, $params = '', $anchor = '', $header = false, $enableamp = true)
 {
 	global $cfg, $sys, $sed_urltrans, $sed_cat;
 
-	$params = preg_replace('/&$/', '', $params); // Fix $more in PFS     
-	$url = $sed_urltrans['*'][0]['rewrite']; // Default rule  
+	// Remove trailing '&' from params string (fixes issues in PFS)
+	$params = preg_replace('/&$/', '', $params);
+	// Set default URL rewrite rule
+	$url = $sed_urltrans['*'][0]['rewrite'];
+	// Convert params to array if passed as string
 	$params = is_array($params) ? $params : sed_parse_str($params);
-	$args = sed_check_params($params);  // Array without empty parameters
+	// Remove empty parameters from the array
+	$args = sed_check_params($params);
 
+	// Check if SEO-friendly URLs are enabled
 	if ($cfg['sefurls']) {
 		$rule = array();
-		if (!empty($sed_urltrans[$section]))  // If there is a section with the rules
-		{
-			foreach ($sed_urltrans[$section] as $rule) // Extract each rule
-			{
-				$matched = true;  // By default, as if a rule is found            
-				$rule['params'] = sed_parse_str($rule['params']);   // Parse the rule parameters of a string into an array                          
-				foreach ($rule['params'] as $key => $val)  // Compare the presence of parameters in both arrays
-				{
+		// If rules exist for the specified section
+		if (!empty($sed_urltrans[$section])) {
+			// Iterate through each rule in the section
+			foreach ($sed_urltrans[$section] as $rule) {
+				$matched = true; // Assume the rule matches by default
+				// Parse rule parameters into an array
+				$rule['params'] = sed_parse_str($rule['params']);
+				// Check if all required parameters match
+				foreach ($rule['params'] as $key => $val) {
 					if (
 						empty($args[$key])
 						|| (!array_key_exists($key, $args))
@@ -5122,6 +5129,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 						break;
 					}
 				}
+				// If the rule matches, use its rewrite template
 				if ($matched) {
 					$url = $rule['rewrite'];
 					break;
@@ -5130,21 +5138,68 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 		}
 	}
 
+	// Find and process all {placeholders} in the rewrite template
 	if (preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER)) {
 		foreach ($matches as $m) {
-			if ($p = mb_strpos($m[1], '(')) {
-				// Callback 
-				$callbfunc = mb_substr($m[1], 0, $p);
-				$url = str_replace($m[0], $callbfunc($args, $section), $url);
-			} else {
-				$var = $m[1];
-				$url = str_replace($m[0], urlencode($args[$var]), $url);
-				unset($args[$var]);
+			$match = $m[1];
+			// Handle new syntax: {param|callback}
+			if (preg_match('/^(.+?)\|(.+)$/', $match, $pipe_match)) {
+				$param = $pipe_match[1]; // Parameter name (e.g., 'al')
+				$callback = $pipe_match[2]; // Callback function name (e.g., 'sed_get_forums_urltrans')
+				// If the callback exists and the parameter is set, call the callback
+				if (function_exists($callback) && isset($args[$param])) {
+					$result = $callback($args, $section);
+					$url = str_replace($m[0], $result, $url);
+					// Remove the processed parameter from args
+					unset($args[$param]);
+				} else {
+					// Replace with empty string if callback or param is missing
+					$url = str_replace($m[0], '', $url);
+				}
+			}
+			// Handle new syntax: {callback(param)}
+			elseif (preg_match('/^(.+)\((.+)\)$/', $match, $func_match)) {
+				$callback = $func_match[1]; // Callback function name
+				$param = $func_match[2]; // Parameter name
+				// If the callback exists and the parameter is set, call the callback
+				if (function_exists($callback) && isset($args[$param])) {
+					$result = $callback($args, $section);
+					$url = str_replace($m[0], $result, $url);
+					// Remove the processed parameter from args
+					unset($args[$param]);
+				} else {
+					// Replace with empty string if callback or param is missing
+					$url = str_replace($m[0], '', $url);
+				}
+			}
+			// Handle old syntax: callback without parameters {callback()}
+			elseif ($p = mb_strpos($match, '(')) {
+				$callback = mb_substr($match, 0, $p); // Extract callback name
+				if (function_exists($callback)) {
+					$url = str_replace($m[0], $callback($args, $section), $url);
+				} else {
+					// Replace with empty string if callback is missing
+					$url = str_replace($m[0], '', $url);
+				}
+			}
+			// Handle simple variable replacement: {var}
+			else {
+				$var = $match; // Variable name
+				if (isset($args[$var])) {
+					$url = str_replace($m[0], urlencode($args[$var]), $url);
+					// Remove the processed parameter from args
+					unset($args[$var]);
+				} else {
+					// Replace with empty string if variable is missing
+					$url = str_replace($m[0], '', $url);
+				}
 			}
 		}
 	}
+
+	// Append any remaining parameters as a query string
 	if (!empty($args)) {
-		$qs = ($cfg['sefurls']) ? '?' : '&';
+		$qs = ($cfg['sefurls']) ? '?' : '&'; // Choose separator based on SEO settings
 		foreach ($args as $key => $val) {
 			if (isset($rule['params'][$key])) {
 				if ($rule['params'][$key] != $val) {
@@ -5154,14 +5209,18 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 				$qs .= $key . '=' . urlencode($val) . '&';
 			}
 		}
+		// Remove trailing '&' from query string
 		$qs = mb_substr($qs, 0, -1);
 		$url .= $qs;
 	}
 
-	$url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&amp;', $url);
+	// Replace '&' with '&' unless used in header or enableamp is false
+	$url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&', $url);
+	// Add absolute path if required
 	$path = ($header || (isset($cfg['absurls']) && $cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';
+	// Clean up multiple slashes and append anchor
 	$result_url = preg_replace('~(^|[^:])//+~', '\\1/', $path . $url . $anchor);
-	return ($result_url);
+	return $result_url;
 }
 
 /** 

@@ -21,9 +21,9 @@ $sed_urlrewrite = array(
           'cond' => '#^/go/#',
           'rule' => 'system/core/go/go.php'
      ),
-	 
-	 /*  Ajax rewriting */
-	 array(
+
+     /*  Ajax rewriting */
+     array(
           'cond' => '#^/ajax(/?)$#',
           'rule' => 'system/core/ajax/ajax.php'
      ),
@@ -85,12 +85,12 @@ $sed_urlrewrite = array(
           'cond' => '#^/sitemap.xml$#',
           'rule' => 'system/core/sitemap/sitemap.php'
      ),
-	 
-	 /*  Robots rewriting */
+
+     /*  Robots rewriting */
      array(
           'cond' => '#^/robots.txt$#',
           'rule' => 'system/core/plug/plug.php?e=robots'
-     ),	 
+     ),
      /*  Poll rewriting */
      array(
           'cond' => '#^/polls/([a-zA-Z0-9]+)(/?)$#',
@@ -143,23 +143,48 @@ $sed_urlrewrite = array(
           'rule' => 'system/core/pm/pm.php'
      ),
 
-     /*  Forums rewriting */
+     /* Forums rewriting */
+     /* Topics with alias */
+     array(
+          'cond' => '#^/forums/topics/([0-9]+)-([a-zA-Z0-9_-]+)(/?)$#',
+          'rule' => 'system/core/forums/forums.php?m=topics&s=$1&al=$2'
+     ),
+     /* Topics without alias */
      array(
           'cond' => '#^/forums/topics/([0-9]+)(/?)$#',
           'rule' => 'system/core/forums/forums.php?m=topics&s=$1'
      ),
+     /* Posts (topic) with alias */
+     array(
+          'cond' => '#^/forums/posts/([0-9]+)-([a-zA-Z0-9_-]+)(/?)$#',
+          'rule' => 'system/core/forums/forums.php?m=posts&q=$1&al=$2'
+     ),
+     /* Posts (topic) without alias */
      array(
           'cond' => '#^/forums/posts/([0-9]+)(/?)$#',
           'rule' => 'system/core/forums/forums.php?m=posts&q=$1'
      ),
+     /* Single post with alias */
+     array(
+          'cond' => '#^/forums/post/([0-9]+)-([a-zA-Z0-9_-]+)(/?)$#',
+          'rule' => 'system/core/forums/forums.php?m=posts&p=$1&al=$2'
+     ),
+     /* Single post without alias */
      array(
           'cond' => '#^/forums/post/([0-9]+)(/?)$#',
           'rule' => 'system/core/forums/forums.php?m=posts&p=$1'
      ),
+     /* Section with alias */
+     array(
+          'cond' => '#^/forums/([a-zA-Z0-9]+)-([a-zA-Z0-9_-]+)(/?)$#',
+          'rule' => 'system/core/forums/forums.php?c=$1&al=$2'
+     ),
+     /* Section without alias */
      array(
           'cond' => '#^/forums/([a-zA-Z0-9]+)(/?)$#',
           'rule' => 'system/core/forums/forums.php?c=$1'
      ),
+     /* Default forums page */
      array(
           'cond' => '#^/forums(/?)$#',
           'rule' => 'system/core/forums/forums.php'

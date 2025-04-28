@@ -131,30 +131,50 @@ $sed_urltrans['pm'] = array(
       )
 );
 
-/*  Forums translation */
+/* Forums translation */
 
 $sed_urltrans['forums'] = array(
-      /**/
+      /* Topics with alias */
+      array(
+            'params' => 'm=topics&s=*&al=*',
+            'rewrite' => 'forums/topics/{s}{al|sed_get_forums_urltrans}'
+      ),
+      /* Topics without alias */
       array(
             'params' => 'm=topics&s=*',
             'rewrite' => 'forums/topics/{s}'
       ),
-      /**/
+      /* Posts (topic) with alias */
+      array(
+            'params' => 'm=posts&q=*&al=*',
+            'rewrite' => 'forums/posts/{q}{al|sed_get_forums_urltrans}'
+      ),
+      /* Posts (topic) without alias */
       array(
             'params' => 'm=posts&q=*',
             'rewrite' => 'forums/posts/{q}'
       ),
-      /**/
+      /* Single post with alias */
+      array(
+            'params' => 'm=posts&p=*&al=*',
+            'rewrite' => 'forums/post/{p}{al|sed_get_forums_urltrans}'
+      ),
+      /* Single post without alias */
       array(
             'params' => 'm=posts&p=*',
             'rewrite' => 'forums/post/{p}'
       ),
-      /**/
+      /* Section with alias */
+      array(
+            'params' => 'c=*&al=*',
+            'rewrite' => 'forums/{c}{al|sed_get_forums_urltrans}'
+      ),
+      /* Section without alias */
       array(
             'params' => 'c=*',
             'rewrite' => 'forums/{c}'
       ),
-      /**/
+      /* Default forums page */
       array(
             'params' => '',
             'rewrite' => 'forums'
@@ -406,4 +426,10 @@ function sed_get_listpath(&$args, &$section)
 function sed_get_section(&$args, &$section)
 {
       return $section;
+}
+
+function sed_get_forums_urltrans(&$args, &$section)
+{
+      $url = (isset($args['al']) && !empty($args['al'])) ? "-" . sed_translit_seourl($args['al']) : "";
+      return $url;
 }
