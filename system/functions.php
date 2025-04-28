@@ -5092,7 +5092,7 @@ function sed_verify_code()
  * @param mixed $params URL parameters as array or parameter string
  * @param string $anchor URL postfix, e.g., anchor
  * @param bool $header Set this TRUE if the URL will be used in HTTP header rather than body output
- * @param bool $enableamp Set this TRUE to disable the replacement of & with &
+ * @param bool $enableamp Set this TRUE to disable the replacement of & with &amp;
  * @return string
  */
 function sed_url($section, $params = '', $anchor = '', $header = false, $enableamp = true)
@@ -5215,7 +5215,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 	}
 
 	// Replace '&' with '&' unless used in header or enableamp is false
-	$url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&', $url);
+	$url = ($header || ($enableamp == false)) ? $url : str_replace('&', '&amp;', $url);
 	// Add absolute path if required
 	$path = ($header || (isset($cfg['absurls']) && $cfg['absurls'] && $enableamp)) ? $sys['abs_url'] : '';
 	// Clean up multiple slashes and append anchor
