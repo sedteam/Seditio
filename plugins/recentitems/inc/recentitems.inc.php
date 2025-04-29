@@ -201,7 +201,7 @@ function sed_get_latesttopics($limit, $mask)
 			$t->assign(array(
 				"LATEST_TOPICS_ROW_ID" => $row['ft_id'],
 				"LATEST_TOPICS_ROW_FORUMPATH" => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'], 30), sed_cutstring($row['fs_category'], 30), TRUE, $parentcat),
-				"LATEST_TOPICS_ROW_URL" => sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&n=last", "#bottom"),
+				"LATEST_TOPICS_ROW_URL" => sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&al=" . $row['ft_title'] . "&n=last", "#bottom"),
 				"LATEST_TOPICS_ROW_SHORTTITLE" => sed_cutstring($row['ft_title'], 50),
 				"LATEST_TOPICS_ROW_TITLE" => $row['ft_title'],
 				"LATEST_TOPICS_ROW_DATE" => sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated'], $cfg['plu_mask_topics_date']),
@@ -220,7 +220,7 @@ function sed_get_latesttopics($limit, $mask)
 				$img,
 				sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_updated'], $cfg['plu_mask_topics_date']),
 				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'], 25), sed_cutstring($row['fs_category'], 16), TRUE, $parentcat),
-				"<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&n=last", "#bottom") . "\">" . sed_cc(sed_cutstring(stripslashes($row['ft_title']), 50)) . "</a>",
+				"<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&al=" . $row['ft_title'] . "&n=last", "#bottom") . "\">" . sed_cc(sed_cutstring(stripslashes($row['ft_title']), 50)) . "</a>",
 				$row['ft_postcount'] - 1
 			);
 		}

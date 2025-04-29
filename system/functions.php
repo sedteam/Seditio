@@ -1077,13 +1077,15 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 
 	if ($link) {
 		foreach ($pathcodes as $k => $x) {
-			$tmp[] = "<a href=\"" . sed_url("forums", "c=" . $x, "#" . $x) . "\">" . sed_cc($sed_forums_str[$x]['title']) . "</a>";
+			$ptitle = sed_cc($sed_forums_str[$x]['title']);
+			$tmp[] = "<a href=\"" . sed_url("forums", "c=" . $x, "#" . $x) . "\">" . $ptitle . "</a>";
 		}
 
 		if (is_array($parentcat)) {
-			$tmp[] =  "<a href=\"" . sed_url("forums", "m=topics&s=" . $parentcat['sectionid']) . "\">" . sed_cc($parentcat['title']) . "</a>";
+			$ptitle = sed_cc($parentcat['title']);
+			$tmp[] =  "<a href=\"" . sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle) . "\">" . $ptitle . "</a>";
 		}
-		$tmp[] = "<a href=\"" . sed_url("forums", "m=topics&s=" . $sectionid) . "\">" . sed_cc($title) . "</a>";
+		$tmp[] = "<a href=\"" . sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title) . "\">" . sed_cc($title) . "</a>";
 	} else {
 		foreach ($pathcodes as $k => $x) {
 			$tmp[] = sed_cc($sed_forums_str[$x]['title']);
@@ -1117,14 +1119,15 @@ function sed_build_forums_bc($sectionid, $title, $category, $parentcat = false)
 	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
 
 	foreach ($pathcodes as $k => $x) {
-		$title = sed_cc($sed_forums_str[$x]['title']);
-		$urlpaths[sed_url("forums", "c=" . $x, "#" . $x)] = $title;
+		$ptitle = sed_cc($sed_forums_str[$x]['title']);
+		$urlpaths[sed_url("forums", "c=" . $x, "#" . $x)] = $ptitle;
 	}
 
 	if (is_array($parentcat)) {
-		$title = sed_cc($parentcat['title']);
-		$urlpaths[sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $title)] = $title;
+		$ptitle = sed_cc($parentcat['title']);
+		$urlpaths[sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle)] = $ptitle;
 	}
+
 	$title = sed_cc($title);
 	$urlpaths[sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title)] = $title;
 }
