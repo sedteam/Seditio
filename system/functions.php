@@ -231,32 +231,41 @@ function sed_ajax_flush($res, $ajax, $content_type = 'text/html')
  * Generates a formatted string of HTML attributes
  *
  * Accepts attributes as a string or array and returns a space-separated string
- * of HTML attributes for use in tags.
+ * of HTML attributes for use in tags. JavaScript event attributes (e.g., onClick)
+ * are not escaped to preserve functionality.
  *
  * @param string|array $attrs Attributes as a string or key-value array
  * @return string Formatted attribute string
  */
 function sed_attr($attrs)
 {
-	// Initialize empty attribute string
 	$attributes = '';
 
-	// Handle array of attributes
+	// List of JavaScript event attributes that should not be escaped
+	$no_escape_attrs = [
+		'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'onmousemove',
+		'onmousedown', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
+		'onchange', 'oninput', 'onsubmit', 'onfocus', 'onblur', 'onload',
+		'onunload', 'onerror', 'onresize', 'onscroll', 'oncontextmenu',
+		'onselect', 'ondrag', 'ondrop'
+	];
+
 	if (is_array($attrs)) {
-		// Iterate through each key-value pair
 		foreach ($attrs as $key => $value) {
-			// Escape key and value to prevent XSS
+			$key_lower = mb_strtolower($key);
 			$escapedKey = htmlspecialchars($key);
-			$escapedValue = htmlspecialchars($value);
-			// Append attribute to the string
+			if (in_array($key_lower, $no_escape_attrs)) {
+				$escapedValue = $value;
+			} else {
+				$escapedValue = htmlspecialchars($value);
+			}
+
 			$attributes .= " $escapedKey=\"$escapedValue\"";
 		}
 	} elseif (is_string($attrs) && !empty($attrs)) {
-		// Use string attributes directly, assuming they are pre-formatted
 		$attributes = " $attrs";
 	}
 
-	// Return the final attribute string
 	return $attributes;
 }
 
@@ -1475,12 +1484,14 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	$res = "<div class=\"rating-box\" id=\"rat-" . $code . "\"><ul class=\"rating s" . $rating_cntround . "\">\n";
 	for ($i = 1; $i <= 10; $i++) {
 		$onclick = "javascript:sedjs.ajaxbind({'url': '" . sed_url($url_part, $url_params . "&ratings=1&display=1&ina=send&ajax=1&newrate=" . $i . "&" . sed_xg()) . "', 'format':  'html', 'method':  'POST', 'update':  '#rat-" . $code . "', 'loading': '#rat-" . $code . "'});";
-		$res .= "<li class=\"s" . $i . "\"><a href=\"javascript:void(0);\" onClick=\"" . $onclick . "\" title=\"" . $i . " - " . $L['rat_choice' . $i] . "\">" . $i . " - " . $L['rat_choice' . $i] . "</a></li>\n";
+		$res .= "<li class=\"s" . $i . "\">" . sed_link('javascript:void(0);', $i . " - " . $L['rat_choice' . $i], array('onClick' => $onclick, 'title' => $i . " - " . $L['rat_choice' . $i])) . "</li>\n";
+
+		//$res .= "<li class=\"s" . $i . "\"><a href=\"javascript:void(0);\" onClick=\"" . $onclick . "\" title=\"" . $i . " - " . $L['rat_choice' . $i] . "\">" . $i . " - " . $L['rat_choice' . $i] . "</a></li>\n";
 	}
 	$res .= "</ul></div>";
 
 	if (($usr['id'] == 0) || ($alr_rated > 0) || !$cfg['ajax']) {
-		$res = "<a href=\"" . sed_url($url_part, $url_params . "&ratings=1") . "\"><img src=\"skins/" . $usr['skin'] . "/img/system/vote" . $rating_cntround . ".gif\" alt=\"\" /></a>";
+		$res = sed_link(sed_url($url_part, $url_params . "&ratings=1"), "<img src=\"skins/" . $usr['skin'] . "/img/system/vote" . $rating_cntround . ".gif\" alt=\"\" />");
 	}
 
 	sed_ajax_flush($res, $ajax);  // AJAX Output
@@ -2298,7 +2309,7 @@ function sed_diefatal($text = 'Reason is unknown.', $title = 'Fatal error')
 {
 	global $cfg;
 	$disp = "<div style=\"font:14px Segoe UI, Verdana, Arial; border:1px dashed #CCCCCC; padding:8px; margin:16px;\">";
-	$disp .= (isset($cfg['mainurl']) && isset($cfg['mainurl'])) ? "<strong><a href=\"" . $cfg['mainurl'] . "\">" . $cfg['maintitle'] . "</a></strong><br />" : "";
+	$disp .= (isset($cfg['mainurl']) && isset($cfg['mainurl'])) ? "<strong>" . sed_link($cfg['mainurl'], $cfg['maintitle']) . "</strong><br />" : "";
 	$disp .= @date('Y-m-d H:i') . ' / ' . $title . ' : ' . $text;
 	$disp .= "</div>";
 	die($disp);
@@ -3653,7 +3664,7 @@ function sed_structure_sort($a, $b, $field = 'structure_path')
  * Takes a URL, link text, and additional attributes to create a properly formatted <a> tag.
  *
  * @param string $url The URL for the href attribute
- * @param string $text The text inside the <a> tag
+ * @param string $text The text inside the <> tag
  * @param string|array $attrs Additional attributes as a string or key-value array
  * @return string The HTML code for the link
  */
@@ -3778,17 +3789,17 @@ function sed_menu_tree($menus, $parent_id, $level = 0, $only_parent = false, $on
 			foreach ($menus[$parent_id] as $item) {
 				$item['menu_url'] = ($item['menu_url'] == '/') ? $sys['dir_uri'] : $item['menu_url'];
 				if ($only_childrensonlevel) {
-					$tree .= "<li><a href=\"" . $item['menu_url'] . "\" data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</a></li>";
+					$tree .= "<li>" . sed_link($item['menu_url'],  $item['menu_title'], array('data-mid' => $item['menu_id'])) . "</li>";
 				} else {
 					$has_children = isset($menus[$item['menu_id']]) ? " class=\"has-children\"" : "";
-					$tree .= "<li" . $has_children . "><a href=\"" . $item['menu_url'] . "\" data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</a>";
+					$tree .= "<li" . $has_children . ">" . sed_link($item['menu_url'],  $item['menu_title'], array('data-mid' => $item['menu_id']));
 					$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
 					$tree .= "</li>";
 				}
 			}
 		} elseif ($only_parent) {
 			$item = $menus[$parent_id];
-			$tree = (!empty($item['menu_url'])) ? "<a href=\"" . $item['menu_url'] . "\" data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</a>" : "<span data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</span>";
+			$tree = (!empty($item['menu_url'])) ? sed_link($item['menu_url'],  $item['menu_title'], array('data-mid' => $item['menu_id'])) : "<span data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</span>";
 			return $tree;
 		}
 		$tree .= "</ul>";
@@ -3984,7 +3995,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 
 	while ($i < $cur_left) {
 		$k = ($i - 1) * $perpage;
-		$res .= sprintf($cfg['pagination'], "<a href=\"" . (($k == 0) ? $url : $address . $k) . "\" class=\"page-link\">" . ($i) . "</a>");
+		$res .= sprintf($cfg['pagination'], sed_link((($k == 0) ? $url : $address . $k),  $i, array('class' => 'page-link')));
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
@@ -3993,7 +4004,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 		if (($j == $currentpage) && ($j != $totalpages)) {
 			$res .= sprintf($cfg['pagination_cur'], ($j));
 		} elseif ($j != $totalpages) {
-			$res .= sprintf($cfg['pagination'], "<a href=\"" . (($k == 0) ? $url : $address . $k) . "\" class=\"page-link\">" . ($j) . "</a>");
+			$res .= sprintf($cfg['pagination'], sed_link((($k == 0) ? $url : $address . $k),  $j, array('class' => 'page-link')));
 		}
 	}
 	while ($i <= $cur_right) {
@@ -4002,7 +4013,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 	}
 	while ($i < $totalpages) {
 		$k = ($i - 1) * $perpage;
-		$res .= sprintf($cfg['pagination'], "<a href=\"" . (($k == 0) ? $url : $address . $k) . "\" class=\"page-link\">" . ($i) . "</a>");
+		$res .= sprintf($cfg['pagination'], sed_link((($k == 0) ? $url : $address . $k),  $i, array('class' => 'page-link')));
 		$i *= ($n % 2) ? 5 : 2;
 		$n++;
 	}
@@ -4010,7 +4021,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd')
 	if ($currentpage == $totalpages) {
 		$res .= sprintf($cfg['pagination_cur'], ($totalpages));
 	} else {
-		$res .= sprintf($cfg['pagination'], "<a href=\"" . (($k == 0) ? $url : $address . $k) . "\" class=\"page-link\">" . ($totalpages) . "</a>");
+		$res .= sprintf($cfg['pagination'], sed_link((($k == 0) ? $url : $address . $k),  $totalpages, array('class' => 'page-link')));
 	}
 	return ($res);
 }
@@ -4041,12 +4052,12 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 		} else {
 			$address_prev = $address . $prevpage;
 		}
-		$res_l = "<a href=\"" . $address_prev . "\" class=\"page-link page-prev\">" . $cfg['pagination_arrowleft'] . " " . $L['Previous'] . "</a>";
+		$res_l = sed_link($address_prev, $cfg['pagination_arrowleft'] . " " . $L['Previous'], array('class' => 'page-link page-prev'));
 	}
 
 	if (($current + $perpage) < $entries) {
 		$nextpage = $current + $perpage;
-		$res_r = "<a href=\"" . $address . $nextpage . "\" class=\"page-link page-next\">" . $L['Next'] . " " . $cfg['pagination_arrowright'] . "</a>";
+		$res_r = sed_link($address . $nextpage,  $L['Next'] . " " . $cfg['pagination_arrowright'], array('class' => 'page-link page-next'));
 	}
 	if ($res_array) {
 		return (array($res_l, $res_r));
@@ -4066,8 +4077,6 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
  */
 function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
 {
-	global  $cfg, $sys, $sed_smilies, $L;
-
 	return (sed_html($text));
 }
 
@@ -4150,7 +4159,7 @@ function sed_redirect($url, $base64 = false)
 		<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
 		<meta http-equiv=\"refresh\" content=\"0; url=" . $url . "\" />
 		<title>Redirecting...</title></head>
-		<body>Redirecting to <a href=\"" . $url . "\">" . $cfg['mainurl'] . "/" . $url . "</a>
+		<body>Redirecting to " . sed_link($url, $cfg['mainurl'] . "/") . "
 		</body>
 		</html>";
 		header("Refresh: 0; URL=" . $url);
