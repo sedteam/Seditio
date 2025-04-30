@@ -228,6 +228,39 @@ function sed_ajax_flush($res, $ajax, $content_type = 'text/html')
 }
 
 /**
+ * Generates a formatted string of HTML attributes
+ *
+ * Accepts attributes as a string or array and returns a space-separated string
+ * of HTML attributes for use in tags.
+ *
+ * @param string|array $attrs Attributes as a string or key-value array
+ * @return string Formatted attribute string
+ */
+function sed_attr($attrs)
+{
+	// Initialize empty attribute string
+	$attributes = '';
+
+	// Handle array of attributes
+	if (is_array($attrs)) {
+		// Iterate through each key-value pair
+		foreach ($attrs as $key => $value) {
+			// Escape key and value to prevent XSS
+			$escapedKey = htmlspecialchars($key);
+			$escapedValue = htmlspecialchars($value);
+			// Append attribute to the string
+			$attributes .= " $escapedKey=\"$escapedValue\"";
+		}
+	} elseif (is_string($attrs) && !empty($attrs)) {
+		// Use string attributes directly, assuming they are pre-formatted
+		$attributes = " $attrs";
+	}
+
+	// Return the final attribute string
+	return $attributes;
+}
+
+/**
  * Generation avatar from first username letter
  *
  * @param int $uid
@@ -804,7 +837,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				if ($quote > 0) {
 					$sqlq = sed_sql_query("SELECT com_id, com_author, com_text FROM $db_com WHERE com_id = '$quote' LIMIT 1");
 					if ($rowq = sed_sql_fetchassoc($sqlq)) {
-						$rtext = "<blockquote><a href=\"" . sed_url($url_part, $url_params . $lurl, "#" . $rowq['com_id']) . "\">#" . $rowq['com_id'] . "</a> <strong>" . $rowq['com_author'] . " :</strong><br />" . $rowq['com_text'] . "</blockquote><br />";
+						$rtext = "<blockquote>" . sed_link(sed_url($url_part, $url_params . $lurl, "#" . $rowq['com_id']), "#" . $rowq['com_id']) . " <strong>" . $rowq['com_author'] . " :</strong><br />" . $rowq['com_text'] . "</blockquote><br />";
 					}
 				}
 				$pfs = ($usr['id'] > 0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
@@ -886,9 +919,12 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60);
 					$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? " - " . sed_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['com_gup'] : '';
 
-					$com_quote = ($usr['id'] > 0) ? "<a href=\"" . sed_url($url_part, $url_params . $lurl . "&quote=" . $row['com_id'] . "&" . sed_xg()) . "#nc" . "\" class=\"btn btn-adm\">" . $L['Quote'] . "</a>&nbsp;" : "";
+					$com_quote = ($usr['id'] > 0) ? sed_link(sed_url($url_part, $url_params . $lurl . "&quote=" . $row['com_id'] . "&" . sed_xg(), "#nc"), $L['Quote'], array('class' => 'btn btn-adm')) . "&nbsp;" : "";
 
-					$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ? "<a href=\"" . sed_url($url_part, $url_params . $lurl . "&a=edit&b=" . $row['com_id'] . "&" . sed_xg(), "#c" . $row['com_id']) . "\" title=\"" . $L['Edit'] . $allowed_time . "\" class=\"btn btn-adm\">" . $L['Edit'] . "</a>&nbsp;<a href=\"" . sed_url($url_part, $url_params . $lurl . "&n=delete&b=" . $row['com_id'] . "&" . sed_xg()) . "\" class=\"btn btn-adm\">" . $L['Delete'] . "</a>&nbsp;" . $L['Ip'] . ":" . sed_build_ipsearch($row['com_authorip']) : '';
+					$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ?
+						sed_link(sed_url($url_part, $url_params . $lurl . "&a=edit&b=" . $row['com_id'] . "&" . sed_xg(), "#c" . $row['com_id']), $L['Edit'], array('title' => $L['Edit'] . $allowed_time, 'class' => 'btn btn-adm')) . "&nbsp;" .
+						sed_link(sed_url($url_part, $url_params . $lurl . "&n=delete&b=" . $row['com_id'] . "&" . sed_xg()), $L['Delete'], array('class' => 'btn btn-adm')) . "&nbsp;" .
+						$L['Ip'] . ":" . sed_build_ipsearch($row['com_authorip']) : '';
 
 					$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author;
 
@@ -954,13 +990,13 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		$res_display = '';
 	}
 
-	$res = "<a href=\"" . sed_url($url_part, $url_params . $lurl) . "\">" . $out['ic_comment'];
-
+	$nbcomment = "";
+	$nbcomment_link = $out['ic_comment'];
 	if ($cfg['countcomments']) {
 		$nbcomment = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com where com_code='$code'"), 0, "COUNT(*)");
-		$res .= " (" . $nbcomment . ")";
+		$nbcomment_link .= " (" . $nbcomment . ")";
 	}
-	$res .= "</a>";
+	$res = sed_link(sed_url($url_part, $url_params . $lurl), $nbcomment_link, array());
 
 	return (array($res, $res_display, $nbcomment));
 }
@@ -993,7 +1029,8 @@ function sed_build_country($flag)
 	global $sed_countries;
 
 	$flag = (empty($flag)) ? '00' : $flag;
-	$result = "<a href=\"" . sed_url("users", "f=country_" . $flag) . "\">" . $sed_countries[$flag] . "</a>";
+
+	$result = sed_link(sed_url("users", "f=country_" . $flag), $sed_countries[$flag]);
 	return ($result);
 }
 
@@ -1038,7 +1075,7 @@ function sed_build_email($email, $hide = false)
 		$result = $L['Hidden'];
 	} elseif (!empty($email) && mb_strpos($email, '@') !== FALSE) {
 		$email = sed_cc($email);
-		$result = "<a href=\"mailto:" . $email . "\">" . $email . "</a>";
+		$result = sed_link("mailto:" . $email, $email);
 	} else {
 		$result = $email;
 	}
@@ -1055,7 +1092,7 @@ function sed_build_email($email, $hide = false)
 function sed_build_flag($flag)
 {
 	$flag = (empty($flag)) ? '00' : $flag;
-	$result = "<a href=\"" . sed_url("users", "f=country_" . $flag) . "\"><img src=\"system/img/flags/f-" . $flag . ".gif\" alt=\"\" /></a>";
+	$result = sed_link(sed_url("users", "f=country_" . $flag), "<img src=\"system/img/flags/f-" . $flag . ".gif\" alt=\"\" />");
 	return ($result);
 }
 
@@ -1078,14 +1115,14 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 	if ($link) {
 		foreach ($pathcodes as $k => $x) {
 			$ptitle = sed_cc($sed_forums_str[$x]['title']);
-			$tmp[] = "<a href=\"" . sed_url("forums", "c=" . $x, "#" . $x) . "\">" . $ptitle . "</a>";
+			$tmp[] = sed_link(sed_url("forums", "c=" . $x, "#" . $x), $ptitle);
 		}
 
 		if (is_array($parentcat)) {
 			$ptitle = sed_cc($parentcat['title']);
-			$tmp[] =  "<a href=\"" . sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle) . "\">" . $ptitle . "</a>";
+			$tmp[] = sed_link(sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle), $ptitle);
 		}
-		$tmp[] = "<a href=\"" . sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title) . "\">" . sed_cc($title) . "</a>";
+		$tmp[] = sed_link(sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title), sed_cc($title));
 	} else {
 		foreach ($pathcodes as $k => $x) {
 			$tmp[] = sed_cc($sed_forums_str[$x]['title']);
@@ -1160,7 +1197,7 @@ function sed_build_list_bc($cat)
  */
 function sed_build_gallery($id, $c1, $c2, $title)
 {
-	return ("<a href=\"javascript:sedjs.gallery('" . $id . "','" . $c1 . "','" . $c2 . "')\">" . $title . "</a>");
+	return sed_link("javascript:sedjs.gallery('" . $id . "','" . $c1 . "','" . $c2 . "')", $title);
 }
 
 /** 
@@ -1178,12 +1215,12 @@ function sed_build_group($grpid)
 	} else {
 		if ($sed_groups[$grpid]['hidden']) {
 			if (sed_auth('users', 'a', 'A')) {
-				$res = "<a href=\"" . sed_url("users", "gm=" . $grpid) . "\">" . $sed_groups[$grpid]['title'] . "</a> (" . $L['Hidden'] . ')';
+				$res = sed_link(sed_url("users", "gm=" . $grpid), $sed_groups[$grpid]['title']) . ' (' . $L['Hidden'] . ')';
 			} else {
 				$res = $L['Hidden'];
 			}
 		} else {
-			$res = "<a href=\"" . sed_url("users", "gm=" . $grpid) . "\">" . $sed_groups[$grpid]['title'] . "</a>";
+			$res = sed_link(sed_url("users", "gm=" . $grpid), $sed_groups[$grpid]['title']);
 		}
 	}
 	return ($res);
@@ -1218,7 +1255,7 @@ function sed_build_groupsms($userid, $edit = false, $maingrp = 0)
 			if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A'))) {
 				$res .= "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"rusermaingrp_$k\" name=\"rusermaingrp\" value=\"$k\" " . $checked_maingrp . " " . $readonly_maingrp . " /><label for=\"rusermaingrp_$k\"></label></span>\n";
 				$res .= "<span class=\"checkbox-item\"><input type=\"checkbox\" class=\"checkbox\" id=\"rusergroupsms_$k\" name=\"rusergroupsms[$k]\" " . $checked . " $readonly /><label for=\"rusergroupsms_$k\"></label></span>\n";
-				$res .= ($k == 1) ? $sed_groups[$k]['title'] : "<a href=\"" . sed_url("users", "g=" . $k) . "\">" . $sed_groups[$k]['title'] . "</a>";
+				$res .= ($k == 1) ? $sed_groups[$k]['title'] : sed_link(sed_url("users", "g=" . $k), $sed_groups[$k]['title']);
 				$res .= ($sed_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
 				$res .= "<br />";
 			}
@@ -1237,7 +1274,7 @@ function sed_build_groupsms($userid, $edit = false, $maingrp = 0)
 function sed_build_ipsearch($ip)
 {
 	if (!empty($ip)) {
-		$result = "<a href=\"" . sed_url("admin", "m=manage&p=ipsearch&a=search&id=" . $ip . "&" . sed_xg()) . "\">" . $ip . "</a>";
+		$result = sed_link(sed_url("admin", "m=manage&p=ipsearch&a=search&id=" . $ip . "&" . sed_xg()), $ip);
 	}
 	return ($result);
 }
@@ -1253,7 +1290,7 @@ function sed_build_skype($skype)
 	$result = '';
 	if (!empty($skype)) {
 		$skype = sed_cc($skype);
-		$result = "<a href=\"skype:" . $skype . "?call\">" . $skype . "</a>";
+		$result = sed_link("skype:" . $skype . "?call", $skype);
 	}
 	return ($result);
 }
@@ -1290,9 +1327,9 @@ function sed_build_pfs($id, $c1, $c2, $title)
 	} else {
 		$modal = ($cfg['enablemodal']) ? ',1' : '';
 		if ($id == 0) {
-			$res = "<a href=\"javascript:sedjs.pfs('0','" . $c1 . "','" . $c2 . "'" . $modal . ")\">" . $title . "</a>";
+			$res = sed_link("javascript:sedjs.pfs('0','" . $c1 . "','" . $c2 . "'" . $modal . ")", $title);
 		} elseif ($sed_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $sed_groups[$usr['maingrp']]['pfs_maxfile'] > 0 && sed_auth('pfs', 'a', 'R')) {
-			$res = "<a href=\"javascript:sedjs.pfs('" . $id . "','" . $c1 . "','" . $c2 . "'" . $modal . ")\">" . $title . "</a>";
+			$res = sed_link("javascript:sedjs.pfs('" . $id . "','" . $c1 . "','" . $c2 . "'" . $modal . ")", $title);
 		} else {
 			$res = '';
 		}
@@ -1309,7 +1346,7 @@ function sed_build_pfs($id, $c1, $c2, $title)
 function sed_build_pm($user)
 {
 	global $usr, $cfg, $L, $out;
-	$result = "<a href=\"" . sed_url("pm", "m=send&to=" . $user) . "\">" . $out['ic_pm'] . "</a>";
+	$result = sed_link(sed_url("pm", "m=send&to=" . $user), $out['ic_pm']);
 	return ($result);
 }
 
@@ -1654,7 +1691,7 @@ function sed_build_url($text, $maxlen = 64)
 			$url = 'http://' . $url;
 		}
 
-		$text = "<a href=\"" . $url . "\">" . sed_cutstring($text, $maxlen) . "</a>";
+		$text = sed_link($url, sed_cutstring($text, $maxlen));
 	}
 	return ($text);
 }
@@ -1694,7 +1731,7 @@ function sed_build_user($id, $user, $group = '')  // Modify in v175
 	} elseif ($id == 0) {
 		$result = '';
 	} else {
-		$result = (!empty($user)) ? "<a href=\"" . sed_url("users", "m=details&id=" . $id) . "\"><span style=\"color:" . $color . ";\">" . $user . "</span></a>" : '?';
+		$result = (!empty($user)) ? sed_link(sed_url("users", "m=details&id=" . $id), "<span style=\"color:" . $color . ";\">" . $user . "</span></a>") : '?';
 	}
 	return ($result);
 }
@@ -2150,7 +2187,7 @@ function sed_cutreadmore($text, $url)
 
 	if ($readmore > 0) {
 		$text = mb_substr($text, 0, $readmore) . " ";
-		$text .= sprintf($cfg['readmore'], "<a href=\"" . $url . "\">" . $L['ReadMore'] . "</a>");
+		$text .= sprintf($cfg['readmore'], sed_link($url, $L['ReadMore']));
 	}
 
 	return ($text);
@@ -3608,6 +3645,21 @@ function sed_structure_sort($a, $b, $field = 'structure_path')
 	}
 
 	return 0;
+}
+
+/**
+ * Generates an HTML anchor tag quickly
+ *
+ * Takes a URL, link text, and additional attributes to create a properly formatted <a> tag.
+ *
+ * @param string $url The URL for the href attribute
+ * @param string $text The text inside the <a> tag
+ * @param string|array $attrs Additional attributes as a string or key-value array
+ * @return string The HTML code for the link
+ */
+function sed_link($url, $text, $attrs = '')
+{
+	return '<a href="' . $url . '"' . sed_attr($attrs) . '>' . $text . '</a>';
 }
 
 /** 
