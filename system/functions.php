@@ -1005,7 +1005,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		$nbcomment = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com where com_code='$code'"), 0, "COUNT(*)");
 		$nbcomment_link .= " (" . $nbcomment . ")";
 	}
-	$res = sed_link(sed_url($url_part, $url_params . $lurl), $nbcomment_link, array());
+	$res = sed_link(sed_url($url_part, $url_params . $lurl), $nbcomment_link);
 
 	return (array($res, $res_display, $nbcomment));
 }
@@ -1485,8 +1485,6 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	for ($i = 1; $i <= 10; $i++) {
 		$onclick = "javascript:sedjs.ajaxbind({'url': '" . sed_url($url_part, $url_params . "&ratings=1&display=1&ina=send&ajax=1&newrate=" . $i . "&" . sed_xg()) . "', 'format':  'html', 'method':  'POST', 'update':  '#rat-" . $code . "', 'loading': '#rat-" . $code . "'});";
 		$res .= "<li class=\"s" . $i . "\">" . sed_link('javascript:void(0);', $i . " - " . $L['rat_choice' . $i], array('onClick' => $onclick, 'title' => $i . " - " . $L['rat_choice' . $i])) . "</li>\n";
-
-		//$res .= "<li class=\"s" . $i . "\"><a href=\"javascript:void(0);\" onClick=\"" . $onclick . "\" title=\"" . $i . " - " . $L['rat_choice' . $i] . "\">" . $i . " - " . $L['rat_choice' . $i] . "</a></li>\n";
 	}
 	$res .= "</ul></div>";
 
@@ -3135,16 +3133,24 @@ function sed_infoget($file, $limiter = 'SED', $maxsize = 32768)
  */
 function sed_radio_item($name, $value, $label = '', $id = '', $checked = false, $onclick = '', $additionalAttributes = array())
 {
-	$id = (empty($id)) ? $name : $name . "_" . $id;
-	$checked = ($checked === true) ? " checked" : "";
-	$onclick = ($onclick) ? " onclick=\"" . $onclick . "\"" : "";
+	$id = (empty($id)) ? $name : $name . '_' . $id;
 
-	$htmlAttributes = "";
-	foreach ($additionalAttributes as $attribute => $attrValue) {
-		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	$attributes = array(
+		'type' => 'radio',
+		'class' => 'radio',
+		'id' => $id,
+		'name' => $name,
+		'value' => $value
+	);
+	if ($checked) {
+		$attributes['checked'] = 'checked';
 	}
+	if ($onclick) {
+		$attributes['onclick'] = $onclick;
+	}
+	$attributes = array_merge($attributes, $additionalAttributes);
 
-	$result = "<span class=\"radio-item\"><input type=\"radio\" class=\"radio\" id=\"" . $id . "\" name=\"" . $name . "\" value=\"" . $value . "\"" . $checked . $onclick . $htmlAttributes . " /><label for=\"" . $id . "\">" . $label . "</label></span>";
+	$result = '<span class="radio-item"><input' . sed_attr($attributes) . ' /><label for="' . $id . '">' . $label . '</label></span>';
 
 	return $result;
 }
@@ -3274,16 +3280,20 @@ function sed_translit_seourl($value)
 
 function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text", $disabled = false, $type = "text", $additionalAttributes = array())
 {
-	$add_disabled = ($disabled) ? " disabled=\"disabled\"" : "";
-
-	$htmlAttributes = "";
-	foreach ($additionalAttributes as $attribute => $attrValue) {
-		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	$attributes = array(
+		'type' => $type,
+		'class' => $class,
+		'name' => $name,
+		'value' => sed_cc($value),
+		'size' => $size,
+		'maxlength' => $maxlength
+	);
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
 	}
+	$attributes = array_merge($attributes, $additionalAttributes);
 
-	$res = "<input type=\"" . $type . "\" class=\"" . $class . "\" name=\"" . $name . "\" value=\"" . sed_cc($value) . "\" size=\"" . $size . "\" maxlength=\"" . $maxlength . "\"" . $add_disabled . $htmlAttributes . " />";
-
-	return ($res);
+	return '<input' . sed_attr($attributes) . ' />';
 }
 
 
@@ -3314,16 +3324,19 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabl
 
 	$escapedValue = sed_cc(sed_checkmore($value, false), ENT_QUOTES);
 
-	$htmlAttributes = "";
-	foreach ($additionalAttributes as $attribute => $attrValue) {
-		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	$attributes = array(
+		'name' => $name,
+		'class' => $class,
+		'rows' => $rows,
+		'cols' => $cols,
+		'data-editor' => $editor
+	);
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
 	}
+	$attributes = array_merge($attributes, $additionalAttributes);
 
-	$disabledAttr = ($disabled) ? ' disabled="disabled"' : '';
-
-	$res = "<textarea name=\"" . $name . "\" class=\"" . $class . "\" rows=\"" . $rows . "\" cols=\"" . $cols . "\" data-editor=\"" . $editor . "\"" . $htmlAttributes . $disabledAttr . ">" . $escapedValue . "</textarea>";
-
-	return $res;
+	return '<textarea' . sed_attr($attributes) . '>' . $escapedValue . '</textarea>';
 }
 
 /** 
@@ -3335,39 +3348,57 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabl
  * @param bool $disabled Disable the checkbox (true or false) 
  * @return string HTML representation of the checkbox(es) 
  */
-
 function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE, $additionalAttributes = array())
 {
 	if (empty($data) || !is_array($data)) {
-		$val = (empty($data)) ? "1" : $data;
+		$val = (empty($data)) ? '1' : $data;
 
-		$checked = ($check_data) ? " checked" : "";
-		$disabledAttr = ($disabled) ? " disabled" : "";
-
-		$htmlAttributes = "";
-		foreach ($additionalAttributes as $attribute => $attrValue) {
-			$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+		$attributes = array(
+			'type' => 'checkbox',
+			'class' => 'checkbox',
+			'id' => $name,
+			'name' => $name,
+			'value' => $val
+		);
+		if ($check_data) {
+			$attributes['checked'] = 'checked';
 		}
+		if ($disabled) {
+			$attributes['disabled'] = 'disabled';
+		}
+		$attributes = array_merge($attributes, $additionalAttributes);
 
-		$result = "<span class=\"checkbox-item\"><input type=\"checkbox\" class=\"checkbox\" id=\"" . $name . "\" name=\"" . $name . "\"" . $checked . $disabledAttr . " value=\"" . $val . "\"" . $htmlAttributes . " /><label for=\"" . $name . "\">&nbsp;</label></span>";
+		$result = '<span class="checkbox-item"><input' . sed_attr($attributes) . ' /><label for="' . $name . '"> </label></span>';
 	} else {
-		if (!is_array($data)) $data = explode(',', $data);
-		if (!is_array($check_data)) $check_data = explode(',', $check_data);
+		if (!is_array($data)) {
+			$data = explode(',', $data);
+		}
+		if (!is_array($check_data)) {
+			$check_data = explode(',', $check_data);
+		}
 		$jj = 0;
 		$result = '';
 		foreach ($data as $key => $v) {
 			$jj++;
-			$isChecked = (is_array($check_data) && in_array($key, $check_data)) ? " checked" : "";
-
-			$htmlAttributes = "";
-			foreach ($additionalAttributes as $attribute => $attrValue) {
-				$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+			$attributes = array(
+				'type' => 'checkbox',
+				'class' => 'checkbox',
+				'id' => $name . '_' . $jj,
+				'name' => $name . '[]',
+				'value' => $key
+			);
+			if (is_array($check_data) && in_array($key, $check_data)) {
+				$attributes['checked'] = 'checked';
 			}
+			if ($disabled) {
+				$attributes['disabled'] = 'disabled';
+			}
+			$attributes = array_merge($attributes, $additionalAttributes);
 
-			$result .= '<span class="checkbox-item"><input type="checkbox" class="checkbox" id="' . $name . "_" . $jj . '" name="' . $name . '[]' . '" value="' . $key . '"' . $isChecked . $htmlAttributes . ' /><label for="' . $name . "_" . $jj . '">' . $v . '</label></span>';
+			$result .= '<span class="checkbox-item"><input' . sed_attr($attributes) . ' /><label for="' . $name . '_' . $jj . '">' . $v . '</label></span>';
 		}
 	}
-	return ($result);
+	return $result;
 }
 
 /** 
@@ -4193,17 +4224,17 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
 		$values = explode(',', $values);
 	}
 
-	$selected = ($isMultiple) ? 'selected="selected"' : 'selected="selected"';
-	$first_option = ($empty_option) ? "<option value=\"\" " . (($check == '') ? $selected : '') . ">---</option>" : '';
+	$selected = 'selected="selected"';
+	$first_option = ($empty_option) ? '<option value="" ' . (($check == '') ? $selected : '') . '>---</option>' : '';
 
-	$htmlAttributes = "";
-	foreach ($additionalAttributes as $attribute => $attrValue) {
-		$htmlAttributes .= " " . $attribute . "=\"" . $attrValue . "\"";
+	$attributes = array('name' => $name);
+	if ($isMultiple) {
+		$attributes['multiple'] = 'multiple';
 	}
 
-	$multipleAttr = ($isMultiple) ? ' multiple' : '';
+	$attributes = array_merge($attributes, $additionalAttributes);
 
-	$result = "<select name=\"$name\"" . $multipleAttr . $htmlAttributes . ">";
+	$result = '<select' . sed_attr($attributes) . '>';
 	$result .= $first_option;
 
 	foreach ($values as $k => $x) {
@@ -4211,10 +4242,10 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
 		$v = ($isArray && $key_isvalue) ? $k : $x;
 		$selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
 		$optionValue = ($disableSedCc) ? $x : sed_cc($x);
-		$result .= "<option value=\"$v\" $selected>" . $optionValue . "</option>";
+		$result .= '<option value="' . $v . '" ' . $selected . '>' . $optionValue . '</option>';
 	}
 
-	$result .= "</select>";
+	$result .= '</select>';
 	return $result;
 }
 
