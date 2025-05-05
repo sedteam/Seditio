@@ -110,12 +110,12 @@ function sed_build_adminsection($adminpath, $breadcrumbsclass = "", $homeicon = 
 	global $cfg, $L;
 
 	$result = array();
-	$adminhome = "<a href=\"" . sed_url("admin") . "\">" . $homeicon . $L['Adminpanel'] . "</a>";
+	$adminhome = sed_link(sed_url("admin"), $homeicon . $L['Adminpanel']);
 	$result[] = $adminhome;
 	$bread = "<ul class=\"" . $breadcrumbsclass . "\"><li>" . $adminhome . "</li>";
 	foreach ($adminpath as $i => $k) {
-		$result[] = "<a href=\"" . $k[0] . "\">" . $k[1] . "</a>";
-		$bread .=	"<li><a href=\"" . $k[0] . "\">" . $k[1] . "</a></li>";
+		$result[] = sed_link($k[0], $k[1]);
+		$bread .=	'<li>' . sed_link($k[0], $k[1]) . '</li>';
 	}
 	$result = implode(" " . $cfg['separator'] . " ", $result);
 	$bread .= "</ul>";
@@ -314,7 +314,7 @@ function sed_linkif($url, $text, $cond, $class = "")
 {
 	$class = (empty($class)) ? "" : " class=\"" . $class . "\"";
 	if ($cond) {
-		$res = "<a href=\"" . $url . "\"" . $class . "><span>" . $text . "</span></a>";
+		$res = sed_link($url,  '<span>' . $text . '</span>', $class);
 	} else {
 		$res = "<span>" . $text . "</span>";
 	}
@@ -716,7 +716,7 @@ function sed_plugin_install($pl)
 
 	sed_auth_reorder();
 	sed_cache_clearall();
-	$res .= (isset($j) && $j > 0) ? "<strong><a href=\"" . sed_url("admin", "m=config&n=edit&o=plug&p=" . $pl) . "\">There was configuration entries, click here to open the configuration panel</a></strong><br />" : '';
+	$res .= (isset($j) && $j > 0) ? "<strong>" . sed_link(sed_url("admin", "m=config&n=edit&o=plug&p=" . $pl), "There was configuration entries, click here to open the configuration panel") . "</strong><br />" : '';
 	return ($res);
 }
 
