@@ -127,23 +127,23 @@ $sql = sed_sql_query($sqlqr);
 
 $sqlqr = "CREATE UNIQUE INDEX unique_config_owner_cat_name ON " . $cfg['sqldbprefix'] . "config (config_owner, config_cat, config_name)";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $sqlqr = "CREATE INDEX idx_config_cat_name ON " . $cfg['sqldbprefix'] . "config (config_cat, config_name)";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "config ADD config_id INT(8) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (config_id)";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "referers DROP PRIMARY KEY";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "referers ADD ref_id INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (ref_id)";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 foreach ($sed_dbnames as $table_name) {
 	$table_name = $cfg['sqldbprefix'] . $table_name;
@@ -154,15 +154,15 @@ foreach ($sed_dbnames as $table_name) {
 
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "auth DROP KEY auth_code, ADD KEY auth_code (auth_code(190))";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic DROP KEY dic_code, ADD KEY dic_code (dic_code(190))";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages DROP KEY page_cat, ADD KEY page_cat (page_cat(190))";
 $adminmain .= sed_cc($sqlqr) . "<br />";
-$sql = sed_sql_query($sqlqr);
+$sql = sed_sql_query($sqlqr, false);
 
 $adminmain .= "Adding the 'available_image_sizes' new config into the core<br />";
 $sqlqr = "INSERT INTO " . $cfg['sqldbprefix'] . "config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default)

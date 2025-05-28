@@ -82,9 +82,39 @@ $cfg['adminskin'] = "sympfy";
 
 /* Message type:  warning => w, error => e, success => s, info => i */
 $cfg['msgtype'] = array(
-	'100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i', '118' => 's', '151' => 'e',
-	'152' => 'e', '153' => 'e', '157' => 'w', '300' => 's', '400' => 'e', '401' => 'e', '403' => 'e', '404' => 'e', '500' => 'e', '502' => 's', '602' => 'w',
-	'603' => 'w', '900' => 'w', '904' => 'w', '907' => 'e', '911' => 'e', '915' => 'e', '916' => 's', '917' => 's', '930' => 'w', '940' => 'w', '950' => 'e'
+	'100' => 'e',
+	'101' => 'e',
+	'102' => 'i',
+	'104' => 'i',
+	'105' => 's',
+	'106' => 's',
+	'109' => 's',
+	'113' => 's',
+	'117' => 'i',
+	'118' => 's',
+	'151' => 'e',
+	'152' => 'e',
+	'153' => 'e',
+	'157' => 'w',
+	'300' => 's',
+	'400' => 'e',
+	'401' => 'e',
+	'403' => 'e',
+	'404' => 'e',
+	'500' => 'e',
+	'502' => 's',
+	'602' => 'w',
+	'603' => 'w',
+	'900' => 'w',
+	'904' => 'w',
+	'907' => 'e',
+	'911' => 'e',
+	'915' => 'e',
+	'916' => 's',
+	'917' => 's',
+	'930' => 'w',
+	'940' => 'w',
+	'950' => 'e'
 );
 
 $cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'info', 'w' => 'warning');
@@ -148,9 +178,39 @@ $shield_hammer = 0;
 /* ======== Names of the SQL tables ========= */
 
 $sed_dbnames = array(
-	'auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'forum_sections', 'forum_structure', 'forum_topics',
-	'forum_posts', 'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options',
-	'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users'
+	'auth',
+	'banlist',
+	'cache',
+	'com',
+	'core',
+	'config',
+	'dic',
+	'dic_items',
+	'forum_sections',
+	'forum_structure',
+	'forum_topics',
+	'forum_posts',
+	'groups',
+	'groups_users',
+	'logger',
+	'menu',
+	'online',
+	'pages',
+	'pfs',
+	'pfs_folders',
+	'plugins',
+	'pm',
+	'polls_options',
+	'polls',
+	'polls_voters',
+	'rated',
+	'ratings',
+	'referers',
+	'smilies',
+	'stats',
+	'structure',
+	'trash',
+	'users'
 );
 
 foreach ($sed_dbnames as $k => $i) {
@@ -243,11 +303,30 @@ function sed_attr($attrs)
 
 	// List of JavaScript event attributes that should not be escaped
 	$no_escape_attrs = [
-		'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'onmousemove',
-		'onmousedown', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
-		'onchange', 'oninput', 'onsubmit', 'onfocus', 'onblur', 'onload',
-		'onunload', 'onerror', 'onresize', 'onscroll', 'oncontextmenu',
-		'onselect', 'ondrag', 'ondrop'
+		'onclick',
+		'ondblclick',
+		'onmouseover',
+		'onmouseout',
+		'onmousemove',
+		'onmousedown',
+		'onmouseup',
+		'onkeydown',
+		'onkeypress',
+		'onkeyup',
+		'onchange',
+		'oninput',
+		'onsubmit',
+		'onfocus',
+		'onblur',
+		'onload',
+		'onunload',
+		'onerror',
+		'onresize',
+		'onscroll',
+		'oncontextmenu',
+		'onselect',
+		'ondrag',
+		'ondrop'
 	];
 
 	if (is_array($attrs)) {
@@ -2792,7 +2871,11 @@ function sed_spoiler($text)
 {
 	global $cfg, $usr, $L;
 
-	// Regular expression to find spoilers with either class, considering the possible absence of one of the attributes
+	if (!is_string($text)) {
+		return '';
+	}
+
+	// Regular expression to find spoilers with either spoiler-content or hidden-content class
 	$pattern = '#<div class="(spoiler-content|hidden-content)"( data-mingroup="([^"]*)")?( data-minlevel="([^"]*)")?>(.*?)<\/div>#s';
 
 	$callback = function ($matches) {
@@ -2801,19 +2884,19 @@ function sed_spoiler($text)
 		$mingroup = isset($matches[3]) ? $matches[3] : '';
 		$minlevel = isset($matches[5]) ? $matches[5] : '';
 		$content = $matches[6];
-		$class = $matches[1]; // Capture the class name
+		$class = $matches[1];
 
-		// Form the opening div string considering the presence of attributes
+		// Form the opening div tag with attributes if present
 		$divOpen = '<div class="' . $class . '"' .
 			(!empty($mingroup) ? ' data-mingroup="' . $mingroup . '"' : '') .
 			(!empty($minlevel) ? ' data-minlevel="' . $minlevel . '"' : '') .
 			'>';
 		$divClose = '</div>';
 
-		// Determine the group name
+		// Determine group name
 		$groupName = !empty($mingroup) ? sed_build_group($mingroup) : '';
 
-		// Check conditions to display or hide the content
+		// Check conditions to display or hide content
 		if (!empty($mingroup) && !empty($minlevel)) {
 			// Both attributes are set
 			if ($usr['maingrp'] == $mingroup && $usr['level'] >= $minlevel) {
@@ -2848,12 +2931,12 @@ function sed_spoiler($text)
 				) . $divClose;
 			}
 		} else {
-			// Neither attribute is set
+			// No attributes set
 			return $divOpen . $content . $divClose;
 		}
 	};
 
-	// Replace each match with the result of the callback function
+	// Replace matches with callback result
 	return preg_replace_callback($pattern, $callback, $text);
 }
 
@@ -3428,22 +3511,80 @@ function sed_is_bot()
 {
 	if (!empty($_SERVER['HTTP_USER_AGENT'])) {
 		$options = array(
-			'YandexBot', 'YandexAccessibilityBot', 'YandexMobileBot', 'YandexDirectDyn',
-			'YandexScreenshotBot', 'YandexImages', 'YandexVideo', 'YandexVideoParser',
-			'YandexMedia', 'YandexBlogs', 'YandexFavicons', 'YandexWebmaster',
-			'YandexPagechecker', 'YandexImageResizer', 'YandexAdNet', 'YandexDirect',
-			'YaDirectFetcher', 'YandexCalendar', 'YandexSitelinks', 'YandexMetrika',
-			'YandexNews', 'YandexNewslinks', 'YandexCatalog', 'YandexAntivirus',
-			'YandexMarket', 'YandexVertis', 'YandexForDomain', 'YandexSpravBot',
-			'YandexSearchShop', 'YandexMedianaBot', 'YandexOntoDB', 'YandexOntoDBAPI',
-			'Googlebot', 'Googlebot-Image', 'Mediapartners-Google', 'AdsBot-Google',
-			'Mail.RU_Bot', 'bingbot', 'Accoona', 'ia_archiver', 'Ask Jeeves',
-			'OmniExplorer_Bot', 'W3C_Validator', 'WebAlta', 'YahooFeedSeeker', 'Yahoo!',
-			'Ezooms', '', 'Tourlentabot', 'MJ12bot', 'AhrefsBot', 'SearchBot', 'SiteStatus',
-			'Nigma.ru', 'Baiduspider', 'Statsbot', 'SISTRIX', 'AcoonBot', 'findlinks',
-			'proximic', 'OpenindexSpider', 'statdom.ru', 'Exabot', 'Spider', 'SeznamBot',
-			'oBot', 'C-T bot', 'Updownerbot', 'Snoopy', 'heritrix', 'Yeti',
-			'DomainVader', 'DCPbot', 'PaperLiBot'
+			'YandexBot',
+			'YandexAccessibilityBot',
+			'YandexMobileBot',
+			'YandexDirectDyn',
+			'YandexScreenshotBot',
+			'YandexImages',
+			'YandexVideo',
+			'YandexVideoParser',
+			'YandexMedia',
+			'YandexBlogs',
+			'YandexFavicons',
+			'YandexWebmaster',
+			'YandexPagechecker',
+			'YandexImageResizer',
+			'YandexAdNet',
+			'YandexDirect',
+			'YaDirectFetcher',
+			'YandexCalendar',
+			'YandexSitelinks',
+			'YandexMetrika',
+			'YandexNews',
+			'YandexNewslinks',
+			'YandexCatalog',
+			'YandexAntivirus',
+			'YandexMarket',
+			'YandexVertis',
+			'YandexForDomain',
+			'YandexSpravBot',
+			'YandexSearchShop',
+			'YandexMedianaBot',
+			'YandexOntoDB',
+			'YandexOntoDBAPI',
+			'Googlebot',
+			'Googlebot-Image',
+			'Mediapartners-Google',
+			'AdsBot-Google',
+			'Mail.RU_Bot',
+			'bingbot',
+			'Accoona',
+			'ia_archiver',
+			'Ask Jeeves',
+			'OmniExplorer_Bot',
+			'W3C_Validator',
+			'WebAlta',
+			'YahooFeedSeeker',
+			'Yahoo!',
+			'Ezooms',
+			'',
+			'Tourlentabot',
+			'MJ12bot',
+			'AhrefsBot',
+			'SearchBot',
+			'SiteStatus',
+			'Nigma.ru',
+			'Baiduspider',
+			'Statsbot',
+			'SISTRIX',
+			'AcoonBot',
+			'findlinks',
+			'proximic',
+			'OpenindexSpider',
+			'statdom.ru',
+			'Exabot',
+			'Spider',
+			'SeznamBot',
+			'oBot',
+			'C-T bot',
+			'Updownerbot',
+			'Snoopy',
+			'heritrix',
+			'Yeti',
+			'DomainVader',
+			'DCPbot',
+			'PaperLiBot'
 		);
 
 		foreach ($options as $row) {

@@ -247,7 +247,10 @@ function sed_sql_query($query, $halterr = true, $conn_id = null)
 	$xtime = microtime();
 
 	if ($halterr) {
-		$result = mysqli_query($conn_id, $query) or sed_diefatal('SQL error : ' . sed_sql_error());
+		$result = mysqli_query($conn_id, $query) or sed_diefatal(
+			'SQL error: ' . sed_sql_error() .
+				($cfg['devmode'] && sed_auth('admin', 'a', 'A') ? ' | Query: ' . $query : '')
+		);
 	} else {
 		$result = mysqli_query($conn_id, $query);
 	}
