@@ -157,8 +157,8 @@ $pfs = sed_build_pfs($usr['id'], 'editpost', 'rmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, "editpost", "rmsg", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rmsg');
 
-$toptitle = "<a href=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</a> " . $cfg['separator'] . " " . sed_build_forums($s, $fs_title, $fs_category) . " " . $cfg['separator'] . " <a href=\"" . sed_url("forums", "m=posts&p=" . $p, "#" . $p) . "\">" . $ft_fulltitle . "</a> ";
-$toptitle .= $cfg['separator'] . " <a href=\"" . sed_url("forums", "m=editpost&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . sed_xg()) . "\">" . $L['Edit'] . "</a>";
+$toptitle = sed_link(sed_url("forums"), $L['Forums']) . $cfg['separator'] . " " . sed_build_forums($s, $fs_title, $fs_category) . " " . $cfg['separator'] . " " . sed_link(sed_url("forums", "m=posts&p=" . $p, "#" . $p), $ft_fulltitle) . " ";
+$toptitle .= $cfg['separator'] . " " . sed_link(sed_url("forums", "m=editpost&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . sed_xg()), $L['Edit']);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 // ---------- Breadcrumbs

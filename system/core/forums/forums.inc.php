@@ -89,7 +89,7 @@ if (!isset($sed_sections_vw)) {
 
 $secact_max = max($sed_sections_act);
 
-$out['markall'] = ($usr['id'] > 0) ? "<a href=\"" . sed_url("forums", "n=markall") . "\">" . $L['for_markallasread'] . "</a>" : '';
+$out['markall'] = ($usr['id'] > 0) ? sed_link(sed_url("forums", "n=markall"), $L['for_markallasread']) : '';
 
 $out['subtitle'] = $L['Forums'];
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
@@ -120,9 +120,9 @@ $mskin = "skins/" . $skin . "/forums.sections.tpl";
 $t = new XTemplate($mskin);
 
 $t->assign(array(
-	"FORUMS_SECTIONS_TITLE" => "<a href=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</a>",
+	"FORUMS_SECTIONS_TITLE" => sed_link(sed_url("forums"), $L['Forums']),
 	"FORUMS_SECTIONS_SHORTTITLE" => $L['Forums'],
-	"FORUMS_SECTIONS_PAGETITLE" => "<a href=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</a>",
+	"FORUMS_SECTIONS_PAGETITLE" => sed_link(sed_url("forums"), $L['Forums']),
 	"FORUMS_SECTIONS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_SECTIONS_MARKALL" =>  $out['markall'],
 	"FORUMS_SECTIONS_SEARCH" => sed_url("plug", "e=search&frm=1"),
@@ -146,10 +146,7 @@ while ($fsn = sed_sql_fetchassoc($sql)) //v178
 
 // by structure extending
 foreach ($sect_arr as $fsec_key => $fsec) {
-	$cattitle = "<a href=\"javascript:sedjs.toggleblock('blk_" . $fsec['fs_category'] . "')\">";
-	$cattitle .= $sed_forums_str[$fsec['fs_category']]['tpath'];
-	$cattitle .= "</a>";
-
+	$cattitle = sed_link("javascript:sedjs.toggleblock('blk_" . $fsec['fs_category'] . "')", $sed_forums_str[$fsec['fs_category']]['tpath']);
 	$lt_date = $fsec['fs_lt_date'];
 
 	if ($c == 'fold') {

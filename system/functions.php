@@ -3842,7 +3842,8 @@ function sed_structure_sort($a, $b, $field = 'structure_path')
  */
 function sed_link($url, $text, $attrs = '')
 {
-	return '<a href="' . $url . '"' . sed_attr($attrs) . '>' . $text . '</a>';
+	$href = !empty($url) ? ' href="' . $url . '"' : '';
+	return '<a' . $href . sed_attr($attrs) . '>' . $text . '</a>';
 }
 
 /** 

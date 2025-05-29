@@ -191,7 +191,7 @@ $pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 
-$toptitle = "<a href=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</a> " . $cfg['separator'] . " " . sed_build_forums($s, $fs_title, $fs_category) . " " . $cfg['separator'] . " <a href=\"" . sed_url("forums", "m=newtopic&s=" . $s) . "\">" . $L['for_newtopic'] . "</a>";
+$toptitle = sed_link(sed_url("forums"), $L['Forums']) . " " . $cfg['separator'] . " " . sed_build_forums($s, $fs_title, $fs_category) . " " . $cfg['separator'] . " " . sed_link(sed_url("forums", "m=newtopic&s=" . $s), $L['for_newtopic']);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 // ---------- Breadcrumbs
