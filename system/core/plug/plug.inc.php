@@ -143,7 +143,7 @@ if (!empty($p)) {
 		$urlpaths[sed_url("plug", "e=" . $e)] = $plugin_title;
 
 		$t->assign(array(
-			"PLUGIN_TITLE" => "<a href=\"" . sed_url("plug", "e=" . $e) . "\">" . $plugin_title . "</a>",
+			"PLUGIN_TITLE" => sed_link(sed_url("plug", "e=" . $e), $plugin_title),
 			"PLUGIN_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 			"PLUGIN_SHORTTITLE" => $plugin_title,
 			"PLUGIN_URL" => sed_url("plug", "e=" . $e),

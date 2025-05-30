@@ -68,13 +68,16 @@ if ($a == 'send') {
 	$userid = sed_import('userid', 'P', 'INT');
 	$touser_src = explode(",", $newpmrecipient);
 	$touser_req = count($touser_src);
+
 	foreach ($touser_src as $k => $i) {
 		$touser_sql[] = "'" . sed_sql_prep(trim(sed_import($i, 'D', 'TXT'))) . "'";
 	}
+
 	$touser_sql = implode(',', $touser_sql);
 	$touser_sql = '(' . $touser_sql . ')';
 	$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
 	$totalrecipients = sed_sql_numrows($sql);
+
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$touser_ids[] = $row['user_id'];
 		$row['user_name'] = sed_cc($row['user_name']);
@@ -190,7 +193,7 @@ if (!empty($q) && empty($newpmtext)) {
 
 $pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
-$pm_sendlink = ($usr['auth_write']) ? "<a href=\"" . sed_url("pm", "m=send") . "\">" . $L['pm_sendnew'] . "</a>" : '';
+$pm_sendlink = ($usr['auth_write']) ? sed_link(sed_url("pm", "m=send"), $L['pm_sendnew']) : '';
 
 $out['subtitle'] = $L['Private_Messages'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
@@ -221,14 +224,14 @@ if (!empty($error_string)) {
 }
 
 $t->assign(array(
-	"PMSEND_TITLE" => "<a href=\"" . sed_url("pm") . "\">" . $L['Private_Messages'] . "</a> " . $cfg['separator'] . " " . $L['pmsend_title'],
+	"PMSEND_TITLE" => sed_link(sed_url("pm"), $L['Private_Messages']) . " " . $cfg['separator'] . " " . $L['pmsend_title'],
 	"PMSEND_SHORTTITLE" => $L['pmsend_title'],
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
 	"PMSEND_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
-	"PMSEND_INBOX" => "<a href=\"" . sed_url("pm") . "\">" . $L['pm_inbox'] . "</a>:" . $totalinbox,
-	"PMSEND_ARCHIVES" => "<a href=\"" . sed_url("pm", "f=archives") . "\">" . $L['pm_archives'] . "</a>:" . $totalarchives,
-	"PMSEND_SENTBOX" => "<a href=\"" . sed_url("pm", "f=sentbox") . "\">" . $L['pm_sentbox'] . "</a>:" . $totalsentbox,
+	"PMSEND_INBOX" => sed_link(sed_url("pm"), $L['pm_inbox']) . ": " . $totalinbox,
+	"PMSEND_ARCHIVES" => sed_link(sed_url("pm", "f=archives"), $L['pm_archives']) . ": " . $totalarchives,
+	"PMSEND_SENTBOX" => sed_link(sed_url("pm", "f=sentbox"), $L['pm_sentbox']) . ": " . $totalsentbox,
 	"PMSEND_FORM_SEND" => sed_url("pm", "m=send&a=send&to=" . $to),
 	"PMSEND_FORM_TITLE" => sed_textbox('newpmtitle', isset($newpmtitle) ? $newpmtitle : '', 64, 64),
 	"PMSEND_FORM_TEXT" =>  sed_textarea('newpmtext', isset($newpmtext) ? $newpmtext : '', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic') . $pfs,

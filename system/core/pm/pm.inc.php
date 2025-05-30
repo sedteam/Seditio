@@ -67,21 +67,21 @@ if (!empty($id)) // -------------- Single mode
 	sed_die(sed_sql_numrows($sql1) == 0);
 	$row1 = sed_sql_fetchassoc($sql1);
 
-	$title = "<a href=\"" . sed_url("pm") . "\">" . $L['Private_Messages'] . "</a> " . $cfg['separator'];
+	$title = sed_link(sed_url("pm"), $L['Private_Messages']) . $cfg['separator'];
 
 	$shorttitle = $L['Private_Messages'];
 	$urlpaths[sed_url("pm")] = $L['Private_Messages'];
 
 	if ($row1['pm_touserid'] == $usr['id'] && $row1['pm_state'] == 2) {
 		$f = 'archives';
-		$title .= " <a href=\"" . sed_url("pm", "f=archives") . "\">" . $L['pm_archives'] . "</a>";
+		$title .= " " . sed_link(sed_url("pm", "f=archives"), $L['pm_archives']);
 		$subtitle = '';
 
 		$shorttitle = $L['pm_archives'];
 		$urlpaths[sed_url("pm", "f=archives")] = $L['pm_archives'];
 	} elseif ($row1['pm_touserid'] == $usr['id'] && $row1['pm_state'] < 2) {
 		$f = 'inbox';
-		$title .= " <a href=\"" . sed_url("pm", "f=inbox") . "\">" . $L['pm_inbox'] . "</a>";
+		$title .= " " . sed_link(sed_url("pm", "f=inbox"), $L['pm_inbox']);
 		$subtitle = '';
 
 		$shorttitle = $L['pm_inbox'];
@@ -97,7 +97,7 @@ if (!empty($id)) // -------------- Single mode
 		}
 	} elseif ($row1['pm_fromuserid'] == $usr['id'] && $row1['pm_state'] == 0) {
 		$f = 'sentbox';
-		$title .= " <a href=\"" . sed_url("pm", "f=sentbox") . "\">" . $L['pm_sentbox'] . "</a>";
+		$title .= " " . sed_link(sed_url("pm", "f=sentbox"), $L['pm_sentbox']);
 		$subtitle = '';
 
 		$shorttitle = $L['pm_sentbox'];
@@ -106,7 +106,7 @@ if (!empty($id)) // -------------- Single mode
 		sed_die();
 	}
 
-	$title .= ' ' . $cfg['separator'] . " <a href=\"" . sed_url("pm", "id=" . $id) . "\">#" . $id . "</a>";
+	$title .= ' ' . $cfg['separator'] . " " . sed_link(sed_url("pm", "id=" . $id), "#" . $id);
 	$urlpaths[sed_url("pm", "id=" . $id)] = "#" . $id;
 
 	$sql = sed_sql_query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='" . $id . "'");
@@ -115,14 +115,14 @@ if (!empty($id)) // -------------- Single mode
 {
 	unset($id);
 
-	$title = "<a href=\"" . sed_url("pm") . "\">" . $L['Private_Messages'] . "</a> " . $cfg['separator'];
+	$title = sed_link(sed_url("pm"), $L['Private_Messages']) . " " . $cfg['separator'];
 
 	if ($f == 'archives') {
 		$totallines = $totalarchives;
 		$sql = sed_sql_query("SELECT * FROM $db_pm
 			WHERE pm_touserid='" . $usr['id'] . "' AND pm_state=2
 			ORDER BY pm_date DESC LIMIT $d," . $cfg['maxrowsperpage']);
-		$title .= " <a href=\"" . sed_url("pm", "f=archives") . "\">" . $L['pm_archives'] . "</a>";
+		$title .= " " . sed_link(sed_url("pm", "f=archives"), $L['pm_archives']);
 		$subtitle = $L['pm_arcsubtitle'];
 
 		$shorttitle = $L['pm_archives'];
@@ -132,7 +132,7 @@ if (!empty($id)) // -------------- Single mode
 		$sql = sed_sql_query("SELECT p.*, u.user_name FROM $db_pm p, $db_users u
        		WHERE p.pm_fromuserid='" . $usr['id'] . "' AND p.pm_state=0 AND u.user_id=p.pm_touserid
 			ORDER BY pm_date DESC LIMIT $d," . $cfg['maxrowsperpage']);
-		$title .= " <a href=\"" . sed_url("pm", "f=sentbox") . "\">" . $L['pm_sentbox'] . "</a>";
+		$title .= " " . sed_link(sed_url("pm", "f=sentbox"), $L['pm_sentbox']);
 		$subtitle = $L['pm_sentboxsubtitle'];
 
 		$shorttitle = $L['pm_sentbox'];
@@ -143,7 +143,7 @@ if (!empty($id)) // -------------- Single mode
 		$sql = sed_sql_query("SELECT * FROM $db_pm
 			WHERE pm_touserid='" . $usr['id'] . "' AND pm_state<2
 			ORDER BY pm_date DESC LIMIT  $d," . $cfg['maxrowsperpage']);
-		$title .= " <a href=\"" . sed_url("pm") . "\">" . $L['pm_inbox'] . "</a>";
+		$title .= " " . sed_link(sed_url("pm"), $L['pm_inbox']);
 		$subtitle = $L['pm_inboxsubtitle'];
 
 		$shorttitle = $L['pm_inbox'];
@@ -172,7 +172,7 @@ if (is_array($extp)) {
 }
 /* ===== */
 
-$pm_sendlink = ($usr['auth_write']) ? "<a href=\"" . sed_url("pm", "m=send") . "\">" . $L['pm_sendnew'] . "</a>" : '';
+$pm_sendlink = ($usr['auth_write']) ? sed_link(sed_url("pm", "m=send"), $L['pm_sendnew']) : '';
 
 require(SED_ROOT . "/system/header.php");
 $t = new XTemplate("skins/" . $skin . "/pm.tpl");
@@ -183,9 +183,9 @@ $t->assign(array(
 	"PM_SUBTITLE" => $subtitle,
 	"PM_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PM_SENDNEWPM" => $pm_sendlink,
-	"PM_INBOX" => "<a href=\"" . sed_url("pm") . "\">" . $L['pm_inbox'] . "</a> : " . $totalinbox,
-	"PM_ARCHIVES" => "<a href=\"" . sed_url("pm", "f=archives") . "\">" . $L['pm_archives'] . "</a> : " . $totalarchives,
-	"PM_SENTBOX" => "<a href=\"" . sed_url("pm", "f=sentbox") . "\">" . $L['pm_sentbox'] . "</a> : " . $totalsentbox,
+	"PM_INBOX" => sed_link(sed_url("pm"), $L['pm_inbox']) . ": " . $totalinbox,
+	"PM_ARCHIVES" => sed_link(sed_url("pm", "f=archives"), $L['pm_archives']) . ": " . $totalarchives,
+	"PM_SENTBOX" => sed_link(sed_url("pm", "f=sentbox"), $L['pm_sentbox']) . ": " . $totalsentbox,
 	"PM_TOP_PAGEPREV" => isset($pm_pageprev) ? $pm_pageprev : '',
 	"PM_TOP_PAGENEXT" => isset($pm_pagenext) ? $pm_pagenext : '',
 	"PM_TOP_PAGINATION" => isset($pm_pagination) ? $pm_pagination : '',
@@ -201,7 +201,9 @@ $extp = sed_getextplugins('pm.loop');
 
 while ($row = sed_sql_fetchassoc($sql) and ($jj < $cfg['maxrowsperpage'])) {
 	$jj++;
-	$row['pm_icon_status'] = ($row['pm_state'] == '0' && $f != 'sentbox') ? "<a href=\"" . sed_url("pm", "id=" . $row['pm_id']) . "\">" . $out['ic_pm_new'] . "</a>" : "<a href=\"" . sed_url("pm", "id=" . $row['pm_id']) . "\">" . $out['ic_pm'] . "</a>";
+	$row['pm_icon_status'] = ($row['pm_state'] == '0' && $f != 'sentbox') ?
+		sed_link(sed_url("pm", "id=" . $row['pm_id']), $out['ic_pm_new']) :
+		sed_link(sed_url("pm", "id=" . $row['pm_id']), $out['ic_pm']);
 
 	if ($f == 'sentbox') {
 		$pm_fromuserid = $usr['id'];
@@ -209,13 +211,13 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj < $cfg['maxrowsperpage'])) {
 		$pm_touserid = $row['pm_touserid'];
 		$pm_touser = sed_cc($row['user_name']);
 		$pm_fromortouser = sed_build_user($pm_touserid, $pm_touser);
-		$row['pm_icon_action'] = "<a href=\"" . sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f) . "\">" . $out['ic_pm_trashcan'] . "</a>";
+		$row['pm_icon_action'] = sed_link(sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f), $out['ic_pm_trashcan']);
 
 		if (!empty($id)) {
 			$pm_editbox = "<h4>" . $L['Edit'] . " :</h4>";
 			$pm_editbox .= "<form id=\"newlink\" action=\"" . sed_url("pm", "m=edit&a=update&" . sed_xg() . "&id=" . $id) . "\" method=\"post\">";
 			$pm_editbox .= sed_textarea('newpmtext', $row['pm_text'], 8, 56, 'Basic');
-			$pm_editbox .= "<br />&nbsp;<br /><input type=\"submit\" class=\"submit btn\" value=\"" . $L['Update'] . "\" /></form>";
+			$pm_editbox .= "<br />&nbsp;<br />" . sed_button($L['Update'], 'submit', 'submit', 'submit btn', false) . "</form>";
 		}
 	} elseif ($f == 'archives') {
 		$pm_fromuserid = $row['pm_fromuserid'];
@@ -223,16 +225,18 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj < $cfg['maxrowsperpage'])) {
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"" . sed_url("pm", "m=send&to=" . $row['pm_fromuserid'] . "&q=" . $row['pm_id']) . "\">" . $out['ic_pm_reply'] . "</a> <a href=\"" . sed_url("pm", "m=edit&a=index&" . sed_xg() . "&id=" . $row['pm_id']) . "\">" . $out['ic_pm_archive'] . "</a>";
-		$row['pm_icon_action'] .= " <a href=\"" . sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f) . "\">" . $out['ic_pm_trashcan'] . "</a>";
+		$row['pm_icon_action'] = sed_link(sed_url("pm", "m=send&to=" . $row['pm_fromuserid'] . "&q=" . $row['pm_id']), $out['ic_pm_reply']) .  " " .
+			sed_link(sed_url("pm", "m=edit&a=index&" . sed_xg() . "&id=" . $row['pm_id']), $out['ic_pm_archive']);
+		$row['pm_icon_action'] .= " " . sed_link(sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f), $out['ic_pm_trashcan']);
 	} else {
 		$pm_fromuserid = $row['pm_fromuserid'];
 		$pm_fromuser = sed_cc($row['pm_fromuser']);
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"" . sed_url("pm", "m=send&to=" . $row['pm_fromuserid'] . "&q=" . $row['pm_id']) . "\">" . $out['ic_pm_reply'] . "</a> <a href=\"" . sed_url("pm", "m=edit&a=archive&" . sed_xg() . "&id=" . $row['pm_id']) . "\">" . $out['ic_pm_archive'] . "</a>";
-		$row['pm_icon_action'] .= ($row['pm_state'] > 0) ? " <a href=\"" . sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f) . "\">" . $out['ic_pm_trashcan'] . "</a>" : '';
+		$row['pm_icon_action'] = sed_link(sed_url("pm", "m=send&to=" . $row['pm_fromuserid'] . "&q=" . $row['pm_id']), $out['ic_pm_reply']) . " " .
+			sed_link(sed_url("pm", "m=edit&a=archive&" . sed_xg() . "&id=" . $row['pm_id']), $out['ic_pm_archive']);
+		$row['pm_icon_action'] .= ($row['pm_state'] > 0) ? " " . sed_link(sed_url("pm", "m=edit&a=delete&" . sed_xg() . "&id=" . $row['pm_id'] . "&f=" . $f), $out['ic_pm_trashcan']) : '';
 	}
 
 	$row['pm_text'] = sed_parse($row['pm_text']);
@@ -245,7 +249,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj < $cfg['maxrowsperpage'])) {
 		"PM_ROW_FROMUSER" => sed_build_user($pm_fromuserid, $pm_fromuser),
 		"PM_ROW_TOUSERID" => $pm_touserid,
 		"PM_ROW_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
-		"PM_ROW_TITLE" => "<a href=\"" . sed_url("pm", "id=" . $row['pm_id']) . "\">" . sed_cc($row['pm_title']) . "</a>",
+		"PM_ROW_TITLE" => sed_link(sed_url("pm", "id=" . $row['pm_id']), sed_cc($row['pm_title'])),
 		"PM_ROW_TEXT" => $row['pm_text'] . (isset($pm_editbox) ? $pm_editbox : ''),
 		"PM_ROW_FROMORTOUSER" => $pm_fromortouser,
 		"PM_ROW_ICON_STATUS" => $row['pm_icon_status'],
