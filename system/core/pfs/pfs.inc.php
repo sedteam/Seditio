@@ -677,7 +677,7 @@ if ($usr['auth_write']) {
         $t->assign(array(
             "PFS_UPLOAD_LIST_NUM" => ($ii + 1),
             "PFS_UPLOAD_LIST_TITLE" => sed_textbox("ntitle[" . $ii . "]", '', 38, 255),
-            "PFS_UPLOAD_LIST_FILE" => "<input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"32\" />"
+            "PFS_UPLOAD_LIST_FILE" => sed_filebox("userfile[" . $ii . "]", 'file', false, '', false, array('size' => 32))
         ));
 
         if ($ii >= $cfg['pfsmaxuploads']) {
@@ -688,7 +688,7 @@ if ($usr['auth_write']) {
     }
 
     $t->assign(array(
-        "PFS_UPLOAD_MULTIPLE" => "<input name=\"userfile[]\" type=\"file\" class=\"file\" multiple=\"true\" size=\"32\" />",
+        "PFS_UPLOAD_MULTIPLE" => sed_filebox('userfile[]', 'file', true, '', false, array('size' => 32)),
         "PFS_ALLOWED_EXT" => ($usr['auth_write']) ? $disp_allowed : ''
     ));
 

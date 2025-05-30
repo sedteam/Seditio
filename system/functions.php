@@ -1841,6 +1841,34 @@ function sed_build_userimage($image)
 	return ($result);
 }
 
+/**
+ * Renders a button element
+ *
+ * @param string $text Button text
+ * @param string $type Button type (submit, reset, button)
+ * @param string $name Button name attribute
+ * @param string $class CSS class for styling
+ * @param bool $disabled Disable the button (true or false)
+ * @param array $additionalAttributes Additional HTML attributes
+ * @return string HTML representation of the button
+ */
+function sed_button($text, $type = 'button', $name = '', $class = 'button', $disabled = false, $additionalAttributes = [])
+{
+	$attributes = [
+		'type' => $type,
+		'class' => $class
+	];
+	if ($name) {
+		$attributes['name'] = $name;
+	}
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
+	}
+	$attributes = array_merge($attributes, $additionalAttributes);
+
+	return '<button' . sed_attr($attributes) . '>' . sed_cc($text) . '</button>';
+}
+
 /** 
  * Automatic replace \n on <br /> 
  * 
@@ -2322,6 +2350,36 @@ function sed_url_check($url)
 	return preg_match('`^' . preg_quote($sys['scheme'] . '://') . '([\w\p{L}\.\-]+\.)?' . preg_quote($sys['domain']) . '`ui', $url);
 }
 
+/**
+ * Renders a date/time input element
+ *
+ * @param string $name Input name attribute
+ * @param string $type Input type (date, time, datetime-local, month, week)
+ * @param string $value Initial value
+ * @param string $class CSS class for styling
+ * @param bool $disabled Disable the input
+ * @param array $additionalAttributes Additional HTML attributes
+ * @return string HTML representation of the date/time input
+ */
+function sed_datetimebox($name, $type = 'date', $value = '', $class = 'datetime', $disabled = false, $additionalAttributes = [])
+{
+	$valid_types = ['date', 'time', 'datetime-local', 'month', 'week'];
+	$type = in_array($type, $valid_types) ? $type : 'date';
+
+	$attributes = [
+		'type' => $type,
+		'class' => $class,
+		'name' => $name,
+		'value' => sed_cc($value)
+	];
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
+	}
+	$attributes = array_merge($attributes, $additionalAttributes);
+
+	return '<input' . sed_attr($attributes) . ' />';
+}
+
 /** 
  * Terminates script execution and performs redirect 
  * 
@@ -2455,6 +2513,38 @@ function sed_error_msg($message)
 		$_SESSION[$_SERVER['REMOTE_ADDR']] = 1;
 	}
 	return ($message);
+}
+
+/**
+ * Renders a file input element
+ *
+ * @param string $name Input name attribute
+ * @param string $class CSS class for styling
+ * @param bool $multiple Allow multiple file uploads
+ * @param string $accept Accepted file types (e.g., 'image/*,.pdf')
+ * @param bool $disabled Disable the input
+ * @param array $additionalAttributes Additional HTML attributes
+ * @return string HTML representation of the file input
+ */
+function sed_filebox($name, $class = 'file', $multiple = false, $accept = '', $disabled = false, $additionalAttributes = [])
+{
+	$attributes = [
+		'type' => 'file',
+		'class' => $class,
+		'name' => $name
+	];
+	if ($multiple) {
+		$attributes['multiple'] = 'multiple';
+	}
+	if ($accept) {
+		$attributes['accept'] = $accept;
+	}
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
+	}
+	$attributes = array_merge($attributes, $additionalAttributes);
+
+	return '<input' . sed_attr($attributes) . ' />';
 }
 
 /** 
@@ -4105,6 +4195,44 @@ function sed_newname($name, $underscore = TRUE)
 	return $newname . "." . $ext;
 }
 
+/**
+ * Renders a number input element
+ *
+ * @param string $name Input name attribute
+ * @param string $value Initial value
+ * @param int $min Minimum value
+ * @param int $max Maximum value
+ * @param float $step Step value
+ * @param string $class CSS class for styling
+ * @param bool $disabled Disable the input
+ * @param array $additionalAttributes Additional HTML attributes
+ * @return string HTML representation of the number input
+ */
+function sed_numberbox($name, $value = '', $min = null, $max = null, $step = null, $class = 'number', $disabled = false, $additionalAttributes = [])
+{
+	$attributes = [
+		'type' => 'number',
+		'class' => $class,
+		'name' => $name,
+		'value' => sed_cc($value)
+	];
+	if ($min !== null) {
+		$attributes['min'] = $min;
+	}
+	if ($max !== null) {
+		$attributes['max'] = $max;
+	}
+	if ($step !== null) {
+		$attributes['step'] = $step;
+	}
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
+	}
+	$attributes = array_merge($attributes, $additionalAttributes);
+
+	return '<input' . sed_attr($attributes) . ' />';
+}
+
 /** 
  * Standard SED output filters, adds XSS protection to forms 
  * 
@@ -4296,6 +4424,37 @@ function sed_pfs_deleteall($userid)
 	return ($num);
 }
 
+/**
+ * Renders a range input element
+ *
+ * @param string $name Input name attribute
+ * @param string $value Initial value
+ * @param int $min Minimum value
+ * @param int $max Maximum value
+ * @param float $step Step value
+ * @param string $class CSS class for styling
+ * @param bool $disabled Disable the input
+ * @param array $additionalAttributes Additional HTML attributes
+ * @return string HTML representation of the range input
+ */
+function sed_rangebox($name, $value = '', $min = 0, $max = 100, $step = 1, $class = 'range', $disabled = false, $additionalAttributes = [])
+{
+	$attributes = [
+		'type' => 'range',
+		'class' => $class,
+		'name' => $name,
+		'value' => sed_cc($value),
+		'min' => $min,
+		'max' => $max,
+		'step' => $step
+	];
+	if ($disabled) {
+		$attributes['disabled'] = 'disabled';
+	}
+	$attributes = array_merge($attributes, $additionalAttributes);
+
+	return '<input' . sed_attr($attributes) . ' />';
+}
 
 /** 
  * Reads raw data from file 
