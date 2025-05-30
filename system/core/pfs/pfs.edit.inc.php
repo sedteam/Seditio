@@ -159,7 +159,7 @@ $t->assign(array(
 	"PFS_EDITFILE_FILE" => $pfs_file,
 	"PFS_EDITFILE_FOLDER" => sed_selectbox_folders($userid, "", $pfs_folderid),
 	"PFS_EDITFILE_DATE" => $pfs_date,
-	"PFS_EDITFILE_URL" => "<a href=\"" . $ff . "\">" . $ff . "</a>",
+	"PFS_EDITFILE_URL" => sed_link($ff, $ff),
 	"PFS_EDITFILE_SIZE" => $pfs_size . " " . $L['kb'],
 ));
 

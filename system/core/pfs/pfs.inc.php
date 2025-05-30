@@ -82,7 +82,7 @@ foreach ($sed_extensions as $k => $line) {
 }
 
 $L['pfs_title'] = ($userid == 0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"" . sed_url("pfs", $more) . "\">" . $L['pfs_title'] . "</a>";
+$title = sed_link(sed_url("pfs", $more), $L['pfs_title']);
 $shorttitle = $L['pfs_title'];
 
 // ---------- Breadcrumbs
@@ -399,7 +399,7 @@ if ($f > 0) {
         $pff_sample = $row1['pff_sample'];
 
         $sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_date DESC");
-        $title .= " " . $cfg['separator'] . " <a href=\"" . sed_url("pfs", "f=" . $pff_id . "&" . $more) . "\">" . $pff_title . "</a>";
+        $title .= " " . $cfg['separator'] . " " . sed_link(sed_url("pfs", "f=" . $pff_id . "&" . $more), $pff_title);
         $shorttitle = $pff_title;
         $urlpaths[sed_url("pfs", "f=" . $pff_id . "&" . $more)] = $pff_title;
     } else {
@@ -440,7 +440,7 @@ if ($f > 0) {
         }
 
         if ($pff_type == 2 && !$cfg['disable_gallery']) {
-            $icon_g = "<a href=\"" . sed_url("gallery", "f=" . $pff_id) . "\">" . $out['ic_jumpto'] . "</a>";
+            $icon_g = sed_link(sed_url("gallery", "f=" . $pff_id), $out['ic_jumpto']);
         } else {
             $icon_g = '';
         }
@@ -508,8 +508,10 @@ while ($row = sed_sql_fetchassoc($sql)) {
     $setassample = "";
 
     if (in_array($pfs_extension, $cfg['gd_supported']) && $cfg['th_amode'] != 'Disabled') {
-        $setassample = (isset($pff_sample) && $pfs_id == $pff_sample) ?  "<span class=\"dsl-icon\">" . $out['ic_checked'] . "</span>" : "<a href=\"" . sed_url("pfs", "a=setsample&id=" . $pfs_id . "&f=" . $f . "&" . sed_xg() . "&" . $more) . "\" title=\"" . $L['pfs_setassample'] . "\" class=\"btn-icon\">" . $out['ic_set'] . "</a>";
-        $pfs_icon = "<a href=\"" . $pfs_fullfile . "\" rel=\"" . $cfg['th_rel'] . "\"><img src=\"" . $cfg['th_dir'] . $pfs_file . "\" alt=\"" . $pfs_file . "\"></a>";
+        $setassample = (isset($pff_sample) && $pfs_id == $pff_sample) ?
+            "<span class=\"dsl-icon\">" . $out['ic_checked'] . "</span>" :
+            sed_link(sed_url("pfs", "a=setsample&id=" . $pfs_id . "&f=" . $f . "&" . sed_xg() . "&" . $more), $out['ic_set'], array('title' => $L['pfs_setassample'], 'class' => 'btn-icon'));
+        $pfs_icon = sed_link($pfs_fullfile, "<img src=\"" . $cfg['th_dir'] . $pfs_file . "\" alt=\"" . $pfs_file . "\">", array('rel' => $cfg['th_rel']));
 
         // Generate thumbnail if it doesn't exist
         if (!file_exists($cfg['th_dir'] . $pfs_file) && file_exists($cfg['pfs_dir'] . $pfs_file)) {
@@ -530,19 +532,19 @@ while ($row = sed_sql_fetchassoc($sql)) {
         }
 
         if ($standalone) {
-            $add_thumbnail .= "<a href=\"javascript:addthumb('" . $cfg['th_dir'] . $pfs_file . "', '" . $pfs_file . "')\" title=\"" . $L['pfs_insertasthumbnail'] . "\" class=\"btn-icon\">" . $out['ic_pastethumb'] . "</a>";
-            $add_image = "<a href=\"javascript:addpix('" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertasimage'] . "\" class=\"btn-icon\">" . $out['ic_pasteimage'] . "</a>";
+            $add_thumbnail .= sed_link("javascript:addthumb('" . $cfg['th_dir'] . $pfs_file . "', '" . $pfs_file . "')",  $out['ic_pastethumb'], array('title' =>  $L['pfs_insertasthumbnail'],  'class' => 'btn-icon'));
+            $add_image = sed_link("javascript:addpix('" . $pfs_fullfile . "')", $out['ic_pasteimage'], array('title' => $L['pfs_insertasimage'],  'class' => 'btn-icon'));
         }
     } elseif (in_array($pfs_extension, $cfg['video_supported'])) {
         if ($standalone) {
-            $add_video = "<a href=\"javascript:addvideo('" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertasvideo'] . "\" class=\"btn-icon\">" . $out['ic_pastevideo'] . "</a>";
+            $add_video = sed_link("javascript:addvideo('" . $pfs_fullfile . "')", $out['ic_pastevideo'], array('title' => $L['pfs_insertasvideo'], 'class' => 'btn-icon'));
         }
     }
 
-    $add_file = ($standalone) ? "<a href=\"javascript:addfile('" . $pfs_file . "','" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertaslink'] . "\" class=\"btn-icon\">" . $out['ic_pastefile'] . "</a>" : '';
+    $add_file = ($standalone) ? sed_link("javascript:addfile('" . $pfs_file . "','" . $pfs_fullfile . "')", $out['ic_pastefile'], array('title' => $L['pfs_insertaslink'], 'class' => 'btn-icon')) : '';
 
     if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) {
-        $add_file = "<a href=\"javascript:addfile_pageurl('" . $pfs_fullfile . "')\" title=\"" . $L['pfs_insertaslink'] . "\" class=\"btn-icon\">" . $out['ic_pastefile'] . "</a>";
+        $add_file = sed_link("javascript:addfile_pageurl('" . $pfs_fullfile . "')", $out['ic_pastefile'], array('title' => $L['pfs_insertaslink'], 'class' => 'btn-icon'));
     }
 
     $stndl_icons_list = "";

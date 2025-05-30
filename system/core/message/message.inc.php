@@ -34,7 +34,7 @@ unset($r, $rd, $ru);
 
 switch ($msg) {
 
-		/* ======== Users ======== */
+	/* ======== Users ======== */
 
 	case '100':
 
@@ -126,14 +126,14 @@ switch ($msg) {
 		$body = $L['msg157_1'];
 		break;
 
-		/* ======== General ======== */
+	/* ======== General ======== */
 
 	case '300':
 		$message = $L['msg300_0'];
 		$body = $L['msg300_1'];
 		break;
 
-		/* ======== Error Pages ========= */
+	/* ======== Error Pages ========= */
 
 	case '400':
 		$message = $L['msg400_0'];
@@ -170,16 +170,16 @@ switch ($msg) {
 		$ru = empty($redirect) ? sed_url("index", "", "", true, true) : str_replace("&", "&amp;", base64_decode($redirect));
 		break;
 
-		/* ======== Private messages ======== */
+	/* ======== Private messages ======== */
 
 	case '502':
 		$message = $L['msg502_0'];
-		$body = $L['msg502_1'] . "<a href=\"" . sed_url("pm", "", "", true, true) . "\">" . $L['msg502_2'] . "</a>" . $L['msg502_3'];
+		$body = $L['msg502_1'] . sed_link(sed_url("pm", "", "", true, true), $L['msg502_2']) . $L['msg502_3'];
 		$rd = 4;
 		$ru = sed_url("pm");
 		break;
 
-		/* ======== Private messages ======== */
+	/* ======== Private messages ======== */
 
 	case '602':
 		$message = $L['msg602_0'];
@@ -191,7 +191,7 @@ switch ($msg) {
 		$body = $L['msg603_1'];
 		break;
 
-		/* ======== System ======== */
+	/* ======== System ======== */
 
 	case '900':
 		$message = $L['msg900_0'];
@@ -245,7 +245,7 @@ switch ($msg) {
 		$body = $L['msg950_1'];
 		break;
 
-		/* ======== Default  ======== */
+	/* ======== Default  ======== */
 
 	default:
 		$message = $L['msg950_0'];

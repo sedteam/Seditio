@@ -276,7 +276,7 @@ if (!empty($pagination)) {
 
 if ($usr['auth_write'] && $c != 'all') {
 	$t->assign(array(
-		"LIST_SUBMITNEWPAGE" => "<a href=\"" . sed_url("page", "m=add&c=" . $c) . "\">" . $L['lis_submitnew'] . "</a>"
+		"LIST_SUBMITNEWPAGE" => sed_link(sed_url("page", "m=add&c=" . $c), $L['lis_submitnew'])
 	));
 	$t->parse("MAIN.LIST_AUTHUSER");
 }
@@ -286,7 +286,7 @@ $t->assign(array(
 	"LIST_PAGETITLE" => $catpath,
 	"LIST_SHORTTITLE" => $sed_cat[$c]['title'],
 	"LIST_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-	"LIST_CATEGORY" => "<a href=\"" . sed_url("list", "c=" . $c) . "\">" . $sed_cat[$c]['title'] . "</a>",
+	"LIST_CATEGORY" => sed_link(sed_url("list", "c=" . $c), $sed_cat[$c]['title']),
 	"LIST_CAT" => $c,
 	"LIST_CATTITLE" => $sed_cat[$c]['title'],
 	"LIST_CATPATH" => $catpath,
@@ -318,27 +318,28 @@ if (!$sed_cat[$c]['group']) {
 		"LIST_TOP_TOTALLINES" => $totallines,
 		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 		"LIST_TOP_TOTALPAGES" => $totalpages,
-		"LIST_TOP_TITLE" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=title&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=title&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Title'],
-		"LIST_TOP_KEY" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=key&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=key&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Key'],
-		"LIST_TOP_DATE" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=date&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=date&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Date'],
-		"LIST_TOP_AUTHOR" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=author&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=author&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Author'],
-		"LIST_TOP_OWNER" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=ownerid&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=ownerid&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Owner'],
-		"LIST_TOP_COUNT" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=count&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=count&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Hits'],
-		"LIST_TOP_FILECOUNT" => "<a href=\"" . sed_url("list", "c=" . $c . "&s=filecount&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a>
-		<a href=\"" . sed_url("list", "c=" . $c . "&s=filecount&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> " . $L['Hits']
+		"LIST_TOP_TITLE" => sed_link(sed_url("list", "c=" . $c . "&s=title&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=title&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Title'],
+		"LIST_TOP_KEY" => sed_link(sed_url("list", "c=" . $c . "&s=key&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=key&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Key'],
+		"LIST_TOP_DATE" => sed_link(sed_url("list", "c=" . $c . "&s=date&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=date&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Date'],
+		"LIST_TOP_AUTHOR" => sed_link(sed_url("list", "c=" . $c . "&s=author&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=author&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Author'],
+		"LIST_TOP_OWNER" => sed_link(sed_url("list", "c=" . $c . "&s=ownerid&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=ownerid&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Owner'],
+		"LIST_TOP_COUNT" => sed_link(sed_url("list", "c=" . $c . "&s=count&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=count&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Hits'],
+		"LIST_TOP_FILECOUNT" => sed_link(sed_url("list", "c=" . $c . "&s=filecount&w=asc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_down']) .
+			sed_link(sed_url("list", "c=" . $c . "&s=filecount&w=desc&o=" . $o . "&p=" . $p . $filter_urlparams), $out['ic_arrow_up']) . $L['Hits']
 	));
 
 	// ----- Extra fields 
 	if ($number_of_extrafields > 0) {
 		foreach ($extrafields as $row) {
 			$extratitle = isset($L['page_' . $row['code'] . '_title']) ? $L['page_' . $row['code'] . '_title'] : $row['title'];
-			$t->assign('LIST_TOP_' . strtoupper($row['code']), "<a href=\"" . sed_url('list', "c=$c&s=" . $row['code'] . "&w=asc&o=$o&p=$p" . $filter_urlparams) . "\">" . $out['ic_arrow_down'] . "</a><a href=\"" . sed_url('list', "c=$c&s=" . $row['code'] . "&w=desc&o=$o&p=$p" . $filter_urlparams) . "\">" . $out['ic_arrow_up'] . "</a> $extratitle");
+			$t->assign('LIST_TOP_' . strtoupper($row['code']), sed_link(sed_url('list', "c=$c&s=" . $row['code'] . "&w=asc&o=$o&p=$p" . $filter_urlparams), $out['ic_arrow_down']) .
+				sed_link(sed_url('list', "c=$c&s=" . $row['code'] . "&w=desc&o=$o&p=$p" . $filter_urlparams), $out['ic_arrow_up']) . " " . $extratitle);
 		}
 	}
 	//--------------- 
@@ -418,9 +419,13 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj <= $cfg['maxrowsperpage'])) {
 
 	$item_code = 'p' . $pag['page_id'];
 	$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
-	$pag['page_comments'] = "<a href=\"" . $pag['page_pageurlcom'] . "\">" . $out['ic_comment'] . " (" . $pag['page_comcount'] . ")</a>";
+	$pag['page_comments'] = sed_link($pag['page_pageurlcom'], $out['ic_comment'] . " (" . $pag['page_comcount'] . ")");
 
-	$pag['admin'] = $usr['isadmin'] ? "<a href=\"" . sed_url("admin", "m=page&a=unvalidate&id=" . $pag['page_id'] . "&" . sed_xg()) . "\">" . $L['Putinvalidationqueue'] . "</a> &nbsp;<a href=\"" . sed_url("page", "m=edit&id=" . $pag['page_id'] . "&r=list") . "\">" . $L['Edit'] . "</a> &nbsp;<a href=\"" . sed_url("page", "m=add&id=" . $pag['page_id'] . "&r=list&a=clone") . "\">" . $L['Clone'] . "</a> " : '';
+	$pag['admin'] = $usr['isadmin'] ?
+		sed_link(sed_url("admin", "m=page&a=unvalidate&id=" . $pag['page_id'] . "&" . sed_xg()), $L['Putinvalidationqueue']) . " &nbsp;" .
+		sed_link(sed_url("page", "m=edit&id=" . $pag['page_id'] . "&r=list"), $L['Edit']) . " &nbsp;" .
+		sed_link(sed_url("page", "m=add&id=" . $pag['page_id'] . "&r=list&a=clone"), $L['Clone']) :
+		'';
 
 	$t->assign(array(
 		"LIST_ROW_URL" => $pag['page_pageurl'],
@@ -443,7 +448,7 @@ while ($pag = sed_sql_fetchassoc($sql) and ($jj <= $cfg['maxrowsperpage'])) {
 		"LIST_ROW_COMMENTS" => $pag['page_comments'],
 		"LIST_ROW_COMCOUNT" => $pag['page_comcount'],
 		"LIST_ROW_COMURL" => $pag['page_pageurlcom'],
-		"LIST_ROW_RATINGS" => "<a href=\"" . $pag['page_pageurlrat'] . "\"><img src=\"skins/" . $usr['skin'] . "/img/system/vote" . round($pag['page_rating'], 0) . ".gif\" alt=\"\" /></a>",
+		"LIST_ROW_RATINGS" => sed_link($pag['page_pageurlrat'], "<img src=\"skins/" . $usr['skin'] . "/img/system/vote" . round($pag['page_rating'], 0) . ".gif\" alt=\"\" />"),
 		"LIST_ROW_ADMIN" => $pag['admin'],
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 	));

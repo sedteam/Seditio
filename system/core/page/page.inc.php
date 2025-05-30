@@ -94,14 +94,11 @@ if ($pag['page_file'] && $a == 'dl') {
 	$file_size = @filesize($row['page_url']);
 	$pag['page_filecount']++;
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='" . $pag['page_id'] . "'");
-
 	if (preg_match('#^(http|ftp)s?://#', $pag['page_url'])) {
 		sed_redirect($pag['page_url']);
 	} else {
 		sed_redirect($sys['abs_url'] . $pag['page_url']);
 	}
-
-	//	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
 	exit;
 }
 
@@ -113,7 +110,7 @@ if (!$usr['isadmin'] || $cfg['disablehitstats']) {
 $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
 
 $pag['page_fulltitle'] = empty($catpath) ? "" : $catpath . " " . $cfg['separator'] . " ";
-$pag['page_fulltitle'] .= "<a href=\"" . $pag['page_pageurl'] . "\">" . $pag['page_title'] . "</a>";
+$pag['page_fulltitle'] .= sed_link($pag['page_pageurl'], $pag['page_title']);
 
 $item_code = 'p' . $pag['page_id'];
 
@@ -270,9 +267,9 @@ if (count($page_thumbs_array) > 0) {
 if ($usr['isadmin']) {
 	$t->assign(array(
 		"PAGE_ADMIN_COUNT" => $pag['page_count'],
-		"PAGE_ADMIN_UNVALIDATE" => "<a href=\"" . sed_url("admin", "m=page&a=unvalidate&id=" . $pag['page_id'] . "&" . sed_xg()) . "\">" . $L['Putinvalidationqueue'] . "</a>",
-		"PAGE_ADMIN_EDIT" => "<a href=\"" . sed_url("page", "m=edit&id=" . $pag['page_id'] . "&r=list") . "\">" . $L['Edit'] . "</a>",
-		"PAGE_ADMIN_CLONE" => "<a href=\"" . sed_url("page", "m=add&id=" . $pag['page_id'] . "&r=list&a=clone") . "\">" . $L['Clone'] . "</a>"
+		"PAGE_ADMIN_UNVALIDATE" => sed_link(sed_url("admin", "m=page&a=unvalidate&id=" . $pag['page_id'] . "&" . sed_xg()), $L['Putinvalidationqueue']),
+		"PAGE_ADMIN_EDIT" => sed_link(sed_url("page", "m=edit&id=" . $pag['page_id'] . "&r=list"), $L['Edit']),
+		"PAGE_ADMIN_CLONE" => sed_link(sed_url("page", "m=add&id=" . $pag['page_id'] . "&r=list&a=clone"), $L['Clone'])
 	));
 
 	$t->parse("MAIN.PAGE_ADMIN");
