@@ -79,7 +79,7 @@ $t = new XTemplate($mskin);
 $t->assign(array(
 	"USERS_DETAILS_URL" => sed_url("users", "m=details&id=" . $urr['user_id']),
 	"USERS_DETAILS_SHORTTITLE" => $L['User'] . " &laquo;" . sed_build_user($urr['user_id'], sed_cc($urr['user_name'])) . "&raquo;",
-	"USERS_DETAILS_TITLE" => "<a href=\"" . sed_url("users") . "\">" . $L['Users'] . "</a> " . $cfg['separator'] . " " . sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
+	"USERS_DETAILS_TITLE" => sed_link(sed_url("users"), $L['Users']) . " " . $cfg['separator'] . " " . sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_DETAILS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"USERS_DETAILS_ID" => $urr['user_id'],
@@ -139,7 +139,7 @@ if (is_array($extp)) {
 
 if ($usr['isadmin']) {
 	$t->assign(array(
-		"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"" . sed_url("users", "m=edit&id=" . $urr['user_id']) . "\">" . $L['Edit'] . "</a>"
+		"USERS_DETAILS_ADMIN_EDIT" => sed_link(sed_url("users", "m=edit&id=" . $urr['user_id']), $L['Edit'])
 	));
 
 	$t->parse("MAIN.USERS_DETAILS_ADMIN");

@@ -265,7 +265,7 @@ if (empty($id) || $id == 'viewall') {
 $t->assign(array(
 	"POLLS_TITLE" => $title,
 	"POLLS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-	"POLLS_VIEWALL" => "<a href=\"" . sed_url("polls", "id=viewall" . $standalone_url) . "\">" . $L['polls_viewarchives'] . "</a>"
+	"POLLS_VIEWALL" => sed_link(sed_url("polls", "id=viewall" . $standalone_url), $L['polls_viewarchives'])
 ));
 
 /* === Hook === */

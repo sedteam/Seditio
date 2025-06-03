@@ -50,12 +50,12 @@ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='" . $usr['id'] . "'
 sed_die(sed_sql_numrows($sql) == 0);
 $urr = sed_sql_fetchassoc($sql);
 
-$profile_form_avatar = "<a name=\"avatar\" id=\"avatar\"></a>";
-$profile_form_photo = "<a name=\"photo\" id=\"photo\"></a>";
-$profile_form_signature = "<a name=\"signature\" id=\"signature\"></a>";
+$profile_form_avatar = sed_link('', '', array('name' => 'avatar', 'id' => 'avatar'));
+$profile_form_photo = sed_link('', '', array('name' => 'photo', 'id' => 'photo'));
+$profile_form_signature = sed_link('', '', array('name' => 'signature', 'id' => 'signature'));
 
 switch ($a) {
-		/* ============= */
+	/* ============= */
 	case 'avatardelete':
 		/* ============= */
 
@@ -75,7 +75,7 @@ switch ($a) {
 
 		break;
 
-		/* ============= */
+	/* ============= */
 	case 'phdelete':
 		/* ============= */
 
@@ -95,7 +95,7 @@ switch ($a) {
 
 		break;
 
-		/* ============= */
+	/* ============= */
 	case 'sigdelete':
 		/* ============= */
 
@@ -115,7 +115,7 @@ switch ($a) {
 
 		break;
 
-		/* ============= */
+	/* ============= */
 	case 'avatarselect':
 		/* ============= */
 
@@ -130,7 +130,7 @@ switch ($a) {
 
 		break;
 
-		/* ============= */
+	/* ============= */
 	case 'update':
 		/* ============= */
 
@@ -387,7 +387,7 @@ switch ($a) {
 		}
 		break;
 
-		/* ============= */
+	/* ============= */
 	default:
 		/* ============= */
 
@@ -410,36 +410,36 @@ $profile_form_timezone .= "</select> " . $usr['gmttime'] . " / " . sed_build_dat
 $profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $profile_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
 $profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
-$profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"" . sed_cc($urr['user_email']) . "\" size=\"32\" maxlength=\"64\" />" : sed_cc($urr['user_email']);
+$profile_form_email = ($cfg['useremailchange']) ? sed_textbox('ruseremail', sed_cc($urr['user_email']), 32, 64, 'text') : sed_cc($urr['user_email']);
 
 $profile_form_avatar = (!empty($urr['user_avatar'])) ? "<img src=\"" . $urr['user_avatar'] . "\" alt=\"\" /><br />" . $L['Delete'] . " [<a href=\"" . sed_url("users", "m=profile&a=avatardelete&" . sed_xg()) . "\">x</a>]<br />&nbsp;<br />" : '';
 $profile_form_avatar .= $L['pro_avatarsupload'] . " (" . $cfg['av_maxx'] . "x" . $cfg['av_maxy'] . "x" . $cfg['av_maxsize'] . $L['bytes'] . ")<br />";
-$profile_form_avatar .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($cfg['av_maxsize'] * 1024) . "\" />";
-$profile_form_avatar .= "<input name=\"userfile\" type=\"file\" class=\"file\" size=\"24\" /><br />";
+$profile_form_avatar .= sed_textbox_hidden('MAX_FILE_SIZE', ($cfg['av_maxsize'] * 1024));
+$profile_form_avatar .= sed_filebox('userfile', 'file', false, '', false, array('size' => '24')) . "<br />";
 
 $profile_form_photo = (!empty($urr['user_photo'])) ? "<img src=\"" . $urr['user_photo'] . "\" alt=\"\" /> " . $L['Delete'] . " [<a href=\"" . sed_url("users", "m=profile&a=phdelete&" . sed_xg()) . "\">x</a>]" : '';
 $profile_form_photo .= $L['pro_photoupload'] . " (" . $cfg['ph_maxx'] . "x" . $cfg['ph_maxy'] . "x" . $cfg['ph_maxsize'] . $L['bytes'] . ")<br />";
-$profile_form_photo .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($cfg['ph_maxsize'] * 1024) . "\" />";
-$profile_form_photo .= "<input name=\"userphoto\" type=\"file\" class=\"file\" size=\"24\" /><br />";
+$profile_form_photo .= sed_textbox_hidden('MAX_FILE_SIZE', ($cfg['ph_maxsize'] * 1024));
+$profile_form_photo .= sed_filebox('userphoto', 'file', false, '', false, array('size' => '24')) . "<br />";
 
 $profile_form_signature = (!empty($urr['user_signature'])) ? "<img src=\"" . $urr['user_signature'] . "\" alt=\"\" /> " . $L['Delete'] . " [<a href=\"" . sed_url("users", "m=profile&a=sigdelete&" . sed_xg()) . "\">x</a>]" : '';
 $profile_form_signature .= $L['pro_sigupload'] . " (" . $cfg['sig_maxx'] . "x" . $cfg['sig_maxy'] . "x" . $cfg['sig_maxsize'] . $L['bytes'] . ")<br />";
-$profile_form_signature .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($cfg['sig_maxsize'] * 1024) . "\" />";
-$profile_form_signature .= "<input name=\"usersig\" type=\"file\" class=\"file\" size=\"24\" /><br />";
+$profile_form_signature .= sed_textbox_hidden('MAX_FILE_SIZE', ($cfg['sig_maxsize'] * 1024));
+$profile_form_signature .=  sed_filebox('usersig', 'file', false, '', false, array('size' => '24')) . "<br />";
 
 if ($a == 'avatarchoose') {
 	sed_check_xg();
-	$profile_form_avatar .=  "<a name=\"list\" id=\"list\"></a><h4>" . $L['pro_avatarschoose'] . " :</h4>";
+	$profile_form_avatar .=  sed_link('', '', array('name' => 'list', 'id' => 'list')) . "<h4>" . $L['pro_avatarschoose'] . " :</h4>";
 	$handle = opendir($cfg['defav_dir']);
 	while ($f = readdir($handle)) {
 		$extens = pathinfo($f, PATHINFO_EXTENSION);
 		if ($f != "." && $f != ".." && in_array($extens, $cfg['gd_supported'])) {
-			$profile_form_avatar .= "<a href=\"" . sed_url("users", "m=profile&a=avatarselect&" . sed_xg() . "&id=" . urlencode($f), "#avatar") . "\"><img src=\"" . $cfg['defav_dir'] . $f . "\" alt=\"\" /></a> ";
+			$profile_form_avatar .= sed_link(sed_url("users", "m=profile&a=avatarselect&" . sed_xg() . "&id=" . urlencode($f), "#avatar"), "<img src=\"" . $cfg['defav_dir'] . $f . "\" alt=\"\" />") . " ";
 		}
 	}
 	closedir($handle);
 } else {
-	$profile_form_avatar .= "<a href=\"" . sed_url("users", "m=profile&a=avatarchoose&" . sed_xg(), "#list") . "\">" . $L['pro_avatarspreset'] . "</a>";
+	$profile_form_avatar .= sed_link(sed_url("users", "m=profile&a=avatarchoose&" . sed_xg(), "#list"), $L['pro_avatarspreset']);
 }
 
 $profile_form_pmnotify = sed_radiobox("ruserpmnotify", $yesno_arr, $urr['user_pmnotify']);
@@ -476,7 +476,7 @@ $urlpaths[sed_url("users")] = $L['Users'];
 $urlpaths[sed_url("users", "m=profile")] = $L['pro_title'];
 
 $t->assign(array(
-	"USERS_PROFILE_TITLE" => "<a href=\"" . sed_url("users", "m=profile") . "\">" . $L['pro_title'] . "</a>",
+	"USERS_PROFILE_TITLE" => sed_link(sed_url("users", "m=profile"), $L['pro_title']),
 	"USERS_PROFILE_SHORTTITLE" => $L['pro_title'],
 	"USERS_PROFILE_URL" => sed_url("users", "m=profile"),
 	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
