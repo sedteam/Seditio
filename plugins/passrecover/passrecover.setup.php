@@ -1,9 +1,10 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Seditio Team
+Copyright (c) Seditio Team
 https://seditio.org
+
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.setup.php
 Version=180

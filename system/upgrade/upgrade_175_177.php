@@ -1,9 +1,10 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Seditio Team
+Copyright (c) Seditio Team
 https://seditio.org
+
 [BEGIN_SED]
 File=upgrade_175_177.php
 Version=180

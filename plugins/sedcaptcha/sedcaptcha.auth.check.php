@@ -1,8 +1,9 @@
 <?php
+
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Russian Seditio Team 
-http://www.neocrome.net http://ldu.ru
+Copyright (c) Seditio Team
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/sedcaptcha.auth.check.php

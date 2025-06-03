@@ -1,9 +1,9 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
+Copyright (c) Seditio Team
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.page.edit.first.php

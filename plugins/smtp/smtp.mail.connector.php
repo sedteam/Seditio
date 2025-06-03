@@ -1,10 +1,10 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Seditio Team
-http://www.neocrome.net
-http://www.seditio.org
+Copyright (c) Seditio Team
+https://seditio.org
+
 [BEGIN_SED]
 File=plugins/smtp/smtp.mail.connector.php
 Version=180

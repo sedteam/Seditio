@@ -1,9 +1,10 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome & Seditio Team
+Copyright (c) Seditio Team
 https://seditio.org
+
 [BEGIN_SED]
 File=install.config.php
 Version=180
@@ -18,7 +19,7 @@ if (!defined('SED_CODE') || !defined('SED_INSTALL')) {
     die('Wrong URL.');
 }
 
-$cfg_data = "<?PHP\n\n/* ====================\n";
+$cfg_data = "<?php\n\n/* ====================\n";
 $cfg_data .= "Seditio - Website engine\n";
 $cfg_data .= "Copyright Neocrome & Seditio Team\n";
 $cfg_data .= "https://seditio.org\n";

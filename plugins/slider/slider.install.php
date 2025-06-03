@@ -1,9 +1,9 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Neocrome
-https://www.seditio.org
+Copyright (c) Seditio Team
+https://seditio.org
 
 [BEGIN_SED]
 File=plugins/slider/slider.install.php

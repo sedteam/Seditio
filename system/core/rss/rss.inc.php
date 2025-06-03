@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio – Website engine

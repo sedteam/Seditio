@@ -1,8 +1,8 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
-Copyright Seditio Team
+Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
