@@ -70,15 +70,15 @@ $browse_list = '';
 
 foreach ($pfsall as $j => $k) {
 	$browse_list .= ($current == $j) ? "<strong>[" : '';
-	$browse_list .= "<a href=\"" . sed_url("gallery", "id=" . $k) . "\">$j</a>";
+	$browse_list .= sed_link(sed_url("gallery", "id=" . $k), $j);
 	$browse_list .= ($current == $j) ? "]</strong>" : '';
 	$browse_list .= " &nbsp;";
 }
 
-$browse_prev = (isset($pfsall[$current - 1]) && $pfsall[$current - 1] > 0) ? "<a href=\"" . sed_url("gallery", "id=" . $pfsall[$current - 1]) . "\">" . $out['ic_gallery_prev'] . "</a>" : '';
-$browse_next = (isset($pfsall[$current + 1]) && $pfsall[$current + 1] > 0) ? "<a href=\"" . sed_url("gallery", "id=" . $pfsall[$current + 1]) . "\">" . $out['ic_gallery_next'] . "</a>" : '';
+$browse_prev = (isset($pfsall[$current - 1]) && $pfsall[$current - 1] > 0) ? sed_link(sed_url("gallery", "id=" . $pfsall[$current - 1]), $out['ic_gallery_prev']) : '';
+$browse_next = (isset($pfsall[$current + 1]) && $pfsall[$current + 1] > 0) ? sed_link(sed_url("gallery", "id=" . $pfsall[$current + 1]), $out['ic_gallery_next']) : '';
 
-$browse_back =  "<a href=\"" . sed_url("gallery", "f=" . $f) . "\">" . $out['ic_gallery_back'] . "</a>";
+$browse_back =  sed_link(sed_url("gallery", "f=" . $f), $out['ic_gallery_back']);
 
 $pfs['pfs_fullfile'] = $cfg['pfs_dir'] . $pfs['pfs_file'];
 $pfs['pfs_filesize'] = floor($pfs['pfs_size'] / 1024);
@@ -99,14 +99,12 @@ if ($pfs['pfs_imgsize'][0] > $cfg['gallery_imgmaxwidth']) {
 			$cfg['gallery_logojpegqual'],                   // $quality
 			false,                   						// $set_watermark
 			false                                           // $preserve_source
-		);		
+		);
 	}
 
 	if (file_exists($cfg['res_dir'] . $pfs['pfs_file'])) {
-		$pfs['pfs_img'] = "<a href=\"javascript:sedjs.picture('" . sed_url("pfs", "m=view&v=" . $pfs['pfs_file']) . "',200,200)\">";
-		$pfs['pfs_img'] .= "<img src=\"" . $cfg['res_dir'] . $pfs['pfs_file'] . "\" alt=\"\" /></a>";
-		$browse_zoom = "<a href=\"javascript:sedjs.picture('" . sed_url("pfs", "m=view&v=" . $pfs['pfs_file']) . "',200,200)\">";
-		$browse_zoom .= $out['ic_gallery_zoom'] . "</a>";
+		$pfs['pfs_img'] = sed_link("javascript:sedjs.picture('" . sed_url("pfs", "m=view&v=" . $pfs['pfs_file']) . "', 200, 200)", "<img src=\"" . $cfg['res_dir'] . $pfs['pfs_file'] . "\" alt=\"\" />");
+		$browse_zoom = sed_link("javascript:sedjs.picture('" . sed_url("pfs", "m=view&v=" . $pfs['pfs_file']) . "', 200, 200)", $out['ic_gallery_zoom']);
 	}
 }
 
@@ -149,9 +147,8 @@ $t = new XTemplate("skins/" . $skin . "/gallery.details.tpl");
 $pfs['pfs_desc'] = sed_parse($pfs['pfs_desc']);
 
 if ($usr['isadmin']) {
-	$pfs['admin'] = "<a href=\"" . sed_url("pfs", "m=edit&id=" . $pfs['pfs_id'] . "&userid=" . $pfs['pfs_userid']) . "\">" . $out['ic_edit'] . "</a>";
-	$pfs['admin'] .= " &nbsp; <a href=\"" . sed_url("pfs", "a=setsample&id=" . $pfs['pfs_id'] . "&f=" . $pff['pff_id'] . "&" . sed_xg()) . "\" title=\"" . $L['pfs_setassample'] . "\">" . $out['ic_set'] . "</a>";
-
+	$pfs['admin'] = sed_link(sed_url("pfs", "m=edit&id=" . $pfs['pfs_id'] . "&userid=" . $pfs['pfs_userid']), $out['ic_edit']);
+	$pfs['admin'] .= " &nbsp; " . sed_link(sed_url("pfs", "a=setsample&id=" . $pfs['pfs_id'] . "&f=" . $pff['pff_id'] . "&" . sed_xg()), $out['ic_set'], array('title' => $L['pfs_setassample']));
 	$t->assign(array(
 		"GALLERY_DETAILS_ADMIN" => $pfs['admin']
 	));

@@ -199,6 +199,7 @@ function sed_poll_delete($id)
 	if ($id != 0) {
 		$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_code = '" . $id . "' LIMIT 1");
 		if (sed_sql_numrows($sql) > 0) {
+			$row = sed_sql_fetchassoc($sql);
 			if ($row['poll_type'] == 1 && !empty($row['poll_code'])) // forum poll type
 			{
 				//deattach poll from topic

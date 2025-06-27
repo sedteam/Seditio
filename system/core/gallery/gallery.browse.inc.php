@@ -93,7 +93,7 @@ while ($pfs = sed_sql_fetchassoc($sql)) {
 	$pfs['pfs_filesize'] = floor($pfs['pfs_size'] / 1024);
 
 	if (($pfs['pfs_extension'] == 'jpg' || $pfs['pfs_extension'] == 'jpeg' || $pfs['pfs_extension'] == 'png') && $cfg['th_amode'] != 'Disabled') {
-		if (!file_exists($cfg['th_dir'] . $pfs['pfs_file']) && file_exists($cfg['pfs_dir'] . $pfs['pfs_file'])) {			
+		if (!file_exists($cfg['th_dir'] . $pfs['pfs_file']) && file_exists($cfg['pfs_dir'] . $pfs['pfs_file'])) {
 			sed_image_process(
 				$cfg['pfs_dir'] . $pfs['pfs_file'],   	// $source
 				$cfg['th_dir'] . $pfs['pfs_file'],    	// $dest
@@ -109,10 +109,8 @@ while ($pfs = sed_sql_fetchassoc($sql)) {
 		}
 	}
 
-	$pfs['popup'] = "<a href=\"javascript:sedjs.picture('" . sed_url("pfs", "m=view&v=" . $pfs['pfs_file']) . "', 200, 200)\">";
-
 	if ($usr['isadmin']) {
-		$pfs['admin'] = "<a href=\"" . sed_url("pfs", "m=edit&id=" . $pfs['pfs_id'] . "&userid=" . $userid) . "\">" . $out['ic_edit'] . "</a>";
+		$pfs['admin'] = sed_link(sed_url("pfs", "m=edit&id=" . $pfs['pfs_id'] . "&userid=" . $userid), $out['ic_edit']);
 	}
 
 	$pfs['pfs_desc'] = sed_parse($pfs['pfs_desc']);
@@ -120,7 +118,7 @@ while ($pfs = sed_sql_fetchassoc($sql)) {
 	$t->assign(array(
 		"GALLERY_BROWSE_ROW_ID" => $pfs['pfs_id'],
 		"GALLERY_BROWSE_ROW_VIEWURL" => sed_url("gallery", "id=" . $pfs['pfs_id']),
-		"GALLERY_BROWSE_ROW_VIEWPOPUP" => $pfs['popup'],
+		"GALLERY_BROWSE_ROW_VIEWPOPUP" => sed_url("pfs", "m=view&v=" . $pfs['pfs_file']),
 		"GALLERY_BROWSE_ROW_FILE" => $pfs['pfs_file'],
 		"GALLERY_BROWSE_ROW_FULLFILE" => $pfs['pfs_fullfile'],
 		"GALLERY_BROWSE_ROW_THUMB" => $pfs['pfs_file'],
