@@ -153,8 +153,6 @@ switch ($n) {
 				if (is_array($cfg_params[$config_name])) {
 					reset($cfg_params[$config_name]);
 					$config_field = sed_selectbox($config_value, $config_name, $cfg_params[$config_name], false, false);
-				} elseif ($cfg_params[$config_name] == "userlevels") {
-					$config_field = sed_selectboxlevels(0, 99, $config_value, $config_name);
 				} else {
 					$config_field = sed_textbox($config_name, $config_value, 8, 11);
 				}

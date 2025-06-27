@@ -312,7 +312,7 @@ switch ($mn) {
 
 				$t->assign(array(
 					"STRUCTURE_LIST_CODE" => $structure_code,
-					"STRUCTURE_LIST_TITLE" => "<a href=\"" . sed_url("admin", "m=page&mn=structure&n=options&id=" . $structure_id . "&" . sed_xg()) . "\">" . sed_cc($structure_title) . "</a>",
+					"STRUCTURE_LIST_TITLE" => sed_link(sed_url("admin", "m=page&mn=structure&n=options&id=" . $structure_id . "&" . sed_xg()), sed_cc($structure_title)),
 					"STRUCTURE_LIST_PATH" => $pathfieldimg . sed_textbox("s[" . $structure_id . "][rpath]", $structure_path, $pathfieldlen, 24),
 					"STRUCTURE_LIST_TPL" => $st_tpl,
 					"STRUCTURE_LIST_GROUP" => $st_group,
@@ -494,11 +494,11 @@ switch ($mn) {
 
 			$t->assign(array(
 				"PAGE_LIST_ID" => $row['page_id'],
-				"PAGE_LIST_TITLE" => "<a href=\"" . sed_url("page", "id=" . $row['page_id']) . "\">" . sed_cc($row['page_title']) . "</a>",
+				"PAGE_LIST_TITLE" => sed_link(sed_url("page", "id=" . $row['page_id']), sed_cc($row['page_title'])),
 				"PAGE_LIST_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),
 				"PAGE_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['page_date']),
 				"PAGE_LIST_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name'])),
-				"PAGE_LIST_VALIDATE" => "<a href=\"" . sed_url("admin", "m=page&mn=queue&a=validate&id=" . $row['page_id'] . "&" . sed_xg()) . "\" class=\"btn btn-adm\">" . $L['Validate'] . "</a>"
+				"PAGE_LIST_VALIDATE" => sed_link(sed_url("admin", "m=page&mn=queue&a=validate&id=" . $row['page_id'] . "&" . sed_xg()), $L['Validate'], array('class' => 'btn btn-adm'))
 			));
 
 			$t->parse("ADMIN_PAGE.PAGE_QUEUE.PAGE_QUEUE_LIST");

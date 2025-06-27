@@ -52,7 +52,7 @@ $totaldblog = sed_sql_rowcount($db_logger);
 
 $n = (empty($n)) ? 'all' : $n;
 
-$clear_all = ($usr['isadmin']) ? "&nbsp;<a href=\"" . sed_url("admin", "m=log&a=purge&" . sed_xg()) . "\" class=\"btn\">" . $L['adm_purgeall'] . " (" . $totaldblog . ")</a>" : '';
+$clear_all = ($usr['isadmin']) ? "&nbsp;" . sed_link(sed_url("admin", "m=log&a=purge&" . sed_xg()), $L['adm_purgeall'] . " (" . $totaldblog . ")", array('class' => 'btn')) : '';
 
 $group_select = $L['Group'] . " : <select name=\"groups\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 
@@ -88,9 +88,9 @@ while ($row = sed_sql_fetchassoc($sql)) {
 	$t->assign(array(
 		"LOG_LIST_ID" => $row['log_id'],
 		"LOG_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['log_date']),
-		"LOG_LIST_IP" => "<a href=\"" . sed_url("admin", "m=manage&p=ipsearch&a=search&id=" . $row['log_ip'] . "&" . sed_xg()) . "\">" . $row['log_ip'] . "</a>",
+		"LOG_LIST_IP" => sed_link(sed_url("admin", "m=manage&p=ipsearch&a=search&id=" . $row['log_ip'] . "&" . sed_xg()), $row['log_ip']),
 		"LOG_LIST_USER" => $row['log_name'],
-		"LOG_LIST_GROUP" => "<a href=\"" . sed_url("admin", "m=log&n=" . $row['log_group']) . "\">" . $log_groups[$row['log_group']] . "</a>",
+		"LOG_LIST_GROUP" => sed_link(sed_url("admin", "m=log&n=" . $row['log_group']), $log_groups[$row['log_group']]),
 		"LOG_LIST_DESC" => htmlspecialchars($row['log_text'])
 	));
 

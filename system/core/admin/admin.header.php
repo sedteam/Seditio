@@ -31,7 +31,7 @@ if (is_array($extp)) {
 /* ===== */
 
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'] . ' ' . $usr['name'] : $L['hea_youarenotlogged'];
-$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"" . sed_url("users") . "\">" . $L['hea_users'] . "</a>" : '';
+$out['userlist'] = (sed_auth('users', 'a', 'R')) ? sed_link(sed_url("users"), $L['hea_users']) : '';
 $out['metas'] = sed_htmlmetas($out['subdesc'], $out['subkeywords']) . $moremetas;
 
 sed_add_javascript($morejavascript);
@@ -61,9 +61,9 @@ if (sed_auth('page', 'any', 'A')) {
 		$out['notices'] .= $L['hea_valqueues'];
 
 		if ($sys['pagesqueued'] == 1) {
-			$out['notices'] .= "<a href=\"" . sed_url("admin", "m=page") . "\">" . "1 " . $L['Page'] . "</a> ";
+			$out['notices'] .= sed_link(sed_url("admin", "m=page"), "1 " . $L['Page']) . " ";
 		} elseif ($sys['pagesqueued'] > 1) {
-			$out['notices'] .= "<a href=\"" . sed_url("admin", "m=page") . "\">" . $sys['pagesqueued'] . " " . $L['Pages'] . "</a> ";
+			$out['notices'] .= sed_link(sed_url("admin", "m=page"), $sys['pagesqueued'] . " " . $L['Pages']) . " ";
 		}
 	}
 }
@@ -100,23 +100,21 @@ $t->assign(array(
 ));
 
 if ($usr['id'] > 0) {
-	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"" . sed_url("admin") . "\">" . $L['hea_administration'] . "</a>" : '';
+	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? sed_link(sed_url("admin"), $L['hea_administration']) : '';
 	$out['loginout_url'] = sed_url("users", "m=logout&" . sed_xg());
-	$out['loginout'] = "<a href=\"" . $out['loginout_url'] . "\">" . $L['hea_logout'] . "</a>";
-	$out['profile'] = "<a href=\"" . sed_url("users", "m=profile") . "\">" . $L['hea_profile'] . "</a>";
+	$out['loginout'] = sed_link($out['loginout_url'], $L['hea_logout']);
+	$out['profile'] = sed_link(sed_url("users", "m=profile"), $L['hea_profile']);
 
-	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"" . sed_url("pm") . "\">" . $L['hea_private_messages'] . "</a>";
-	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : "<a href=\"" . sed_url("pfs") . "\">" . $L['hea_mypfs'] . "</a>";
-	$out['pageadd'] = sed_auth('page', 'any', 'W') ? "<a href=\"" . sed_url("page", "m=add") . "\">" . $L['hea_pageadd'] . "</a>" : "";
+	$out['pms'] = ($cfg['disable_pm']) ? '' : sed_link(sed_url("pm"), $L['hea_private_messages']);
+	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : sed_link(sed_url("pfs"), $L['hea_mypfs']);
+	$out['pageadd'] = sed_auth('page', 'any', 'W') ? sed_link(sed_url("page", "m=add"), $L['hea_pageadd']) : "";
 
 	if (!$cfg['disable_pm']) {
 		if ($usr['newpm']) {
 			$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='" . $usr['id'] . "' AND pm_state=0");
 			$usr['messages'] = sed_sql_result($sqlpm, 0, 'COUNT(*)');
 		}
-		$out['pmreminder'] = "<a href=\"" . sed_url("pm") . "\">";
-		$out['pmreminder'] .= ($usr['messages'] > 0) ? $usr['messages'] . ' ' . $L['hea_privatemessages'] : $L['hea_noprivatemessages'];
-		$out['pmreminder'] .= "</a>";
+		$out['pmreminder'] = sed_link(sed_url("pm"), ($usr['messages'] > 0) ? $usr['messages'] . ' ' . $L['hea_privatemessages'] : $L['hea_noprivatemessages']);
 	}
 
 	if (!empty($out['notices'])) $t->parse("HEADER.USER.HEADER_NOTICES");
@@ -144,14 +142,14 @@ if ($usr['id'] > 0) {
 
 	if (sed_auth('admin', 'a', 'A')) {
 		$order_field = (sed_stat_get("version") >= 180) ? " ORDER BY config_id ASC" : "";
-		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'".$order_field);
+		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core'" . $order_field);
 		$config_menu = "<ul>";
 
 		while ($row = sed_sql_fetchassoc($sql)) {
 			$config_menu .= "<li>";
 			$code = "core_" . $row['config_cat'];
 			$config_menu_class = ($row['config_cat'] == $p) ? "current" : '';
-			$config_menu .= "<a href=\"" . sed_url("admin", "m=config&n=edit&o=core&p=" . $row['config_cat']) . "\" class=\"" . $config_menu_class . "\">" . $L[$code] . "</a>";
+			$config_menu .= sed_link(sed_url("admin", "m=config&n=edit&o=core&p=" . $row['config_cat']),  $L[$code], array('class' => $config_menu_class));
 			$config_menu .= "</li>";
 		}
 

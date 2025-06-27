@@ -41,4 +41,4 @@ $adminmain .= $cfg['sqlversion'] . " --> " . $cfg['version'] . "<br />" . $L['Fi
 $upg_status = FALSE;
 require($upg_file);
 
-$adminmain .= ($upg_status) ? "<a href=\"" . sed_url("admin") . "\">" . $L['upg_success'] . "</a>" : "<a href=\"" . sed_url("admin") . "\">" . $L['upg_failure'] . "</a>";
+$adminmain .= ($upg_status) ? sed_link(sed_url("admin"), $L['upg_success']) : sed_link(sed_url("admin"), $L['upg_failure']);

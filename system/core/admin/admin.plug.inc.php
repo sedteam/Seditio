@@ -42,7 +42,7 @@ unset($disp_errors);
 $t = new XTemplate(sed_skinfile('admin.plug', false, true));
 
 switch ($a) {
-		/* =============== */
+	/* =============== */
 	case 'details':
 		/* =============== */
 
@@ -139,9 +139,9 @@ switch ($a) {
 					if ($info_file['Status'] == 3) {
 						$pl_action = "-";
 					} elseif ($row['pl_active'] == 1) {
-						$pl_action = "<a href=\"" . sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=pausepart&part=" . $row['pl_id'] . "&" . sed_xg()) . "\" class=\"btn btn-adm\">Pause</a>";
+						$pl_action = sed_link(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=pausepart&part=" . $row['pl_id'] . "&" . sed_xg()), 'Pause', array('class' => 'btn btn-adm'));
 					} elseif ($row['pl_active'] == 0) {
-						$pl_action = "<a href=\"" . sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=unpausepart&part=" . $row['pl_id'] . "&" . sed_xg()) . "\" class=\"btn btn-adm\">Un-pause</a>";
+						$pl_action = sed_link(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=unpausepart&part=" . $row['pl_id'] . "&" . sed_xg()), 'Un-pause', array('class' => 'btn btn-adm'));
 					}
 
 					$t->assign(array(
@@ -204,7 +204,7 @@ switch ($a) {
 
 		break;
 
-		/* =============== */
+	/* =============== */
 	case 'edit':
 		/* =============== */
 
@@ -413,7 +413,7 @@ switch ($a) {
 				"HOOK_LIST_HOOK" => $row['pl_hook'],
 				"HOOK_LIST_PLUG_TITLE" => $row['pl_title'],
 				"HOOK_LIST_PLUG_CODE" => $row['pl_code'],
-				"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">" . $extplugin_file_path . "</span>" : "<a href=\"" . sed_url("admin", "m=plug&a=delhook&id=" . $row['pl_id'] . "&" . sed_xg(), "#hooks") . "\">" . $out['ic_delete'] . "</a> <span style=\"color:#AC5866; font-weight:bold;\">" . $L['adm_missing'] . " : " . $extplugin_file_path . "</span>",
+				"HOOK_LIST_PLUG_FILE" => (file_exists($extplugin_file)) ? "<span style=\"color:#739E48; font-weight:bold;\">" . $extplugin_file_path . "</span>" : sed_link(sed_url("admin", "m=plug&a=delhook&id=" . $row['pl_id'] . "&" . sed_xg(), "#hooks"), $out['ic_delete']) . " <span style=\"color:#AC5866; font-weight:bold;\">" . $L['adm_missing'] . " : " . $extplugin_file_path . "</span>",
 				"HOOK_LIST_ORDER" => $row['pl_order'],
 				"HOOK_LIST_STATUS" => $sed_yesno[$row['pl_active']]
 			));

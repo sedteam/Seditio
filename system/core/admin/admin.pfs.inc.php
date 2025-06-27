@@ -51,7 +51,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 	$row['user_id'] = ($row['user_id'] == 0) ? "0" : $row['user_id'];
 
 	$t->assign(array(
-		"PFS_LIST_EDIT" => "<a href=\"" . sed_url("pfs", "userid=" . $row['user_id']) . "\">" . $out['ic_edit'] . "</a>",
+		"PFS_LIST_EDIT" => sed_link(sed_url("pfs", "userid=" . $row['user_id']), $out['ic_edit']),
 		"PFS_LIST_USER" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
 		"PFS_LIST_COUNTFILES" => $row['COUNT(*)']
 	));

@@ -51,7 +51,7 @@ foreach ($skinlist as $i => $x) {
 	$skin_desc .= $L['URL'] . " : " . $info['Url'] . "<br />";
 	$skin_desc .= $L['Description'] . " : " . $info['Description'] . "";
 	$skin_default = ($x == $cfg['defaultskin']) ? $out['ic_checked'] : $out['ic_unchecked'];
-	$skin_set = ($x == $cfg['defaultskin']) ? $out['ic_checked'] : "<a href=\"" . sed_url("admin", "m=config&n=edit&o=core&p=skin&setskin=update&skin_name=" . $x . "&" . sed_xg()) . "\">" . $out['ic_set'] . "</a>";
+	$skin_set = ($x == $cfg['defaultskin']) ? $out['ic_checked'] : sed_link(sed_url("admin", "m=config&n=edit&o=core&p=skin&setskin=update&skin_name=" . $x . "&" . sed_xg()), $out['ic_set']);
 
 	$t->assign(array(
 		"SKIN_LIST_NAME" => $skin_name,

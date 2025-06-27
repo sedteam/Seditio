@@ -49,7 +49,7 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled') {
 }
 
 $t->assign(array(
-	"HOME_PAGE_QUEUED" => "<a href=\"" . sed_url("admin", "m=page") . "\">" . $L['Pages'] . " : " . $pagesqueued . "</a>",
+	"HOME_PAGE_QUEUED" => sed_link(sed_url("admin", "m=page"), $L['Pages'] . " : " . $pagesqueued),
 	"HOME_PAGE_ADDNEWENTRY" => sed_linkif(sed_url("page", "m=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))
 ));
 
@@ -81,7 +81,7 @@ if ($sys['user_istopadmin']) {
 		$status_ok = FALSE;
 
 		if (file_exists($upg_file)) {
-			$upgstat .= "<br /><strong><a href=\"" . sed_url("admin", "m=upgrade&" . sed_xg()) . "\">" . $L['upg_upgradenow'] . "</a></strong>";
+			$upgstat .= "<br /><strong>" . sed_link(sed_url("admin", "m=upgrade&" . sed_xg()), $L['upg_upgradenow']) . "</strong>";
 			$upgstat .= "<br />" . $L['upg_manual'];
 		} else {
 			$upgstat .= "<br /><strong>" . $L['upg_upgradenotavail'] . "</strong>";

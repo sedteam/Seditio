@@ -202,8 +202,8 @@ switch ($n) {
 					"GROUP_LIST_ID" => $row['grp_id'],
 					"GROUP_LIST_URL" => sed_url("admin", "m=users&n=edit&g=" . $row['grp_id']),
 					"GROUP_LIST_TITLE" => sed_cc($row['grp_title']),
-					"GROUP_LIST_GRP_COUNT" => "<a href=\"" . sed_url("users", "gm=" . $row['grp_id']) . "\">" . $members[$row['grp_id']] . "</a>",
-					"GROUP_LIST_MAINGRP_COUNT" => "<a href=\"" . sed_url("users", "g=" . $row['grp_id']) . "\">" . $members_main[$row['grp_id']] . "</a>",
+					"GROUP_LIST_GRP_COUNT" => sed_link(sed_url("users", "gm=" . $row['grp_id']), $members[$row['grp_id']]),
+					"GROUP_LIST_MAINGRP_COUNT" => sed_link(sed_url("users", "g=" . $row['grp_id']), $members_main[$row['grp_id']]),
 					"GROUP_LIST_DISABLE" => $sed_yesno[!$row['grp_disabled']],
 					"GROUP_LIST_COUNT" => $sed_yesno[$row['grp_hidden']],
 					"GROUP_LIST_RIGHT_URL" => sed_url("admin", "m=rights&g=" . $row['grp_id'])

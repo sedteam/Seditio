@@ -142,14 +142,12 @@ if ($n == 'edit') {
 
 	$form_parent_cat .= "</select>";
 
-	if (file_exists($fs_icon)) {
-		$fs_icon_img = " <img src=\"" . $fs_icon . "\" alt=\"\" />";
-	}
+	$fs_icon_img = file_exists($fs_icon) ? " <img src=\"" . $fs_icon . "\" alt=\"\" />" : "";
 
 	if ($usr['isadmin']) {
 		$t->assign(array(
-			"FS_UPDATE_RESYNC" => "<a href=\"" . sed_url("admin", "m=forums&n=edit&a=resync&id=" . $fs_id . "&" . sed_xg()) . "\">" . $L['Resync'] . "</a>",
-			"FS_UPDATE_DELETE" => "<a href=\"" . sed_url("admin", "m=forums&n=edit&a=delete&id=" . $fs_id . "&" . sed_xg()) . "\">" . $out['ic_delete'] . "</a>"
+			"FS_UPDATE_RESYNC" => sed_link(sed_url("admin", "m=forums&n=edit&a=resync&id=" . $fs_id . "&" . sed_xg()), $L['Resync']),
+			"FS_UPDATE_DELETE" => sed_link(sed_url("admin", "m=forums&n=edit&a=delete&id=" . $fs_id . "&" . sed_xg()), $out['ic_delete'])
 		));
 
 		$t->parse("ADMIN_FORUMS.FS_UPDATE.FS_ADMIN");
@@ -161,16 +159,16 @@ if ($n == 'edit') {
 		"FS_UPDATE_ID" => $fs_id,
 		"FS_UPDATE_PARENTCAT" => $form_parent_cat,
 		"FS_UPDATE_CATEGORY" => sed_selectbox_forumcat($fs_category, 'rcat'),
-		"FS_UPDATE_TITLE" => "<input type=\"text\" class=\"text\" name=\"rtitle\" value=\"" . sed_cc($fs_title) . "\" size=\"56\" maxlength=\"128\" />",
-		"FS_UPDATE_DESC" => "<input type=\"text\" class=\"text\" name=\"rdesc\" value=\"" . sed_cc($fs_desc) . "\" size=\"56\" maxlength=\"255\" />",
-		"FS_UPDATE_ICON" => "<input type=\"text\" class=\"text\" name=\"ricon\" value=\"" . sed_cc($fs_icon) . "\" size=\"40\" maxlength=\"255\" />" . $fs_icon_img,
+		"FS_UPDATE_TITLE" => sed_textbox('rtitle', $fs_title, 56, 128),
+		"FS_UPDATE_DESC" => sed_textbox('rdesc', $fs_desc, 56, 255),
+		"FS_UPDATE_ICON" => sed_textbox('ricon', $fs_icon, 40, 255) . $fs_icon_img,
 		"FS_UPDATE_ALLOWUSERTEXT" => $form_allowusertext,
 		"FS_UPDATE_ALLOWBBCODES" => $form_allowbbcodes,
 		"FS_UPDATE_ALLOWSMILIES" => $form_allowsmilies,
 		"FS_UPDATE_ALLOWPRIVATETOPICS" => $form_allowprvtopics,
 		"FS_UPDATE_COUNTPOST" => $form_countposts,
 		"FS_UPDATE_STATE" => $form_state,
-		"FS_UPDATE_AUTOPRUNE" => "<input type=\"text\" class=\"text\" name=\"rautoprune\" value=\"" . $fs_autoprune . "\" size=\"3\" maxlength=\"7\" />"
+		"FS_UPDATE_AUTOPRUNE" => sed_textbox('rautoprune', $fs_autoprune, 3, 7)
 	));
 
 	$t->parse("ADMIN_FORUMS.FS_UPDATE");
@@ -265,7 +263,7 @@ if ($n == 'edit') {
 		}
 
 		$t->assign(array(
-			"FS_LIST_TITLE" => "<a href=\"" . sed_url("admin", "m=forums&n=edit&id=" . $fs_id) . "\">" . $fs_title . "</a>",
+			"FS_LIST_TITLE" => sed_link(sed_url("admin", "m=forums&n=edit&id=" . $fs_id), $fs_title),
 			"FS_LIST_ORDER_UP_URL" => sed_url("admin", "m=forums&id=" . $fs_id . "&a=order&w=up"),
 			"FS_LIST_ORDER_DOWN_URL" => sed_url("admin", "m=forums&id=" . $fs_id . "&a=order&w=down"),
 			"FS_LIST_ALLOWPRIWATETOPICS" => $sed_yesno[$row['fs_allowprvtopics']],
@@ -284,8 +282,8 @@ if ($n == 'edit') {
 	$t->assign(array(
 		"FS_ADD_SEND" => sed_url("admin", "m=forums&a=add"),
 		"FS_ADD_CATEGORY" => sed_selectbox_forumcat('', 'ncat'),
-		"FS_ADD_TITLE" => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"64\" maxlength=\"128\" />",
-		"FS_ADD_DESC" => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"64\" maxlength=\"255\" />"
+		"FS_ADD_TITLE" => sed_textbox('ntitle', '', 64, 128),
+		"FS_ADD_DESC" => sed_textbox('ndesc', '', 64, 255)
 	));
 
 	$t->parse("ADMIN_FORUMS.FS_CAT");
