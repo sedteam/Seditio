@@ -333,11 +333,11 @@ function sed_attr($attrs)
 	if (is_array($attrs)) {
 		foreach ($attrs as $key => $value) {
 			$key_lower = mb_strtolower($key);
-			$escapedKey = htmlspecialchars($key);
+			$escapedKey = sed_cc($key);
 			if (in_array($key_lower, $no_escape_attrs)) {
 				$escapedValue = $value;
 			} else {
-				$escapedValue = htmlspecialchars($value);
+				$escapedValue = sed_cc($value);
 			}
 
 			$attributes .= " $escapedKey=\"$escapedValue\"";
@@ -3458,7 +3458,7 @@ function sed_textbox($name, $value, $size = 56, $maxlength = 255, $class = "text
 		'type' => $type,
 		'class' => $class,
 		'name' => $name,
-		'value' => sed_cc($value),
+		'value' => $value,
 		'size' => $size,
 		'maxlength' => $maxlength
 	);
