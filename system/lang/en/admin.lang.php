@@ -367,6 +367,8 @@ $L['adm_dic_comma_separat'] = "(comma separated)";
 
 $L['adm_help_dic'] = ""; //Need add
 
+$L['adm_dic_form_wysiwyg'] = "WYSIWYG editor type";
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Menu items";

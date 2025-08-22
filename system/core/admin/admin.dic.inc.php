@@ -35,6 +35,8 @@ $mn = sed_import('mn', 'G', 'TXT');
 $did = sed_import('did', 'G', 'INT');
 $tid = sed_import('tid', 'G', 'INT');
 
+$wysiwyg_types = array('noeditor' => 'No editor', 'Micro' => 'Micro', 'Basic' => 'Basic', 'Extended' => 'Extended', 'Full' => 'Full');
+
 $sql_dic = sed_sql_query("SELECT * FROM $db_dic WHERE 1 ORDER BY dic_title ASC");
 
 while ($row_dic = sed_sql_fetchassoc($sql_dic)) {
@@ -148,6 +150,7 @@ switch ($mn) {
 			"DIC_EDIT_FORM_MAXSIZE" => sed_textbox('dformmaxsize', $row['dic_form_maxsize'], 3, 10),
 			"DIC_EDIT_FORM_COLS" => sed_textbox('dformcols', $row['dic_form_cols'], 3, 10),
 			"DIC_EDIT_FORM_ROWS" => sed_textbox('dformrows', $row['dic_form_rows'], 3, 10),
+			"DIC_EDIT_FORM_WYSIWYG" => sed_radiobox("dformwysiwyg", $wysiwyg_types, $row['dic_form_wysiwyg']),
 			"DIC_EDIT_DICPARENT" => sed_selectbox($row['dic_parent'], 'dparent', $dicparent) //sed_textbox('dtype', $row['dic_type'])		
 		));
 
@@ -211,7 +214,7 @@ switch ($mn) {
 			for ($i = 1; $i <= 255; $i++) {
 				$maxsize_arr[$i] = $i;
 			}
-			
+
 			$isset_column = "";
 			if (!empty($row['dic_extra_location'])) {
 				$colname = $row['dic_code'];
@@ -266,6 +269,8 @@ switch ($mn) {
 		$dformcols = sed_import('dformcols', 'P', 'TXT');
 		$dformrows = sed_import('dformrows', 'P', 'TXT');
 
+		$dformwysiwyg = sed_import('dformwysiwyg', 'P', 'TXT'); // new sed 180
+
 		if ($a == 'update' && (!empty($did))) {
 			$sql = sed_sql_query("UPDATE $db_dic SET 
 				dic_title = '" . sed_sql_prep($dtitle) . "', 
@@ -278,7 +283,8 @@ switch ($mn) {
 				dic_form_size = '" . sed_sql_prep($dformsize) . "',
 				dic_form_maxsize = '" . sed_sql_prep($dformmaxsize) . "',
 				dic_form_cols = '" . sed_sql_prep($dformcols) . "',
-				dic_form_rows = '" . sed_sql_prep($dformrows) . "'          
+				dic_form_rows = '" . sed_sql_prep($dformrows) . "',
+				dic_form_wysiwyg = '" . sed_sql_prep($dformwysiwyg) . "'
 				WHERE dic_id = '" . $did . "'");
 
 			sed_log("Update directory #" . $did, 'adm');
@@ -311,7 +317,8 @@ switch ($mn) {
 					dic_form_size,
 					dic_form_maxsize,
 					dic_form_cols,
-					dic_form_rows             
+					dic_form_rows,
+					dic_form_wysiwyg					
 					) 
 					VALUES 
 					('" . sed_sql_prep($dtitle) . "', 
@@ -324,7 +331,8 @@ switch ($mn) {
 					'" . sed_sql_prep($dformsize) . "',
 					'" . sed_sql_prep($dformmaxsize) . "',
 					'" . sed_sql_prep($dformcols) . "',
-					'" . sed_sql_prep($dformrows) . "')");
+					'" . sed_sql_prep($dformrows) . "',
+					'" . sed_sql_prep($dformwysiwyg) . "')");
 
 				sed_log("Addded directory #" . $did, 'adm');
 				sed_cache_clear('sed_dic');
@@ -357,7 +365,7 @@ switch ($mn) {
 			$t->parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST.ADMIN_ACTIONS");
 
 			$dic_code = "<a href=\"" . sed_url('admin', 'm=dic&mn=extra&did=' . $row['dic_id']) . "\">" . $row['dic_code'] . "</a>";
-			
+
 			if (!empty($row['dic_extra_location'])) {
 				$i = 1;
 				$colname = $row['dic_code'];
@@ -395,7 +403,8 @@ switch ($mn) {
 			"DIC_ADD_FORM_SIZE" => sed_textbox('dformsize', $dformsize, 3, 10),
 			"DIC_ADD_FORM_MAXSIZE" => sed_textbox('dformmaxsize', $dformmaxsize, 3, 10),
 			"DIC_ADD_FORM_COLS" => sed_textbox('dformcols', $dformcols, 3, 10),
-			"DIC_ADD_FORM_ROWS" => sed_textbox('dformrows', $dformrows, 3, 10)
+			"DIC_ADD_FORM_ROWS" => sed_textbox('dformrows', $dformrows, 3, 10),
+			"DIC_ADD_FORM_WYSIWYG" => sed_radiobox("dformwysiwyg", $wysiwyg_types, 'noeditor')
 		));
 
 		$t->parse("ADMIN_DIC.DIC_STRUCTURE");

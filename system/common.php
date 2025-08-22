@@ -600,6 +600,7 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
 				'form_maxsize' => $row['dic_form_maxsize'],
 				'form_cols' => $row['dic_form_cols'],
 				'form_rows' => $row['dic_form_rows'],
+				'form_wysiwyg' => $row['dic_form_wysiwyg'],
 				'extra_location' => $row['dic_extra_location'],
 				'extra_type' => $row['dic_extra_type'],
 				'extra_size' => $row['dic_extra_size'],

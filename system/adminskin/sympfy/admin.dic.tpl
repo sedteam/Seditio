@@ -177,6 +177,15 @@
 								{DIC_ADD_FORM_ROWS}
 							</div>
 						</div>
+						
+						<div class="table-row resp-table-row">
+							<div class="table-td text-left resp-table-td">
+								{PHP.L.adm_dic_form_wysiwyg} :
+							</div>
+							<div class="table-td text-left resp-table-td">
+								{DIC_ADD_FORM_WYSIWYG}
+							</div>
+						</div>						
 
 						<div class="table-row resp-table-row">
 							<div class="table-td text-left resp-table-td">
@@ -307,6 +316,15 @@
 							{DIC_EDIT_FORM_ROWS}
 						</div>
 					</div>
+					
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">
+							{PHP.L.adm_dic_form_wysiwyg} :
+						</div>
+						<div class="table-td text-left resp-table-td">
+							{DIC_EDIT_FORM_WYSIWYG}
+						</div>
+					</div>					
 
 					<div class="table-row resp-table-row">
 						<div class="table-td text-left resp-table-td">

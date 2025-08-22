@@ -369,6 +369,8 @@ $L['adm_dic_comma_separat'] = "(разделенные через запятую
 
 $L['adm_help_dic'] = ""; //Need add
 
+$L['adm_dic_form_wysiwyg'] = "Тип WYSIWYG редактора";
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Пункты меню";

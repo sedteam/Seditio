@@ -6043,7 +6043,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 				break;
 
 			case 'textarea':
-				$t2 = sed_textarea($importrowname . $row['code'], $field_value, $row['form_rows'], $row['form_cols']);
+				$t2 = sed_textarea($importrowname . $row['code'], $field_value, $row['form_rows'], $row['form_cols'], $row['form_wysiwyg']);
 				break;
 
 			case 'select':

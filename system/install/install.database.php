@@ -110,6 +110,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "dic (
   dic_form_maxsize smallint(5) NOT NULL default '0',
   dic_form_cols smallint(5) NOT NULL default '0',
   dic_form_rows smallint(5) NOT NULL default '0',
+  dic_form_wysiwyg varchar(20) NOT NULL default 'noeditor',
   dic_extra_location varchar(40) NOT NULL default '',
   dic_extra_type varchar(20) NOT NULL default '',
   dic_extra_size smallint(5) NOT NULL default '0',

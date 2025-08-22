@@ -210,6 +210,10 @@ $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_fol
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD dic_form_wysiwyg varchar(20) NOT NULL default 'noeditor' AFTER dic_form_rows";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to 180...<br />";

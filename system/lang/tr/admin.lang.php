@@ -354,6 +354,7 @@ $L['adm_dic_form_size'] = "Metin alanının boyutu";
 $L['adm_dic_form_maxsize'] = "Metin alanının maksimum boyutu";
 $L['adm_dic_form_cols'] = "Metin alanının sütun sayısı";
 $L['adm_dic_form_rows'] = "Metin alanının satır sayısı";
+$L['adm_dic_form_wysiwyg'] = "WYSIWYG düzenleyici türü";
 
 $L['adm_dic_extra'] = "Ekstra alan";
 $L['adm_dic_addextra'] = "Ekstra alan ekle";
