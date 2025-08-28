@@ -1687,31 +1687,41 @@ var sedjs = {
     /**
      * Toggles the visibility of spoiler content.
      */
-    spoiler: function() {
-        function toggleSpoilerContent(spoilerToggle) {
-            var spoiler = spoilerToggle.closest('.spoiler');
-            var spoilerContent = spoiler.querySelector('.spoiler-content');
-            var isHidden = window.getComputedStyle(spoilerContent).display === 'none';
+	spoiler: function() {
+		function toggleSpoilerContent(spoilerToggle) {
+			var spoiler = spoilerToggle.closest('.spoiler');
+			var spoilerContent = spoiler.querySelector('.spoiler-content');
+			var isHidden = window.getComputedStyle(spoilerContent).display === 'none';
 
-            if (isHidden) {
-                spoilerContent.style.display = 'block';
-                sedjs.removeClass(spoilerToggle, 'show-icon');
-                sedjs.addClass(spoilerToggle, 'hide-icon');
-            } else {
-                spoilerContent.style.display = 'none';
-                sedjs.removeClass(spoilerToggle, 'hide-icon');
-                sedjs.addClass(spoilerToggle, 'show-icon');
-            }
-        }
+			if (isHidden) {
+				spoilerContent.style.display = 'block';
+				sedjs.removeClass(spoilerToggle, 'show-icon');
+				sedjs.addClass(spoilerToggle, 'hide-icon');
+			} else {
+				spoilerContent.style.display = 'none';
+				sedjs.removeClass(spoilerToggle, 'hide-icon');
+				sedjs.addClass(spoilerToggle, 'show-icon');
+			}
+		}
 
-        var spoilerToggles = document.querySelectorAll('.spoiler-toggle');
-        spoilerToggles.forEach(function(toggle) {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                toggleSpoilerContent(this);
-            });
-        });
-    },
+		var spoilerToggles = document.querySelectorAll('.spoiler-toggle');
+		spoilerToggles.forEach(function(toggle) {
+			toggle.addEventListener('click', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				toggleSpoilerContent(this);
+			});
+		});
+
+		var spoilerTitles = document.querySelectorAll('.spoiler-title');
+		spoilerTitles.forEach(function(title) {
+			title.addEventListener('click', function(e) {
+				e.preventDefault();
+				var spoilerToggle = this.querySelector('.spoiler-toggle');
+				toggleSpoilerContent(spoilerToggle);
+			});
+		});
+	},
 
     /**
      * Adds click event listeners to specified elements to fade out and slide up their parent elements.
