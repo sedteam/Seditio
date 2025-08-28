@@ -19,7 +19,25 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-$available_sort = array('id', 'type', 'key', 'title', 'desc', 'text', 'author', 'owner', 'date', 'begin', 'expire', 'count', 'file', 'url', 'size', 'filecount');
+// Define sortable & filterable columns and their types
+$available_sort_filterable = array(
+	'id' => 'INT',
+	'key' => 'TXT',
+	'title' => 'TXT',
+	'desc' => 'TXT',
+	'author' => 'TXT',
+	'owner' => 'INT',
+	'date' => 'INT',
+	'begin' => 'INT',
+	'expire' => 'INT',
+	'count' => 'INT',
+	'file' => 'INT',
+	'url' => 'TXT',
+	'size' => 'TXT',
+	'filecount' => 'INT'
+);
+
+// Define allowed sort directions
 $available_way = array('asc', 'desc');
 
 $id = sed_import('id', 'G', 'INT');
@@ -35,6 +53,11 @@ $extrafields = array();
 $extrafields = sed_extrafield_get('pages');
 $number_of_extrafields = count($extrafields);
 
+// Add extra fields to filterable fields
+foreach ($extrafields as $key => $val) {
+	$available_sort_filterable[$key] = $val['vartype'];
+}
+
 $filter_vars = array();
 $filter_sql = array();
 $filter_urlspar = array();
@@ -43,16 +66,50 @@ $filter_urlparams = "";
 
 $sql_where = "";
 
-if (count($extrafields) > 0) {
-	foreach ($extrafields as $key => $val) {
-		array_push($available_sort, $key);
-		if (in_array($val['vartype'], array('INT', 'BOL', 'TXT'))) {
-			$filter_vars['filter_' . $key] = sed_import('filter_' . $key, 'G', $val['vartype']);
-			if (!empty($filter_vars['filter_' . $key])) {
-				$filter_sql[] = "page_" . $key . " = '" . sed_sql_prep($filter_vars['filter_' . $key]) . "'";
-				$filter_urlspar['filter_' . $key] = $filter_vars['filter_' . $key];
-				$filter_urlparams_arr[] = $key . " = '" . $filter_vars['filter_' . $key] . "'";
+// Process all filterable fields (standard columns and extra fields)
+foreach ($available_sort_filterable as $key => $vartype) {
+	if (!preg_match('/^[a-zA-Z0-9_]+$/', $key)) {
+		continue; // Skip invalid field names
+	}
+	if (!in_array($vartype, array('INT', 'BOL', 'TXT'))) {
+		continue;
+	}
+
+	$filter_vars['filter_' . $key] = sed_import('filter_' . $key, 'G', 'ARR');
+	if (empty($filter_vars['filter_' . $key])) {
+		$filter_vars['filter_' . $key] = sed_import('filter_' . $key, 'G', $vartype, 255);
+	}
+
+	if (!empty($filter_vars['filter_' . $key])) {
+		if (is_array($filter_vars['filter_' . $key])) {
+			// Limit array size to prevent performance issues
+			if (count($filter_vars['filter_' . $key]) > 50) {
+				continue; // Skip arrays with too many elements
 			}
+			// Process array values
+			$escaped_values = array();
+			foreach ($filter_vars['filter_' . $key] as $value) {
+				$filtered_value = sed_import($value, 'D', $vartype, 255);
+				if ($filtered_value !== null && $filtered_value !== '') {
+					$escaped_values[] = sed_sql_prep($filtered_value);
+				}
+			}
+			if (!empty($escaped_values)) {
+				$filter_sql[] = 'page_' . $key . " IN ('" . implode("','", $escaped_values) . "')";
+				foreach ($filter_vars['filter_' . $key] as $value) {
+					$filter_urlspar['filter_' . $key . '[]'] = $value;
+					$filter_urlparams_arr[] = 'filter_' . $key . '[]=' . urlencode($value);
+				}
+			}
+		} else {
+			// Process single value
+			if ($vartype === 'TXT') {
+				$filter_sql[] = 'page_' . $key . " LIKE '%" . sed_sql_prep($filter_vars['filter_' . $key]) . "%'";
+			} else {
+				$filter_sql[] = 'page_' . $key . " = '" . sed_sql_prep($filter_vars['filter_' . $key]) . "'";
+			}
+			$filter_urlspar['filter_' . $key] = $filter_vars['filter_' . $key];
+			$filter_urlparams_arr[] = 'filter_' . $key . '=' . urlencode($filter_vars['filter_' . $key]);
 		}
 	}
 }
@@ -81,7 +138,8 @@ if (is_array($extp)) {
 }
 /* ===== */
 
-if (empty($s) || !in_array($s, $available_sort) || !in_array($w, $available_way)) {
+// Validate sort column and direction
+if (empty($s) || !isset($available_sort_filterable[$s]) || !in_array($w, $available_way)) {
 	$s = $sed_cat[$c]['order'];
 	$w = $sed_cat[$c]['way'];
 }
