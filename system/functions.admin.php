@@ -379,8 +379,8 @@ function sed_loadconfigmap()
 	$result[] = array('main', '10', 'cookiepath', 1, '', '');
 	$result[] = array('main', '10', 'cookielifetime', 2, '5184000', array(1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 604800, 1296000, 2592000, 5184000));
 	$result[] = array('main', '12', 'disablehitstats', 3, '0', '');
-	$result[] = array('main', '13', 'ajax', 3, '0', ''); //Sed 175
-	$result[] = array('main', '14', 'enablemodal', 3, '0', ''); //Sed 175
+	$result[] = array('main', '13', 'ajax', 3, '1', ''); //Sed 175
+	$result[] = array('main', '14', 'enablemodal', 3, '1', ''); //Sed 175
 	$result[] = array('main', '20', 'shieldenabled', 3, '0', '');
 	$result[] = array('main', '20', 'shieldtadjust', 2, '100', array(10, 25, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800));
 	$result[] = array('main', '20', 'shieldzhammer', 2, '25', array(5, 10, 15, 20, 25, 30, 40, 50, 100));
@@ -424,7 +424,7 @@ function sed_loadconfigmap()
 	$result[] = array('menus', '10', 'topline', 0, '', '');
 	$result[] = array('menus', '10', 'banner', 0, '', '');
 	$result[] = array('menus', '10', 'bottomline', 0, '', '');
-	$result[] = array('menus', '15', 'menu1', 0, '<ul><li><a href="/">Home</a></li><li><a href="/forums/">Forums</a></li><li><a href="/articles/">Articles</a></li><li><a href="/gallery/">Galleries</a></li><li><a href="/plug/contact">Contact</a></li></ul>', '');
+	$result[] = array('menus', '15', 'menu1', 0, '', '');
 	$result[] = array('menus', '15', 'menu2', 0, '',  '');
 	$result[] = array('menus', '15', 'menu3', 0, '', '');
 	$result[] = array('menus', '15', 'menu4', 0, '', '');
