@@ -12,7 +12,7 @@ CKEDITOR.editorConfig = function(config) {
     config.pasteUploadImageUrlApi = 'plug/?ajx=ckeditor';
     config.filebrowserImageUploadUrl = 'plug/?ajx=ckeditor';
 
-    config.contentsCss = ['plugins/ckeditor/lib/ckeditor.css?v=1'];
+    config.contentsCss = ['plugins/ckeditor/lib/ckeditor.css?v=2'];
 
     config.layoutmanager_loadbootstrap = false;
 

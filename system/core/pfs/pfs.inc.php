@@ -542,7 +542,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
         }
     }
 
-    $add_file = ($standalone) ? sed_link("javascript:addfile('" . $pfs_file . "','" . $pfs_fullfile . "')", $out['ic_pastefile'], array('title' => $L['pfs_insertaslink'], 'class' => 'btn-icon')) : '';
+    $add_file = ($standalone) ? sed_link("javascript:addfile('" . $pfs_file . "','" . $pfs_fullfile . "', '" . $pfs_title . "', '" . $pfs_extension . "')", $out['ic_pastefile'], array('title' => $L['pfs_insertaslink'], 'class' => 'btn-icon')) : '';
 
     if ((($c2 == "newpageurl") || ($c2 == "rpageurl")) && ($standalone)) {
         $add_file = sed_link("javascript:addfile_pageurl('" . $pfs_fullfile . "')", $out['ic_pastefile'], array('title' => $L['pfs_insertaslink'], 'class' => 'btn-icon'));

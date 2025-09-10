@@ -699,10 +699,10 @@ if (!$notlastpage && !$ft_state && $usr['id'] > 0 && $allowreplybox && $usr['aut
 
 	$t->parse("MAIN.FORUMS_POSTS_NEWPOST");
 } elseif ($ft_state) {
-	$t->assign("FORUMS_POSTS_TOPICLOCKED_BODY", $L['Topiclocked']);
+	$t->assign("FORUMS_POSTS_TOPICLOCKED_BODY", sed_alert($L['Topiclocked'], 'e'));
 	$t->parse("MAIN.FORUMS_POSTS_TOPICLOCKED");
 } elseif (!$allowreplybox && !$notlastpage && !$ft_state && $usr['id'] > 0) {
-	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", $L['for_antibump']);
+	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", sed_alert($L['for_antibump'], 'e'));
 	$t->parse("MAIN.FORUMS_POSTS_ANTIBUMP");
 }
 

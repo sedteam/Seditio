@@ -1302,3 +1302,1476 @@ blockquote cite:before {
     max-width: 100%;
     height: auto;
 }
+
+
+/*-------------------------*/
+
+
+/***** PFS FILE EXTENSIONS *****/
+
+
+/*-------------------------*/
+
+.ext {
+    position: relative;
+    display: inline-block;
+    line-height: 1.29em;
+    width: 1em;
+    background-repeat: no-repeat;
+}
+
+.ext:before {
+    content: '\00a0';
+}
+
+.ext-3g2 {
+    background-image: url("/system/img/ext/3g2.svg");
+}
+
+.ext-3ga {
+    background-image: url("/system/img/ext/3ga.svg");
+}
+
+.ext-3gp {
+    background-image: url("/system/img/ext/3gp.svg");
+}
+
+.ext-7z {
+    background-image: url("/system/img/ext/7z.svg");
+}
+
+.ext-aa {
+    background-image: url("/system/img/ext/aa.svg");
+}
+
+.ext-aac {
+    background-image: url("/system/img/ext/aac.svg");
+}
+
+.ext-ac {
+    background-image: url("/system/img/ext/ac.svg");
+}
+
+.ext-accdb {
+    background-image: url("/system/img/ext/accdb.svg");
+}
+
+.ext-accdt {
+    background-image: url("/system/img/ext/accdt.svg");
+}
+
+.ext-adn {
+    background-image: url("/system/img/ext/adn.svg");
+}
+
+.ext-ai {
+    background-image: url("/system/img/ext/ai.svg");
+}
+
+.ext-aif {
+    background-image: url("/system/img/ext/aif.svg");
+}
+
+.ext-aifc {
+    background-image: url("/system/img/ext/aifc.svg");
+}
+
+.ext-aiff {
+    background-image: url("/system/img/ext/aiff.svg");
+}
+
+.ext-ait {
+    background-image: url("/system/img/ext/ait.svg");
+}
+
+.ext-amr {
+    background-image: url("/system/img/ext/amr.svg");
+}
+
+.ext-ani {
+    background-image: url("/system/img/ext/ani.svg");
+}
+
+.ext-apk {
+    background-image: url("/system/img/ext/apk.svg");
+}
+
+.ext-app {
+    background-image: url("/system/img/ext/app.svg");
+}
+
+.ext-applescript {
+    background-image: url("/system/img/ext/applescript.svg");
+}
+
+.ext-asax {
+    background-image: url("/system/img/ext/asax.svg");
+}
+
+.ext-asc {
+    background-image: url("/system/img/ext/asc.svg");
+}
+
+.ext-ascx {
+    background-image: url("/system/img/ext/ascx.svg");
+}
+
+.ext-asf {
+    background-image: url("/system/img/ext/asf.svg");
+}
+
+.ext-ash {
+    background-image: url("/system/img/ext/ash.svg");
+}
+
+.ext-ashx {
+    background-image: url("/system/img/ext/ashx.svg");
+}
+
+.ext-asmx {
+    background-image: url("/system/img/ext/asmx.svg");
+}
+
+.ext-asp {
+    background-image: url("/system/img/ext/asp.svg");
+}
+
+.ext-aspx {
+    background-image: url("/system/img/ext/aspx.svg");
+}
+
+.ext-asx {
+    background-image: url("/system/img/ext/asx.svg");
+}
+
+.ext-au {
+    background-image: url("/system/img/ext/au.svg");
+}
+
+.ext-aup {
+    background-image: url("/system/img/ext/aup.svg");
+}
+
+.ext-avi {
+    background-image: url("/system/img/ext/avi.svg");
+}
+
+.ext-axd {
+    background-image: url("/system/img/ext/axd.svg");
+}
+
+.ext-aze {
+    background-image: url("/system/img/ext/aze.svg");
+}
+
+.ext-bak {
+    background-image: url("/system/img/ext/bak.svg");
+}
+
+.ext-bash {
+    background-image: url("/system/img/ext/bash.svg");
+}
+
+.ext-bat {
+    background-image: url("/system/img/ext/bat.svg");
+}
+
+.ext-bin {
+    background-image: url("/system/img/ext/bin.svg");
+}
+
+.ext-blank {
+    background-image: url("/system/img/ext/blank.svg");
+}
+
+.ext-bmp {
+    background-image: url("/system/img/ext/bmp.svg");
+}
+
+.ext-bowerrc {
+    background-image: url("/system/img/ext/bowerrc.svg");
+}
+
+.ext-bpg {
+    background-image: url("/system/img/ext/bpg.svg");
+}
+
+.ext-browser {
+    background-image: url("/system/img/ext/browser.svg");
+}
+
+.ext-bz2 {
+    background-image: url("/system/img/ext/bz2.svg");
+}
+
+.ext-c {
+    background-image: url("/system/img/ext/c.svg");
+}
+
+.ext-cab {
+    background-image: url("/system/img/ext/cab.svg");
+}
+
+.ext-cad {
+    background-image: url("/system/img/ext/cad.svg");
+}
+
+.ext-caf {
+    background-image: url("/system/img/ext/caf.svg");
+}
+
+.ext-cal {
+    background-image: url("/system/img/ext/cal.svg");
+}
+
+.ext-cd {
+    background-image: url("/system/img/ext/cd.svg");
+}
+
+.ext-cer {
+    background-image: url("/system/img/ext/cer.svg");
+}
+
+.ext-cfg {
+    background-image: url("/system/img/ext/cfg.svg");
+}
+
+.ext-cfm {
+    background-image: url("/system/img/ext/cfm.svg");
+}
+
+.ext-cfml {
+    background-image: url("/system/img/ext/cfml.svg");
+}
+
+.ext-cgi {
+    background-image: url("/system/img/ext/cgi.svg");
+}
+
+.ext-class {
+    background-image: url("/system/img/ext/class.svg");
+}
+
+.ext-cmd {
+    background-image: url("/system/img/ext/cmd.svg");
+}
+
+.ext-codekit {
+    background-image: url("/system/img/ext/codekit.svg");
+}
+
+.ext-coffee {
+    background-image: url("/system/img/ext/coffee.svg");
+}
+
+.ext-coffeelintignore {
+    background-image: url("/system/img/ext/coffeelintignore.svg");
+}
+
+.ext-com {
+    background-image: url("/system/img/ext/com.svg");
+}
+
+.ext-compile {
+    background-image: url("/system/img/ext/compile.svg");
+}
+
+.ext-conf {
+    background-image: url("/system/img/ext/conf.svg");
+}
+
+.ext-config {
+    background-image: url("/system/img/ext/config.svg");
+}
+
+.ext-cpp {
+    background-image: url("/system/img/ext/cpp.svg");
+}
+
+.ext-cptx {
+    background-image: url("/system/img/ext/cptx.svg");
+}
+
+.ext-cr2 {
+    background-image: url("/system/img/ext/cr2.svg");
+}
+
+.ext-crdownload {
+    background-image: url("/system/img/ext/crdownload.svg");
+}
+
+.ext-crt {
+    background-image: url("/system/img/ext/crt.svg");
+}
+
+.ext-crypt {
+    background-image: url("/system/img/ext/crypt.svg");
+}
+
+.ext-cs {
+    background-image: url("/system/img/ext/cs.svg");
+}
+
+.ext-csh {
+    background-image: url("/system/img/ext/csh.svg");
+}
+
+.ext-cson {
+    background-image: url("/system/img/ext/cson.svg");
+}
+
+.ext-csproj {
+    background-image: url("/system/img/ext/csproj.svg");
+}
+
+.ext-css {
+    background-image: url("/system/img/ext/css.svg");
+}
+
+.ext-csv {
+    background-image: url("/system/img/ext/csv.svg");
+}
+
+.ext-cue {
+    background-image: url("/system/img/ext/cue.svg");
+}
+
+.ext-dat {
+    background-image: url("/system/img/ext/dat.svg");
+}
+
+.ext-db {
+    background-image: url("/system/img/ext/db.svg");
+}
+
+.ext-dbf {
+    background-image: url("/system/img/ext/dbf.svg");
+}
+
+.ext-deb {
+    background-image: url("/system/img/ext/deb.svg");
+}
+
+.ext-dgn {
+    background-image: url("/system/img/ext/dgn.svg");
+}
+
+.ext-dist {
+    background-image: url("/system/img/ext/dist.svg");
+}
+
+.ext-diz {
+    background-image: url("/system/img/ext/diz.svg");
+}
+
+.ext-dll {
+    background-image: url("/system/img/ext/dll.svg");
+}
+
+.ext-dmg {
+    background-image: url("/system/img/ext/dmg.svg");
+}
+
+.ext-dng {
+    background-image: url("/system/img/ext/dng.svg");
+}
+
+.ext-doc {
+    background-image: url("/system/img/ext/doc.svg");
+}
+
+.ext-docb {
+    background-image: url("/system/img/ext/docb.svg");
+}
+
+.ext-docm {
+    background-image: url("/system/img/ext/docm.svg");
+}
+
+.ext-docx {
+    background-image: url("/system/img/ext/docx.svg");
+}
+
+.ext-dot {
+    background-image: url("/system/img/ext/dot.svg");
+}
+
+.ext-dotm {
+    background-image: url("/system/img/ext/dotm.svg");
+}
+
+.ext-dotx {
+    background-image: url("/system/img/ext/dotx.svg");
+}
+
+.ext-download {
+    background-image: url("/system/img/ext/download.svg");
+}
+
+.ext-dpj {
+    background-image: url("/system/img/ext/dpj.svg");
+}
+
+.ext-ds_store {
+    background-image: url("/system/img/ext/ds_store.svg");
+}
+
+.ext-dtd {
+    background-image: url("/system/img/ext/dtd.svg");
+}
+
+.ext-dwg {
+    background-image: url("/system/img/ext/dwg.svg");
+}
+
+.ext-dxf {
+    background-image: url("/system/img/ext/dxf.svg");
+}
+
+.ext-editorconfig {
+    background-image: url("/system/img/ext/editorconfig.svg");
+}
+
+.ext-el {
+    background-image: url("/system/img/ext/el.svg");
+}
+
+.ext-enc {
+    background-image: url("/system/img/ext/enc.svg");
+}
+
+.ext-eot {
+    background-image: url("/system/img/ext/eot.svg");
+}
+
+.ext-eps {
+    background-image: url("/system/img/ext/eps.svg");
+}
+
+.ext-epub {
+    background-image: url("/system/img/ext/epub.svg");
+}
+
+.ext-eslintignore {
+    background-image: url("/system/img/ext/eslintignore.svg");
+}
+
+.ext-exe {
+    background-image: url("/system/img/ext/exe.svg");
+}
+
+.ext-f4v {
+    background-image: url("/system/img/ext/f4v.svg");
+}
+
+.ext-fax {
+    background-image: url("/system/img/ext/fax.svg");
+}
+
+.ext-fb2 {
+    background-image: url("/system/img/ext/fb2.svg");
+}
+
+.ext-fla {
+    background-image: url("/system/img/ext/fla.svg");
+}
+
+.ext-flac {
+    background-image: url("/system/img/ext/flac.svg");
+}
+
+.ext-flv {
+    background-image: url("/system/img/ext/flv.svg");
+}
+
+.ext-folder {
+    background-image: url("/system/img/ext/folder.svg");
+}
+
+.ext-gadget {
+    background-image: url("/system/img/ext/gadget.svg");
+}
+
+.ext-gdp {
+    background-image: url("/system/img/ext/gdp.svg");
+}
+
+.ext-gem {
+    background-image: url("/system/img/ext/gem.svg");
+}
+
+.ext-gif {
+    background-image: url("/system/img/ext/gif.svg");
+}
+
+.ext-gitattributes {
+    background-image: url("/system/img/ext/gitattributes.svg");
+}
+
+.ext-gitignore {
+    background-image: url("/system/img/ext/gitignore.svg");
+}
+
+.ext-go {
+    background-image: url("/system/img/ext/go.svg");
+}
+
+.ext-gpg {
+    background-image: url("/system/img/ext/gpg.svg");
+}
+
+.ext-gz {
+    background-image: url("/system/img/ext/gz.svg");
+}
+
+.ext-h {
+    background-image: url("/system/img/ext/h.svg");
+}
+
+.ext-handlebars {
+    background-image: url("/system/img/ext/handlebars.svg");
+}
+
+.ext-hbs {
+    background-image: url("/system/img/ext/hbs.svg");
+}
+
+.ext-heic {
+    background-image: url("/system/img/ext/heic.svg");
+}
+
+.ext-hs {
+    background-image: url("/system/img/ext/hs.svg");
+}
+
+.ext-hsl {
+    background-image: url("/system/img/ext/hsl.svg");
+}
+
+.ext-htm {
+    background-image: url("/system/img/ext/htm.svg");
+}
+
+.ext-html {
+    background-image: url("/system/img/ext/html.svg");
+}
+
+.ext-ibooks {
+    background-image: url("/system/img/ext/ibooks.svg");
+}
+
+.ext-icns {
+    background-image: url("/system/img/ext/icns.svg");
+}
+
+.ext-ico {
+    background-image: url("/system/img/ext/ico.svg");
+}
+
+.ext-ics {
+    background-image: url("/system/img/ext/ics.svg");
+}
+
+.ext-idx {
+    background-image: url("/system/img/ext/idx.svg");
+}
+
+.ext-iff {
+    background-image: url("/system/img/ext/iff.svg");
+}
+
+.ext-ifo {
+    background-image: url("/system/img/ext/ifo.svg");
+}
+
+.ext-image {
+    background-image: url("/system/img/ext/image.svg");
+}
+
+.ext-img {
+    background-image: url("/system/img/ext/img.svg");
+}
+
+.ext-in {
+    background-image: url("/system/img/ext/in.svg");
+}
+
+.ext-indd {
+    background-image: url("/system/img/ext/indd.svg");
+}
+
+.ext-inf {
+    background-image: url("/system/img/ext/inf.svg");
+}
+
+.ext-ini {
+    background-image: url("/system/img/ext/ini.svg");
+}
+
+.ext-iso {
+    background-image: url("/system/img/ext/iso.svg");
+}
+
+.ext-j2 {
+    background-image: url("/system/img/ext/j2.svg");
+}
+
+.ext-jar {
+    background-image: url("/system/img/ext/jar.svg");
+}
+
+.ext-java {
+    background-image: url("/system/img/ext/java.svg");
+}
+
+.ext-jpe {
+    background-image: url("/system/img/ext/jpe.svg");
+}
+
+.ext-jpeg {
+    background-image: url("/system/img/ext/jpeg.svg");
+}
+
+.ext-jpg {
+    background-image: url("/system/img/ext/jpg.svg");
+}
+
+.ext-js {
+    background-image: url("/system/img/ext/js.svg");
+}
+
+.ext-json {
+    background-image: url("/system/img/ext/json.svg");
+}
+
+.ext-jsp {
+    background-image: url("/system/img/ext/jsp.svg");
+}
+
+.ext-jsx {
+    background-image: url("/system/img/ext/jsx.svg");
+}
+
+.ext-key {
+    background-image: url("/system/img/ext/key.svg");
+}
+
+.ext-kf8 {
+    background-image: url("/system/img/ext/kf8.svg");
+}
+
+.ext-kmk {
+    background-image: url("/system/img/ext/kmk.svg");
+}
+
+.ext-ksh {
+    background-image: url("/system/img/ext/ksh.svg");
+}
+
+.ext-kup {
+    background-image: url("/system/img/ext/kup.svg");
+}
+
+.ext-less {
+    background-image: url("/system/img/ext/less.svg");
+}
+
+.ext-lex {
+    background-image: url("/system/img/ext/lex.svg");
+}
+
+.ext-licx {
+    background-image: url("/system/img/ext/licx.svg");
+}
+
+.ext-lisp {
+    background-image: url("/system/img/ext/lisp.svg");
+}
+
+.ext-lit {
+    background-image: url("/system/img/ext/lit.svg");
+}
+
+.ext-lnk {
+    background-image: url("/system/img/ext/lnk.svg");
+}
+
+.ext-lock {
+    background-image: url("/system/img/ext/lock.svg");
+}
+
+.ext-log {
+    background-image: url("/system/img/ext/log.svg");
+}
+
+.ext-lua {
+    background-image: url("/system/img/ext/lua.svg");
+}
+
+.ext-m {
+    background-image: url("/system/img/ext/m.svg");
+}
+
+.ext-m2v {
+    background-image: url("/system/img/ext/m2v.svg");
+}
+
+.ext-m3u {
+    background-image: url("/system/img/ext/m3u.svg");
+}
+
+.ext-m3u8 {
+    background-image: url("/system/img/ext/m3u8.svg");
+}
+
+.ext-m4 {
+    background-image: url("/system/img/ext/m4.svg");
+}
+
+.ext-m4a {
+    background-image: url("/system/img/ext/m4a.svg");
+}
+
+.ext-m4r {
+    background-image: url("/system/img/ext/m4r.svg");
+}
+
+.ext-m4v {
+    background-image: url("/system/img/ext/m4v.svg");
+}
+
+.ext-map {
+    background-image: url("/system/img/ext/map.svg");
+}
+
+.ext-master {
+    background-image: url("/system/img/ext/master.svg");
+}
+
+.ext-mc {
+    background-image: url("/system/img/ext/mc.svg");
+}
+
+.ext-md {
+    background-image: url("/system/img/ext/md.svg");
+}
+
+.ext-mdb {
+    background-image: url("/system/img/ext/mdb.svg");
+}
+
+.ext-mdf {
+    background-image: url("/system/img/ext/mdf.svg");
+}
+
+.ext-me {
+    background-image: url("/system/img/ext/me.svg");
+}
+
+.ext-mi {
+    background-image: url("/system/img/ext/mi.svg");
+}
+
+.ext-mid {
+    background-image: url("/system/img/ext/mid.svg");
+}
+
+.ext-midi {
+    background-image: url("/system/img/ext/midi.svg");
+}
+
+.ext-mk {
+    background-image: url("/system/img/ext/mk.svg");
+}
+
+.ext-mkv {
+    background-image: url("/system/img/ext/mkv.svg");
+}
+
+.ext-mm {
+    background-image: url("/system/img/ext/mm.svg");
+}
+
+.ext-mo {
+    background-image: url("/system/img/ext/mo.svg");
+}
+
+.ext-mobi {
+    background-image: url("/system/img/ext/mobi.svg");
+}
+
+.ext-mod {
+    background-image: url("/system/img/ext/mod.svg");
+}
+
+.ext-mov {
+    background-image: url("/system/img/ext/mov.svg");
+}
+
+.ext-mp2 {
+    background-image: url("/system/img/ext/mp2.svg");
+}
+
+.ext-mp3 {
+    background-image: url("/system/img/ext/mp3.svg");
+}
+
+.ext-mp4 {
+    background-image: url("/system/img/ext/mp4.svg");
+}
+
+.ext-mpa {
+    background-image: url("/system/img/ext/mpa.svg");
+}
+
+.ext-mpd {
+    background-image: url("/system/img/ext/mpd.svg");
+}
+
+.ext-mpe {
+    background-image: url("/system/img/ext/mpe.svg");
+}
+
+.ext-mpeg {
+    background-image: url("/system/img/ext/mpeg.svg");
+}
+
+.ext-mpg {
+    background-image: url("/system/img/ext/mpg.svg");
+}
+
+.ext-mpga {
+    background-image: url("/system/img/ext/mpga.svg");
+}
+
+.ext-mpp {
+    background-image: url("/system/img/ext/mpp.svg");
+}
+
+.ext-mpt {
+    background-image: url("/system/img/ext/mpt.svg");
+}
+
+.ext-msi {
+    background-image: url("/system/img/ext/msi.svg");
+}
+
+.ext-msu {
+    background-image: url("/system/img/ext/msu.svg");
+}
+
+.ext-nef {
+    background-image: url("/system/img/ext/nef.svg");
+}
+
+.ext-nes {
+    background-image: url("/system/img/ext/nes.svg");
+}
+
+.ext-nfo {
+    background-image: url("/system/img/ext/nfo.svg");
+}
+
+.ext-nix {
+    background-image: url("/system/img/ext/nix.svg");
+}
+
+.ext-npmignore {
+    background-image: url("/system/img/ext/npmignore.svg");
+}
+
+.ext-odb {
+    background-image: url("/system/img/ext/odb.svg");
+}
+
+.ext-ods {
+    background-image: url("/system/img/ext/ods.svg");
+}
+
+.ext-odt {
+    background-image: url("/system/img/ext/odt.svg");
+}
+
+.ext-ogg {
+    background-image: url("/system/img/ext/ogg.svg");
+}
+
+.ext-ogv {
+    background-image: url("/system/img/ext/ogv.svg");
+}
+
+.ext-ost {
+    background-image: url("/system/img/ext/ost.svg");
+}
+
+.ext-otf {
+    background-image: url("/system/img/ext/otf.svg");
+}
+
+.ext-ott {
+    background-image: url("/system/img/ext/ott.svg");
+}
+
+.ext-ova {
+    background-image: url("/system/img/ext/ova.svg");
+}
+
+.ext-ovf {
+    background-image: url("/system/img/ext/ovf.svg");
+}
+
+.ext-p12 {
+    background-image: url("/system/img/ext/p12.svg");
+}
+
+.ext-p7b {
+    background-image: url("/system/img/ext/p7b.svg");
+}
+
+.ext-pages {
+    background-image: url("/system/img/ext/pages.svg");
+}
+
+.ext-part {
+    background-image: url("/system/img/ext/part.svg");
+}
+
+.ext-pcd {
+    background-image: url("/system/img/ext/pcd.svg");
+}
+
+.ext-pdb {
+    background-image: url("/system/img/ext/pdb.svg");
+}
+
+.ext-pdf {
+    background-image: url("/system/img/ext/pdf.svg");
+}
+
+.ext-pem {
+    background-image: url("/system/img/ext/pem.svg");
+}
+
+.ext-pfx {
+    background-image: url("/system/img/ext/pfx.svg");
+}
+
+.ext-pgp {
+    background-image: url("/system/img/ext/pgp.svg");
+}
+
+.ext-ph {
+    background-image: url("/system/img/ext/ph.svg");
+}
+
+.ext-phar {
+    background-image: url("/system/img/ext/phar.svg");
+}
+
+.ext-php {
+    background-image: url("/system/img/ext/php.svg");
+}
+
+.ext-pkg {
+    background-image: url("/system/img/ext/pkg.svg");
+}
+
+.ext-pl {
+    background-image: url("/system/img/ext/pl.svg");
+}
+
+.ext-plist {
+    background-image: url("/system/img/ext/plist.svg");
+}
+
+.ext-pm {
+    background-image: url("/system/img/ext/pm.svg");
+}
+
+.ext-png {
+    background-image: url("/system/img/ext/png.svg");
+}
+
+.ext-po {
+    background-image: url("/system/img/ext/po.svg");
+}
+
+.ext-pom {
+    background-image: url("/system/img/ext/pom.svg");
+}
+
+.ext-pot {
+    background-image: url("/system/img/ext/pot.svg");
+}
+
+.ext-potx {
+    background-image: url("/system/img/ext/potx.svg");
+}
+
+.ext-pps {
+    background-image: url("/system/img/ext/pps.svg");
+}
+
+.ext-ppsx {
+    background-image: url("/system/img/ext/ppsx.svg");
+}
+
+.ext-ppt {
+    background-image: url("/system/img/ext/ppt.svg");
+}
+
+.ext-pptm {
+    background-image: url("/system/img/ext/pptm.svg");
+}
+
+.ext-pptx {
+    background-image: url("/system/img/ext/pptx.svg");
+}
+
+.ext-prop {
+    background-image: url("/system/img/ext/prop.svg");
+}
+
+.ext-ps {
+    background-image: url("/system/img/ext/ps.svg");
+}
+
+.ext-ps1 {
+    background-image: url("/system/img/ext/ps1.svg");
+}
+
+.ext-psd {
+    background-image: url("/system/img/ext/psd.svg");
+}
+
+.ext-psp {
+    background-image: url("/system/img/ext/psp.svg");
+}
+
+.ext-pst {
+    background-image: url("/system/img/ext/pst.svg");
+}
+
+.ext-pub {
+    background-image: url("/system/img/ext/pub.svg");
+}
+
+.ext-py {
+    background-image: url("/system/img/ext/py.svg");
+}
+
+.ext-pyc {
+    background-image: url("/system/img/ext/pyc.svg");
+}
+
+.ext-qt {
+    background-image: url("/system/img/ext/qt.svg");
+}
+
+.ext-ra {
+    background-image: url("/system/img/ext/ra.svg");
+}
+
+.ext-ram {
+    background-image: url("/system/img/ext/ram.svg");
+}
+
+.ext-rar {
+    background-image: url("/system/img/ext/rar.svg");
+}
+
+.ext-raw {
+    background-image: url("/system/img/ext/raw.svg");
+}
+
+.ext-rb {
+    background-image: url("/system/img/ext/rb.svg");
+}
+
+.ext-rdf {
+    background-image: url("/system/img/ext/rdf.svg");
+}
+
+.ext-resx {
+    background-image: url("/system/img/ext/resx.svg");
+}
+
+.ext-retry {
+    background-image: url("/system/img/ext/retry.svg");
+}
+
+.ext-rm {
+    background-image: url("/system/img/ext/rm.svg");
+}
+
+.ext-rom {
+    background-image: url("/system/img/ext/rom.svg");
+}
+
+.ext-rpm {
+    background-image: url("/system/img/ext/rpm.svg");
+}
+
+.ext-rsa {
+    background-image: url("/system/img/ext/rsa.svg");
+}
+
+.ext-rss {
+    background-image: url("/system/img/ext/rss.svg");
+}
+
+.ext-rtf {
+    background-image: url("/system/img/ext/rtf.svg");
+}
+
+.ext-ru {
+    background-image: url("/system/img/ext/ru.svg");
+}
+
+.ext-rub {
+    background-image: url("/system/img/ext/rub.svg");
+}
+
+.ext-sass {
+    background-image: url("/system/img/ext/sass.svg");
+}
+
+.ext-scss {
+    background-image: url("/system/img/ext/scss.svg");
+}
+
+.ext-sdf {
+    background-image: url("/system/img/ext/sdf.svg");
+}
+
+.ext-sed {
+    background-image: url("/system/img/ext/sed.svg");
+}
+
+.ext-sh {
+    background-image: url("/system/img/ext/sh.svg");
+}
+
+.ext-sitemap {
+    background-image: url("/system/img/ext/sitemap.svg");
+}
+
+.ext-skin {
+    background-image: url("/system/img/ext/skin.svg");
+}
+
+.ext-sldm {
+    background-image: url("/system/img/ext/sldm.svg");
+}
+
+.ext-sldx {
+    background-image: url("/system/img/ext/sldx.svg");
+}
+
+.ext-sln {
+    background-image: url("/system/img/ext/sln.svg");
+}
+
+.ext-sol {
+    background-image: url("/system/img/ext/sol.svg");
+}
+
+.ext-sql {
+    background-image: url("/system/img/ext/sql.svg");
+}
+
+.ext-sqlite {
+    background-image: url("/system/img/ext/sqlite.svg");
+}
+
+.ext-step {
+    background-image: url("/system/img/ext/step.svg");
+}
+
+.ext-stl {
+    background-image: url("/system/img/ext/stl.svg");
+}
+
+.ext-svg {
+    background-image: url("/system/img/ext/svg.svg");
+}
+
+.ext-swd {
+    background-image: url("/system/img/ext/swd.svg");
+}
+
+.ext-swf {
+    background-image: url("/system/img/ext/swf.svg");
+}
+
+.ext-swift {
+    background-image: url("/system/img/ext/swift.svg");
+}
+
+.ext-sys {
+    background-image: url("/system/img/ext/sys.svg");
+}
+
+.ext-tar {
+    background-image: url("/system/img/ext/tar.svg");
+}
+
+.ext-tcsh {
+    background-image: url("/system/img/ext/tcsh.svg");
+}
+
+.ext-tex {
+    background-image: url("/system/img/ext/tex.svg");
+}
+
+.ext-tfignore {
+    background-image: url("/system/img/ext/tfignore.svg");
+}
+
+.ext-tga {
+    background-image: url("/system/img/ext/tga.svg");
+}
+
+.ext-tgz {
+    background-image: url("/system/img/ext/tgz.svg");
+}
+
+.ext-tif {
+    background-image: url("/system/img/ext/tif.svg");
+}
+
+.ext-tiff {
+    background-image: url("/system/img/ext/tiff.svg");
+}
+
+.ext-tmp {
+    background-image: url("/system/img/ext/tmp.svg");
+}
+
+.ext-torrent {
+    background-image: url("/system/img/ext/torrent.svg");
+}
+
+.ext-ts {
+    background-image: url("/system/img/ext/ts.svg");
+}
+
+.ext-tsv {
+    background-image: url("/system/img/ext/tsv.svg");
+}
+
+.ext-ttf {
+    background-image: url("/system/img/ext/ttf.svg");
+}
+
+.ext-twig {
+    background-image: url("/system/img/ext/twig.svg");
+}
+
+.ext-txt {
+    background-image: url("/system/img/ext/txt.svg");
+}
+
+.ext-udf {
+    background-image: url("/system/img/ext/udf.svg");
+}
+
+.ext-vb {
+    background-image: url("/system/img/ext/vb.svg");
+}
+
+.ext-vbproj {
+    background-image: url("/system/img/ext/vbproj.svg");
+}
+
+.ext-vbs {
+    background-image: url("/system/img/ext/vbs.svg");
+}
+
+.ext-vcd {
+    background-image: url("/system/img/ext/vcd.svg");
+}
+
+.ext-vcs {
+    background-image: url("/system/img/ext/vcs.svg");
+}
+
+.ext-vdi {
+    background-image: url("/system/img/ext/vdi.svg");
+}
+
+.ext-vdx {
+    background-image: url("/system/img/ext/vdx.svg");
+}
+
+.ext-vmdk {
+    background-image: url("/system/img/ext/vmdk.svg");
+}
+
+.ext-vob {
+    background-image: url("/system/img/ext/vob.svg");
+}
+
+.ext-vscodeignore {
+    background-image: url("/system/img/ext/vscodeignore.svg");
+}
+
+.ext-vsd {
+    background-image: url("/system/img/ext/vsd.svg");
+}
+
+.ext-vss {
+    background-image: url("/system/img/ext/vss.svg");
+}
+
+.ext-vst {
+    background-image: url("/system/img/ext/vst.svg");
+}
+
+.ext-vsx {
+    background-image: url("/system/img/ext/vsx.svg");
+}
+
+.ext-vtx {
+    background-image: url("/system/img/ext/vtx.svg");
+}
+
+.ext-war {
+    background-image: url("/system/img/ext/war.svg");
+}
+
+.ext-wav {
+    background-image: url("/system/img/ext/wav.svg");
+}
+
+.ext-wbk {
+    background-image: url("/system/img/ext/wbk.svg");
+}
+
+.ext-webinfo {
+    background-image: url("/system/img/ext/webinfo.svg");
+}
+
+.ext-webm {
+    background-image: url("/system/img/ext/webm.svg");
+}
+
+.ext-webp {
+    background-image: url("/system/img/ext/webp.svg");
+}
+
+.ext-wma {
+    background-image: url("/system/img/ext/wma.svg");
+}
+
+.ext-wmf {
+    background-image: url("/system/img/ext/wmf.svg");
+}
+
+.ext-wmv {
+    background-image: url("/system/img/ext/wmv.svg");
+}
+
+.ext-woff {
+    background-image: url("/system/img/ext/woff.svg");
+}
+
+.ext-woff2 {
+    background-image: url("/system/img/ext/woff2.svg");
+}
+
+.ext-wps {
+    background-image: url("/system/img/ext/wps.svg");
+}
+
+.ext-wsf {
+    background-image: url("/system/img/ext/wsf.svg");
+}
+
+.ext-xaml {
+    background-image: url("/system/img/ext/xaml.svg");
+}
+
+.ext-xcf {
+    background-image: url("/system/img/ext/xcf.svg");
+}
+
+.ext-xlm {
+    background-image: url("/system/img/ext/xlm.svg");
+}
+
+.ext-xls {
+    background-image: url("/system/img/ext/xls.svg");
+}
+
+.ext-xlsm {
+    background-image: url("/system/img/ext/xlsm.svg");
+}
+
+.ext-xlsx {
+    background-image: url("/system/img/ext/xlsx.svg");
+}
+
+.ext-xlt {
+    background-image: url("/system/img/ext/xlt.svg");
+}
+
+.ext-xltm {
+    background-image: url("/system/img/ext/xltm.svg");
+}
+
+.ext-xltx {
+    background-image: url("/system/img/ext/xltx.svg");
+}
+
+.ext-xml {
+    background-image: url("/system/img/ext/xml.svg");
+}
+
+.ext-xpi {
+    background-image: url("/system/img/ext/xpi.svg");
+}
+
+.ext-xps {
+    background-image: url("/system/img/ext/xps.svg");
+}
+
+.ext-xrb {
+    background-image: url("/system/img/ext/xrb.svg");
+}
+
+.ext-xsd {
+    background-image: url("/system/img/ext/xsd.svg");
+}
+
+.ext-xsl {
+    background-image: url("/system/img/ext/xsl.svg");
+}
+
+.ext-xspf {
+    background-image: url("/system/img/ext/xspf.svg");
+}
+
+.ext-xz {
+    background-image: url("/system/img/ext/xz.svg");
+}
+
+.ext-yaml {
+    background-image: url("/system/img/ext/yaml.svg");
+}
+
+.ext-yml {
+    background-image: url("/system/img/ext/yml.svg");
+}
+
+.ext-z {
+    background-image: url("/system/img/ext/z.svg");
+}
+
+.ext-zip {
+    background-image: url("/system/img/ext/zip.svg");
+}
+
+.ext-zsh {
+    background-image: url("/system/img/ext/zsh.svg");
+}
