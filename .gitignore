@@ -228,3 +228,4 @@ system/database.pdo.php
 plugins/hybridauth/*
 plugins/smtp/log/*
 plugins/thanks/*
+plugins/forumlock/*
