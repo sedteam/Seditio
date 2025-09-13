@@ -17,6 +17,13 @@ Description=Ajax Interface
 
 if (!defined('SED_CODE')) exit();
 
+if (!sed_is_ajax()) {
+    header("Content-type: application/json; charset=UTF-8");
+    http_response_code(403);
+    echo json_encode(['error' => 'Access denied. Invalid Seditio AJAX header.']);
+    exit;
+}
+
 $location = 'Ajax';
 $z = 'ajax';
 

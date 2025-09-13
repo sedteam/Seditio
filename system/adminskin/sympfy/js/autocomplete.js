@@ -577,7 +577,9 @@
 
                     xhr.open(options.type, serviceUrl + (params ? separator + serializeParams(params) : ''), true);
 
-                    if (options.dataType === 'json') {
+                    xhr.setRequestHeader('X-Seditio-Ajax', 'good-seditio-ajax');
+					
+					if (options.dataType === 'json') {
                         xhr.setRequestHeader('Accept', 'application/json');
                     }
 

@@ -252,6 +252,12 @@ function sed_get_latestpolls($limit, $mask)
 
 	// -- AJAX Poll vote
 	if ($ajax && $cfg['ajax'] && $a == "send") {
+		
+		if (!sed_is_ajax()) {
+			sed_die(true, 404);
+			exit;
+		}			
+		
 		if (!empty($id) && !empty($vote)) {
 			if ($usr['id'] > 0) {
 				$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='" . $usr['id'] . "' OR pv_userip='" . $usr['ip'] . "') LIMIT 1");

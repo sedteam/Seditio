@@ -83,6 +83,12 @@ if (empty($id) || $id == 'viewall') {
 			$alreadyvoted = (sed_sql_numrows($sql2) > 0) ? 1 : 0;
 
 			if ($a == 'send' && empty($error_string) && !$alreadyvoted) {
+				
+				if ($ajax && !sed_is_ajax()) {
+					sed_die(true, 404);
+					exit;
+				}				
+				
 				$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='$vote'");
 				if (sed_sql_affectedrows() == 1) {
 					$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (" . (int)$id . ", " . (int)$usr['id'] . ", '" . $usr['ip'] . "')");

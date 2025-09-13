@@ -432,7 +432,10 @@ var sedjs = {
 
         // Initialize the request
         xhr.open(method, url, settings.async);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // Indicate AJAX request
+		
+		// Indicate AJAX request
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
+		xhr.setRequestHeader('X-Seditio-Ajax', 'good-seditio-ajax');
 
         // Set Content-Type header based on data type and settings
         if (!isGet) {

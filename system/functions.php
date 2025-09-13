@@ -1479,6 +1479,11 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM " . $db_rated . " WHERE rated_userid=" . $usr['id'] . " AND rated_code = '" . sed_sql_prep($code) . "'"), 0, 'COUNT(*)');
 
 	if ($ina == 'send' && $newrate >= 1 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0 && $allow) {
+		
+		if ($ajax && !sed_is_ajax()) {
+			sed_die(true, 404);
+			exit;
+		}		
 
 		$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
 
@@ -3591,6 +3596,16 @@ function sed_is_ssl()   // New in 175
 		return true;
 	}
 	return false;
+}
+
+/** 
+ * Check X_SEDITIO_AJAX in headers
+ * 
+ * @return bool
+ */
+function sed_is_ajax() {
+    return isset($_SERVER['HTTP_X_SEDITIO_AJAX']) 
+           && $_SERVER['HTTP_X_SEDITIO_AJAX'] === 'good-seditio-ajax';
 }
 
 /** 
