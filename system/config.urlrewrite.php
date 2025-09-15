@@ -31,7 +31,7 @@ $sed_urlrewrite = array(
 
      /*  Resizer rewriting */
      array(
-          'cond' => '#^/datas/resized/(.+)#',
+          'cond' => '#^/datas/resized/([a-zA-Z0-9_/.-]+\.(?:jpg|jpeg|png|gif|webp))$#',
           'rule' => 'system/core/resizer/resizer.php?file=$1'
      ),
 

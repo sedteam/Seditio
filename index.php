@@ -47,6 +47,11 @@ foreach ($sed_urlrewrite as $val) {
 
     $url = urldecode($url);
 
+    if (strpos($url, '../') !== false || strpos($url, '..\\') !== false) {
+      header("HTTP/1.1 403 Forbidden");
+      exit;
+    }
+
     if (($pos = mb_strpos($url, "?")) !== false) {
       $params = mb_substr($url, $pos + 1);
       parse_str($params, $vars);
