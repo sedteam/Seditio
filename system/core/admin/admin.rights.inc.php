@@ -242,7 +242,7 @@ if ($advanced) {
 }
 
 while ($row = sed_sql_fetcharray($sql3)) {
-	$link = sed_url("admin", "m=page");
+	$link = sed_url("admin", "m=page&mn=structure&n=options&id=" . $sed_cat[$row['auth_option']]['id'] . "&" . sed_xg());
 	$title = $sed_cat[$row['auth_option']]['tpath'];
 	sed_rights_parseline($row, $title, $link);
 }
