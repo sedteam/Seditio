@@ -84,7 +84,7 @@ if (empty($id) || $id == 'viewall') {
 
 			if ($a == 'send' && empty($error_string) && !$alreadyvoted) {
 				
-				if ($ajax && !sed_is_ajax()) {
+				if ($ajax && !sed_check_csrf()) {
 					sed_die(true, 404);
 					exit;
 				}				

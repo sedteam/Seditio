@@ -253,7 +253,7 @@ function sed_get_latestpolls($limit, $mask)
 	// -- AJAX Poll vote
 	if ($ajax && $cfg['ajax'] && $a == "send") {
 		
-		if (!sed_is_ajax()) {
+		if (!sed_check_csrf()) {
 			sed_die(true, 404);
 			exit;
 		}			

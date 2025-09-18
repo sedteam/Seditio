@@ -577,7 +577,7 @@
 
                     xhr.open(options.type, serviceUrl + (params ? separator + serializeParams(params) : ''), true);
 
-                    xhr.setRequestHeader('X-Seditio-Ajax', 'good-seditio-ajax');
+					xhr.setRequestHeader('X-Seditio-Csrf', document.querySelector('meta[name="csrf-token"]').content || '');
 					
 					if (options.dataType === 'json') {
                         xhr.setRequestHeader('Accept', 'application/json');

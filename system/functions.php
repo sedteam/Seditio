@@ -1480,7 +1480,7 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 
 	if ($ina == 'send' && $newrate >= 1 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0 && $allow) {
 		
-		if ($ajax && !sed_is_ajax()) {
+		if ($ajax && !sed_check_csrf()) {
 			sed_die(true, 404);
 			exit;
 		}		
@@ -2101,6 +2101,16 @@ function sed_cc($text, $ent_quotes = null, $bbmode = FALSE)
 		);
 		return ($text);
 	}
+}
+
+/** 
+ * Check CSRF token in headers
+ * 
+ * @return bool
+ */
+function sed_check_csrf() {
+    $csrf = isset($_SERVER['HTTP_X_SEDITIO_CSRF']) ? $_SERVER['HTTP_X_SEDITIO_CSRF'] : '';
+    return $csrf === sed_sourcekey();
 }
 
 /** 
@@ -2929,6 +2939,7 @@ function sed_htmlmetas($description = '', $keywords = '', $robots_index = 1, $ro
     <meta name=\"robots\" content=\"" . $robots . "\" />
     <meta name=\"generator\" content=\"Seditio CMS https://seditio.org\" />
     <meta http-equiv=\"last-modified\" content=\"" . gmdate("D, d M Y H:i:s") . " GMT\" />
+	<meta name=\"csrf-token\" content=\"" . sed_sourcekey() . "\" />
     <link rel=\"shortcut icon\" href=\"favicon.ico\" />";
 	return ($result);
 }
@@ -3596,16 +3607,6 @@ function sed_is_ssl()   // New in 175
 		return true;
 	}
 	return false;
-}
-
-/** 
- * Check X_SEDITIO_AJAX in headers
- * 
- * @return bool
- */
-function sed_is_ajax() {
-    return isset($_SERVER['HTTP_X_SEDITIO_AJAX']) 
-           && $_SERVER['HTTP_X_SEDITIO_AJAX'] === 'good-seditio-ajax';
 }
 
 /** 

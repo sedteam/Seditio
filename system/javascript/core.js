@@ -435,7 +435,7 @@ var sedjs = {
 		
 		// Indicate AJAX request
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
-		xhr.setRequestHeader('X-Seditio-Ajax', 'good-seditio-ajax');
+		xhr.setRequestHeader('X-Seditio-Csrf', document.querySelector('meta[name="csrf-token"]').content || '');
 
         // Set Content-Type header based on data type and settings
         if (!isGet) {

@@ -17,19 +17,19 @@ Description=Ajax Interface
 
 if (!defined('SED_CODE')) exit();
 
-if (!sed_is_ajax()) {
-    header("Content-type: application/json; charset=UTF-8");
-    http_response_code(403);
-    echo json_encode(['error' => 'Access denied. Invalid Seditio AJAX header.']);
-    exit;
-}
-
 $location = 'Ajax';
 $z = 'ajax';
 
 require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/datas/config.php');
 require(SED_ROOT . '/system/common.php');
+
+if (!sed_check_csrf()) {
+    header("Content-type: application/json; charset=UTF-8");
+    http_response_code(403);
+    echo json_encode(['error' => 'Access denied. Invalid CSRF AJAX header.']);
+    exit;
+}
 
 $query = sed_import('query', 'G', 'TXT');
 $query = sed_sql_prep($query);
