@@ -2927,7 +2927,7 @@ function sed_htmlmetas($description = '', $keywords = '', $robots_index = 1, $ro
     <meta name=\"description\" content=\"" . $description . "\" />
     <meta name=\"keywords\" content=\"" . $keywords . "\" />
     <meta name=\"robots\" content=\"" . $robots . "\" />
-    <meta name=\"generator\" content=\"Seditio by Neocrome & Seditio Team https://seditio.org\" />
+    <meta name=\"generator\" content=\"Seditio CMS https://seditio.org\" />
     <meta http-equiv=\"last-modified\" content=\"" . gmdate("D, d M Y H:i:s") . " GMT\" />
     <link rel=\"shortcut icon\" href=\"favicon.ico\" />";
 	return ($result);
@@ -5259,7 +5259,8 @@ function sed_sourcekey()
 {
 	global $usr;
 
-	$result = ($usr['id'] > 0) ? mb_strtoupper(mb_substr($usr['sessionid'], 0, 6)) : 'GUEST';
+	$sourcekey = mb_strtoupper(mb_substr($usr['sourcekey'], 0, 6));
+	$result = ($usr['id'] > 0) ? $sourcekey : 'GUEST_'.$sourcekey;
 	return ($result);
 }
 

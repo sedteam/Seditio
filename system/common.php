@@ -183,6 +183,11 @@ $usr['messages'] = 0;
 
 session_start();
 
+if (empty($_SESSION['guest_sourcekey'])) {
+	$_SESSION['guest_sourcekey'] = md5(sed_unique(16));
+}
+$usr['sourcekey'] = $_SESSION['guest_sourcekey'];
+
 if (isset($_SESSION[$sys['site_id'] . '_n']) && ($cfg['authmode'] == 2 || $cfg['authmode'] == 3)) {
 	$rsedition = $_SESSION[$sys['site_id'] . '_n'];
 	$rseditiop = $_SESSION[$sys['site_id'] . '_p'];
@@ -210,6 +215,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 		if ($row['user_maingrp'] > 3) {
 			$usr['id'] = $row['user_id'];
 			$usr['sessionid'] = ($cfg['authmode'] == 1) ? sed_hash($row['user_lastvisit'], 2) : sed_hash($row['user_secret'], 2);
+			$usr['sourcekey'] = md5($row['user_secret'] . $row['user_lastvisit']);
 			$usr['name'] = $row['user_name'];
 			$usr['maingrp'] = $row['user_maingrp'];
 			$usr['lastvisit'] = $row['user_lastvisit'];
