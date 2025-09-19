@@ -150,7 +150,7 @@ function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
         if ($width > 0 || $height > 0) {
-            $resized_filename = $file . '.' . $type . ($width > 0 ? $width : '') . 'x' . ($height > 0 ? $height : '') . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
+            $resized_filename = $file . '.' . $type . $width . 'x' . $height . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
         } else {
             // TODO fix this option does not work now
             $resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
@@ -166,7 +166,7 @@ function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $
 function sed_get_resize_params($filename)
 {
     // Determining the resize parameters
-    if (!preg_match('/(.+)\.(resize|crop)?([0-9]*)x([0-9]*)(w)?\.([^\.]+)(\.webp)?$/', $filename, $matches)) {
+    if (!preg_match('/(.+)\.(resize|crop)([0-9]+)x([0-9]+)(w)?\.([^\.]+)(\.webp)?$/', $filename, $matches)) {
         return false;
     }
 
