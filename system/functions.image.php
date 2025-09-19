@@ -65,7 +65,6 @@ function sed_resize($filename)
         $cfg['available_image_sizes'] = array();
     }
 
-
     $check_ais = (count($cfg['available_image_sizes']) > 0) ? in_array($size, $cfg['available_image_sizes']) : TRUE;
 
     if (!file_exists($originals_dir . $original_file) || empty($original_file) || !$check_ais) {
@@ -186,19 +185,22 @@ function sed_get_resize_params($filename)
  * Processes an image using the GD library, supporting resizing, cropping, and watermarking.
  *
  * This function handles the low-level image manipulation using GD. It supports proportional
- * resizing when $max_h is 0, or exact dimensions when both $max_w and $max_h are specified.
+ * resizing when $max_w or $max_h is 0, or exact dimensions when both are specified. For crop,
+ * it scales proportionally to fit the target dimensions before cropping.
  *
  * @param string $src_file Path to the source image file.
  * @param string $dst_file Path to the destination image file.
  * @param string $type Processing type: 'resize' or 'crop'.
  * @param int $max_w Maximum or exact width of the output image.
  * @param int $max_h Maximum or exact height of the output image (0 for proportional resizing).
+ * @param int $quality JPEG quality percentage (0-100).
  * @param string|null $watermark Path to the watermark image file (optional).
  * @param int $watermark_offset_x Horizontal offset for watermark placement (pixels).
  * @param int $watermark_offset_y Vertical offset for watermark placement (pixels).
  * @param int $watermark_opacity Watermark opacity percentage (0-100).
- * @param string $watermark_postition Watermark position (e.g., 'Top left', 'Bottom right').
+ * @param string $watermark_position Watermark position (e.g., 'Top left', 'Bottom right').
  * @param bool $use_webp Whether to save the output as WebP instead of the original format.
+ * @param string $dim_priority Dimension to prioritize when resizing ('Width' or 'Height').
  * @return bool True on success, false on failure.
  */
 function sed_image_constrain_gd(
@@ -212,7 +214,7 @@ function sed_image_constrain_gd(
     $watermark_offset_x = 0,
     $watermark_offset_y = 0,
     $watermark_opacity = 100,
-    $watermark_postition = '',
+    $watermark_position = '',
     $use_webp = false,
     $dim_priority = 'Width'
 ) {
@@ -263,10 +265,14 @@ function sed_image_constrain_gd(
     }
 
     // Determine output dimensions:
-    // If $max_h is 0, calculate proportional dimensions using sed_calc_contrain_size (for $keepratio = true);
-    // otherwise, use $max_w and $max_h directly as exact dimensions (for $keepratio = false)
-    if ($max_h == 0) {
-        @list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type, $dim_priority);
+    // For crop: always calculate proportional dimensions to fit $max_w x $max_h.
+    // For resize: if $max_w or $max_h is 0, calculate proportional dimensions; otherwise, stretch.
+    if ($type == 'crop') {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type, $dim_priority);
+    } elseif ($max_w == 0 && $max_h > 0) {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', 'Height');
+    } elseif ($max_h == 0) {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', $dim_priority);
     } else {
         $dst_w = $max_w;
         $dst_h = $max_h;
@@ -284,14 +290,15 @@ function sed_image_constrain_gd(
     // Resample source image into destination canvas
     imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
 
-    // Apply cropping if requested
-    if ($type == 'crop') {
+    // Apply cropping if requested and both $max_w and $max_h are non-zero
+    if ($type == 'crop' && $max_w > 0 && $max_h > 0) {
         $x0 = ($dst_w - $max_w) / 2;
         $y0 = ($dst_h - $max_h) / 2;
         $_dst_img = imagecreatetruecolor($max_w, $max_h);
         imagealphablending($_dst_img, false);
         imagesavealpha($_dst_img, true);
         imagecopy($_dst_img, $dst_img, 0, 0, (int)$x0, (int)$y0, $max_w, $max_h);
+        imagedestroy($dst_img);
         $dst_img = $_dst_img;
         $dst_w = $max_w;
         $dst_h = $max_h;
@@ -303,7 +310,7 @@ function sed_image_constrain_gd(
         $owidth = imagesx($overlay);
         $oheight = imagesy($overlay);
 
-        switch ($watermark_postition) {
+        switch ($watermark_position) {
             case 'Top left':
                 $watermark_x = $watermark_offset_x;
                 $watermark_y = $watermark_offset_y;
@@ -327,6 +334,7 @@ function sed_image_constrain_gd(
         }
 
         sed_imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity);
+        imagedestroy($overlay);
     }
 
     // Adjust quality for PNG if not using WebP
@@ -367,21 +375,23 @@ function sed_image_constrain_gd(
  * Processes an image using the Imagick library, supporting resizing, cropping, and watermarking.
  *
  * This function handles image manipulation with Imagick, offering proportional resizing when
- * $max_h is 0, or exact dimensions when both $max_w and $max_h are provided. It also supports
- * sharpening and WebP output.
+ * $max_w or $max_h is 0, or stretching to exact dimensions when both are provided. For crop,
+ * it scales proportionally to fit the target dimensions before cropping.
  *
  * @param string $src_file Path to the source image file.
  * @param string $dst_file Path to the destination image file.
  * @param string $type Processing type: 'resize' or 'crop'.
  * @param int $max_w Maximum or exact width of the output image.
  * @param int $max_h Maximum or exact height of the output image (0 for proportional resizing).
+ * @param int $quality JPEG quality percentage (0-100).
  * @param string|null $watermark Path to the watermark image file (optional).
  * @param int $watermark_offset_x Horizontal offset for watermark placement (pixels).
  * @param int $watermark_offset_y Vertical offset for watermark placement (pixels).
  * @param int $watermark_opacity Watermark opacity percentage (0-100).
- * @param string $watermark_postition Watermark position (e.g., 'Top left', 'Bottom right').
+ * @param string $watermark_position Watermark position (e.g., 'Top left', 'Bottom right').
  * @param float $sharpen Sharpening factor for Imagick (default 0.2).
  * @param bool $use_webp Whether to save the output as WebP instead of the original format.
+ * @param string $dim_priority Dimension to prioritize when resizing ('Width' or 'Height').
  * @return bool True on success, false on failure.
  */
 function sed_image_constrain_imagick(
@@ -395,7 +405,7 @@ function sed_image_constrain_imagick(
     $watermark_offset_x = 0,
     $watermark_offset_y = 0,
     $watermark_opacity = 100,
-    $watermark_postition = '',
+    $watermark_position = '',
     $sharpen = 0.2,
     $use_webp = false,
     $dim_priority = 'Width'
@@ -420,31 +430,36 @@ function sed_image_constrain_imagick(
     $src_w = $thumb->getImageWidth();
     $src_h = $thumb->getImageHeight();
 
-    // Skip processing if no watermark and image is within bounds
-    if (!$watermark && ($src_w <= $max_w) && ($src_h <= $max_h)) {
+    // Skip processing if no watermark and image is within bounds (resize only)
+    if (!$watermark && ($src_w <= $max_w) && ($src_h <= $max_h) && $type == 'resize') {
+        $thumb->destroy();
         return copy($src_file, $dst_file);
     }
 
     // Determine output dimensions:
-    // If $max_h is 0, calculate proportional dimensions using sed_calc_contrain_size (for $keepratio = true);
-    // otherwise, use $max_w and $max_h directly as exact dimensions (for $keepratio = false)
-    if ($max_h == 0) {
+    // For crop: always calculate proportional dimensions to fit $max_w x $max_h.
+    // For resize: if $max_w or $max_h is 0, calculate proportional dimensions; otherwise, stretch.
+    if ($type == 'crop') {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type, $dim_priority);
+    } elseif ($max_w == 0 && $max_h > 0) {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', 'Height');
+    } elseif ($max_h == 0) {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', $dim_priority);
     } else {
         $dst_w = $max_w;
         $dst_h = $max_h;
     }
 
     // Process image based on type
-    if ($type == 'crop') {
+    if ($type == 'crop' && $max_w > 0 && $max_h > 0) {
+        $thumb->thumbnailImage($dst_w, $dst_h, true);
         $x0 = ($dst_w - $max_w) / 2;
         $y0 = ($dst_h - $max_h) / 2;
-        $thumb->thumbnailImage($dst_w, $dst_h);
         $thumb->cropImage($max_w, $max_h, (int)$x0, (int)$y0);
         $dst_w = $max_w;
         $dst_h = $max_h;
     } else {
-        $thumb->thumbnailImage($dst_w, $dst_h);
+        $thumb->thumbnailImage($dst_w, $dst_h, ($type == 'resize' && ($max_w == 0 || $max_h == 0)) || $type == 'crop');
     }
 
     // Convert to WebP if requested
@@ -454,8 +469,6 @@ function sed_image_constrain_imagick(
     }
 
     // Apply watermark if provided
-    $watermark_x = null;
-    $watermark_y = null;
     if ($watermark && is_readable($watermark)) {
         $overlay = new Imagick($watermark);
         $overlay->evaluateImage(Imagick::EVALUATE_MULTIPLY, $watermark_opacity / 100, Imagick::CHANNEL_ALPHA);
@@ -463,7 +476,7 @@ function sed_image_constrain_imagick(
         $owidth = $overlay->getImageWidth();
         $oheight = $overlay->getImageHeight();
 
-        switch ($watermark_postition) {
+        switch ($watermark_position) {
             case 'Top left':
                 $watermark_x = $watermark_offset_x;
                 $watermark_y = $watermark_offset_y;
@@ -493,6 +506,7 @@ function sed_image_constrain_imagick(
             }
             $frame->compositeImage($overlay, Imagick::COMPOSITE_OVER, $watermark_x, $watermark_y);
         }
+        $overlay->destroy();
     }
 
     // Finalize image settings
@@ -501,15 +515,12 @@ function sed_image_constrain_imagick(
 
     // Write the processed image
     if (!$thumb->writeImages($dst_file, true)) {
+        $thumb->destroy();
         return false;
     }
 
     // Clean up resources
     $thumb->destroy();
-    if (isset($overlay) && is_object($overlay)) {
-        $overlay->destroy();
-    }
-
     return true;
 }
 
@@ -534,15 +545,30 @@ function sed_calc_contrain_size($src_w, $src_h, $max_w = 0, $max_h = 0, $type = 
     $dst_h = $src_h;
 
     if ($type == 'crop') {
-        $source_aspect_ratio = $src_w / $src_h;
-        $desired_aspect_ratio = $max_w / $max_h;
-
-        if ($source_aspect_ratio > $desired_aspect_ratio) {
+        // Handle cases where $max_w or $max_h is 0
+        if ($max_w == 0 && $max_h == 0) {
+            // If both are 0, return original dimensions
+            return array((int)$dst_w, (int)$dst_h);
+        } elseif ($max_w == 0) {
+            // Scale by height, keep width proportional
             $dst_h = $max_h;
-            $dst_w = (int)($max_h * $source_aspect_ratio);
-        } else {
+            $dst_w = (int)($max_h * ($src_w / $src_h));
+        } elseif ($max_h == 0) {
+            // Scale by width, keep height proportional
             $dst_w = $max_w;
-            $dst_h = (int)($max_w / $source_aspect_ratio);
+            $dst_h = (int)($max_w / ($src_w / $src_h));
+        } else {
+            // Both dimensions provided, scale to fit and crop
+            $source_aspect_ratio = $src_w / $src_h;
+            $desired_aspect_ratio = $max_w / $max_h;
+
+            if ($source_aspect_ratio > $desired_aspect_ratio) {
+                $dst_h = $max_h;
+                $dst_w = (int)($max_h * $source_aspect_ratio);
+            } else {
+                $dst_w = $max_w;
+                $dst_h = (int)($max_w / $source_aspect_ratio);
+            }
         }
     } else {
         if ($dim_priority == 'Width' && $max_w > 0) {
