@@ -1479,11 +1479,11 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM " . $db_rated . " WHERE rated_userid=" . $usr['id'] . " AND rated_code = '" . sed_sql_prep($code) . "'"), 0, 'COUNT(*)');
 
 	if ($ina == 'send' && $newrate >= 1 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0 && $allow) {
-		
+
 		if ($ajax && !sed_check_csrf()) {
 			sed_die(true, 404);
 			exit;
-		}		
+		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
 
@@ -2108,9 +2108,10 @@ function sed_cc($text, $ent_quotes = null, $bbmode = FALSE)
  * 
  * @return bool
  */
-function sed_check_csrf() {
-    $csrf = isset($_SERVER['HTTP_X_SEDITIO_CSRF']) ? $_SERVER['HTTP_X_SEDITIO_CSRF'] : '';
-    return $csrf === sed_sourcekey();
+function sed_check_csrf()
+{
+	$csrf = isset($_SERVER['HTTP_X_SEDITIO_CSRF']) ? $_SERVER['HTTP_X_SEDITIO_CSRF'] : '';
+	return $csrf === sed_sourcekey();
 }
 
 /** 
@@ -2138,12 +2139,18 @@ function sed_check_xp()
 	global $xp;
 
 	$sk = sed_sourcekey();
-	if ($_SERVER["REQUEST_METHOD"] == 'POST' && !defined('SED_AUTH') && !defined('SED_DISABLE_XFORM')) {
+
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SERVER['HTTP_X_SEDITIO_CSRF'])) {
+		if (!sed_check_csrf()) {
+			sed_diefatal('Invalid CSRF token for AJAX POST request.');
+		}
+	} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_AUTH') && !defined('SED_DISABLE_XFORM')) {
 		if (empty($xp) || $xp != $sk) {
 			sed_diefatal('Wrong parameter in the URL.');
 		}
 	}
-	return ($sk);
+
+	return $sk;
 }
 
 /**
@@ -5261,7 +5268,7 @@ function sed_sourcekey()
 	global $usr;
 
 	$sourcekey = mb_strtoupper(mb_substr($usr['sourcekey'], 0, 6));
-	$result = ($usr['id'] > 0) ? $sourcekey : 'GUEST_'.$sourcekey;
+	$result = ($usr['id'] > 0) ? $sourcekey : 'GUEST_' . $sourcekey;
 	return ($result);
 }
 
