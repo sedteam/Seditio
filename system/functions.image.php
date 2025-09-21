@@ -55,6 +55,13 @@ function sed_resize($filename)
     $preview_dir = SED_ROOT . '/' . $cfg['res_dir'];
 
     list($original_file, $type, $width, $height, $set_watermark, $use_webp) = sed_get_resize_params($filename);
+
+    // Check if parameters are valid
+    if ($original_file === false) {
+        header("HTTP/1.1 404 Not Found");
+        exit;
+    }
+
     $size = $width . 'x' . $height;
 
     //Check available image resolutions
@@ -88,6 +95,7 @@ function sed_resize($filename)
     // Use configured JPEG quality or fallback to default
     $quality = (!empty($cfg['th_jpeg_quality'])) ? $cfg['th_jpeg_quality'] : $cfg['quality'];
     $dim_priority = (!empty($cfg['th_dimpriority'])) ? $cfg['th_dimpriority'] : 'Width';
+    $keepratio = $cfg['th_keepratio'];
 
     $watermark  = (!empty($watermark) && $set_watermark && is_file($watermark)) ? $watermark : null;
 
@@ -106,7 +114,8 @@ function sed_resize($filename)
             $watermark_position,
             $sharpen,
             $use_webp,
-            $dim_priority
+            $dim_priority,
+            $keepratio
         );
     } else {
         sed_image_constrain_gd(
@@ -122,7 +131,8 @@ function sed_resize($filename)
             $watermark_transparency,
             $watermark_position,
             $use_webp,
-            $dim_priority
+            $dim_priority,
+            $keepratio
         );
     }
 
@@ -153,7 +163,9 @@ function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $
             $resized_filename = $file . '.' . $type . $width . 'x' . $height . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
         } else {
             // TODO fix this option does not work now
-            $resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
+            //$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
+            header("HTTP/1.1 404 Not Found");
+            exit;
         }
     }
     return $resized_filename;
@@ -201,6 +213,7 @@ function sed_get_resize_params($filename)
  * @param string $watermark_position Watermark position (e.g., 'Top left', 'Bottom right').
  * @param bool $use_webp Whether to save the output as WebP instead of the original format.
  * @param string $dim_priority Dimension to prioritize when resizing ('Width' or 'Height').
+ * @param bool $keepratio Keep original ratio
  * @return bool True on success, false on failure.
  */
 function sed_image_constrain_gd(
@@ -216,7 +229,8 @@ function sed_image_constrain_gd(
     $watermark_opacity = 100,
     $watermark_position = '',
     $use_webp = false,
-    $dim_priority = 'Width'
+    $dim_priority = 'Width',
+    $keepratio = false // Added to handle proportional resizing when both dimensions are non-zero
 ) {
     global $cfg;
 
@@ -267,11 +281,14 @@ function sed_image_constrain_gd(
     // Determine output dimensions:
     // For crop: always calculate proportional dimensions to fit $max_w x $max_h.
     // For resize: if $max_w or $max_h is 0, calculate proportional dimensions; otherwise, stretch.
+    // If $keepratio is true and both $max_w and $max_h are non-zero, calculate proportional dimensions.
     if ($type == 'crop') {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type, $dim_priority);
     } elseif ($max_w == 0 && $max_h > 0) {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', 'Height');
     } elseif ($max_h == 0) {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', $dim_priority);
+    } elseif ($keepratio && $max_w > 0 && $max_h > 0) {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', $dim_priority);
     } else {
         $dst_w = $max_w;
@@ -392,6 +409,7 @@ function sed_image_constrain_gd(
  * @param float $sharpen Sharpening factor for Imagick (default 0.2).
  * @param bool $use_webp Whether to save the output as WebP instead of the original format.
  * @param string $dim_priority Dimension to prioritize when resizing ('Width' or 'Height').
+ * @param bool $keepratio Keep original ratio
  * @return bool True on success, false on failure.
  */
 function sed_image_constrain_imagick(
@@ -408,7 +426,8 @@ function sed_image_constrain_imagick(
     $watermark_position = '',
     $sharpen = 0.2,
     $use_webp = false,
-    $dim_priority = 'Width'
+    $dim_priority = 'Width',
+    $keepratio = false // Added to handle proportional resizing when both dimensions are non-zero
 ) {
     global $cfg;
 
@@ -439,11 +458,14 @@ function sed_image_constrain_imagick(
     // Determine output dimensions:
     // For crop: always calculate proportional dimensions to fit $max_w x $max_h.
     // For resize: if $max_w or $max_h is 0, calculate proportional dimensions; otherwise, stretch.
+    // If $keepratio is true and both $max_w and $max_h are non-zero, calculate proportional dimensions.
     if ($type == 'crop') {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, $type, $dim_priority);
     } elseif ($max_w == 0 && $max_h > 0) {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', 'Height');
     } elseif ($max_h == 0) {
+        list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', $dim_priority);
+    } elseif ($keepratio && $max_w > 0 && $max_h > 0) {
         list($dst_w, $dst_h) = sed_calc_contrain_size($src_w, $src_h, $max_w, $max_h, 'resize', $dim_priority);
     } else {
         $dst_w = $max_w;
@@ -459,7 +481,7 @@ function sed_image_constrain_imagick(
         $dst_w = $max_w;
         $dst_h = $max_h;
     } else {
-        $thumb->thumbnailImage($dst_w, $dst_h, ($type == 'resize' && ($max_w == 0 || $max_h == 0)) || $type == 'crop');
+        $thumb->thumbnailImage($dst_w, $dst_h, ($type == 'resize' && ($keepratio || $max_w == 0 || $max_h == 0)) || $type == 'crop');
     }
 
     // Convert to WebP if requested
@@ -678,9 +700,7 @@ function sed_image_process(
 
     // Prepare final dimensions for processing
     $final_w = $target_w;
-    // If $keepratio is true, set height to 0 to let lower-level functions calculate it proportionally;
-    // if false, use the exact $target_h to enforce fixed dimensions
-    $final_h = $keepratio ? 0 : $target_h;
+    $final_h = $target_h; // Always pass both dimensions, keepratio is handled in lower-level functions
 
     // Watermark configuration: use provided value or fall back to global config
     $watermark_file = ($set_watermark == false) ? null : (isset($cfg['gallery_logofile']) ? $cfg['gallery_logofile'] : null);
@@ -714,7 +734,8 @@ function sed_image_process(
             $watermark_pos,
             0.2, // Default sharpening factor for Imagick
             false,
-            $dim_priority
+            $dim_priority,
+            $keepratio // Pass keepratio to Imagick
         );
     } else {
         $result = sed_image_constrain_gd(
@@ -730,7 +751,8 @@ function sed_image_process(
             $watermark_op,
             $watermark_pos,
             false,
-            $dim_priority
+            $dim_priority,
+            $keepratio // Pass keepratio to GD
         );
     }
 
