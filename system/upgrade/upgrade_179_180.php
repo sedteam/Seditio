@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=upgrade_179_180.php
 Version=180
-Updated=2023-dec-27
+Updated=2025-sep-23
 Type=Core.upgrade
 Author=Seditio Team
 Description=Database upgrade
@@ -213,6 +213,27 @@ $sql = sed_sql_query($sqlqr);
 $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD dic_form_wysiwyg varchar(20) NOT NULL default 'noeditor' AFTER dic_form_rows";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "config ADD config_variants varchar(255) NOT NULL default '' AFTER config_text";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "UPDATE " . $cfg['sqldbprefix'] . "config SET config_variants = config_default WHERE config_owner = 'plug'";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "UPDATE " . $cfg['sqldbprefix'] . "config SET config_default = config_value";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$cfgmap = sed_loadconfigmap();
+
+foreach ($cfgmap as $i => $line) {
+	$line[5] = (!empty($line[5] && is_array($line[5]))) ? implode(',', $line[5]) : '';
+	$sqlqr = "UPDATE " . $cfg['sqldbprefix'] . "config SET config_default = '" . $line[4] . "', config_variants = '" . $line[5] . "' WHERE config_name = '".$line[2]."' AND config_owner = 'core'";
+	$adminmain .= sed_cc($sqlqr) . "<br />";
+	$sql = sed_sql_query($sqlqr);
+}
 
 $adminmain .= "-----------------------<br />";
 

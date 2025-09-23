@@ -152,12 +152,16 @@ switch ($m) {
 			$res .= $L['install_presettings'] . "<br />";
 
 			require_once('system/functions.admin.php');
+			
+			$cfgmap = sed_loadconfigmap();
+			
 			foreach ($cfgmap as $i => $line) {
-				$query[] = "('core','" . $line[0] . "','" . $line[1] . "','" . $line[2] . "'," . (int)$line[3] . ",'" . $line[4] . "')";
+				$line[5] = (!empty($line[5] && is_array($line[5]))) ? implode(',', $line[5]) : ''; //variants, new sed180 
+				$query[] = "('core','" . $line[0] . "','" . $line[1] . "','" . $line[2] . "'," . (int)$line[3] . ",'" . $line[4] . "','" . $line[4] . "','" . $line[5] . "')";
 			}
 			$query = implode(",", $query);
 
-			$sql = sed_sql_query("INSERT INTO " . $sqldbprefix . "config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES " . $query);
+			$sql = sed_sql_query("INSERT INTO " . $sqldbprefix . "config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_variants) VALUES " . $query);
 
 			$res .= $L['install_adding_administrator'] . "<br />";
 

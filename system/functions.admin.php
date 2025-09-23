@@ -23,7 +23,6 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 
 unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_help);
 $adminpath = array();
-$cfgmap = sed_loadconfigmap();
 
 /** 
  * Converts an access character mask into a permission byte 
@@ -176,8 +175,9 @@ function sed_admin_breadcrumbs($urlpaths, $startpos = 1, $home = true)
  * @param string $type Option type
  * @param string $default Default and initial value, by default is an empty string
  * @param string $text Textual description. It is usually omitted and stored in langfiles 
+ * @param string $variants A comma separated (without spaces) list of possible values, only for SELECT options. 
  */
-function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $text)
+function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $text, $variants)
 {
 	global $db_config;
 
@@ -203,8 +203,8 @@ function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $t
 			break;
 	}
 
-	$sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text)
-            VALUES ('$owner', '$cat', '$order', '$name', " . (int)$type1 . ", '$value', '$default', '" . sed_sql_prep($text) . "')");
+	$sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text, config_variants)
+            VALUES ('$owner', '$cat', '$order', '$name', " . (int)$type1 . ", '$value', '$default', '" . sed_sql_prep($text) . "', '$variants')");
 }
 
 /** 
@@ -356,7 +356,7 @@ function sed_loadcharsets()
 }
 
 /** 
- * Load default config
+ * Load default config (use only install mode, deprecated)
  * 
  * @return array 
  */
@@ -656,7 +656,7 @@ function sed_plugin_install($pl)
 					/*  if (isset($L['setup_cfg_'.$i])) { $line[4] = $L['setup_cfg_'.$i]; }  */
 					/* ===== */
 
-					sed_config_add('plug', $pl, $line[0], $i, $line[1], $line[3], $line[2], $line[4]);
+					sed_config_add('plug', $pl, $line[0], $i, $line[1], $line[3], $line[3], $line[4], $line[2]);
 					$res .= "- Entry #$j : $i (" . $line[1] . ") Installed<br />";
 				}
 			}

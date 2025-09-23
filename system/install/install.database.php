@@ -80,6 +80,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "config (
   config_value text NOT NULL,
   config_default varchar(255) NOT NULL default '',
   config_text varchar(255) NOT NULL default '',
+  config_variants varchar(255) NOT NULL default '',
   PRIMARY KEY (config_id),
   UNIQUE INDEX unique_config_owner_cat_name (config_owner, config_cat, config_name),
   INDEX idx_config_cat_name (config_cat, config_name)

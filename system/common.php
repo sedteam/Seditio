@@ -34,19 +34,6 @@ mb_internal_encoding('UTF-8'); // New v171
 
 $sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
-if (sed_sql_numrows($sql_config) < 100) {
-	define('SED_ADMIN', TRUE);
-	require_once(SED_ROOT . '/system/functions.admin.php');
-	unset($query);
-
-	foreach ($cfgmap as $i => $line) {
-		$query[] = "('core','" . $line[0] . "','" . $line[1] . "','" . $line[2] . "'," . (int)$line[3] . ",'" . $line[4] . "')";
-	}
-	$query = implode(",", $query);
-
-	$sql = sed_sql_query("INSERT INTO $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES " . $query);
-}
-
 while ($row = sed_sql_fetchassoc($sql_config)) {
 	if ($row['config_owner'] == 'core') {
 		$cfg[$row['config_name']] = $row['config_value'];
