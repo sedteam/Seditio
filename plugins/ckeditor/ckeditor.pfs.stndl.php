@@ -47,7 +47,7 @@ function addpix(gfile)
 function addfile(gfile, gpath, gtitle, ext)
 	{ 
 	gtitle = (gtitle) ? gtitle : gfile;
-	var html = '<i class=\"ext ext-'+ext+'\"></i> <a href=\"'+gpath+'\">'+gtitle+'</a>';
+	var html = '<i class=\"ext ext-'+ext+'\">&nbsp;</i> <a href=\"'+gpath+'\">'+gtitle+'</a>';
 	window." . $openerparent . ".CKEDITOR.instances['" . $c2 . "'].insertHtml(html); " . $auto_popup_close . "
 	}
 function addfile_pageurl(gfile)
