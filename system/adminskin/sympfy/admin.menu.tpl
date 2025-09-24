@@ -104,6 +104,11 @@
 							<div class="table-td text-left resp-table-td">{PHP.L.adm_position} :</div>
 							<div class="table-td text-left resp-table-td">{MENU_ADD_POSITION}</div>
 						</div>
+						
+						<div class="table-row resp-table-row">
+							<div class="table-td text-left resp-table-td">{PHP.L.Target} :</div>
+							<div class="table-td text-left resp-table-td">{MENU_ADD_TARGET}</div>
+						</div>						
 
 						<div class="table-row resp-table-row">
 							<div class="table-td text-left resp-table-td">{PHP.L.adm_activity} :</div>
@@ -169,6 +174,11 @@
 						<div class="table-td text-left resp-table-td">{PHP.L.adm_position} :</div>
 						<div class="table-td text-left resp-table-td">{MENU_UPDATE_POSITION}</div>
 					</div>
+					
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">{PHP.L.Target} :</div>
+						<div class="table-td text-left resp-table-td">{MENU_UPDATE_TARGET}</div>
+					</div>					
 
 					<div class="table-row resp-table-row">
 						<div class="table-td text-left resp-table-td">{PHP.L.adm_activity} :</div>

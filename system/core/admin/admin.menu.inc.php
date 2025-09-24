@@ -25,6 +25,13 @@ sed_block($usr['isadmin']);
 $mn = sed_import('mn', 'G', 'TXT');
 $mid = sed_import('mid', 'G', 'INT');
 
+$target_arr = array(
+	'_blank' => 'New Window (_blank)',
+	'_top' => 'Topmost Window (_top)',
+	'_self' => 'Same Window (_self)',
+	'_parent' => 'Parent Window (_parent)'
+);
+
 // ---------- Breadcrumbs
 $urlpaths = array();
 $urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
@@ -42,6 +49,7 @@ switch ($a) {
 		$murl = sed_import('murl', 'P', 'TXT');
 		$mposition = sed_import('mposition', 'P', 'INT');
 		$mvisible = sed_import('mvisible', 'P', 'BOL');
+		$mtarget = sed_import('mtarget', 'P', 'TXT');
 
 		if (empty($mtitle)) {
 			$msg = 303;
@@ -53,7 +61,8 @@ switch ($a) {
 						menu_title,
 						menu_url,
 						menu_position,
-						menu_visible
+						menu_visible,
+						menu_target
 						)
 						VALUES 
 						(
@@ -61,8 +70,10 @@ switch ($a) {
 						'" . sed_sql_prep($mtitle) . "',
 						'" . sed_sql_prep($murl) . "',
 						" . (int)$mposition . ",
-						" . (int)$mvisible . "
+						" . (int)$mvisible . ",
+						'" . sed_sql_prep($mtarget) . "'
 						)");
+						
 			if (empty($mposition)) {
 				$mposition = sed_sql_insertid();
 				$sql = sed_sql_query("UPDATE $db_menu SET menu_position = " . (int)$mposition . " WHERE menu_id = " . $mposition);
@@ -98,6 +109,7 @@ switch ($a) {
 		$murl = sed_import('murl', 'P', 'TXT');
 		$mposition = sed_import('mposition', 'P', 'INT');
 		$mvisible = sed_import('mvisible', 'P', 'BOL');
+		$mtarget = sed_import('mtarget', 'P', 'TXT');
 
 		if (empty($mtitle)) {
 			$msg = 303;
@@ -107,7 +119,8 @@ switch ($a) {
 							menu_title = '" . sed_sql_prep($mtitle) . "',
 							menu_url = '" . sed_sql_prep($murl) . "',
 							menu_position = " . (int)$mposition . ",
-							menu_visible = " . (int)$mvisible . " 
+							menu_visible = " . (int)$mvisible . ",
+							menu_target = '" . sed_sql_prep($mtarget) . "' 						
 							WHERE menu_id = " . $mid);
 
 			sed_log("Update menu item #" . $mid, 'adm');
@@ -162,7 +175,8 @@ switch ($mn) {
 			"MENU_UPDATE_TITLE" => sed_textbox('mtitle', $row['menu_title']),
 			"MENU_UPDATE_URL" => sed_textbox('murl', $row['menu_url']),
 			"MENU_UPDATE_POSITION" => sed_textbox('mposition', $row['menu_position'], 3, 5),
-			"MENU_UPDATE_VISIBLE" => sed_checkbox('mvisible', "", $row['menu_visible'])
+			"MENU_UPDATE_VISIBLE" => sed_checkbox('mvisible', "", $row['menu_visible']),
+			"MENU_UPDATE_TARGET" => sed_selectbox($row['menu_target'], 'mtarget', $target_arr)
 		));
 
 		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");
@@ -175,7 +189,7 @@ switch ($mn) {
 
 		$sql = sed_sql_query("SELECT * FROM $db_menu WHERE 1 ORDER BY menu_position ASC");
 		while ($row = sed_sql_fetchassoc($sql)) {
-			$MENU_tree[$row['menu_pid']][$row['menu_id']] = $row;
+			$menu_tree[$row['menu_pid']][$row['menu_id']] = $row;
 			$menu_row[$row['menu_id']] = $row;
 		}
 
@@ -194,7 +208,8 @@ switch ($mn) {
 			"MENU_ADD_TITLE" => sed_textbox('mtitle', isset($mtitle) ? $mtitle : ''),
 			"MENU_ADD_URL" => sed_textbox('murl', isset($murl) ? $murl : ''),
 			"MENU_ADD_POSITION" => sed_textbox('mposition', isset($mposition) ? $mposition : '', 3, 5),
-			"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', isset($mvisible) ? $mvisible : '')
+			"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', isset($mvisible) ? $mvisible : '', 1),
+			"MENU_ADD_TARGET" => sed_selectbox(isset($mtarget) ? $mtarget : '', 'mtarget', $target_arr)
 		));
 
 		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");

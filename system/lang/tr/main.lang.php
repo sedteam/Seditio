@@ -279,6 +279,7 @@ $L['Submit'] = "Gönder";
 $L['System'] = "Sistem";
 $L['Tag'] = "Etiket";
 $L['Tags'] = "Etiketler";
+$L['Target'] = "Target"; // Yeni v180'da
 $L['Text'] = "Metin";
 $L['Thumbnail'] = "Küçük Resim";
 $L['Thumbnails'] = "Küçük Resimler";

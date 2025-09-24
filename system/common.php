@@ -618,7 +618,7 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
 /* ======== Menus ======== */
 
 if (!isset($sed_menu) && (sed_stat_get("version") > 177)) {
-	$sql = sed_sql_query("SELECT * FROM sed_menu WHERE 1 ORDER BY menu_position ASC");
+	$sql = sed_sql_query("SELECT * FROM $db_menu WHERE 1 ORDER BY menu_position ASC");
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$menu_tree[$row['menu_pid']][$row['menu_id']] = $row;
 		$menu_row[$row['menu_id']] = $row;

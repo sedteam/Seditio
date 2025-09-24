@@ -4060,40 +4060,85 @@ function sed_mail($fmail, $subject, $body, $headers = '', $param = '', $content 
 	}
 }
 
-/** 
- * Menu tree generation
- * 
- * @return string
+/**
+ * Generate a menu tree
+ *
+ * @param array $menus Array of menu items
+ * @param int $parent_id Parent menu ID
+ * @param int $level Current menu level
+ * @param bool $only_parent Return only the parent item
+ * @param bool $only_childrensonlevel Return only children at the current level
+ * @param string $class Additional CSS class for the menu
+ * @return string|null HTML menu code or null if the menu is empty
  */
 function sed_menu_tree($menus, $parent_id, $level = 0, $only_parent = false, $only_childrensonlevel = false, $class = "")
 {
-	global $sys;
-	if (is_array($menus) && isset($menus[$parent_id])) {
-		$class = (!empty($class)) ? " " . $class : "";
-		$tree = "<ul class=\"level-" . $level . $class . "\">";
-		if ($only_parent == false) {
-			$level++;
-			foreach ($menus[$parent_id] as $item) {
-				$item['menu_url'] = ($item['menu_url'] == '/') ? $sys['dir_uri'] : $item['menu_url'];
-				if ($only_childrensonlevel) {
-					$tree .= "<li>" . sed_link($item['menu_url'],  $item['menu_title'], array('data-mid' => $item['menu_id'])) . "</li>";
-				} else {
-					$has_children = isset($menus[$item['menu_id']]) ? " class=\"has-children\"" : "";
-					$tree .= "<li" . $has_children . ">" . sed_link($item['menu_url'],  $item['menu_title'], array('data-mid' => $item['menu_id']));
-					$tree .=  sed_menu_tree($menus, $item['menu_id'], $level);
-					$tree .= "</li>";
-				}
-			}
-		} elseif ($only_parent) {
-			$item = $menus[$parent_id];
-			$tree = (!empty($item['menu_url'])) ? sed_link($item['menu_url'],  $item['menu_title'], array('data-mid' => $item['menu_id'])) : "<span data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</span>";
-			return $tree;
-		}
-		$tree .= "</ul>";
-	} else {
-		return null;
-	}
-	return $tree;
+    global $sys;
+
+    // Check if the menu exists for the given parent_id
+    if (is_array($menus) && isset($menus[$parent_id])) {
+        $class = (!empty($class)) ? " " . $class : "";
+        $tree = "<ul class=\"level-" . $level . $class . "\">";
+
+        if ($only_parent == false) {
+            $level++;
+            foreach ($menus[$parent_id] as $item) {
+                // Skip hidden menu items
+                if ($item['menu_visible'] != 1) {
+                    continue;
+                }
+
+                $item['menu_url'] = ($item['menu_url'] == '/') ? $sys['dir_uri'] : $item['menu_url'];
+                // Prepare attributes array with data-mid and optional target
+                $attributes = array('data-mid' => $item['menu_id']);
+                if (!empty($item['menu_target'])) {
+                    $attributes['target'] = $item['menu_target'];
+                }
+
+                if ($only_childrensonlevel) {
+                    $tree .= "<li>" . sed_link($item['menu_url'], $item['menu_title'], $attributes) . "</li>";
+                } else {
+                    // Check for visible children to apply 'has-children' class
+                    $has_children = false;
+                    if (isset($menus[$item['menu_id']])) {
+                        foreach ($menus[$item['menu_id']] as $child) {
+                            if ($child['menu_visible'] == 1) {
+                                $has_children = true;
+                                break;
+                            }
+                        }
+                    }
+                    $has_children_class = $has_children ? " class=\"has-children\"" : "";
+                    $tree .= "<li" . $has_children_class . ">" . sed_link($item['menu_url'], $item['menu_title'], $attributes);
+                    $tree .= sed_menu_tree($menus, $item['menu_id'], $level, false, false, $class);
+                    $tree .= "</li>";
+                }
+            }
+            // Return null if no visible items remain after filtering
+            if ($tree == "<ul class=\"level-" . ($level - 1) . $class . "\">") {
+                return null;
+            }
+        } elseif ($only_parent) {
+            $item = $menus[$parent_id];
+            // Skip hidden parent item
+            if ($item['menu_visible'] != 1) {
+                return null;
+            }
+            // Prepare attributes array with data-mid and optional target
+            $attributes = array('data-mid' => $item['menu_id']);
+            if (!empty($item['menu_target'])) {
+                $attributes['target'] = $item['menu_target'];
+            }
+            $tree = (!empty($item['menu_url'])) ? sed_link($item['menu_url'], $item['menu_title'], $attributes) : "<span data-mid=\"" . $item['menu_id'] . "\">" . $item['menu_title'] . "</span>";
+            return $tree;
+        }
+
+        $tree .= "</ul>";
+    } else {
+        return null;
+    }
+
+    return $tree;
 }
 
 /** 

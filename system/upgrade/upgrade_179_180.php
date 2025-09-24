@@ -235,6 +235,10 @@ foreach ($cfgmap as $i => $line) {
 	$sql = sed_sql_query($sqlqr);
 }
 
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "menu ADD menu_target varchar(10) NOT NULL default '' AFTER menu_visible";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to 180...<br />";

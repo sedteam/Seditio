@@ -275,6 +275,7 @@ $L['Submit'] = "Submit";
 $L['System'] = "System";
 $L['Tag'] = "Tag";
 $L['Tags'] = "Tags";
+$L['Target'] = "Target"; // New in v180
 $L['Text'] = "Text";
 $L['Thumbnail'] = "Thumbnail";
 $L['Thumbnails'] = "Thumbnails";
