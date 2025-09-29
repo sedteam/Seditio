@@ -229,3 +229,4 @@ plugins/hybridauth/*
 plugins/smtp/log/*
 plugins/thanks/*
 plugins/forumlock/*
+plugins/userlatestposts/*

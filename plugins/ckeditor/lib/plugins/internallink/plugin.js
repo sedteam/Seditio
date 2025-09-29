@@ -103,6 +103,9 @@
             };
 
             httpRequest.open('GET', serviceURL, true);
+			// Indicate AJAX request
+			httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
+			httpRequest.setRequestHeader('X-Seditio-Csrf', document.querySelector('meta[name="csrf-token"]').content || '');
             httpRequest.send();
         }
     };
