@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function() {
     CKEDITOR.plugins.add('internallink', {
-        lang: ['en', 'ru'],
+        lang: 'en,ru',
         requires: 'dialog',
         icons: 'internallink',
         hidpi: true,

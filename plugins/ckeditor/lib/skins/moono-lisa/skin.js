@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.skin.name="moono-lisa";CKEDITOR.skin.ua_editor="ie,iequirks,ie8,gecko";CKEDITOR.skin.ua_dialog="ie,iequirks,ie8";

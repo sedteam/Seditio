@@ -56,7 +56,13 @@ CKEDITOR.plugins.add('spoiler', {
                             label: editor.lang.spoiler.minlevel,
                             items: [
                                 ['Not specified', '']
-                            ].concat(Array.from({ length: 100 }, (_, i) => [i.toString(), i.toString()]))
+                            ].concat((function() {
+                                var result = [];
+                                for (var i = 0; i < 100; i++) {
+                                    result.push([i.toString(), i.toString()]);
+                                }
+                                return result;
+                            })())
                         },
                         {
                             type: 'select',
@@ -64,7 +70,13 @@ CKEDITOR.plugins.add('spoiler', {
                             label: editor.lang.spoiler.mingroup,
                             items: [
                                 ['Not specified', '']
-                            ].concat(Array.from({ length: 7 }, (_, i) => [(i + 4).toString(), (i + 4).toString()]))
+                            ].concat((function() {
+                                var result = [];
+                                for (var i = 0; i < 7; i++) {
+                                    result.push([(i + 4).toString(), (i + 4).toString()]);
+                                }
+                                return result;
+                            })())
                         }
                     ]
                 }],

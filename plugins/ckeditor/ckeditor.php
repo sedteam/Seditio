@@ -83,7 +83,7 @@ if ($usr['maingrp'] > 3) {
 						height = CkTextareas[editorType];
 					}
 
-					CKEDITOR.timestamp='ABCDFGHJ';
+					CKEDITOR.timestamp='ABCDF3';
 					CKEDITOR.config.customConfig = '" . $ck_config . "';
 					CKEDITOR.config.baseHref = '" . $sys['abs_url'] . "';
 					CKEDITOR.replace(textarea, {

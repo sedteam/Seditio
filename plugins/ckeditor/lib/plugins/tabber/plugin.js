@@ -9,7 +9,7 @@ CKEDITOR.plugins.add('tabber', {
     // Indicates that the plugin supports high-resolution screens
     hidpi: true,
     // Supported languages
-    lang: [ 'en', 'ru' ],
+    lang: 'en,ru',
     // Plugin icon
     icons: 'tabber',
     // Plugin initialization

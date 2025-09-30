@@ -1,17 +1,19 @@
 CKEDITOR.editorConfig = function(config) {
     config.toolbar = 'Basic';
 
-    config.extraPlugins = 'more,html5video,imagepaste,spoiler,internallink,tabber';
+    config.extraPlugins = 'more,html5video,spoiler,internallink,tabber,syntaxhighlight,layoutmanager';
 
     config.internallinkServiceURL = "/ajax/?m=pages";
+	config.imageUploadUrl = 'plug/?ajx=ckeditor';
+	config.filebrowserUploadUrl = 'plug/?ajx=ckeditor&fl=filebrowser';
+	config.filebrowserImageUploadUrl = 'plug/?ajx=ckeditor';
 	
-	config.uploadUrl = 'plug/?ajx=ckeditor';
-    config.filebrowserUploadUrl = 'plug/?ajx=ckeditor&fl=filebrowser';
-
+	/*
+	config.uploadUrl = 'plug/?ajx=ckeditor';	
     config.pasteUploadFileApi = 'plug/?ajx=ckeditor';
     config.pasteUploadImageUrlApi = 'plug/?ajx=ckeditor';
-    config.filebrowserImageUploadUrl = 'plug/?ajx=ckeditor';
-
+	*/
+	
     config.contentsCss = ['plugins/ckeditor/lib/ckeditor.css?v=2'];
 
     config.layoutmanager_loadbootstrap = false;
@@ -19,6 +21,7 @@ CKEDITOR.editorConfig = function(config) {
     config.htmlEncodeOutput = false;
     config.entities = false;
     config.allowedContent = true;
+	config.clipboard_handleImages = false;
 
     CKEDITOR.dtd.$removeEmpty.i = 0;
 
