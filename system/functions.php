@@ -4206,35 +4206,6 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 }
 
 /** 
- * Mobile detect 
- * 
- * @return bool 
- */
-function sed_mobile_detect()
-{
-	if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
-		return (TRUE);
-	}
-
-	if (isset($_SERVER['HTTP_ACCEPT'])) {
-		if (mb_strpos(mb_strtolower($_SERVER['HTTP_ACCEPT']), 'wap') !== FALSE) {
-			return (TRUE);
-		}
-	}
-
-	if (isset($_SERVER['HTTP_USER_AGENT'])) {
-		if (strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile') !== FALSE) {
-			return (TRUE);
-		}
-
-		if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mini') !== FALSE) {
-			return (TRUE);
-		}
-	}
-	return (FALSE);
-}
-
-/** 
  * Rename file name uses translit or unique number
  * 
  * @global $sed_translit 
@@ -6487,91 +6458,82 @@ $sed_countries = array(
 	'zw' => 'Zimbabwe'
 );
 
-/** 
- * CURL GET  
- */
-function sed_browser($url, $post = array(), $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)", $proxy = '', $ssl_verifypeer = false, $ssl_verifyhost = false)
-{
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60); // timeout 60 sec
-	curl_setopt($ch, CURLOPT_TIMEOUT, 200); // timeout 200 sec
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	if ($post) {
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-	}
-	curl_setopt($ch, CURLOPT_USERAGENT, $uagent);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl_verifypeer);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $ssl_verifyhost);
-	if (!empty($proxy)) {
-		curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-		curl_setopt($ch, CURLOPT_PROXY, "$proxy");
-	}
-	$html = curl_exec($ch);
-	curl_close($ch);
-	return $html;
-}
-
 /**
- * CURL DOWNLOAD FILE
+ * Universal CURL function for HTTP requests and file downloads
  *
- * @param string $url Distantion url
- * @param string $path Source file path
- * @param string $uagent User agent
- * @return void
+ * @param string $url Source URL
+ * @param array $options Configuration options:
+ *   - post (array): POST data for requests
+ *   - user_agent (string): User agent string
+ *   - proxy (string): Proxy address
+ *   - ssl_verifypeer (bool): Verify SSL peer
+ *   - ssl_verifyhost (bool): Verify SSL host
+ *   - output_file (string): Path to save downloaded file
+ * @return mixed Response content, file path, or false on failure
  */
-function sed_getfile($url, $path, $uagent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)", $proxy = '', $ssl_verifypeer = false, $ssl_verifyhost = false)
-{
-	$fp = fopen($path, 'w');
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_USERAGENT, $uagent);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl_verifypeer);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $ssl_verifyhost);
-	if (!empty($proxy)) {
-		curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-		curl_setopt($ch, CURLOPT_PROXY, "$proxy");
-	}
-	curl_setopt($ch, CURLOPT_FILE, $fp);
-	curl_exec($ch);
-	curl_close($ch);
-	fclose($fp);
+function sed_browser($url, $options = array()) {
+    // Set default options
+    $defaults = array(
+        'post' => array(),
+        'user_agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)',
+        'proxy' => '',
+        'ssl_verifypeer' => false,
+        'ssl_verifyhost' => false,
+        'output_file' => ''
+    );
+    $options = array_merge($defaults, $options);
+
+    // Initialize CURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 200);
+    curl_setopt($ch, CURLOPT_USERAGENT, $options['user_agent']);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $options['ssl_verifypeer']);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $options['ssl_verifyhost']);
+    if (!empty($options['proxy'])) {
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        curl_setopt($ch, CURLOPT_PROXY, $options['proxy']);
+    }
+
+    // Configure POST request if data is provided
+    if (!empty($options['post'])) {
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $options['post']);
+    }
+
+    // Configure file download if output path is specified
+    $fp = null;
+    if (!empty($options['output_file'])) {
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $fp = fopen($options['output_file'], 'w');
+        if ($fp === false) {
+            curl_close($ch);
+            return false;
+        }
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+    }
+
+    // Execute CURL request
+    $result = curl_exec($ch);
+
+    // Check for CURL errors
+    if ($result === false) {
+        curl_close($ch);
+        if ($fp) {
+            fclose($fp);
+        }
+        return false;
+    }
+
+    // Close CURL and file pointer
+    curl_close($ch);
+    if ($fp) {
+        fclose($fp);
+    }
+
+    // Return response for non-file downloads or file path for downloads
+    return !empty($options['output_file']) ? $options['output_file'] : $result;
 }
 
-/**
- * Download image from distantion url
- *
- * @param string $source_file Source file path
- * @param string $dst_dir Distantion file path
- * @param int $uid 
- * @return string
- */
-function sed_download_img($source_file, $dst_dir, $uid)
-{
-	$imgsize = getimagesize($source_file);
-	$width = $imgsize[0];
-	$height = $imgsize[1];
-	$mime = $imgsize['mime'];
-	switch ($mime) {
-		case 'image/png':
-			$ext = ".png";
-			break;
-
-		case 'image/gif':
-			$ext = ".gif";
-			break;
-
-		case 'image/jpeg':
-			$ext = ".jpg";
-			break;
-
-		default:
-			return false;
-	}
-	$dst_file = $uid . $ext;
-	sed_getfile($source_file, $dst_dir . $dst_file);
-	return $dst_file;
-}

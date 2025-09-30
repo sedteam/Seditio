@@ -51,10 +51,7 @@ $sys['site_id'] = 'sed' . substr(md5(empty($cfg['site_secret']) ? $cfg['mainurl'
 $online_timedout = $sys['now'] - $cfg['timedout'];
 $cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 $cfg['css'] = $cfg['defaultskin'];
-
 $usr['ip'] = sed_get_userip();
-
-$cfg['mobile_client'] = sed_mobile_detect();
 $sys['unique'] = sed_unique(16);
 
 /* ================================== */

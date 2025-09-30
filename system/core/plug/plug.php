@@ -21,11 +21,9 @@ define('SED_PLUG', TRUE);
 $location = 'Plugins';
 $z = 'plug';
 
-/*
 if (!empty($_GET['ajx'])) {
 	define('SED_DISABLE_XFORM', true);
 }
-*/
 
 require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/datas/config.php');
