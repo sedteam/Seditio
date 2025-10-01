@@ -484,10 +484,17 @@ function sed_image_constrain_imagick(
         $thumb->thumbnailImage($dst_w, $dst_h, ($type == 'resize' && ($keepratio || $max_w == 0 || $max_h == 0)) || $type == 'crop');
     }
 
-    // Convert to WebP if requested
+    // Convert to WebP if requested with lossy compression
     if ($use_webp) {
         $thumb->setImageFormat('webp');
-        $thumb->setOption('webp:lossless', 'true');
+        $thumb->setOption('webp:lossless', 'false');
+        $thumb->setOption('webp:method', '6');
+        $thumb->setOption('webp:lossy-quality', $quality);
+    }
+
+    // Optimize PNG compression if applicable
+    if ($thumb->getImageFormat() == 'png' && !$use_webp) {
+        $thumb->setOption('png:compression-level', '9');
     }
 
     // Apply watermark if provided
@@ -531,8 +538,10 @@ function sed_image_constrain_imagick(
         $overlay->destroy();
     }
 
-    // Finalize image settings
+    // Remove metadata to reduce file size
     $thumb->stripImage();
+
+    // Set compression quality
     $thumb->setImageCompressionQuality($quality);
 
     // Write the processed image
