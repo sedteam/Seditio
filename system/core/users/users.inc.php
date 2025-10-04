@@ -293,7 +293,6 @@ while ($urr = sed_sql_fetchassoc($sql) and $jj < $cfg['maxusersperpage']) {
 		"USERS_ROW_COUNTRYFLAG" => sed_build_flag($urr['user_country']),
 		"USERS_ROW_TEXT" => $urr['user_text'],
 		"USERS_ROW_WEBSITE" => sed_build_url($urr['user_website']),
-		"USERS_ROW_SKYPE" => sed_build_skype($urr['user_skype']),
 		"USERS_ROW_GENDER" => $urr['user_gender'],
 		"USERS_ROW_BIRTHDATE" => $urr['user_birthdate'],
 		"USERS_ROW_AGE" => $urr['user_age'],

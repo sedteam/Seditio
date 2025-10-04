@@ -1369,22 +1369,6 @@ function sed_build_ipsearch($ip)
 }
 
 /** 
- * Returns Skype call link 
- * 
- * @param string $skype Skype login 
- * @return string 
- */
-function sed_build_skype($skype)
-{
-	$result = '';
-	if (!empty($skype)) {
-		$skype = sed_cc($skype);
-		$result = sed_link("skype:" . $skype . "?call", $skype);
-	}
-	return ($result);
-}
-
-/** 
  * Odd/even class choser for row 
  * 
  * @param int $number Row number 

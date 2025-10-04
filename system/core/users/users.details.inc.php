@@ -104,7 +104,6 @@ $t->assign(array(
 	"USERS_DETAILS_PMNOTIFY" =>  $sed_yesno[$urr['user_pmnotify']],
 	"USERS_DETAILS_SKIN" => $urr['user_skin'],
 	"USERS_DETAILS_WEBSITE" => $urr['user_website'],
-	"USERS_DETAILS_SKYPE" => sed_build_skype($urr['user_skype']),
 	"USERS_DETAILS_GENDER" => $urr['user_gender'],
 	"USERS_DETAILS_BIRTHDATE" => $urr['user_birthdate'],
 	"USERS_DETAILS_AGE" => $urr['user_age'],
