@@ -285,11 +285,11 @@ $t->assign("PAGE_TEXT2", $pag['page_text2']);
 if ($pag['page_file']) {
 	if (!empty($pag['page_url'])) {
 		$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
-		$pag['page_fileicon'] = "system/img/pfs/" . mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)) . ".gif";
+		$pag['page_fileicon'] = "system/img/ext/" . mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)) . ".svg";
 		if (!file_exists($pag['page_fileicon'])) {
-			$pag['page_fileicon'] = "system/img/admin/page.png";
+			$pag['page_fileicon'] = "system/img/ext/download.svg";
 		}
-		$pag['page_fileicon'] = "<img src=\"" . $pag['page_fileicon'] . "\" alt=\"\">";
+		$pag['page_fileicon'] = "<img src=\"" . $pag['page_fileicon'] . "\" width=\"16\" alt=\"\">";
 	} else {
 		$pag['page_fileicon'] = '';
 	}
