@@ -391,11 +391,10 @@ while ($row1 = sed_sql_fetchassoc($sql1)) {
 
 foreach ($forum_sections as $key => $value) {
 	$pcat = $forum_sections[$key]['fs_parentcat'];
+	$parentcat2 = array();
 	if ($pcat > 0) {
 		$parentcat2['sectionid']  = $forum_sections[$pcat]['fs_id'];
 		$parentcat2['title']  = $forum_sections[$pcat]['fs_title'];
-	} else {
-		$parentcat2 = FALSE;
 	}
 
 	$cfs = sed_build_forums($forum_sections[$key]['fs_id'], $forum_sections[$key]['fs_title'], $forum_sections[$key]['fs_category'], FALSE, $parentcat2);
@@ -411,11 +410,10 @@ foreach ($forum_sections as $key => $value) {
 $movebox .= "</select> " . $L['Ghost'] . " " . sed_checkbox('ghost', 1, true);
 $jumpbox .= "</select>";
 
+$parentcat = array();
 if ($fs_parentcat > 0) {
 	$parentcat['sectionid']  = $forum_sections[$fs_parentcat]['fs_id'];
 	$parentcat['title']  = $forum_sections[$fs_parentcat]['fs_title'];
-} else {
-	$parentcat = FALSE;
 }
 
 /* ============ ==================== ==================*/

@@ -1207,7 +1207,7 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 			$tmp[] = sed_link(sed_url("forums", "c=" . $x, "#" . $x), $ptitle);
 		}
 
-		if (is_array($parentcat)) {
+		if (is_array($parentcat) && !empty($parentcat)) {
 			$ptitle = sed_cc($parentcat['title']);
 			$tmp[] = sed_link(sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle), $ptitle);
 		}
@@ -1217,7 +1217,7 @@ function sed_build_forums($sectionid, $title, $category, $link = true, $parentca
 			$tmp[] = sed_cc($sed_forums_str[$x]['title']);
 		}
 
-		if (is_array($parentcat)) {
+		if (is_array($parentcat) && !empty($parentcat)) {
 			$tmp[] = $parentcat['title'];
 		}
 
@@ -1249,7 +1249,7 @@ function sed_build_forums_bc($sectionid, $title, $category, $parentcat = false)
 		$urlpaths[sed_url("forums", "c=" . $x, "#" . $x)] = $ptitle;
 	}
 
-	if (is_array($parentcat)) {
+	if (is_array($parentcat) && !empty($parentcat)) {
 		$ptitle = sed_cc($parentcat['title']);
 		$urlpaths[sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle)] = $ptitle;
 	}
