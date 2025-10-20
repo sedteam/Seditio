@@ -579,7 +579,7 @@ function sed_plugin_install($pl)
 	$res .= "<strong>Deleting old configuration entries...</strong> ";
 	$res .= "Found:" . sed_sql_affectedrows() . "<br />";
 
-	$extplugin_info = "plugins/" . $pl . "/" . $pl . ".setup.php";
+	$extplugin_info = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".setup.php";
 
 	$res .= "<strong>Looking for the setup file...</strong> ";
 
@@ -590,7 +590,7 @@ function sed_plugin_install($pl)
 		$info['Auth_members'] = (isset($info['Auth_members'])) ? $info['Auth_members'] : 'R';
 		$info['Lock_members'] = (isset($info['Lock_members'])) ? $info['Lock_members'] : 'W12345A';
 
-		$handle = opendir("plugins/" . $pl);
+		$handle = opendir(SED_ROOT . "/plugins/" . $pl);
 		$setupfile = $pl . ".setup.php";
 		$res .= "<strong>Looking for parts...</strong><br />";
 		while ($f = readdir($handle)) {
@@ -604,7 +604,7 @@ function sed_plugin_install($pl)
 		$res .= "<strong>Installing the parts...</strong><br />";
 		foreach ($parts as $i => $x) {
 			$res .= "- Part " . $x . " ...";
-			$extplugin_file = "plugins/" . $pl . "/" . $x;
+			$extplugin_file = SED_ROOT . "/plugins/" . $pl . "/" . $x;
 			$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 			if (empty($info_part['Error'])) {
@@ -706,7 +706,7 @@ function sed_plugin_install($pl)
 	sed_auth_reset();
 	$res .= "<strong>Resetting the auth column for all the users...</strong><br />";
 
-	$extplugin_install = "plugins/" . $pl . "/" . $pl . ".install.php";
+	$extplugin_install = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".install.php";
 	$res .= "<strong>Looking for the optional PHP file : " . $extplugin_install . "...</strong> ";
 	if (file_exists($extplugin_install)) {
 		$res .= "Found, executing...<br />";
@@ -753,7 +753,7 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 		$res .= "Resetting the auth column for all the users... ";
 		$res .= "Found:" . sed_sql_affectedrows() . "<br />";
 
-		$extplugin_uninstall = "plugins/" . $pl . "/" . $pl . ".uninstall.php";
+		$extplugin_uninstall = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".uninstall.php";
 		$res .= "Looking for the optional PHP file : " . $extplugin_uninstall . "... ";
 		if (file_exists($extplugin_uninstall)) {
 			$res .= "Found, executing...<br />";
