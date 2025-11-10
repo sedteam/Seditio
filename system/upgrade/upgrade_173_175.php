@@ -105,31 +105,31 @@ $sql = sed_sql_query($sqlqr);
 // Changing the length of columns in tables
 
 $adminmain .= "Changing the length of columns in tables<br />";
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure MODIFY structure_title VARCHAR(100)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure MODIFY structure_title VARCHAR(100) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure MODIFY structure_code VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure MODIFY structure_code VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure MODIFY structure_path VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure MODIFY structure_path VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages MODIFY page_alias VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages MODIFY page_alias VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages MODIFY page_cat VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages MODIFY page_cat VARCHAR(255) DEFAULT NULL";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "auth MODIFY auth_code VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "auth MODIFY auth_code VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "auth MODIFY auth_option VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "auth MODIFY auth_option VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 

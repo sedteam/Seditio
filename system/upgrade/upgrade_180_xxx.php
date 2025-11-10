@@ -22,11 +22,11 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 $adminmain .= "Clearing the internal SQL cache...<br />";
 $sql = sed_sql_query("TRUNCATE TABLE " . $cfg['sqldbprefix'] . "cache");
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_topics MODIFY ft_title VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_topics MODIFY ft_title VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_sections MODIFY fs_title VARCHAR(255)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_sections MODIFY fs_title VARCHAR(255) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 

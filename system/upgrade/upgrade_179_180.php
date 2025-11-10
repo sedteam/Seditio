@@ -98,31 +98,31 @@ $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
 // IPv6 support
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "banlist MODIFY banlist_ip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "banlist MODIFY banlist_ip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "com MODIFY com_authorip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "com MODIFY com_authorip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_posts MODIFY fp_posterip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_posts MODIFY fp_posterip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "logger MODIFY log_ip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "logger MODIFY log_ip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "online MODIFY online_ip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "online MODIFY online_ip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "polls_voters MODIFY pv_userip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "polls_voters MODIFY pv_userip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "users MODIFY user_lastip VARCHAR(45)";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "users MODIFY user_lastip VARCHAR(45) NOT NULL DEFAULT ''";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
@@ -194,27 +194,27 @@ $sqlqr = "DELETE FROM " . $cfg['sqldbprefix'] . "config WHERE config_cat='pfs' A
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages ADD page_seo_index tinyint(1) unsigned NOT NULL default '1' AFTER page_seo_h1";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages ADD page_seo_index tinyint(1) unsigned NOT NULL DEFAULT '1' AFTER page_seo_h1";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages ADD page_seo_follow tinyint(1) unsigned NOT NULL default '1' AFTER page_seo_index";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "pages ADD page_seo_follow tinyint(1) unsigned NOT NULL DEFAULT '1' AFTER page_seo_index";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_index tinyint(1) unsigned NOT NULL default '1' AFTER structure_seo_h1";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_index tinyint(1) unsigned NOT NULL DEFAULT '1' AFTER structure_seo_h1";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_follow tinyint(1) unsigned NOT NULL default '1' AFTER structure_seo_index";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "structure ADD structure_seo_follow tinyint(1) unsigned NOT NULL DEFAULT '1' AFTER structure_seo_index";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD dic_form_wysiwyg varchar(20) NOT NULL default 'noeditor' AFTER dic_form_rows";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD dic_form_wysiwyg varchar(20) NOT NULL DEFAULT 'noeditor' AFTER dic_form_rows";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "config ADD config_variants varchar(255) NOT NULL default '' AFTER config_text";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "config ADD config_variants varchar(255) NOT NULL DEFAULT '' AFTER config_text";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
@@ -235,7 +235,7 @@ foreach ($cfgmap as $i => $line) {
 	$sql = sed_sql_query($sqlqr);
 }
 
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "menu ADD menu_target varchar(10) NOT NULL default '' AFTER menu_visible";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "menu ADD menu_target varchar(10) NOT NULL DEFAULT '' AFTER menu_visible";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 

@@ -28,7 +28,7 @@ $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
 $adminmain .= "Adding the 'poll_code' column to table polls...<br />";
-$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "polls ADD poll_code varchar(16) NOT NULL default '' AFTER poll_ownerid";
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "polls ADD poll_code varchar(16) NOT NULL DEFAULT '' AFTER poll_ownerid";
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
