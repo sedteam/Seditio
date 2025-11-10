@@ -442,7 +442,7 @@ $toptitle .= " " . $cfg['separator'] . " " . sed_link(sed_url("forums", "m=posts
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
-$out['subtitle'] = $L['Forums'] . " - " . sed_cc($ft_title);
+$out['subtitle'] = ($curpage > 0) ? $L['Forums'] . " - " . sed_cc($ft_title) . " (" . $L['Page'] . " " . ($curpage + 1) . ")" : $L['Forums'] . " - " . sed_cc($ft_title);
 
 /**/
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');

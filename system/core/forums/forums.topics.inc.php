@@ -58,9 +58,13 @@ function cursort($trigger, $way)
 if (empty($o)) {
 	$o = 'updated';
 }
+
 if (empty($w)) {
 	$w = 'desc';
 }
+
+$pn_o = ($o == 'updated') ? "" : $o;
+$pn_w = ($w == 'desc') ? "" : $w;
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
@@ -302,8 +306,10 @@ $sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_sectionid='$s' $co
 	ORDER by ft_sticky DESC, ft_" . $o . " " . $w . "
 	LIMIT $d, " . $cfg['maxtopicsperpage']);
 
+$curpage = $d / $cfg['maxtopicsperpage'];
+
 $sys['sublocation'] = $fs_title;
-$out['subtitle'] = $L['Forums'] . " - " . $fs_title;
+$out['subtitle'] = ($curpage > 0) ? $L['Forums'] . " - " . $fs_title . " (" . $L['Page'] . " " . ($curpage + 1) . ")" : $L['Forums'] . " - " . $fs_title;
 
 /**/
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
@@ -330,8 +336,8 @@ require(SED_ROOT . "/system/header.php");
 $mskin = sed_skinfile(array('forums', 'topics', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-$pages = sed_pagination(sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=" . $o . "&w=" . $w), $d, $totaltopics, $cfg['maxtopicsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=" . $o . "&w=" . $w), $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
+$pages = sed_pagination(sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=" . $pn_o . "&w=" . $pn_w), $d, $totaltopics, $cfg['maxtopicsperpage']);
+list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=topics&s=" . $s . "&al=" . $fs_title . "&o=" . $pn_o . "&w=" . $pn_w), $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
 
 $toptitle = sed_link(sed_url("forums"), $L['Forums']) . " " . $cfg['separator'] . " " . sed_build_forums($s, $fs_title, $fs_category, TRUE, $parentcat);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
