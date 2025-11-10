@@ -141,8 +141,7 @@ switch ($m) {
 				}
 
 				$items[$i]['description'] = $row['fp_text'];
-
-				$items[$i]['link'] = $cfg['mainurl'] . "/" . sed_url("forums", "m=posts&p=" . $row['fp_id'], "#" . $row['fp_id'], false, false);
+				$items[$i]['link'] = $cfg['mainurl'] . "/" . sed_url("forums", "m=posts&p=" . $row['fp_id'] . "&al=" . $row['ft_title'], false, false);
 				$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 
 				if (!empty($s)) {
@@ -159,7 +158,7 @@ switch ($m) {
 
 		break;
 
-		//pages
+	//pages
 
 	default:
 
