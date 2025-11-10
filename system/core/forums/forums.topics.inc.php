@@ -424,14 +424,13 @@ if (isset($forum_subforums) && is_array($forum_subforums)) {
 				sed_forum_sectionsetlast($fsn['fs_id']);
 			}
 
-			$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
-
 			if ($usr['id'] > 0 && $fsn['fs_lt_date'] > $usr['lastvisit'] && $fsn['fs_lt_posterid'] != $usr['id']) {
 				$fsn['fs_title'] = "+ " . $fsn['fs_title'];
 				$fsn['fs_newposts'] = '1';
 			}
 
 			if ($fsn['fs_lt_id'] > 0) {
+				$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
 				$url_params = "m=posts&q=" . $fsn['fs_lt_id'] . "&al=" . $fsn['fs_lt_title'];
 				$is_unread = $usr['id'] > 0
 					&& $fsn['fs_lt_date'] > $usr['lastvisit']
@@ -443,6 +442,7 @@ if (isset($forum_subforums) && is_array($forum_subforums)) {
 
 				$fsn['lastpost'] = sed_link($url, sed_cutstring($fsn['fs_lt_title'], 32));
 			} else {
+				$fsn['fs_timago'] = '&nbsp;';
 				$fsn['lastpost'] = '&nbsp;';
 				$fsn['fs_lt_date'] = '&nbsp;';
 				$fsn['fs_lt_postername'] = '';
