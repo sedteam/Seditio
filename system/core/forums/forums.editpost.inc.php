@@ -104,8 +104,8 @@ if ($a == 'update') {
 	/* ===== */
 
 	$rmsg = sed_import('rmsg', 'P', 'HTM');
-	$rtopictitle = sed_import('rtopictitle', 'P', 'TXT', 64);
-	$rtopicdesc = sed_import('rtopicdesc', 'P', 'TXT', 64);
+	$rtopictitle = sed_import('rtopictitle', 'P', 'TXT', 255);
+	$rtopicdesc = sed_import('rtopicdesc', 'P', 'TXT', 255);
 	$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater)) ? '' : $usr['name'];
 
 	$error_string .= ((!empty($rtopictitle)) && mb_strlen($rtopictitle) < 2) ? $L['for_titletooshort'] . "<br />" : '';
@@ -209,8 +209,8 @@ $t->assign(array(
 	"FORUMS_EDITPOST_SEND" => sed_url("forums", "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . sed_xg()),
 	"FORUMS_EDITPOST_TEXT" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic') . " " . $pfs,
 	"FORUMS_EDITPOST_TEXTONLY" => sed_textarea('rmsg', $fp_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic'),
-	"FORUMS_EDITPOST_TITLE" => sed_textbox('rtopictitle', $ft_title, 56, 64),
-	"FORUMS_EDITPOST_DESC" => sed_textbox('rtopicdesc', $ft_desc, 56, 64),
+	"FORUMS_EDITPOST_TITLE" => sed_textbox('rtopictitle', $ft_title, 56, 255),
+	"FORUMS_EDITPOST_DESC" => sed_textbox('rtopicdesc', $ft_desc, 56, 255),
 	"FORUMS_EDITPOST_MYPFS" => $pfs
 ));
 

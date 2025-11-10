@@ -78,7 +78,7 @@ if ($a == 'newtopic') {
 	}
 	/* ===== */
 
-	$newtopictitle = sed_import('newtopictitle', 'P', 'TXT', 128);
+	$newtopictitle = sed_import('newtopictitle', 'P', 'TXT', 255);
 	$newtopicdesc = sed_import('newtopicdesc', 'P', 'TXT', 255);
 	$newprvtopic = sed_import('newprvtopic', 'P', 'BOL');
 	$newmsg = sed_import('newmsg', 'P', 'HTM');
@@ -236,8 +236,8 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_parse($fs_desc),
 	"FORUMS_NEWTOPIC_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=" . $s . "&poll=" . $poll),
-	"FORUMS_NEWTOPIC_TITLE" => sed_textbox('newtopictitle', isset($newtopictitle) ? $newtopictitle : '', 56, 64),
-	"FORUMS_NEWTOPIC_DESC" => sed_textbox('newtopicdesc', isset($newtopicdesc) ? $newtopicdesc : '', 56, 64),
+	"FORUMS_NEWTOPIC_TITLE" => sed_textbox('newtopictitle', isset($newtopictitle) ? $newtopictitle : '', 56, 255),
+	"FORUMS_NEWTOPIC_DESC" => sed_textbox('newtopicdesc', isset($newtopicdesc) ? $newtopicdesc : '', 56, 255),
 	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic') . " " . $pfs,
 	"FORUMS_NEWTOPIC_TEXTONLY" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic'),
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs
