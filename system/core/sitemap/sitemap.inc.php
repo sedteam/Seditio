@@ -121,7 +121,7 @@ switch ($m) {
 			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $row['fs_id']);
 			if ($usr['auth_read']) {
 				$i++;
-				$row['fs_url'] = sed_url("forums", "m=topics&s=" . $row['fs_id'], "", false, false);
+				$row['fs_url'] = sed_url("forums", "m=topics&s=" . $row['fs_id'] . "&al=" . $row['fs_title'], "", false, false);
 				$items[$i]['loc'] = $main_url . $row['fs_url'];
 				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fs_lt_date']);
 				$items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
@@ -131,7 +131,7 @@ switch ($m) {
 
 		// forum posts
 
-		$sql = sed_sql_query("SELECT t.ft_id, t.ft_movedto, s.fs_id, p.fp_updated FROM $db_forum_posts p 
+		$sql = sed_sql_query("SELECT t.ft_id, t.ft_title, t.ft_movedto, s.fs_id, p.fp_updated FROM $db_forum_posts p 
        LEFT JOIN $db_forum_topics t ON ( p.fp_topicid = t.ft_id ) LEFT JOIN $db_forum_sections s ON ( p.fp_sectionid = s.fs_id ) 
        GROUP BY t.ft_id ORDER BY t.ft_sticky DESC, p.fp_creation DESC LIMIT " . $smcfg['forums']['limit']);
 
@@ -140,7 +140,7 @@ switch ($m) {
 			if ($usr['auth_read']) {
 				$i++;
 				$moved = ($row['ft_movedto']) ? $row['ft_movedto'] : $row['ft_id'];
-				$row['fp_url'] = sed_url('forums', 'm=posts&q=' . $moved, "", false, false);
+				$row['fp_url'] = sed_url('forums', 'm=posts&q=' . $moved . "&al=" . $row['ft_title'], "", false, false);
 				$items[$i]['loc'] = $main_url . $row['fp_url'];
 				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fp_updated']);
 				$items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
