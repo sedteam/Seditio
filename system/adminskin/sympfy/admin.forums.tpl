@@ -200,7 +200,7 @@
 									{FS_LIST_TITLE}
 								</div>
 								<div class="table-td text-center resp-table-td forums-order" data-label="{PHP.L.Order}">
-									<a href="{FS_LIST_ORDER_UP_URL}">{PHP.cfg.arrow_up}</a><a href="{FS_LIST_ORDER_DOWN_URL}">{PHP.cfg.arrow_down}</a>
+									<a href="{FS_LIST_ORDER_UP_URL}">{PHP.out.ic_arrow_up}</a><a href="{FS_LIST_ORDER_DOWN_URL}">{PHP.out.ic_arrow_down}</a>
 								</div>
 								<div class="table-td text-center resp-table-td forums-prvtopics" data-label="{PHP.L.adm_enableprvtopics}">
 									{FS_LIST_ALLOWPRIWATETOPICS}
