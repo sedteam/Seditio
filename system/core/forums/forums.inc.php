@@ -148,7 +148,6 @@ while ($fsn = sed_sql_fetchassoc($sql)) //v178
 // by structure extending
 foreach ($sect_arr as $fsec_key => $fsec) {
 	$cattitle = sed_link("javascript:sedjs.toggleblock('blk_" . $fsec['fs_category'] . "')", $sed_forums_str[$fsec['fs_category']]['tpath']);
-	$lt_date = $fsec['fs_lt_date'];
 
 	if ($c == 'fold') {
 		$fold = TRUE;
@@ -207,6 +206,7 @@ foreach ($sect_arr as $fsec_key => $fsec) {
 				$fsn['fs_lt_posterid'] = 0;
 			}
 
+			$lt_date = $fsn['fs_lt_date'];
 			$fsn['fs_lt_date'] = ($fsn['fs_lt_date'] > 0) ? sed_build_date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date']) : '';
 			$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount'] > 9999) ? floor($fsn['fs_viewcount'] / 1000) . "k" : $fsn['fs_viewcount'];
 			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
