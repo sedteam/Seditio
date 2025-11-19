@@ -194,13 +194,14 @@ var sedjs = {
     },
 	
 	/**
-	 * Adds or updates query parameters from <select> without duplicating them
-	 * If the parameter (e.g. "filial") already exists → replaces its value
-	 * If the same value is selected again → no duplicate, URL stays clean
-	 * If empty option is selected → removes the "filial" parameter completely
+	 * Updates URL query parameters from the selected <option> value.
+	 * Fully replaces existing parameters with new ones, removes duplicates,
+	 * preserves unrelated params, produces clean URL (no &&, ??, ?& etc.).
+	 * Empty value removes all parameters that were in the option value.
+	 * Pure ES5 – works in any browser.
 	 *
-	 * @param {HTMLSelectElement} selectElement - the <select> that triggered the change
-	 */	
+	 * @param {HTMLSelectElement} selectElement - the changed <select>
+	 */
 	redirectWithParam: function(selectElement) {
 		var paramString = selectElement.value.replace(/^\s+|\s+$/g, '');
 		var pathname    = window.location.pathname;
