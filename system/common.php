@@ -600,6 +600,8 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
 				'extra_location' => $row['dic_extra_location'],
 				'extra_type' => $row['dic_extra_type'],
 				'extra_size' => $row['dic_extra_size'],
+				'extra_default'	=> $row['dic_extra_default'],
+				'extra_allownull' => $row['dic_extra_allownull'],
 				'terms' => array(),
 				'term_default' => ''
 			);

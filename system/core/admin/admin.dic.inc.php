@@ -181,6 +181,9 @@ switch ($mn) {
 		$extralocation = sed_import('extralocation', 'P', 'TXT');
 		$extratype = sed_import('extratype', 'P', 'TXT');
 		$extrasize = sed_import('extrasize', 'P', 'INT');
+		
+		$extradefault  = sed_import('extradefault', 'P', 'TXT');  
+		$extraallownull= sed_import('extraallownull', 'P', 'BOL'); 
 
 		$sql = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id = '" . $did . "'");
 		if (sed_sql_numrows($sql) > 0) {
@@ -188,8 +191,10 @@ switch ($mn) {
 
 			//---
 			if ($a == 'add' && (!empty($did))) {
-				if (!empty($extralocation) && !empty($row['dic_code'])) {
-					sed_extrafield_add($extralocation, $row['dic_code'], $extratype, $extrasize);
+				if (!empty($extralocation) && !empty($row['dic_code'])) {					
+					$default_val = ($extradefault !== null) ? $extradefault : '';
+					$allow_null_val = ($extraallownull !== null) ? $extraallownull : false;
+					sed_extrafield_add($extralocation, $row['dic_code'], $extratype, $extrasize, $default_val, $allow_null_val);					
 					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true));
 				}
 			}
@@ -198,8 +203,10 @@ switch ($mn) {
 				$extradelete = sed_import('extradelete', 'P', 'BOL');
 				if ($extradelete) {
 					sed_extrafield_remove($row['dic_extra_location'], $row['dic_code']);
-				} else {
-					sed_extrafield_update($row['dic_extra_location'], $row['dic_code'], $extratype, $extrasize);
+				} else {					
+					$default_val = ($extradefault !== null) ? $extradefault : '';
+					$allow_null_val = ($extraallownull !== null) ? $extraallownull : false;
+					sed_extrafield_update($row['dic_extra_location'], $row['dic_code'], $extratype, $extrasize, $default_val, $allow_null_val);
 				}
 				sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true));
 			}
@@ -246,7 +253,9 @@ switch ($mn) {
 					$row['dic_extra_location'] . " / <strong>" . $isset_column . "</strong>" :
 					sed_selectbox($row['dic_extra_location'], 'extralocation', $location_arr),
 				"DIC_EXTRA_TYPE" => sed_selectbox($row['dic_extra_type'], 'extratype', $type_arr, false),
-				"DIC_EXTRA_SIZE" => sed_selectbox($row['dic_extra_size'], 'extrasize', $maxsize_arr)
+				"DIC_EXTRA_SIZE" => sed_selectbox($row['dic_extra_size'], 'extrasize', $maxsize_arr),
+				"DIC_EXTRA_DEFAULT" => sed_textbox('extradefault', $row['dic_extra_default'], 30, 255),
+				"DIC_EXTRA_ALLOWNULL" => sed_checkbox('extraallownull', $row['dic_extra_allownull'], $row['dic_extra_allownull']) . $L['adm_dic_extra_allownull']				
 			));
 
 			$t->parse("ADMIN_DIC.DIC_EXTRA");

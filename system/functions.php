@@ -5871,126 +5871,291 @@ function sed_extrafield_buildvar($extrafields, $var_prefix, $table_prefix)
 }
 
 /**
- * Add extra field for pages
+ * Add an extra field to a database table — extended version with support for advanced MySQL types
  *
- * @param string $sql_table Table for adding extrafield (without sed_)
- * @param string $name Field name (unique)
- * @param string $type Field type (input, textarea etc)
- * @param string $size Field size
- * @return bool
+ * Creates a new column for the extrafield. Fully backward compatible with old 4-parameter calls.
+ *
+ * @param string $sql_table       Table name (without sed_ prefix, e.g. 'pages', 'users')
+ * @param string $name            Unique field code (dic_code)
+ * @param string $type            Field type (case-insensitive):
+ *                                varchar, text, mediumtext, longtext,
+ *                                int, tinyint, bigint, boolean,
+ *                                decimal/numeric, date, datetime, timestamp
+ * @param mixed  $size            Size parameter (default 255):
+ *                                - integer for length (VARCHAR, INT, BIGINT, etc.)
+ *                                - string like '10,2' for DECIMAL(10,2)
+ *                                - ignored for TEXT types, DATE, etc.
+ * @param mixed  $default         Default value ('' by default for backward compatibility)
+ *                                - '' → legacy behavior ('' for strings, 0 for numbers)
+ *                                - any value → explicit DEFAULT
+ *                                - null → no DEFAULT clause
+ * @param bool   $allow_null      Allow NULL values (false = NOT NULL by default)
+ * @param string $extra           Optional additional SQL modifiers (e.g. 'UNSIGNED', 'ON UPDATE CURRENT_TIMESTAMP')
+ *
+ * @return bool                   True on success, false on failure
  */
-function sed_extrafield_add($sql_table, $name, $type, $size)
+function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = '', $allow_null = false, $extra = '')
 {
 	global $db_dic, $cfg;
 
 	$table_prefix = $cfg['sqldbprefix'];
+	$type = strtolower($type);
 
-	$fieldsres = sed_sql_query("SELECT dic_code FROM $db_dic WHERE dic_extra_location = '$sql_table'");
-
-	$extrafieldsnames = array();
-	while ($row = sed_sql_fetchassoc($fieldsres)) {
-		$extrafieldsnames[] = $row['dic_code'];
+	/* === Checks: already exists in dictionary or table === */
+	$res = sed_sql_query("SELECT dic_code FROM $db_dic WHERE dic_extra_location = '" . sed_sql_prep($sql_table) . "'");
+	while ($row = sed_sql_fetchassoc($res)) {
+		if ($row['dic_code'] === $name) {
+			return false;
+		}
 	}
 
-	if (count($extrafieldsnames) > 0) if (in_array($name, $extrafieldsnames)) return 0; // No adding - fields already exist 
-
-	// Check table sed_$sql_table - if field with same name exists - exit. 
-	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM " . $table_prefix . $sql_table . " LIKE '%\_$name'")) > 0) {
-		return FALSE;
+	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM " . $table_prefix . $sql_table . " LIKE '%\_" . sed_sql_prep($name) . "'")) > 0) {
+		return false;
 	}
 
-	$fieldsres = sed_sql_query("SELECT * FROM " . $table_prefix . $sql_table . " LIMIT 1");
+	/* === Determine column prefix === */
+	$res = sed_sql_query("SELECT * FROM " . $table_prefix . $sql_table . " LIMIT 1");
+	if (sed_sql_numrows($res) == 0) {
+		return false;
+	}
+
+	$column_prefix = '';
 	$i = 0;
-	while ($i < sed_sql_numfields($fieldsres)) {
-		$column = sed_sql_fetchfield($fieldsres, $i);
-		// get column prefix in this table
-		$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
-		preg_match("#.*?_" . preg_quote($name) . "$#", $column->name, $match);
-		if (isset($match[0]) && $match[0] != "") return false; // No adding - fields already exist
+	while ($i < sed_sql_numfields($res)) {
+		$field = sed_sql_fetchfield($res, $i);
+		if ($i === 0) {
+			$column_prefix = substr($field->name, 0, strpos($field->name, "_"));
+		}
+		if (preg_match('#.*?_' . preg_quote($name) . '$#', $field->name)) {
+			return false;
+		}
 		$i++;
 	}
 
-	$step1 = sed_sql_query("UPDATE $db_dic SET 
-		dic_extra_location = '" . sed_sql_prep($sql_table) . "', 
-		dic_extra_type = '" . sed_sql_prep($type) . "', 
-		dic_extra_size = '" . $size . "' 
-		WHERE dic_code = '" . $name . "'");
-
+	/* === Extended type mapping === */
 	switch ($type) {
-		case "varchar":
-			$sqltype = "VARCHAR(" . $size . ")";
+		case 'varchar':
+			$sqltype = 'VARCHAR(' . max(1, (int)$size) . ')';
 			break;
-		case "text":
-			$sqltype = "TEXT";
+		case 'text':
+			$sqltype = 'TEXT';
 			break;
-		case "int":
-			$sqltype = "INT(" . $size . ")";
+		case 'mediumtext':
+			$sqltype = 'MEDIUMTEXT';
 			break;
-		case "tinyint":
-			$sqltype = "TINYINT(" . $size . ")";
+		case 'longtext':
+			$sqltype = 'LONGTEXT';
 			break;
-		case "boolean":
-			$sqltype = "TINYINT(1)";
+		case 'int':
+			$sqltype = 'INT(' . ((int)$size ? (int)$size : 11) . ')';
 			break;
+		case 'tinyint':
+			$sqltype = 'TINYINT(' . ((int)$size ? (int)$size : 4) . ')';
+			break;
+		case 'bigint':
+			$sqltype = 'BIGINT(' . ((int)$size ? (int)$size : 20) . ')';
+			break;
+		case 'boolean':
+			$sqltype = 'TINYINT(1)';
+			break;
+		case 'decimal':
+		case 'numeric':
+			$size_str = preg_replace('/[^\d,]/', '', $size);
+			$size_str = $size_str ? $size_str : '10,2';
+			$sqltype = "DECIMAL($size_str)";
+			break;
+		case 'date':
+			$sqltype = 'DATE';
+			break;
+		case 'datetime':
+			$sqltype = 'DATETIME';
+			break;
+		case 'timestamp':
+			$sqltype = 'TIMESTAMP';
+			break;
+		default:
+			$sqltype = 'VARCHAR(255)'; // safe fallback
 	}
 
-	$step2 = sed_sql_query("ALTER TABLE " . $table_prefix . $sql_table . " ADD " . $column_prefix . "_$name $sqltype ");
-	return TRUE;
+	if (!empty($extra)) {
+		$sqltype .= ' ' . trim($extra);
+	}
+
+	/* === Attributes: NULL/NOT NULL + DEFAULT === */
+	$sqlattr = $allow_null ? 'NULL' : 'NOT NULL';
+
+	if ($default !== '') {
+		if (is_numeric($default)) {
+			$sqlattr .= ' DEFAULT ' . floatval($default);
+		} elseif (is_bool($default)) {
+			$sqlattr .= ' DEFAULT ' . ($default ? 1 : 0);
+		} elseif (strtoupper($default) === 'CURRENT_TIMESTAMP') {
+			$sqlattr .= ' DEFAULT CURRENT_TIMESTAMP';
+		} else {
+			$sqlattr .= " DEFAULT '" . sed_sql_prep($default) . "'";
+		}
+	} elseif (!$allow_null) {
+		// Backward compatibility defaults
+		$numeric_types = array('int', 'tinyint', 'bigint', 'boolean', 'decimal');
+		$text_types = array('varchar', 'text', 'mediumtext', 'longtext');
+		if (in_array($type, $numeric_types)) {
+			$sqlattr .= ' DEFAULT 0';
+		} elseif (in_array($type, $text_types)) {
+			$sqlattr .= " DEFAULT ''";
+		}
+	}
+
+	/* === Create column === */
+	$column_name = $column_prefix . '_' . $name;
+	$query = "ALTER TABLE " . $table_prefix . $sql_table . " ADD $column_name $sqltype $sqlattr";
+	if (!sed_sql_query($query)) {
+		return false;
+	}
+
+	/* === Update dictionary === */
+	$dic_default_sql = ($default === null) ? 'NULL' : "'" . sed_sql_prep($default) . "'";
+	$size_for_db = is_string($size) ? $size : (int)$size;
+	sed_sql_query("UPDATE $db_dic SET
+        dic_extra_location = '" . sed_sql_prep($sql_table) . "',
+        dic_extra_type = '" . sed_sql_prep($type) . "',
+        dic_extra_size = '" . sed_sql_prep($size_for_db) . "',
+        dic_extra_default = $dic_default_sql,
+        dic_extra_allownull = " . ($allow_null ? 1 : 0) . "
+        WHERE dic_code = '" . sed_sql_prep($name) . "'");
+
+	return true;
 }
 
 /**
- * Update extra field
+ * Update an existing extra field — extended version with support for advanced types
  *
- * @param string $sql_table Table contains extrafield (without sed_)
- * @param string $name Field name (unique)
- * @param string $type Field type (input, textarea etc)
- * @param string $size Field size
+ * Modifies column type, size, default, nullability, and extra modifiers.
+ * Fully backward compatible with old calls.
+ *
+ * @param string $sql_table       Table name (without sed_)
+ * @param string $name            Field code (dic_code)
+ * @param string $type            New field type (same list as in add function)
+ * @param mixed  $size            New size
+ * @param mixed  $default         New default value
+ * @param bool   $allow_null      New nullability
+ * @param string $extra           New extra modifiers
+ *
  * @return bool
  */
-function sed_extrafield_update($sql_table, $name, $type, $size)
+function sed_extrafield_update($sql_table, $name, $type, $size = 255, $default = '', $allow_null = false, $extra = '')
 {
 	global $db_dic, $cfg;
 
 	$table_prefix = $cfg['sqldbprefix'];
+	$type = strtolower($type);
 
-	$fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_dic WHERE dic_code = '$name' AND dic_extra_location='$sql_table'");
+	/* === Existence checks === */
+	$count_dic = sed_sql_query("SELECT COUNT(*) FROM $db_dic
+        WHERE dic_code = '" . sed_sql_prep($name) . "'
+        AND dic_extra_location = '" . sed_sql_prep($sql_table) . "'");
+	$count_col = sed_sql_query("SHOW COLUMNS FROM " . $table_prefix . $sql_table . " LIKE '%\_" . sed_sql_prep($name) . "'");
 
-	if (sed_sql_numrows($fieldsres) <= 0 || sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM " . $table_prefix . $sql_table . " LIKE '%\_$name'")) <= 0) {
-		return FALSE;
+	if (sed_sql_result($count_dic, 0, 0) == 0 || sed_sql_numrows($count_col) == 0) {
+		return false;
 	}
 
-	$fieldsres = sed_sql_query("SELECT * FROM " . $table_prefix . $sql_table . " LIMIT 1");
-	$column = sed_sql_fetchfield($fieldsres, 0);
-	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
+	/* === Column prefix === */
+	$res = sed_sql_query("SELECT * FROM " . $table_prefix . $sql_table . " LIMIT 1");
+	$first_field = sed_sql_fetchfield($res, 0);
+	$column_prefix = substr($first_field->name, 0, strpos($first_field->name, "_"));
 
-	$step1 = sed_sql_query("UPDATE $db_dic SET 
-		dic_extra_location = '" . sed_sql_prep($sql_table) . "', 
-		dic_extra_type = '" . sed_sql_prep($type) . "', 
-		dic_extra_size = '" . $size . "' 
-		WHERE dic_code = '" . $name . "'");
-
-	if (empty($size)) $size = 11;
-
+	/* === Type mapping (same as in add) === */
 	switch ($type) {
-		case "varchar":
-			$sqltype = "VARCHAR(" . $size . ")";
+		case 'varchar':
+			$sqltype = 'VARCHAR(' . max(1, (int)$size) . ')';
 			break;
-		case "text":
-			$sqltype = "TEXT";
+		case 'text':
+			$sqltype = 'TEXT';
 			break;
-		case "int":
-			$sqltype = "INT(" . $size . ")";
+		case 'mediumtext':
+			$sqltype = 'MEDIUMTEXT';
 			break;
-		case "tinyint":
-			$sqltype = "TINYINT(" . $size . ")";
+		case 'longtext':
+			$sqltype = 'LONGTEXT';
 			break;
-		case "boolean":
-			$sqltype = "TINYINT(1)";
+		case 'int':
+			$sqltype = 'INT(' . ((int)$size ? (int)$size : 11) . ')';
 			break;
+		case 'tinyint':
+			$sqltype = 'TINYINT(' . ((int)$size ? (int)$size : 4) . ')';
+			break;
+		case 'bigint':
+			$sqltype = 'BIGINT(' . ((int)$size ? (int)$size : 20) . ')';
+			break;
+		case 'boolean':
+			$sqltype = 'TINYINT(1)';
+			break;
+		case 'decimal':
+		case 'numeric':
+			$size_str = preg_replace('/[^\d,]/', '', $size);
+			$size_str = $size_str ? $size_str : '10,2';
+			$sqltype = "DECIMAL($size_str)";
+			break;
+		case 'date':
+			$sqltype = 'DATE';
+			break;
+		case 'datetime':
+			$sqltype = 'DATETIME';
+			break;
+		case 'timestamp':
+			$sqltype = 'TIMESTAMP';
+			break;
+		default:
+			$sqltype = 'VARCHAR(255)';
 	}
 
-	$step2 = sed_sql_query("ALTER TABLE " . $table_prefix . $sql_table . " CHANGE " . $column_prefix . "_$name " . $column_prefix . "_$name $sqltype ");
-	return TRUE;
+	if (!empty($extra)) {
+		$sqltype .= ' ' . trim($extra);
+	}
+
+	/* === Attributes === */
+	$sqlattr = $allow_null ? 'NULL' : 'NOT NULL';
+
+	if ($default !== '') {
+		if (is_numeric($default)) {
+			$sqlattr .= ' DEFAULT ' . floatval($default);
+		} elseif (is_bool($default)) {
+			$sqlattr .= ' DEFAULT ' . ($default ? 1 : 0);
+		} elseif (strtoupper($default) === 'CURRENT_TIMESTAMP') {
+			$sqlattr .= ' DEFAULT CURRENT_TIMESTAMP';
+		} else {
+			$sqlattr .= " DEFAULT '" . sed_sql_prep($default) . "'";
+		}
+	} elseif (!$allow_null) {
+		$numeric_types = array('int', 'tinyint', 'bigint', 'boolean', 'decimal');
+		$text_types = array('varchar', 'text', 'mediumtext', 'longtext');
+		if (in_array($type, $numeric_types)) {
+			$sqlattr .= ' DEFAULT 0';
+		} elseif (in_array($type, $text_types)) {
+			$sqlattr .= " DEFAULT ''";
+		}
+	}
+
+	/* === Modify column === */
+	$column_name = $column_prefix . '_' . $name;
+	$query = "ALTER TABLE " . $table_prefix . $sql_table .
+		" CHANGE $column_name $column_name $sqltype $sqlattr";
+	if (!sed_sql_query($query)) {
+		return false;
+	}
+
+	/* === Update dictionary === */
+	$dic_default_sql = ($default === null) ? 'NULL' : "'" . sed_sql_prep($default) . "'";
+	$size_for_db = is_string($size) ? $size : (int)$size;
+	sed_sql_query("UPDATE $db_dic SET
+        dic_extra_location = '" . sed_sql_prep($sql_table) . "',
+        dic_extra_type = '" . sed_sql_prep($type) . "',
+        dic_extra_size = '" . sed_sql_prep($size_for_db) . "',
+        dic_extra_default = $dic_default_sql,
+        dic_extra_allownull = " . ($allow_null ? 1 : 0) . "
+        WHERE dic_code = '" . sed_sql_prep($name) . "'");
+
+	return true;
 }
 
 /**
@@ -6455,69 +6620,69 @@ $sed_countries = array(
  *   - output_file (string): Path to save downloaded file
  * @return mixed Response content, file path, or false on failure
  */
-function sed_browser($url, $options = array()) {
-    // Set default options
-    $defaults = array(
-        'post' => array(),
-        'user_agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)',
-        'proxy' => '',
-        'ssl_verifypeer' => false,
-        'ssl_verifyhost' => false,
-        'output_file' => ''
-    );
-    $options = array_merge($defaults, $options);
+function sed_browser($url, $options = array())
+{
+	// Set default options
+	$defaults = array(
+		'post' => array(),
+		'user_agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;)',
+		'proxy' => '',
+		'ssl_verifypeer' => false,
+		'ssl_verifyhost' => false,
+		'output_file' => ''
+	);
+	$options = array_merge($defaults, $options);
 
-    // Initialize CURL
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 200);
-    curl_setopt($ch, CURLOPT_USERAGENT, $options['user_agent']);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $options['ssl_verifypeer']);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $options['ssl_verifyhost']);
-    if (!empty($options['proxy'])) {
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        curl_setopt($ch, CURLOPT_PROXY, $options['proxy']);
-    }
+	// Initialize CURL
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 200);
+	curl_setopt($ch, CURLOPT_USERAGENT, $options['user_agent']);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $options['ssl_verifypeer']);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $options['ssl_verifyhost']);
+	if (!empty($options['proxy'])) {
+		curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+		curl_setopt($ch, CURLOPT_PROXY, $options['proxy']);
+	}
 
-    // Configure POST request if data is provided
-    if (!empty($options['post'])) {
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $options['post']);
-    }
+	// Configure POST request if data is provided
+	if (!empty($options['post'])) {
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $options['post']);
+	}
 
-    // Configure file download if output path is specified
-    $fp = null;
-    if (!empty($options['output_file'])) {
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        $fp = fopen($options['output_file'], 'w');
-        if ($fp === false) {
-            curl_close($ch);
-            return false;
-        }
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-    }
+	// Configure file download if output path is specified
+	$fp = null;
+	if (!empty($options['output_file'])) {
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		$fp = fopen($options['output_file'], 'w');
+		if ($fp === false) {
+			curl_close($ch);
+			return false;
+		}
+		curl_setopt($ch, CURLOPT_FILE, $fp);
+	}
 
-    // Execute CURL request
-    $result = curl_exec($ch);
+	// Execute CURL request
+	$result = curl_exec($ch);
 
-    // Check for CURL errors
-    if ($result === false) {
-        curl_close($ch);
-        if ($fp) {
-            fclose($fp);
-        }
-        return false;
-    }
+	// Check for CURL errors
+	if ($result === false) {
+		curl_close($ch);
+		if ($fp) {
+			fclose($fp);
+		}
+		return false;
+	}
 
-    // Close CURL and file pointer
-    curl_close($ch);
-    if ($fp) {
-        fclose($fp);
-    }
+	// Close CURL and file pointer
+	curl_close($ch);
+	if ($fp) {
+		fclose($fp);
+	}
 
-    // Return response for non-file downloads or file path for downloads
-    return !empty($options['output_file']) ? $options['output_file'] : $result;
+	// Return response for non-file downloads or file path for downloads
+	return !empty($options['output_file']) ? $options['output_file'] : $result;
 }
-

@@ -371,6 +371,12 @@ $L['adm_help_dic'] = ""; //Need add
 
 $L['adm_dic_form_wysiwyg'] = "Тип WYSIWYG редактора";
 
+$L['adm_dic_extra_default'] = 'Значение по умолчанию';
+$L['adm_dic_extra_default_help'] = 'Оставьте пустым — будет пустая строка или 0 (в зависимости от типа поля). Введите нужное значение — оно будет использовано как DEFAULT.';
+$L['adm_dic_extra_allownull'] = 'Разрешить NULL значения';
+$L['adm_dic_extra_allownull_help'] = 'Если включено и поле "Значение по умолчанию" пустое — колонка будет NULL без DEFAULT.';
+$L['adm_dic_extra_field'] = 'колонка базы данных';
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Пункты меню";

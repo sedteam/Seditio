@@ -30,6 +30,14 @@ $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "forum_sections MODIFY fs_title 
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD COLUMN dic_extra_default VARCHAR(255) NOT NULL DEFAULT ''";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD COLUMN dic_extra_allownull TINYINT(1) NOT NULL DEFAULT 0";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to xxx...<br />";

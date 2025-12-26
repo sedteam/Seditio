@@ -624,6 +624,26 @@
 							{DIC_EXTRA_SIZE}
 						</div>
 					</div>
+					
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">
+							{PHP.L.adm_dic_extra_default} :
+						</div>
+						<div class="table-td text-left resp-table-td">
+							{DIC_EXTRA_DEFAULT}
+							<div class="descr">{PHP.L.adm_dic_extra_default_help}</div>
+						</div>
+					</div>
+
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">
+							{PHP.L.adm_dic_extra_allownull} :
+						</div>
+						<div class="table-td text-left resp-table-td">
+							{DIC_EXTRA_ALLOWNULL}
+							<div class="descr">{PHP.L.adm_dic_extra_allownull_help}</div>
+						</div>
+					</div>					
 
 					<!-- BEGIN: DIC_EXTRA_DELETE -->
 

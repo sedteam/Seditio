@@ -183,12 +183,11 @@ function sed_get_latesttopics($limit, $mask)
 	while ($row = sed_sql_fetchassoc($sql)) {
 		if (sed_auth('forums', $row['fs_id'], 'R')) {
 			$img = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&n=unread", "#unread") . "\">" . $out['ic_arrow_unread'] . "</a>" : "<a href=\"" . sed_url("forums", "m=posts&q=" . $row['ft_id'] . "&n=last", "#bottom") . "\">" . $out['ic_arrow_follow'] . "</a> ";
-
+			
+			$parentcat = array();
 			if ($row['fs_parentcat'] > 0) {
 				$parentcat['sectionid']  = $forum_parentcat[$row['fs_parentcat']]['fs_id'];
 				$parentcat['title']  = $forum_parentcat[$row['fs_parentcat']]['fs_title'];
-			} else {
-				$parentcat = FALSE;
 			}
 
 			/*Autogen avatar from first letter*/

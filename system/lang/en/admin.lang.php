@@ -369,6 +369,12 @@ $L['adm_help_dic'] = ""; //Need add
 
 $L['adm_dic_form_wysiwyg'] = "WYSIWYG editor type";
 
+$L['adm_dic_extra_default'] = 'Default value';
+$L['adm_dic_extra_default_help'] = 'Leave empty — will use empty string or 0 (depending on field type). Enter a value — it will be used as DEFAULT.';
+$L['adm_dic_extra_allownull'] = 'Allow NULL values';
+$L['adm_dic_extra_allownull_help'] = 'If enabled and "Default value" is empty — column will be NULL without DEFAULT.';
+$L['adm_dic_extra_field'] = 'database column';
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Menu items";

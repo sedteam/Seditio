@@ -115,6 +115,8 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "dic (
   dic_extra_location varchar(40) NOT NULL DEFAULT '',
   dic_extra_type varchar(20) NOT NULL DEFAULT '',
   dic_extra_size smallint(5) NOT NULL DEFAULT '0',
+  dic_extra_default VARCHAR(255) NOT NULL DEFAULT '',
+  dic_extra_allownull TINYINT(1) NOT NULL DEFAULT '0',
   KEY dic_code (dic_code), 
   KEY dic_parent (dic_parent),
   PRIMARY KEY (dic_id)

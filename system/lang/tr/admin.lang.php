@@ -365,6 +365,12 @@ $L['adm_dic_extra_size'] = "Alan uzunluğu";
 $L['adm_dic_comma_separat'] = "(virgülle ayrılmış)";
 $L['adm_help_dic'] = ""; //Ekleme gerekli
 
+$L['adm_dic_extra_default'] = 'Varsayılan değer';
+$L['adm_dic_extra_default_help'] = 'Boş bırakın — boş string veya 0 kullanılacak (alan türüne göre). Değer girin — bu değer DEFAULT olarak kullanılacak.';
+$L['adm_dic_extra_allownull'] = 'NULL değerlerine izin ver';
+$L['adm_dic_extra_allownull_help'] = 'Etkinse ve "Varsayılan değer" boşsa — sütun DEFAULT olmadan NULL olacak.';
+$L['adm_dic_extra_field'] = 'veritabanı sütunu';
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Menü öğeleri";
