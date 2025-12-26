@@ -22,6 +22,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 
 global $db_dic, $db_dic_items, $db_pages;
 
+sed_extrafield_add("pages", "slider", "tinyint", "2");
+
 $dtitle = "Slider";
 $dcode = "slider";
 $dparent = 0;
@@ -65,11 +67,10 @@ $did = sed_sql_insertid();
 
 $sql = sed_sql_query("INSERT into $db_dic_items (ditem_dicid, ditem_title, ditem_code, ditem_children, ditem_defval) 
 		VALUES (" . (int)$did . ", 'Yes', '1', '0', '0')");
+		
 $sql = sed_sql_query("INSERT into $db_dic_items (ditem_dicid, ditem_title, ditem_code, ditem_children, ditem_defval) 
 		VALUES (" . (int)$did . ", 'No', '0', '0', '1')");
 
 sed_log("Added new dic & terms #" . $did, 'adm');
-
-sed_extrafield_add("pages", "slider", "tinyint", "2");
 
 sed_cache_clear('sed_dic');
