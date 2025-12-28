@@ -38,6 +38,10 @@ $sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD COLUMN dic_extra_allown
 $adminmain .= sed_cc($sqlqr) . "<br />";
 $sql = sed_sql_query($sqlqr);
 
+$sqlqr = "ALTER TABLE " . $cfg['sqldbprefix'] . "dic ADD COLUMN dic_extra_extra VARCHAR(255) NOT NULL DEFAULT ''";
+$adminmain .= sed_cc($sqlqr) . "<br />";
+$sql = sed_sql_query($sqlqr);
+
 $adminmain .= "-----------------------<br />";
 
 $adminmain .= "Changing the SQL version number to xxx...<br />";

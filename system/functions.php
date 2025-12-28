@@ -3060,200 +3060,190 @@ function sed_image_ttf_center($image, $text, $font, $size, $angle = 8)
 	return array($x, $y);
 }
 
-/** 
- * Imports data from the outer world 
- * 
- * @param string $name Variable name 
- * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering) 
- * @param string $filter Filter type 
- * @param int $maxlen Length limit 
- * @param bool $dieonerror Die with fatal error on wrong input 
- * @return mixed 
+/**
+ * Imports data from the outer world
+ *
+ * @param string $name         Variable name
+ * @param string $source       Source type: G (GET), P (POST), C (COOKIE) or D (direct variable)
+ * @param string $filter       Filter type (INT, NUM, TXT, ALP, SLU, BOL, ARR, HTM, HTR, etc.)
+ * @param int    $maxlen       Maximum length (0 = no limit)
+ * @param bool   $dieonerror   Die with fatal error on invalid input (default: false)
+ * @return mixed               Filtered value or null/default on failure
  */
-function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror = FALSE)
+function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror = false)
 {
 	global $cfg;
 
 	switch ($source) {
 		case 'G':
-			$v = (isset($_GET[$name])) ? $_GET[$name] : NULL;
-			$log = TRUE;
+			$v = isset($_GET[$name]) ? $_GET[$name] : null;
+			$log = true;
 			break;
-
 		case 'P':
-			$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
-			$log = TRUE;
-			if ($filter == 'ARR') {
-				return ($v);
-			}
+			$v = isset($_POST[$name]) ? $_POST[$name] : null;
+			$log = true;
 			break;
-
 		case 'C':
-			$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : NULL;
-			$log = TRUE;
+			$v = isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
+			$log = true;
 			break;
-
 		case 'D':
-			$v = $name;
-			$log = FALSE;
+			$v = $name; // Direct pass-through (used for internal variables)
+			$log = false;
 			break;
-
 		default:
 			sed_diefatal('Unknown source for a variable : <br />Name = ' . $name . '<br />Source = ' . $source . ' ? (must be G, P, C or D)');
-			break;
+			return null;
 	}
 
-	if ($v == '' || $v == NULL) {
-		return ($v);
+	// If value is empty or null — return it immediately (no filtering needed)
+	if ($v === '' || $v === null) {
+		return $v;
 	}
 
-	if ($maxlen > 0) {
-		$v = mb_substr($v, 0, $maxlen);
+	// Apply length limit if specified
+	if ($maxlen > 0 && is_string($v)) {
+		$v = mb_substr($v, 0, $maxlen, 'UTF-8');
 	}
 
-	$pass = FALSE;
-	$defret = NULL;
-	$filter = ($filter == 'STX') ? 'TXT' : $filter;
+	$pass = false;
+	$defret = null;
+	$filter = ($filter === 'STX') ? 'TXT' : $filter; // Backward compatibility
 
 	switch ($filter) {
 		case 'INT':
-			if (is_numeric($v) == TRUE && floor($v) == $v) {
-				$pass = TRUE;
+			if (is_numeric($v) && (int)$v == $v) {
+				$v = (int)$v;
+				$pass = true;
 			}
 			break;
 
 		case 'NUM':
-			if (is_numeric($v) == TRUE) {
-				$pass = TRUE;
+			if (is_numeric($v)) {
+				$v = $v + 0; // Convert to float/int
+				$pass = true;
 			}
 			break;
 
 		case 'TXT':
 			$v = trim($v);
-			if (mb_strpos($v, '<') === FALSE) {
-				$pass = TRUE;
+			if (mb_strpos($v, '<') === false) {
+				$pass = true;
 			} else {
-				$defret = str_replace('<', '&lt;', $v);
+				$defret = htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
 			}
 			break;
 
-		case 'SLU':
+		case 'SLU': // Slug-like: letters, numbers, underscore, dash, slash
 			$v = trim($v);
-			$f = preg_replace('/[^a-zA-Z0-9_=\/]/', '', $v);
-			if ($v == $f) {
-				$pass = TRUE;
+			$clean = preg_replace('/[^a-zA-Z0-9_\-\=\/]/', '', $v);
+			if ($v === $clean) {
+				$pass = true;
 			} else {
-				$defret = '';
+				$defret = $clean;
 			}
 			break;
 
-		case 'ALP':
+		case 'ALP': // Alphabetic only (with sed_alphaonly helper)
 			$v = trim($v);
-			$f = sed_alphaonly($v);
-			if ($v == $f) {
-				$pass = TRUE;
+			$clean = sed_alphaonly($v);
+			if ($v === $clean) {
+				$pass = true;
 			} else {
-				$defret = $f;
+				$defret = $clean;
 			}
 			break;
 
-		case 'ALS':
+		case 'ALS': // Alphanumeric + spaces + dash (for titles)
 			$v = trim($v);
-			$v = preg_replace('/[^\w\s-]/u', '_', $v);
-			$pass = TRUE;
+			$v = preg_replace('/[^\w\s\-]/u', '_', $v);
+			$pass = true;
 			break;
 
-		case 'PSW':
+		case 'PSW': // Password-like: safe chars, max 32
 			$v = trim($v);
-			$f = preg_replace('#[\'"&<>]#', '', $v);
-			$f = mb_substr($f, 0, 32);
-
-			if ($v == $f) {
-				$pass = TRUE;
+			$clean = preg_replace('#[\'"&<>]#', '', $v);
+			$clean = mb_substr($clean, 0, 32, 'UTF-8');
+			if ($v === $clean) {
+				$pass = true;
 			} else {
-				$defret = $f;
+				$defret = $clean;
 			}
 			break;
 
-		case 'H32':
+		case 'H32': // Hash-like: alphanumeric, max 32
 			$v = trim($v);
-			$f = sed_alphaonly($v);
-			$f = mb_substr($f, 0, 32);
-
-			if ($v == $f) {
-				$pass = TRUE;
+			$clean = sed_alphaonly($v);
+			$clean = mb_substr($clean, 0, 32, 'UTF-8');
+			if ($v === $clean) {
+				$pass = true;
 			} else {
-				$defret = $f;
+				$defret = $clean;
 			}
 			break;
 
-		case 'HTR':
+		case 'HTR': // HTML trusted (no filtering)
 			$v = trim($v);
-			$pass = TRUE;
+			$pass = true;
 			break;
 
-		case 'HTM':
+		case 'HTM': // HTML with plugin filtering
 			$v = trim($v);
-
-			/* == Hook for the plugins html filter == */
+			/* == Hook for plugins == */
 			$extp = sed_getextplugins('import.filter');
 			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+				foreach ($extp as $pl) {
+					include SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php';
 				}
 			}
 			/* ===== */
-
-			$pass = TRUE;
+			$pass = true;
 			break;
 
-		case 'ARR':
-			if (TRUE)	// !!!!!!!!!!!
-			{
-				$pass = TRUE;
-			}
+		case 'ARR': // Array — no filtering, return as-is
+			$pass = true;
 			break;
 
-		case 'BOL':
-			if ($v == "1" || $v == "on") {
-				$pass = TRUE;
-				$v = "1";
-			} elseif ($v == "0" || $v == "off") {
-				$pass = TRUE;
-				$v = "0";
+		case 'BOL': // Boolean
+			if ($v === '1' || $v === 'on' || $v === true || $v === 1) {
+				$v = true;
+				$pass = true;
+			} elseif ($v === '0' || $v === 'off' || $v === false || $v === 0) {
+				$v = false;
+				$pass = true;
 			} else {
-				$defret = "0";
+				$defret = false;
 			}
 			break;
 
-		case 'LVL':
-			if (is_numeric($v) == TRUE && $v >= 0 && $v <= 100 && floor($v) == $v) {
-				$pass = TRUE;
+		case 'LVL': // User level (0-100)
+			if (is_numeric($v) && $v >= 0 && $v <= 100 && floor($v) == $v) {
+				$v = (int)$v;
+				$pass = true;
 			} else {
-				$defret = NULL;
+				$defret = null;
 			}
 			break;
 
-		case 'NOC':
-			$pass = TRUE;
+		case 'NOC': // No check — return raw
+			$pass = true;
 			break;
 
 		default:
 			sed_diefatal('Unknown filter for a variable : <br />Var = ' . $v . '<br />Filter = ' . $filter . ' ?');
-			break;
+			return null;
 	}
 
 	if ($pass) {
-		return ($v);
+		return $v;
 	} else {
 		if ($log) {
 			sed_log_sed_import($source, $filter, $name, $v);
 		}
 		if ($dieonerror) {
 			sed_diefatal('Wrong input.');
-		} else {
-			return ($defret);
 		}
+		return $defret;
 	}
 }
 
@@ -5901,7 +5891,7 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 	$table_prefix = $cfg['sqldbprefix'];
 	$type = strtolower($type);
 
-	/* === Checks: already exists in dictionary or table === */
+	/* === Checks: already exists === */
 	$res = sed_sql_query("SELECT dic_code FROM $db_dic WHERE dic_extra_location = '" . sed_sql_prep($sql_table) . "'");
 	while ($row = sed_sql_fetchassoc($res)) {
 		if ($row['dic_code'] === $name) {
@@ -5913,7 +5903,7 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 		return false;
 	}
 
-	/* === Determine column prefix === */
+	/* === Column prefix === */
 	$res = sed_sql_query("SELECT * FROM " . $table_prefix . $sql_table . " LIMIT 1");
 	if (sed_sql_numrows($res) == 0) {
 		return false;
@@ -5932,49 +5922,68 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 		$i++;
 	}
 
-	/* === Extended type mapping === */
+	$normalized_size = 0;
+
 	switch ($type) {
 		case 'varchar':
-			$sqltype = 'VARCHAR(' . max(1, (int)$size) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 255;
+			$sqltype = 'VARCHAR(' . max(1, $normalized_size) . ')';
 			break;
+
 		case 'text':
 			$sqltype = 'TEXT';
 			break;
+
 		case 'mediumtext':
 			$sqltype = 'MEDIUMTEXT';
 			break;
+
 		case 'longtext':
 			$sqltype = 'LONGTEXT';
 			break;
+
 		case 'int':
-			$sqltype = 'INT(' . ((int)$size ? (int)$size : 11) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 11;
+			$sqltype = 'INT(' . $normalized_size . ')';
 			break;
+
 		case 'tinyint':
-			$sqltype = 'TINYINT(' . ((int)$size ? (int)$size : 4) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 4;
+			$sqltype = 'TINYINT(' . $normalized_size . ')';
 			break;
+
 		case 'bigint':
-			$sqltype = 'BIGINT(' . ((int)$size ? (int)$size : 20) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 20;
+			$sqltype = 'BIGINT(' . $normalized_size . ')';
 			break;
+
 		case 'boolean':
 			$sqltype = 'TINYINT(1)';
 			break;
+
 		case 'decimal':
 		case 'numeric':
-			$size_str = preg_replace('/[^\d,]/', '', $size);
-			$size_str = $size_str ? $size_str : '10,2';
-			$sqltype = "DECIMAL($size_str)";
+			$normalized_size = preg_replace('/[^\d,]/', '', $size);
+			$normalized_size = $normalized_size ? $normalized_size : '10,2';
+			$sqltype = "DECIMAL($normalized_size)";
 			break;
+
 		case 'date':
 			$sqltype = 'DATE';
 			break;
+
 		case 'datetime':
 			$sqltype = 'DATETIME';
 			break;
+
 		case 'timestamp':
 			$sqltype = 'TIMESTAMP';
 			break;
+
 		default:
-			$sqltype = 'VARCHAR(255)'; // safe fallback
+			$sqltype = 'VARCHAR(255)';
+			$normalized_size = 255;
+			break;
 	}
 
 	if (!empty($extra)) {
@@ -5995,7 +6004,6 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 			$sqlattr .= " DEFAULT '" . sed_sql_prep($default) . "'";
 		}
 	} elseif (!$allow_null) {
-		// Backward compatibility defaults
 		$numeric_types = array('int', 'tinyint', 'bigint', 'boolean', 'decimal');
 		$text_types = array('varchar', 'text', 'mediumtext', 'longtext');
 		if (in_array($type, $numeric_types)) {
@@ -6012,15 +6020,18 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 		return false;
 	}
 
-	/* === Update dictionary === */
+	/* === Update dictionary with normalized size === */
 	$dic_default_sql = ($default === null) ? 'NULL' : "'" . sed_sql_prep($default) . "'";
-	$size_for_db = is_string($size) ? $size : (int)$size;
+	$size_for_db = ($type === 'decimal' || $type === 'numeric') ? $normalized_size : (int)$normalized_size;
+	$extra_for_db = sed_sql_prep($extra);
+
 	sed_sql_query("UPDATE $db_dic SET
         dic_extra_location = '" . sed_sql_prep($sql_table) . "',
         dic_extra_type = '" . sed_sql_prep($type) . "',
         dic_extra_size = '" . sed_sql_prep($size_for_db) . "',
         dic_extra_default = $dic_default_sql,
-        dic_extra_allownull = " . ($allow_null ? 1 : 0) . "
+        dic_extra_allownull = " . ($allow_null ? 1 : 0) . ",
+        dic_extra_extra = '" . $extra_for_db . "'
         WHERE dic_code = '" . sed_sql_prep($name) . "'");
 
 	return true;
@@ -6054,7 +6065,6 @@ function sed_extrafield_update($sql_table, $name, $type, $size = 255, $default =
         WHERE dic_code = '" . sed_sql_prep($name) . "'
         AND dic_extra_location = '" . sed_sql_prep($sql_table) . "'");
 	$count_col = sed_sql_query("SHOW COLUMNS FROM " . $table_prefix . $sql_table . " LIKE '%\_" . sed_sql_prep($name) . "'");
-
 	if (sed_sql_result($count_dic, 0, 0) == 0 || sed_sql_numrows($count_col) == 0) {
 		return false;
 	}
@@ -6064,53 +6074,87 @@ function sed_extrafield_update($sql_table, $name, $type, $size = 255, $default =
 	$first_field = sed_sql_fetchfield($res, 0);
 	$column_prefix = substr($first_field->name, 0, strpos($first_field->name, "_"));
 
-	/* === Type mapping (same as in add) === */
+	$normalized_size = 0;
+
 	switch ($type) {
 		case 'varchar':
-			$sqltype = 'VARCHAR(' . max(1, (int)$size) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 255;
+			$sqltype = 'VARCHAR(' . max(1, $normalized_size) . ')';
 			break;
+
 		case 'text':
 			$sqltype = 'TEXT';
 			break;
+
 		case 'mediumtext':
 			$sqltype = 'MEDIUMTEXT';
 			break;
+
 		case 'longtext':
 			$sqltype = 'LONGTEXT';
 			break;
+
 		case 'int':
-			$sqltype = 'INT(' . ((int)$size ? (int)$size : 11) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 11;
+			$sqltype = 'INT(' . $normalized_size . ')';
 			break;
+
 		case 'tinyint':
-			$sqltype = 'TINYINT(' . ((int)$size ? (int)$size : 4) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 4;
+			$sqltype = 'TINYINT(' . $normalized_size . ')';
 			break;
+
 		case 'bigint':
-			$sqltype = 'BIGINT(' . ((int)$size ? (int)$size : 20) . ')';
+			$normalized_size = ((int)$size > 0) ? (int)$size : 20;
+			$sqltype = 'BIGINT(' . $normalized_size . ')';
 			break;
+
 		case 'boolean':
 			$sqltype = 'TINYINT(1)';
 			break;
+
 		case 'decimal':
 		case 'numeric':
-			$size_str = preg_replace('/[^\d,]/', '', $size);
-			$size_str = $size_str ? $size_str : '10,2';
-			$sqltype = "DECIMAL($size_str)";
+			$normalized_size = preg_replace('/[^\d,]/', '', $size);
+			$normalized_size = $normalized_size ? $normalized_size : '10,2';
+			$sqltype = "DECIMAL($normalized_size)";
 			break;
+
 		case 'date':
 			$sqltype = 'DATE';
 			break;
+
 		case 'datetime':
 			$sqltype = 'DATETIME';
 			break;
+
 		case 'timestamp':
 			$sqltype = 'TIMESTAMP';
 			break;
+
 		default:
 			$sqltype = 'VARCHAR(255)';
+			$normalized_size = 255;
+			break;
 	}
 
-	if (!empty($extra)) {
-		$sqltype .= ' ' . trim($extra);
+	/* === Extra modifiers handling === */
+	$current_res = sed_sql_query("SELECT dic_extra_extra FROM $db_dic
+        WHERE dic_code = '" . sed_sql_prep($name) . "'
+        AND dic_extra_location = '" . sed_sql_prep($sql_table) . "'");
+	$current_row = sed_sql_fetchassoc($current_res);
+	$current_extra = isset($current_row['dic_extra_extra']) ? $current_row['dic_extra_extra'] : '';
+
+	if ($extra === '') {
+		$extra_to_use = '';
+	} elseif ($extra !== null) {
+		$extra_to_use = trim($extra);
+	} else {
+		$extra_to_use = $current_extra;
+	}
+
+	if (!empty($extra_to_use)) {
+		$sqltype .= ' ' . $extra_to_use;
 	}
 
 	/* === Attributes === */
@@ -6146,13 +6190,15 @@ function sed_extrafield_update($sql_table, $name, $type, $size = 255, $default =
 
 	/* === Update dictionary === */
 	$dic_default_sql = ($default === null) ? 'NULL' : "'" . sed_sql_prep($default) . "'";
-	$size_for_db = is_string($size) ? $size : (int)$size;
+	$size_for_db = ($type === 'decimal' || $type === 'numeric') ? $normalized_size : (int)$normalized_size;
+
 	sed_sql_query("UPDATE $db_dic SET
         dic_extra_location = '" . sed_sql_prep($sql_table) . "',
         dic_extra_type = '" . sed_sql_prep($type) . "',
         dic_extra_size = '" . sed_sql_prep($size_for_db) . "',
         dic_extra_default = $dic_default_sql,
-        dic_extra_allownull = " . ($allow_null ? 1 : 0) . "
+        dic_extra_allownull = " . ($allow_null ? 1 : 0) . ",
+        dic_extra_extra = '" . sed_sql_prep($extra_to_use) . "'
         WHERE dic_code = '" . sed_sql_prep($name) . "'");
 
 	return true;

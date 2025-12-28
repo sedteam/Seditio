@@ -375,6 +375,9 @@ $L['adm_dic_extra_allownull'] = 'Allow NULL values';
 $L['adm_dic_extra_allownull_help'] = 'If enabled and "Default value" is empty — column will be NULL without DEFAULT.';
 $L['adm_dic_extra_field'] = 'database column';
 
+$L['adm_dic_extra_extra']       = 'Additional modifiers';
+$L['adm_dic_extra_extra_help']  = 'E.g.: UNSIGNED, ON UPDATE CURRENT_TIMESTAMP, AUTO_INCREMENT, etc.';
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Menu items";

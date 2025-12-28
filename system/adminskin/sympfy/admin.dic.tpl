@@ -643,7 +643,17 @@
 							{DIC_EXTRA_ALLOWNULL}
 							<div class="descr">{PHP.L.adm_dic_extra_allownull_help}</div>
 						</div>
-					</div>					
+					</div>	
+
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">
+							{PHP.L.adm_dic_extra_extra} :
+						</div>
+						<div class="table-td text-left resp-table-td">
+							{DIC_EXTRA_EXTRA}
+							<div class="descr">{PHP.L.adm_dic_extra_extra_help}</div>
+						</div>
+					</div>						
 
 					<!-- BEGIN: DIC_EXTRA_DELETE -->
 

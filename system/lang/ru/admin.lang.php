@@ -377,6 +377,9 @@ $L['adm_dic_extra_allownull'] = 'Разрешить NULL значения';
 $L['adm_dic_extra_allownull_help'] = 'Если включено и поле "Значение по умолчанию" пустое — колонка будет NULL без DEFAULT.';
 $L['adm_dic_extra_field'] = 'колонка базы данных';
 
+$L['adm_dic_extra_extra']       = 'Дополнительные модификаторы';
+$L['adm_dic_extra_extra_help']  = 'Например: UNSIGNED, ON UPDATE CURRENT_TIMESTAMP, AUTO_INCREMENT и т.д.';
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Пункты меню";

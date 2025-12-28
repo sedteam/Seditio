@@ -371,6 +371,9 @@ $L['adm_dic_extra_allownull'] = 'NULL değerlerine izin ver';
 $L['adm_dic_extra_allownull_help'] = 'Etkinse ve "Varsayılan değer" boşsa — sütun DEFAULT olmadan NULL olacak.';
 $L['adm_dic_extra_field'] = 'veritabanı sütunu';
 
+$L['adm_dic_extra_extra']       = 'Ek değiştiriciler';
+$L['adm_dic_extra_extra_help']  = 'Örneğin: UNSIGNED, ON UPDATE CURRENT_TIMESTAMP, AUTO_INCREMENT vb.';
+
 /* ====== Menu manager ====== */
 
 $L['adm_menuitems'] = "Menü öğeleri";
