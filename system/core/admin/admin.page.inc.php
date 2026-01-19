@@ -285,7 +285,11 @@ switch ($mn) {
 				} elseif ($row['structure_tpl'] == 'same_as_parent') {
 					$structure_tpl_sym = $L['adm_tpl_parent'];
 				} else {
-					$structure_tpl_sym = $L['adm_tpl_forced'] . ": <strong>" . $sed_cat[$row['structure_tpl']]['tpath'] . "</strong>";
+					if (isset($sed_cat[$row['structure_tpl']]) && isset($sed_cat[$row['structure_tpl']]['tpath'])) {
+						$structure_tpl_sym = $L['adm_tpl_forced'] . ": <strong>" . $sed_cat[$row['structure_tpl']]['tpath'] . "</strong>";
+					} else {
+						$structure_tpl_sym = $L['adm_tpl_forced'] . ": <strong>Unknown ???</strong>";
+					}
 				}
 
 				$st_tpl = $structure_tpl_sym . ": ";

@@ -33,14 +33,57 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 	$jevix = new Jevix();
 
 	switch ($filter) {
-			/* -- Full settings -- */
+		/* -- Full settings -- */
 		case 'full':
 
 			$jevix->cfgAllowTags(array(
-				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small',
-				'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'sub', 'acronym', 'h1', 'h2', 'button',
-				'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'object', 'param', 'embed', 'adabracut',
-				'blockquote', 'iframe', 'span', 'div', 'table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th', 'video', 'source'
+				'p',
+				'a',
+				'img',
+				'i',
+				'b',
+				'u',
+				's',
+				'em',
+				'strong',
+				'strike',
+				'small',
+				'nobr',
+				'li',
+				'ol',
+				'ul',
+				'sup',
+				'abbr',
+				'sub',
+				'acronym',
+				'h1',
+				'h2',
+				'button',
+				'h3',
+				'h4',
+				'h5',
+				'h6',
+				'br',
+				'hr',
+				'pre',
+				'code',
+				'object',
+				'param',
+				'embed',
+				'adabracut',
+				'blockquote',
+				'iframe',
+				'span',
+				'div',
+				'table',
+				'tbody',
+				'thead',
+				'tfoot',
+				'tr',
+				'td',
+				'th',
+				'video',
+				'source'
 			));
 			// Establish short tags. (Not having closing tag)
 			$jevix->cfgSetTagShort(array('br', 'img', 'hr', 'source'));
@@ -126,15 +169,44 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagNoTypography('code', 'video', 'object');
 
 			break;
-			/* ---- */
+		/* ---- */
 
-			/* -- Medium settings -- */
+		/* -- Medium settings -- */
 		case 'medium':
 
 			$jevix->cfgAllowTags(array(
-				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small',
-				'nobr', 'li', 'ol', 'ul', 'sup', 'abbr', 'sub', 'acronym', 'h1', 'h2',
-				'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'blockquote', 'span', 'div'
+				'p',
+				'a',
+				'img',
+				'i',
+				'b',
+				'u',
+				's',
+				'em',
+				'strong',
+				'strike',
+				'small',
+				'nobr',
+				'li',
+				'ol',
+				'ul',
+				'sup',
+				'abbr',
+				'sub',
+				'acronym',
+				'h1',
+				'h2',
+				'h3',
+				'h4',
+				'h5',
+				'h6',
+				'br',
+				'hr',
+				'pre',
+				'code',
+				'blockquote',
+				'span',
+				'div'
 			));
 			$jevix->cfgSetTagShort(array('br', 'img', 'hr'));
 			$jevix->cfgSetTagPreformatted(array('pre', 'code'));
@@ -195,9 +267,9 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagNoTypography('code');
 
 			break;
-			/* ---- */
+		/* ---- */
 
-			/* -- Micro settings - default -- */
+		/* -- Micro settings - default -- */
 		default:
 
 			$jevix->cfgAllowTags(array('p', 'a', 'i', 'b', 'u', 's', 'em', 'strong', 'br', 'strike'));
@@ -269,9 +341,31 @@ class Jevix
 	public $tagsRules = array();
 
 	public $tagsStyleAllowed = array(
-		'font-family', 'font-size', 'font-weight', 'text-align', 'text-indent', 'text-decoration', 'line-height', 'color',
-		'background-color', 'background-image', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'padding-left', 'padding-right',
-		'padding-top', 'padding-bottom', 'border-width', 'border-style', 'border-color', 'padding', 'margin', 'width', 'height'
+		'font-family',
+		'font-size',
+		'font-weight',
+		'text-align',
+		'text-indent',
+		'text-decoration',
+		'line-height',
+		'color',
+		'background-color',
+		'background-image',
+		'margin-left',
+		'margin-right',
+		'margin-top',
+		'margin-bottom',
+		'padding-left',
+		'padding-right',
+		'padding-top',
+		'padding-bottom',
+		'border-width',
+		'border-style',
+		'border-color',
+		'padding',
+		'margin',
+		'width',
+		'height'
 	);
 
 	public $entities1 = array('"' => '&quot;', "'" => '&#39;', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
@@ -328,7 +422,7 @@ class Jevix
 	const TR_TAG_CALLBACK_FULL = 17;
 	const TR_TAG_PARSE_STYLE = 20;
 
-	protected $chClasses = array(0 => 512, 1 => 512, 2 => 512, 3 => 512, 4 => 512, 5 => 512, 6 => 512, 7 => 512, 8 => 512, 9 => 32, 10 => 66048, 11 => 512, 12 => 512, 13 => 66048, 14 => 512, 15 => 512, 16 => 512, 17 => 512, 18 => 512, 19 => 512, 20 => 512, 21 => 512, 22 => 512, 23 => 512, 24 => 512, 25 => 512, 26 => 512, 27 => 512, 28 => 512, 29 => 512, 30 => 512, 31 => 512, 32 => 32, 97 => 71, 98 => 71, 99 => 71, 100 => 71, 101 => 71, 102 => 71, 103 => 71, 104 => 71, 105 => 71, 106 => 71, 107 => 71, 108 => 71, 109 => 71, 110 => 71, 111 => 71, 112 => 71, 113 => 71, 114 => 71, 115 => 71, 116 => 71, 117 => 71, 118 => 71, 119 => 71, 120 => 71, 121 => 71, 122 => 71, 65 => 71, 66 => 71, 67 => 71, 68 => 71, 69 => 71, 70 => 71, 71 => 71, 72 => 71, 73 => 71, 74 => 71, 75 => 71, 76 => 71, 77 => 71, 78 => 71, 79 => 71, 80 => 71, 81 => 71, 82 => 71, 83 => 71, 84 => 71, 85 => 71, 86 => 71, 87 => 71, 88 => 71, 89 => 71, 90 => 71, 1072 => 11, 1073 => 11, 1074 => 11, 1075 => 11, 1076 => 11, 1077 => 11, 1078 => 11, 1079 => 11, 1080 => 11, 1081 => 11, 1082 => 11, 1083 => 11, 1084 => 11, 1085 => 11, 1086 => 11, 1087 => 11, 1088 => 11, 1089 => 11, 1090 => 11, 1091 => 11, 1092 => 11, 1093 => 11, 1094 => 11, 1095 => 11, 1096 => 11, 1097 => 11, 1098 => 11, 1099 => 11, 1100 => 11, 1101 => 11, 1102 => 11, 1103 => 11, 1040 => 11, 1041 => 11, 1042 => 11, 1043 => 11, 1044 => 11, 1045 => 11, 1046 => 11, 1047 => 11, 1048 => 11, 1049 => 11, 1050 => 11, 1051 => 11, 1052 => 11, 1053 => 11, 1054 => 11, 1055 => 11, 1056 => 11, 1057 => 11, 1058 => 11, 1059 => 11, 1060 => 11, 1061 => 11, 1062 => 11, 1063 => 11, 1064 => 11, 1065 => 11, 1066 => 11, 1067 => 11, 1068 => 11, 1069 => 11, 1070 => 11, 1071 => 11, 48 => 337, 49 => 337, 50 => 337, 51 => 337, 52 => 337, 53 => 337, 54 => 337, 55 => 337, 56 => 337, 57 => 337, 34 => 57345, 39 => 16385, 46 => 1281, 44 => 1025, 33 => 1025, 63 => 1281, 58 => 1025, 59 => 1281, 1105 => 11, 1025 => 11, 47 => 257, 38 => 257, 37 => 257, 45 => 257, 95 => 257, 61 => 257, 43 => 257, 35 => 257, 124 => 257,);
+	protected $chClasses = array(0 => 512, 1 => 512, 2 => 512, 3 => 512, 4 => 512, 5 => 512, 6 => 512, 7 => 512, 8 => 512, 9 => 32, 10 => 66048, 11 => 512, 12 => 512, 13 => 66048, 14 => 512, 15 => 512, 16 => 512, 17 => 512, 18 => 512, 19 => 512, 20 => 512, 21 => 512, 22 => 512, 23 => 512, 24 => 512, 25 => 512, 26 => 512, 27 => 512, 28 => 512, 29 => 512, 30 => 512, 31 => 512, 32 => 32, 97 => 71, 98 => 71, 99 => 71, 100 => 71, 101 => 71, 102 => 71, 103 => 71, 104 => 71, 105 => 71, 106 => 71, 107 => 71, 108 => 71, 109 => 71, 110 => 71, 111 => 71, 112 => 71, 113 => 71, 114 => 71, 115 => 71, 116 => 71, 117 => 71, 118 => 71, 119 => 71, 120 => 71, 121 => 71, 122 => 71, 65 => 71, 66 => 71, 67 => 71, 68 => 71, 69 => 71, 70 => 71, 71 => 71, 72 => 71, 73 => 71, 74 => 71, 75 => 71, 76 => 71, 77 => 71, 78 => 71, 79 => 71, 80 => 71, 81 => 71, 82 => 71, 83 => 71, 84 => 71, 85 => 71, 86 => 71, 87 => 71, 88 => 71, 89 => 71, 90 => 71, 1072 => 11, 1073 => 11, 1074 => 11, 1075 => 11, 1076 => 11, 1077 => 11, 1078 => 11, 1079 => 11, 1080 => 11, 1081 => 11, 1082 => 11, 1083 => 11, 1084 => 11, 1085 => 11, 1086 => 11, 1087 => 11, 1088 => 11, 1089 => 11, 1090 => 11, 1091 => 11, 1092 => 11, 1093 => 11, 1094 => 11, 1095 => 11, 1096 => 11, 1097 => 11, 1098 => 11, 1099 => 11, 1100 => 11, 1101 => 11, 1102 => 11, 1103 => 11, 1040 => 11, 1041 => 11, 1042 => 11, 1043 => 11, 1044 => 11, 1045 => 11, 1046 => 11, 1047 => 11, 1048 => 11, 1049 => 11, 1050 => 11, 1051 => 11, 1052 => 11, 1053 => 11, 1054 => 11, 1055 => 11, 1056 => 11, 1057 => 11, 1058 => 11, 1059 => 11, 1060 => 11, 1061 => 11, 1062 => 11, 1063 => 11, 1064 => 11, 1065 => 11, 1066 => 11, 1067 => 11, 1068 => 11, 1069 => 11, 1070 => 11, 1071 => 11, 48 => 337, 49 => 337, 50 => 337, 51 => 337, 52 => 337, 53 => 337, 54 => 337, 55 => 337, 56 => 337, 57 => 337, 34 => 57345, 39 => 16385, 46 => 1281, 44 => 1025, 33 => 1025, 63 => 1281, 58 => 1025, 59 => 1281, 1105 => 11, 1025 => 11, 47 => 257, 38 => 257, 37 => 257, 45 => 257, 95 => 325, 61 => 257, 43 => 257, 35 => 257, 124 => 257,);
 
 	protected function _cfgSetTagsFlag($tags, $flag, $value, $createIfNoExists = true)
 	{
@@ -709,7 +803,7 @@ class Jevix
 
 	protected function name(&$name = '', $minus = false)
 	{
-		if (($this->curChClass & self::LAT) == self::LAT) {
+		if (($this->curChClass & self::LAT) == self::LAT || $this->curCh == '_') {
 			$name .= $this->curCh;
 			$this->getCh();
 		} else {
