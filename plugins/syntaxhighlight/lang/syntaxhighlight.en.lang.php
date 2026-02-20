@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/syntaxhighlight/lang/syntaxhighlight.en.lang.php
-Version=180
-Updated=2025-feb-16
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=

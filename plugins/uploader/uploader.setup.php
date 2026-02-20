@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.setup.php
-Version=180
-Updated=2025-jan-23
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=
@@ -28,6 +28,7 @@ Auth_guests=0
 Lock_guests=RW12345A
 Auth_members=R
 Lock_members=W12345A
+Requires_modules=pfs
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]

@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/header.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Global header
@@ -56,7 +56,7 @@ $out['register_link'] = sed_url("users", "m=register");  // New in 175
 $out['auth_link'] = sed_url("users", "m=auth");  // New in 175
 $out['whosonline_link'] = sed_url("plug", "e=whosonline");  // New in 175
 
-if (sed_auth('page', 'any', 'A')) {
+if (sed_module_active('page') && sed_auth('page', 'any', 'A')) {
 	$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 	$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
 
@@ -114,11 +114,11 @@ if ($usr['id'] > 0) {
 	$out['loginout_url'] = sed_url("users", "m=logout&" . sed_xg());
 	$out['loginout'] = "<a href=\"" . $out['loginout_url'] . "\">" . $L['hea_logout'] . "</a>";
 	$out['profile'] = "<a href=\"" . sed_url("users", "m=profile") . "\">" . $L['hea_profile'] . "</a>";
-	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"" . sed_url("pm") . "\">" . $L['hea_private_messages'] . "</a>";
-	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : "<a href=\"" . sed_url("pfs") . "\">" . $L['hea_mypfs'] . "</a>";
-	$out['pageadd'] = sed_auth('page', 'any', 'W') ? "<a href=\"" . sed_url("page", "m=add") . "\">" . $L['hea_pageadd'] . "</a>" : "";
+	$out['pms'] = (!sed_module_active('pm')) ? '' : "<a href=\"" . sed_url("pm") . "\">" . $L['hea_private_messages'] . "</a>";
+	$out['pfs'] = (!sed_module_active('pfs') || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : "<a href=\"" . sed_url("pfs") . "\">" . $L['hea_mypfs'] . "</a>";
+	$out['pageadd'] = (sed_module_active('page') && sed_auth('page', 'any', 'W')) ? "<a href=\"" . sed_url("page", "m=add") . "\">" . $L['hea_pageadd'] . "</a>" : "";
 
-	if (!$cfg['disable_pm']) {
+	if (sed_module_active('pm')) {
 		if ($usr['newpm']) {
 			$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='" . $usr['id'] . "' AND pm_state=0");
 			$usr['messages'] = sed_sql_result($sqlpm, 0, 'COUNT(*)');

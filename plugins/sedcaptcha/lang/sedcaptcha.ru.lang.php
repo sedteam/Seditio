@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/lang/sedcaptcha.ru.lang.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=

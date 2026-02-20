@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/cleaner/cleaner.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -63,32 +63,34 @@ if ($cfg['plugin']['cleaner']['refprune'] > 0) {
 	}
 }
 
-if ($cfg['plugin']['cleaner']['pmnotread'] > 0) {
-	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotread'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_state=0");
+if (sed_module_active('pm')) {
+	if ($cfg['plugin']['cleaner']['pmnotread'] > 0) {
+		$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotread'] * 86400);
+		$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_state=0");
 
-	$deleted = sed_sql_affectedrows();
-	if ($deleted > 0) {
-		sed_log("Cleaner plugin deleted " . $deleted . " PM not read since " . $cfg['plugin']['cleaner']['pmnotread'] . " days", 'adm');
+		$deleted = sed_sql_affectedrows();
+		if ($deleted > 0) {
+			sed_log("Cleaner plugin deleted " . $deleted . " PM not read since " . $cfg['plugin']['cleaner']['pmnotread'] . " days", 'adm');
+		}
 	}
-}
 
-if ($cfg['plugin']['cleaner']['pmnotarchived'] > 0) {
-	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotarchived'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_state=1");
+	if ($cfg['plugin']['cleaner']['pmnotarchived'] > 0) {
+		$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotarchived'] * 86400);
+		$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_state=1");
 
-	$deleted = sed_sql_affectedrows();
-	if ($deleted > 0) {
-		sed_log("Cleaner plugin deleted " . $deleted . " PM not archived since " . $cfg['plugin']['cleaner']['pmnotarchived'] . " days", 'adm');
+		$deleted = sed_sql_affectedrows();
+		if ($deleted > 0) {
+			sed_log("Cleaner plugin deleted " . $deleted . " PM not archived since " . $cfg['plugin']['cleaner']['pmnotarchived'] . " days", 'adm');
+		}
 	}
-}
 
-if ($cfg['plugin']['cleaner']['pmold'] > 0) {
-	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmold'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago");
+	if ($cfg['plugin']['cleaner']['pmold'] > 0) {
+		$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmold'] * 86400);
+		$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago");
 
-	$deleted = sed_sql_affectedrows();
-	if ($deleted > 0) {
-		sed_log("Cleaner plugin deleted " . $deleted . " PM older than " . $cfg['plugin']['cleaner']['pmold'] . " days", 'adm');
+		$deleted = sed_sql_affectedrows();
+		if ($deleted > 0) {
+			sed_log("Cleaner plugin deleted " . $deleted . " PM older than " . $cfg['plugin']['cleaner']['pmold'] . " days", 'adm');
+		}
 	}
 }

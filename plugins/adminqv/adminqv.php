@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/adminqv/adminqv.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -36,20 +36,29 @@ $timeback_stats = 15; // 15 days
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
 $newusers = sed_sql_result($sql, 0, "COUNT(*)");
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
-$newpages = sed_sql_result($sql, 0, "COUNT(*)");
+$newpages = 0;
+if (sed_module_active('page')) {
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
+	$newpages = sed_sql_result($sql, 0, "COUNT(*)");
+}
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
-$newtopics = sed_sql_result($sql, 0, "COUNT(*)");
+$newtopics = 0;
+$newposts = 0;
+if (sed_module_active('forums')) {
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
+	$newtopics = sed_sql_result($sql, 0, "COUNT(*)");
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
-$newposts = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
+	$newposts = sed_sql_result($sql, 0, "COUNT(*)");
+}
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
-$newcomments = sed_sql_result($sql, 0, "COUNT(*)");
+$newcomments = sed_plug_active('comments') ? sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'"), 0, "COUNT(*)") : 0;
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
-$newpms = sed_sql_result($sql, 0, "COUNT(*)");
+$newpms = 0;
+if (sed_module_active('pm')) {
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
+	$newpms = sed_sql_result($sql, 0, "COUNT(*)");
+}
 
 $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT " . $timeback_stats);
 while ($row = sed_sql_fetchassoc($sql)) {
@@ -97,7 +106,7 @@ if (!$cfg['disablereg']) {
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWUSERS");
 }
 
-if (!$cfg['disable_page']) {
+if (sed_module_active('page')) {
 
 	$qv->assign(array(
 		"QV_NEWPAGES" => $newpages,
@@ -106,7 +115,7 @@ if (!$cfg['disable_page']) {
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWPAGES");
 }
 
-if (!$cfg['disable_forums']) {
+if (sed_module_active('forums')) {
 
 	$qv->assign(array(
 		"QV_NEWTOPICS" => $newtopics,
@@ -116,7 +125,7 @@ if (!$cfg['disable_forums']) {
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWONFORUMS");
 }
 
-if (!$cfg['disable_comments']) {
+if (sed_plug_active('comments')) {
 
 	$qv->assign(array(
 		"QV_NEWCOMMENTS" => $newcomments,
@@ -125,10 +134,10 @@ if (!$cfg['disable_comments']) {
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWCOMMENTS");
 }
 
-if (!$cfg['disable_pm']) {
+if (sed_module_active('pm')) {
 
 	$qv->assign(array(
-		"QV_NEWPMS" => $newcomments
+		"QV_NEWPMS" => $newpms
 	));
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWPMS");
 }

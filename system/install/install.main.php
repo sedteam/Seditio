@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=install.php
-Version=180
-Updated=2025-jan-25
+File=system/install/install.main.php
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Seditio auto-installation
@@ -111,7 +111,7 @@ switch ($m) {
 		$mysqluser = sed_import('mysqluser', 'P', 'TXT', 128);
 		$mysqlpassword = sed_import('mysqlpassword', 'P', 'TXT', 128);
 		$mysqldb = sed_import('mysqldb', 'P', 'TXT', 128);
-		$sqldb = sed_import('sqldb', 'P', 'TXT', 10);
+		$sqldb = 'mysqli';
 
 		$md_site_secret = md5(sed_unique(16)); // New sed171
 		$cfg['site_secret'] = $md_site_secret;
@@ -134,6 +134,22 @@ switch ($m) {
 			$connection_id = sed_sql_connect($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb);
 			$cfg['mysqldb'] = $sqldbprefix;
 			sed_sql_set_charset($connection_id, 'utf8');
+
+			$db_clear_before_import = sed_import('db_clear_before_import', 'P', 'INT');
+			if ($db_clear_before_import) {
+				sed_sql_query("SET FOREIGN_KEY_CHECKS = 0");
+				$sql_tables = sed_sql_query("SHOW TABLES");
+				$dropped = 0;
+				while ($row = sed_sql_fetcharray($sql_tables)) {
+					$tbl = $row[0];
+					if ($tbl !== '') {
+						sed_sql_query("DROP TABLE IF EXISTS `" . sed_sql_prep($tbl) . "`");
+						$dropped++;
+					}
+				}
+				sed_sql_query("SET FOREIGN_KEY_CHECKS = 1");
+				$res .= "<strong>" . (isset($L['install_database_cleared']) ? $L['install_database_cleared'] : 'Database cleared') . ":</strong> " . $dropped . " " . (isset($L['install_tables_dropped']) ? $L['install_tables_dropped'] : 'table(s) dropped') . ".<br />";
+			}
 
 			$fp = @fopen($cfg['config_file'], 'w');
 			@fwrite($fp, $cfg_data);
@@ -249,8 +265,8 @@ switch ($m) {
 
 			$res .= "<span class=\"yes\">" . $L['install_done'] . "</span>";
 
-			$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=plugins") . "\" method=\"post\">";
-			$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . $L['install_contine_toplugins'] . "\">";
+			$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=modules") . "\" method=\"post\">";
+			$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . (isset($L['install_contine_tomodules']) ? $L['install_contine_tomodules'] : 'Continue to Modules') . "\">";
 			$res .= "</form>";
 		} else {
 			$res .= "<span class=\"no\">" . $L['install_error_notwrite'] . "</span>";
@@ -260,9 +276,158 @@ switch ($m) {
 
 		// -----------------------------------------------
 
-	case 'plugins':
+	case 'modules':
 
 		$step = 4;
+
+		$res .= "<h3>" . (isset($L['install_modules']) ? $L['install_modules'] : 'Modules') . " :</h3>";
+		$res .= (isset($L['install_optional_modules']) ? $L['install_optional_modules'] : 'Select optional modules to install:');
+		$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=modinst") . "\" method=\"post\">";
+		$res .= "<table class=\"cells striped\">";
+		$res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">" . (isset($L['install_modules']) ? $L['install_modules'] : 'Modules') . "</td>";
+		$res .= "<td style=\"width:10%;\" class=\"coltop\">" . $L['install_install'] . "</td>";
+		$res .= "</tr>";
+
+		$modules_list = array();
+		$modules_dir = SED_ROOT . '/modules';
+		if (is_dir($modules_dir)) {
+			$handle = opendir($modules_dir);
+			while ($f = readdir($handle)) {
+				if ($f != '.' && $f != '..' && is_dir($modules_dir . '/' . $f)) {
+					$setup = $modules_dir . '/' . $f . '/' . $f . '.setup.php';
+					if (file_exists($setup)) {
+						$modules_list[] = $f;
+					}
+				}
+			}
+			closedir($handle);
+			sort($modules_list);
+		}
+
+		if (count($modules_list) > 0) {
+			foreach ($modules_list as $k => $v) {
+				$mod_info_file = $modules_dir . "/" . $v . "/" . $v . ".setup.php";
+				$mod_info = sed_infoget($mod_info_file, 'SED_MODULE');
+
+				$mod_name = isset($mod_info['Name']) ? $mod_info['Name'] : $v;
+				$mod_desc = isset($mod_info['Description']) ? $mod_info['Description'] : '';
+				$checked = (isset($mod_info['Installer_skip']) && $mod_info['Installer_skip'] == 1) ? '' : "checked=\"checked\"";
+
+				$res .= "<tr><td style=\"width:6%; text-align:center;\">";
+				$res .= "&bull;";
+				$res .= "</td><td><strong>" . $mod_name . "</strong><br /><span class=\"desc\">" . $mod_desc . "</span></td>";
+				$res .= "<td style=\"width:6%; text-align:center;\">";
+				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"mod[]\" value=\"" . $v . "\" " . $checked . " />";
+				$res .= "</td></tr>";
+			}
+		} else {
+			$res .= "<tr><td colspan=\"3\">" . (isset($L['install_no_modules']) ? $L['install_no_modules'] : 'No modules found in /modules/ directory.') . "</td></tr>";
+		}
+
+		$res .= "</table>";
+		$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . (isset($L['install_install_modules']) ? $L['install_install_modules'] : 'Install Modules & Continue') . "\">";
+		$res .= "</form>";
+
+		break;
+
+		// -----------------------------------------------
+
+	case 'modinst':
+
+		$step = 5;
+
+		$mod = sed_import('mod', 'P', 'ARR');
+		$res .= "<h3>" . (isset($L['install_installing_modules']) ? $L['install_installing_modules'] : 'Installing Modules') . "</h3>";
+
+		$usr = $_SESSION['usr'];
+		$sys['now_offset'] = time();
+
+		$j = 0;
+		$log = '';
+
+		if (!isset($sed_groups)) {
+			$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled = 0 ORDER BY grp_level DESC");
+			if (sed_sql_numrows($sql) > 0) {
+				while ($row = sed_sql_fetchassoc($sql)) {
+					$sed_groups[$row['grp_id']] = array(
+						'id' => $row['grp_id'],
+						'alias' => $row['grp_alias'],
+						'level' => $row['grp_level'],
+						'disabled' => $row['grp_disabled'],
+						'hidden' => $row['grp_hidden'],
+						'title' => sed_cc($row['grp_title']),
+						'desc' => sed_cc($row['grp_desc']),
+						'icon' => $row['grp_icon'],
+						'pfs_maxfile' => $row['grp_pfs_maxfile'],
+						'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
+						'ownerid' => $row['grp_ownerid']
+					);
+				}
+			}
+		}
+
+		if (is_array($mod)) {
+			// Sort by dependencies so required modules install first (e.g. pfs before gallery)
+			$modules_dir = SED_ROOT . '/modules';
+			$mod_deps = array();
+			foreach ($mod as $v) {
+				$setup_file = $modules_dir . '/' . $v . '/' . $v . '.setup.php';
+				$req = array();
+				if (file_exists($setup_file)) {
+					$info = sed_infoget($setup_file, 'SED_MODULE');
+					if (!empty($info['Requires'])) {
+						$req = array_map('trim', explode(',', $info['Requires']));
+						$req = array_filter($req);
+					}
+				}
+				$mod_deps[$v] = $req;
+			}
+			$ordered = array();
+			while (count($ordered) < count($mod)) {
+				$progress = false;
+				foreach ($mod as $v) {
+					if (in_array($v, $ordered)) continue;
+					$deps_ok = true;
+					foreach ($mod_deps[$v] as $r) {
+						if (in_array($r, $mod) && !in_array($r, $ordered)) {
+							$deps_ok = false;
+							break;
+						}
+					}
+					if ($deps_ok) {
+						$ordered[] = $v;
+						$progress = true;
+					}
+				}
+				if (!$progress) break;
+			}
+			$mod = $ordered;
+
+			foreach ($mod as $k => $v) {
+				$j++;
+				$log .= sed_module_install($v);
+			}
+		}
+
+		$res .= $j . " " . (isset($L['install_installed_modules']) ? $L['install_installed_modules'] : 'module(s) installed') . " (";
+		$res .= "<a onclick=\"toggleblock('modlogf'); return false;\" href=\"javascript:void(0)\">" . $L['install_display_log'] . "</a>).<br />";
+		$res .= "<div name=\"modlog\" id=\"modlogf\" style=\"display:none;\" >";
+		$res .= $log . "</div>";
+
+		// Generate URL cache after module installation
+		sed_urls_generate();
+
+		$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=plugins") . "\" method=\"post\">";
+		$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . $L['install_contine_toplugins'] . "\">";
+		$res .= "</form>";
+
+		break;
+
+		// -----------------------------------------------
+
+	case 'plugins':
+
+		$step = 6;
 
 		$res .= "<h3>" . $L['install_plugins'] . " :</h3>";
 		$res .= $L['install_optional_plugins'];
@@ -289,7 +454,7 @@ switch ($m) {
 
 			$res .= "<tr><td style=\"width:6%; text-align:center;\">";
 			$res .= sed_plugin_icon($v);
-			$res .= "</td><td><strong>" . $info['Name'] . "</strong><br /><spab class=\"desc\">" . $info['Description'] . "</span></td>";
+			$res .= "</td><td><strong>" . $info['Name'] . "</strong><br /><span class=\"desc\">" . $info['Description'] . "</span></td>";
 			$res .= "<td style=\"width:6%; text-align:center;\">";
 			$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"pl[]\" value=\"" . $v . "\" " . $checked . " />";
 			$res .= "</td></tr>";
@@ -305,7 +470,7 @@ switch ($m) {
 
 	case 'plinst':
 
-		$step = 5;
+		$step = 7;
 
 		$pl = sed_import('pl', 'P', 'ARR');
 		$res .= "<h3>" . $L['install_installing_plugins'] . "</h3>";
@@ -338,17 +503,39 @@ switch ($m) {
 		}
 
 		foreach ($pl as $k => $v) {
-			$j++;
-			$extplugin_info = "plugins/" . $v . "/" . $v . ".setup.php";
+			$extplugin_info = SED_ROOT . "/plugins/" . $v . "/" . $v . ".setup.php";
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+			$req_modules = isset($info['Requires_modules']) ? array_map('trim', explode(',', $info['Requires_modules'])) : array();
+			$req_modules = array_filter($req_modules);
+			$dep_ok = true;
+			$missing_mod = '';
+			foreach ($req_modules as $req) {
+				$sql_dep = sed_sql_query("SELECT ct_state, ct_title FROM $db_core WHERE ct_code='" . sed_sql_prep($req) . "' LIMIT 1");
+				$dep_row = sed_sql_fetchassoc($sql_dep);
+				if (!$dep_row || (int)$dep_row['ct_state'] != 1) {
+					$dep_ok = false;
+					$missing_mod = !empty($dep_row['ct_title']) ? $dep_row['ct_title'] : $req;
+					break;
+				}
+			}
+			if (!$dep_ok) {
+				$skip_msg = (isset($L['install_plugin_skipped']) ? $L['install_plugin_skipped'] : 'skipped (required module %s is not installed)');
+				$res .= "- " . sed_cc($info['Name']) . ": <span class=\"no\">" . sprintf($skip_msg, sed_cc($missing_mod)) . "</span><br />";
+				$log .= "<h3>" . sed_cc($info['Name']) . " (" . $v . ")</h3><span class=\"no\">" . sprintf($skip_msg, sed_cc($missing_mod)) . "</span><br />";
+				continue;
+			}
+			$j++;
 			$res .= "- Installing : " . $info['Name'] . "<br />";
 			$log .= sed_plugin_install($v);
 		}
 
 		$res .= "<br />" . $j . " " . $L['install_installed_plugins'];
-		$res .= "<a onclick=\"return toggleblock('logf')\" href=\"#\">" . $L['install_display_log'] . "</a>).<br />";
+		$res .= "<a onclick=\"toggleblock('logf'); return false;\" href=\"javascript:void(0)\">" . $L['install_display_log'] . "</a>).<br />";
 		$res .= "<div name=\"log\" id=\"logf\" style=\"display:none;\" >";
 		$res .= $log . "</div>";
+
+		// Generate URL cache after all installations
+		sed_urls_generate();
 
 		sed_stat_create('installed', 1);
 
@@ -405,21 +592,9 @@ switch ($m) {
 		$res .= "<input type=\"text\" name=\"sqldbprefix\" size=\"32\" value=\"sed_\" maxlength=\"16\" />";
 		$res .= " (" . $L['install_seditio_already'] . ")</td></tr>";
 
-		$res .= "<tr><td style=\"width:172px;\">" . $L['install_mysql_connector'] . "</td><td colspan=\"2\">";
-
-		if ((extension_loaded('mysql')) && (extension_loaded('mysqli'))) {
-			$param_value = "mysql,mysqli";
-			$cheked = 'mysqli';
-		} elseif (extension_loaded('mysqli')) {
-			$param_value = "mysqli";
-			$cheked = 'mysqli';
-		} else {
-			$param_value = "mysql";
-			$cheked = 'mysql';
-		}
-
-		$res .= sed_selectbox($cheked, 'sqldb', $param_value, false);
-		$res .= " (" . $L['install_mysql_preffered'] . ")</td></tr>";
+		$res .= "<tr><td style=\"width:172px;\">" . (isset($L['install_database_clear_before']) ? $L['install_database_clear_before'] : 'Clear database before import') . "</td><td colspan=\"2\">";
+		$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"db_clear_before_import\" value=\"1\" /> ";
+		$res .= (isset($L['install_database_clear_before_hint']) ? $L['install_database_clear_before_hint'] : 'Drop all tables in the database before import.') . "</td></tr>";
 
 		$res .= "</table>";
 

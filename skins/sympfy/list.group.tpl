@@ -24,19 +24,19 @@
 
 		<!-- END: LIST_AUTHUSER -->
 
+		<div class="section-menu">
+			<div class="inline-menu">
+				<ul>
+					<!-- BEGIN: LIST_ROWCAT -->
+					<li><a href="{LIST_ROWCAT_URL}" data-category="{LIST_ROWCAT_ID}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>
+					<!-- END: LIST_ROWCAT -->
+				</ul>
+			</div>
+		</div>
+
 		<div id="primary-container">
 
 			<div id="primary">
-
-				<div class="section-category-menu">
-					<div class="category-menu">
-						<ul>
-							<!-- BEGIN: LIST_ROWCAT -->
-							<li><a href="{LIST_ROWCAT_URL}" data-category="{LIST_ROWCAT_ID}">{LIST_ROWCAT_TITLE} <span>{LIST_ROWCAT_COUNT}</span></a></li>
-							<!-- END: LIST_ROWCAT -->
-						</ul>
-					</div>
-				</div>
 
 				<!-- BEGIN: LIST_CATTEXT -->
 
@@ -72,7 +72,7 @@
 										<div class="post-date">{LIST_ROW_DATE}</div>
 									</div>
 									<div class="post-title">
-										<h3><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}">{LIST_ROW_TITLE}</a></h3>
+										<h3><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">{LIST_ROW_TITLE}</a></h3>
 									</div>
 									<div class="post-desc">
 										<p>{LIST_ROW_DESC}</p>

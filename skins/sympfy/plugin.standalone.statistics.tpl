@@ -33,15 +33,19 @@
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBUSERS}</div>
 					</div>
 
+					<!-- BEGIN: PLUGIN_STATISTICS_PAGES_ROW -->
 					<div class="table-row">
 						<div class="table-td">{PHP.L.Pages}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBPAGES}</div>
 					</div>
+					<!-- END: PLUGIN_STATISTICS_PAGES_ROW -->
 
+					<!-- BEGIN: PLUGIN_STATISTICS_COMMENTS_ROW -->
 					<div class="table-row">
 						<div class="table-td">{PHP.L.Comments}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBCOMMENTS}</div>
 					</div>
+					<!-- END: PLUGIN_STATISTICS_COMMENTS_ROW -->
 
 					<div class="table-row">
 						<div class="table-td">{PHP.L.plu_totalmails}</div>
@@ -52,6 +56,7 @@
 
 			</div>
 
+			<!-- BEGIN: PLUGIN_STATISTICS_PM_BLOCK -->
 			<h4>{PHP.L.Private_Messages}:</h4>
 
 			<div class="table cells striped">
@@ -76,7 +81,9 @@
 				</div>
 
 			</div>
+			<!-- END: PLUGIN_STATISTICS_PM_BLOCK -->
 
+			<!-- BEGIN: PLUGIN_STATISTICS_FORUMS_BLOCK -->
 			<h4>{PHP.L.Forums}:</h4>
 
 			<div class="table cells striped">
@@ -101,13 +108,16 @@
 				</div>
 
 			</div>
+			<!-- END: PLUGIN_STATISTICS_FORUMS_BLOCK -->
 
+			<!-- BEGIN: PLUGIN_STATISTICS_POLLS_RATINGS_BLOCK -->
 			<h4>{PHP.L.plu_pollsratings}:</h4>
 
 			<div class="table cells striped">
 
 				<div class="table-body">
 
+					<!-- BEGIN: PLUGIN_STATISTICS_RATINGS_ROWS -->
 					<div class="table-row">
 						<div class="table-td">{PHP.L.plu_pagesrated}</div>
 						<div class="table-td text-center" style="width:100px;">{PLUGIN_STATISTICS_TOTALDBRATINGS}</div>
@@ -117,7 +127,9 @@
 						<div class="table-td">{PHP.L.plu_votesratings}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBRATINGSVOTES}</div>
 					</div>
+					<!-- END: PLUGIN_STATISTICS_RATINGS_ROWS -->
 
+					<!-- BEGIN: PLUGIN_STATISTICS_POLLS_ROWS -->
 					<div class="table-row">
 						<div class="table-td">{PHP.L.plu_polls}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBPOLLS}</div>
@@ -127,11 +139,14 @@
 						<div class="table-td">{PHP.L.plu_votespolls}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBPOLLSVOTES}</div>
 					</div>
+					<!-- END: PLUGIN_STATISTICS_POLLS_ROWS -->
 
 				</div>
 
 			</div>
+			<!-- END: PLUGIN_STATISTICS_POLLS_RATINGS_BLOCK -->
 
+			<!-- BEGIN: PLUGIN_STATISTICS_PFS_BLOCK -->
 			<h4>{PHP.L.PFS}:</h4>
 
 			<div class="table cells striped">
@@ -151,6 +166,7 @@
 				</div>
 
 			</div>
+			<!-- END: PLUGIN_STATISTICS_PFS_BLOCK -->
 
 			<h4>{PHP.L.plu_contributions}:</h4>
 
@@ -159,6 +175,7 @@
 				<div class="table-body">
 
 					<!-- BEGIN: PLUGIN_STATISTICS_IS_USER -->
+					<!-- BEGIN: PLUGIN_STATISTICS_USER_FORUMS -->
 					<div class="table-row">
 						<div class="table-td">{PHP.L.Posts}</div>
 						<div class="table-td text-center" style="width:100px;">{PLUGIN_STATISTICS_USER_POSTSCOUNT}</div>
@@ -168,11 +185,14 @@
 						<div class="table-td">{PHP.L.Topics}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_USER_TOPICSCOUNT}</div>
 					</div>
+					<!-- END: PLUGIN_STATISTICS_USER_FORUMS -->
 
+					<!-- BEGIN: PLUGIN_STATISTICS_USER_COMMENTS -->
 					<div class="table-row">
 						<div class="table-td">{PHP.L.Comments}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_USER_COMMENTS}</div>
 					</div>
+					<!-- END: PLUGIN_STATISTICS_USER_COMMENTS -->
 					<!-- END: PLUGIN_STATISTICS_IS_USER -->
 
 					<!-- BEGIN: PLUGIN_STATISTICS_IS_NOT_USER -->

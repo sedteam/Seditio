@@ -295,7 +295,7 @@ a.remove-link:hover {
     width: 230px;
     min-width: 230px;
     color: #888;
-    background: url(../img/bg-body.gif) left top;
+    background: rgb(0, 0, 0) url(../img/bg-body.gif) left top;
 }
 
 #primary {

@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=install.config.php
-Version=180
-Updated=2025-jan-25
+File=system/install/install.config.php
+Version=185
+Updated=2026-feb-14
 Type=Core.install
 Author=Seditio Team
 Description=Configuration builder
@@ -58,13 +58,17 @@ $cfg_data .= "// TRUE = enabled / FALSE = disabled\n";
 $cfg_data .= "// ========================\n";
 
 $cfg_data .= "\n\$cfg['sqldbprefix'] = '" . $sqldbprefix . "';			// Database tables prefix\n";
-$cfg_data .= "\$cfg['sqldb'] = '" . $sqldb . "';  				// Type of the database connector driver, set 'mysql' or 'mysqli'.\n";
+$cfg_data .= "\$cfg['sqldb'] = 'mysqli';  				// Database connector (mysqli only).\n";
+$cfg_data .= "\$cfg['mysqlengine'] = 'InnoDB';   // Table engine (InnoDB recommended)\n";
+$cfg_data .= "\$cfg['mysqlcharset'] = 'utf8mb4';\n";
+$cfg_data .= "\$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';\n";
 $cfg_data .= "\$cfg['site_secret'] = '" . $md_site_secret . "'; 					// Site secret key\n";
 $cfg_data .= "\$cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) default=3\n";
 $cfg_data .= "\$cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in on your server)\n";
 $cfg_data .= "\$cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed\n";
 
 $cfg_data .= "\$cfg['multihost'] = TRUE;            // Allow multiple host names for this site\n";
+$cfg_data .= "\$cfg['patchmode'] = FALSE;           // TRUE = enable automatic schema patches (for upgrades)\n";
 
 $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// Name of MySQL tables\n";

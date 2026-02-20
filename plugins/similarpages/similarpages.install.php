@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/similarpages/similarpages.install.php
-Version=170
-Updated=2012-feb-26
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=

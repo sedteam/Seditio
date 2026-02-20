@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/news/news.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -24,6 +24,7 @@ Author=Seditio Team
 Copyright=
 Notes=
 SQL=
+Requires_modules=page
 Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R

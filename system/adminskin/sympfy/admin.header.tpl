@@ -54,25 +54,30 @@
 						</li>
 						<!-- END: CONFIG_MENU -->
 
-						<!-- BEGIN: PAGE_MENU -->
+						<!-- BEGIN: MODULES_MENU -->
 						<li>
-							<a href="{ADMIN_MENU_PAGE_URL}" class="nav-top-item yes-submenu {ADMIN_MENU_PAGE_URL_CLASS}">
-								<span class="nav-icon"><i class="ic-pages"></i></span>
-								<span class="nav-title">{PHP.L.Pages}</span>
+							<a href="{ADMIN_MENU_MODULES_URL}" class="nav-top-item no-submenu {ADMIN_MENU_MODULES_URL_CLASS}">
+								<span class="nav-icon"><i class="ic-wand"></i></span>
+								<span class="nav-title">{PHP.L.adm_modules}</span>
 							</a>
-							{ADMIN_MENU_PAGE}
 						</li>
-						<!-- END: PAGE_MENU -->
+						<!-- END: MODULES_MENU -->
 
-						<!-- BEGIN: FORUMS_MENU -->
+						<!-- BEGIN: MODULE_MENU_ITEM -->
 						<li>
-							<a href="{ADMIN_MENU_FORUMS_URL}" class="nav-top-item yes-submenu {ADMIN_MENU_FORUMS_URL_CLASS}">
-								<span class="nav-icon"><i class="ic-forums"></i></span>
-								<span class="nav-title">{PHP.L.Forums}</span>
+							<a href="{ADMIN_MODULE_MENU_URL}" class="nav-top-item {ADMIN_MODULE_MENU_SUBMENU_CLASS} {ADMIN_MODULE_MENU_URL_CLASS}" style="padding-left: 15px;">
+								<span class="nav-icon"><i class="ic-{ADMIN_MODULE_MENU_MOD_CODE}"></i></span>
+								<span class="nav-title">{ADMIN_MODULE_MENU_TITLE}</span>
 							</a>
-							{ADMIN_MENU_FORUMS}
+							<!-- BEGIN: MODULE_MENU_SUB -->
+							<ul class="arrow_list" {ADMIN_MODULE_MENU_SUB_STYLE}>
+								<!-- BEGIN: MODULE_MENU_SUBITEM -->
+								<li><a href="{ADMIN_MODULE_SUB_URL}" class="{ADMIN_MODULE_SUB_CLASS}"><span>{ADMIN_MODULE_SUB_TITLE}</span></a></li>
+								<!-- END: MODULE_MENU_SUBITEM -->
+							</ul>
+							<!-- END: MODULE_MENU_SUB -->
 						</li>
-						<!-- END: FORUMS_MENU -->
+						<!-- END: MODULE_MENU_ITEM -->
 
 						<!-- BEGIN: USERS_MENU -->
 						<li>

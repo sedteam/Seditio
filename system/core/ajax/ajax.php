@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=ajax/ajax.php
-Version=180
-Updated=2025-jan-25
+File=system/core/ajax/ajax.php
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Amro
 Description=Ajax Interface
@@ -52,7 +52,7 @@ if ($m == 'pages' && !empty($query)) {
 				$suggestion->id = $val['id'];
 				$suggestion->title = $val['title'];
 				$suggestion->value = $val['title'];
-				$suggestion->url = sed_url("list", "c=" . $key);
+				$suggestion->url = sed_url("page", "c=" . $key);
 				$suggestion->data = $val;
 				$suggestions[] = $suggestion;
 				}
@@ -65,7 +65,7 @@ if ($m == 'pages' && !empty($query)) {
 		$suggestion->id = $sed_cat[$c]['id'];
 		$suggestion->title = $sed_cat[$c]['title'];
 		$suggestion->value = $sed_cat[$c]['title'];
-		$suggestion->url = sed_url("list", "c=" . $c);
+		$suggestion->url = sed_url("page", "c=" . $c);
 		$suggestion->data = $val;
 		$suggestions[] = $suggestion;
 		$sql_where = "page_cat='$c' AND";

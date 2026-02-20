@@ -11,8 +11,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/en/message.lang.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Lang
 Author=Seditio Team
 Description=Language messages
@@ -87,7 +87,7 @@ $L['msg502_1'] = "Done, your private message was successfully sent.<br />Click "
 $L['msg502_2'] = "here";
 $L['msg502_3'] = " to go back to private messages or to send a new PM.";
 
-/* ======== Forums ======== */
+/* ======== Forums (displayed by message module) ======== */
 
 $L['msg602_0'] = "Section locked";
 $L['msg602_1'] = "This section is locked.";
@@ -101,7 +101,9 @@ $L['msg900_1'] = "Page not yet done, come back later please.";
 $L['msg904_0'] = "System pages for administrator eyes only";
 $L['msg904_1'] = "You cannot list system pages with your level.";
 $L['msg907_0'] = "Plug-in not loaded";
-$L['msg907_1'] = "An error occured while attempting to load this plug-in, file(s) missing ?";
+$L['msg907_1'] = "An error occurred while attempting to load this plug-in, possibly it is paused or some files are missing.";
+$L['msg909_0'] = "Module not loaded";
+$L['msg909_1'] = "An error occurred while attempting to load this module, possibly it is paused or some files are missing.";
 $L['msg911_0'] = "Language file missing";
 $L['msg911_1'] = "An error occured while attempting to check this language pack.";
 $L['msg915_0'] = "Error !";

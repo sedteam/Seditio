@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ckeditor/lang/ckeditor.tr.lang.php
-Version=180
-Updated=2012-оct-19
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=

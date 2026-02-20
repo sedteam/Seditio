@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.plugins.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.plug.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -80,12 +80,57 @@ switch ($a) {
 				$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_CONFIG");
 			}
 
+			// Dependencies: from DB if installed, else from setup; build clickable links with titles
+			$req_modules_str = '';
+			$req_plugins_str = '';
+			$req_module_codes = array();
+			$req_plugin_codes = array();
+			$sql_dep = sed_sql_query("SELECT pl_dependencies FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0 AND pl_dependencies IS NOT NULL AND pl_dependencies != '' LIMIT 1");
+			if ($dep_row = sed_sql_fetchassoc($sql_dep)) {
+				$deps = json_decode($dep_row['pl_dependencies'], true);
+				if (isset($deps['requires']) && is_array($deps['requires'])) {
+					$req_module_codes = $deps['requires'];
+				}
+				if (isset($deps['requires_plugins']) && is_array($deps['requires_plugins'])) {
+					$req_plugin_codes = $deps['requires_plugins'];
+				}
+			} else {
+				if (!empty($info['Requires_modules'])) {
+					$req_module_codes = array_map('trim', array_filter(explode(',', $info['Requires_modules'])));
+				}
+				if (!empty($info['Requires_plugins'])) {
+					$req_plugin_codes = array_map('trim', array_filter(explode(',', $info['Requires_plugins'])));
+				}
+			}
+			if (!empty($req_module_codes)) {
+				$mod_titles = array();
+				foreach ($req_module_codes as $mc) {
+					$sql_m = sed_sql_query("SELECT ct_title FROM $db_core WHERE ct_code='" . sed_sql_prep($mc) . "' LIMIT 1");
+					$mr = sed_sql_fetchassoc($sql_m);
+					$title = $mr ? $mr['ct_title'] : $mc;
+					$mod_titles[] = sed_link(sed_url("admin", "m=modules&a=details&mod=" . $mc), $title);
+				}
+				$req_modules_str = implode(', ', $mod_titles);
+			}
+			if (!empty($req_plugin_codes)) {
+				$plug_titles = array();
+				foreach ($req_plugin_codes as $pc) {
+					$sql_p = sed_sql_query("SELECT pl_title FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pc) . "' AND pl_module=0 LIMIT 1");
+					$pr = sed_sql_fetchassoc($sql_p);
+					$title = ($pr && !empty($pr['pl_title'])) ? $pr['pl_title'] : $pc;
+					$plug_titles[] = sed_link(sed_url("admin", "m=plug&a=details&pl=" . $pc), $title);
+				}
+				$req_plugins_str = implode(', ', $plug_titles);
+			}
+
 			$t->assign(array(
 				"PLUG_DETAILS_NAME" => $info['Name'],
 				"PLUG_DETAILS_CODE" => $info['Code'],
 				"PLUG_DETAILS_DESC" => isset($info['Description']) ? $info['Description'] : '',
 				"PLUG_DETAILS_VERSION" => isset($info['Version']) ? $info['Version'] : '',
 				"PLUG_DETAILS_DATE" => isset($info['Date']) ? $info['Date'] : '',
+				"PLUG_DETAILS_REQUIRES_MODULES" => $req_modules_str,
+				"PLUG_DETAILS_REQUIRES_PLUGINS" => $req_plugins_str,
 				"PLUG_DETAILS_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=plug&io=" . $info['Code']),
 				"PLUG_DETAILS_DEFAUTH_GUESTS" => sed_build_admrights($info['Auth_guests']),
 				"PLUG_DETAILS_DEFLOCK_GUESTS" => sed_build_admrights($info['Lock_guests']),
@@ -99,6 +144,30 @@ switch ($a) {
 				"PLUG_DETAILS_PAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=pause&" . sed_xg()),
 				"PLUG_DETAILS_UNPAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=unpause&" . sed_xg())
 			));
+
+			if (!empty($req_modules_str)) {
+				$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_REQUIRES_MODULES");
+			}
+			if (!empty($req_plugins_str)) {
+				$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_REQUIRES_PLUGINS");
+			}
+
+			// Options: show Install only when not installed; Uninstall + Pause/Unpause when installed
+			$sql_inst = sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0");
+			$plug_installed = (int) sed_sql_result($sql_inst, 0, "COUNT(*)") > 0;
+			$sql_active = sed_sql_query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0");
+			$plug_has_active = (int) sed_sql_result($sql_active, 0, "SUM(pl_active)") > 0;
+
+			if (!$plug_installed) {
+				$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_OPT_INSTALL");
+			} else {
+				$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_OPT_UNINSTALL");
+				if ($plug_has_active) {
+					$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_OPT_PAUSE");
+				} else {
+					$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_DETAILS_OPT_UNPAUSE");
+				}
+			}
 
 			foreach ($parts as $i => $x) {
 				$extplugin_file = SED_ROOT . "/plugins/" . $pl . "/" . $x;
@@ -244,10 +313,37 @@ switch ($a) {
 
 			case 'unpause':
 				sed_check_xg();
-				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
-				sed_cache_clearall();
-				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
-				exit;
+				// Check dependencies before activating
+				$dep_ok = true;
+				$sql_dep = sed_sql_query("SELECT pl_dependencies FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != '' LIMIT 1");
+				if ($dep_row = sed_sql_fetchassoc($sql_dep)) {
+					$deps = json_decode($dep_row['pl_dependencies'], true);
+					if (isset($deps['requires']) && is_array($deps['requires'])) {
+						foreach ($deps['requires'] as $req_code) {
+							$sql_req = sed_sql_query("SELECT ct_state FROM $db_core WHERE ct_code='" . sed_sql_prep($req_code) . "' AND ct_state=1 LIMIT 1");
+							if (!sed_sql_fetchassoc($sql_req)) {
+								$dep_ok = false;
+								$adminwarnings .= "Cannot activate: required module '" . $req_code . "' is not installed or not active.<br />";
+							}
+						}
+					}
+					if ($dep_ok && isset($deps['requires_plugins']) && is_array($deps['requires_plugins'])) {
+						foreach ($deps['requires_plugins'] as $req_code) {
+							$sql_req = sed_sql_query("SELECT SUM(pl_active) AS active_count FROM $db_plugins WHERE pl_code='" . sed_sql_prep($req_code) . "' AND pl_module=0");
+							$req_row = sed_sql_fetchassoc($sql_req);
+							if (!$req_row || (int)$req_row['active_count'] < 1) {
+								$dep_ok = false;
+								$adminwarnings .= "Cannot activate: required plugin '" . $req_code . "' is not installed or not active.<br />";
+							}
+						}
+					}
+				}
+				if ($dep_ok) {
+					$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
+					sed_cache_clearall();
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
+					exit;
+				}
 				break;
 
 			case 'pausepart':
@@ -394,9 +490,9 @@ switch ($a) {
 		}
 
 		if ($o == 'code') {
-			$sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
+			$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE (pl_module=0 OR pl_module IS NULL) ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
 		} else {
-			$sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
+			$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE (pl_module=0 OR pl_module IS NULL) ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
 		}
 
 		$t->assign(array(

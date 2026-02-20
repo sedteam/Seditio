@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=install.en.lang.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=English installation lang file
@@ -34,6 +34,7 @@ $L['install_adding_administrator'] = "Adding the administrator account...";
 $L['install_done'] = "Done.";
 $L['install_contine_toplugins'] = "Continue to the plugins";
 $L['install_error_notwrite'] = "Error, could not write the file, please check that this file is writable.";
+$L['install_error_db_connection'] = "Cannot connect to the database. Check host, username, password and database name.";
 $L['install_now'] = "Install now";
 $L['install_plugins'] = "Plugins";
 $L['install_install'] = "Install";
@@ -43,6 +44,7 @@ $L['install_optional_plugins'] = "Here you can install plugins and get new featu
 $L['install_installing_plugins'] = "Installing the plugins :";
 $L['install_installed_plugins'] = "plugins installed (";
 $L['install_display_log'] = "Display the log";
+$L['install_plugin_skipped'] = "skipped (required module %s is not installed)";
 $L['install_contine_homepage'] = "Continue to the home page";
 $L['install_error'] = "Error !";
 $L['install_wrong_manual'] = "Something went wrong, you'll have to manually setup the engine, the steps are detailled <a href=\"http://www.neocrome.net/page.php?al=install\">here</a>.";
@@ -55,6 +57,10 @@ $L['install_database_password'] = "Database password :";
 $L['install_database_name'] = "Database name :";
 $L['install_database_tableprefix'] = "Database table prefix :";
 $L['install_seditio_already'] = "Don't change, unless you already have a Seditio in this database";
+$L['install_database_clear_before'] = "Clear database before import :";
+$L['install_database_clear_before_hint'] = "Drop all tables in the database before creating new ones.";
+$L['install_database_cleared'] = "Database cleared";
+$L['install_tables_dropped'] = "table(s) dropped";
 $L['install_input_mode'] = "Input mode for text areas :";
 $L['install_html_mode'] = "<strong>HTML</strong> (recommended)<br /> \n
            The textareas for pages, posts in forums and private messages are natively handled as HTML code.<br />\n
@@ -74,6 +80,7 @@ $L['install_email'] = "Email :";
 $L['install_doublecheck'] = "Double-check, it's important!";
 $L['install_country'] = "Country :";
 $L['install_validate'] = "Validate";
+$L['install_fill_required'] = "Please fill in all required fields:";
 $L['install_auto_installer'] = "This is the auto-installer for Seditio (build " . @$cfg['version'] . ")";
 $L['install_create_configfile'] = "It will create the configuration file <strong>" . @$cfg['config_file'] . "</strong>, \n
 	         then will create and populate the tables in your MySQL database.<br /> \n

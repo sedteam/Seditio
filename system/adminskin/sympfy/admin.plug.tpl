@@ -53,6 +53,26 @@
 						{PLUG_DETAILS_DATE}
 					</div>
 				</div>
+				<!-- BEGIN: PLUG_DETAILS_REQUIRES_MODULES -->
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.adm_requires_modules}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_REQUIRES_MODULES}
+					</div>
+				</div>
+				<!-- END: PLUG_DETAILS_REQUIRES_MODULES -->
+				<!-- BEGIN: PLUG_DETAILS_REQUIRES_PLUGINS -->
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">
+						{PHP.L.adm_requires_plugins}:
+					</div>
+					<div class="table-td text-left resp-table-td">
+						{PLUG_DETAILS_REQUIRES_PLUGINS}
+					</div>
+				</div>
+				<!-- END: PLUG_DETAILS_REQUIRES_PLUGINS -->
 				<!-- BEGIN: PLUG_DETAILS_CONFIG -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td pl-title">
@@ -149,6 +169,7 @@
 
 			<div class="table-body resp-table-body">
 
+				<!-- BEGIN: PLUG_DETAILS_OPT_INSTALL -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td" style="width:33%;">
 						<a href="{PLUG_DETAILS_INSTALL_URL}" title="{PHP.L.adm_opt_installall}"><img src="system/img/admin/play.png" alt="" /> {PHP.L.adm_opt_installall}</a>
@@ -157,6 +178,8 @@
 						{PHP.L.adm_opt_installall_explain}
 					</div>
 				</div>
+				<!-- END: PLUG_DETAILS_OPT_INSTALL -->
+				<!-- BEGIN: PLUG_DETAILS_OPT_UNINSTALL -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td">
 						<a href="{PLUG_DETAILS_UNINSTALL_URL}" title="{PHP.L.adm_opt_uninstallall}"><img src="system/img/admin/stop.png" alt="" /> {PHP.L.adm_opt_uninstallall}</a>
@@ -165,6 +188,8 @@
 						{PHP.L.adm_opt_uninstallall_explain}
 					</div>
 				</div>
+				<!-- END: PLUG_DETAILS_OPT_UNINSTALL -->
+				<!-- BEGIN: PLUG_DETAILS_OPT_PAUSE -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td">
 						<a href="{PLUG_DETAILS_PAUSE_URL}" title="{PHP.L.adm_opt_pauseall}"><img src="system/img/admin/pause.png" alt="" /> {PHP.L.adm_opt_pauseall}</a>
@@ -173,6 +198,8 @@
 						{PHP.L.adm_opt_pauseall_explain}
 					</div>
 				</div>
+				<!-- END: PLUG_DETAILS_OPT_PAUSE -->
+				<!-- BEGIN: PLUG_DETAILS_OPT_UNPAUSE -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td">
 						<a href="{PLUG_DETAILS_UNPAUSE_URL}" title="{PHP.L.adm_opt_unpauseall}"><img src="system/img/admin/forward.png" alt="" /> {PHP.L.adm_opt_unpauseall}</a>
@@ -181,6 +208,7 @@
 						{PHP.L.adm_opt_unpauseall_explain}
 					</div>
 				</div>
+				<!-- END: PLUG_DETAILS_OPT_UNPAUSE -->
 
 			</div>
 

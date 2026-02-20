@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/otherpages/otherpages.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=otherpages
 Name=Other pages
 Description=Display other pages in category
-Version=180
+Version=185
 Date=2021-jul-08
 Author=Seditio Team
 Copyright=
@@ -28,6 +28,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
+Requires_modules=page
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]

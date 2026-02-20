@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.config.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.config.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Configuration
@@ -88,6 +88,24 @@ switch ($n) {
 					}
 				}
 			}
+		} elseif ($a == 'reset' && $o == 'module' && !empty($v) && !empty($p)) {
+			sed_check_xg();
+
+			$module_info = SED_ROOT . "/modules/" . $p . "/" . $p . ".setup.php";
+			if (file_exists($module_info)) {
+				$info_cfg = sed_infoget($module_info, 'SED_MODULE_CONFIG');
+				if (empty($info_cfg['Error'])) {
+					foreach ($info_cfg as $i => $x) {
+						$line = explode(":", $x);
+						if (is_array($line) && !empty($line[1]) && !empty($i)) {
+							if ($v == $i) {
+								$default_val = isset($line[3]) ? $line[3] : '';
+								$sql = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($default_val) . "' WHERE config_name='$v' AND config_owner='$o' AND config_cat='$p'");
+							}
+						}
+					}
+				}
+			}
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
@@ -99,14 +117,24 @@ switch ($n) {
 
 			$adminhelpconfig = isset($L["adm_help_config_$p"]) ? $L["adm_help_config_$p"] : '';
 			$adminlegend = $L["core_" . $p];
+		} elseif ($o == 'module') {
+			$module_info = SED_ROOT . "/modules/" . $p . "/" . $p . ".setup.php";
+			$info = file_exists($module_info) ? sed_infoget($module_info, 'SED_MODULE') : array();
+			$name = isset($info['Name']) ? $info['Name'] : $p;
+
+			$urlpaths[sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p)] = $name . ' (' . $p . ')';
+			$admintitle = $name . ' (' . $p . ')';
+
+			$adminlegend = (isset($L['Module']) ? $L['Module'] : 'Module') . ' : ' . $name . ' (' . $p . ')';
 		} else {
 			$extplugin_info = SED_ROOT . "/plugins/" . $p . "/" . $p . ".setup.php";
-			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+			$info = file_exists($extplugin_info) ? sed_infoget($extplugin_info, 'SED_EXTPLUGIN') : array();
+			$name = isset($info['Name']) ? $info['Name'] : $p;
 
-			$urlpaths[sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p)] = $info['Name'] . ' (' . $p . ')';
-			$admintitle = $info['Name'] . ' (' . $p . ')';
+			$urlpaths[sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p)] = $name . ' (' . $p . ')';
+			$admintitle = $name . ' (' . $p . ')';
 
-			$adminlegend = $L['Plugin'] . ' : ' . $info['Name'] . ' (' . $p . ')';
+			$adminlegend = $L['Plugin'] . ' : ' . $name . ' (' . $p . ')';
 		}
 
 		$t = new XTemplate(sed_skinfile('admin.config', false, true));
@@ -117,6 +145,10 @@ switch ($n) {
 			$config_name = $row['config_name'];
 			$config_value = $row['config_value'];
 			$config_default = $row['config_default'];
+			// Use default when value is empty (e.g. radio default was mis-parsed as empty)
+			if (($config_value === '' || $config_value === null) && $config_default !== '' && $config_default !== null) {
+				$config_value = $config_default;
+			}
 			$config_variants = (!empty($row['config_variants'])) ? explode(",", $row['config_variants']) : '';
 			$config_type = $row['config_type'];
 			$config_title = isset($L['cfg_' . $row['config_name']][0]) ? $L['cfg_' . $row['config_name']][0] : '';
@@ -155,7 +187,7 @@ switch ($n) {
 				$config_field = "<textarea name=\"$config_name\" rows=\"5\" cols=\"76\" class=\"noeditor\">" . $config_value . "</textarea>";
 			}
 
-			$config_reset_url = ($o == 'core' || $o == 'plug') ? sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p . "&a=reset&v=" . $config_name . "&" . sed_xg()) : '';
+			$config_reset_url = ($o == 'core' || $o == 'plug' || $o == 'module') ? sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p . "&a=reset&v=" . $config_name . "&" . sed_xg()) : '';
 
 			$t->assign(array(
 				"CONFIG_LIST_TITLE" => $config_title,
@@ -190,6 +222,14 @@ switch ($n) {
 
 		if (file_exists($sys['inc_cfg_options'])) {
 			require($sys['inc_cfg_options']);
+		}
+
+		// Module-specific extra config (e.g. gallery GD block) on config edit page
+		if ($o == 'module' && !empty($p)) {
+			$mod_cfg_inc = SED_ROOT . '/modules/' . $p . '/admin/' . $p . '.admin.config.php';
+			if (is_file($mod_cfg_inc)) {
+				require($mod_cfg_inc);
+			}
 		}
 
 		break;

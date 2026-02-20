@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/functions.admin.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -51,6 +51,55 @@ function sed_auth_getvalue($mask)
 		}
 	}
 	return ($res);
+}
+
+/**
+ * Install auth rights for one (auth_code, auth_option): insert missing rows per group.
+ * Uses letter masks (R, W, 1-5, A) converted via sed_auth_getvalue().
+ *
+ * @param string $auth_code Area code (e.g. 'page', 'forums', 'plug').
+ * @param string|int $auth_option Option (e.g. category code, section id).
+ * @param array $rights_by_group [groupid => letter_mask], e.g. [1 => 'R', 4 => 'RW']. Empty string = 0.
+ * @param array|null $lock_by_group Same keyed by groupid for lock; null = 0 for all.
+ * @param int $setby_userid Value for auth_setbyuserid.
+ * @return void
+ */
+function sed_auth_install_option($auth_code, $auth_option, $rights_by_group, $lock_by_group = null, $setby_userid = 1)
+{
+	global $db_auth;
+
+	$auth_code = sed_sql_prep($auth_code);
+	$auth_option = is_int($auth_option) ? (int)$auth_option : sed_sql_prep($auth_option);
+	$setby_userid = (int)$setby_userid;
+
+	foreach ($rights_by_group as $gid => $mask) {
+		$gid = (int)$gid;
+		$chk = sed_sql_query("SELECT 1 FROM $db_auth WHERE auth_code='$auth_code' AND auth_option='" . sed_sql_prep($auth_option) . "' AND auth_groupid=$gid LIMIT 1");
+		if (sed_sql_numrows($chk) > 0) {
+			continue;
+		}
+		$rval = sed_auth_getvalue($mask === '' ? '' : $mask);
+		$lval = ($lock_by_group !== null && array_key_exists($gid, $lock_by_group)) ? sed_auth_getvalue($lock_by_group[$gid] === '' ? '' : $lock_by_group[$gid]) : 0;
+		sed_sql_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES ($gid, '$auth_code', '" . sed_sql_prep($auth_option) . "', " . (int)$rval . ", " . (int)$lval . ", $setby_userid)");
+	}
+}
+
+/**
+ * Install auth rights for multiple options with the same rights per group.
+ *
+ * @param string $auth_code Area code.
+ * @param string|int|array $options Single option or array of options.
+ * @param array $rights_by_group [groupid => letter_mask].
+ * @param array|null $lock_by_group Same for lock; null = 0 for all.
+ * @param int $setby_userid Value for auth_setbyuserid.
+ * @return void
+ */
+function sed_auth_install($auth_code, $options, $rights_by_group, $lock_by_group = null, $setby_userid = 1)
+{
+	$options = is_array($options) ? $options : array($options);
+	foreach ($options as $opt) {
+		sed_auth_install_option($auth_code, $opt, $rights_by_group, $lock_by_group, $setby_userid);
+	}
 }
 
 /** 
@@ -207,100 +256,7 @@ function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $t
             VALUES ('$owner', '$cat', '$order', '$name', " . (int)$type1 . ", '$value', '$default', '" . sed_sql_prep($text) . "', '$variants')");
 }
 
-/** 
- * Delete forums section 
- * 
- * @param int $id Section ID 
- * @return int Count deleted rows 
- */
-function sed_forum_deletesection($id)
-{
-	global $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_auth;
-
-	$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_sectionid='$id'");
-	$num = sed_sql_affectedrows();
-	$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_sectionid='$id'");
-	$num = $num + sed_sql_affectedrows();
-	$sql = sed_sql_query("DELETE FROM $db_forum_sections WHERE fs_id='$id'");
-	$num = $num + sed_sql_affectedrows();
-	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='forums' AND auth_option='$id'");
-	$num = $num + sed_sql_affectedrows();
-	sed_log("Forums : Deleted section " . $id, 'adm');
-	return ($num);
-}
-
-/** 
- * Recounts posts & topics in section
- * 
- * @param int $id Section ID 
- */
-function sed_forum_resync($id)
-{
-	global $db_forum_topics, $db_forum_posts, $db_forum_sections;
-
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$id'");
-	$num = sed_sql_result($sql, 0, "COUNT(*)");
-
-	$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1");
-	while ($row = sed_sql_fetchassoc($sql)) {
-		sed_forum_resynctopic($row['ft_id']);
-	}
-
-	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
-	sed_forum_sectionsetlast($id);
-
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$id'");
-	$num = sed_sql_result($sql, 0, "COUNT(*)");
-
-	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
-
-	sed_log("Forums : Re-synced section " . $id, 'adm');
-	return;
-}
-
-/** 
- * Recounts posts in a given topic 
- * 
- * @param int $id Topic ID 
- */
-function sed_forum_resynctopic($id)
-{
-	global $db_forum_topics, $db_forum_posts;
-
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$id'");
-	$num = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_postcount='$num' WHERE ft_id='$id'");
-
-	$sql = sed_sql_query("SELECT fp_posterid, fp_postername, fp_updated
-		FROM $db_forum_posts
-		WHERE fp_topicid='$id'
-		ORDER BY fp_id DESC LIMIT 1");
-
-	if ($row = sed_sql_fetchassoc($sql)) {
-		$sql = sed_sql_query("UPDATE $db_forum_topics SET
-			ft_lastposterid='" . (int)$row['fp_posterid'] . "',
-			ft_lastpostername='" . sed_sql_prep($row['fp_postername']) . "',
-			ft_updated='" . (int)$row['fp_updated'] . "'
-			WHERE ft_id='$id'");
-	}
-	return;
-}
-
-/** 
- * Recounts posts & topics all sections
- * 
- * @param int $id Section ID 
- */
-function sed_forum_resyncall()
-{
-	global $db_forum_sections;
-
-	$sql = sed_sql_query("SELECT fs_id FROM $db_forum_sections");
-	while ($row = sed_sql_fetchassoc($sql)) {
-		sed_forum_resync($row['fs_id']);
-	}
-	return;
-}
+/* Forum admin functions moved to modules/forums/inc/forums.functions.php */
 
 /** 
  * Returns link or title url depending on the permissions
@@ -402,13 +358,12 @@ function sed_loadconfigmap()
 
 	$result[] = array('meta', '01', 'defaulttitle', 1, '{MAINTITLE} - {SUBTITLE}', '');  //Sed 175
 	$result[] = array('meta', '02', 'indextitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 179
-	$result[] = array('meta', '03', 'listtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-	$result[] = array('meta', '04', 'pagetitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-	$result[] = array('meta', '05', 'forumstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	/* listtitle, pagetitle moved to modules/page/page.setup.php */
+	/* forumstitle config moved to forums module */
 	$result[] = array('meta', '06', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-	$result[] = array('meta', '07', 'pmtitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 175
-	$result[] = array('meta', '08', 'gallerytitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
-	$result[] = array('meta', '09', 'pfstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	/* pmtitle moved to modules/pm/pm.setup.php */
+	/* gallerytitle moved to modules/gallery */
+	/* pfstitle moved to modules/pfs/pfs.setup.php */
 	$result[] = array('meta', '10', 'plugtitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
 
 	$result[] = array('skin', '02', 'forcedefaultskin', 3, '1', '');
@@ -442,63 +397,34 @@ function sed_loadconfigmap()
 	$result[] = array('menus', '20', 'freetext7', 0, '', '');
 	$result[] = array('menus', '20', 'freetext8', 0, '', '');
 	$result[] = array('menus', '20', 'freetext9', 0, '', '');
-	$result[] = array('comments', '01', 'disable_comments', 3, '0', '');
-	$result[] = array('comments', '04', 'showcommentsonpage', 3, '0', ''); //New v172
-	$result[] = array('comments', '05', 'maxcommentsperpage', 2, '30', array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90)); //New v173
-	$result[] = array('comments', '06', 'maxtimeallowcomedit', 2, '15', array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90)); //New v173
-	$result[] = array('comments', '07', 'maxcommentlenght', 1, '2000', '');
-	$result[] = array('comments', '10', 'countcomments', 3, '1', '');
-	$result[] = array('comments', '11', 'commentsorder', 2, 'ASC', array('ASC', 'DESC')); //New v173
-	$result[] = array('forums', '01', 'disable_forums', 3, '0', '');
-	$result[] = array('forums', '10', 'hideprivateforums', 3, '0', '');
-	$result[] = array('forums', '10', 'hottopictrigger', 2, '20', array(5, 10, 15, 20, 25, 30, 35, 40, 50));
-	$result[] = array('forums', '10', 'maxtopicsperpage', 2, '30', array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90));
-	$result[] = array('forums', '12', 'antibumpforums', 3, '0', '');
-	$result[] = array('page', '01', 'disable_page', 3, '0', '');
-	$result[] = array('page', '03', 'showpagesubcatgroup', 3, '0', '');
-	$result[] = array('page', '05', 'maxrowsperpage', 2, '15', array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90));
-	$result[] = array('page', '06', 'genseourls', 3, '1', '');   // New in v178
-	$result[] = array('pfs', '01', 'disable_pfs', 3, '0', '');
-	$result[] = array('pfs', '02', 'pfs_filemask', 3, '0', '');
-	$result[] = array('pfs', '03', 'available_image_sizes', 1, '', '');
-	// $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
-	$result[] = array('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled', 'GD2', 'Imagick'));
-	$result[] = array('pfs', '10', 'th_x', 2, '112', '');
-	$result[] = array('pfs', '10', 'th_y', 2, '84', '');
-	//$result[] = array('pfs', '10', 'th_border', 2, '0', '');
-	$result[] = array('pfs', '10', 'th_dimpriority', 2, 'Width', array('Width', 'Height'));
-	$result[] = array('pfs', '10', 'th_keepratio', 3, '1', '');
-	$result[] = array('pfs', '10', 'th_jpeg_quality', 2, '85', array(0, 5, 10, 20, 30, 40, 50, 60, 70, 75, 80, 85, 90, 95, 100));
-	//$result[] = array('pfs', '10', 'th_colorbg', 2, '000000', '');
-	//$result[] = array('pfs', '10', 'th_colortext', 2, 'FFFFFF', '');
-	$result[] = array('pfs', '10', 'th_rel', 2, 'sedthumb', '');
-	//$result[] = array('pfs', '10', 'th_textsize', 2, '0', array(0, 1, 2, 3, 4, 5));
-	// ---- New in v173
-	$result[] = array('rss', '01', 'disable_rss', 3, '0', '');
-	$result[] = array('rss', '02', 'disable_rsspages', 3, '0', '');
-	$result[] = array('rss', '03', 'disable_rsscomments', 3, '0', '');
-	$result[] = array('rss', '04', 'disable_rssforums', 3, '0', '');
-	$result[] = array('rss', '05', 'rss_timetolive', 2, '300', '');
-	$result[] = array('rss', '06', 'rss_maxitems', 2, '30', array(0, 5, 10, 20, 30, 40, 50, 60, 70, 75, 80, 85, 90, 95, 100));
-	$result[] = array('rss', '07', 'rss_defaultcode', 2, 'news', '');
-	// ----
-	$result[] = array('gallery', '01', 'disable_gallery', 3, '0', '');
-	$result[] = array('gallery', '10', 'gallery_gcol', 2, '4', '');
-	$result[] = array('gallery', '11', 'gallery_bcol', 2, '6', '');
-	$result[] = array('gallery', '12', 'gallery_imgmaxwidth', 2, '600', '');
-	$result[] = array('gallery', '20', 'gallery_logofile', 1, '', '');
-	$result[] = array('gallery', '21', 'gallery_logopos', 2, 'Bottom left', array('Top left', 'Top right', 'Bottom left', 'Bottom right'));
-	$result[] = array('gallery', '22', 'gallery_logotrsp', 2, '50', array(0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100));
-	$result[] = array('gallery', '23', 'gallery_logojpegqual', 2, '90', array(0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100));
+	/* Comments config in plug (plugins/comments) */
+	/* Forums config moved to modules/forums/forums.setup.php */
+	/* disable_page removed: pages on/off only via Admin → Modules (sed_module_active('page')) */
+	/* page config (showpagesubcatgroup, maxrowsperpage, genseourls) in modules/page/page.setup.php */
+	/* PFS config (disable_pfs, pfs_filemask, pfstitle) in modules/pfs/pfs.setup.php */
+	/* Images/thumbs (th_*, available_image_sizes) in core category 'images' */
+	$result[] = array('images', '03', 'available_image_sizes', 1, '', '');
+	$result[] = array('images', '10', 'th_amode', 2, 'GD2', array('Disabled', 'GD2', 'Imagick'));
+	$result[] = array('images', '10', 'th_x', 2, '112', '');
+	$result[] = array('images', '10', 'th_y', 2, '84', '');
+	$result[] = array('images', '10', 'th_dimpriority', 2, 'Width', array('Width', 'Height'));
+	$result[] = array('images', '10', 'th_keepratio', 3, '1', '');
+	$result[] = array('images', '10', 'th_jpeg_quality', 2, '85', array(0, 5, 10, 20, 30, 40, 50, 60, 70, 75, 80, 85, 90, 95, 100));
+	$result[] = array('images', '10', 'th_rel', 2, 'sedthumb', '');
+	$result[] = array('images', '12', 'th_imgmaxwidth', 2, '600', '');
+	$result[] = array('images', '20', 'th_logofile', 1, '', '');
+	$result[] = array('images', '21', 'th_logopos', 2, 'Bottom left', array('Top left', 'Top right', 'Bottom left', 'Bottom right'));
+	$result[] = array('images', '22', 'th_logotrsp', 2, '50', array(0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100));
+	$result[] = array('images', '23', 'th_logojpegqual', 2, '90', array(0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100));
+	/* RSS config moved to modules/rss (install via Admin → Modules) */
+	/* Gallery config moved to modules/gallery (install via Admin → Modules) */
 	$result[] = array('plug', '01', 'disable_plug', 3, '0', '');
-	$result[] = array('pm', '01', 'disable_pm', 3, '0', '');
-	$result[] = array('pm', '10', 'pm_maxsize', 2, '10000', array(200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 30000, 50000, 65000));
-	$result[] = array('pm', '10', 'pm_allownotifications', 3, '1', '');
-	$result[] = array('polls', '01', 'disable_polls', 3, '0', '');
-	$result[] = array('ratings', '01', 'disable_ratings', 3, '0', '');
+	/* PM config (pm_maxsize, pm_allownotifications) in modules/pm/pm.setup.php */
+	/* polls: use module on/off (Admin → Modules), no disable_polls config */
+	/* ratings: use plugin on/off (Admin → Plugins), no disable_ratings config */
 	$result[] = array('trash', '01', 'trash_prunedelay', 2, '7', array(0, 1, 2, 3, 4, 5, 7, 10, 15, 20, 30, 45, 60, 90, 120));
 	$result[] = array('trash', '10', 'trash_comment', 3, '1', '');
-	$result[] = array('trash', '11', 'trash_forum', 3, '1', '');
+	/* trash_forum config moved to forums module */
 	$result[] = array('trash', '12', 'trash_page', 3, '1', '');
 	$result[] = array('trash', '13', 'trash_pm', 3, '1', '');
 	$result[] = array('trash', '14', 'trash_user', 3, '1', '');
@@ -568,7 +494,7 @@ function sed_plugin_icon($code)
  */
 function sed_plugin_install($pl)
 {
-	global $db_plugins, $db_config, $db_auth, $db_users, $sed_groups, $usr, $cfg;
+	global $db_core, $db_plugins, $db_config, $db_auth, $db_users, $sed_groups, $usr, $cfg;
 
 	$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 	$res = "<h3>Installing : plugins/" . $pl . "</h3>";
@@ -589,6 +515,40 @@ function sed_plugin_install($pl)
 
 		$info['Auth_members'] = (isset($info['Auth_members'])) ? $info['Auth_members'] : 'R';
 		$info['Lock_members'] = (isset($info['Lock_members'])) ? $info['Lock_members'] : 'W12345A';
+
+		// Dependencies: parse and validate
+		$req_modules = isset($info['Requires_modules']) ? array_map('trim', explode(',', $info['Requires_modules'])) : array();
+		$req_modules = array_filter($req_modules);
+		$req_plugins = isset($info['Requires_plugins']) ? array_map('trim', explode(',', $info['Requires_plugins'])) : array();
+		$req_plugins = array_filter($req_plugins);
+
+		$res .= "<strong>Checking dependencies...</strong> ";
+		foreach ($req_modules as $req) {
+			$sql_dep = sed_sql_query("SELECT ct_state, ct_title FROM $db_core WHERE ct_code='" . sed_sql_prep($req) . "' LIMIT 1");
+			$dep_row = sed_sql_fetchassoc($sql_dep);
+			if (!$dep_row || (int)$dep_row['ct_state'] != 1) {
+				$dep_name = !empty($dep_row['ct_title']) ? $dep_row['ct_title'] : $req;
+				$dep_url = sed_url("admin", "m=modules&a=details&mod=" . $req);
+				$res .= "<span class=\"no\">Required module " . sed_link($dep_url, sed_cc($dep_name), 'class="alert-link"') . " is not installed or not active. Installation aborted.</span><br />";
+				return $res;
+			}
+		}
+		foreach ($req_plugins as $req) {
+			$sql_dep = sed_sql_query("SELECT SUM(pl_active) AS active_count FROM $db_plugins WHERE pl_code='" . sed_sql_prep($req) . "' AND pl_module=0");
+			$dep_row = sed_sql_fetchassoc($sql_dep);
+			if (!$dep_row || (int)$dep_row['active_count'] < 1) {
+				$sql_title = sed_sql_query("SELECT pl_title FROM $db_plugins WHERE pl_code='" . sed_sql_prep($req) . "' AND pl_module=0 LIMIT 1");
+				$title_row = sed_sql_fetchassoc($sql_title);
+				$dep_name = ($title_row && !empty($title_row['pl_title'])) ? $title_row['pl_title'] : $req;
+				$dep_url = sed_url("admin", "m=plug&a=details&pl=" . $req);
+				$res .= "<span class=\"no\">Required plugin " . sed_link($dep_url, sed_cc($dep_name), 'class="alert-link"') . " is not installed or not active. Installation aborted.</span><br />";
+				return $res;
+			}
+		}
+		$res .= "OK.<br />";
+
+		$dependencies_json = sed_sql_prep(json_encode(array('requires' => array_values($req_modules), 'requires_plugins' => array_values($req_plugins))));
+		$pl_version = isset($info['Version']) ? sed_sql_prep($info['Version']) : '0.0.0';
 
 		$handle = opendir(SED_ROOT . "/plugins/" . $pl);
 		$setupfile = $pl . ".setup.php";
@@ -617,7 +577,7 @@ function sed_plugin_install($pl)
 					} else {
 						$order = 10;
 					}
-					$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('" . trim($hook) . "', '" . $info_part['Code'] . "', '" . sed_sql_prep($info_part['Part']) . "', '" . sed_sql_prep($info['Name']) . "', '" . $info_part['File'] . "',  " . (int)$order . ", 1)");
+					$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active) VALUES ('" . trim($hook) . "', '" . $info_part['Code'] . "', '" . sed_sql_prep($info_part['Part']) . "', '" . sed_sql_prep($info['Name']) . "', '" . $pl_version . "', '" . $dependencies_json . "', '" . $info_part['File'] . "', " . (int)$order . ", 1)");
 				}
 
 				//$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
@@ -673,34 +633,54 @@ function sed_plugin_install($pl)
 
 	$res .= "<strong>Adding the rights for the user groups...</strong><br />";
 
+	global $sed_groups;
+	$plug_default_rights = array(
+		SED_GROUP_DEFAULT => 'RW',
+		SED_GROUP_GUESTS => 'R',
+		SED_GROUP_INACTIVE => 'R',
+		SED_GROUP_BANNED => '',
+		SED_GROUP_MEMBERS => 'RW',
+		SED_GROUP_MODERATORS => 'RWA',
+		SED_GROUP_SUPERADMINS => 'RWA12345',
+	);
+	$plug_default_lock = array(
+		SED_GROUP_DEFAULT => 'A',
+		SED_GROUP_GUESTS => 'W12345A',
+		SED_GROUP_INACTIVE => 'W12345A',
+		SED_GROUP_BANNED => 'RWA12345',
+		SED_GROUP_MEMBERS => 'A',
+		SED_GROUP_MODERATORS => '',
+		SED_GROUP_SUPERADMINS => 'RWA12345',
+	);
+	$plug_rights = array();
+	$plug_lock = array();
+	$plug_comment = array();
 	foreach ($sed_groups as $k => $v) {
-		$comment = ' (Plugin setup)';
-
-		if ($v['id'] == 1 || $v['id'] == 2) {
-			$ins_auth = sed_auth_getvalue($info['Auth_guests']);
-			$ins_lock = sed_auth_getvalue($info['Lock_guests']);
-
-			if ($ins_auth > 128 || $ins_lock < 128) {
-				$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
-				$ins_lock = 128;
-				$comment = ' (System override, guests and inactive are not allowed to admin)';
+		$gid = $v['id'];
+		$plug_rights[$gid] = isset($plug_default_rights[$gid]) ? $plug_default_rights[$gid] : $plug_default_rights[SED_GROUP_DEFAULT];
+		$plug_lock[$gid] = isset($plug_default_lock[$gid]) ? $plug_default_lock[$gid] : $plug_default_lock[SED_GROUP_DEFAULT];
+		$plug_comment[$gid] = ' (Plugin setup)';
+		if ($gid == SED_GROUP_GUESTS || $gid == SED_GROUP_INACTIVE) {
+			$plug_rights[$gid] = $info['Auth_guests'];
+			$plug_lock[$gid] = $info['Lock_guests'];
+			if (sed_auth_getvalue($info['Auth_guests']) > 128 || sed_auth_getvalue($info['Lock_guests']) < 128) {
+				$plug_rights[$gid] = str_replace('A', '', $info['Auth_guests']);
+				$plug_lock[$gid] = 'A';
+				$plug_comment[$gid] = ' (System override, guests and inactive are not allowed to admin)';
 			}
-		} elseif ($v['id'] == 3) {
-			$ins_auth = 0;
-			$ins_lock = 255;
-			$comment = ' (System override, Banned)';
-		} elseif ($v['id'] == 5) {
-			$ins_auth = 255;
-			$ins_lock = 255;
-			$comment = ' (System override, Administrators)';
-		} else {
-			$ins_auth = sed_auth_getvalue($info['Auth_members']);
-			$ins_lock = sed_auth_getvalue($info['Lock_members']);
+		} elseif ($gid == SED_GROUP_BANNED) {
+			$plug_comment[$gid] = ' (System override, Banned)';
+		} elseif ($gid == SED_GROUP_SUPERADMINS) {
+			$plug_comment[$gid] = ' (System override, Administrators)';
+		} elseif ($gid == SED_GROUP_MEMBERS || $gid == SED_GROUP_MODERATORS) {
+			$plug_rights[$gid] = $info['Auth_members'];
+			$plug_lock[$gid] = $info['Lock_members'];
 		}
-
-		$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (" . (int)$v['id'] . ", 'plug', '$pl', " . (int)$ins_auth . ", " . (int)$ins_lock . ", " . (int)$usr['id'] . ")");
-
-		$res .= "Group #" . $v['id'] . ", " . $sed_groups[$v['id']]['title'] . " : Auth=" . sed_build_admrights($ins_auth) . " / Lock=" . sed_build_admrights($ins_lock) . $comment . "<br />";
+	}
+	sed_auth_install_option('plug', $pl, $plug_rights, $plug_lock, $usr['id']);
+	foreach ($sed_groups as $k => $v) {
+		$gid = $v['id'];
+		$res .= "Group #" . $gid . ", " . $sed_groups[$gid]['title'] . " : Auth=" . sed_build_admrights(sed_auth_getvalue($plug_rights[$gid])) . " / Lock=" . sed_build_admrights(sed_auth_getvalue($plug_lock[$gid])) . $plug_comment[$gid] . "<br />";
 	}
 
 	sed_auth_reset();
@@ -739,6 +719,26 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 	$res = '';
 	while ($row = sed_sql_fetchassoc($sql0)) {
 		$pl = $row['pl_code'];
+		// Check reverse dependencies (other plugins that require this one)
+		$blocked = false;
+		$sql_deps = sed_sql_query("SELECT pl_code, pl_title, pl_dependencies FROM $db_plugins WHERE pl_module=0 AND pl_code!='" . sed_sql_prep($pl) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != ''");
+		while ($dep_row = sed_sql_fetchassoc($sql_deps)) {
+			$deps = json_decode($dep_row['pl_dependencies'], true);
+			if (is_array($deps) && isset($deps['requires_plugins']) && is_array($deps['requires_plugins']) && in_array($pl, $deps['requires_plugins'])) {
+				$dep_name = !empty($dep_row['pl_title']) ? $dep_row['pl_title'] : $dep_row['pl_code'];
+				$dep_url = sed_url("admin", "m=plug&a=details&pl=" . $dep_row['pl_code']);
+				$res .= "<h3>Removing : plugins/" . $pl . "</h3>";
+				$res .= "<span class=\"no\">Cannot uninstall: plugin " . sed_link($dep_url, $dep_name, 'class="alert-link"') . " depends on this plugin. Uninstall it first.</span><br />";
+				$blocked = true;
+				break;
+			}
+		}
+		if ($blocked) {
+			if (!$all || $pl != 'all') {
+				return $res;
+			}
+			continue;
+		}
 		$res .= "<h3>Removing : plugins/" . $pl . "</h3>";
 		$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 		$res .= "Deleting old installation of this plugin... ";
@@ -766,72 +766,293 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 	return ($res);
 }
 
-/** 
- * Removes a category 
- * 
- * @param int $id Category ID
- * @param string $c Category code
+/**
+ * Module installation
+ *
+ * @param string $code Module code (directory name in /modules/)
+ * @return string Installation log
  */
-function sed_structure_delcat($id, $c)
+function sed_module_install($code)
 {
-	global $db_structure, $db_auth;
+	global $db_core, $db_plugins, $db_config, $db_auth, $db_users, $sed_groups, $usr, $cfg;
 
-	$sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
-	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
-	sed_auth_clear('all');
-	sed_cache_clear('sed_cat');
-}
+	$code = preg_replace('/[^a-zA-Z0-9_]/', '', $code);
+	$res = "<h3>Installing module: " . $code . "</h3>";
+	$module_dir = SED_ROOT . '/modules/' . $code . '/';
+	$setup_file = $module_dir . $code . '.setup.php';
 
-/** 
- * Add a new category 
- * 
- * @param string $code Category code 
- * @param string $path Category path
- * @param string $title Category title 
- * @param string $desc Category description
- * @param string $icon Category icon src path
- * @param int $group Category group flag
- * @return bool      
- */
-function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
-{
-	global $db_structure, $db_auth, $sed_groups, $usr;
+	// Step 1: Parse setup file
+	$res .= "<strong>Looking for the setup file...</strong> ";
+	if (!file_exists($setup_file)) {
+		$res .= "Not found! Installation failed!<br />";
+		return $res;
+	}
+	$res .= "Found.<br />";
 
-	$res = FALSE;
+	$info = sed_infoget($setup_file, 'SED_MODULE');
+	if (!empty($info['Error'])) {
+		$res .= "Error parsing setup file: " . $info['Error'] . "<br />";
+		return $res;
+	}
 
-	if (!empty($title) && !empty($code) && !empty($path) && $code != 'all') {
-		$code = sed_replacespace($code);  //New in175
+	$info['Name'] = isset($info['Name']) ? $info['Name'] : $code;
+	$info['Version'] = isset($info['Version']) ? $info['Version'] : '1.0.0';
+	$info['Requires'] = isset($info['Requires']) ? $info['Requires'] : '';
+	$info['Admin'] = isset($info['Admin']) ? (int)$info['Admin'] : 0;
+	$info['Auth_guests'] = isset($info['Auth_guests']) ? $info['Auth_guests'] : 'R';
+	$info['Lock_guests'] = isset($info['Lock_guests']) ? $info['Lock_guests'] : 'W12345A';
+	$info['Auth_members'] = isset($info['Auth_members']) ? $info['Auth_members'] : 'RW';
+	$info['Lock_members'] = isset($info['Lock_members']) ? $info['Lock_members'] : '12345A';
 
-		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
-		if (sed_sql_numrows($sql) == 0) {
-			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order) 
-					VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($path) . "', '" . sed_sql_prep($title) . "', '" . sed_sql_prep($desc) . "', '" . sed_sql_prep($icon) . "', " . (int)$group . ", 'date.desc')");
-
-			foreach ($sed_groups as $k => $v) {
-				if ($v['id'] == 1 || $v['id'] == 2) {
-					$ins_auth = 1;
-					$ins_lock = 254;
-				} elseif ($v['id'] == 3) {
-					$ins_auth = 0;
-					$ins_lock = 255;
-				} elseif ($v['id'] == 5) {
-					$ins_auth = 255;
-					$ins_lock = 255;
-				} else {
-					$ins_auth = 3;
-					$ins_lock = ($k == 4) ? 128 : 0;
-				}
-				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (" . (int)$v['id'] . ", 'page', '$code', " . (int)$ins_auth . ", " . (int)$ins_lock . ", " . (int)$usr['id'] . ")");
-				$res = TRUE;
+	// Step 2: Check dependencies
+	if (!empty($info['Requires'])) {
+		$requires = array_map('trim', explode(',', $info['Requires']));
+		foreach ($requires as $req) {
+			if (empty($req)) continue;
+			$sql_dep = sed_sql_query("SELECT ct_state FROM $db_core WHERE ct_code='" . sed_sql_prep($req) . "' LIMIT 1");
+			$dep_row = sed_sql_fetchassoc($sql_dep);
+			if (!$dep_row || $dep_row['ct_state'] != 1) {
+				$res .= "<span class=\"no\">Required module '" . $req . "' is not installed or not active. Installation aborted.</span><br />";
+				return $res;
 			}
-			sed_auth_reorder();
-			sed_auth_clear('all');
-			sed_cache_clear('sed_cat');
+		}
+		$res .= "Dependencies satisfied.<br />";
+	}
+
+	// Step 3: Remove old installation if exists
+	$sql = sed_sql_query("DELETE FROM $db_core WHERE ct_code='" . sed_sql_prep($code) . "'");
+	$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='" . sed_sql_prep($code) . "' AND pl_module=1");
+	$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='module' AND config_cat='" . sed_sql_prep($code) . "'");
+	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='" . sed_sql_prep($code) . "'");
+	$res .= "Cleaned up any previous installation.<br />";
+
+	// Step 4: Execute install script
+	$install_file = $module_dir . $code . '.install.php';
+	$res .= "<strong>Looking for install script...</strong> ";
+	if (file_exists($install_file)) {
+		$res .= "Found, executing...<br />";
+		include($install_file);
+	} else {
+		$res .= "Not found (optional).<br />";
+	}
+
+	// Step 5: Register in sed_core
+	$ct_path = 'modules/' . $code . '/';
+	$sql = sed_sql_query("INSERT INTO $db_core (ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', 1, 0, '" . sed_sql_prep($ct_path) . "', " . (int)$info['Admin'] . ")");
+	$res .= "Registered in core registry.<br />";
+
+	// Step 6: Register all module parts in sed_plugins (like plugin parts)
+	$dependencies_json = '';
+	if (!empty($info['Requires'])) {
+		$dependencies_json = json_encode(array('requires' => array_map('trim', explode(',', $info['Requires']))));
+	}
+	$module_parts = array();
+	$handle = @opendir($module_dir);
+	if ($handle) {
+		$skip = array($code . '.setup.php', $code . '.install.php', $code . '.uninstall.php', $code . '.urls.php');
+		while (($f = readdir($handle)) !== false) {
+			if ($f === '.' || $f === '..') continue;
+			if (mb_strtolower(mb_substr($f, -4)) !== '.php') continue;
+			if (in_array($f, $skip)) continue;
+			$module_parts[] = $f;
+		}
+		closedir($handle);
+	}
+	if (empty($module_parts)) {
+		$module_parts[] = $code . '.php';
+	}
+	sort($module_parts);
+	$main_file = $code . '.php';
+	$parts_ordered = array();
+	if (in_array($main_file, $module_parts)) {
+		$parts_ordered[] = $main_file;
+		$module_parts = array_values(array_diff($module_parts, array($main_file)));
+	}
+	$parts_ordered = array_merge($parts_ordered, $module_parts);
+	$order = 10;
+	foreach ($parts_ordered as $x) {
+		$part_name = mb_substr($x, 0, -4);
+		$pl_part = ($part_name === $code) ? 'main' : $part_name;
+		$pl_file = $part_name;
+		$sql = sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_module) VALUES ('module', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($pl_part) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($pl_file) . "', " . (int)$order . ", 1, 1)");
+		$order += 10;
+	}
+	$res .= "Registered " . count($parts_ordered) . " part(s) in plugins registry (pl_module=1).<br />";
+
+	// Step 7: Install configuration entries
+	$info_cfg = sed_infoget($setup_file, 'SED_MODULE_CONFIG');
+	$res .= "<strong>Looking for configuration entries...</strong> ";
+	if (empty($info_cfg['Error'])) {
+		$j = 0;
+		foreach ($info_cfg as $i => $x) {
+			$line = explode(":", $x);
+			if (is_array($line) && !empty($line[1]) && !empty($i)) {
+				$j++;
+				sed_config_add('module', $code, $line[0], $i, $line[1], $line[3], $line[3], $line[4], isset($line[2]) ? $line[2] : '');
+				$res .= "Config #$j: $i (" . $line[1] . ") Installed<br />";
+			}
+		}
+		$res .= "Found $j entries.<br />";
+	} else {
+		$res .= "None found.<br />";
+	}
+
+	// Step 8: Set up rights
+	$res .= "<strong>Adding rights for user groups...</strong><br />";
+	global $sed_groups;
+	$mod_default_rights = array(
+		SED_GROUP_DEFAULT => 'RW',
+		SED_GROUP_GUESTS => 'R',
+		SED_GROUP_INACTIVE => 'R',
+		SED_GROUP_BANNED => '',
+		SED_GROUP_MEMBERS => 'RW',
+		SED_GROUP_MODERATORS => 'RWA',
+		SED_GROUP_SUPERADMINS => 'RWA12345',
+	);
+	$mod_default_lock = array(
+		SED_GROUP_DEFAULT => 'A',
+		SED_GROUP_GUESTS => 'W12345A',
+		SED_GROUP_INACTIVE => 'W12345A',
+		SED_GROUP_BANNED => 'RWA12345',
+		SED_GROUP_MEMBERS => 'A',
+		SED_GROUP_MODERATORS => '',
+		SED_GROUP_SUPERADMINS => 'RWA12345',
+	);
+	$mod_rights = array();
+	$mod_lock = array();
+	$mod_comment = array();
+	foreach ($sed_groups as $k => $v) {
+		$gid = $v['id'];
+		$mod_rights[$gid] = isset($mod_default_rights[$gid]) ? $mod_default_rights[$gid] : $mod_default_rights[SED_GROUP_DEFAULT];
+		$mod_lock[$gid] = isset($mod_default_lock[$gid]) ? $mod_default_lock[$gid] : $mod_default_lock[SED_GROUP_DEFAULT];
+		$mod_comment[$gid] = ' (Module setup)';
+		if ($gid == SED_GROUP_GUESTS || $gid == SED_GROUP_INACTIVE) {
+			$mod_rights[$gid] = $info['Auth_guests'];
+			$mod_lock[$gid] = $info['Lock_guests'];
+			$mod_comment[$gid] = ' (Guests/Inactive)';
+		} elseif ($gid == SED_GROUP_BANNED) {
+			$mod_comment[$gid] = ' (Banned)';
+		} elseif ($gid == SED_GROUP_SUPERADMINS) {
+			$mod_comment[$gid] = ' (Administrators)';
+		} elseif ($gid == SED_GROUP_MEMBERS || $gid == SED_GROUP_MODERATORS) {
+			$mod_rights[$gid] = $info['Auth_members'];
+			$mod_lock[$gid] = $info['Lock_members'];
 		}
 	}
-	return ($res);
+	sed_auth_install_option($code, 'a', $mod_rights, $mod_lock, $usr['id']);
+	foreach ($sed_groups as $k => $v) {
+		$gid = $v['id'];
+		$res .= "Group #" . $gid . " (" . $v['title'] . "): Auth=" . sed_build_admrights(sed_auth_getvalue($mod_rights[$gid])) . " / Lock=" . sed_build_admrights(sed_auth_getvalue($mod_lock[$gid])) . $mod_comment[$gid] . "<br />";
+	}
+	sed_auth_reset();
+
+	// Step 9: Regenerate URL cache
+	sed_urls_generate();
+	$res .= "URL cache regenerated.<br />";
+
+	sed_cache_clearall();
+	$res .= "<strong>Module '" . $info['Name'] . "' installed successfully.</strong><br />";
+	return $res;
 }
 
+/**
+ * Module uninstallation
+ *
+ * @param string $code Module code
+ * @return string Uninstallation log
+ */
+function sed_module_uninstall($code)
+{
+	global $db_core, $db_plugins, $db_config, $db_auth, $db_users;
+
+	$code = preg_replace('/[^a-zA-Z0-9_]/', '', $code);
+	$res = "<h3>Uninstalling module: " . $code . "</h3>";
+
+	// Check reverse dependencies (other modules and plugins)
+	$code_title = $code;
+	$sql_ct = sed_sql_query("SELECT ct_title FROM $db_core WHERE ct_code='" . sed_sql_prep($code) . "' LIMIT 1");
+	if ($ct_row = sed_sql_fetchassoc($sql_ct)) {
+		$code_title = $ct_row['ct_title'];
+	}
+	$code_url = sed_url("admin", "m=modules&a=details&mod=" . $code);
+
+	$sql_deps = sed_sql_query("SELECT pl_code, pl_title, pl_dependencies, pl_module FROM $db_plugins WHERE pl_code!='" . sed_sql_prep($code) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != ''");
+	while ($dep_row = sed_sql_fetchassoc($sql_deps)) {
+		$deps = json_decode($dep_row['pl_dependencies'], true);
+		if (!is_array($deps)) {
+			continue;
+		}
+		$depends = false;
+		if (isset($deps['requires']) && is_array($deps['requires']) && in_array($code, $deps['requires'])) {
+			$depends = true;
+		}
+		if ($depends) {
+			$dep_name = !empty($dep_row['pl_title']) ? $dep_row['pl_title'] : $dep_row['pl_code'];
+			$dep_url = !empty($dep_row['pl_module'])
+				? sed_url("admin", "m=modules&a=details&mod=" . $dep_row['pl_code'])
+				: sed_url("admin", "m=plug&a=details&pl=" . $dep_row['pl_code']);
+			$kind = !empty($dep_row['pl_module']) ? 'module' : 'plugin';
+			$res .= "<span class=\"no\">Cannot uninstall: " . $kind . " " . sed_link($dep_url, $dep_name, 'class="alert-link"') . " depends on " . sed_link($code_url, $code_title, 'class="alert-link"') . ". Uninstall it first.</span><br />";
+			return $res;
+		}
+	}
+
+	// Execute uninstall script
+	$module_dir = SED_ROOT . '/modules/' . $code . '/';
+	$uninstall_file = $module_dir . $code . '.uninstall.php';
+	$res .= "<strong>Looking for uninstall script...</strong> ";
+	if (file_exists($uninstall_file)) {
+		$res .= "Found, executing...<br />";
+		include($uninstall_file);
+	} else {
+		$res .= "Not found (optional).<br />";
+	}
+
+	// Clean up database
+	$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='module' AND config_cat='" . sed_sql_prep($code) . "'");
+	$res .= "Deleted configuration entries: " . sed_sql_affectedrows() . "<br />";
+
+	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='" . sed_sql_prep($code) . "'");
+	$res .= "Deleted auth entries: " . sed_sql_affectedrows() . "<br />";
+
+	$sql = sed_sql_query("DELETE FROM $db_core WHERE ct_code='" . sed_sql_prep($code) . "'");
+	$res .= "Deleted from core registry: " . sed_sql_affectedrows() . "<br />";
+
+	$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='" . sed_sql_prep($code) . "' AND pl_module=1");
+	$res .= "Deleted from plugins registry: " . sed_sql_affectedrows() . "<br />";
+
+	$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
+	$res .= "Reset user auth cache.<br />";
+
+	// Regenerate URL cache
+	sed_urls_generate();
+	$res .= "URL cache regenerated.<br />";
+
+	sed_cache_clearall();
+	$res .= "<strong>Module '" . $code . "' uninstalled.</strong><br />";
+	return $res;
+}
+
+/**
+ * Pause or resume a module (toggle ct_state)
+ *
+ * @param string $code Module code
+ * @param int $state New state (0=paused, 1=active)
+ * @return string Log message
+ */
+function sed_module_pause($code, $state)
+{
+	global $db_core;
+
+	$code = preg_replace('/[^a-zA-Z0-9_]/', '', $code);
+	$state = (int)$state;
+	$sql = sed_sql_query("UPDATE $db_core SET ct_state=" . $state . " WHERE ct_code='" . sed_sql_prep($code) . "'");
+	sed_urls_generate();
+	sed_cache_clearall();
+	return ($state == 1) ? "Module '" . $code . "' activated." : "Module '" . $code . "' paused.";
+}
+
+/* sed_structure_delcat, sed_structure_newcat moved to modules/page/inc/page.functions.php */
 
 /** 
  * Removing an item from trash 
@@ -891,7 +1112,7 @@ function sed_trash_insert($dat, $db)
  */
 function sed_trash_restore($id)
 {
-	global $db_forum_topics, $db_forum_posts, $db_trash;
+	global $db_trash;
 
 	$columns = array();
 	$datas = array();
@@ -906,44 +1127,48 @@ function sed_trash_restore($id)
 			return (TRUE);
 
 		case 'forumpost':
-			global $db_forum_posts;
-			$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='" . $res['tr_datas']['fp_topicid'] . "'");
+			if (function_exists('sed_forum_resynctopic')) {
+				global $db_forum_topics, $db_forum_posts;
+				$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='" . $res['tr_datas']['fp_topicid'] . "'");
 
-			if ($row = sed_sql_fetchassoc($sql)) {
-				sed_trash_insert($res['tr_datas'], $db_forum_posts);
-				sed_log("Post #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
-				sed_forum_resynctopic($res['tr_datas']['fp_topicid']);
-				sed_forum_sectionsetlast($res['tr_datas']['fp_sectionid']);
-				sed_forum_resync($res['tr_datas']['fp_sectionid']);
-				return (TRUE);
-			} else {
-				$sql1 = sed_sql_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q" . $res['tr_datas']['fp_topicid'] . "'");
-				if ($row1 = sed_sql_fetchassoc($sql1)) {
-					sed_trash_restore($row1['tr_id']);
-					sed_trash_delete($row1['tr_id']);
+				if ($row = sed_sql_fetchassoc($sql)) {
+					sed_trash_insert($res['tr_datas'], $db_forum_posts);
+					sed_log("Post #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
+					sed_forum_resynctopic($res['tr_datas']['fp_topicid']);
+					sed_forum_sectionsetlast($res['tr_datas']['fp_sectionid']);
+					sed_forum_resync($res['tr_datas']['fp_sectionid']);
+					return (TRUE);
+				} else {
+					$sql1 = sed_sql_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q" . $res['tr_datas']['fp_topicid'] . "'");
+					if ($row1 = sed_sql_fetchassoc($sql1)) {
+						sed_trash_restore($row1['tr_id']);
+						sed_trash_delete($row1['tr_id']);
+					}
 				}
 			}
-
 			break;
 
 		case 'forumtopic':
-			global $db_forum_topics;
-			sed_trash_insert($res['tr_datas'], $db_forum_topics);
-			sed_log("Topic #" . $res['tr_datas']['ft_id'] . " restored from the trash can.", 'adm');
+			if (function_exists('sed_forum_resynctopic')) {
+				global $db_forum_topics, $db_forum_posts;
+				sed_trash_insert($res['tr_datas'], $db_forum_topics);
+				sed_log("Topic #" . $res['tr_datas']['ft_id'] . " restored from the trash can.", 'adm');
 
-			$sql = sed_sql_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-" . $res['tr_itemid'] . "'");
+				$sql = sed_sql_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-" . $res['tr_itemid'] . "'");
 
-			while ($row = sed_sql_fetchassoc($sql)) {
-				$res2 = sed_trash_get($row['tr_id']);
-				sed_trash_insert($res2['tr_datas'], $db_forum_posts);
-				sed_trash_delete($row['tr_id']);
-				sed_log("Post #" . $res2['tr_datas']['fp_id'] . " restored from the trash can (belongs to topic #" . $res2['tr_datas']['fp_topicid'] . ").", 'adm');
+				while ($row = sed_sql_fetchassoc($sql)) {
+					$res2 = sed_trash_get($row['tr_id']);
+					sed_trash_insert($res2['tr_datas'], $db_forum_posts);
+					sed_trash_delete($row['tr_id']);
+					sed_log("Post #" . $res2['tr_datas']['fp_id'] . " restored from the trash can (belongs to topic #" . $res2['tr_datas']['fp_topicid'] . ").", 'adm');
+				}
+
+				sed_forum_resynctopic($res['tr_itemid']);
+				sed_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
+				sed_forum_resync($res['tr_datas']['ft_sectionid']);
+				return (TRUE);
 			}
-
-			sed_forum_resynctopic($res['tr_itemid']);
-			sed_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
-			sed_forum_resync($res['tr_datas']['ft_sectionid']);
-			return (TRUE);
+			break;
 
 		case 'page':
 			global $db_pages, $db_structure;

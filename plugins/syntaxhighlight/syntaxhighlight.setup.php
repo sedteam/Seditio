@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/syntaxhighlight/syntaxhighlight.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=syntaxhighlight
 Name=Syntaxhighlight 3
 Description=Syntaxhighlight for Seditio 
-Version=180
+Version=185
 Date=2025-mar-01
 Author=Amro
 Copyright=Amro

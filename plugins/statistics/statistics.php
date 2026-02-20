@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/statistics/statistics.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -32,19 +32,25 @@ $s = sed_import('s', 'G', 'TXT');
 $m = sed_import('m', 'G', 'TXT');
 
 if ($m == 'share') {
-	$totaldbposts = sed_sql_rowcount($db_forum_posts);
-	$totaldbtopics = sed_sql_rowcount($db_forum_topics);
-	$totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-	$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
-	$sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-	$totaldbtopics += sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
-	$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-	$totaldbposts += sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
+	$totaldbposts = 0;
+	$totaldbtopics = 0;
+	$totaldbviews = 0;
+	if (sed_module_active('forums')) {
+		$totaldbposts = sed_sql_rowcount($db_forum_posts);
+		$totaldbtopics = sed_sql_rowcount($db_forum_topics);
+		$totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
+		$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
+		$sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
+		$totaldbtopics += sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
+		$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
+		$totaldbposts += sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
+	}
+	$share_pages = sed_module_active('page') ? sed_sql_rowcount($db_pages) : 0;
 	$output = "Seditio - Website engine<br />Copyright Neocrome & Seditio Team<br />";
 	$output .= "<a href=\"https://seditio.org\">https://seditio.org</a><br />";
 	$output .= "&nbsp;<br />[BEGIN_SED]<br />Title=" . $cfg['maintitle'] . "<br />";
 	$output .= "Subtitle=" . $cfg['subtitle'] . "<br />Version=" . $cfg['version'] . "<br />";
-	$output .= "Pages=" . sed_sql_rowcount($db_pages) . "<br />Users=" . sed_sql_rowcount($db_users) . "<br />";
+	$output .= "Pages=" . $share_pages . "<br />Users=" . sed_sql_rowcount($db_users) . "<br />";
 	$output .= "Pms=" . sed_stat_get('totalpms') . "<br />Forum_views=" . $totaldbviews . "<br />";
 	$output .= "Forum_posts=" . $totaldbposts . "<br />Forum_topics=" . $totaldbtopics . "<br />[END_SED]<br />&nbsp;";
 	die($output);
@@ -52,14 +58,27 @@ if ($m == 'share') {
 
 $plugin_title = $L['plu_title'];
 
-$totaldbpages = sed_sql_rowcount($db_pages);
-$totaldbcomments = sed_sql_rowcount($db_com);
+$totaldbpages = sed_module_active('page') ? sed_sql_rowcount($db_pages) : 0;
+$totaldbcomments = sed_plug_active('comments') ? sed_sql_rowcount($db_com) : 0;
 $totaldbratings = sed_sql_rowcount($db_ratings);
 $totaldbratingsvotes = sed_sql_rowcount($db_rated);
-$totaldbpolls = sed_sql_rowcount($db_polls);
-$totaldbpollsvotes = sed_sql_rowcount($db_polls_voters);
-$totaldbposts = sed_sql_rowcount($db_forum_posts);
-$totaldbtopics = sed_sql_rowcount($db_forum_topics);
+$totaldbpolls = sed_module_active('polls') ? sed_sql_rowcount($db_polls) : 0;
+$totaldbpollsvotes = sed_module_active('polls') ? sed_sql_rowcount($db_polls_voters) : 0;
+$totaldbposts = 0;
+$totaldbtopics = 0;
+$totaldbviews = 0;
+$totaldbtopicspruned = 0;
+$totaldbpostspruned = 0;
+if (sed_module_active('forums')) {
+	$totaldbposts = sed_sql_rowcount($db_forum_posts);
+	$totaldbtopics = sed_sql_rowcount($db_forum_topics);
+	$totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
+	$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
+	$sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
+	$totaldbtopicspruned = sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
+	$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
+	$totaldbpostspruned = sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
+}
 $totaldbfiles = sed_sql_rowcount($db_pfs);
 $totaldbusers = sed_sql_rowcount($db_users);
 
@@ -67,26 +86,20 @@ $totalpages = sed_stat_get('totalpages');
 $totalmailsent = sed_stat_get('totalmailsent');
 $totalpmsent = sed_stat_get('totalpms');
 
-$totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
-
-$sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-$totaldbtopicspruned = sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
-
-$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-$totaldbpostspruned = sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
-
 $totaldbfilesize = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs");
 $totaldbfilesize = sed_sql_result($totaldbfilesize, 0, "SUM(pfs_size)");
 
-$totalpmactive = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state<2");
-$totalpmactive = sed_sql_result($totalpmactive, 0, "COUNT(*)");
-
-$totalpmarchived = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=2");
-$totalpmarchived = sed_sql_result($totalpmarchived, 0, "COUNT(*)");
-
-$totalpmold = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=3");
-$totalpmold = sed_sql_result($totalpmold, 0, "COUNT(*)");
+$totalpmactive = 0;
+$totalpmarchived = 0;
+$totalpmold = 0;
+if (sed_module_active('pm')) {
+	$totalpmactive = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state<2");
+	$totalpmactive = sed_sql_result($totalpmactive, 0, "COUNT(*)");
+	$totalpmarchived = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=2");
+	$totalpmarchived = sed_sql_result($totalpmarchived, 0, "COUNT(*)");
+	$totalpmold = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=3");
+	$totalpmold = sed_sql_result($totalpmold, 0, "COUNT(*)");
+}
 
 $sql = sed_sql_query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
 $row = sed_sql_fetchassoc($sql);
@@ -98,18 +111,27 @@ $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
 if ($usr['id'] > 0) {
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='" . $usr['id'] . "'");
-	$user_postscount = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='" . $usr['id'] . "'");
-	$user_topicscount = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='" . $usr['id'] . "'");
-	$user_comments = sed_sql_result($sql, 0, "COUNT(*)");
+	$user_postscount = 0;
+	$user_topicscount = 0;
+	if (sed_module_active('forums')) {
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='" . $usr['id'] . "'");
+		$user_postscount = sed_sql_result($sql, 0, "COUNT(*)");
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='" . $usr['id'] . "'");
+		$user_topicscount = sed_sql_result($sql, 0, "COUNT(*)");
+	}
+	$user_comments = sed_plug_active('comments') ? sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='" . $usr['id'] . "'"), 0, "COUNT(*)") : 0;
 
 	$t->assign(array(
 		"PLUGIN_STATISTICS_USER_POSTSCOUNT" => $user_postscount,
 		"PLUGIN_STATISTICS_USER_TOPICSCOUNT" => $user_topicscount,
 		"PLUGIN_STATISTICS_USER_COMMENTS" => $user_comments
 	));
+	if (sed_module_active('forums')) {
+		$t->parse('MAIN.PLUGIN_STATISTICS_IS_USER.PLUGIN_STATISTICS_USER_FORUMS');
+	}
+	if (sed_plug_active('comments')) {
+		$t->parse('MAIN.PLUGIN_STATISTICS_IS_USER.PLUGIN_STATISTICS_USER_COMMENTS');
+	}
 	$t->parse('MAIN.PLUGIN_STATISTICS_IS_USER');
 } else {
 	$t->parse('MAIN.PLUGIN_STATISTICS_IS_NOT_USER');
@@ -179,3 +201,28 @@ $t->assign(array(
 	"PLUGIN_STATISTICS_UNKNOWN_COUNT" => $totalusers - $ii,
 	"PLUGIN_STATISTICS_TOTALUSERS" => $totalusers
 ));
+
+if (sed_module_active('page')) {
+	$t->parse('MAIN.PLUGIN_STATISTICS_PAGES_ROW');
+}
+if (sed_plug_active('comments')) {
+	$t->parse('MAIN.PLUGIN_STATISTICS_COMMENTS_ROW');
+}
+if (sed_module_active('pm')) {
+	$t->parse('MAIN.PLUGIN_STATISTICS_PM_BLOCK');
+}
+if (sed_module_active('forums')) {
+	$t->parse('MAIN.PLUGIN_STATISTICS_FORUMS_BLOCK');
+}
+if (sed_plug_active('ratings') || sed_module_active('polls')) {
+	if (sed_plug_active('ratings')) {
+		$t->parse('MAIN.PLUGIN_STATISTICS_POLLS_RATINGS_BLOCK.PLUGIN_STATISTICS_RATINGS_ROWS');
+	}
+	if (sed_module_active('polls')) {
+		$t->parse('MAIN.PLUGIN_STATISTICS_POLLS_RATINGS_BLOCK.PLUGIN_STATISTICS_POLLS_ROWS');
+	}
+	$t->parse('MAIN.PLUGIN_STATISTICS_POLLS_RATINGS_BLOCK');
+}
+if (sed_module_active('pfs')) {
+	$t->parse('MAIN.PLUGIN_STATISTICS_PFS_BLOCK');
+}

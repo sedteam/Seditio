@@ -12,7 +12,7 @@ To install Seditio you need the following server software pre-installed:
 
 <ul>
 <li>WWW Server (Apache, nginx, etc)</li>
-<li>PHP 5.4.0 or higher</li>
+<li>PHP 5.6.0 or higher</li>
 <li>MySQL 5.0.7 or higher</li>
 </ul>
 
@@ -51,7 +51,7 @@ To install Seditio you need the following server software pre-installed:
 
 <h2>Copyright</h2>
 
-<p>Copyright (c) 2011-2025, Seditio Team<br />
+<p>Copyright (c) 2011-2026, Seditio Team<br />
 Copyright (c) 2001-2011, Neocrome</p>
 
 <p>All rights reserved.</p>

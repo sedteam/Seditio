@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/recentitems/inc/recentitems.inc.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -26,7 +26,11 @@ function sed_get_latestpages($limit, $mask)
 {
 	global $t, $L, $db_pages, $db_users, $sys, $usr, $cfg, $sed_cat, $plu_empty;
 
-	$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+	if (!sed_module_active('page')) {
+		return $plu_empty;
+	}
+
+	$pcomments = (sed_plug_active('comments') && !empty($cfg['plugin']['comments']['showcommentsonpage'])) ? "" : "&comments=1";
 
 	$res = '';
 
@@ -63,7 +67,7 @@ function sed_get_latestpages($limit, $mask)
 			/* old result view use mask */
 			$res .= sprintf(
 				$mask,
-				"<a href=\"" . sed_url("list", "c=" . $row['page_cat']) . "\">" . $sed_cat[$row['page_cat']]['title'] . "</a>",
+				"<a href=\"" . sed_url("page", "c=" . $row['page_cat']) . "\">" . $sed_cat[$row['page_cat']]['title'] . "</a>",
 				"<a href=\"" . $row['page_pageurl'] . "\">" . sed_cc(sed_cutstring(stripslashes($row['page_title']), 50)) . "</a>",
 				sed_build_date($cfg['formatyearmonthday'], $row['page_date'], $cfg['plu_mask_pages_date'])
 			);
@@ -82,6 +86,10 @@ function sed_get_latestpages($limit, $mask)
 function sed_get_latestcomments($limit, $mask)
 {
 	global $t, $L, $db_com, $sys, $db_pages, $db_users, $usr, $cfg, $sed_cat, $plu_empty, $ishtml;
+
+	if (!sed_plug_active('comments')) {
+		return '';
+	}
 
 	$modal = ($cfg['enablemodal']) ? ',1' : '';
 
@@ -109,11 +117,19 @@ function sed_get_latestcomments($limit, $mask)
 
 		switch ($j) {
 			case 'p':
-				$sql2 = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias FROM sed_pages WHERE page_id = $k LIMIT 1");
-				$row2 = sed_sql_fetchassoc($sql2);
-				$sys['catcode'] = $row2['page_cat']; //new in v175          
-				$row2['page_pageurl'] = (empty($row2['page_alias'])) ? sed_url("page", "id=" . $row2['page_id'] . "&comments=1", "#c" . $row['com_id']) : sed_url("page", "al=" . $row2['page_alias'] . "&comments=1", "#c" . $row['com_id']);
-				$lnk = "<a href=\"" . $row2['page_pageurl'] . "\">" . sed_cutstring(stripslashes($row2['page_title']), 60) . "</a>";
+				if (sed_module_active('page')) {
+					$sql2 = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias FROM $db_pages WHERE page_id = " . (int)$k . " LIMIT 1");
+					$row2 = sed_sql_fetchassoc($sql2);
+					if ($row2) {
+						$sys['catcode'] = $row2['page_cat']; //new in v175
+						$row2['page_pageurl'] = (empty($row2['page_alias'])) ? sed_url("page", "id=" . $row2['page_id'] . "&comments=1", "#c" . $row['com_id']) : sed_url("page", "al=" . $row2['page_alias'] . "&comments=1", "#c" . $row['com_id']);
+						$lnk = "<a href=\"" . $row2['page_pageurl'] . "\">" . sed_cutstring(stripslashes($row2['page_title']), 60) . "</a>";
+					} else {
+						$lnk = $L['Page'] . " #" . $k;
+					}
+				} else {
+					$lnk = $L['Page'] . " #" . $k;
+				}
 				break;
 
 			case 'v':
@@ -122,6 +138,14 @@ function sed_get_latestcomments($limit, $mask)
 
 			case 'g':
 				$lnk = "<a href=\"" . sed_url("gallery", "id=" . $k . "&comments=1", "#c" . $row['com_id']) . "\">" . $L['Gallery'] . " #" . $k . "</a>";
+				break;
+
+			case 'u':
+				$lnk = "<a href=\"" . sed_url("users", "m=details&id=" . $k . "&comments=1", "#c" . $row['com_id']) . "\">" . $L['Users'] . " #" . $k . "</a>";
+				break;
+
+			default:
+				$lnk = $L['Comment'] . " #" . $row['com_id'];
 				break;
 		}
 
@@ -163,6 +187,10 @@ function sed_get_latesttopics($limit, $mask)
 {
 	global $t, $L, $db_forum_topics, $db_forum_sections, $db_users, $usr, $cfg, $skin, $plu_empty, $out;
 
+	if (!sed_module_active('forums')) {
+		return $plu_empty;
+	}
+
 	$res = '';
 
 	$sql0 = sed_sql_query("SELECT fs_id, fs_title, fs_parentcat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername 
@@ -188,11 +216,6 @@ function sed_get_latesttopics($limit, $mask)
 			if ($row['fs_parentcat'] > 0) {
 				$parentcat['sectionid']  = $forum_parentcat[$row['fs_parentcat']]['fs_id'];
 				$parentcat['title']  = $forum_parentcat[$row['fs_parentcat']]['fs_title'];
-			}
-
-			/*Autogen avatar from first letter*/
-			if (empty($row['user_avatar']) && $row['user_id'] > 0) {
-				sed_autogen_avatar($row['user_id']);
 			}
 
 			//print_r($row);
@@ -237,6 +260,10 @@ function sed_get_latesttopics($limit, $mask)
 function sed_get_latestpolls($limit, $mask)
 {
 	global $t, $L, $cfg, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
+
+	if (!sed_module_active('polls')) {
+		return $plu_empty;
+	}
 
 	$res = '';
 

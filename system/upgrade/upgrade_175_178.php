@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=upgrade_175_178.php
-Version=180
-Updated=2025-jan-25
+File=system/upgrade/upgrade_175_178.php
+Version=185
+Updated=2026-feb-14
 Type=Core.upgrade
 Author=Seditio Team
 Description=Database upgrade

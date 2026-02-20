@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/massmovetopics/massmovetopics.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -25,6 +25,7 @@ Icon=forums
 Copyright=
 Notes=
 SQL=
+Requires_modules=forums
 Auth_guests=0
 Lock_guests=RW12345A
 Auth_members=0

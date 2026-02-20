@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.manage.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.manage.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -101,7 +101,7 @@ if (!empty($p)) {
 		$authentries[$row['auth_code']] = $row['COUNT(*)'];
 	}
 
-	$sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'forums', 'users', 'plug', 'page', 'trash') ORDER BY ct_title ASC");
+	$sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'users', 'plug', 'page', 'trash') AND (ct_path IS NULL OR ct_path = '' OR ct_path NOT LIKE 'modules/%') ORDER BY ct_title ASC");
 	$lines = array();
 
 	while ($row = sed_sql_fetchassoc($sql)) {
@@ -116,7 +116,7 @@ if (!empty($p)) {
 
 		if (isset($cfgentries[$row['ct_code']]) && $cfgentries[$row['ct_code']] > 0) {
 			$t->assign(array(
-				"MODULES_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=core&p=" . $row['ct_code'])
+				"MODULES_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=module&p=" . $row['ct_code'])
 			));
 			$t->parse("ADMIN_MANAGE.MODULES_LIST.MODULES_LIST_CONFIG");
 		}
@@ -159,6 +159,26 @@ if (!empty($p)) {
 	));
 
 	$t->parse("ADMIN_MANAGE.MODULES_LIST_REFERERS");
+
+	$extp = sed_getextplugins('admin.plug');
+	if (is_array($extp)) {
+		foreach ($extp as $k => $pl) {
+			$path_lang_alt = SED_ROOT . "/plugins/" . $pl['pl_code'] . "/lang/" . $pl['pl_code'] . "." . $lang . ".lang.php";
+			$path_lang_def = SED_ROOT . "/plugins/" . $pl['pl_code'] . "/lang/" . $pl['pl_code'] . ".en.lang.php";
+			if (@file_exists($path_lang_alt)) {
+				require($path_lang_alt);
+			} elseif (@file_exists($path_lang_def)) {
+				require($path_lang_def);
+			}
+			$plug_title = (isset($L[$pl['pl_title']]) ? $L[$pl['pl_title']] : $pl['pl_title']);
+			$t->assign(array(
+				"MODULES_PLUG_LIST_URL" => sed_url("admin", "m=" . $pl['pl_code']),
+				"MODULES_PLUG_LIST_TITLE" => $plug_title,
+				"MODULES_PLUG_LIST_CODE" => $pl['pl_code']
+			));
+			$t->parse("ADMIN_MANAGE.MODULES_PLUG_LIST");
+		}
+	}
 
 	$plugins = array();
 

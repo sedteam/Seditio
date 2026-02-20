@@ -61,6 +61,7 @@
 					</div>
 					<!-- END: GALLERY_DETAILS_DESC -->
 
+					<!-- BEGIN: GALLERY_DETAILS_COMMENTS -->
 					<div class="page-comments spoiler-container {GALLERY_DETAILS_COMMENTS_ISSHOW}">
 
 						<div class="comments-box-title">
@@ -72,6 +73,7 @@
 						</div>
 
 					</div>
+					<!-- END: GALLERY_DETAILS_COMMENTS -->
 
 				</div>
 

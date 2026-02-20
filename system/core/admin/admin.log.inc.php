@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.statistics.log.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.log.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -32,7 +32,7 @@ $log_groups = array(
 	'all' => $L['All'],
 	'def' => $L['Default'],
 	'adm' => $L['Administration'],
-	'for' => $L['Forums'],
+	'for' => (isset($L['Forums']) ? $L['Forums'] : 'Forums'),
 	'sec' => $L['Security'],
 	'usr' => $L['Users'],
 	'plg' => $L['Plugins']

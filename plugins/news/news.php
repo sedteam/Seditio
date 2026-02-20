@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/news/news.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -45,7 +45,7 @@ if (empty($c)) {
 	$c = $cfg['plugin']['news']['category'];
 }
 
-if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($cfg['plugin']['news']['category']) && !empty($sed_cat[$cfg['plugin']['news']['category']]['order'])) {
+if (sed_module_active('page') && $cfg['plugin']['news']['maxpages'] > 0 && !empty($cfg['plugin']['news']['category']) && !empty($sed_cat[$cfg['plugin']['news']['category']]['order'])) {
 	$jj = 0;
 
 	/* --- Modified in v173 --- */
@@ -128,7 +128,7 @@ if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($cfg['plugin']['news']['cat
 
 		$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
 
-		$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+		$pcomments = (sed_plug_active('comments') && !empty($cfg['plugin']['comments']['showcommentsonpage'])) ? "" : "&comments=1";
 
 		$pag['page_pageurlcom'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . $pag['page_id'] . $pcomments) : sed_url("page", "al=" . $pag['page_alias'] . $pcomments);
 		$pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . $pag['page_id'] . "&ratings=1") : sed_url("page", "al=" . $pag['page_alias'] . "&ratings=1");
@@ -143,7 +143,7 @@ if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($cfg['plugin']['news']['cat
 			"PAGE_ROW_CAT" => $pag['page_cat'],
 			"PAGE_ROW_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
 			"PAGE_ROW_CATPATH" => $catpath,
-			"PAGE_ROW_CATURL" => sed_url("list", "c=" . $pag['page_cat']),
+			"PAGE_ROW_CATURL" => sed_url("page", "c=" . $pag['page_cat']),
 			"PAGE_ROW_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
 			"PAGE_ROW_CATID" => $sed_cat[$pag['page_cat']]['id'],
 			"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],

@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.rightsbyitem.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.rightsbyitem.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Rights
@@ -26,24 +26,14 @@ $advanced = sed_import('advanced', 'G', 'BOL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$L['adm_code']['admin'] = $L['Administration'];
-$L['adm_code']['comments'] = $L['Comments'];
-$L['adm_code']['forums'] = $L['Forums'];
-$L['adm_code']['index'] = $L['Home'];
-$L['adm_code']['message'] = $L['Messages'];
-$L['adm_code']['page'] = $L['Pages'];
-$L['adm_code']['pfs'] = $L['PFS'];
-$L['adm_code']['gallery'] = $L['Gallery'];
-$L['adm_code']['plug'] = $L['Plugins'];
-$L['adm_code']['pm'] = $L['Private_Messages'];
-$L['adm_code']['polls'] = $L['Polls'];
-$L['adm_code']['ratings'] = $L['Ratings'];
-$L['adm_code']['users'] = $L['Users'];
-$L['adm_code']['dic'] = $L['core_dic'];
-$L['adm_code']['menu'] = $L['core_menu'];
-$L['adm_code']['log'] = $L['Log'];
-$L['adm_code']['trash'] = $L['Trashcan'];
-$L['adm_code']['manage'] = $L['adm_manage'];
+// Build adm_code titles from sed_core (no hardcoded module names)
+$sql = sed_sql_query("SELECT ct_code, ct_title FROM $db_core");
+while ($row = sed_sql_fetchassoc($sql)) {
+	$L['adm_code'][$row['ct_code']] = $row['ct_title'];
+}
+
+// Prefer localized title from module lang ($L['core_*']) over adm_code (from DB)
+$area_title = (isset($L['core_' . $ic]) && $L['core_' . $ic] !== '') ? $L['core_' . $ic] : (isset($L['adm_code'][$ic]) ? $L['adm_code'][$ic] : $ic);
 
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem', false, true));
 
@@ -76,18 +66,7 @@ $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db
 
 sed_die(sed_sql_numrows($sql) == 0);
 
-switch ($ic) {
-	case 'page':
-		$title = " : " . $sed_cat[$io]['title'];
-		$rurl = sed_url('admin', 'm=page&mn=structure');
-		break;
-
-	case 'forums':
-		$forum = sed_forum_info($io);
-		$title = " : " . sed_cc($forum['fs_title']) . " (#" . $io . ")";
-		$rurl = sed_url('admin', 'm=forums');
-		break;
-
+	switch ($ic) {
 	case 'plug':
 		$extplugin_info = SED_ROOT . "/plugins/" . $io . "/" . $io . ".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
@@ -98,6 +77,14 @@ switch ($ic) {
 	default:
 		$title = ($io == 'a') ? '' : $io;
 		$rurl = sed_url('admin', 'm=manage');
+		// Module-specific title/rurl: admin/{code}.admin.rightsbyitem.php
+		$r = sed_sql_query("SELECT ct_path FROM $db_core WHERE ct_code='" . sed_sql_prep($ic) . "' LIMIT 1");
+		if ($r && ($crow = sed_sql_fetchassoc($r)) && strpos($crow['ct_path'], 'modules/') === 0) {
+			$mod_inc = SED_ROOT . '/' . $crow['ct_path'] . 'admin/' . $ic . '.admin.rightsbyitem.php';
+			if (is_file($mod_inc)) {
+				include($mod_inc);
+			}
+		}
 		break;
 }
 
@@ -112,10 +99,10 @@ if (is_array($extp)) {
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[$rurl] =  $L['adm_code'][$ic];
-$urlpaths[sed_url("admin", "m=rightsbyitem&ic=" . $ic . "&io=" . $io)] =  $L['Rights'] . " / " . $L['adm_code'][$ic] . $title;
+$urlpaths[$rurl] =  $area_title;
+$urlpaths[sed_url("admin", "m=rightsbyitem&ic=" . $ic . "&io=" . $io)] =  $L['Rights'] . " / " . $area_title . $title;
 
-$admintitle = $L['Rights'] . " / " . $L['adm_code'][$ic] . $title;
+$admintitle = $L['Rights'] . " / " . $area_title . $title;
 
 $legend = "<img src=\"system/img/admin/auth_r.gif\" alt=\"\" /> : " . $L['Read'] . "<br />";
 $legend .= "<img src=\"system/img/admin/auth_w.gif\" alt=\"\" /> : " . $L['Write'] . "<br />";
@@ -127,7 +114,7 @@ $legend .= ($advanced) ? "<img src=\"system/img/admin/auth_5.gif\" alt=\"\" /> :
 $legend .= "<img src=\"system/img/admin/auth_a.gif\" alt=\"\" /> : " . $L['Administration'];
 
 $t->assign(array(
-	"RIGHTS_TITLE" => $L['Rights'] . " / " . $L['adm_code'][$ic] . $title,
+	"RIGHTS_TITLE" => $L['Rights'] . " / " . $area_title . $title,
 	"RIGHTS_COLUMN_COUNT" => ($advanced) ? 8 : 3,
 	"RIGHTS_UPDATECOLUMN_COUNT" => ($advanced) ? 12 : 7,
 	"RIGHTS_UPDATE_SEND" => sed_url("admin", "m=rightsbyitem&a=update&ic=" . $ic . "&io=" . $io)

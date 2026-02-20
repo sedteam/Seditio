@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/similarpages/similarpages.setup.php
-Version=170
-Updated=2012-feb-26
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=similarpages
 Name=Similar Pages
 Description=The plugin displays a list of similar pages
-Version=170
+Version=185
 Date=2012-feb-26
 Author=Amro
 Copyright=
@@ -28,6 +28,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
+Requires_modules=page
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]

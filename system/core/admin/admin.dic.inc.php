@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.dic.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.dic.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Amro
 Description=Administration panel
@@ -232,9 +232,12 @@ switch ($mn) {
 			$location_arr = array(
 				'pages'        => 'Pages',
 				'users'        => 'Users',
-				'com'          => 'Comments',
-				'forum_topics' => 'Forum topics'
+				'com'          => 'Comments'
 			);
+			/* Forum topics dict support available when forums module is active */
+			if (isset($db_forum_topics)) {
+				$location_arr['forum_topics'] = 'Forum topics';
+			}
 
 			$type_arr = array(
 				'varchar'     => 'VARCHAR',

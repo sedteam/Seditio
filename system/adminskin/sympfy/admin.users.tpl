@@ -101,7 +101,7 @@
 				<!-- BEGIN: USERS_EDIT_ADMIN -->
 				<li class="form-row">
 					<div class="form-label"><label>{PHP.L.Delete} :</label></div>
-					<div class="form-field"><a href="{USERS_EDIT_DELETE_URL}">{PHP.out.img_delete}</a></div>
+					<div class="form-field"><a href="{USERS_EDIT_DELETE_URL}"><i class="ic-trash"></i></a></div>
 				</li>
 				<!-- END: USERS_EDIT_ADMIN -->
 

@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/templates.php
-Version=180
-Updated=2025-mar-08
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Xtemplate SE class

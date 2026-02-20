@@ -11,8 +11,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/tr/message.lang.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Lang
 Author=Seditio Team
 Description=Language messages
@@ -87,12 +87,12 @@ $L['msg502_1'] = "Tamam, özel mesajınız başarıyla gönderildi.<br />Geri d�
 $L['msg502_2'] = "buraya";
 $L['msg502_3'] = " tıklayın.";
 
-/* ======== Forums ======== */
+/* ======== Forums (displayed by message module) ======== */
 
 $L['msg602_0'] = "Bölüm kilitli";
-$L['msg602_1'] = "Bu bölüm kilitlenmiştir.";
+$L['msg602_1'] = "Bu bölüm kilitli.";
 $L['msg603_0'] = "Konu kilitli";
-$L['msg603_1'] = "Bu konu kilitlenmiştir.";
+$L['msg603_1'] = "Bu konu kilitli.";
 
 /* ======== System ======== */
 
@@ -101,7 +101,9 @@ $L['msg900_1'] = "Sayfa henüz tamamlanmadı, lütfen daha sonra tekrar gelin.";
 $L['msg904_0'] = "Sistem sayfaları yalnızca yöneticiler içindir";
 $L['msg904_1'] = "Sizin seviyenizle sistem sayfalarını listeleyemezsiniz.";
 $L['msg907_0'] = "Eklenti yüklenemedi";
-$L['msg907_1'] = "Bu eklenti yüklenmeye çalışılırken bir hata oluştu, dosya(lar) eksik olabilir mi?";
+$L['msg907_1'] = "Bu eklenti yüklenmeye çalışılırken bir hata oluştu, duraklatılmış olabilir veya bazı dosyalar eksik olabilir.";
+$L['msg909_0'] = "Modül yüklenemedi";
+$L['msg909_1'] = "Bu modül yüklenmeye çalışılırken bir hata oluştu, duraklatılmış olabilir veya bazı dosyalar eksik olabilir.";
 $L['msg911_0'] = "Dil dosyası eksik";
 $L['msg911_1'] = "Bu dil paketi kontrol edilmeye çalışılırken bir hata oluştu.";
 $L['msg915_0'] = "Hata!";

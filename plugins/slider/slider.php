@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/slider/slider.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -44,7 +44,8 @@ $cfg['plu_mask_pages_date'] = "<span class=\"sdate\">{d-m} {H:i}</span>";
 
 $slider = "<div id=\"slider\">";
 
-$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+if (sed_module_active('page')) {
+$pcomments = (sed_plug_active('comments') && !empty($cfg['plugin']['comments']['showcommentsonpage'])) ? "" : "&comments=1";
 
 $sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_desc, p.page_date, p.page_text, p.page_thumb, 
 					p.page_ownerid, p.page_count, p.page_comcount, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
@@ -105,7 +106,7 @@ if (sed_sql_numrows($sql) > 0) {
 			/* old result view use mask */
 			$slider .= sprintf(
 				$cfg['plu_mask_slider'],
-				"<a href=\"" . sed_url("list", "c=" . $row['page_cat']) . "\">" . $sed_cat[$row['page_cat']]['title'] . "</a>",
+				"<a href=\"" . sed_url("page", "c=" . $row['page_cat']) . "\">" . $sed_cat[$row['page_cat']]['title'] . "</a>",
 				"<a href=\"" . $row['page_pageurl'] . "\">" . sed_cc(sed_cutstring(stripslashes($row['page_title']), 50)) . "</a>",
 				sed_cc(sed_cutstring(stripslashes($row['page_title']), 50)),
 				strip_tags($row['page_desc']),
@@ -124,6 +125,12 @@ if (sed_sql_numrows($sql) > 0) {
 	));
 } else {
 	$t->assign(array(
+		"SLIDER_NOACTIVE" => "home-noslider"
+	));
+}
+} else {
+	$t->assign(array(
+		"PLUGIN_SLIDER" => "",
 		"SLIDER_NOACTIVE" => "home-noslider"
 	));
 }

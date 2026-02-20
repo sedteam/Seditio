@@ -118,6 +118,17 @@
 
 			</div>
 
+			<!-- BEGIN: USERS_DETAILS_COMMENTS -->
+			<div class="page-comments spoiler-container {USERS_DETAILS_COMMENTS_ISSHOW}">
+				<div class="comments-box-title">
+					<h3><a href="{USERS_DETAILS_COMMENTS_URL}">{PHP.skinlang.page.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({USERS_DETAILS_COMMENTS_COUNT})</span>{USERS_DETAILS_COMMENTS_JUMP}</a></h3>
+				</div>
+				<div class="comments-box spoiler-body">
+					{USERS_DETAILS_COMMENTS_DISPLAY}
+				</div>
+			</div>
+			<!-- END: USERS_DETAILS_COMMENTS -->
+
 		</div>
 
 	</div>

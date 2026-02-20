@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/robots/robots.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=robots
 Name=Robots generator 
 Description=Generates the content of robots.txt
-Version=180
+Version=185
 Date=2025-mar-26
 Author=Seditio Team
 Copyright=

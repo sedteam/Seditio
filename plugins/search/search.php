@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/search/search.php
-Version=180
+Version=185
 Date=2022-jul-28
 Type=Plugin
 Author=Amro
@@ -59,7 +59,7 @@ if ($a == 'search') {
 		$sqlsearch = (count($words) > 1) ? implode("%", $words) : $words[0];
 		$sqlsearch = "%" . $sqlsearch . "%";
 
-		if (!$cfg['disable_page']) {
+		if (sed_module_active('page')) {
 
 			$pag_sub = sed_import('pag_sub', 'P', 'ARR');
 			if (!is_array($pag_sub) || $pag_sub[0] == 'all') {
@@ -91,7 +91,7 @@ if ($a == 'search') {
 						$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=" . $row['page_id']) : sed_url("page", "al=" . $row['page_alias']);
 						$ownername = sed_sql_fetchassoc(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='" . $row['page_ownerid'] . "'"));
 						$t->assign(array(
-							"PLUGIN_SEARCH_ROW_PAGE_CATEGORY_URL" => sed_url("list", "c=" . $row['page_cat']),
+							"PLUGIN_SEARCH_ROW_PAGE_CATEGORY_URL" => sed_url("page", "c=" . $row['page_cat']),
 							"PLUGIN_SEARCH_ROW_PAGE_CATEGORY_TITLE" => $sed_cat[$row['page_cat']]['tpath'],
 							"PLUGIN_SEARCH_ROW_PAGE_URL" =>	$row['page_pageurl'],
 							"PLUGIN_SEARCH_ROW_PAGE_TITLE" => sed_cc($row['page_title']),
@@ -107,7 +107,7 @@ if ($a == 'search') {
 			}
 		}
 
-		if (!$cfg['disable_forums']) {
+		if (sed_module_active('forums')) {
 			$frm_sub = sed_import('frm_sub', 'P', 'ARR');
 
 			if (!is_array($frm_sub) || $frm_sub[0] == 9999) {
@@ -151,7 +151,7 @@ if ($a == 'search') {
 	}
 }
 
-if (!$cfg['disable_page']) {
+if (sed_module_active('page')) {
 
 	$selectboxCatValues = array('all' => $L['plu_allcategories']);
 	foreach ($sed_cat as $i => $x) {
@@ -173,7 +173,7 @@ if (!$cfg['disable_page']) {
 	$t->parse("MAIN.PLUGIN_SEARCH_FORM.PLUGIN_SEARCH_FORM_PAGES");
 }
 
-if (!$cfg['disable_forums']) {
+if (sed_module_active('forums')) {
 	$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s 
 			LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
 			ORDER by fn_path ASC, fs_order ASC");

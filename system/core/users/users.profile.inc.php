@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=users.profile.inc.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=User profile
@@ -202,11 +202,6 @@ switch ($a) {
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$avatar', '$f_extension', -1, '', " . (int)$uav_size . ", 0)");
 					@chmod($avatarpath, 0666);
 				}
-			}
-		} else {
-			// autogeneration avatar from letter sed v178
-			if (empty($usr['profile']['user_avatar'])) {
-				sed_autogen_avatar($usr['id']);
 			}
 		}
 

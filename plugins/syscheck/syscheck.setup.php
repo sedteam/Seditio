@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=syscheck
 Name=System check
 Description=Will check the versions of the PHP system files and TPL skin files
-Version=180
+Version=185
 Date=2010-feb-05
 Author=Seditio Team
 Copyright=

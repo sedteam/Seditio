@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/uploader/uploader.ajax.php
-Version=180
-Updated=2025-jan-23
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=
@@ -132,7 +132,7 @@ if (in_array($f_extension, $allow_extension) == FALSE) {
 						
 		/* TODO Add to config plugin option Add watermark or insert checkbox in uploader form
 		* Combined resize and watermark processing
-		if (!empty($cfg['gallery_logofile']) && @file_exists($cfg['gallery_logofile'])) {
+		if (!empty($cfg['th_logofile']) && @file_exists($cfg['th_logofile'])) {
 			$do_watermark = true;
 			sed_image_process(
 				$cfg['pfs_dir'] . $filename,      // $source
@@ -142,7 +142,7 @@ if (in_array($f_extension, $allow_extension) == FALSE) {
 				true,                           // $keepratio (only if resizing)
 				'resize',                       // $type
 				'Width',                        // $dim_priority
-				$cfg['gallery_logojpegqual'],   // $quality
+				$cfg['th_logojpegqual'],   // $quality
 				$do_watermark,                  // $set_watermark
 				true                            // $preserve_source
 			);

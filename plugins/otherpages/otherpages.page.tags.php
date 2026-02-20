@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/otherpages/otherpages.page.tags.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -37,7 +37,11 @@ function sed_get_otherpages($pid, $cat, $limit)
 {
 	global $t, $L, $db_pages, $db_users, $sys, $usr, $cfg, $sed_cat, $plu_empty;
 
-	$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+	if (!sed_module_active('page')) {
+		return '';
+	}
+
+	$pcomments = (sed_plug_active('comments') && !empty($cfg['plugin']['comments']['showcommentsonpage'])) ? "" : "&comments=1";
 
 	$sql = sed_sql_query("(SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_desc, p.page_date, p.page_ownerid, p.page_count, p.page_comcount, 
 						p.page_thumb, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
@@ -62,7 +66,7 @@ function sed_get_otherpages($pid, $cat, $limit)
 					"OTHER_PAGES_ROW_URL" => $row['page_pageurl'],
 					"OTHER_PAGES_ROW_ID" => $row['page_id'],
 					"OTHER_PAGES_ROW_CAT" => $row['page_cat'],
-					"OTHER_PAGES_ROW_CATURL" => sed_url('list', 'c=' . $row['page_cat']),
+					"OTHER_PAGES_ROW_CATURL" => sed_url('page', 'c=' . $row['page_cat']),
 					"OTHER_PAGES_ROW_DESC" => $row['page_desc'],
 					"OTHER_PAGES_ROW_CATTITLE" => $sed_cat[$row['page_cat']]['title'],
 					"OTHER_PAGES_ROW_CATPATH" => sed_build_catpath($row['page_cat'], "<a href=\"%1\$s\">%2\$s</a>"),

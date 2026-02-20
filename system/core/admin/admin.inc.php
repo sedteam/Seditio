@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -50,9 +50,35 @@ if (is_array($extp)) {
 	}
 }
 
-$sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
-$sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'] . ".$s";
-$sys['inc'] = SED_ROOT . '/system/core/admin/' . $sys['inc'] . '.inc.php';
+$sys['inc'] = '';
+
+// Check if $m is a registered module with admin panel
+if (!empty($m)) {
+	$sql_mod = sed_sql_query("SELECT ct_path, ct_code, ct_admin FROM $db_core WHERE ct_code='" . sed_sql_prep($m) . "' LIMIT 1");
+	if ($mod = sed_sql_fetchassoc($sql_mod)) {
+		if ($mod['ct_admin']) {
+			// Try module's own admin file: {path}admin/{code}.admin.php
+			$adm_path = SED_ROOT . '/' . $mod['ct_path'] . 'admin/' . $mod['ct_code'] . '.admin.php';
+			if (file_exists($adm_path)) {
+				$sys['inc'] = $adm_path;
+			}
+		}
+	}
+	// Plugin admin: convention plugins/{m}/{m}.admin.plug.php, only if plugin is active
+	if (empty($sys['inc']) && !empty($m) && sed_plug_active($m)) {
+		$plug_admin_inc = SED_ROOT . '/plugins/' . $m . '/' . $m . '.admin.plug.php';
+		if (file_exists($plug_admin_inc)) {
+			$sys['inc'] = $plug_admin_inc;
+		}
+	}
+}
+
+// Fallback to legacy system admin files
+if (empty($sys['inc'])) {
+	$sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
+	$sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'] . ".$s";
+	$sys['inc'] = SED_ROOT . '/system/core/admin/' . $sys['inc'] . '.inc.php';
+}
 
 if (!file_exists($sys['inc'])) {
 	sed_die();

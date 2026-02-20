@@ -10,9 +10,9 @@ Language : English (code:en)
 Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
-File=system/core/admin/lang/en/admin.lang.php
-Version=180
-Updated=2025-jan-25
+File=system/lang/en/admin.lang.php
+Version=185
+Updated=2026-feb-14
 Type=Lang
 Author=Seditio Team
 Description=Admin panel
@@ -23,26 +23,26 @@ Description=Admin panel
 
 $L['core_main'] = "Main setup";
 $L['core_parser'] = "Parser";             // New in v120
-$L['core_rss'] = "RSS feeds";             // New in v173
 $L['core_dic'] = "Directories & Extra fields";             // New in v173
 $L['core_time'] = "Time and date";
 $L['core_skin'] = "Skins";
 $L['core_lang'] = "Languages";
 $L['core_menus'] = "Menu slots";
 $L['core_comments'] = "Comments";
-$L['core_forums'] = "Forums";
 $L['core_page'] = "Pages";
 $L['core_pfs'] = "Personal file space";
-$L['core_gallery'] = "Gallery";
 $L['core_plug'] = "Plugins";
-$L['core_pm'] = "Private messages";
-$L['core_polls'] = "Polls";
 $L['core_ratings'] = "Ratings";
 $L['core_trash'] = "Trash can";
 $L['core_users'] = "Users";
 $L['core_meta'] = "HTML Meta";
 $L['core_index'] = "Home page";
 $L['core_menu'] = "Menu manager"; // New in v178
+$L['core_message'] = "System messages";
+$L['core_admin'] = "Administration panel";
+$L['core_log'] = "Log";
+$L['core_manage'] = "Manage";
+$L['core_images'] = "Images";
 
 /* ====== Upgrade ====== */
 
@@ -137,7 +137,7 @@ $L['cfg_sefurls301'] = array("301 redirect to the SEF URLs", "Enable 301 redirec
 $L['cfg_dateformat'] = array("Main date mask", "Default: Y-m-d H:i");
 $L['cfg_formatmonthday'] = array("Short date mask", "Default: m-d");
 $L['cfg_formatyearmonthday'] = array("Medium date mask", "Default: Y-m-d");
-$L['cfg_formatmonthdayhourmin'] = array("Forum date mask", "Default: m-d H:i");
+/* $L['cfg_formatmonthdayhourmin'] moved to modules/forums/lang/ */
 $L['cfg_servertimezone'] = array("Server time zone", "Offset of the server from the GMT+00");
 $L['cfg_defaulttimezone'] = array("Default time zone", "For guests and new members, from -12 to +12");
 $L['cfg_timedout'] = array("Idle delay, in seconds", "After this delay, user is away");
@@ -160,15 +160,16 @@ $L['cfg_maxrowsperpage'] = array("Maximum lines in lists", "");
 $L['cfg_showpagesubcatgroup'] = array("Show in groups pages from the subsections", "");   //New Sed171
 $L['cfg_genseourls'] = array("Generate SEO url (auto gen* page alias)? ", "");   //New Sed178
 $L['cfg_maxcommentsperpage'] = array("Maximum comments per page", "");  //New Sed173
+$L['cfg_maxratsperpage'] = array("Ratings per page in admin", "");
 $L['cfg_commentsorder'] = array("Sorting order for comments", "ASC - new bottom, DESC - newest on top");  //New Sed173
 $L['cfg_maxtimeallowcomedit'] = array("The time allowed to edit comments", "In minutes, if 0 - editing is prohibited");  //New Sed173
 $L['cfg_showcommentsonpage'] = array("Show comments on pages", "By default displays comment on the page");   //New Sed171
 $L['cfg_maxcommentlenght'] = array("The maximum length of a comment", "Default: 2000 characters");  //New Sed175
 $L['cfg_countcomments'] = array("Count comments", "Display the count of comments near the icon");
-$L['cfg_hideprivateforums'] = array("Hide private forums", "");
+/* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
 $L['cfg_hottopictrigger'] = array("Posts for a topic to be 'hot'", "");
 $L['cfg_maxtopicsperpage'] = array("Maximum topics or posts per page", "");
-$L['cfg_antibumpforums'] = array("Anti-bump protection", "Will prevent users from posting twice in a row in the same topic");
+/* $L['cfg_antibumpforums'] moved to modules/forums/lang/ */
 $L['cfg_pfsuserfolder'] = array("Folder storage mode", "If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to a PFS, it's too late to change this.");
 $L['cfg_th_amode'] = array("Thumbnails generation", "");
 $L['cfg_th_x'] = array("Thumbnails, width", "Default: 112 pixels");
@@ -188,14 +189,13 @@ $L['cfg_available_image_sizes'] = array("Available image resolutions", "Listed w
 $L['cfg_disable_gallery'] = array("Disable the gallery", "");         // New in v150
 $L['cfg_gallery_gcol'] = array("Number of columns for the galleries", "Default : 4");     // New in v150
 $L['cfg_gallery_bcol'] = array("Number of columns for the pictures", "Default : 6");        // New in v150
-$L['cfg_gallery_logofile'] = array("Png/jpeg/Gif logo that will be added to all the new PFS images", "Leave empty to disable");        // New in v150
-$L['cfg_gallery_logopos'] = array("Position of the logo in the PFS images", "Default : Bottom left");        // New in v150
-$L['cfg_gallery_logotrsp'] = array("Merging level for the logo in %", "Default : 50");        // New in v150
-$L['cfg_gallery_logojpegqual'] = array("Quality of the final image afer the logo is inserted, if it's a Jpeg", "Default : 90");        // New in v150
-$L['cfg_gallery_imgmaxwidth'] = array("Max width in pixel for a picture displayed, if it's larger a sized-down copy will be processed", "");         // New in v150
+$L['cfg_th_imgmaxwidth'] = array("Max width in pixel for a picture displayed, if it's larger a sized-down copy will be processed", "");
+$L['cfg_th_logofile'] = array("Png/jpeg/Gif logo that will be added to all the new PFS images", "Leave empty to disable");
+$L['cfg_th_logopos'] = array("Position of the logo in the PFS images", "Default : Bottom left");
+$L['cfg_th_logotrsp'] = array("Merging level for the logo in %", "Default : 50");
+$L['cfg_th_logojpegqual'] = array("Quality of the final image after the logo is inserted, if it's a Jpeg", "Default : 90");
 
-$L['cfg_pm_maxsize'] = array("Maximum length for messages", "Default: 10000 chars");
-$L['cfg_pm_allownotifications'] = array("Allow PM notifications by email", "");
+/* cfg_pm_* moved to modules/pm/lang/ */
 $L['cfg_disablehitstats'] = array("Disable hit statistics", "Referers and hits per day");
 $L['cfg_disablereg'] = array("Disable registration process", "Prevent users from registering new accounts");
 $L['cfg_disablewhosonline'] = array("Disable who's online", "Automatically enabled if you turn on the Shield");
@@ -253,16 +253,16 @@ $L['cfg_extra7uchange'] = array("Editable in user profile ?", "");
 $L['cfg_extra8uchange'] = array("Editable in user profile ?", "");
 $L['cfg_extra9uchange'] = array("Editable in user profile ?", "");
 $L['cfg_disable_comments'] = array("Disable the comments", "");
-$L['cfg_disable_forums'] = array("Disable the forums", "");
+/* $L['cfg_disable_forums'] moved to modules/forums/lang/ */
 $L['cfg_disable_pfs'] = array("Disable the PFS", "");
-$L['cfg_disable_polls'] = array("Disable the polls", "");
-$L['cfg_disable_pm'] = array("Disable the private messages", "");
+/* $L['cfg_disable_polls'] moved to modules/polls/lang/ (polls now use module on/off) */
+/* $L['cfg_disable_pm'] removed: PM use module on/off (Admin → Modules) */
 $L['cfg_disable_ratings'] = array("Disable the ratings", "");
 $L['cfg_disable_page'] = array("Disable the pages", "");
 $L['cfg_disable_plug'] = array("Disable the plugins", "");
 $L['cfg_trash_prunedelay'] = array("Remove the items from the trash can after * days (Zero to keep forever)", "");
 $L['cfg_trash_comment'] = array("Use the trash can for the comments", "");
-$L['cfg_trash_forum'] = array("Use the trash can for the forums", "");
+/* $L['cfg_trash_forum'] moved to modules/forums/lang/ */
 $L['cfg_trash_page'] = array("Use the trash can for the pages", "");
 $L['cfg_trash_pm'] = array("Use the trash can for the private messages", "");
 $L['cfg_trash_user'] = array("Use the trash can for the users", "");
@@ -282,24 +282,14 @@ $L['cfg_defaulttitle'] = array("Default Title", "Available options: {MAINTITLE},
 $L['cfg_indextitle'] = array("Title for Homepage", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 179
 $L['cfg_listtitle'] = array("Title for lists of pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
 $L['cfg_pagetitle'] = array("Title for pages", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");        //Sed 175
-$L['cfg_forumstitle'] = array("Title for forums", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+/* $L['cfg_forumstitle'] moved to modules/forums/lang/ */
 $L['cfg_userstitle'] = array("Title for users", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
-$L['cfg_pmtitle'] = array("Title for PM", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
-$L['cfg_gallerytitle'] = array("Title for gallery", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+/* cfg_pmtitle moved to modules/pm/lang/ */
+/* cfg_gallerytitle moved to modules/gallery/lang/ */
 $L['cfg_pfstitle'] = array("Title for PFS", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 $L['cfg_plugtitle'] = array("Title for plugins", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 
-/* ====== Rss ====== */
-
-$L['cfg_disable_rss'] = array("Disable RSS feeds", "");
-$L['cfg_disable_rsspages'] = array("Disable RSS feed for pages", "");
-$L['cfg_disable_rsscomments'] = array("Disable RSS feed for comments", "");
-$L['cfg_disable_rssforums'] = array("Disable RSS feed for the forums", "");
-$L['cfg_rss_timetolive'] = array("Cash time for RSS feed", "in seconds");
-$L['cfg_rss_defaultcode'] = array("Default RSS feed", "enter the category code");
-$L['cfg_rss_maxitems'] = array("The maximum number of rows in the RSS feed", "");
-
-$L['adm_help_config_rss'] = "Links to open RSS feeds: <br />" . $cfg['mainurl'] . "/" . "rss (by default, the output of news categories specified in the settings) <br /> " . $cfg['mainurl'] . "/" . "rss/pages?c=XX (XX - Category code, the last pages of the category) <br />" . $cfg['mainurl'] . "/" . "rss/comments?id=XX (XX - ID page, comments page) <br />" . $cfg['mainurl'] . "/" . "rss/forums (latest posts from all sections of the forum) <br />" . $cfg['mainurl'] . "/" . "rss/forums?s=XX (XX - ID section, recent posts section) <br />" . $cfg['mainurl'] . "/" . "rss/forums?q=XX (XX - ID topic, recent posts in the topic) <br />" . $cfg['mainurl'] . "/" . "rss/forums?s=XX&q=YY (XX - ID section, YY - ID topic)";
+/* ====== Rss: cfg_* and adm_help_config_rss moved to modules/rss/lang/ ====== */
 
 /* ====== Forums ====== */
 
@@ -309,11 +299,7 @@ $L['adm_enablesmilies'] = "Enable smilies";
 $L['adm_enableprvtopics'] = "Allow private topics";
 $L['adm_countposts'] = "Count posts";
 $L['adm_autoprune'] = "Auto-prune topics after * days";
-$L['adm_postcounters'] = "Check the counters";
-$L['adm_help_forums'] = "Not available";
-$L['adm_forum_structure'] = "Structure of the forums (categories)";
-$L['adm_forum_structure_cat'] = "Structure of the forums";
-$L['adm_help_forums_structure'] = "Not available";
+/* Forum admin strings moved to modules/forums/lang/ */
 $L['adm_defstate'] = "Default state";
 $L['adm_defstate_0'] = "Folded";
 $L['adm_defstate_1'] = "Unfolded";
@@ -426,10 +412,7 @@ $L['adm_tpl_parent'] = "Same as the parent category";
 $L['adm_enablecomments'] = "Enable Comments";   // New v173
 $L['adm_enableratings'] = "Enable Ratings";     // New v173
 
-/* ====== Polls ====== */
-
-$L['adm_help_polls'] = "Once you created a new poll topics, select 'Edit' to add options (choices) for this poll.<br />'Delete' will delete the selected poll, the options, and all related votes.<br />'Reset' will delete all votes for the selected poll. It won't delete the poll itself or the options.<br />'Bump' will change the poll creation date to the current date, and so will make the poll 'current', top of the list.";
-$L['adm_poll_title'] = "Poll title";
+/* ====== Polls (core_polls, adm_help_polls, adm_poll_title moved to modules/polls/lang/) ====== */
 
 /* ====== Statistics ====== */
 
@@ -496,6 +479,9 @@ $L['adm_paused'] = "Paused";
 $L['adm_running'] = "Running";
 $L['adm_partrunning'] = "Partially running";
 $L['adm_notinstalled'] = "Not installed";
+$L['adm_requires_modules'] = "Requires (modules)";
+$L['adm_requires_plugins'] = "Requires (plugins)";
+$L['adm_dependent_plugins'] = "Plugins depending on this module";
 
 $L['adm_opt_installall'] = "Install all";
 $L['adm_opt_installall_explain'] = "This will install or reset all the parts of the plugin.";
@@ -505,6 +491,14 @@ $L['adm_opt_pauseall'] = "Pause all";
 $L['adm_opt_pauseall_explain'] = "This will pause (disable) all the parts of the plugin.";
 $L['adm_opt_unpauseall'] = "Un-pause all";
 $L['adm_opt_unpauseall_explain'] = "This will un-pause (enable) all the parts of the plugin.";
+
+/* ====== Modules ====== */
+
+$L['adm_modules'] = "Modules";
+$L['adm_modules_installed'] = "Installed Modules";
+$L['adm_modules_available'] = "Available Modules";
+$L['adm_modules_none'] = "No modules installed.";
+$L['adm_modules_noavailable'] = "No new modules available for installation.";
 
 /* ====== Private messages ====== */
 

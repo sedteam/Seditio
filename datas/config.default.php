@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=datas/config.php
-Version=180
-Updated=2025-jan-25
+File=datas/config.default.php
+Version=185
+Updated=2026-feb-14
 Type=Config
 Author=Seditio Team
 Description=Configuration
@@ -40,12 +40,16 @@ $cfg['adminskin'] = 'sympfy';        // Default admin skin
 // ========================
 
 $cfg['sqldbprefix'] = 'sed_';            // Database tables prefix
-$cfg['sqldb'] = 'mysql';                  // Type of the database engine.
+$cfg['sqldb'] = 'mysqli';                 // Database connector (mysqli only).
+$cfg['mysqlengine'] = 'InnoDB';   // Table engine (InnoDB recommended)
+$cfg['mysqlcharset'] = 'utf8mb4';
+$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
 $cfg['site_secret'] = '';                     // Site secret key
 $cfg['authmode'] = 3;                     // (1:cookies, 2:sessions, 3:cookies+sessions) default=3
 $cfg['redirmode'] = FALSE;                // 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['ipcheck'] = TRUE;                  // Will kill the logged-in session if the IP has changed
-$cfg['multihost'] = TRUE;            // Allow multiple host names for this site 
+$cfg['multihost'] = TRUE;            // Allow multiple host names for this site
+$cfg['patchmode'] = FALSE;           // TRUE = enable automatic schema patches (for upgrades)
 
 // ========================
 // Name of MySQL tables

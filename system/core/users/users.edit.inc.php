@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=users.php
-Version=180
-Updated=2025-jan-25
+File=system/core/users/users.edit.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Users
@@ -121,8 +121,8 @@ if ($a == 'update') {
 				}
 				$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='$id'");
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id'");
-				if ($ruserdelpfs) {
-					sed_pfs_deleteall($id);
+				if ($ruserdelpfs && function_exists('sed_pfs_deleteall_module')) {
+					sed_pfs_deleteall_module($id);
 				}
 				sed_log("Deleted user #" . $id, 'adm');
 				sed_redirect(sed_url("message", "msg=109&rc=200&id=" . $id, "", true));
@@ -166,19 +166,15 @@ if ($a == 'update') {
 		if ($rusername != $urr['user_name']) {
 			$oldname = sed_sql_prep($urr['user_name']);
 			$newname = sed_sql_prep($rusername);
-			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_lastpostername='$newname' WHERE ft_lastpostername='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_firstpostername='$newname' WHERE ft_firstpostername='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_postername='$newname' WHERE fp_postername='$oldname'");
+			if (isset($db_forum_topics) && isset($db_forum_posts)) {
+				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_lastpostername='$newname' WHERE ft_lastpostername='$oldname'");
+				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_firstpostername='$newname' WHERE ft_firstpostername='$oldname'");
+				$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_postername='$newname' WHERE fp_postername='$oldname'");
+			}
 			$sql = sed_sql_query("UPDATE $db_pages SET page_author='$newname' WHERE page_author='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_com SET com_author='$newname' WHERE com_author='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_online SET online_name='$newname' WHERE online_name='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
-		}
-
-		// autogeneration avatar from letter sed v178		
-		if (empty($urr['user_avatar'])) {
-			$gen_avatar = sed_autogen_avatar($urr['user_id']);
-			$ruseravatar = ($gen_avatar['status']) ? $gen_avatar['imagepath'] : $ruseravatar;
 		}
 
 		// ------ Extra fields 
@@ -245,11 +241,6 @@ if ($a == 'update') {
 				$rbody .= $L['auth_contactadmin'];
 				sed_mail($urr['user_email'], $rsubject, $rbody);
 			}
-		}
-
-		// autogeneration avatar from letter sed v178
-		if (empty($ruseravatar)) {
-			sed_autogen_avatar($id);
 		}
 
 		/* === Hook === */

@@ -11,8 +11,8 @@ Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
 File=system/lang/tr/main.lang.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Lang
 Author=Seditio Team
 Description=Language main
@@ -28,20 +28,21 @@ $L['Add'] = "Ekle";
 $L['Admin.'] = "Yönetici";
 $L['Administration'] = "Yönetim";
 $L['Adminpanel'] = "Yönetim Paneli";
-$L['Anonymous'] = "Anonim";
 $L['Age'] = "Yaş";
 $L['Ago'] = "önce";
 $L['AIM'] = "AIM Adresi";
 $L['Alias'] = "Takma Ad";
-$L['Allcategories'] = "Tüm kategoriler";
 $L['All'] = "Tüm";
+$L['Allcategories'] = "Tüm kategoriler";
 $L['Allpages'] = "Tüm sayfalar";
 $L['Alltimesare'] = "Tüm zamanlar";
 $L['Announcement'] = "Duyuru";
+$L['Anonymous'] = "Anonim";
 $L['Archives'] = "Arşivler";
 $L['Ascending'] = "Artan";
 $L['Author'] = "Yazar";
 $L['Auth'] = "Yetkilendirme"; // Yeni v178
+$L['Back'] = "Geri";
 $L['Banned'] = "Yasaklı";
 $L['Banlist'] = "Yasaklılar Listesi";
 $L['BBcode'] = "BBcode";
@@ -50,7 +51,7 @@ $L['Begin'] = "Başla";
 $L['Birthdate'] = "Doğum Tarihi";
 $L['Birthday'] = "Doğum Günü";
 $L['Body'] = "İçerik";
-$L['Bump'] = "Yukarı Çıkart";
+$L['Bump'] = "Yukarı taşı";
 $L['Byfirstletter'] = "İlk harfe göre";
 $L['bytes'] = "bayt";
 $L['Cancel'] = "İptal";
@@ -58,13 +59,13 @@ $L['Captcha'] = "Captcha";
 $L['Category'] = "Kategori";
 $L['Categories'] = "Kategoriler";
 $L['Clearstatus'] = "Durumu Temizle";
-$L['Close'] = "Kapat";
 $L['Clone'] = "Klonla";
+$L['Close'] = "Kapat";
 $L['Code'] = "Kod";
-$L['Configuration'] = "Yapılandırma";
-$L['Configname'] = "Yapılandırma adı";
 $L['Comment'] = "Yorum";
 $L['Comments'] = "Yorumlar";
+$L['Configuration'] = "Yapılandırma";
+$L['Configname'] = "Yapılandırma adı";
 $L['Confirm'] = "Onayla";
 $L['Copy'] = "Kopyala";
 $L['Copyurl'] = "URL'yi Kopyala";
@@ -84,14 +85,13 @@ $L['Descending'] = "Azalan";
 $L['Description'] = "Açıklama";
 $L['Disabled'] = "Devre Dışı";
 $L['Download'] = "İndir";
-
 $L['Duplicate'] = "Çift";
 $L['Duration'] = "Süre";
 $L['Edit'] = "Düzenle";
-$L['Error'] = "Hata";
 $L['Email'] = "E-posta";
 $L['Emailmask'] = "E-posta maskesi";
 $L['Enabled'] = "Etkin";
+$L['Error'] = "Hata";
 $L['Event'] = "Etkinlik";
 $L['Events'] = "Etkinlikler";
 $L['Expand'] = "Genişlet";
@@ -108,20 +108,18 @@ $L['Forums'] = "Forumlar";
 $L['Gallery'] = "Galeri";
 $L['Galleries'] = "Galeriler";
 $L['Gender'] = "Cinsiyet";
-$L['Picture'] = "Resim";
-$L['Pictures'] = "Resimler";
-$L['Ghost'] = "Hayalet";
+$L['Ghost'] = "Taşındı bildirimi bırak";
+$L['Gotosite'] = "Siteye git";
 $L['Group'] = "Grup";
 $L['Groups'] = "Gruplar";
-$L['Gotosite'] = "Siteye git";
 $L['Guest'] = "Ziyaretçi";
 $L['Guests'] = "Ziyaretçiler";
 $L['Headlines'] = "Başlıkları Görüntüle";
 $L['Help'] = "Yardım";
 $L['Here'] = "Burada";
 $L['Hi'] = "Merhaba";
-$L['Hide'] = "Gizle";
 $L['Hidden'] = "Gizli";
+$L['Hide'] = "Gizle";
 $L['Hits'] = "Ziyaretler";
 $L['Home'] = "Ana Sayfa";
 $L['Hook'] = "Hook";
@@ -133,22 +131,21 @@ $L['ICQ'] = "ICQ Numarası";
 $L['Id'] = "ID";
 $L['Image'] = "Resim";
 $L['ImageURL'] = "Resim URL'si";
+$L['Inactive'] = "Pasif";
 $L['Install'] = "Kuruluyor";
 $L['Ip'] = "IP";
-$L['Ipsearch'] = "IP arama";
 $L['Ipmask'] = "IP maskesi";
-$L['Inactive'] = "Pasif";
+$L['Ipsearch'] = "IP arama";
 $L['IRC'] = "IRC";
 $L['Item'] = "Öğe";
 $L['Items'] = "Öğeler";
-
 $L['Key'] = "Anahtar";
 $L['kb'] = "KB";
+$L['Lastlogged'] = "Son giriş";
+$L['Lastpost'] = "Son gönderi";
 $L['Left'] = "Sol";
 $L['Level'] = "Seviye";
 $L['Levels'] = "Seviyeler";
-$L['Lastlogged'] = "Son giriş";
-$L['Lastpost'] = "Son gönderi";
 $L['Link'] = "Bağlantı";
 $L['Links'] = "Bağlantılar";
 $L['Location'] = "Konum";
@@ -159,13 +156,13 @@ $L['Login'] = "Giriş";
 $L['Logout'] = "Çıkış";
 $L['Main'] = "Ana";
 $L['Maingroup'] = "Ana grup";
-$L['Maintenance'] = "Bakım Modu"; //Yeni v175'te
 $L['Mainmenu'] = "Ana menü";
-$L['Makesticky'] = "Yapışkan";
-$L['Menu'] = "Menü";
-$L['Menus'] = "Menüler";
+$L['Maintenance'] = "Bakım Modu"; //Yeni v175'te
+$L['Makesticky'] = "Sabit yap";
 $L['Member'] = "Üye";
 $L['Members'] = "Üyeler";
+$L['Menu'] = "Menü";
+$L['Menus'] = "Menüler";
 $L['Message'] = "Mesaj";
 $L['Messages'] = "Mesajlar";
 $L['Meta'] = "Meta Verisi";   //Yeni v175'te
@@ -175,28 +172,27 @@ $L['Minutes'] = "dakikalar";
 $L['Moderators'] = "Moderatörler";
 $L['Module'] = "Modül";
 $L['Modules'] = "Modüller";
-$L['MSN'] = "MSN Messenger";
 $L['More'] = "Daha fazla...";
 $L['Move'] = "Taşı";
 $L['Moved'] = "Taşındı";
-$L['Mypfs'] = "Dosyalarım";
+$L['MSN'] = "MSN Messenger";
 $L['Myjournal'] = "Weblogum";
+$L['Mypfs'] = "Dosyalarım";
 $L['na'] = "Mevcut değil";
 $L['Name'] = "Ad";
 $L['Names'] = "İsimler";
-$L['Next'] = "Sonraki sayfa";
 $L['New'] = "Yeni";
 $L['News'] = "Haberler";
 $L['Newspost'] = "Haber gönderisi";
 $L['Newsposts'] = "Haber gönderileri";
+$L['Next'] = "Sonraki sayfa";
 $L['No'] = "Hayır";
 $L['None'] = "Hiçbiri";
 $L['Normal'] = "Hayır";
 $L['Notes'] = "Notlar";
 $L['Occupation'] = "Meslek";
-
-$L['Online'] = "Çevrimiçi"; 				// Yeni v130'da
 $L['Offline'] = "Çevrimdışı"; 				// Yeni v130'da
+$L['Online'] = "Çevrimiçi"; 				// Yeni v130'da
 $L['Open'] = "Açık";
 $L['Option'] = "Seçenek";
 $L['Options'] = "Seçenekler";
@@ -212,19 +208,21 @@ $L['Parts'] = "Bölümler";
 $L['Path'] = "Yol";
 $L['Password'] = "Şifre";
 $L['PFS'] = "Kişisel Dosya Alanı";
-$L['Plugins'] = "Eklentiler";
+$L['Picture'] = "Resim";
+$L['Pictures'] = "Resimler";
 $L['Plugin'] = "Eklenti";
+$L['Plugins'] = "Eklentiler";
 $L['Poll'] = "Anket";
 $L['Polls'] = "Anketler";
 $L['Post'] = "Gönderi";
-$L['Posts'] = "Gönderiler";
 $L['Poster'] = "Gönderen";
+$L['Posts'] = "Gönderiler";
 $L['Preview'] = "Önizleme";
 $L['Previous'] = "Önceki sayfa";
-$L['Private'] = "Özel";
-$L['Private_Messages'] = "Özel mesajlar";
 $L['Print'] = "Yazdır"; // Yeni v175'te
 $L['Printversion'] = "Yazdırılabilir sürüm";  // Yeni v175'te
+$L['Private'] = "Özel";
+$L['Private_Messages'] = "Özel mesajlar";
 $L['Profile'] = "Profil";
 $L['Prune'] = "Temizle";
 $L['Public'] = "Herkese açık";
@@ -236,28 +234,22 @@ $L['Rating'] = "Değerlendirme";
 $L['Ratings'] = "Değerlendirmeler";
 $L['Read'] = "Oku";
 $L['ReadMore'] = "Daha fazla oku...";
-
 $L['Reason'] = "Sebep";
 $L['Referer'] = "Referans";
 $L['Referers'] = "Referanslar";
 $L['Refresh'] = "Yenile";
-$L['Reply'] = "Yanıtla";
-$L['Replies'] = "Yanıtlar";
 $L['Register'] = "Kayıt Ol";
 $L['Registered'] = "Kayıtlı";
 $L['Registration'] = "Kayıt";
+$L['Replies'] = "Yanıtlar";
 $L['Remove'] = "Kaldır";
+$L['Reply'] = "Yanıtla";
+$L['Requires'] = "Gereksinimler";
 $L['Reset'] = "Sıfırla";
 $L['Restore'] = "Geri Yükle";
 $L['Resync'] = "Yeniden Senkronize Et";
 $L['Right'] = "Sağ";
 $L['Rights'] = "Haklar";
-$L['Show'] = "Göster";
-$L['Spoiler'] = "Spoiler";
-$L['Standalone'] = "Bağımsız";
-$L['Statistics'] = "İstatistikler";
-$L['StatsLogs'] = "İstatistikler & günlükler";
-$L['Structure'] = "Yapı";
 $L['Search'] = "Ara";
 $L['Second'] = "saniye";
 $L['Seconds'] = "saniyeler";
@@ -267,13 +259,18 @@ $L['Security'] = "Güvenlik";
 $L['Set'] = "Ayarla";
 $L['Setup'] = "Kurulum";
 $L['SFS'] = "Site Dosya Alanı";
+$L['Show'] = "Göster";
 $L['Size'] = "Boyut";
 $L['Skin'] = "Temalar";
 $L['Skins'] = "Temalar";
 $L['Skype'] = "Skype Numarası";  // Yeni v175'te
 $L['Smilies'] = "Gülücükler";
+$L['Spoiler'] = "Spoiler";
+$L['Standalone'] = "Bağımsız";
 $L['Started'] = "Başlatıldı";
-$L['Status'] = "Durum";
+$L['Statistics'] = "İstatistikler";
+$L['StatsLogs'] = "İstatistikler & günlükler";
+$L['Structure'] = "Yapı";
 $L['Sub'] = "Alt";    // Yeni v161'de
 $L['Submit'] = "Gönder";
 $L['System'] = "Sistem";
@@ -288,17 +285,17 @@ $L['Title'] = "Başlık";
 $L['Tool'] = "Araç";
 $L['Tools'] = "Araçlar";
 $L['Topic'] = "Konu";
-$L['Topics'] = "Konular";
+$L['Topiclocked'] = "Bu konu kilitli, yeni mesaj yazılamaz.";
 $L['Topicoptions'] = "Konu seçenekleri";
-$L['Topiclocked'] = "Bu konu kilitli, yeni gönderilere izin verilmiyor.";
+$L['Topics'] = "Konular";
 $L['Total'] = "Toplam";
-
 $L['TPL'] = "TPL";		// Yeni v110'da
 $L['Trash'] = "Çöp"; 		// Yeni v110'da
 $L['Trashcan'] = "Çöp kutusu";
 $L['Type'] = "Tür";
 $L['Unfold'] = "Aç";
 $L['Unknown'] = "?";
+$L['Uninstall'] = "Kaldırılıyor";
 $L['Unlock'] = "Kilidi aç";
 $L['Unlocked'] = "Kilidi açıldı";
 $L['Until'] = "Kadar";
@@ -308,10 +305,10 @@ $L['Upload'] = "Yükle";
 $L['URL'] = "URL";
 $L['User'] = "Kullanıcı";
 $L['Userid'] = "Kullanıcı ID";
-$L['Users'] = "Kullanıcılar";
-$L['Username'] = "Kullanıcı adı";
 $L['Userfirstname'] = "Ad";
 $L['Userlastname'] = "Soyad";
+$L['Username'] = "Kullanıcı adı";
+$L['Users'] = "Kullanıcılar";
 $L['Validate'] = "Doğrula";
 $L['Value'] = "Değer";
 $L['Values'] = "Değerler";
@@ -326,7 +323,6 @@ $L['Wipe'] = "Sil";
 $L['Wipeall'] = "Hepsini sil";
 $L['Write'] = "Yaz";
 $L['Wysiwyg'] = "Wysiwyg Düzenleyicisi";
-$L['Uninstall'] = "Kaldırılıyor";
 $L['Yes'] = "Evet";
 $L['YIM'] = "Yahoo Messenger";
 
@@ -352,12 +348,6 @@ $L['Gender_U'] = "Bilinmiyor";
 $L['com_skinfail'] = "Uyarı, tercihinizdeki skin yüklenemedi, profilinizi kontrol edin.";
 $L['com_members'] = "üyelik(ler)";
 $L['com_guests'] = "misafir(ler)";
-
-/* ====== Gallery ====== */
-
-$L['gallery_home_title'] = "Galeriler";         // New in v150
-$L['gallery_browse_title'] = "Galeri";         // New in v150
-$L['gallery_details_title'] = "Resim";         // New in v150
 
 /* ====== Header ====== */
 
@@ -409,35 +399,7 @@ $L['aut_registertitle'] = "Yeni bir üye hesabı kaydedin";
 $L['aut_registersubtitle'] = "";
 $L['aut_logintitle'] = "Giriş formu";
 
-/* ====== Comments ====== */
-
-$L['com_disable'] = "Yorum yapma kapalı!"; // New in v173
-$L['com_commenttooshort'] = "Yorum çok kısa veya eksik";
-$L['com_commenttoolong'] = "Yorum çok uzun";
-$L['com_commentadded'] = "Tamam, yorum eklendi";
-$L['com_regonly'] = "Yalnızca kayıtlı kullanıcılar yeni yorum yapabilir";
-$L['com_nocommentsyet'] = "Henüz yorum yapılmamış";
-$L['com_gup'] = " kaldı";
-$L['com_commenteditallowtime'] = "Bir yorumu düzenlemek için izin verilen süre dolmuş";
-$L['com_commentdeleteallowtime'] = "Bir yorumu silmek için izin verilen süre dolmuş";
-
-/* ====== Forums ======= */
-
-$L['for_newtopic'] = "Yeni konu";
-$L['for_markallasread'] = "Tüm gönderileri okundu olarak işaretle";
-$L['for_titletooshort'] = "Başlık çok kısa veya eksik"; // New in v171
-$L['for_msgtooshort'] = "Konu metni çok kısa veya eksik"; // New in v171
-$L['for_updatedby'] = "<br /><em>Bu gönderi %1\$s tarafından düzenlendi (%2\$s, %3\$s önce)</em>";
-$L['for_antibump'] = "Anti-bump koruması devreye girdi, ardışık olarak iki kere gönderi yapamazsınız.";
-$L['for_mod_clear'] = "Değerlendirmeleri temizle";    // New in v160
-$L['for_mod_force'] = "Değerlendirmeyi zorla ";    // New in v160
-
-$L['for_quickpost'] = "Hızlı yanıt"; // New in v178
-$L['for_post_text'] = "Gönderi metni"; // New in v178
-
-/* ====== List ====== */
-
-$L['lis_submitnew'] = "Yeni bir gönderi gönder";
+/* ====== Forums strings moved to modules/forums/lang/ ======= */
 
 /* ====== Messages ====== */
 
@@ -450,105 +412,12 @@ $L['spoiler_locked_group'] = "Gizli içerik sadece {groupName} grubu için mevcu
 $L['spoiler_locked_level'] = "Gizli içerik, en az {minlevel} erişim seviyesine sahip kullanıcılar için mevcut";
 
 
-/* ====== Pages ====== */
-
-$L['pag_catmissing'] = "Kategori kodu eksik";
-$L['pag_titletooshort'] = "Başlık çok kısa veya eksik";
-$L['pag_desctooshort'] = "Açıklama çok kısa veya eksik";
-$L['pag_authortooshort'] = "Yazar adı çok kısa veya eksik";
-$L['pagadd_title'] = "Yeni sayfa gönderim formu";
-$L['pagadd_subtitle'] = "Yeni bir sayfa gönderin";
-$L['paged_title'] = "Sayfa özellikleri";
-$L['paged_subtitle'] = "Bu sayfa için değerleri güncelle";
-
-/* ====== Personal file space ====== */
-
-$L['pfs_title'] = "Kişisel Dosya Alanım";
-$L['pfs_filetoobigorext'] = "Yükleme başarısız oldu, bu dosya belki çok büyük veya uzantısı yasaklı mı?";
-$L['pfs_fileexists'] = "Yükleme başarısız oldu, bu isimle zaten bir dosya var mı?";
-$L['pfs_filelistempty'] = "Liste boş.";
-$L['pfs_folderistempty'] = "Bu klasör boş.";
-$L['pfs_totalsize'] = "Toplam boyut";
-$L['pfs_maxspace'] = "İzin verilen maksimum alan";
-$L['pfs_maxsize'] = "Bir dosya için maksimum boyut";
-$L['pfs_filesintheroot'] = "Kök klasördeki dosya(lar)";
-$L['pfs_filesinthisfolder'] = "Bu klasördeki dosya(lar)";
-$L['pfs_newfile'] = "Bir dosya yükleyin:";
-$L['pfs_newfolder'] = "Yeni bir klasör oluşturun:";
-$L['pfs_editfolder'] = "Bir klasörü düzenliyorum";
-$L['pfs_editfile'] = "Bir dosyayı düzenliyorum";
-$L['pfs_extallowed'] = "İzin verilen uzantılar";
-$L['pfs_insertasthumbnail'] = "Küçük resim olarak ekle"; // New in v175
-$L['pfs_insertasimage'] = "Tam boyutlu resim olarak ekle"; // New in v175
-$L['pfs_insertaslink'] = "Dosyaya link olarak ekle"; // New in v175
-$L['pfs_multiuploading'] = "Birden fazla dosya yükleme"; // New in v175
-$L['pfs_insertasvideo'] = "Video olarak ekle"; // New in v180
-$L['pfs_setassample'] = "Örnek olarak ayarla";  // New in v150
-$L['pfs_addlogo'] = "Logoyu ekle";  // New in v150
-$L['pfs_resize'] = "Boyut %1\$s pikselden büyükse yeniden boyutlandır";  // New in v150
-
 /* ====== Plug ====== */
 
 // Empty
 
 /* ====== Pm ====== */
-
-$L['pm_titletooshort'] = "Başlık çok kısa veya eksik";
-$L['pm_bodytooshort'] = "Özel mesajın içeriği çok kısa veya eksik";
-$L['pm_bodytoolong'] = "Özel mesajın içeriği çok uzun, maksimum " . $cfg['pm_maxsize'] . " karakter";
-$L['pm_wrongname'] = "En az bir alıcı yanlış yazılmış ve listeden çıkarılmıştır";
-$L['pm_toomanyrecipients'] = "Maksimum %1\$s alıcı lütfen";
-$L['pmsend_title'] = "Yeni bir özel mesaj gönder";
-$L['pmsend_subtitle'] = "";
-$L['pm_sendnew'] = "Yeni bir özel mesaj gönder";
-$L['pm_inbox'] = "Gelen kutusu";
-$L['pm_inboxsubtitle'] = "Özel mesajlar, en yenisi üstte";
-$L['pm_sentbox'] = "Gönderilen kutusu";
-$L['pm_sentboxsubtitle'] = "Gönderilen ve alıcı tarafından henüz görüntülenmeyen mesajlar";
-$L['pm_archives'] = "Arşivler";
-$L['pm_arcsubtitle'] = "Eski mesajlar, en yenisi üstte";
-$L['pm_replyto'] = "Bu kullanıcıya yanıt ver";
-$L['pm_putinarchives'] = "Arşive taşı";
-$L['pm_notifytitle'] = "Yeni özel mesaj";
-$L['pm_notify'] = "Merhaba %1\$s,\n\nBu e-postayı alıyorsunuz çünkü gelen kutunuzda yeni bir özel mesaj var.\nGönderen: %2\$s\nMesajı okumak için bu bağlantıya tıklayın: %3\$s";
-$L['pm_multiplerecipients'] = "Bu özel mesaj, %1\$s diğer alıcıya da gönderildi.";
-
-/* ====== Polls ====== */
-
-$L['polls_viewresults'] = "Sonuçları gör";
-$L['polls_viewarchives'] = "Tüm anketleri gör";
-$L['polls_Vote'] = "Oyla";
-$L['polls_votes'] = "oy";
-$L['polls_since'] = "tarihten beri";
-$L['polls_alreadyvoted'] = "Bu ankete zaten oy verdiniz.";
-$L['polls_notyetvoted'] = "Yukarıdaki satırlardan birine tıklayarak oy verebilirsiniz.";
-$L['polls_votecasted'] = "Tamam, oy başarıyla kaydedildi";
-$L['polls_add'] = "Anket ekle";
-$L['polls_edit'] = "Anketi düzenle";
-$L['polls_title'] = "Anket başlığı";
-$L['polls_option'] = "Anket seçeneği";
-$L['polls_addoption'] = "Anket seçeneği ekle";
-$L['polls_options'] = "Anket seçenekleri";
-$L['polls_emptytitle'] = "Anket başlığı boş veya 2'den az cevap seçeneği var";
-
-/* ====== Ratings ====== */
-
-$L['rat_choice1'] = "Çok kötü";
-$L['rat_choice2'] = "Kötü";
-$L['rat_choice3'] = "O kadar kötü değil";
-$L['rat_choice4'] = "Ortalama";
-$L['rat_choice5'] = "İyi";
-$L['rat_choice6'] = "Hemen hemen iyi";
-$L['rat_choice7'] = "İyi";
-$L['rat_choice8'] = "Çok iyi";
-$L['rat_choice9'] = "Mükemmel";
-$L['rat_choice10'] = "Kusursuz";
-$L['rat_votecasted'] = "Tamam, oy başarıyla kaydedildi";
-$L['rat_since'] = "tarihten beri";
-$L['rat_notyetrated'] = "Henüz oylanmadı";
-$L['rat_alreadyvoted'] = "Bu öğeye zaten oy verdiniz.";
-$L['rat_registeredonly'] = "Yalnızca kayıtlı kullanıcılar öğeleri oylayabilir.";
-$L['rat_disable'] = "Oylama değişikliği devre dışı bırakıldı!";
+/* $L['pm_*'], $L['pmsend_*'] moved to modules/pm/lang/ */
 
 /* ====== Users ====== */
 
@@ -574,14 +443,6 @@ $L['pro_photoupload'] = "Bir fotoğraf yükleyin";
 $L['pro_avatarspreset'] = "...veya buraya tıklayarak önceden yüklenmiş avatarlar galerisini görüntüleyebilirsiniz";
 $L['pro_avatarschoose'] = "Kendi avatarınızı ayarlamak için aşağıdaki resme tıklayın";
 $L['pro_avataruploadfailed'] = "Yükleme başarısız oldu, eski avatarı silerek slotu boşaltın!";
-
-/* ====== Rss ====== */
-
-$L['rss_lastforums'] = "Forumlardaki Son Paylaşımlar"; // New in v173
-$L['rss_lastsections'] = "Forumdaki Son Gönderiler: "; // New in v173
-$L['rss_lasttopics'] = "Konuya Yapılan Son Yorum: "; // New in v173
-$L['rss_commentauthor'] = "Kullanıcı Yorumları"; // New in v173
-$L['rss_lastcomments'] = "Son Yorumlar"; // New in v173
 
 /* ====== Metadata information ====== */
 

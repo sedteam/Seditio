@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=message.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Messages
@@ -207,6 +207,11 @@ switch ($msg) {
 	case '907':
 		$message = $L['msg907_0'];
 		$body = $L['msg907_1'];
+		break;
+
+	case '909':
+		$message = isset($L['msg909_0']) ? $L['msg909_0'] : 'Module not loaded';
+		$body = isset($L['msg909_1']) ? $L['msg909_1'] : 'An error occurred while attempting to load this module.';
 		break;
 
 	case '911':

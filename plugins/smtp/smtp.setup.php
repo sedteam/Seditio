@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/smtp/smtp.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=smtp
 Name=SMTP Sender 3.0
 Description=SMTP mail sender for Seditio 17x
-Version=180
+Version=185
 Date=2025-jan-31
 Author=Amro
 Copyright=Amro

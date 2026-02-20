@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=datas/resized/index.php
-Version=180
-Updated=2021-feb-06
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Directory blocker

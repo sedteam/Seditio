@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/common.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Common
@@ -23,7 +23,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */
 
-require(SED_ROOT . '/system/database.' . $cfg['sqldb'] . '.php');
+require_once(SED_ROOT . '/system/database.' . $cfg['sqldb'] . '.php');
 $connection_id = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 sed_sql_set_charset($connection_id, 'utf8mb4');
@@ -35,12 +35,14 @@ mb_internal_encoding('UTF-8'); // New v171
 $sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
 while ($row = sed_sql_fetchassoc($sql_config)) {
-	if ($row['config_owner'] == 'core') {
+	if ($row['config_owner'] == 'core' || $row['config_owner'] == 'module') {
 		$cfg[$row['config_name']] = $row['config_value'];
 	} else {
 		$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
 	}
 }
+
+sed_apply_patches();
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
@@ -257,6 +259,24 @@ $n = sed_import('n', 'G', 'ALP', 24);
 $a = sed_import('a', 'G', 'ALP', 24);
 $b = sed_import('b', 'G', 'ALP', 24);
 
+/* ======== Active modules list and API functions ======== */
+
+if (!isset($sed_modules)) {
+	$sed_modules = array();
+	$sql_mods = sed_sql_query("SELECT * FROM $db_core WHERE ct_state=1");
+	while ($mod_row = sed_sql_fetchassoc($sql_mods)) {
+		$sed_modules[$mod_row['ct_code']] = $mod_row;
+	}
+	sed_cache_store('sed_modules', $sed_modules, 3300);
+}
+foreach ($sed_modules as $mod_row) {
+	$mod_path = isset($mod_row['ct_path']) ? (string)$mod_row['ct_path'] : '';
+	$api_file = SED_ROOT . '/' . $mod_path . 'inc/' . $mod_row['ct_code'] . '.functions.php';
+	if (file_exists($api_file)) {
+		require_once($api_file);
+	}
+}
+
 /* ======== Plugins ======== */
 
 if (!isset($sed_plugins)) {
@@ -305,7 +325,6 @@ if (is_array($extp)) {
 		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 	}
 }
-
 
 /* ======== Gzip and output filtering ======== */
 
@@ -406,6 +425,20 @@ if (!file_exists($mlang)) {
 $lang = $usr['lang'];
 require($mlang);
 
+/* Active modules: load their lang so $L['core_*'] etc. are available everywhere */
+foreach ($sed_modules as $mod_code => $mod_row) {
+	$mod_path = isset($mod_row['ct_path']) ? (string)$mod_row['ct_path'] : '';
+	if ($mod_path === '' || strpos($mod_path, 'modules/') !== 0) {
+		continue;
+	}
+	$mod_lang_file = SED_ROOT . '/modules/' . $mod_code . '/lang/' . $mod_code . '.' . $lang . '.lang.php';
+	if (is_file($mod_lang_file)) {
+		include_once($mod_lang_file);
+	} elseif (is_file(SED_ROOT . '/modules/' . $mod_code . '/lang/' . $mod_code . '.en.lang.php')) {
+		include_once(SED_ROOT . '/modules/' . $mod_code . '/lang/' . $mod_code . '.en.lang.php');
+	}
+}
+
 $yesno_arr = array(1 => $L['Yes'], 0 => $L['No']);
 $yesno_revers_arr = array(0 => $L['Yes'], 1 => $L['No']);
 
@@ -435,11 +468,11 @@ $out['ic_arrow_follow'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/arro
 $out['ic_gallery'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-gallery.gif\" alt=\"\" />";
 $out['ic_folder'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-folder.gif\" alt=\"\" />";
 
-$out['ic_pastethumb'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastethumb.gif\" alt=\"" . $L['pfs_insertasthumbnail'] . "\" />";
-$out['ic_pastefile'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastefile.gif\" alt=\"" . $L['pfs_insertaslink'] . "\" />";
-$out['ic_pasteimage'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pasteimage.gif\" alt=\"" . $L['pfs_insertasimage'] . "\" />";
+$out['ic_pastethumb'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastethumb.gif\" alt=\"" . (isset($L['pfs_insertasthumbnail']) ? $L['pfs_insertasthumbnail'] : '') . "\" />";
+$out['ic_pastefile'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastefile.gif\" alt=\"" . (isset($L['pfs_insertaslink']) ? $L['pfs_insertaslink'] : '') . "\" />";
+$out['ic_pasteimage'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pasteimage.gif\" alt=\"" . (isset($L['pfs_insertasimage']) ? $L['pfs_insertasimage'] : '') . "\" />";
 
-$out['ic_pastevideo'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastevideo.gif\" alt=\"" . $L['pfs_insertasvideo'] . "\" />";
+$out['ic_pastevideo'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastevideo.gif\" alt=\"" . (isset($L['pfs_insertasvideo']) ? $L['pfs_insertasvideo'] : '') . "\" />";
 
 $out['ic_comment'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-comment.gif\" alt=\"\" />";
 
@@ -452,9 +485,9 @@ $out['ic_gallery_zoom'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/gall
 
 $out['ic_pm_new'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-new.gif\" alt=\"\" />";
 $out['ic_pm'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm.gif\" alt=\"\" />";
-$out['ic_pm_trashcan'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-trashcan.gif\" alt=\"" . $L['Delete'] . "\" />";
-$out['ic_pm_reply'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-reply.gif\" alt=\"" . $L['pm_replyto'] . "\" />";
-$out['ic_pm_archive'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-archive.gif\" alt=\"" . $L['pm_putinarchives'] . "\" />";
+$out['ic_pm_trashcan'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-trashcan.gif\" alt=\"" . (isset($L, $L['Delete']) ? $L['Delete'] : '') . "\" />";
+$out['ic_pm_reply'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-reply.gif\" alt=\"" . (isset($L, $L['pm_replyto']) ? $L['pm_replyto'] : '') . "\" />";
+$out['ic_pm_archive'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pm-archive.gif\" alt=\"" . (isset($L, $L['pm_putinarchives']) ? $L['pm_putinarchives'] : '') . "\" />";
 
 $out['ic_alert_error'] = "<img src=\"system/img/alerts/error.png\" alt=\"\" />";
 $out['ic_alert_info'] = "<img src=\"system/img/alerts/info.png\" alt=\"\" />";
@@ -551,19 +584,9 @@ if (!$cfg['disablehitstats']) {
 	}
 }
 
-/* ======== Categories ======== */
+/* ======== Categories (page/list) are loaded by the page module in inc/page.functions.php ======== */
 
-if ((!isset($sed_cat) || !$sed_cat) && !$cfg['disable_page']) {
-	$sed_cat = sed_load_structure();
-	sed_cache_store('sed_cat', $sed_cat, 3600);
-}
-
-/* ======== Forums ======== */
-
-if ((!isset($sed_forums_str) || !$sed_forums_str) && !$cfg['disable_forums']) {
-	$sed_forums_str = sed_load_forum_structure();
-	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
-}
+/* ======== Forums structure is loaded by the forums module via its API ======== */
 
 /* ======== Directories ======== */
 
@@ -571,6 +594,7 @@ $dic_type = array(1 => 'select', 2 => 'radio', 3 => 'checkbox',  4 => 'textinput
 $dic_var_type = array('varchar' => 'TXT', 'text' => 'HTM', 'int' => 'INT', 'tinyint' => 'INT', 'boolean' => 'BOL');
 
 if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
+	$sed_dic = array();
 	// Load directories
 	$sql = sed_sql_query("SELECT * FROM $db_dic");
 	if (sed_sql_numrows($sql) > 0) {

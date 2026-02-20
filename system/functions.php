@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/functions.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -28,7 +28,12 @@ $usr = array();
 require(SED_ROOT . '/system/config.extensions.php');
 
 /* ======== Urltranslation rules ========= */
-require(SED_ROOT . '/system/config.urltranslation.php');
+$sed_urls_cache = SED_ROOT . '/datas/cache/sed_urls.php';
+if (file_exists($sed_urls_cache)) {
+	require($sed_urls_cache);
+} else {
+	require(SED_ROOT . '/system/config.urltranslation.php');
+}
 
 /* ======== Image functions ========= */
 require(SED_ROOT . '/system/functions.image.php');
@@ -43,6 +48,17 @@ $sys['starttime'] = $i[1] + $i[0];
 
 unset($warnings, $moremetas, $morejavascript, $morecss, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_parser, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount);
 
+/* ======== Group ID constants and default auth arrays ======== */
+if (!defined('SED_GROUP_DEFAULT')) {
+	define('SED_GROUP_DEFAULT', 0);
+	define('SED_GROUP_GUESTS', 1);
+	define('SED_GROUP_INACTIVE', 2);
+	define('SED_GROUP_BANNED', 3);
+	define('SED_GROUP_MEMBERS', 4);
+	define('SED_GROUP_SUPERADMINS', 5);
+	define('SED_GROUP_MODERATORS', 6);
+}
+
 // ALL the value below are DEFAULTS, change the value in datas/config.php if needed, NOT HERE.
 
 $cfg['authmode'] = 3; 				// (1:cookies, 2:sessions, 3:cookies+sessions)
@@ -50,7 +66,6 @@ $cfg['authsecret'] = TRUE;			// Update the secret code upon every authorization
 $cfg['enablecustomhf'] = TRUE;		// To enable header.$location.tpl and footer.$location.tpl
 $cfg['devmode'] = FALSE;
 $cfg['sefurls'] = TRUE;
-$cfg['forumsefurls'] = TRUE;		// Enable new forum sefurls
 $cfg['abs_url'] = TRUE;
 $cfg['redirmode'] = FALSE;
 $cfg['pfs_dir'] = 'datas/users/';
@@ -71,10 +86,14 @@ $cfg['readmore'] = " <div class=\"readmore\"> %s </div>";
 $cfg['pfsmaxuploads'] = 6;
 $cfg['textarea_default_width'] = 75;
 $cfg['textarea_default_height'] = 16;
-$cfg['sqldb'] = 'mysql';
+$cfg['sqldb'] = 'mysqli';
 $cfg['sqldbprefix'] = 'sed_';
-$cfg['version'] = '180';
-$cfg['versions_list'] = array(120, 121, 125, 126, 130, 150, 159, 160, 161, 162, 170, 171, 172, 173, 175, 177, 178, 179, 180);
+$cfg['mysqlengine'] = 'InnoDB';
+$cfg['mysqlcharset'] = 'utf8mb4';
+$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
+$cfg['version'] = '185';
+$cfg['patchmode'] = FALSE;  // TRUE = enable automatic schema patches (for upgrades)
+$cfg['versions_list'] = array(120, 121, 125, 126, 130, 150, 159, 160, 161, 162, 170, 171, 172, 173, 175, 177, 178, 179, 180, 185);
 $cfg['group_colors'] = array('red', 'yellow', 'black', 'blue', 'white', 'green', 'gray', 'navy', 'darkmagenta', 'pink', 'cadetblue', 'linen', 'deepskyblue', 'inherit');
 $cfg['separator_symbol'] = "&raquo;";
 $cfg['structuresort'] = TRUE;
@@ -83,39 +102,10 @@ $cfg['adminskin'] = "sympfy";
 
 /* Message type:  warning => w, error => e, success => s, info => i */
 $cfg['msgtype'] = array(
-	'100' => 'e',
-	'101' => 'e',
-	'102' => 'i',
-	'104' => 'i',
-	'105' => 's',
-	'106' => 's',
-	'109' => 's',
-	'113' => 's',
-	'117' => 'i',
-	'118' => 's',
-	'151' => 'e',
-	'152' => 'e',
-	'153' => 'e',
-	'157' => 'w',
-	'300' => 's',
-	'400' => 'e',
-	'401' => 'e',
-	'403' => 'e',
-	'404' => 'e',
-	'500' => 'e',
-	'502' => 's',
-	'602' => 'w',
-	'603' => 'w',
-	'900' => 'w',
-	'904' => 'w',
-	'907' => 'e',
-	'911' => 'e',
-	'915' => 'e',
-	'916' => 's',
-	'917' => 's',
-	'930' => 'w',
-	'940' => 'w',
-	'950' => 'e'
+	'100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i',
+	'118' => 's', '151' => 'e', '152' => 'e', '153' => 'e', '157' => 'w', '300' => 's', '400' => 'e', '401' => 'e', '403' => 'e',
+	'404' => 'e', '500' => 'e', '502' => 's', '602' => 'w', '603' => 'w', '900' => 'w', '904' => 'w', '907' => 'e', '911' => 'e',
+	'915' => 'e', '916' => 's', '917' => 's', '930' => 'w', '940' => 'w', '950' => 'e' 
 );
 
 $cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'info', 'w' => 'warning');
@@ -179,39 +169,9 @@ $shield_hammer = 0;
 /* ======== Names of the SQL tables ========= */
 
 $sed_dbnames = array(
-	'auth',
-	'banlist',
-	'cache',
-	'com',
-	'core',
-	'config',
-	'dic',
-	'dic_items',
-	'forum_sections',
-	'forum_structure',
-	'forum_topics',
-	'forum_posts',
-	'groups',
-	'groups_users',
-	'logger',
-	'menu',
-	'online',
-	'pages',
-	'pfs',
-	'pfs_folders',
-	'plugins',
-	'pm',
-	'polls_options',
-	'polls',
-	'polls_voters',
-	'rated',
-	'ratings',
-	'referers',
-	'smilies',
-	'stats',
-	'structure',
-	'trash',
-	'users'
+	'auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'forum_posts', 'forum_sections', 'forum_structure', 'forum_topics',
+	'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters',
+	'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users'
 );
 
 foreach ($sed_dbnames as $k => $i) {
@@ -350,40 +310,6 @@ function sed_attr($attrs)
 }
 
 /**
- * Generation avatar from first username letter
- *
- * @param int $uid
- * @return array|bool status result
- */
-function sed_autogen_avatar($uid)
-{
-	global $usr, $cfg, $db_pfs, $db_users;
-
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$uid' LIMIT 1");
-	if (sed_sql_numrows($sql) == 0) return FALSE;
-
-	$urr = sed_sql_fetchassoc($sql);
-
-	$gen_avatar = sed_gen_letteravatar($urr['user_name'], $uid, (int)$cfg['av_maxy'] / 2, $cfg['av_maxx'], $cfg['av_maxy']);
-
-	if ($gen_avatar['status']) {
-		$avatarpath = $gen_avatar['imagepath'];
-		$avatar = $gen_avatar['image'];
-
-		$dotpos = mb_strrpos($avatar, ".") + 1;
-		$f_extension = mb_strtolower(mb_substr($avatar, $dotpos, 5));
-
-		$uav_size = filesize($avatarpath);
-		$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='" . $urr['user_id'] . "'");
-		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
-		$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$urr['user_id'] . ", '$avatar', '$f_extension', -1, '', " . (int)$uav_size . ", 0)");
-		@chmod($avatarpath, 0666);
-	}
-
-	return $gen_avatar;
-}
-
-/**
  * Checks user authorization for specific actions or options within a designated area.
  *
  * This function is used to verify if the user has the required permissions
@@ -428,18 +354,19 @@ function sed_auth($area, $option, $mask = 'RWA')
 		} elseif ($option == 'any') {
 			$cnt = 0;
 
-			if (is_array($usr['auth'][$area])) {
+			if (isset($usr['auth'][$area]) && is_array($usr['auth'][$area])) {
 				foreach ($usr['auth'][$area] as $k => $g) {
 					$cnt += (($g & $mn[$ml]) == $mn[$ml]);
 				}
 			}
-			$cnt = ($cnt == 0 && $usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
+			$cnt = ($cnt == 0 && !empty($usr['auth']['admin']['a']) && $ml == 'A') ? 1 : $cnt;
 
 			$sys['auth_log'][] = ($cnt > 0) ? $area . "." . $option . "." . $ml . "=1" : $area . "." . $option . "." . $ml . "=0";
 			$res[] = ($cnt > 0) ? TRUE : FALSE;
 		} else {
-			$sys['auth_log'][] = ((isset($usr['auth'][$area][$option]) && $usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area . "." . $option . "." . $ml . "=1" : $area . "." . $option . "." . $ml . "=0";
-			$res[] = ((isset($usr['auth'][$area][$option]) && $usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
+			$has_opt = isset($usr['auth'][$area][$option]) && ($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml];
+			$sys['auth_log'][] = $has_opt ? $area . "." . $option . "." . $ml . "=1" : $area . "." . $option . "." . $ml . "=0";
+			$res[] = $has_opt ? TRUE : FALSE;
 		}
 	}
 	if (count($res) == 1) {
@@ -604,7 +531,7 @@ function sed_build_catpath($cat, $mask)
 	$tmp = array();
 	foreach ($pathcodes as $k => $x) {
 		if ($x != 'system') {
-			$tmp[] = sprintf($mask, sed_url("list", "c=" . $x), $sed_cat[$x]['title']);
+			$tmp[] = sprintf($mask, sed_url("page", "c=" . $x), $sed_cat[$x]['title']);
 		}
 	}
 
@@ -612,484 +539,7 @@ function sed_build_catpath($cat, $mask)
 	return ($result);
 }
 
-/** 
- * Builds comments 
- * 
- * @param string $code Item code 
- * @param string $url Base url 
- * @param int $display Display comments on page
- * @param bool $allow Enable or disable comments an item  
- * @return array 
- */
-function sed_build_comments($code, $url, $display, $allow = TRUE)
-{
-	global $db_com, $db_users, $db_pages, $cfg, $out, $usr, $L, $sys, $skin, $flocation;
-
-	$flocation = 'Comments';
-
-	$n = sed_import('n', 'G', 'ALP');
-	$a = sed_import('a', 'G', 'ALP');
-	$b = sed_import('b', 'G', 'INT');
-	$quote = sed_import('quote', 'G', 'INT');
-	//$cm = sed_import('cm', 'G', 'INT');  
-	$d = sed_import('d', 'G', 'INT');
-
-	$error_string = '';
-
-	$wd = (is_null($d) && empty($b)) ? TRUE : FALSE;
-
-	//fix for sed_url()
-	if (is_array($url)) {
-		$url_part = $url['part'];
-		$url_params = $url['params'];
-	} else {
-		$url = str_replace('&amp;', '&', $url);
-		$url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
-		$url_params = mb_substr($url, mb_strpos($url, '?') + 1, mb_strlen($url));
-	}
-	//--------
-	$lurl = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
-	//-------- 
-
-	if (!empty($b)) {
-		$before_after = ($cfg['commentsorder'] == "DESC") ? ">" : "<";
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code' AND com_id " . $before_after . " '$b'");
-		$com_before_after = sed_sql_result($sql, 0, "COUNT(*)");
-		$d = $cfg['maxcommentsperpage'] * floor($com_before_after / $cfg['maxcommentsperpage']);
-	}
-
-	$d = empty($d) ? 0 : (int)$d;
-
-	list($usr['auth_read_com'], $usr['auth_write_com'], $usr['isadmin_com']) = sed_auth('comments', 'a');
-	sed_block($usr['auth_read_com']);
-
-	if ($cfg['disable_comments'] || !$usr['auth_read_com']) {
-		return (array('', '', ''));
-	}
-
-	// ---------- Extra fields - getting
-	$extrafields = array();
-	$extrafields = sed_extrafield_get('com');
-	$number_of_extrafields = count($extrafields);
-
-	// ----------------------
-
-	if ($display) {
-		if ($n == 'send' && $usr['auth_write_com'] && $allow) {
-			sed_shield_protect();
-
-			$rtext = sed_import('rtext', 'P', 'HTM');
-
-			// --------- Extra fields     
-			if ($number_of_extrafields > 0) $newcommentextrafields = sed_extrafield_buildvar($extrafields, 'r', 'com');
-			// ----------------------			
-
-			/* == Hook for the plugins == */
-			$extp = sed_getextplugins('comments.send.first');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
-			/* ===== */
-
-			$error_string .= (mb_strlen($rtext) < 2) ? $L['com_commenttooshort'] . "<br />" : '';
-			$error_string .= (mb_strlen($rtext) > $cfg['maxcommentlenght']) ? $L['com_commenttoolong'] . "<br />" : '';
-
-			if (empty($error_string)) {
-
-				// ------ Extra fields 
-				if (count($extrafields) > 0) {
-					foreach ($extrafields as $i => $row) {
-						$ssql_extra_columns .= ', com_' . $row['code'];
-						$ssql_extra_values .= ", '" . sed_sql_prep($newcommentextrafields['com_' . $row['code']]) . "'";
-					}
-				}
-				// ----------------------
-
-				$sql = sed_sql_query("INSERT INTO $db_com 
-						(com_code, 
-						com_author, 
-						com_authorid, 
-						com_authorip, 
-						com_text, 
-						com_date" . $ssql_extra_columns . ") 
-					VALUES 
-						('" . sed_sql_prep($code) . "', 
-						'" . sed_sql_prep($usr['name']) . "', 
-						" . (int)$usr['id'] . ", 
-						'" . $usr['ip'] . "', 
-						'" . sed_sql_prep($rtext) . "', 
-						" . (int)$sys['now_offset'] . $ssql_extra_values . ")");
-
-				if (mb_substr($code, 0, 1) == 'p') {
-					$page_id = mb_substr($code, 1, 10);
-					$sql = sed_sql_query("UPDATE $db_pages SET page_comcount='" . sed_get_comcount($code) . "' WHERE page_id='" . $page_id . "'");
-				}
-
-				/* == Hook for the plugins == */
-				$extp = sed_getextplugins('comments.send.new');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
-				}
-				/* ===== */
-
-				sed_shield_update(20, "New comment");
-				sed_redirect(sed_url($url_part, $url_params . $lurl, "", true));
-				exit;
-			}
-		}
-
-		if ($n == 'delete') {
-			sed_check_xg();
-
-			$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$b' LIMIT 1");
-			$row = sed_sql_fetchassoc($sql);
-
-			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
-			$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
-			$usr['allow_edit_com'] = ($usr['isadmin'] || $usr['isowner_com']);
-
-			if (!$usr['allow_edit_com']) {
-				$error_string .= $L['com_commentdeleteallowtime'] . "<br />";
-			}
-
-			if (empty($error_string)) {
-				sed_block($usr['allow_edit_com']);
-				if ((sed_sql_numrows($sql) > 0) && ($usr['isowner_com'] || $usr['isadmin_com'])) {
-					if ($cfg['trash_comment']) {
-						sed_trash_put('comment', $L['Comment'] . " #" . $b . " (" . $row['com_author'] . ")", $b, $row);
-					}
-
-					$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$b'");
-
-					if (mb_substr($row['com_code'], 0, 1) == 'p') {
-						$page_id = mb_substr($row['com_code'], 1, 10);
-						$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=" . sed_get_comcount($row['com_code']) . " WHERE page_id=" . $page_id);
-					}
-					$com_grp = ($usr['isadmin']) ? "adm" : "usr";
-					sed_log("Deleted comment #" . $b . " in '" . $code . "'", $com_grp);
-				}
-				sed_redirect(sed_url($url_part, $url_params . $lurl, "", true));
-				exit;
-			}
-		}
-
-		if ($a == "edit") {
-			$sql1 = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$b' LIMIT 1");
-			sed_die(sed_sql_numrows($sql1) == 0);
-
-			$row = sed_sql_fetchassoc($sql1);
-
-			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
-			$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
-			$usr['allow_edit_com'] = ($usr['isadmin'] || $usr['isowner_com']);
-
-			if (!$usr['allow_edit_com']) {
-				$error_string .= $L['com_commenteditallowtime'] . "<br />";
-			}
-
-			if ($n == 'update') {
-				sed_check_xg();
-				sed_shield_protect();
-
-				$rtext = sed_import('rtext', 'P', 'HTM');
-
-				// --------- Extra fields     
-				if ($number_of_extrafields > 0) $rcommentextrafields = sed_extrafield_buildvar($extrafields, 'r', 'com');
-				// ----------------------	
-
-				/* == Hook for the plugins == */
-				$extp = sed_getextplugins('comments.edit.update.first');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
-				}
-				/* ===== */
-
-				$error_string .= (mb_strlen($rtext) < 2) ? $L['com_commenttooshort'] . "<br />" : '';
-				$error_string .= (mb_strlen($rtext) > $cfg['maxcommentlenght']) ? $L['com_commenttoolong'] . "<br />" : '';
-
-				if (empty($error_string)) {
-					sed_block($usr['allow_edit_com']);
-
-					// ------ Extra fields 
-					if (count($extrafields) > 0) {
-						foreach ($extrafields as $i => $row) {
-							$ssql_extra .= ", com_" . $row['code'] . " = " . "'" . sed_sql_prep($rcommentextrafields['com_' . $row['code']]) . "'";
-						}
-					}
-					// ----------------------	
-
-					$sql3 = sed_sql_query("UPDATE $db_com SET com_text = '" . sed_sql_prep($rtext) . "'" . $ssql_extra . " WHERE com_id='$b'");
-
-					/* == Hook for the plugins == */
-					$extp = sed_getextplugins('comments.edit.update.done');
-					if (is_array($extp)) {
-						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-						}
-					}
-					/* ===== */
-
-					unset($rtext);
-
-					$com_grp = ($usr['isadmin']) ? "adm" : "usr";
-					sed_log("Edited comment #" . $b . " in '" . $code . "'", $com_grp);
-					sed_redirect(sed_url($url_part, $url_params . $lurl . "&b=" . $b, "#c" . $b, true));
-					exit;
-				}
-			}
-
-			$t = new XTemplate(sed_skinfile('comments'));
-
-			/* == Hook for the plugins == */
-			$extp = sed_getextplugins('comments.main');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
-			/* ===== */
-
-			if (!empty($error_string)) {
-				$t->assign("COMMENTS_ERROR_BODY", $error_string);
-				$t->parse("COMMENTS.COMMENTS_ERROR");
-			}
-
-			if ($usr['allow_edit_com']) {
-				if ($usr['auth_write_com']) {
-					$pfs = ($usr['id'] > 0) ? sed_build_pfs($usr['id'], "editcomment", "rtext", $L['Mypfs']) : '';
-					$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, "editcomment", "rtext", $L['SFS']) : '';
-					$post_main = sed_textarea('rtext', $row['com_text'], 6, $cfg['textarea_default_width'], 'Micro') . " " . $pfs;
-				}
-
-				$t->assign(array(
-					"COMMENTS_EDIT_CODE" => $code,
-					"COMMENTS_EDIT_FORM_ID" => $row['com_id'],
-					"COMMENTS_EDIT_FORM_SEND" => sed_url($url_part, $url_params . $lurl . "&a=edit&n=update&b=" . $b . "&" . sed_xg()),
-					"COMMENTS_EDIT_FORM_URL" => sed_url($url_part, $url_params . $lurl, "#" . $row['com_id']),
-					"COMMENTS_EDIT_FORM_AUTHOR" => $usr['name'],
-					"COMMENTS_EDIT_FORM_AUTHORID" => $usr['id'],
-					"COMMENTS_EDIT_FORM_TEXT" => $post_main,
-					"COMMENTS_EDIT_FORM_MYPFS" => $pfs
-				));
-
-				// Extra fields 
-				if (count($extrafields) > 0) {
-					$extra_array = sed_build_extrafields('com', 'COMMENTS_EDIT_FORM', $extrafields, $row, 'r');
-					$t->assign($extra_array);
-				}
-				// -----------				
-
-				if ($usr['auth_write_com']) {
-
-					/* == Hook for the plugins == */
-					$extp = sed_getextplugins('comments.editcomment.tags');
-					if (is_array($extp)) {
-						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-						}
-					}
-					/* ===== */
-
-					$t->parse("COMMENTS.COMMENTS_EDITCOMMENT");
-				}
-			}
-		} else {
-			$error_string .= ($n == 'added') ? $L['com_commentadded'] . "<br />" : '';
-
-			$t = new XTemplate(sed_skinfile('comments'));
-
-			/* == Hook for the plugins == */
-			$extp = sed_getextplugins('comments.main');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
-			/* ===== */
-
-			if (!empty($error_string)) {
-				$t->assign("COMMENTS_ERROR_BODY", sed_alert($error_string, 'e'));
-				$t->parse("COMMENTS.COMMENTS_ERROR");
-			}
-
-			$pfs = '';
-			$post_main = '';
-
-			if ($usr['auth_write_com'] && $allow) {
-				$rtext = sed_import('rtext', 'P', 'HTM');
-				if ($quote > 0) {
-					$sqlq = sed_sql_query("SELECT com_id, com_author, com_text FROM $db_com WHERE com_id = '$quote' LIMIT 1");
-					if ($rowq = sed_sql_fetchassoc($sqlq)) {
-						$rtext = "<blockquote>" . sed_link(sed_url($url_part, $url_params . $lurl, "#" . $rowq['com_id']), "#" . $rowq['com_id']) . " <strong>" . $rowq['com_author'] . " :</strong><br />" . $rowq['com_text'] . "</blockquote><br />";
-					}
-				}
-				$pfs = ($usr['id'] > 0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
-				$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
-				$post_main = sed_textarea('rtext', $rtext, 6, $cfg['textarea_default_width'], 'Micro') . " " . $pfs;
-			}
-
-			$t->assign(array(
-				"COMMENTS_CODE" => $code,
-				"COMMENTS_FORM_SEND" => sed_url($url_part, $url_params . $lurl . "&n=send"),
-				"COMMENTS_FORM_AUTHOR" => $usr['name'],
-				"COMMENTS_FORM_AUTHORID" => $usr['id'],
-				"COMMENTS_FORM_TEXT" => $post_main,
-				"COMMENTS_FORM_MYPFS" => $pfs
-			));
-
-			// Extra fields 
-			if (count($extrafields) > 0) {
-				$extra_array = sed_build_extrafields('com', 'COMMENTS_FORM', $extrafields, $newcommentextrafields, 'r');
-				$t->assign($extra_array);
-			}
-			// -----------
-
-			if ($usr['auth_write_com'] && $allow) {
-
-				/* == Hook for the plugins == */
-				$extp = sed_getextplugins('comments.newcomment.tags');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
-				}
-				/* ===== */
-
-				$t->parse("COMMENTS.COMMENTS_NEWCOMMENT");
-			}
-
-			/* ===== */
-
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com AS c
-					LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-					WHERE com_code='$code'");
-
-			$totallines = sed_sql_result($sql, 0, "COUNT(*)");
-			$totalpages = ceil($totallines / $cfg['maxcommentsperpage']);
-
-			$currentpage = ceil($d / $cfg['maxcommentsperpage']) + 1;
-
-			$pagination = sed_pagination(sed_url($url_part, $url_params . $lurl), $d, $totallines, $cfg['maxcommentsperpage']);
-			list($pageprev, $pagenext) = sed_pagination_pn(sed_url($url_part, $url_params . $lurl), $d, $totallines, $cfg['maxcommentsperpage'], TRUE);
-
-			$t->assign(array(
-				"COMMENTS_PAGINATION" => $pagination,
-				"COMMENTS_PAGEPREV" => $pageprev,
-				"COMMENTS_PAGENEXT" => $pagenext
-			));
-
-			/* ===== */
-
-			$sql = sed_sql_query("SELECT c.*, u.user_id, u.user_avatar, u.user_maingrp FROM $db_com AS c
-					LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-					WHERE com_code='$code' ORDER BY com_id " . $cfg['commentsorder'] . " LIMIT $d, " . $cfg['maxcommentsperpage']);
-
-			if (sed_sql_numrows($sql) > 0) {
-				$i = 0;
-
-				/* === Hook - Part1 : Set === */
-				$extp = sed_getextplugins('comments.loop');
-				/* ===== */
-
-				while ($row = sed_sql_fetchassoc($sql)) {
-					$row['com_text'] = sed_parse($row['com_text']);
-					$i++;
-					$com_author = sed_cc($row['com_author']);
-					$com_text = "<div id=\"blkcom_" . $row['com_id'] . "\" >" . $row['com_text'] . "</div>";
-
-					$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60)) ? TRUE : FALSE;
-					$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
-					$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['maxtimeallowcomedit'] * 60);
-					$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? " - " . sed_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['com_gup'] : '';
-
-					$com_quote = ($usr['id'] > 0) ? sed_link(sed_url($url_part, $url_params . $lurl . "&quote=" . $row['com_id'] . "&" . sed_xg(), "#nc"), $L['Quote'], array('class' => 'btn btn-adm')) . "&nbsp;" : "";
-
-					$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ?
-						sed_link(sed_url($url_part, $url_params . $lurl . "&a=edit&b=" . $row['com_id'] . "&" . sed_xg(), "#c" . $row['com_id']), $L['Edit'], array('title' => $L['Edit'] . $allowed_time, 'class' => 'btn btn-adm')) . "&nbsp;" .
-						sed_link(sed_url($url_part, $url_params . $lurl . "&n=delete&b=" . $row['com_id'] . "&" . sed_xg()), $L['Delete'], array('class' => 'btn btn-adm')) . "&nbsp;" .
-						$L['Ip'] . ":" . sed_build_ipsearch($row['com_authorip']) : '';
-
-					$com_authorlink = ($row['com_authorid'] > 0 && $row['user_id'] > 0) ? sed_build_user($row['com_authorid'], $com_author, $row['user_maingrp']) : $com_author;
-
-					$t->assign(array(
-						"COMMENTS_ROW_ID" => $row['com_id'],
-						"COMMENTS_ROW_ORDER" => $i + $d,
-						"COMMENTS_ROW_URL" => sed_url($url_part, $url_params . $lurl . "&b=" . $row['com_id'], "#c" . $row['com_id']),
-						"COMMENTS_ROW_AUTHOR" => $com_authorlink,
-						"COMMENTS_ROW_AUTHORID" => $row['com_authorid'],
-						"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
-						"COMMENTS_ROW_TEXT" => $com_text,
-						"COMMENTS_ROW_DATE" => sed_build_date($cfg['dateformat'], $row['com_date']),
-						"COMMENTS_ROW_ODDEVEN" => sed_build_oddeven($i),
-						"COMMENTS_ROW_ADMIN" => $com_quote . $com_admin
-					));
-
-					// ---------- Extra fields - getting
-					if (count($extrafields) > 0) {
-						$extra_array = sed_build_extrafields_data('com', 'COMMENTS_ROW', $extrafields, $row);
-						$t->assign($extra_array);
-					}
-					// ----------------------						
-
-					/* === Hook - Part2 : Include === */
-					if (is_array($extp)) {
-						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-						}
-					}
-					/* ===== */
-
-					$t->parse("COMMENTS.COMMENTS_ROW");
-				}
-			} elseif ($allow) {
-				$t->assign(array(
-					"COMMENTS_EMPTYTEXT" => $L['com_nocommentsyet']
-				));
-				$t->parse("COMMENTS.COMMENTS_EMPTY");
-			}
-
-			/* === sed 173 */
-			if (!$allow) {
-				$t->assign(array(
-					"COMMENTS_DISABLETEXT" => $L['com_disable']
-				));
-				$t->parse("COMMENTS.COMMENTS_DISABLE");
-			}
-			/* === */
-		}
-
-		/* == Hook for the plugins == */
-		$extp = sed_getextplugins('comments.tags');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
-		/* ===== */
-
-		$t->parse("COMMENTS");
-		$res_display = $t->text("COMMENTS");
-	} else {
-		$res_display = '';
-	}
-
-	$nbcomment = "";
-	$nbcomment_link = $out['ic_comment'];
-	if ($cfg['countcomments']) {
-		$nbcomment = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com where com_code='$code'"), 0, "COUNT(*)");
-		$nbcomment_link .= " (" . $nbcomment . ")";
-	}
-	$res = sed_link(sed_url($url_part, $url_params . $lurl), $nbcomment_link);
-
-	return (array($res, $res_display, $nbcomment));
-}
-
+/* sed_build_comments moved to plugins/comments/inc/comments.functions.php */
 
 /** 
  * Parsing user signature text 
@@ -1185,95 +635,8 @@ function sed_build_flag($flag)
 	return ($result);
 }
 
-/** 
- * Returns forum thread path 
- * 
- * @param int $sectionid Section ID 
- * @param string $title Thread title 
- * @param string $category Category code 
- * @param bool $link Display as links 
- * @param mixed $parentcat Master section 
- * @return string 
- */
-function sed_build_forums($sectionid, $title, $category, $link = true, $parentcat = false)
-{
-	global $sed_forums_str, $cfg;
-
-	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
-
-	if ($link) {
-		foreach ($pathcodes as $k => $x) {
-			$ptitle = sed_cc($sed_forums_str[$x]['title']);
-			$tmp[] = sed_link(sed_url("forums", "c=" . $x, "#" . $x), $ptitle);
-		}
-
-		if (is_array($parentcat) && !empty($parentcat)) {
-			$ptitle = sed_cc($parentcat['title']);
-			$tmp[] = sed_link(sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle), $ptitle);
-		}
-		$tmp[] = sed_link(sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title), sed_cc($title));
-	} else {
-		foreach ($pathcodes as $k => $x) {
-			$tmp[] = sed_cc($sed_forums_str[$x]['title']);
-		}
-
-		if (is_array($parentcat) && !empty($parentcat)) {
-			$tmp[] = $parentcat['title'];
-		}
-
-		$tmp[] = sed_cc($title);
-	}
-
-	$result = implode(' ' . $cfg['separator_symbol'] . ' ', $tmp);
-
-	return ($result);
-}
-
-/** 
- * Forums breadcrumbs build path arr
- *
- * @param int $sectionid Forum section id
- * @param string $title Title  
- * @param string $category Category code  
- * @param string $cat Category code  
- * @param string $cat Category code   
- */
-function sed_build_forums_bc($sectionid, $title, $category, $parentcat = false)
-{
-	global $sed_forums_str, $cfg, $urlpaths;
-
-	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
-
-	foreach ($pathcodes as $k => $x) {
-		$ptitle = sed_cc($sed_forums_str[$x]['title']);
-		$urlpaths[sed_url("forums", "c=" . $x, "#" . $x)] = $ptitle;
-	}
-
-	if (is_array($parentcat) && !empty($parentcat)) {
-		$ptitle = sed_cc($parentcat['title']);
-		$urlpaths[sed_url("forums", "m=topics&s=" . $parentcat['sectionid'] . "&al=" . $ptitle)] = $ptitle;
-	}
-
-	$title = sed_cc($title);
-	$urlpaths[sed_url("forums", "m=topics&s=" . $sectionid . "&al=" . $title)] = $title;
-}
-
-/** 
- * List breadcrumbs build path arr
- *
- * @param string $cat Category code  
- */
-function sed_build_list_bc($cat)
-{
-	global $sed_cat, $cfg, $urlpaths;
-
-	$pathcodes = explode('.', $sed_cat[$cat]['path']);
-	foreach ($pathcodes as $k => $x) {
-		if ($x != 'system') {
-			$urlpaths[sed_url("list", "c=" . $x)] = $sed_cat[$x]['title'];
-		}
-	}
-}
+/* Forum functions moved to modules/forums/inc/forums.functions.php */
+/* sed_build_list_bc moved to modules/page/inc/page.functions.php */
 
 /** 
  * Build a link for open popup or modal window for gallery 
@@ -1395,7 +758,7 @@ function sed_build_oddeven($number)
 function sed_build_pfs($id, $c1, $c2, $title)
 {
 	global $L, $cfg, $usr, $sed_groups;
-	if ($cfg['disable_pfs']) {
+	if (!sed_module_active('pfs')) {
 		$res = '';
 	} else {
 		$modal = ($cfg['enablemodal']) ? ',1' : '';
@@ -1421,261 +784,6 @@ function sed_build_pm($user)
 	global $usr, $cfg, $L, $out;
 	$result = sed_link(sed_url("pm", "m=send&to=" . $user), $out['ic_pm']);
 	return ($result);
-}
-
-/** 
- * Builds ratings for an item 
- * 
- * @param string $code Item code 
- * @param string $url Base url 
- * @param int $display Display available for edit
- * @param bool $allow Enable or disable ratings an item  
- * @return array 
- */
-function sed_build_ratings($code, $url, $display, $allow = true)
-{
-	global $db_ratings, $db_rated, $db_pages, $db_users, $cfg, $usr, $sys, $L;
-
-	$ajax = sed_import('ajax', 'P', 'BOL');
-	$ajax = ($cfg['ajax']) ? $ajax : false;
-
-	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = sed_auth('ratings', 'a');
-
-	if ($cfg['disable_ratings'] || !$usr['auth_read_rat']) {
-		return (array('', ''));
-	}
-
-	if (is_array($url)) //fix for sed_url()
-	{
-		$url_part = $url['part'];
-		$url_params = $url['params'];
-	} else {
-		$url = str_replace('&amp;', '&', $url);
-		$url_part = mb_substr($url, 0, mb_strpos($url, '.php'));
-		$url_params = mb_substr($url, mb_strpos($url, '?') + 1, mb_strlen($url));
-	}
-
-	//----------------
-
-	$ina = sed_import('ina', 'G', 'ALP');
-	$newrate = sed_import('newrate', 'P', 'INT');
-
-	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM " . $db_rated . " WHERE rated_userid=" . $usr['id'] . " AND rated_code = '" . sed_sql_prep($code) . "'"), 0, 'COUNT(*)');
-
-	if ($ina == 'send' && $newrate >= 1 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0 && $allow) {
-
-		if ($ajax && !sed_check_csrf()) {
-			sed_die(true, 404);
-			exit;
-		}
-
-		$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
-
-		if ($row = sed_sql_fetchassoc($sql)) {
-			$rating_average = $row['rating_average'];
-			$yetrated = TRUE;
-
-			if ($rating_average < 1) {
-				$rating_average = 1;
-			} elseif ($rating_average > 10) {
-				$rating_average = 10;
-			}
-
-			$rating_cntround = round($rating_average, 0);
-		} else {
-			$yetrated = FALSE;
-			$rating_average = 0;
-			$rating_cntround = 0;
-		}
-
-		/* == Hook for the plugins == */
-		$extp = sed_getextplugins('ratings.send.first');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
-		/* ===== */
-
-		if (!$yetrated) {
-			$sql = sed_sql_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('" . sed_sql_prep($code) . "', 0, " . (int)$newrate . ", " . (int)$sys['now_offset'] . ", '') ");
-		}
-
-		$sql = sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('" . sed_sql_prep($code) . "', " . (int)$usr['id'] . ", " . (int)$newrate . ")");
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
-		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-		$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ($rating_voters);
-		$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
-
-		$alr_rated = 1;
-
-		if (mb_substr($code, 0, 1) == 'p') {
-			$page_id = mb_substr($code, 1, 10);
-			$sql = sed_sql_query("UPDATE $db_pages SET page_rating='$ratingnewaverage' WHERE page_id=" . (int)$page_id);
-		}
-
-		/* == Hook for the plugins == */
-		$extp = sed_getextplugins('ratings.send.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
-		/* ===== */
-
-		if (!$ajax) {
-			sed_redirect(sed_url($url_part, $url_params . "&ratings=1&ina=added", "", true));
-			exit;
-		}
-	}
-
-	//----------------
-
-	$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
-
-	if ($row = sed_sql_fetchassoc($sql)) {
-		$rating_average = $row['rating_average'];
-		$yetrated = TRUE;
-
-		if ($rating_average < 1) {
-			$rating_average = 1;
-		} elseif ($rating_average > 10) {
-			$rating_average = 10;
-		}
-
-		$rating_cntround = round($rating_average, 0);
-	} else {
-		$yetrated = FALSE;
-		$rating_average = 0;
-		$rating_cntround = 0;
-	}
-
-	$res = "<div class=\"rating-box\" id=\"rat-" . $code . "\"><ul class=\"rating s" . $rating_cntround . "\">\n";
-	for ($i = 1; $i <= 10; $i++) {
-		$onclick = "javascript:sedjs.ajaxbind({'url': '" . sed_url($url_part, $url_params . "&ratings=1&display=1&ina=send&ajax=1&newrate=" . $i . "&" . sed_xg()) . "', 'format':  'html', 'method':  'POST', 'update':  '#rat-" . $code . "', 'loading': '#rat-" . $code . "'});";
-		$res .= "<li class=\"s" . $i . "\">" . sed_link('javascript:void(0);', $i . " - " . $L['rat_choice' . $i], array('onClick' => $onclick, 'title' => $i . " - " . $L['rat_choice' . $i])) . "</li>\n";
-	}
-	$res .= "</ul></div>";
-
-	if (($usr['id'] == 0) || ($alr_rated > 0) || !$cfg['ajax']) {
-		$res = sed_link(sed_url($url_part, $url_params . "&ratings=1"), "<img src=\"skins/" . $usr['skin'] . "/img/system/vote" . $rating_cntround . ".gif\" alt=\"\" />");
-	}
-
-	sed_ajax_flush($res, $ajax);  // AJAX Output
-
-	if (!$display) {
-		return (array($res, ''));
-	}
-
-	$votedcasted = ($ina == 'added') ? 1 : 0;
-	$alreadyvoted = FALSE;
-	$rate_form = '';
-
-	for ($i = 1; $i <= 10; $i++) {
-		$rate_form .= sed_radio_item("newrate", $i, "<img src=\"skins/" . $usr['skin'] . "/img/system/vote" . $i . ".gif\" alt=\"\" /> " . $i . " - " . $L['rat_choice' . $i], $i) . "<br />";
-	}
-
-	if ($usr['id'] > 0) {
-		$sql1 = sed_sql_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='" . $usr['id'] . "' LIMIT 1");
-
-		if ($row1 = sed_sql_fetchassoc($sql1)) {
-			$alreadyvoted = TRUE;
-			$rating_uservote = $L['rat_alreadyvoted'] . " (" . $row1['rated_value'] . ")";
-		}
-	}
-
-	$t = new XTemplate(sed_skinfile('ratings'));
-
-	/* == Hook for the plugins == */
-	$extp = sed_getextplugins('ratings.main');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
-	}
-	/* ===== */
-
-	if (!empty($error_string)) {
-		$t->assign("RATINGS_ERROR_BODY", $error_string);
-		$t->parse("RATINGS.RATINGS_ERROR");
-	}
-
-	if ($yetrated) {
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-		$rating_average = $row['rating_average'];
-		$rating_since = $L['rat_since'] . " " . sed_build_date($cfg['dateformat'], $row['rating_creationdate']);
-
-		if ($rating_average < 1) {
-			$rating_average = 1;
-		} elseif ($rating_average > 10) {
-			$rating_average = 10;
-		}
-
-		$rating = round($rating_average, 0);
-		$rating_averageimg = "<img src=\"skins/" . $usr['skin'] . "/img/system/vote" . $rating . ".gif\" alt=\"\" />";
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-	} else {
-		$rating_voters = 0;
-		$rating_since = '';
-		$rating_average = $L['rat_notyetrated'];
-		$rating_averageimg = '';
-	}
-
-	$t->assign(array(
-		"RATINGS_AVERAGE" => $rating_average,
-		"RATINGS_AVERAGEIMG" => $rating_averageimg,
-		"RATINGS_VOTERS" => $rating_voters,
-		"RATINGS_SINCE" => $rating_since
-	));
-
-	if ($usr['id'] > 0 && $votedcasted && $allow) {
-		$t->assign(array(
-			"RATINGS_EXTRATEXT" => $L['rat_votecasted'],
-		));
-		$t->parse("RATINGS.RATINGS_EXTRA");
-	} elseif ($usr['id'] > 0 && $alreadyvoted && $allow) {
-		$t->assign(array(
-			"RATINGS_EXTRATEXT" => $rating_uservote,
-		));
-		$t->parse("RATINGS.RATINGS_EXTRA");
-	} elseif ($usr['id'] == 0 && $allow) {
-		$t->assign(array(
-			"RATINGS_EXTRATEXT" => $L['rat_registeredonly'],
-		));
-		$t->parse("RATINGS.RATINGS_EXTRA");
-	} elseif ($usr['id'] > 0 && !$alreadyvoted && $allow) {
-		$t->assign(array(
-			"RATINGS_NEWRATE_FORM_SEND" => sed_url($url_part, $url_params . "&ratings=1&ina=send"),
-			"RATINGS_NEWRATE_FORM_VOTER" => $usr['name'],
-			"RATINGS_NEWRATE_FORM_RATE" => $rate_form
-		));
-		$t->parse("RATINGS.RATINGS_NEWRATE");
-	}
-
-	/* ==== sed 173 */
-	if (!$allow) {
-		$t->assign(array(
-			"RATINGS_DISABLETEXT" => $L['rat_disable']
-		));
-		$t->parse("RATINGS.RATINGS_DISABLE");
-	}
-	/* ===   	
-	
-	/* == Hook for the plugins == */
-	$extp = sed_getextplugins('ratings.tags');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
-	}
-	/* ===== */
-
-	$t->parse("RATINGS");
-	$res_display = $t->text("RATINGS");
-
-	return (array($res, $res_display));
 }
 
 /** 
@@ -2279,6 +1387,10 @@ function sed_cutstring($res, $l, $ellipsis = '...')
 {
 	global $cfg;
 
+	if ($res === null || $res === '') {
+		return '';
+	}
+	$res = (string) $res;
 	$enc = mb_strtolower($cfg['charset']);
 	if ($enc == 'utf-8') {
 		if (mb_strlen($res) > $l) {
@@ -2355,6 +1467,56 @@ function sed_url_check($url)
 {
 	global $sys;
 	return preg_match('`^' . preg_quote($sys['scheme'] . '://') . '([\w\p{L}\.\-]+\.)?' . preg_quote($sys['domain']) . '`ui', $url);
+}
+
+/**
+ * Check if a module is active and not paused.
+ * Uses global $sed_modules (only modules with ct_state=1 are loaded there).
+ * Pause is managed via Admin → Modules (ct_state), not via config.
+ *
+ * @param string $code Module code (e.g. 'forums', 'gallery', 'rss')
+ * @return bool
+ */
+function sed_module_active($code)
+{
+	global $sed_modules;
+	return !empty($code) && is_array($sed_modules) && isset($sed_modules[$code]);
+}
+
+/**
+ * Check if a module part is active (not paused).
+ * Uses global $sed_plugins (only pl_active=1 rows are there; paused parts are absent).
+ *
+ * @param string $code Module code (e.g. 'page', 'forums')
+ * @param string $part Part identifier as in pl_part (e.g. 'page.add', 'main')
+ * @return bool
+ */
+function sed_module_part_active($code, $part)
+{
+	global $sed_plugins;
+	if (!is_array($sed_plugins) || !isset($sed_plugins['module'])) {
+		return false;
+	}
+	foreach ($sed_plugins['module'] as $k) {
+		if ($k['pl_code'] === $code && $k['pl_part'] === $part) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Die (redirect to message 907) if module part is not active (paused).
+ *
+ * @param string $code Module code (e.g. 'page', 'forums')
+ * @param string $part Part identifier as in pl_part (e.g. 'page.add', 'forums.topics')
+ */
+function sed_dieifdisabled_part($code, $part)
+{
+	if (!sed_module_part_active($code, $part)) {
+		sed_redirect(sed_url("message", "msg=909", "", true));
+		exit;
+	}
 }
 
 /**
@@ -2554,157 +1716,7 @@ function sed_filebox($name, $class = 'file', $multiple = false, $accept = '', $d
 	return '<input' . sed_attr($attributes) . ' />';
 }
 
-/** 
- * Gets details for forum section 
- * 
- * @param int $id Section ID 
- * @return mixed 
- */
-function sed_forum_info($id)
-{
-	global $db_forum_sections;
-
-	$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
-	if ($res = sed_sql_fetchassoc($sql)) {
-		return ($res);
-	} else {
-		return ('');
-	}
-}
-
-/** 
- * Moves outdated topics to trash 
- * 
- * @param string $mode Selection criteria 
- * @param int $section Section 
- * @param int $param Selection parameter value 
- * @return int 
- */
-function sed_forum_prunetopics($mode, $section, $param)
-{
-	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $L;
-
-	$num = 0;
-	$num1 = 0;
-
-	switch ($mode) {
-		case 'updated':
-			$limit = $sys['now'] - ($param * 86400);
-			$sql1 = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_sectionid='$section' AND ft_updated<'$limit' AND ft_sticky='0'");
-			break;
-
-		case 'single':
-			$sql1 = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_sectionid='$section' AND ft_id='$param'");
-			break;
-	}
-
-	if (sed_sql_numrows($sql1) > 0) {
-		while ($row1 = sed_sql_fetchassoc($sql1)) {
-			$q = $row1['ft_id'];
-
-			if ($cfg['trash_forum']) {
-				$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
-
-				while ($row = sed_sql_fetchassoc($sql)) {
-					sed_trash_put('forumpost', $L['Post'] . " #" . $row['fp_id'] . " from topic #" . $q, "p" . $row['fp_id'] . "-q" . $q, $row);
-				}
-			}
-
-			$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
-			$num += sed_sql_affectedrows();
-
-			if ($cfg['trash_forum']) {
-				$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
-
-				while ($row = sed_sql_fetchassoc($sql)) {
-					sed_trash_put('forumtopic', $L['Topic'] . " #" . $q . " (no post left)", "q" . $q, $row);
-				}
-			}
-
-			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
-			$num1 += sed_sql_affectedrows();
-		}
-
-		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num', fs_topiccount_pruned=fs_topiccount_pruned+'$num1', fs_postcount_pruned=fs_postcount_pruned+'$num' WHERE fs_id='$section'");
-	}
-	$num1 = ($num1 == '') ? '0' : $num1;
-	return ($num1);
-}
-
-/** 
- * Changes last message for the section 
- * 
- * @param int $id Section ID 
- */
-function sed_forum_sectionsetlast($id)
-{
-	global $db_forum_topics, $db_forum_sections;
-
-	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
-	if (sed_sql_numrows($sql) > 0) {
-		$row = sed_sql_fetchassoc($sql);
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=" . (int)$row['ft_id'] . ", fs_lt_title='" . sed_sql_prep($row['ft_title']) . "', fs_lt_date=" . (int)$row['ft_updated'] . ", fs_lt_posterid=" . (int)$row['ft_lastposterid'] . ", fs_lt_postername='" . sed_sql_prep($row['ft_lastpostername']) . "' WHERE fs_id='$id'");
-	}
-	return;
-}
-
-/**
- * Function to generate letter avatar
- *
- * @param string, Font Size, Image width and height
- * @return array Url
- */
-function sed_gen_letteravatar($text, $uid, $fontSize, $imgWidth, $imgHeight)
-{
-	global $cfg, $usr;
-
-	/* settings */
-	$font = SED_ROOT . "/" . $cfg['font_dir'] . 'calibri.ttf'; /*define font*/
-
-	// Split words and get first letter of each word. Example - Kannan m -> KM
-	$words = explode(" ", $text);
-	$text = "";
-
-	foreach ($words as $w) {
-		$text .= mb_substr($w, 0, 1);
-	}
-
-	// File name and extension
-	$fileName = $uid . '-avatar.jpg';
-
-	// Default text color - White
-	$textColor = '#FFF';
-
-	// Convert hex code to RGB
-	$textColor = sed_hextorgb($textColor);
-
-	// if exist return the image
-
-	if (file_exists($cfg['av_dir'] . $fileName)) {
-		return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'] . $fileName);
-	}
-
-	$im = imagecreatetruecolor($imgWidth, $imgHeight);
-	$textColor = imagecolorallocate($im, $textColor['r'], $textColor['g'], $textColor['b']);
-
-	// Random background Colors
-	$colorCode = array("#56aad8", "#61c4a8", "#d3ab92", "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50", "#f1c40f", "#e67e22", "#e74c3c", "#f39c12", "#d35400", "#c0392b", "#7f8c8d");
-	$backgroundColor = sed_hextorgb($colorCode[rand(0, count($colorCode) - 1)]);
-	$backgroundColor = imagecolorallocate($im, $backgroundColor['r'], $backgroundColor['g'], $backgroundColor['b']);
-
-	imagefill($im, 0, 0, $backgroundColor);
-	list($x, $y) = sed_image_ttf_center($im, $text, $font, $fontSize);
-	imagettftext($im, $fontSize, 0, $x, $y, $textColor, $font, $text);
-
-	if (imagejpeg($im, $cfg['av_dir'] . $fileName, 90)) {
-		/*save image as JPG*/
-		imagedestroy($im);
-		return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'] . $fileName);
-	} else {
-		return array('status' => FALSE);
-	}
-}
+/* sed_forum_info, sed_forum_prunetopics, sed_forum_sectionsetlast moved to modules/forums/inc/forums.functions.php */
 
 /** 
  * Generate captcha code
@@ -2770,23 +1782,19 @@ function sed_getextplugins($hook, $cond = 'R')
 	return ($extplugins);
 }
 
-/** 
- * Returns number of comments for item 
- * 
- * @param string $code Item code 
- * @return int 
+/**
+ * Check if a plugin is active (has at least one active part, pl_module=0)
+ *
+ * @param string $code Plugin code
+ * @return bool
  */
-function sed_get_comcount($code)
+function sed_plug_active($code)
 {
-	global $db_com;
-
-	$sql = sed_sql_query("SELECT DISTINCT com_code, COUNT(*) FROM $db_com WHERE com_code='$code' GROUP BY com_code");
-
-	if ($row = sed_sql_fetchassoc($sql)) {
-		return ($row['COUNT(*)']);
-	} else {
-		return ("0");
-	}
+	global $db_plugins;
+	$code = sed_sql_prep($code);
+	$sql = sed_sql_query("SELECT SUM(pl_active) AS ac FROM $db_plugins WHERE pl_code='" . $code . "' AND pl_module=0");
+	$row = sed_sql_fetchassoc($sql);
+	return (isset($row['ac']) && $row['ac'] > 0);
 }
 
 /** 
@@ -2871,30 +1879,6 @@ function sed_hash($data, $type = 1, $salt = '', $algorithm = 'md5')
 	}
 
 	return $res;
-}
-
-/**
- * Convert hex value to rgb array
- *
- * @param string $colour Hex code
- * @return array|bool RGB code
- */
-function sed_hextorgb($colour)
-{
-	if ($colour[0] == '#') {
-		$colour = substr($colour, 1);
-	}
-	if (strlen($colour) == 6) {
-		list($r, $g, $b) = array($colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5]);
-	} elseif (strlen($colour) == 3) {
-		list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
-	} else {
-		return false;
-	}
-	$r = hexdec($r);
-	$g = hexdec($g);
-	$b = hexdec($b);
-	return array('r' => $r, 'g' => $g, 'b' => $b);
 }
 
 /**
@@ -3036,28 +2020,6 @@ function sed_spoiler($text)
 
 	// Replace matches with callback result
 	return preg_replace_callback($pattern, $callback, $text);
-}
-
-/**
- * Get center position on image
- *
- * @param GdImage $image
- * @param string $text
- * @param string $font
- * @param float $size
- * @param float $angle
- * @return array Position 
- */
-function sed_image_ttf_center($image, $text, $font, $size, $angle = 8)
-{
-	$xi = imagesx($image);
-	$yi = imagesy($image);
-	$box = imagettfbbox($size, $angle, $font, $text);
-	$xr = abs(max($box[2], $box[4])) + 5;
-	$yr = abs(max($box[5], $box[7]));
-	$x = intval(($xi - $xr) / 2);
-	$y = intval(($yi + $yr) / 2);
-	return array($x, $y);
 }
 
 /**
@@ -3748,175 +2710,7 @@ function sed_add_javascript($js = '', $is_file = false)
 	}
 }
 
-/** 
- * Loads comlete category structure into array 
- * 
- * @return array 
- */
-function sed_load_structure()
-{
-	global $db_structure, $cfg, $L;
-
-	$res = array();
-
-	$path = array(); // code path tree
-	$tpath = array(); // title path tree
-
-	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
-
-	$rows = array();
-	while ($data_rows = sed_sql_fetchassoc($sql)) {
-		$rows[] = $data_rows;
-	}
-
-	if ($cfg['structuresort']) {
-		usort($rows, 'sed_structure_sort');
-	}
-
-	foreach ($rows as $row) {
-		if (!empty($row['structure_icon'])) {
-			$row['structure_icon_src'] = $row['structure_icon'];
-			$row['structure_icon'] = "<img src=\"" . $row['structure_icon'] . "\" alt=\"\" />";
-		} else {
-			$row['structure_icon_src'] = '';
-			$row['structure_icon'] = '';
-		}
-
-		$last_dot = mb_strrpos($row['structure_path'], '.');
-
-		$row['structure_tpl'] = (empty($row['structure_tpl'])) ? $row['structure_code'] : $row['structure_tpl'];
-
-		if ($last_dot > 0) {
-			$path1 = mb_substr($row['structure_path'], 0, ($last_dot));
-			$spath = $path[$path1]; //new sed175
-			$path[$row['structure_path']] = $path[$path1] . '.' . $row['structure_code'];
-			$tpath[$row['structure_path']] = $tpath[$path1] . ' ' . $cfg['separator_symbol'] . ' ' . $row['structure_title'];
-			$parent_dot = mb_strrpos($path[$path1], '.');
-			$parent_tpl = ($parent_dot > 0) ? mb_substr($path[$path1], $parent_dot + 1) : $path[$path1];
-			$row['structure_tpl'] = ($row['structure_tpl'] == 'same_as_parent') ? $parent_tpl : $row['structure_tpl'];
-		} else {
-			$path[$row['structure_path']] = $row['structure_code'];
-			$tpath[$row['structure_path']] = $row['structure_title'];
-			$spath = "";
-		}
-
-		$order = explode('.', $row['structure_order']);
-
-		$res[$row['structure_code']] = array(
-			'id' => $row['structure_id'],
-			'path' => $path[$row['structure_path']],
-			'tpath' => $tpath[$row['structure_path']],
-			'spath' => $spath,
-			'rpath' => $row['structure_path'],
-			'tpl' => $row['structure_tpl'],
-			'title' => $row['structure_title'],
-			'desc' => $row['structure_desc'],
-			'icon' => $row['structure_icon'],
-			'iconsrc' => $row['structure_icon_src'],
-			'thumb' => $row['structure_thumb'],
-			'seo_h1' => $row['structure_seo_h1'],
-			'seo_title' => $row['structure_seo_title'],
-			'seo_desc' => $row['structure_seo_desc'],
-			'seo_keywords' => $row['structure_seo_keywords'],
-			'seo_index' => $row['structure_seo_index'],
-			'seo_follow' => $row['structure_seo_follow'],
-			'group' => $row['structure_group'],
-			'allowcomments' => $row['structure_allowcomments'],
-			'allowratings' => $row['structure_allowratings'],
-			'order' => $order[0],
-			'way' => $order[1]
-		);
-	}
-
-	return ($res);
-}
-
-/** 
- * Loads complete forum structure into array 
- * 
- * @return array 
- */
-function sed_load_forum_structure()
-{
-	global $db_forum_structure, $cfg, $L;
-
-	$res = array();
-
-	$path = array(); // code path tree
-	$tpath = array(); // title path tree
-
-	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER BY fn_path ASC");
-
-	while ($row = sed_sql_fetchassoc($sql)) {
-		if (!empty($row['fn_icon'])) {
-			$row['fn_icon'] = "<img src=\"" . $row['fn_icon'] . "\" alt=\"\" />";
-		}
-
-		$path2 = mb_strrpos($row['fn_path'], '.');
-
-		$row['fn_tpl'] = (empty($row['fn_tpl'])) ? $row['fn_code'] : $row['fn_tpl'];
-
-		if ($path2 > 0) {
-			$path1 = mb_substr($row['fn_path'], 0, ($path2));
-			$path[$row['fn_path']] = $path[$path1] . '.' . $row['fn_code'];
-			$tpath[$row['fn_path']] = $tpath[$path1] . ' ' . $cfg['separator'] . ' ' . $row['fn_title'];
-			$parent_dot = mb_strrpos($path[$path1], '.');
-			$parent_tpl = ($parent_dot > 0) ? mb_substr($path[$path1], $parent_dot + 1) : $path[$path1];
-			$row['fn_tpl'] = ($row['fn_tpl'] == 'same_as_parent') ? $parent_tpl : $row['fn_tpl'];
-		} else {
-			$path[$row['fn_path']] = $row['fn_code'];
-			$tpath[$row['fn_path']] = $row['fn_title'];
-		}
-
-		$res[$row['fn_code']] = array(
-			'path' => $path[$row['fn_path']],
-			'tpath' => $tpath[$row['fn_path']],
-			'rpath' => $row['fn_path'],
-			'tpl' => $row['fn_tpl'],
-			'title' => $row['fn_title'],
-			'desc' => $row['fn_desc'],
-			'icon' => $row['fn_icon'],
-			'defstate' => $row['fn_defstate']
-		);
-	}
-
-	return ($res);
-}
-
-/**
- * Function for natural sorting by splitting a specified field into parts.
- *
- * This function takes two associative arrays representing rows from the database
- * and compares their values for a specified field using natural sorting. The
- * field values are split into parts by dots, and each part is compared individually.
- *
- * @param array $a The first row from the database.
- * @param array $b The second row from the database.
- * @param string $field The field to compare. Default is 'structure_path'.
- * @return int A negative, zero, or positive integer depending on whether the
- *             first argument is considered to be respectively less than, equal
- *             to, or greater than the second.
- */
-function sed_structure_sort($a, $b, $field = 'structure_path')
-{
-	// Split the specified field into parts by dots
-	$a_parts = explode('.', $a[$field]);
-	$b_parts = explode('.', $b[$field]);
-
-	// Compare parts
-	for ($i = 0; $i < max(count($a_parts), count($b_parts)); $i++) {
-		// Get the value of the part or an empty string if the part does not exist
-		$a_value = isset($a_parts[$i]) ? $a_parts[$i] : '';
-		$b_value = isset($b_parts[$i]) ? $b_parts[$i] : '';
-
-		// Compare parts using natural sorting
-		if ($a_value != $b_value) {
-			return strnatcmp($a_value, $b_value);
-		}
-	}
-
-	return 0;
-}
+/* sed_load_structure, sed_structure_sort moved to modules/page/inc/page.functions.php */
 
 /**
  * Generates an HTML anchor tag quickly
@@ -4395,49 +3189,6 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 	return (sed_html($text));
 }
 
-/** 
- * Delete all PFS files for a specific user. Returns number of items removed. 
- * 
- * @param int $userid User ID 
- * @return int 
- */
-function sed_pfs_deleteall($userid)
-{
-	global $db_pfs_folders, $db_pfs, $cfg;
-
-	if (!$userid) {
-		return;
-	}
-
-	$num = 0;
-
-	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
-	$num = $num + sed_sql_affectedrows();
-	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
-	$num = $num + sed_sql_affectedrows();
-
-	$bg = $userid . '-';
-	$bgl = mb_strlen($bg);
-
-	$handle = @opendir($cfg['pfs_dir']);
-	while ($f = @readdir($handle)) {
-		if (mb_substr($f, 0, $bgl) == $bg) {
-			@unlink($cfg['pfs_dir'] . $f);
-		}
-	}
-	@closedir($handle);
-
-	$handle = @opendir($cfg['th_dir']);
-	while ($f = @readdir($handle)) {
-		if (mb_substr($f, 0, $bgl) == $bg) {
-			@unlink($cfg['th_dir'] . $f);
-		}
-	}
-	@closedir($handle);
-
-	return ($num);
-}
-
 /**
  * Renders a range input element
  *
@@ -4721,26 +3472,7 @@ function sed_selectbox_folders($user, $skip, $check)
 	return ($result);
 }
 
-/** 
- * Returns forum category dropdown code 
- * 
- * @param int $check Selected category 
- * @param string $name Dropdown name 
- * @return string 
- */
-function sed_selectbox_forumcat($check, $name)
-{
-	global $usr, $sed_forums_str, $L;
-
-	$result =  "<select name=\"$name\" size=\"1\">";
-
-	foreach ($sed_forums_str as $i => $x) {
-		$selected = ($i == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"" . $i . "\" $selected> " . $x['tpath'] . "</option>";
-	}
-	$result .= "</select>";
-	return ($result);
-}
+/* sed_selectbox_forumcat moved to modules/forums/inc/forums.functions.php */
 
 
 /** 
@@ -4798,7 +3530,15 @@ function sed_selectbox_lang($check, $name)
 {
 	global $sed_languages, $sed_countries;
 
-	$handle = opendir("system/lang/");
+	$lang_path = (defined('SED_ROOT') ? SED_ROOT : '') . '/system/lang/';
+	if (!is_dir($lang_path)) {
+		return "<select name=\"$name\" size=\"1\"><option value=\"$check\">$check</option></select>";
+	}
+	$handle = opendir($lang_path);
+	if ($handle === false) {
+		return "<select name=\"$name\" size=\"1\"><option value=\"$check\">$check</option></select>";
+	}
+	$langlist = array();
 	while ($f = readdir($handle)) {
 		if ($f[0] != '.') {
 			$langlist[] = $f;
@@ -4818,27 +3558,7 @@ function sed_selectbox_lang($check, $name)
 	return ($result);
 }
 
-/** 
- * Renders forum section selection dropdown 
- * 
- * @param string $check Selected value 
- * @param string $name Dropdown name 
- * @return string 
- */
-function sed_selectbox_sections($check, $name)
-{
-	global $db_forum_sections, $cfg;
-
-	$sql = sed_sql_query("SELECT fs_id, fs_title, fs_category FROM $db_forum_sections WHERE 1 ORDER by fs_order ASC");
-	$result = "<select name=\"$name\" size=\"1\">";
-	while ($row = sed_sql_fetchassoc($sql)) {
-		$selected = ($row['fs_id'] == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"" . $row['fs_id'] . "\" $selected>" . sed_cc(sed_cutstring($row['fs_category'], 24));
-		$result .= ' ' . $cfg['separator'] . ' ' . sed_cc(sed_cutstring($row['fs_title'], 32));
-	}
-	$result .= "</select>";
-	return ($result);
-}
+/* sed_selectbox_sections moved to modules/forums/inc/forums.functions.php */
 
 /** 
  * Returns skin selection dropdown 
@@ -4849,14 +3569,20 @@ function sed_selectbox_sections($check, $name)
  */
 function sed_selectbox_skin($check, $name)
 {
-	$handle = opendir("skins/");
-	while ($f = readdir($handle)) {
-		if (mb_strpos($f, '.') === FALSE) {
-			$skinlist[] = $f;
+	$skinlist = array();
+	$skins_path = (defined('SED_ROOT') ? SED_ROOT : '') . '/skins/';
+	if (is_dir($skins_path)) {
+		$handle = opendir($skins_path);
+		if ($handle !== false) {
+			while ($f = readdir($handle)) {
+				if (mb_strpos($f, '.') === FALSE) {
+					$skinlist[] = $f;
+				}
+			}
+			closedir($handle);
+			sort($skinlist);
 		}
 	}
-	closedir($handle);
-	sort($skinlist);
 
 	$result = "<select name=\"$name\" size=\"1\">";
 	foreach ($skinlist as $i => $x) {
@@ -4899,14 +3625,20 @@ function sed_translate_date($timestampDate)
  */
 function sed_radiobox_skin($check, $name)
 {
-	$handle = opendir("skins/");
-	while ($f = readdir($handle)) {
-		if (mb_strpos($f, '.') === FALSE) {
-			$skinlist[] = $f;
+	$skinlist = array();
+	$skins_path = (defined('SED_ROOT') ? SED_ROOT : '') . '/skins/';
+	if (is_dir($skins_path)) {
+		$handle = opendir($skins_path);
+		if ($handle !== false) {
+			while ($f = readdir($handle)) {
+				if (mb_strpos($f, '.') === FALSE) {
+					$skinlist[] = $f;
+				}
+			}
+			closedir($handle);
+			sort($skinlist);
 		}
 	}
-	closedir($handle);
-	sort($skinlist);
 	$result = '';
 	foreach ($skinlist as $i => $x) {
 		$checked = ($x == $check) ? "checked=\"checked\"" : '';
@@ -5209,6 +3941,22 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 		$scan_prefix[] = SED_ROOT . 'skins/' . $cfg['defaultskin'] . '/';
 	}
 
+	/* Module tpl fallback: if the base name matches a module, add its tpl/ dir */
+	if (is_dir(SED_ROOT . '/modules/' . $bname . '/tpl/')) {
+		$scan_prefix[] = SED_ROOT . '/modules/' . $bname . '/tpl/';
+	}
+	/* List skin fallback: list was merged into page module, so list.tpl etc. live in modules/page/tpl/ */
+	if ($bname === 'list' && is_dir(SED_ROOT . '/modules/page/tpl/')) {
+		$scan_prefix[] = SED_ROOT . '/modules/page/tpl/';
+	}
+	/* Admin skin fallback for modules: admin.{module} -> modules/{module}/tpl/ */
+	if ($adminskin && is_array($base) && count($base) >= 2) {
+		$mod_name = $base[1];
+		if (is_dir(SED_ROOT . '/modules/' . $mod_name . '/tpl/')) {
+			$scan_prefix[] = SED_ROOT . '/modules/' . $mod_name . '/tpl/';
+		}
+	}
+
 	if (is_array($base)) {
 		$base_depth = count($base);
 		for ($i = $base_depth; $i > 0; $i--) {
@@ -5315,6 +4063,66 @@ function sed_stat_set($name, $value)
 
 	$sql = sed_sql_query("UPDATE $db_stats SET stat_value='$value' WHERE stat_name='$name'");
 	return;
+}
+
+/**
+ * Apply schema patches for version upgrades.
+ * Called early in common.php, before modules/plugins loading.
+ * Patches are stored in system/upgrade/patch/ as patch_{FROM}_{TO}_{NN}.php
+ * and tracked in sed_stats to run only once.
+ */
+function sed_apply_patches()
+{
+	global $cfg;
+
+	if (empty($cfg['patchmode'])) {
+		return;
+	}
+
+	$patch_dir = SED_ROOT . '/system/upgrade/patch';
+	if (!is_dir($patch_dir)) {
+		return;
+	}
+
+	$sql_version = (int)sed_stat_get('version');
+	if (!$sql_version) {
+		return;
+	}
+	$code_version = (int)$cfg['version'];
+
+	/* Skip when DB is already at or ahead of code version (no patches needed) */
+	if ($sql_version >= $code_version) {
+		return;
+	}
+
+	$files = glob($patch_dir . '/patch_*.php');
+	if (empty($files)) {
+		return;
+	}
+	sort($files);
+
+	foreach ($files as $file) {
+		$basename = basename($file, '.php');
+		if (!preg_match('/^patch_(\d+)_(\d+)_(\d+)$/', $basename, $m)) {
+			continue;
+		}
+		$from = (int)$m[1];
+		$to = (int)$m[2];
+
+		if ($sql_version != $from || $code_version < $to) {
+			continue;
+		}
+
+		$stat_key = $basename;
+		if (sed_stat_get($stat_key)) {
+			continue;
+		}
+
+		include($file);
+
+		sed_stat_create($stat_key, '1');
+		sed_cache_clearall();  /* Clear stale cache (sed_modules, sed_plugins) after schema change */
+	}
 }
 
 /** 
@@ -5497,6 +4305,16 @@ function sed_verify_code()
 	} else return sed_error_msg($L['captcha_error_hacker_go_home']);
 }
 
+/* sed_get_pagepath, sed_get_listpath moved to modules/page/inc/page.functions.php */
+
+/**
+ * Get section name for URL translation
+ */
+function sed_get_section(&$args, &$section)
+{
+	return $section;
+}
+
 /**
  * Transforms parameters into URL by following user-defined rules in $sed_urltrans
  *
@@ -5656,9 +4474,12 @@ function sed_sefurlredirect()
 
 		if ($section == 'list' && isset($params_arr['c'])) {
 			$sys['catcode'] = $params_arr['c'];
+			$section = 'page';
 		}
 		if ($section == 'page') {
-			if (isset($params_arr['al']) && !empty($params_arr['al'])) {
+			if (isset($params_arr['c'])) {
+				$sys['catcode'] = $params_arr['c'];
+			} elseif (isset($params_arr['al']) && !empty($params_arr['al'])) {
 				$pal = sed_import($params_arr['al'], 'D', 'ALP');
 				$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_alias='$pal' LIMIT 1");
 				$pag = sed_sql_fetchassoc($sql);
@@ -6731,4 +5552,87 @@ function sed_browser($url, $options = array())
 
 	// Return response for non-file downloads or file path for downloads
 	return !empty($options['output_file']) ? $options['output_file'] : $result;
+}
+
+/**
+ * Generate URL cache file combining system rules and module rules.
+ * Order is determined by numeric 'order' (lower = checked first). Base rules have
+ * order in config.urlrewrite.php; modules set $mod_urlrewrite_order in .urls.php.
+ * Ranges: see comment in system/config.urlrewrite.php.
+ *
+ * @return bool TRUE on success, FALSE on failure
+ */
+function sed_urls_generate()
+{
+	global $db_core;
+
+	$sed_urlrewrite = array();
+	$sed_urltrans = array();
+
+	$rewrite_file = SED_ROOT . '/system/config.urlrewrite.php';
+	$trans_file = SED_ROOT . '/system/config.urltranslation.php';
+
+	if (file_exists($rewrite_file)) {
+		include($rewrite_file);
+	}
+	if (file_exists($trans_file)) {
+		include($trans_file);
+	}
+
+	/* Collect all rewrite rules with order. Base rules already have 'order' from config. */
+	$all_rules = array();
+	foreach ($sed_urlrewrite as $r) {
+		$all_rules[] = array(
+			'order' => isset($r['order']) ? (int)$r['order'] : 500,
+			'cond'  => $r['cond'],
+			'rule'  => $r['rule']
+		);
+	}
+
+	$default_order = 500;
+	$sql_mods = sed_sql_query("SELECT ct_code, ct_path FROM $db_core WHERE ct_state=1");
+	while ($row = sed_sql_fetchassoc($sql_mods)) {
+		$urls_file = SED_ROOT . '/' . $row['ct_path'] . $row['ct_code'] . '.urls.php';
+		if (file_exists($urls_file)) {
+			$mod_urlrewrite = array();
+			$mod_urltrans = array();
+			$mod_urlrewrite_order = $default_order;
+			include($urls_file);
+			$order = isset($mod_urlrewrite_order) ? (int)$mod_urlrewrite_order : $default_order;
+			if (!empty($mod_urlrewrite)) {
+				foreach ($mod_urlrewrite as $r) {
+					$r_order = isset($r['order']) ? (int)$r['order'] : $order;
+					$all_rules[] = array('order' => $r_order, 'cond' => $r['cond'], 'rule' => $r['rule']);
+				}
+			}
+			if (!empty($mod_urltrans)) {
+				$sed_urltrans = array_merge($sed_urltrans, $mod_urltrans);
+			}
+		}
+	}
+
+	usort($all_rules, function ($a, $b) {
+		return $a['order'] - $b['order'];
+	});
+
+	/* Cache stores only cond and rule for index.php */
+	$sed_urlrewrite = array();
+	foreach ($all_rules as $r) {
+		$sed_urlrewrite[] = array('cond' => $r['cond'], 'rule' => $r['rule']);
+	}
+
+	$cache_dir = SED_ROOT . '/datas/cache';
+	if (!is_dir($cache_dir)) {
+		@mkdir($cache_dir, 0755, true);
+		@file_put_contents($cache_dir . '/index.php', '<?php die(); ?>');
+	}
+
+	$cache_file = $cache_dir . '/sed_urls.php';
+	$content = "<?php\n";
+	$content .= "/* Auto-generated URL cache. Do not edit manually. */\n";
+	$content .= "/* Generated: " . date('Y-m-d H:i:s') . " */\n\n";
+	$content .= '$sed_urlrewrite = ' . var_export($sed_urlrewrite, true) . ";\n\n";
+	$content .= '$sed_urltrans = ' . var_export($sed_urltrans, true) . ";\n";
+
+	return (bool)@file_put_contents($cache_file, $content);
 }

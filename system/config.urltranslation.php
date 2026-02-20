@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=system/config.urlrewrite.php
-Version=180
-Updated=2025-jan-25
+File=system/config.urltranslation.php
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Url translation config
@@ -33,64 +33,11 @@ $sed_urltrans['go'] = array(
       )
 );
 
-/*  RSS translation */
+/* RSS and Sitemap translation: see modules/rss/rss.urls.php and modules/sitemap/sitemap.urls.php when modules are active */
 
-$sed_urltrans['rss'] = array(
-      array(
-            'params' => 'm=*',
-            'rewrite' => 'rss/{m}'
-      ),
-      array(
-            'params' => '',
-            'rewrite' => 'rss'
-      )
-);
+/* Polls translation: see modules/polls/polls.urls.php when module is active */
 
-/*  Sitemap translation */
-
-$sed_urltrans['sitemap'] = array(
-      array(
-            'params' => 'm=*',
-            'rewrite' => 'sitemap/{m}.xml'
-      ),
-      array(
-            'params' => '',
-            'rewrite' => 'sitemap.xml'
-      )
-);
-
-/*  Polls translation */
-
-$sed_urltrans['polls'] = array(
-      array(
-            'params' => 'id=*',
-            'rewrite' => 'polls/{id}'
-      ),
-      array(
-            'params' => '',
-            'rewrite' => 'polls'
-      )
-);
-
-/*  Gallery translation */
-
-$sed_urltrans['gallery'] = array(
-      /**/
-      array(
-            'params' => 'f=*',
-            'rewrite' => 'gallery/{f}'
-      ),
-      /**/
-      array(
-            'params' => 'id=*',
-            'rewrite' => 'gallery/pic/{id}'
-      ),
-      /**/
-      array(
-            'params' => '',
-            'rewrite' => 'gallery'
-      )
-);
+/* Gallery translation: see modules/gallery/gallery.urls.php when module is active */
 
 /*  PFS translation */
 
@@ -107,80 +54,7 @@ $sed_urltrans['pfs'] = array(
       )
 );
 
-/*  Pm translation    */
-
-$sed_urltrans['pm'] = array(
-      /**/
-      array(
-            'params' => 'id=*',
-            'rewrite' => 'pm/mess/{id}'
-      ),
-      /**/
-      array(
-            'params' => 'm=*',
-            'rewrite' => 'pm/action/{m}'
-      ),
-      /**/
-      array(
-            'params' => 'f=*',
-            'rewrite' => 'pm/{f}'
-      ),
-      /**/
-      array(
-            'params' => '',
-            'rewrite' => 'pm'
-      )
-);
-
-/* Forums translation */
-
-$sed_urltrans['forums'] = array(
-      /* Topics with alias */
-      array(
-            'params' => 'm=topics&s=*&al=*',
-            'rewrite' => 'forums/topics/{s}{al|sed_get_forums_urltrans}'
-      ),
-      /* Topics without alias */
-      array(
-            'params' => 'm=topics&s=*',
-            'rewrite' => 'forums/topics/{s}'
-      ),
-      /* Posts (topic) with alias */
-      array(
-            'params' => 'm=posts&q=*&al=*',
-            'rewrite' => 'forums/posts/{q}{al|sed_get_forums_urltrans}'
-      ),
-      /* Posts (topic) without alias */
-      array(
-            'params' => 'm=posts&q=*',
-            'rewrite' => 'forums/posts/{q}'
-      ),
-      /* Single post with alias */
-      array(
-            'params' => 'm=posts&p=*&al=*',
-            'rewrite' => 'forums/post/{p}{al|sed_get_forums_urltrans}'
-      ),
-      /* Single post without alias */
-      array(
-            'params' => 'm=posts&p=*',
-            'rewrite' => 'forums/post/{p}'
-      ),
-      /* Section with alias */
-      array(
-            'params' => 'c=*&al=*',
-            'rewrite' => 'forums/{c}{al|sed_get_forums_urltrans}'
-      ),
-      /* Section without alias */
-      array(
-            'params' => 'c=*',
-            'rewrite' => 'forums/{c}'
-      ),
-      /* Default forums page */
-      array(
-            'params' => '',
-            'rewrite' => 'forums'
-      )
-);
+/* Pm translation: see modules/pm/pm.urls.php when module is active */
 
 /*  Plugins translation */
 
@@ -308,74 +182,7 @@ $sed_urltrans['message'] = array(
       )
 );
 
-/*  Lists translation */
-
-$sed_urltrans['list'] = array(
-      array(
-            'params' => 'c=all&s=*&w=*',
-            'rewrite' => 'all/sort/{s}-{w}/'
-      ),
-      array(
-            'params' => 'c=*&s=*&w=*',
-            'rewrite' => '{sed_get_listpath()}sort/{s}-{w}/'
-      ),
-      array(
-            'params' => 'c=all',
-            'rewrite' => 'all/'
-      ),
-      array(
-            'params' => 'c=*',
-            'rewrite' => '{sed_get_listpath()}'
-      ),
-      array(
-            'params' => '',
-            'rewrite' => 'list'
-      )
-);
-
-/*  Pages translation */
-
-$sed_urltrans['page'] = array(
-      /* 1 */
-      array(
-            'params' => 'm=*',
-            'rewrite' => 'page/{m}'
-      ),
-      /* 2 */
-      array(
-            'params' => 'id=*&a=dl',
-            'rewrite' => '{sed_get_pagepath()}{id}/download'
-      ),
-      /* 3 */
-      array(
-            'params' => 'al=*&a=dl',
-            'rewrite' => '{sed_get_pagepath()}{al}/download'
-      ),
-      /* 4 */
-      /*   array( 
-          'params' => 'id=*&comments=1', 
-          'rewrite' => '{sed_get_pagepath()}{id}/comments'
-    ),
-    /* 5 */
-      /*    array( 
-          'params' => 'al=*&comments=1', 
-          'rewrite' => '{sed_get_pagepath()}{al}/comments'
-    ),
-    /* 6 */
-      array(
-            'params' => 'id=*',
-            'rewrite' => '{sed_get_pagepath()}{id}'
-      ),
-      /* 7 */
-      array(
-            'params' => 'al=*',
-            'rewrite' => '{sed_get_pagepath()}{al}'
-      ),
-      array(
-            'params' => '',
-            'rewrite' => 'page'
-      )
-);
+/*  List and page translation: see modules/page/page.urls.php when module is active */
 
 /*  Index translation */
 
@@ -395,43 +202,4 @@ $sed_urltrans['*'] = array(
       )
 );
 
-/*  Callback functions */
-
-function sed_get_pagepath(&$args, &$section)
-{
-      global $sys, $sed_cat;
-      $url = "";
-      if (isset($sys['catcode']) && $sys['catcode'] != "system") {
-            $cpath = $sed_cat[$sys['catcode']]['path'];
-            $cpath_arr = explode('.', $cpath);
-            foreach ($cpath_arr as $a) {
-                  $url .= urlencode($a) . "/";
-            }
-      }
-      return $url;
-}
-
-function sed_get_listpath(&$args, &$section)
-{
-      global $sed_cat;
-      $url = '';
-      $cpath = $sed_cat[$args['c']]['path'];
-      $cpath_arr = explode('.', $cpath);
-      foreach ($cpath_arr as $a) {
-            $url .= urlencode($a) . "/";
-      }
-      unset($args['c']);
-      return $url;
-}
-
-function sed_get_section(&$args, &$section)
-{
-      return $section;
-}
-
-function sed_get_forums_urltrans(&$args, &$section)
-{
-      global $cfg;
-      $url = (isset($args['al']) && !empty($args['al']) && $cfg['forumsefurls']) ? "-" . sed_translit_seourl($args['al']) : "";
-      return $url;
-}
+/* Callback functions sed_get_pagepath, sed_get_listpath, sed_get_section are in system/functions.php; sed_get_forums_urltrans in modules/forums/inc/forums.functions.php */

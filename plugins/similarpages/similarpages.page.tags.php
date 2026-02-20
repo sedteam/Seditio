@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/similarpages/similarpages.page.tags.php
-Version=170
-Updated=2012-feb-26
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=The plugin displays a list of similar pages
@@ -47,6 +47,10 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 {
 	global $L, $t, $pag, $db_pages, $db_users, $usr, $cfg, $sed_cat, $plu_empty;
 
+	if (!sed_module_active('page')) {
+		return $plu_empty;
+	}
+
 	$sql_cat = "";
 	$res = "";
 
@@ -68,7 +72,7 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 		$sql_cat = "AND page_cat IN ('" . implode("','", $catsub) . "')";
 	}
 
-	$pcomments = ($cfg['showcommentsonpage']) ? "" : "&comments=1";
+	$pcomments = (sed_plug_active('comments') && !empty($cfg['plugin']['comments']['showcommentsonpage'])) ? "" : "&comments=1";
 
 	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_title, p.page_date, p.page_ownerid, p.page_count,
 						p.page_comcount, p.page_thumb, u.user_id, u.user_name, u.user_maingrp, u.user_avatar 
@@ -129,7 +133,7 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 				/* old result view use mask */
 				$res .= sprintf(
 					$mask,
-					"<a href=\"" . sed_url("list", "c=" . $row['page_cat']) . "\">" . $sed_cat[$row['page_cat']]['title'] . "</a>",
+					"<a href=\"" . sed_url("page", "c=" . $row['page_cat']) . "\">" . $sed_cat[$row['page_cat']]['title'] . "</a>",
 					"<a href=\"" . $row['page_pageurl'] . "\">" . sed_cc(sed_cutstring(stripslashes($row['page_title']), 36)) . "</a>",
 					date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
 				);
@@ -146,7 +150,7 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 
 /* ============= */
 
-if ($sim_maxcount > 0 && !$cfg['disable_page']) {
+if ($sim_maxcount > 0 && sed_module_active('page')) {
 	$t->assign(array(
 		"PLUGIN_SIMILAR_PAGES" => sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $cfg['plu_mask_similar_pages'])
 	));

@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.tr.lang.php
-Version=180
-Updated=2006-jun-05
+Version=185
+Updated=2026-feb-14
 Type=Plugin.standalone
 Author=Seditio Team
 Description=

@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=index.php
-Version=180
-Updated=2021-jun-15
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=SEF Url's loader
@@ -18,7 +18,13 @@ Description=SEF Url's loader
 define('SED_CODE', TRUE);
 define('SED_ROOT', dirname(__FILE__));
 
-require(SED_ROOT . '/system/config.urlrewrite.php');
+/* Load URL rewrite rules from cache or system config */
+$sed_urls_cache = SED_ROOT . '/datas/cache/sed_urls.php';
+if (file_exists($sed_urls_cache)) {
+  require($sed_urls_cache);
+} else {
+  require(SED_ROOT . '/system/config.urlrewrite.php');
+}
 
 $request_uri = $_SERVER['REQUEST_URI'];
 
@@ -76,11 +82,34 @@ foreach ($sed_urlrewrite as $val) {
 $module = @$_GET['module'];
 
 if (!empty($module)) {
-  $system_core = array("install", "admin", "captcha", "resizer", "forums", "gallery", "index", "list", "message", "page", "pfs", "plug", "pm", "polls", "rss", "sitemap", "users", "view");
-  if (in_array($module, $system_core)) {
-    $system_incl_dir = ($module == "install") ? SED_ROOT . "/system/install/" : SED_ROOT . "/system/core/" . $module . "/";
-    include_once($system_incl_dir . $module . ".php");
-    die();
+  $m = preg_replace('/[^a-zA-Z0-9]/', '', $module);
+
+  if (!empty($m)) {
+    /* Redirect old list links to page module (list merged into page) */
+    if ($m == 'list') {
+      $vars_req['module'] = 'page';
+      $new_query = http_build_query($vars_req);
+      header('Location: ' . $subdir_uri . $request_uri . '?' . $new_query, true, 301);
+      exit;
+    }
+
+    $path_modules = SED_ROOT . "/modules/" . $m . "/" . $m . ".php";
+
+    if (file_exists($path_modules)) {
+      include_once($path_modules);
+      die();
+    }
+
+    if ($m == 'install') {
+      $path_core = SED_ROOT . "/system/install/install.php";
+    } else {
+      $path_core = SED_ROOT . "/system/core/" . $m . "/" . $m . ".php";
+    }
+
+    if (file_exists($path_core)) {
+      include_once($path_core);
+      die();
+    }
   }
 }
 

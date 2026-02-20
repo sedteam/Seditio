@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/functions.image.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Core
 Author=Amro
 Description=Image Functions
@@ -83,13 +83,13 @@ function sed_resize($filename)
 
     $watermark_offset_x = $cfg['watermark_offset_x'];
     $watermark_offset_y = $cfg['watermark_offset_y'];
-    $watermark_position = $cfg['gallery_logopos'];
+    $watermark_position = $cfg['th_logopos'];
 
     $sharpen = min(100, $cfg['images_sharpen']) / 100;
-    $watermark_transparency = min(100, $cfg['gallery_logotrsp']);
+    $watermark_transparency = min(100, $cfg['th_logotrsp']);
 
-    if (!empty($cfg['gallery_logofile']) && $set_watermark) {
-        $watermark = (strpos($cfg['gallery_logofile'], "/") == 0) ? SED_ROOT . $cfg['gallery_logofile'] : SED_ROOT . '/' . $cfg['gallery_logofile'];
+    if (!empty($cfg['th_logofile']) && $set_watermark) {
+        $watermark = (strpos($cfg['th_logofile'], "/") == 0) ? SED_ROOT . $cfg['th_logofile'] : SED_ROOT . '/' . $cfg['th_logofile'];
     }
 
     // Use configured JPEG quality or fallback to default
@@ -712,14 +712,14 @@ function sed_image_process(
     $final_h = $target_h; // Always pass both dimensions, keepratio is handled in lower-level functions
 
     // Watermark configuration: use provided value or fall back to global config
-    $watermark_file = ($set_watermark == false) ? null : (isset($cfg['gallery_logofile']) ? $cfg['gallery_logofile'] : null);
+    $watermark_file = ($set_watermark == false) ? null : (isset($cfg['th_logofile']) ? $cfg['th_logofile'] : null);
     if (!empty($watermark_file)) {
         $watermark_file = (strpos($watermark_file, SED_ROOT) === 0) ? $watermark_file : SED_ROOT . '/' . ltrim($watermark_file, '/');
         $watermark_file = file_exists($watermark_file) ? $watermark_file : null;
     }
 
-    $watermark_pos = isset($cfg['gallery_logopos']) ? $cfg['gallery_logopos'] : 'Bottom left';
-    $watermark_op = isset($cfg['gallery_logotrsp']) ? $cfg['gallery_logotrsp'] : 100;
+    $watermark_pos = isset($cfg['th_logopos']) ? $cfg['th_logopos'] : 'Bottom left';
+    $watermark_op = isset($cfg['th_logotrsp']) ? $cfg['th_logotrsp'] : 100;
     $watermark_op = min(100, max(0, (int)$watermark_op));
     $watermark_offset_x = isset($cfg['watermark_offset_x']) ? $cfg['watermark_offset_x'] : 8;
     $watermark_offset_y = isset($cfg['watermark_offset_y']) ? $cfg['watermark_offset_y'] : 8;

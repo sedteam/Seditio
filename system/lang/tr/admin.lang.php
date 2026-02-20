@@ -10,9 +10,9 @@ Language : English (code:tr)
 Localization done by : Neocrome
 -----------------------
 [BEGIN_SED]
-File=system/core/admin/lang/tr/admin.lang.php
-Version=180
-Updated=2025-jan-25
+File=system/lang/tr/admin.lang.php
+Version=185
+Updated=2026-feb-14
 Type=Lang
 Author=Seditio Team
 Description=Admin panel
@@ -23,26 +23,26 @@ Description=Admin panel
 
 $L['core_main'] = "Ana ayar";
 $L['core_parser'] = "Yorumlayıcı";             // v120'de yeni
-$L['core_rss'] = "RSS beslemeleri";             // v173'te yeni
 $L['core_dic'] = "Dizinler ve Ekstra alanlar";  // v173'te yeni
 $L['core_time'] = "Zaman ve tarih";
 $L['core_skin'] = "Temalar";
 $L['core_lang'] = "Diller";
 $L['core_menus'] = "Menü slotları";
 $L['core_comments'] = "Yorumlar";
-$L['core_forums'] = "Forumlar";
 $L['core_page'] = "Sayfalar";
 $L['core_pfs'] = "Kişisel dosya alanı";
-$L['core_gallery'] = "Galeri";
 $L['core_plug'] = "Eklentiler";
-$L['core_pm'] = "Özel mesajlar";
-$L['core_polls'] = "Anketler";
 $L['core_ratings'] = "Değerlendirmeler";
 $L['core_trash'] = "Çöp kutusu";
 $L['core_users'] = "Kullanıcılar";
 $L['core_meta'] = "HTML Meta";
 $L['core_index'] = "Ana sayfa";
 $L['core_menu'] = "Menü yöneticisi"; // v178'de yeni
+$L['core_message'] = "Sistem mesajları";
+$L['core_admin'] = "Yönetim paneli";
+$L['core_log'] = "Günlük";
+$L['core_manage'] = "Yönet";
+$L['core_images'] = "Görüntüler";
 
 /* ====== Upgrade ====== */
 
@@ -138,7 +138,7 @@ $L['cfg_sefurls301'] = array("SEF URL'lere 301 yönlendirmesi", "Eski URL'den SE
 $L['cfg_dateformat'] = array("Ana tarih maskesi", "Varsayılan: Y-m-d H:i");
 $L['cfg_formatmonthday'] = array("Kısa tarih maskesi", "Varsayılan: m-d");
 $L['cfg_formatyearmonthday'] = array("Orta tarih maskesi", "Varsayılan: Y-m-d");
-$L['cfg_formatmonthdayhourmin'] = array("Forum tarih maskesi", "Varsayılan: m-d H:i");
+/* $L['cfg_formatmonthdayhourmin'] moved to modules/forums/lang/ */
 $L['cfg_servertimezone'] = array("Sunucu zaman dilimi", "Sunucunun GMT+00'a göre farkı");
 $L['cfg_defaulttimezone'] = array("Varsayılan zaman dilimi", "Misafirler ve yeni üyeler için, -12 ile +12 arasında");
 $L['cfg_timedout'] = array("Boşta bekleme süresi, saniye cinsinden", "Bu süre sonrasında kullanıcı 'uzak' olarak kabul edilir");
@@ -161,15 +161,16 @@ $L['cfg_maxrowsperpage'] = array("Listelerdeki maksimum satır", "");
 $L['cfg_showpagesubcatgroup'] = array("Alt kategorilerden sayfaları gruplar halinde göster", "");   //Yeni Sed171
 $L['cfg_genseourls'] = array("SEO URL'si oluştur (otomatik oluştur* sayfa takma adı)?", "");   //Yeni Sed178
 $L['cfg_maxcommentsperpage'] = array("Sayfa başına maksimum yorum", "");  //Yeni Sed173
+$L['cfg_maxratsperpage'] = array("Yönetimde sayfa başına değerlendirme", "");
 $L['cfg_commentsorder'] = array("Yorum sıralama düzeni", "ASC - yeni alt sırada, DESC - en yenisi üstte");  //Yeni Sed173
 $L['cfg_maxtimeallowcomedit'] = array("Yorumları düzenlemek için izin verilen süre", "Dakika cinsinden, 0 ise - düzenleme yasaktır");  //Yeni Sed173
 $L['cfg_showcommentsonpage'] = array("Sayfalarda yorumları göster", "Varsayılan olarak sayfada yorum gösterir");   //Yeni Sed171
 $L['cfg_maxcommentlenght'] = array("Bir yorumun maksimum uzunluğu", "Varsayılan: 2000 karakter");  //Yeni Sed175
 $L['cfg_countcomments'] = array("Yorum sayısını say", "Yorum simgesinin yanında yorum sayısını göster");
-$L['cfg_hideprivateforums'] = array("Özel forumları gizle", "");
+/* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
 $L['cfg_hottopictrigger'] = array("Bir konu 'sıcak' hale gelmesi için gönderiler", "");
 $L['cfg_maxtopicsperpage'] = array("Sayfa başına maksimum konu veya gönderi", "");
-$L['cfg_antibumpforums'] = array("Anti-bump koruması", "Kullanıcıların aynı konuda arka arkaya iki kez gönderi yapmasını engeller");
+/* $L['cfg_antibumpforums'] moved to modules/forums/lang/ */
 $L['cfg_pfsuserfolder'] = array("Klasör depolama modu", "Etkinleştirilirse, kullanıcı dosyalarını /datas/users/USERID/... alt klasörlerinde depolar, dosya adının önüne USERID eklemek yerine. Sadece siteyi ilk kurarken ayarlanabilir. Bir dosya PFS'ye yüklendiğinde, bu değiştirilemez.");
 $L['cfg_th_amode'] = array("Küçük resim oluşturma", "");
 $L['cfg_th_x'] = array("Küçük resimler, genişlik", "Varsayılan: 112 piksel");
@@ -187,17 +188,14 @@ $L['cfg_pfs_filemask'] = array("Dosya isimleri zaman desenine göre", "Zaman des
 
 $L['cfg_available_image_sizes'] = array("Mevcut görüntü çözünürlükleri", "Virgülle sıralanmış, boşluk yok. Örnek: 120x80,800x600");  // Yeni sed180
 
-$L['cfg_disable_gallery'] = array("Galeriyi devre dışı bırak", "");         // Yeni v150
-$L['cfg_gallery_gcol'] = array("Galeriler için sütun sayısı", "Varsayılan : 4");     // Yeni v150
-$L['cfg_gallery_bcol'] = array("Resimler için sütun sayısı", "Varsayılan : 6");        // Yeni v150
-$L['cfg_gallery_logofile'] = array("Tüm yeni PFS resimlerine eklenecek Png/jpeg/Gif logosu", "Devre dışı bırakmak için boş bırakın");        // Yeni v150
-$L['cfg_gallery_logopos'] = array("PFS resimlerindeki logo konumu", "Varsayılan : Alt sol");        // Yeni v150
-$L['cfg_gallery_logotrsp'] = array("Logonun birleştirme seviyesi, % olarak", "Varsayılan : 50");        // Yeni v150
-$L['cfg_gallery_logojpegqual'] = array("Logo eklendikten sonra final görüntüsünün kalitesi, eğer Jpeg ise", "Varsayılan : 90");        // Yeni v150
-$L['cfg_gallery_imgmaxwidth'] = array("Görüntü için maksimum genişlik, eğer daha büyükse boyut küçültülmüş bir kopya işlenecek", "");         // Yeni v150
+/* Gallery config (cfg_disable_gallery, cfg_gallery_gcol, cfg_gallery_bcol) moved to modules/gallery/lang/ */
+$L['cfg_th_imgmaxwidth'] = array("Görüntü için maksimum genişlik (piksel), daha büyükse küçültülmüş kopya işlenir", "");
+$L['cfg_th_logofile'] = array("Tüm yeni PFS resimlerine eklenecek Png/jpeg/Gif logosu", "Devre dışı bırakmak için boş bırakın");
+$L['cfg_th_logopos'] = array("PFS resimlerindeki logo konumu", "Varsayılan : Alt sol");
+$L['cfg_th_logotrsp'] = array("Logonun birleştirme seviyesi, % olarak", "Varsayılan : 50");
+$L['cfg_th_logojpegqual'] = array("Logo eklendikten sonra final görüntünün kalitesi (Jpeg)", "Varsayılan : 90");
 
-$L['cfg_pm_maxsize'] = array("Mesajlar için maksimum uzunluk", "Varsayılan: 10000 karakter");
-$L['cfg_pm_allownotifications'] = array("E-posta ile PM bildirimlerine izin ver", "");
+/* cfg_pm_* moved to modules/pm/lang/ */
 $L['cfg_disablehitstats'] = array("Hit istatistiklerini devre dışı bırak", "Referanslar ve günlük hitler");
 $L['cfg_disablereg'] = array("Kayıt işlemini devre dışı bırak", "Kullanıcıların yeni hesaplar kaydetmesini engeller");
 $L['cfg_disablewhosonline'] = array("Kimler çevrimiçi kısmını devre dışı bırak", "Shield'ı etkinleştirirseniz otomatik olarak etkinleştirilir");
@@ -257,16 +255,16 @@ $L['cfg_extra8uchange'] = array("Kullanıcı profilinde düzenlenebilir mi?", ""
 $L['cfg_extra9uchange'] = array("Kullanıcı profilinde düzenlenebilir mi?", "");
 
 $L['cfg_disable_comments'] = array("Yorumları devre dışı bırak", "");
-$L['cfg_disable_forums'] = array("Forumları devre dışı bırak", "");
+/* $L['cfg_disable_forums'] moved to modules/forums/lang/ */
 $L['cfg_disable_pfs'] = array("PFS'yi devre dışı bırak", "");
-$L['cfg_disable_polls'] = array("Anketleri devre dışı bırak", "");
-$L['cfg_disable_pm'] = array("Özel mesajları devre dışı bırak", "");
+/* $L['cfg_disable_polls'] moved to modules/polls/lang/ (polls now use module on/off) */
+/* $L['cfg_disable_pm'] removed: PM use module on/off (Admin → Modules) */
 $L['cfg_disable_ratings'] = array("Değerlendirmeleri devre dışı bırak", "");
 $L['cfg_disable_page'] = array("Sayfaları devre dışı bırak", "");
 $L['cfg_disable_plug'] = array("Eklentileri devre dışı bırak", "");
 $L['cfg_trash_prunedelay'] = array("Çöp kutasındaki öğeleri * gün sonra sil (Sonsuza kadar tutmak için sıfır)", "");
 $L['cfg_trash_comment'] = array("Yorumlar için çöp kutusunu kullan", "");
-$L['cfg_trash_forum'] = array("Forumlar için çöp kutusunu kullan", "");
+/* $L['cfg_trash_forum'] moved to modules/forums/lang/ */
 $L['cfg_trash_page'] = array("Sayfalar için çöp kutusunu kullan", "");
 $L['cfg_trash_pm'] = array("Özel mesajlar için çöp kutusunu kullan", "");
 $L['cfg_trash_user'] = array("Kullanıcılar için çöp kutusunu kullan", "");
@@ -284,24 +282,14 @@ $L['cfg_defaulttitle'] = array("Varsayılan Başlık", "Mevcut seçenekler: {MAI
 $L['cfg_indextitle'] = array("Ana Sayfa Başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 179
 $L['cfg_listtitle'] = array("Sayfa listeleri için başlık", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
 $L['cfg_pagetitle'] = array("Sayfa başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}, {CATEGORY}");        //Sed 175
-$L['cfg_forumstitle'] = array("Forum başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+/* $L['cfg_forumstitle'] moved to modules/forums/lang/ */
 $L['cfg_userstitle'] = array("Kullanıcı başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
-$L['cfg_pmtitle'] = array("Özel Mesaj başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
-$L['cfg_gallerytitle'] = array("Galeri başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        //Sed 175
+/* cfg_pmtitle moved to modules/pm/lang/ */
+/* $L['cfg_gallerytitle'] moved to modules/gallery/lang/ */
 $L['cfg_pfstitle'] = array("PFS başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 $L['cfg_plugtitle'] = array("Eklenti başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 
-/* ====== Rss ====== */
-
-$L['cfg_disable_rss'] = array("RSS beslemelerini devre dışı bırak", "");
-$L['cfg_disable_rsspages'] = array("Sayfalar için RSS beslemesini devre dışı bırak", "");
-$L['cfg_disable_rsscomments'] = array("Yorumlar için RSS beslemesini devre dışı bırak", "");
-$L['cfg_disable_rssforums'] = array("Forumlar için RSS beslemesini devre dışı bırak", "");
-$L['cfg_rss_timetolive'] = array("RSS beslemesi için önbellek süresi", "saniye cinsinden");
-$L['cfg_rss_defaultcode'] = array("Varsayılan RSS beslemesi", "kategori kodunu girin");
-$L['cfg_rss_maxitems'] = array("RSS beslemesindeki maksimum satır sayısı", "");
-
-$L['adm_help_config_rss'] = "Açılabilir RSS besleme bağlantıları: <br />" . $cfg['mainurl'] . "/" . "rss (varsayılan olarak, ayarlarda belirtilen haber kategorilerinin çıktısı) <br /> " . $cfg['mainurl'] . "/" . "rss/pages?c=XX (XX - Kategori kodu, kategorinin son sayfaları) <br />" . $cfg['mainurl'] . "/" . "rss/comments?id=XX (XX - Sayfa ID'si, yorumlar sayfası) <br />" . $cfg['mainurl'] . "/" . "rss/forums (tüm forum bölümlerinden son yazılar) <br />" . $cfg['mainurl'] . "/" . "rss/forums?s=XX (XX - Bölüm ID'si, bölümdeki son yazılar) <br />" . $cfg['mainurl'] . "/" . "rss/forums?q=XX (XX - Konu ID'si, konudaki son yazılar) <br />" . $cfg['mainurl'] . "/" . "rss/forums?s=XX&q=YY (XX - Bölüm ID'si, YY - Konu ID'si)";
+/* ====== Rss: cfg_* and adm_help_config_rss moved to modules/rss/lang/ ====== */
 
 /* ====== Forums ====== */
 
@@ -310,12 +298,7 @@ $L['adm_enablebbcodes'] = "BBcode'ları Etkinleştir";
 $L['adm_enablesmilies'] = "Gülücükleri Etkinleştir";
 $L['adm_enableprvtopics'] = "Özel Konulara İzin Ver";
 $L['adm_countposts'] = "Gönderi Sayısını Say";
-$L['adm_autoprune'] = "* gün sonra konuları otomatik olarak temizle";
-$L['adm_postcounters'] = "Sayaçları Kontrol Et";
-$L['adm_help_forums'] = "Mevcut değil";
-$L['adm_forum_structure'] = "Forumların Yapısı (Kategoriler)";
-$L['adm_forum_structure_cat'] = "Forumların Yapısı";
-$L['adm_help_forums_structure'] = "Mevcut değil";
+/* Forum admin strings moved to modules/forums/lang/ */
 $L['adm_defstate'] = "Varsayılan Durum";
 $L['adm_defstate_0'] = "Katlanmış";
 $L['adm_defstate_1'] = "Açık";
@@ -420,10 +403,7 @@ $L['adm_tpl_parent'] = "Ana kategoriyle aynı olan";
 $L['adm_enablecomments'] = "Yorumları etkinleştir";   // Yeni v173
 $L['adm_enableratings'] = "Puanlamayı etkinleştir";     // Yeni v173
 
-/* ====== Polls ====== */
-
-$L['adm_help_polls'] = "Yeni bir anket konusu oluşturduktan sonra, bu ankete seçenekler (tercihler) eklemek için 'Düzenle'yi seçin.<br />'Sil' seçeneği, seçilen anketi, seçenekleri ve ilgili tüm oyları siler.<br />'Sıfırla' seçeneği, seçilen anketin tüm oylarını siler. Ankete veya seçeneklere zarar vermez.<br />'Yükselt' seçeneği, anketin oluşturulma tarihini geçerli tarihe değiştirir ve böylece anketi 'güncel' yaparak listenin en üstüne çıkarır.";
-$L['adm_poll_title'] = "Anket başlığı";
+/* ====== Polls (core_polls, adm_help_polls, adm_poll_title moved to modules/polls/lang/) ====== */
 
 /* ====== Statistics ====== */
 
@@ -490,6 +470,9 @@ $L['adm_paused'] = "Duraklatıldı";
 $L['adm_running'] = "Çalışıyor";
 $L['adm_partrunning'] = "Kısmen çalışıyor";
 $L['adm_notinstalled'] = "Yüklenmedi";
+$L['adm_requires_modules'] = "Gereksinimler (modüller)";
+$L['adm_requires_plugins'] = "Gereksinimler (eklentiler)";
+$L['adm_dependent_plugins'] = "Bu modüle bağımlı eklentiler";
 
 $L['adm_opt_installall'] = "Tümünü yükle";
 $L['adm_opt_installall_explain'] = "Bu, eklentinin tüm bölümlerini yükleyecek veya sıfırlayacaktır.";

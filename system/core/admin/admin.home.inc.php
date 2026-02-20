@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.home.inc.php
-Version=180
-Updated=2025-jan-25
+File=system/core/admin/admin.home.inc.php
+Version=185
+Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -24,8 +24,11 @@ $urlpaths = array();
 $urlpaths[sed_url("admin", "m=home")] = $L['Home'];
 $admintitle = $L['Home'];
 
-$pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
-$pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
+$pagesqueued = 0;
+if (sed_module_active('page')) {
+	$sqltmp_pq = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
+	$pagesqueued = sed_sql_result($sqltmp_pq, 0, "COUNT(*)");
+}
 
 $upgstat = '';
 
@@ -49,8 +52,8 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled') {
 }
 
 $t->assign(array(
-	"HOME_PAGE_QUEUED" => sed_link(sed_url("admin", "m=page"), $L['Pages'] . " : " . $pagesqueued),
-	"HOME_PAGE_ADDNEWENTRY" => sed_linkif(sed_url("page", "m=add"), $L['addnewentry'], sed_auth('page', 'any', 'A'))
+	"HOME_PAGE_QUEUED" => sed_module_active('page') ? sed_link(sed_url("admin", "m=page"), $L['Pages'] . " : " . $pagesqueued) : ($L['Pages'] . " : -"),
+	"HOME_PAGE_ADDNEWENTRY" => sed_linkif(sed_url("page", "m=add"), $L['addnewentry'], sed_module_active('page') && sed_auth('page', 'any', 'A'))
 ));
 
 // --------------------------

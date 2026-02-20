@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/recentitems/recentitems.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -63,19 +63,21 @@ $cfg['plu_mask_polls'] =  empty($cfg['plu_mask_polls']) ? "<div>%1\$s</div>" : $
 
 $plu_empty = $L['None'] . "<br />";
 
-if ($cfg['plugin']['recentitems']['maxpages'] > 0 && !$cfg['disable_page']) {
+$latestpages = $latesttopics = $latestpoll = $latestcomments = '';
+
+if ($cfg['plugin']['recentitems']['maxpages'] > 0 && sed_module_active('page')) {
 	$latestpages = sed_get_latestpages($cfg['plugin']['recentitems']['maxpages'], $cfg['plu_mask_pages']);
 }
 
-if ($cfg['plugin']['recentitems']['maxtopics'] > 0 && !$cfg['disable_forums']) {
+if ($cfg['plugin']['recentitems']['maxtopics'] > 0 && sed_module_active('forums')) {
 	$latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics'], $cfg['plu_mask_topics']);
 }
 
-if ($cfg['plugin']['recentitems']['maxpolls'] > 0 && !$cfg['disable_polls']) {
+if ($cfg['plugin']['recentitems']['maxpolls'] > 0 && sed_module_active('polls')) {
 	$latestpoll = sed_get_latestpolls($cfg['plugin']['recentitems']['maxpolls'], $cfg['plu_mask_polls']);
 }
 
-if ($cfg['plugin']['recentitems']['maxcomments'] > 0 && !$cfg['disable_comments']) {
+if ($cfg['plugin']['recentitems']['maxcomments'] > 0 && sed_plug_active('comments')) {
 	$latestcomments = sed_get_latestcomments($cfg['plugin']['recentitems']['maxcomments'], $cfg['plu_mask_comments']);
 }
 

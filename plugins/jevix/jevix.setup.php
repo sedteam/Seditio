@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/jevix/jevix.setup.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Amro
 Description=
@@ -18,7 +18,7 @@ Description=
 Code=jevix
 Name=Jevix 1.3b
 Description=Jevix - HTML Filter for Seditio, beta version for Seditio 16x-17x
-Version=180
+Version=185
 Date=2012-may-22
 Author=Amro
 Copyright=Amro

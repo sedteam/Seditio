@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/massmovetopics/massmovetopics.admin.php
-Version=180
-Updated=2025-jan-25
+Version=185
+Updated=2026-feb-14
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -37,6 +37,7 @@ $plugin_body .= '</div>';
 
 $plugin_body .= '<div class="content-box-content">';
 
+if (sed_module_active('forums')) {
 $sourceid = sed_import('sourceid', 'P', 'INT');
 $targetid = sed_import('targetid', 'P', 'INT');
 
@@ -70,6 +71,9 @@ if ($a == 'move') {
 	$plugin_body .= "... to the section :</td><td>" . $select_target . "</td></tr>";
 	$plugin_body .= "<tr><td colspan=\"2\"><div class=\"text-center\"><input type=\"submit\" class=\"submit btn\" value=\"" . $L['Move'] . "\" /></div></td></tr></table>";
 	$plugin_body .= "</form>";
+}
+} else {
+	$plugin_body .= "<p class=\"no\">" . $L['Forums'] . " " . $L['Disabled'] . ".</p>";
 }
 
 $plugin_body .= "</div></div>";
