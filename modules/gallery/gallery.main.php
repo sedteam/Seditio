@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Gallery home
-Hooks=gallery.home.first,gallery.home.main,gallery.home.tags
 [END_SED]
 ==================== */
 

@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Page view
-Hooks=page.first,page.fetch,page.main,page.tags
 [END_SED]
 ==================== */
 

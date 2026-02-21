@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Gallery details
-Hooks=gallery.details.first,gallery.details.main,gallery.details.tags
 [END_SED]
 ==================== */
 

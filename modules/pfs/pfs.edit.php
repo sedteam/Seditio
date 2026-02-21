@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=PFS edit file
-Hooks=pfs.stndl,pfs.editfolder.tags
 [END_SED]
 ==================== */
 

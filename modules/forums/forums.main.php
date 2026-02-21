@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Forums sections (main page)
-Hooks=forums.sections.first,forums.sections.main,forums.sections.loop,forums.sections.tags
 [END_SED]
 ==================== */
 

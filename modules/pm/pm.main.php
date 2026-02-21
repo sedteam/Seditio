@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Private messages
-Hooks=pm.first,pm.main,pm.loop,pm.tags
 [END_SED]
 ==================== */
 

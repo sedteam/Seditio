@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Edit page
-Hooks=page.edit.update.first,page.edit.update.done,page.edit.first,page.edit.main,page.edit.tags
 [END_SED]
 ==================== */
 

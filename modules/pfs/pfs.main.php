@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=PFS main
-Hooks=pfs.first,pfs.upload.first,pfs.upload.moved,pfs.upload.done,pfs.stndl,pfs.stndl.icons,pfs.tags
 [END_SED]
 ==================== */
 

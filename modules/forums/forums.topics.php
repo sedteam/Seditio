@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Forums
-Hooks=forums.topics.first,forums.topics.main,forums.topics.loop,forums.topics.tags
 [END_SED]
 ==================== */
 

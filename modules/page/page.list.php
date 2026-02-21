@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=List (categories)
-Hooks=list.first,list.fetch,list.main,list.loopfirst,list.loop,list.tags
 [END_SED]
 ==================== */
 

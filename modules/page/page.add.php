@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Add page
-Hooks=page.add.first,page.add.add.first,page.add.add.done,page.add.clone,page.add.main,page.add.tags
 [END_SED]
 ==================== */
 

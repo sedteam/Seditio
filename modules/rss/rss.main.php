@@ -11,7 +11,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=RSS Creator
-Hooks=rss.create,rss.output
 [END_SED]
 ==================== */
 

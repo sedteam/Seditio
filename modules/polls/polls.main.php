@@ -12,7 +12,6 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=Polls
-Hooks=polls.first,polls.stndl,polls.main,polls.view,polls.tags
 [END_SED]
 ==================== */
 
