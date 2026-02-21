@@ -56,25 +56,9 @@ $sed_urltrans['pfs'] = array(
 
 /* Pm translation: see modules/pm/pm.urls.php when module is active */
 
-/*  Plugins translation */
+/*  Plugins translation: contact, whosonline, passrecover, robots see plugins/{code}/{code}.urls.php when plugin active */
 
 $sed_urltrans['plug'] = array(
-      /**/
-      array(
-            'params' => 'e=contact',
-            'rewrite' => 'contact'
-      ),
-      /**/
-      array(
-            'params' => 'e=whosonline',
-            'rewrite' => 'whosonline'
-      ),
-      /**/
-      array(
-            'params' => 'e=passrecover',
-            'rewrite' => 'passrecover'
-      ),
-      /**/
       array(
             'params' => 'e=*',
             'rewrite' => 'plug/{e}'

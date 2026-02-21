@@ -20,7 +20,9 @@ Description=Url rewriting config
  * Ranges: 100-199 system (go, ajax, resizer, install, captcha, robots);
  * 200-499 modules (view, rss, sitemap, polls, gallery, pfs, pm, forums);
  * 500-549 plug, admin; 550-599 users, message; 600-649 list; 650-699 page; 700 index.
- * Modules set $mod_urlrewrite_order in their .urls.php. See sed_urls_generate() in functions.php.
+ * Modules set $mod_urlrewrite_order in their .urls.php.
+ * Plugins set $mod_urlrewrite_order in plugins/{code}/{code}.urls.php.
+ * See sed_urls_generate() in system/functions.php.
  */
 
 $sed_urlrewrite = array(
@@ -65,12 +67,7 @@ $sed_urlrewrite = array(
           'rule' => 'system/core/captcha/captcha.php'
      ),
 
-     /*  Robots rewriting */
-     array(
-          'order' => 160,
-          'cond' => '#^/robots.txt$#',
-          'rule' => 'system/core/plug/plug.php?e=robots'
-     ),
+     /*  Robots rewriting: see plugins/robots/robots.urls.php when plugin active */
 
      /*  PFS rewriting (launcher in modules/pfs/; rules also in pfs.urls.php when module active) */
      array(
@@ -84,22 +81,7 @@ $sed_urlrewrite = array(
           'rule' => 'modules/pfs/pfs.php'
      ),
 
-     /*  Plugins rewriting */
-     array(
-          'order' => 500,
-          'cond' => '#^/contact(/?)$#',
-          'rule' => 'system/core/plug/plug.php?e=contact'
-     ),
-     array(
-          'order' => 505,
-          'cond' => '#^/whosonline(/?)$#',
-          'rule' => 'system/core/plug/plug.php?e=whosonline'
-     ),
-     array(
-          'order' => 510,
-          'cond' => '#^/passrecover(/?)$#',
-          'rule' => 'system/core/plug/plug.php?e=passrecover'
-     ),
+     /*  Plugins rewriting: see plugins/{code}/{code}.urls.php when plugin active (contact, whosonline, passrecover, robots) */
      array(
           'order' => 515,
           'cond' => '#^/plug/([a-zA-Z0-9_-]+)(/?)$#',

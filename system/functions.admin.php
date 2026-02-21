@@ -679,6 +679,7 @@ function sed_plugin_install($pl)
 	}
 
 	sed_auth_reorder();
+	sed_urls_generate();
 	sed_cache_clearall();
 	$res .= (isset($j) && $j > 0) ? "<strong>" . sed_link(sed_url("admin", "m=config&n=edit&o=plug&p=" . $pl), "There was configuration entries, click here to open the configuration panel") . "</strong><br />" : '';
 	return ($res);
@@ -745,6 +746,7 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 			$res .= "Not found.<br />";
 		}
 	}
+	sed_urls_generate();
 	sed_cache_clearall();
 	return ($res);
 }

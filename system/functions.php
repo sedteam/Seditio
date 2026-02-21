@@ -5410,16 +5410,17 @@ function sed_browser($url, $options = array())
 }
 
 /**
- * Generate URL cache file combining system rules and module rules.
+ * Generate URL cache file combining system rules, module rules and plugin rules.
  * Order is determined by numeric 'order' (lower = checked first). Base rules have
- * order in config.urlrewrite.php; modules set $mod_urlrewrite_order in .urls.php.
+ * order in config.urlrewrite.php; modules set $mod_urlrewrite_order in .urls.php;
+ * plugins set it in plugins/{code}/{code}.urls.php.
  * Ranges: see comment in system/config.urlrewrite.php.
  *
  * @return bool TRUE on success, FALSE on failure
  */
 function sed_urls_generate()
 {
-	global $db_core;
+	global $db_core, $db_plugins;
 
 	$sed_urlrewrite = array();
 	$sed_urltrans = array();
@@ -5461,7 +5462,41 @@ function sed_urls_generate()
 				}
 			}
 			if (!empty($mod_urltrans)) {
-				$sed_urltrans = array_merge($sed_urltrans, $mod_urltrans);
+				foreach ($mod_urltrans as $section => $rules) {
+					if (isset($sed_urltrans[$section]) && is_array($sed_urltrans[$section]) && is_array($rules)) {
+						$sed_urltrans[$section] = array_merge($sed_urltrans[$section], $rules);
+					} else {
+						$sed_urltrans[$section] = $rules;
+					}
+				}
+			}
+		}
+	}
+
+	/* Plugins: load {pl_code}.urls.php for each active plugin */
+	$sql_plugs = sed_sql_query("SELECT DISTINCT pl_code FROM $db_plugins WHERE pl_module=0 AND pl_active=1");
+	while ($row = sed_sql_fetchassoc($sql_plugs)) {
+		$urls_file = SED_ROOT . '/plugins/' . $row['pl_code'] . '/' . $row['pl_code'] . '.urls.php';
+		if (file_exists($urls_file)) {
+			$mod_urlrewrite = array();
+			$mod_urltrans = array();
+			$mod_urlrewrite_order = $default_order;
+			include($urls_file);
+			$order = isset($mod_urlrewrite_order) ? (int)$mod_urlrewrite_order : $default_order;
+			if (!empty($mod_urlrewrite)) {
+				foreach ($mod_urlrewrite as $r) {
+					$r_order = isset($r['order']) ? (int)$r['order'] : $order;
+					$all_rules[] = array('order' => $r_order, 'cond' => $r['cond'], 'rule' => $r['rule']);
+				}
+			}
+			if (!empty($mod_urltrans)) {
+				foreach ($mod_urltrans as $section => $rules) {
+					if (isset($sed_urltrans[$section]) && is_array($sed_urltrans[$section]) && is_array($rules)) {
+						$sed_urltrans[$section] = array_merge($sed_urltrans[$section], $rules);
+					} else {
+						$sed_urltrans[$section] = $rules;
+					}
+				}
 			}
 		}
 	}
