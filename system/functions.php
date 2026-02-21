@@ -4316,7 +4316,7 @@ function sed_url($section, $params = '', $anchor = '', $header = false, $enablea
 
 	// Append any remaining parameters as a query string
 	if (!empty($args)) {
-		$qs = ($cfg['sefurls']) ? '?' : '&'; // Choose separator based on SEO settings
+		$qs = (strpos($url, '?') !== false) ? '&' : '?'; // Use & if URL already has query string
 		foreach ($args as $key => $val) {
 			if (isset($rule['params'][$key])) {
 				if ($rule['params'][$key] != $val) {

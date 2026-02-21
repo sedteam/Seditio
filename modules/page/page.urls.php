@@ -112,14 +112,14 @@ $mod_urltrans['page'] = array(
 		'rewrite' => 'all/'
 	),
 	array(
+		'params' => 'm=*',
+		'rewrite' => 'page/{m}'
+	),
+	array(
 		'params' => 'c=*',
 		'rewrite' => '{sed_get_listpath()}'
 	),
 	/* Page rules */
-	array(
-		'params' => 'm=*',
-		'rewrite' => 'page/{m}'
-	),
 	array(
 		'params' => 'id=*&a=dl',
 		'rewrite' => '{sed_get_pagepath()}{id}/download'
