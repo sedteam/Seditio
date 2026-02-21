@@ -75,24 +75,16 @@ $mod_urlrewrite = array(
 $mod_urltrans = array();
 $mod_urltrans['users'] = array(
 	array(
-		'params' => 'm=details&id=*',
-		'rewrite' => 'users/details/{id}'
+		'params' => 'f=all&s=*&w=*&gm=*',
+		'rewrite' => 'users/group/{gm}/sort/{s}-{w}'
 	),
 	array(
-		'params' => 'm=edit&id=*',
-		'rewrite' => 'users/edit/{id}'
+		'params' => 'gm=*',
+		'rewrite' => 'users/group/{gm}'
 	),
 	array(
-		'params' => 'm=auth&a=*',
-		'rewrite' => 'users/auth/{a}'
-	),
-	array(
-		'params' => 'm=register&a=*',
-		'rewrite' => 'users/register/{a}'
-	),
-	array(
-		'params' => 'm=*',
-		'rewrite' => 'users/{m}'
+		'params' => 'f=all&s=*&w=*&g=*',
+		'rewrite' => 'users/maingroup/{g}/sort/{s}-{w}'
 	),
 	array(
 		'params' => 'f=*&s=*&w=*',
@@ -103,12 +95,44 @@ $mod_urltrans['users'] = array(
 		'rewrite' => 'users/filter/{f}'
 	),
 	array(
-		'params' => 'gm=*',
-		'rewrite' => 'users/group/{gm}'
-	),
-	array(
 		'params' => 'g=*',
 		'rewrite' => 'users/maingroup/{g}'
+	),
+	array(
+		'params' => 'm=auth&a=*',
+		'rewrite' => 'users/auth/{a}'
+	),
+	array(
+		'params' => 'm=register&a=*',
+		'rewrite' => 'users/register/{a}'
+	),
+	array(
+		'params' => 'm=*&a=*',
+		'rewrite' => 'users/{m}/{a}'
+	),
+	array(
+		'params' => 'm=details&id=*',
+		'rewrite' => 'users/details/{id}'
+	),
+	array(
+		'params' => 'm=edit&id=*',
+		'rewrite' => 'users/edit/{id}'
+	),
+	array(
+		'params' => 'm=*&id=*',
+		'rewrite' => 'users/{m}/{id}'
+	),
+	array(
+		'params' => 'm=auth',
+		'rewrite' => 'login'
+	),
+	array(
+		'params' => 'm=register',
+		'rewrite' => 'register'
+	),
+	array(
+		'params' => 'm=*',
+		'rewrite' => 'users/{m}'
 	),
 	array(
 		'params' => '',

@@ -5464,7 +5464,7 @@ function sed_urls_generate()
 			if (!empty($mod_urltrans)) {
 				foreach ($mod_urltrans as $section => $rules) {
 					if (isset($sed_urltrans[$section]) && is_array($sed_urltrans[$section]) && is_array($rules)) {
-						$sed_urltrans[$section] = array_merge($sed_urltrans[$section], $rules);
+						$sed_urltrans[$section] = array_merge($rules, $sed_urltrans[$section]);
 					} else {
 						$sed_urltrans[$section] = $rules;
 					}
@@ -5492,7 +5492,8 @@ function sed_urls_generate()
 			if (!empty($mod_urltrans)) {
 				foreach ($mod_urltrans as $section => $rules) {
 					if (isset($sed_urltrans[$section]) && is_array($sed_urltrans[$section]) && is_array($rules)) {
-						$sed_urltrans[$section] = array_merge($sed_urltrans[$section], $rules);
+						/* Plugin-specific rules (e.g. e=contact) must be checked before generic (e=*) */
+						$sed_urltrans[$section] = array_merge($rules, $sed_urltrans[$section]);
 					} else {
 						$sed_urltrans[$section] = $rules;
 					}

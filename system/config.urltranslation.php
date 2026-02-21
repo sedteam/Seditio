@@ -39,20 +39,7 @@ $sed_urltrans['go'] = array(
 
 /* Gallery translation: see modules/gallery/gallery.urls.php when module is active */
 
-/*  PFS translation */
-
-$sed_urltrans['pfs'] = array(
-      /**/
-      array(
-            'params' => 'f=*',
-            'rewrite' => 'pfs/{f}'
-      ),
-      /**/
-      array(
-            'params' => '',
-            'rewrite' => 'pfs'
-      )
-);
+/*  PFS translation: see modules/pfs/pfs.urls.php when module is active */
 
 /* Pm translation: see modules/pm/pm.urls.php when module is active */
 
@@ -84,68 +71,7 @@ $sed_urltrans['admin'] = array(
       )
 );
 
-/*  Users translation */
-
-$sed_urltrans['users'] = array(
-      /**/
-      array(
-            'params' => 'f=all&s=*&w=*&gm=*',
-            'rewrite' => 'users/group/{gm}/sort/{s}-{w}'
-      ),
-      /**/
-      array(
-            'params' => 'gm=*',
-            'rewrite' => 'users/group/{gm}'
-      ),
-      /**/
-      array(
-            'params' => 'f=all&s=*&w=*&g=*',
-            'rewrite' => 'users/maingroup/{g}/sort/{s}-{w}'
-      ),
-      /**/
-      array(
-            'params' => 'f=*&s=*&w=*',
-            'rewrite' => 'users/filter/{f}/sort/{s}-{w}'
-      ),
-      /**/
-      array(
-            'params' => 'f=*',
-            'rewrite' => 'users/filter/{f}'
-      ),
-      /**/
-      array(
-            'params' => 'g=*',
-            'rewrite' => 'users/maingroup/{g}'
-      ),
-      /**/
-      array(
-            'params' => 'm=*&a=*',
-            'rewrite' => 'users/{m}/{a}'
-      ),
-      /**/
-      array(
-            'params' => 'm=*&id=*',
-            'rewrite' => 'users/{m}/{id}'
-      ),
-      /**/
-      array(
-            'params' => 'm=auth',
-            'rewrite' => 'login'
-      ),
-      array(
-            'params' => 'm=register',
-            'rewrite' => 'register'
-      ),
-      array(
-            'params' => 'm=*',
-            'rewrite' => 'users/{m}'
-      ),
-      /**/
-      array(
-            'params' => '',
-            'rewrite' => 'users'
-      )
-);
+/*  Users translation: see modules/users/users.urls.php when module is active */
 
 /*  Messages translation */
 

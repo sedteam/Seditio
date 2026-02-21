@@ -69,17 +69,7 @@ $sed_urlrewrite = array(
 
      /*  Robots rewriting: see plugins/robots/robots.urls.php when plugin active */
 
-     /*  PFS rewriting (launcher in modules/pfs/; rules also in pfs.urls.php when module active) */
-     array(
-          'order' => 170,
-          'cond' => '#^/pfs/([0-9]+)(/?)$#',
-          'rule' => 'modules/pfs/pfs.php?f=$1'
-     ),
-     array(
-          'order' => 180,
-          'cond' => '#^/pfs(/?)$#',
-          'rule' => 'modules/pfs/pfs.php'
-     ),
+     /*  PFS rewriting: see modules/pfs/pfs.urls.php when module active */
 
      /*  Plugins rewriting: see plugins/{code}/{code}.urls.php when plugin active (contact, whosonline, passrecover, robots) */
      array(

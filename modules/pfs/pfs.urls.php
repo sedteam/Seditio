@@ -34,3 +34,13 @@ $mod_urlrewrite = array(
 );
 
 $mod_urltrans = array();
+$mod_urltrans['pfs'] = array(
+	array(
+		'params' => 'f=*',
+		'rewrite' => 'pfs/{f}'
+	),
+	array(
+		'params' => '',
+		'rewrite' => 'pfs'
+	),
+);
