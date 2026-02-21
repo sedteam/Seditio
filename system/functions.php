@@ -1679,18 +1679,27 @@ function sed_getextplugins($hook, $cond = 'R')
 }
 
 /**
- * Check if a plugin is active (has at least one active part, pl_module=0)
+ * Check if a plugin is active (has at least one active part, pl_module=0).
+ * Uses global $sed_plugins (only pl_active=1 rows are there).
  *
  * @param string $code Plugin code
  * @return bool
  */
 function sed_plug_active($code)
 {
-	global $db_plugins;
-	$code = sed_sql_prep($code);
-	$sql = sed_sql_query("SELECT SUM(pl_active) AS ac FROM $db_plugins WHERE pl_code='" . $code . "' AND pl_module=0");
-	$row = sed_sql_fetchassoc($sql);
-	return (isset($row['ac']) && $row['ac'] > 0);
+	global $sed_plugins;
+	if (!is_array($sed_plugins)) {
+		return false;
+	}
+	foreach ($sed_plugins as $hook_plugins) {
+		if (!is_array($hook_plugins)) continue;
+		foreach ($hook_plugins as $pl) {
+			if (isset($pl['pl_code']) && $pl['pl_code'] === $code && (int)$pl['pl_module'] === 0) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 /** 
