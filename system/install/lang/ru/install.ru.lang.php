@@ -21,6 +21,8 @@ $L['install_step2'] = "Файл конфигурации";
 $L['install_step3'] = "MySQL база данных";
 $L['install_step4'] = "Плагины";
 $L['install_step5'] = "Готово";
+$L['install_step4_modules'] = "Выбор модулей";
+$L['install_step5_modinst'] = "Установка модулей";
 
 $L['install_language installation'] = "Язык установки";
 $L['install_select_language installation'] = "Выбор языка установки";
@@ -109,3 +111,12 @@ $L['install_available'] = "Доступно";
 $L['install_missing'] = "Недоступно?";
 $L['install_refresh'] = "Обновить";
 $L['install_nextstep'] = "Следующий шаг";
+
+$L['install_modules'] = "Модули";
+$L['install_optional_modules'] = "Выберите опциональные модули для установки:";
+$L['install_no_modules'] = "Модули в /modules/ не найдены.";
+$L['install_install_modules'] = "Установить модули и продолжить";
+$L['install_installing_modules'] = "Установка модулей";
+$L['install_installed_modules'] = "модулей установлено";
+$L['install_contine_tomodules'] = "К модулям";
+$L['install_config_size'] = "Размер файла: %s байт.";

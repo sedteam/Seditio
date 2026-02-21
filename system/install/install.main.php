@@ -56,13 +56,13 @@ $res = "";
 
 // ------------------------------------
 
-$disp_header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
-$disp_header .= '<html xmlns="http://www.w3.org/1999/xhtml">';
+$disp_header = '<!DOCTYPE html>';
+$disp_header .= '<html lang="' . $langinstall . '">';
 $disp_header .= '<head>';
 $disp_header .= '<base href="' . $sys['abs_url'] . '" />';
-$disp_header .= '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />';
-$disp_header .= '<meta name="description" content="' . $L['install_title'] . '" />';
-$disp_header .= "<script type=\"text/javascript\">  <!--
+$disp_header .= '<meta charset="UTF-8">';
+$disp_header .= '<meta name="description" content="' . $L['install_title'] . '">';
+$disp_header .= "<script>
  function toggleblock(id)
 	{
 	var bl = document.getElementById(id);
@@ -70,11 +70,9 @@ $disp_header .= "<script type=\"text/javascript\">  <!--
 		{ bl.style.display = ''; }
 	else
 		{ bl.style.display = 'none'; }
-	} 
-  //-->
+	}
 </script>";
-$disp_header .= '<style type="text/css">';
-$disp_header .= '<!-- ';
+$disp_header .= '<style>';
 $disp_header .= 'body 		{ background-color: #FFFFFF; padding:24px; text-align:center; margin:0; ';
 $disp_header .= 'font-family: Segoe UI, Verdana, Arial, Helvetica; color: #101010; font-size: 13px; }';
 $disp_header .= '#conte	{ width:800px; margin:20px auto 0 auto; padding:8px 20px 12px 20px; text-align:left; background-color: #F0F0F0; border-radius:20px;} ';
@@ -86,14 +84,13 @@ $disp_header .= 'table.cells 	{ width:100%; margin:0; padding:0; }';
 $disp_header .= 'table.cells td	{ padding:5px; background-color:#E6E6E6; margin:0; }';
 $disp_header .= '.coltop		{ text-align:center; font-size:95%;  background-color:#C9C9C9!important; color:#707070; }';
 $disp_header .= '.desc 		{ font-size:90%; padding:3px; color:#646464; }';
-$disp_header .= '-->';
 $disp_header .= '</style>';
-$disp_header .= '<link rel="stylesheet" type="text/css" href="system/install/install.css" />';
+$disp_header .= '<link rel="stylesheet" href="system/install/install.css" />';
 $disp_header .= '<title>' . $L['install_title'] . '</title>';
 $disp_header .= '</head>';
 $disp_header .= '<body>';
 $disp_header .= '<div id="conte">';
-$disp_footer = '</div><br /></div><br /></body><br /></html>';
+$disp_footer = '</div></div></body></html>';
 
 // -----------------------------------------------
 
@@ -102,23 +99,34 @@ switch ($m) {
 
 		$step = 3;
 
-		// ---------------------------------------
-
-		$res .= "<h2>" . $L['install_build_config'] . " <strong>" . $cfg['config_file'] . "</strong>...</h2>";
-
-		$m = sed_import('m', 'G', 'ALP', 24);
 		$mysqlhost = sed_import('mysqlhost', 'P', 'TXT', 128);
 		$mysqluser = sed_import('mysqluser', 'P', 'TXT', 128);
 		$mysqlpassword = sed_import('mysqlpassword', 'P', 'TXT', 128);
 		$mysqldb = sed_import('mysqldb', 'P', 'TXT', 128);
 		$sqldb = 'mysqli';
 
-		$md_site_secret = md5(sed_unique(16)); // New sed171
-		$cfg['site_secret'] = $md_site_secret;
-
 		$sqldbprefix = sed_import('sqldbprefix', 'P', 'TXT', 16);
 		$defaultskin = sed_import('defaultskin', 'P', 'TXT', 32);
 		$defaultlang = sed_import('defaultlang', 'P', 'ALP', 2);
+
+		require(SED_ROOT . '/system/database.' . $cfg['sqldb'] . '.php');
+		$db_test = sed_sql_connect($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb, TRUE);
+
+		if ($db_test === false) {
+			$db_connection_error = mysqli_connect_error();
+			if (empty($db_connection_error) && empty($mysqldb)) {
+				$db_connection_error = 'Database name is required.';
+			}
+			$m = 'param';
+			goto render_param;
+		}
+
+		// ---------------------------------------
+
+		$res .= "<h2>" . $L['install_build_config'] . " <strong>" . $cfg['config_file'] . "</strong>...</h2>";
+
+		$md_site_secret = md5(sed_unique(16)); // New sed171
+		$cfg['site_secret'] = $md_site_secret;
 
 		require(SED_ROOT . '/system/install/install.config.php');
 
@@ -130,7 +138,6 @@ switch ($m) {
 
 			$res .= $L['install_creating_mysql'] . "<br />";
 
-			require(SED_ROOT . '/system/database.' . $cfg['sqldb'] . '.php');
 			$connection_id = sed_sql_connect($mysqlhost, $mysqluser, $mysqlpassword, $mysqldb);
 			$cfg['mysqldb'] = $sqldbprefix;
 			sed_sql_set_charset($connection_id, 'utf8');
@@ -148,7 +155,7 @@ switch ($m) {
 					}
 				}
 				sed_sql_query("SET FOREIGN_KEY_CHECKS = 1");
-				$res .= "<strong>" . (isset($L['install_database_cleared']) ? $L['install_database_cleared'] : 'Database cleared') . ":</strong> " . $dropped . " " . (isset($L['install_tables_dropped']) ? $L['install_tables_dropped'] : 'table(s) dropped') . ".<br />";
+				$res .= "<strong>" . $L['install_database_cleared'] . ":</strong> " . $dropped . " " . $L['install_tables_dropped'] . ".<br />";
 			}
 
 			$fp = @fopen($cfg['config_file'], 'w');
@@ -156,7 +163,7 @@ switch ($m) {
 			@fclose($fp);
 
 			$cfg_size = filesize($cfg['config_file']);
-			$res .= "Size of the file : " . $cfg_size . " bytes.<br />";
+			$res .= sprintf($L['install_config_size'], $cfg_size) . "<br />";
 			$res .= "<span class=\"yes\">" . $L['install_looks_chmod'] . "</span>";
 			@chmod($cfg['config_file'], 0444);
 
@@ -266,7 +273,7 @@ switch ($m) {
 			$res .= "<span class=\"yes\">" . $L['install_done'] . "</span>";
 
 			$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=modules") . "\" method=\"post\">";
-			$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . (isset($L['install_contine_tomodules']) ? $L['install_contine_tomodules'] : 'Continue to Modules') . "\">";
+			$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . $L['install_contine_tomodules'] . "\">";
 			$res .= "</form>";
 		} else {
 			$res .= "<span class=\"no\">" . $L['install_error_notwrite'] . "</span>";
@@ -280,11 +287,11 @@ switch ($m) {
 
 		$step = 4;
 
-		$res .= "<h3>" . (isset($L['install_modules']) ? $L['install_modules'] : 'Modules') . " :</h3>";
-		$res .= (isset($L['install_optional_modules']) ? $L['install_optional_modules'] : 'Select optional modules to install:');
+		$res .= "<h3>" . $L['install_modules'] . " :</h3>";
+		$res .= $L['install_optional_modules'];
 		$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=modinst") . "\" method=\"post\">";
 		$res .= "<table class=\"cells striped\">";
-		$res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">" . (isset($L['install_modules']) ? $L['install_modules'] : 'Modules') . "</td>";
+		$res .= "<tr><td colspan=\"2\" style=\"width:80%;\" class=\"coltop\">" . $L['install_modules'] . "</td>";
 		$res .= "<td style=\"width:10%;\" class=\"coltop\">" . $L['install_install'] . "</td>";
 		$res .= "</tr>";
 
@@ -325,11 +332,11 @@ switch ($m) {
 				$res .= "</td></tr>";
 			}
 		} else {
-			$res .= "<tr><td colspan=\"3\">" . (isset($L['install_no_modules']) ? $L['install_no_modules'] : 'No modules found in /modules/ directory.') . "</td></tr>";
+			$res .= "<tr><td colspan=\"3\">" . $L['install_no_modules'] . "</td></tr>";
 		}
 
 		$res .= "</table>";
-		$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . (isset($L['install_install_modules']) ? $L['install_install_modules'] : 'Install Modules & Continue') . "\">";
+		$res .= "<input type=\"submit\" class=\"submit btn\" style=\"margin-top:32px;\" value=\"" . $L['install_install_modules'] . "\">";
 		$res .= "</form>";
 
 		break;
@@ -341,7 +348,7 @@ switch ($m) {
 		$step = 5;
 
 		$mod = sed_import('mod', 'P', 'ARR');
-		$res .= "<h3>" . (isset($L['install_installing_modules']) ? $L['install_installing_modules'] : 'Installing Modules') . "</h3>";
+		$res .= "<h3>" . $L['install_installing_modules'] . "</h3>";
 
 		$usr = $_SESSION['usr'];
 		$sys['now_offset'] = time();
@@ -434,7 +441,7 @@ switch ($m) {
 			}
 		}
 
-		$res .= $j . " " . (isset($L['install_installed_modules']) ? $L['install_installed_modules'] : 'module(s) installed') . " (";
+		$res .= $j . " " . $L['install_installed_modules'] . " (";
 		$res .= "<a onclick=\"toggleblock('modlogf'); return false;\" href=\"javascript:void(0)\">" . $L['install_display_log'] . "</a>).<br />";
 		$res .= "<div name=\"modlog\" id=\"modlogf\" style=\"display:none;\" >";
 		$res .= $log . "</div>";
@@ -544,7 +551,7 @@ switch ($m) {
 				}
 			}
 			if (!$dep_ok) {
-				$skip_msg = (isset($L['install_plugin_skipped']) ? $L['install_plugin_skipped'] : 'skipped (required module %s is not installed)');
+				$skip_msg = $L['install_plugin_skipped'];
 				$res .= "- " . sed_cc($info['Name']) . ": <span class=\"no\">" . sprintf($skip_msg, sed_cc($missing_mod)) . "</span><br />";
 				$log .= "<h3>" . sed_cc($info['Name']) . " (" . $v . ")</h3><span class=\"no\">" . sprintf($skip_msg, sed_cc($missing_mod)) . "</span><br />";
 				continue;
@@ -593,8 +600,28 @@ switch ($m) {
 		// -----------------------------------------------
 
 	case 'param':
+	render_param:
 
 		$step = 2;
+
+		if (!empty($db_connection_error)) {
+			$res .= "<div class=\"error\" style=\"padding:16px; margin:8px 0; border:1px solid #c31d1d; background-color:#fde8e8; border-radius:4px; text-align:left; font-size:100%;\">";
+			$res .= "<strong>" . $L['install_error_db_connection'] . "</strong><br />" . htmlspecialchars($db_connection_error);
+			$res .= "</div>";
+		}
+
+		$val_mysqlhost = isset($mysqlhost) ? htmlspecialchars($mysqlhost) : 'localhost';
+		$val_mysqluser = isset($mysqluser) ? htmlspecialchars($mysqluser) : 'root';
+		$val_mysqlpassword = isset($mysqlpassword) ? htmlspecialchars($mysqlpassword) : '';
+		$val_mysqldb = isset($mysqldb) ? htmlspecialchars($mysqldb) : '';
+		$val_sqldbprefix = isset($sqldbprefix) ? htmlspecialchars($sqldbprefix) : 'sed_';
+		$val_admin_name = isset($_POST['admin_name']) ? htmlspecialchars($_POST['admin_name']) : '';
+		$val_admin_pass = isset($_POST['admin_pass']) ? htmlspecialchars($_POST['admin_pass']) : '';
+		$val_admin_email = isset($_POST['admin_email']) ? htmlspecialchars($_POST['admin_email']) : '';
+		$val_admin_country = isset($_POST['admin_country']) ? $_POST['admin_country'] : (isset($cfg['defaultcountry']) ? $cfg['defaultcountry'] : '');
+		$val_defaultskin = isset($defaultskin) ? $defaultskin : $cfg['default_skin'];
+		$val_defaultlang = isset($defaultlang) ? $defaultlang : '';
+		$val_db_clear = !empty($_POST['db_clear_before_import']) ? 'checked="checked"' : '';
 
 		$res .= "<form name=\"install\" action=\"" . sed_url("install", "m=config") . "\" method=\"post\">";
 
@@ -602,24 +629,24 @@ switch ($m) {
 
 		$res .= "<table class=\"cells\">";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_hosturl'] . "</td><td colspan=\"2\">";
-		$res .= "<input type=\"text\" name=\"mysqlhost\" size=\"32\" value=\"localhost\" maxlength=\"128\" />";
+		$res .= "<input type=\"text\" name=\"mysqlhost\" size=\"32\" value=\"" . $val_mysqlhost . "\" maxlength=\"128\" />";
 		$res .= " (" . $L['install_always_localhost'] . ")</td></tr>";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_user'] . "</td><td colspan=\"2\">";
-		$res .= "<input type=\"text\" name=\"mysqluser\" size=\"32\" value=\"root\" maxlength=\"128\" />";
+		$res .= "<input type=\"text\" name=\"mysqluser\" size=\"32\" value=\"" . $val_mysqluser . "\" maxlength=\"128\" />";
 		$res .= " (" . $L['install_see_yourhosting'] . ")</td></tr>";
-		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_password'] . "</td><td colspan=\"2\"><input type=\"text\" name=\"mysqlpassword\" size=\"32\" value=\"\" maxlength=\"128\" />";
+		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_password'] . "</td><td colspan=\"2\"><input type=\"text\" name=\"mysqlpassword\" size=\"32\" value=\"" . $val_mysqlpassword . "\" maxlength=\"128\" />";
 		$res .= " (" . $L['install_see_yourhosting'] . ")</td></tr>";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_name'] . "</td><td colspan=\"2\">";
-		$res .= "<input type=\"text\" name=\"mysqldb\" size=\"32\" value=\"\" maxlength=\"128\" />";
+		$res .= "<input type=\"text\" name=\"mysqldb\" size=\"32\" value=\"" . $val_mysqldb . "\" maxlength=\"128\" />";
 		$res .= " (" . $L['install_see_yourhosting'] . ")</td></tr>";
 
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_tableprefix'] . "</td><td colspan=\"2\">";
-		$res .= "<input type=\"text\" name=\"sqldbprefix\" size=\"32\" value=\"sed_\" maxlength=\"16\" />";
+		$res .= "<input type=\"text\" name=\"sqldbprefix\" size=\"32\" value=\"" . $val_sqldbprefix . "\" maxlength=\"16\" />";
 		$res .= " (" . $L['install_seditio_already'] . ")</td></tr>";
 
-		$res .= "<tr><td style=\"width:172px;\">" . (isset($L['install_database_clear_before']) ? $L['install_database_clear_before'] : 'Clear database before import') . "</td><td colspan=\"2\">";
-		$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"db_clear_before_import\" value=\"1\" /> ";
-		$res .= (isset($L['install_database_clear_before_hint']) ? $L['install_database_clear_before_hint'] : 'Drop all tables in the database before import.') . "</td></tr>";
+		$res .= "<tr><td style=\"width:172px;\">" . $L['install_database_clear_before'] . "</td><td colspan=\"2\">";
+		$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"db_clear_before_import\" value=\"1\" " . $val_db_clear . " /> ";
+		$res .= $L['install_database_clear_before_hint'] . "</td></tr>";
 
 		$res .= "</table>";
 
@@ -628,9 +655,9 @@ switch ($m) {
 		$res .= "<table style=\"width:100%;\" class=\"cells\">";
 
 		$res .= "<tr><td style=\"width:172px; vertical-align:top;\">" . $L['install_default_skin'] . "</td><td  style=\"vertical-align:top;\">";
-		$res .= sed_radiobox_skin($cfg['default_skin'], 'defaultskin') . "</td></tr>";
+		$res .= sed_radiobox_skin($val_defaultskin, 'defaultskin') . "</td></tr>";
 		$res .= "<tr><td style=\"width:96px;\">" . $L['install_default_lang'] . "</td><td>";
-		$res .= sed_selectbox_lang('', 'defaultlang') . "</td></tr>";
+		$res .= sed_selectbox_lang($val_defaultlang, 'defaultlang') . "</td></tr>";
 
 		$res .= "</table>";
 
@@ -638,13 +665,13 @@ switch ($m) {
 
 		$res .= "<table style=\"width:100%;\" class=\"cells\">";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_account_name'] . "</td>";
-		$res .= "<td><input type=\"text\" name=\"admin_name\" size=\"32\" value=\"\" maxlength=\"128\" /> (" . $L['install_ownaccount_name'] . ")</td></tr>";
+		$res .= "<td><input type=\"text\" name=\"admin_name\" size=\"32\" value=\"" . $val_admin_name . "\" maxlength=\"128\" /> (" . $L['install_ownaccount_name'] . ")</td></tr>";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_password'] . "</td>";
-		$res .= "<td><input type=\"text\" name=\"admin_pass\" size=\"32\" value=\"\" maxlength=\"128\" /> (" . $L['install_least8chars'] . ")</td></tr>";
+		$res .= "<td><input type=\"text\" name=\"admin_pass\" size=\"32\" value=\"" . $val_admin_pass . "\" maxlength=\"128\" /> (" . $L['install_least8chars'] . ")</td></tr>";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_email'] . "</td>";
-		$res .= "<td><input type=\"text\" name=\"admin_email\" size=\"32\" value=\"\" maxlength=\"128\" /> (" . $L['install_doublecheck'] . ")</td></tr>";
+		$res .= "<td><input type=\"text\" name=\"admin_email\" size=\"32\" value=\"" . $val_admin_email . "\" maxlength=\"128\" /> (" . $L['install_doublecheck'] . ")</td></tr>";
 		$res .= "<tr><td style=\"width:172px;\">" . $L['install_country'] . "</td>";
-		$res .= "<td>" . sed_selectbox_countries(isset($cfg['defaultcountry']) ? $cfg['defaultcountry'] : '', 'admin_country') . "</td></tr>";
+		$res .= "<td>" . sed_selectbox_countries($val_admin_country, 'admin_country') . "</td></tr>";
 		$res .= "<tr><td colspan=\"2\" style=\"padding-top:32px; text-align:center;\"><input type=\"submit\" class=\"submit btn\" value=\"" . $L['install_validate'] . "\"></td></tr>";
 		$res .= "</table>";
 

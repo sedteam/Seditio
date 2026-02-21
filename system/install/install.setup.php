@@ -29,8 +29,8 @@ $steps[0] = $L['install_step0'];
 $steps[1] = $L['install_step1'];
 $steps[2] = $L['install_step2'];
 $steps[3] = $L['install_step3'];
-$steps[4] = isset($L['install_step4_modules']) ? $L['install_step4_modules'] : 'Select Modules';
-$steps[5] = isset($L['install_step5_modinst']) ? $L['install_step5_modinst'] : 'Install Modules';
+$steps[4] = $L['install_step4_modules'];
+$steps[5] = $L['install_step5_modinst'];
 $steps[6] = $L['install_step4'];
 $steps[7] = $L['install_step5'];
 

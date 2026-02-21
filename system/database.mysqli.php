@@ -63,14 +63,22 @@ function sed_sql_close($conn_id = null)
  * @param string $host The MySQL server. It can also include a port number. e.g. "hostname:port" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
  * @param string $user The username
  * @param string $pass The password
- * @param string $db The name of the database that is to be selected.     
- * @return mysqli|bool Specified link identifier  
+ * @param string $db The name of the database that is to be selected.
+ * @param bool $testconn If TRUE, only test connection: return false on failure (no die), return true on success (connection is closed).
+ * @return mysqli|bool Specified link identifier, or true/false when $testconn=TRUE
  */
-function sed_sql_connect($host, $user, $pass, $db)
+function sed_sql_connect($host, $user, $pass, $db, $testconn = FALSE)
 {
 	$conn_id = @mysqli_connect($host, $user, $pass, $db);
 	if (mysqli_connect_errno() || empty($db)) {
+		if ($testconn) {
+			return false;
+		}
 		sed_diefatal('Connect failed. Please check your settings in the file datas/config.php. ' . mysqli_connect_error());
+	}
+	if ($testconn) {
+		mysqli_close($conn_id);
+		return true;
 	}
 	return ($conn_id);
 }

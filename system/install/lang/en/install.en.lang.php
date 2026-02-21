@@ -21,6 +21,8 @@ $L['install_step2'] = "Configuration file";
 $L['install_step3'] = "MySQL database";
 $L['install_step4'] = "Plugins";
 $L['install_step5'] = "Done";
+$L['install_step4_modules'] = "Select Modules";
+$L['install_step5_modinst'] = "Install Modules";
 
 $L['install_language installation'] = "Language installation";
 $L['install_select_language installation'] = "Select the installation language";
@@ -109,3 +111,12 @@ $L['install_available'] = "Available";
 $L['install_missing'] = "Missing ?";
 $L['install_refresh'] = "Refresh";
 $L['install_nextstep'] = "Next step";
+
+$L['install_modules'] = "Modules";
+$L['install_optional_modules'] = "Select optional modules to install:";
+$L['install_no_modules'] = "No modules found in /modules/ directory.";
+$L['install_install_modules'] = "Install Modules & Continue";
+$L['install_installing_modules'] = "Installing Modules";
+$L['install_installed_modules'] = "module(s) installed";
+$L['install_contine_tomodules'] = "Continue to Modules";
+$L['install_config_size'] = "Size of the file: %s bytes.";
