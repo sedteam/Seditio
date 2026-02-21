@@ -6,12 +6,13 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.users.inc.php
+File=modules/users/admin/users.admin.php
 Version=185
-Updated=2026-feb-14
-Type=Core.admin
+Updated=2026-feb-21
+Type=Module
 Author=Seditio Team
-Description=Users
+Description=Users admin
+Lock=0
 [END_SED]
 ==================== */
 
@@ -34,7 +35,7 @@ $admintitle = $L['Users'];
 $t = new XTemplate(sed_skinfile('admin.users', false, true));
 
 if (sed_auth('admin', 'a', 'A')) {
-	$t->assign("BUTTON_USERS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=core&p=users"));
+	$t->assign("BUTTON_USERS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=module&p=users"));
 	$t->parse("ADMIN_USERS.USERS_BUTTONS.USERS_BUTTONS_CONFIG");
 }
 

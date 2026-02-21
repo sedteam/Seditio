@@ -6,12 +6,13 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=users.register.inc.php
+File=modules/users/users.register.php
 Version=185
-Updated=2026-feb-14
-Type=Core
+Updated=2026-feb-21
+Type=Module
 Author=Seditio Team
-Description=User auth
+Description=User registration
+Lock=0
 [END_SED]
 ==================== */
 
@@ -285,7 +286,7 @@ if (is_array($extp)) {
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
-$t = new XTemplate("skins/" . $skin . "/users.register.tpl");
+$t = new XTemplate(sed_skinfile('users.register'));
 
 // ---------- Breadcrumbs
 $urlpaths[sed_url("users", "m=register")] = $L['Registration'];

@@ -28,6 +28,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
+Requires_modules=pfs
 [END_SED_EXTPLUGIN]
 
 ==================== */

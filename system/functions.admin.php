@@ -428,25 +428,7 @@ function sed_loadconfigmap()
 	$result[] = array('trash', '12', 'trash_page', 3, '1', '');
 	$result[] = array('trash', '13', 'trash_pm', 3, '1', '');
 	$result[] = array('trash', '14', 'trash_user', 3, '1', '');
-	$result[] = array('users', '01', 'disablereg', 3, '0', '');
-	$result[] = array('users', '02', 'defaultcountry', 2, '', '');
-	$result[] = array('users', '03', 'disablewhosonline', 3, '0', '');
-	$result[] = array('users', '05', 'maxusersperpage', 2, '50', array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100, 150, 200));
-	$result[] = array('users', '07', 'regrequireadmin', 3, '0',  '');
-	$result[] = array('users', '10', 'regnoactivation', 3, '0', '');
-	$result[] = array('users', '10', 'useremailchange', 3, '0', '');
-	$result[] = array('users', '10', 'usertextimg', 3, '0', '');
-	$result[] = array('users', '10', 'color_group', 3, '0', '');   //new in v175
-	$result[] = array('users', '12', 'av_maxsize', 2, '64000', '');
-	$result[] = array('users', '12', 'av_maxx', 2, '128', '');
-	$result[] = array('users', '12', 'av_maxy', 2, '128', '');
-	$result[] = array('users', '12', 'usertextmax', 2, '300', '');
-	$result[] = array('users', '13', 'sig_maxsize', 2, '64000', '');
-	$result[] = array('users', '13', 'sig_maxx', 2, '640', '');
-	$result[] = array('users', '13', 'sig_maxy', 2, '100', '');
-	$result[] = array('users', '14', 'ph_maxsize', 2, '64000', '');
-	$result[] = array('users', '14', 'ph_maxx', 2, '256', '');
-	$result[] = array('users', '14', 'ph_maxy', 2, '256', '');
+	/* users configs moved to modules/users/users.setup.php */
 	return ($result);
 }
 
@@ -1058,6 +1040,14 @@ function sed_module_pause($code, $state)
 
 	$code = preg_replace('/[^a-zA-Z0-9_]/', '', $code);
 	$state = (int)$state;
+
+	$sql_check = sed_sql_query("SELECT ct_lock FROM $db_core WHERE ct_code='" . sed_sql_prep($code) . "' LIMIT 1");
+	if ($row_check = sed_sql_fetchassoc($sql_check)) {
+		if ((int)$row_check['ct_lock'] === 1 && $state === 0) {
+			return "Module '" . $code . "' is locked and cannot be paused.";
+		}
+	}
+
 	$sql = sed_sql_query("UPDATE $db_core SET ct_state=" . $state . " WHERE ct_code='" . sed_sql_prep($code) . "'");
 	sed_urls_generate();
 	sed_cache_clearall();

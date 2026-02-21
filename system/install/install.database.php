@@ -333,7 +333,7 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, c
 /* PM core entry is created by sed_module_install('pm') when the module is installed */
 /* Polls core entry is created by sed_module_install('polls') when the module is installed */
 /* Ratings: plugin only; no core entry (admin via admin.plug hook) */
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (12, 'users', 'Users', '100', 1, 1, 'system/core/users/', 1);");
+/* Users core entry is created by sed_module_install('users') when the module is installed */
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (13, 'trash', 'Trash Can', '110', 1, 1, 'system/core/', 1);");
 /* Gallery: install via Admin → Modules (modules/gallery) */
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (15, 'dic', 'Directories', '177', 1, 0, 'system/core/', 1);");
@@ -375,12 +375,7 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (24, 6, 'me
 /* Polls auth entries are created by sed_module_install('polls') when the module is installed */
 /* Ratings auth entries are created by plugins/ratings when the plugin is installed */
 
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (49, 1, 'users', 'a', 0, 254, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (50, 2, 'users', 'a', 0, 254, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (51, 3, 'users', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (52, 4, 'users', 'a', 3, 128, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (53, 5, 'users', 'a', 255, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (54, 6, 'users', 'a', 3, 128, 1);");
+/* Users auth entries are created by sed_module_install('users') when the module is installed */
 
 /* Forums auth entries are created by sed_module_install() */
 /* Page auth entries (per category) are created by modules/page/page.install.php */

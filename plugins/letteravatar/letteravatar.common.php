@@ -30,9 +30,8 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-require_once(SED_ROOT . '/plugins/letteravatar/inc/letteravatar.functions.php');
-
-if ($usr['id'] > 0 && empty($usr['profile']['user_avatar'])) {
+if (sed_module_active('pfs') && $usr['id'] > 0 && empty($usr['profile']['user_avatar'])) {
+	require_once(SED_ROOT . '/plugins/letteravatar/inc/letteravatar.functions.php');
 	$gen_avatar = letteravatar_autogen($usr['id']);
 	if ($gen_avatar && $gen_avatar['status']) {
 		$usr['profile']['user_avatar'] = $gen_avatar['imagepath'];

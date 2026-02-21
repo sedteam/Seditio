@@ -123,67 +123,7 @@ $sed_urlrewrite = array(
           'rule' => 'system/core/admin/admin.php'
      ),
 
-     /*  Users rewriting */
-     array(
-          'order' => 535,
-          'cond' => '#^/users/filter/([a-zA-Z0-9_-]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-          'rule' => 'system/core/users/users.php?f=$1&s=$2&w=$3'
-     ),
-     array(
-          'order' => 540,
-          'cond' => '#^/users/filter/([a-zA-Z0-9_-]+)(/?)$#',
-          'rule' => 'system/core/users/users.php?f=$1'
-     ),
-     array(
-          'order' => 545,
-          'cond' => '#^/users/group/([0-9]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-          'rule' => 'system/core/users/users.php?f=all&gm=$1&s=$2&w=$3'
-     ),
-     array(
-          'order' => 550,
-          'cond' => '#^/users/group/([0-9]+)(/?)$#',
-          'rule' => 'system/core/users/users.php?gm=$1'
-     ),
-     array(
-          'order' => 555,
-          'cond' => '#^/users/maingroup/([0-9]+)/sort/([a-zA-Z]+)-(asc|desc)(/?)$#',
-          'rule' => 'system/core/users/users.php?f=all&g=$1&s=$2&w=$3'
-     ),
-     array(
-          'order' => 560,
-          'cond' => '#^/users/maingroup/([0-9]+)(/?)$#',
-          'rule' => 'system/core/users/users.php?g=$1'
-     ),
-     array(
-          'order' => 565,
-          'cond' => '#^/users/([a-zA-Z]+)/([a-zA-Z]+)(/?)$#',
-          'rule' => 'system/core/users/users.php?m=$1&a=$2'
-     ),
-     array(
-          'order' => 570,
-          'cond' => '#^/users/([a-zA-Z]+)/([0-9]+)(/?)$#',
-          'rule' => 'system/core/users/users.php?m=$1&id=$2'
-     ),
-     array(
-          'order' => 575,
-          'cond' => '#^/users/([a-zA-Z]+)(/?)$#',
-          'rule' => 'system/core/users/users.php?m=$1'
-     ),
-     array(
-          'order' => 580,
-          'cond' => '#^/users(/?)$#',
-          'rule' => 'system/core/users/users.php'
-     ),
-     array(
-          'order' => 585,
-          'cond' => '#^/register(/?)$#',
-          'rule' => 'system/core/users/users.php?m=register'
-     ),
-     array(
-          'order' => 590,
-          'cond' => '#^/login(/?)$#',
-          'rule' => 'system/core/users/users.php?m=auth'
-     ),
+     /* Users rewriting rules moved to modules/users/users.urls.php */
 
      /*  Messages rewriting */
      array(

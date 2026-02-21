@@ -6,12 +6,13 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=users.profile.inc.php
+File=modules/users/users.profile.php
 Version=185
-Updated=2026-feb-14
-Type=Core
+Updated=2026-feb-21
+Type=Module
 Author=Seditio Team
 Description=User profile
+Lock=0
 [END_SED]
 ==================== */
 

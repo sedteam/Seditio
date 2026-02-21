@@ -59,7 +59,7 @@ $core_paths = array(
 	'plug'    => array('path' => 'system/core/plug/',    'admin' => 1),
 	'pm'      => array('path' => 'modules/pm/',          'admin' => 1),
 	'polls'   => array('path' => 'modules/polls/',       'admin' => 1),
-	'users'   => array('path' => 'system/core/users/',   'admin' => 1),
+	'users'   => array('path' => 'modules/users/',        'admin' => 1),
 	'trash'   => array('path' => 'system/core/',         'admin' => 1),
 	'gallery' => array('path' => 'modules/gallery/',     'admin' => 1),
 	'dic'     => array('path' => 'system/core/',         'admin' => 1),
@@ -158,9 +158,25 @@ sed_sql_query("UPDATE $db_plugins SET pl_lock=0 WHERE 1");
 
 $adminmain .= "-----------------------<br />";
 
+/* ======== Users: migrate from core to module ======== */
+$adminmain .= "Migrating Users from core to module...<br />";
+
+$saved_users_auth = array();
+$sql_ua = sed_sql_query("SELECT * FROM $db_auth WHERE auth_code='users'");
+while ($row_ua = sed_sql_fetchassoc($sql_ua)) {
+	$saved_users_auth[] = $row_ua;
+}
+
+sed_sql_query("DELETE FROM $db_core WHERE ct_code='users'");
+sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='users' AND pl_module=1");
+sed_sql_query("UPDATE $db_config SET config_owner='module' WHERE config_owner='core' AND config_cat='users'");
+$adminmain .= "Users core entry removed, config owner updated.<br />";
+
+$adminmain .= "-----------------------<br />";
+
 /* ======== Clean up old core configs that now belong to modules ======== */
 $adminmain .= "Removing old core configs for modules (will be recreated by module install)...<br />";
-$modules_to_install = array('page', 'forums', 'pfs', 'pm', 'polls', 'gallery', 'rss', 'sitemap', 'view');
+$modules_to_install = array('users', 'page', 'forums', 'pfs', 'pm', 'polls', 'gallery', 'rss', 'sitemap', 'view');
 foreach ($modules_to_install as $mod_code) {
 	sed_sql_query("DELETE FROM $db_config WHERE config_owner='core' AND config_cat='" . sed_sql_prep($mod_code) . "'");
 }
@@ -175,6 +191,15 @@ foreach ($modules_to_install as $mod_code) {
 	} else {
 		$adminmain .= "Module $mod_code: setup file not found, skipped.<br />";
 	}
+}
+
+/* ======== Users: restore custom auth entries ======== */
+if (!empty($saved_users_auth)) {
+	$adminmain .= "Restoring custom Users auth entries...<br />";
+	foreach ($saved_users_auth as $sa) {
+		sed_sql_query("UPDATE $db_auth SET auth_rights=" . (int)$sa['auth_rights'] . ", auth_rights_lock=" . (int)$sa['auth_rights_lock'] . " WHERE auth_groupid=" . (int)$sa['auth_groupid'] . " AND auth_code='users' AND auth_option='" . sed_sql_prep($sa['auth_option']) . "'");
+	}
+	$adminmain .= "Done.<br />";
 }
 
 /* ======== Full plugin reinstallation ======== */

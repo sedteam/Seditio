@@ -311,12 +311,16 @@ switch ($m) {
 
 				$mod_name = isset($mod_info['Name']) ? $mod_info['Name'] : $v;
 				$mod_desc = isset($mod_info['Description']) ? $mod_info['Description'] : '';
-				$checked = (isset($mod_info['Installer_skip']) && $mod_info['Installer_skip'] == 1) ? '' : "checked=\"checked\"";
+				$is_locked = (isset($mod_info['Lock_module']) && (int)$mod_info['Lock_module'] === 1);
+				$checked = $is_locked ? "checked=\"checked\" disabled" : ((isset($mod_info['Installer_skip']) && $mod_info['Installer_skip'] == 1) ? '' : "checked=\"checked\"");
 
 				$res .= "<tr><td style=\"width:6%; text-align:center;\">";
 				$res .= "&bull;";
 				$res .= "</td><td><strong>" . $mod_name . "</strong><br /><span class=\"desc\">" . $mod_desc . "</span></td>";
 				$res .= "<td style=\"width:6%; text-align:center;\">";
+				if ($is_locked) {
+					$res .= "<input type=\"hidden\" name=\"mod[]\" value=\"" . $v . "\" />";
+				}
 				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"mod[]\" value=\"" . $v . "\" " . $checked . " />";
 				$res .= "</td></tr>";
 			}
@@ -366,9 +370,30 @@ switch ($m) {
 			}
 		}
 
-		if (is_array($mod)) {
+		if (!is_array($mod)) {
+			$mod = array();
+		}
+
+		// Ensure Lock_module=1 modules are always included
+		$modules_dir = SED_ROOT . '/modules';
+		if (is_dir($modules_dir)) {
+			$dh = opendir($modules_dir);
+			while ($df = readdir($dh)) {
+				if ($df != '.' && $df != '..' && is_dir($modules_dir . '/' . $df)) {
+					$sf = $modules_dir . '/' . $df . '/' . $df . '.setup.php';
+					if (file_exists($sf)) {
+						$si = sed_infoget($sf, 'SED_MODULE');
+						if (isset($si['Lock_module']) && (int)$si['Lock_module'] === 1 && !in_array($df, $mod)) {
+							array_unshift($mod, $df);
+						}
+					}
+				}
+			}
+			closedir($dh);
+		}
+
+		if (count($mod) > 0) {
 			// Sort by dependencies so required modules install first (e.g. pfs before gallery)
-			$modules_dir = SED_ROOT . '/modules';
 			$mod_deps = array();
 			foreach ($mod as $v) {
 				$setup_file = $modules_dir . '/' . $v . '/' . $v . '.setup.php';

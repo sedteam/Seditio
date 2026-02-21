@@ -61,8 +61,8 @@ $plugin_title = $L['plu_title'];
 
 $totaldbpages = sed_module_active('page') ? sed_sql_rowcount($db_pages) : 0;
 $totaldbcomments = sed_plug_active('comments') ? sed_sql_rowcount($db_com) : 0;
-$totaldbratings = sed_sql_rowcount($db_ratings);
-$totaldbratingsvotes = sed_sql_rowcount($db_rated);
+$totaldbratings = sed_plug_active('ratings') ? sed_sql_rowcount($db_ratings) : 0;
+$totaldbratingsvotes = sed_plug_active('ratings') ? sed_sql_rowcount($db_rated) : 0;
 $totaldbpolls = sed_module_active('polls') ? sed_sql_rowcount($db_polls) : 0;
 $totaldbpollsvotes = sed_module_active('polls') ? sed_sql_rowcount($db_polls_voters) : 0;
 $totaldbposts = 0;
@@ -80,15 +80,18 @@ if (sed_module_active('forums')) {
 	$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
 	$totaldbpostspruned = sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
 }
-$totaldbfiles = sed_sql_rowcount($db_pfs);
+$totaldbfiles = sed_module_active('pfs') ? sed_sql_rowcount($db_pfs) : 0;
 $totaldbusers = sed_sql_rowcount($db_users);
 
 $totalpages = sed_stat_get('totalpages');
 $totalmailsent = sed_stat_get('totalmailsent');
 $totalpmsent = sed_stat_get('totalpms');
 
-$totaldbfilesize = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs");
-$totaldbfilesize = sed_sql_result($totaldbfilesize, 0, "SUM(pfs_size)");
+$totaldbfilesize = 0;
+if (sed_module_active('pfs')) {
+	$sql_pfs = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs");
+	$totaldbfilesize = (int)sed_sql_result($sql_pfs, 0, "SUM(pfs_size)");
+}
 
 $totalpmactive = 0;
 $totalpmarchived = 0;
