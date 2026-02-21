@@ -29,11 +29,13 @@ Auth_guests=R
 Lock_guests=
 Auth_members=R
 Lock_members=
+Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
 disable_rsspages=02:radio::0:Disable RSS feed for pages
 disable_rsscomments=03:radio::0:Disable RSS feed for comments
+disable_rssforums=04:radio::0:Disable RSS feed for forums
 rss_timetolive=05:string::300:Cache time for RSS feed (seconds)
 rss_maxitems=06:select:0,5,10,20,30,40,50,60,70,75,80,85,90,95,100:30:Maximum items in RSS feed
 rss_defaultcode=07:string::news:Default RSS feed category code

@@ -21,6 +21,7 @@ File=letteravatar.common
 Hooks=common
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

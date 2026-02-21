@@ -57,6 +57,12 @@
 					<div class="table-td text-left resp-table-td pl-title">{PHP.L.adm_deflock_members}:</div>
 					<div class="table-td text-left resp-table-td">{MODULE_DETAILS_DEFLOCK_MEMBERS}</div>
 				</div>
+				<!-- BEGIN: MODULE_DETAILS_LOCKED -->
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td pl-title">{PHP.L.adm_locked}:</div>
+					<div class="table-td text-left resp-table-td">{PHP.L.adm_module_locked}</div>
+				</div>
+				<!-- END: MODULE_DETAILS_LOCKED -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td pl-title">{PHP.L.Author}:</div>
 					<div class="table-td text-left resp-table-td">{MODULE_DETAILS_AUTHOR}</div>
@@ -96,6 +102,7 @@
 </div>
 <!-- END: MODULE_DETAILS_HELP -->
 
+<!-- BEGIN: MODULE_DETAILS_OPT_BOX -->
 <div class="content-box">
 	<div class="content-box-header">
 		<h3>{PHP.L.Options}</h3>
@@ -140,6 +147,7 @@
 		</div>
 	</div>
 </div>
+<!-- END: MODULE_DETAILS_OPT_BOX -->
 
 <div class="content-box">
 	<div class="content-box-header">

@@ -17,6 +17,7 @@ Part=common
 Hooks=common
 File=ratings.common
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

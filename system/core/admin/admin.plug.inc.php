@@ -185,7 +185,7 @@ switch ($a) {
 
 					$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST.PLUG_PARTS_ERROR");
 				} else {
-					$sql = sed_sql_query("SELECT pl_active, pl_id FROM $db_plugins WHERE pl_code='$pl' AND pl_part='" . $info_file['Part'] . "' LIMIT 1");
+					$sql = sed_sql_query("SELECT pl_active, pl_id, pl_lock FROM $db_plugins WHERE pl_code='$pl' AND pl_part='" . $info_file['Part'] . "' LIMIT 1");
 
 					if ($row = sed_sql_fetchassoc($sql)) {
 						$info_file['Status'] = $row['pl_active'];
@@ -207,10 +207,12 @@ switch ($a) {
 
 					if ($info_file['Status'] == 3) {
 						$pl_action = "-";
+					} elseif (isset($row) && $row && (int)$row['pl_lock'] === 1) {
+						$pl_action = isset($L['adm_lockpart']) ? $L['adm_lockpart'] : 'Lock part';
 					} elseif ($row['pl_active'] == 1) {
-						$pl_action = sed_link(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=pausepart&part=" . $row['pl_id'] . "&" . sed_xg()), 'Pause', array('class' => 'btn btn-adm'));
+						$pl_action = sed_link(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=pausepart&part=" . $row['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_pause']) ? $L['adm_opt_pause'] : 'Pause', array('class' => 'btn btn-adm'));
 					} elseif ($row['pl_active'] == 0) {
-						$pl_action = sed_link(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=unpausepart&part=" . $row['pl_id'] . "&" . sed_xg()), 'Un-pause', array('class' => 'btn btn-adm'));
+						$pl_action = sed_link(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=unpausepart&part=" . $row['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_unpause']) ? $L['adm_opt_unpause'] : 'Un-pause', array('class' => 'btn btn-adm'));
 					}
 
 					$t->assign(array(
@@ -305,7 +307,7 @@ switch ($a) {
 
 			case 'pause':
 				sed_check_xg();
-				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0 AND pl_lock=0");
 				sed_cache_clearall();
 				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
 				exit;
@@ -339,7 +341,7 @@ switch ($a) {
 					}
 				}
 				if ($dep_ok) {
-					$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
+					$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0");
 					sed_cache_clearall();
 					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
 					exit;
@@ -348,7 +350,13 @@ switch ($a) {
 
 			case 'pausepart':
 				sed_check_xg();
-				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
+				$sql_check = sed_sql_query("SELECT pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0 LIMIT 1");
+				$row_check = sed_sql_fetchassoc($sql_check);
+				if (!$row_check || (int)$row_check['pl_lock'] === 1) {
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl . "&msg=locked", "", true));
+					exit;
+				}
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0");
 				sed_cache_clearall();
 				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
 				exit;
@@ -356,7 +364,7 @@ switch ($a) {
 
 			case 'unpausepart':
 				sed_check_xg();
-				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0");
 				sed_cache_clearall();
 				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
 				exit;

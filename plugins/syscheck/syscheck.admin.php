@@ -21,6 +21,7 @@ File=syscheck.admin
 Hooks=tools
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

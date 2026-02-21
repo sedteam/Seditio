@@ -11,6 +11,7 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=RSS Creator
+Lock=0
 [END_SED]
 ==================== */
 

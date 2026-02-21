@@ -151,9 +151,10 @@ foreach (array('comments' => 'Comments', 'ratings' => 'Ratings') as $pcode => $p
 /* Plugin dependencies: otherpages, similarpages, slider -> page; uploader -> pfs */
 $deps_page = sed_sql_prep(json_encode(array('requires' => array('page'), 'requires_plugins' => array())));
 $deps_pfs = sed_sql_prep(json_encode(array('requires' => array('pfs'), 'requires_plugins' => array())));
-$adminmain .= "Updating plugin dependencies...<br />";
+$adminmain .= "Updating plugin dependencies & lock status...<br />";
 sed_sql_query("UPDATE $db_plugins SET pl_dependencies='$deps_page' WHERE pl_module=0 AND pl_code IN ('otherpages','similarpages','slider')");
 sed_sql_query("UPDATE $db_plugins SET pl_dependencies='$deps_pfs' WHERE pl_module=0 AND pl_code='uploader'");
+sed_sql_query("UPDATE $db_plugins SET pl_lock=0 WHERE 1");
 
 $adminmain .= "-----------------------<br />";
 

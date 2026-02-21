@@ -12,6 +12,7 @@ Updated=2026-feb-14
 Type=Module
 Author=Seditio Team
 Description=XML Sitemap Generator
+Lock=0
 [END_SED]
 ==================== */
 

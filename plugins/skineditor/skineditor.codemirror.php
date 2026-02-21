@@ -21,6 +21,7 @@ File=skineditor.codemirror
 Hooks=admin.main
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

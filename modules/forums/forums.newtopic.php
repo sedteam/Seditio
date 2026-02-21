@@ -12,6 +12,7 @@ Updated=2026-feb-14
 Type=Core
 Author=Seditio Team
 Description=Forums
+Lock=0
 [END_SED]
 ==================== */
 

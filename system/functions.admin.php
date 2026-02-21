@@ -568,6 +568,7 @@ function sed_plugin_install($pl)
 			$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 			if (empty($info_part['Error'])) {
+				$pl_lock = (isset($info_part['Lock']) && (int)$info_part['Lock'] === 1) ? 1 : 0;
 				//Multihooks New v 173
 				$mhooks = explode(",", $info_part['Hooks']);
 				foreach ($mhooks as $k => $hook) {
@@ -577,7 +578,7 @@ function sed_plugin_install($pl)
 					} else {
 						$order = 10;
 					}
-					$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active) VALUES ('" . trim($hook) . "', '" . $info_part['Code'] . "', '" . sed_sql_prep($info_part['Part']) . "', '" . sed_sql_prep($info['Name']) . "', '" . $pl_version . "', '" . $dependencies_json . "', '" . $info_part['File'] . "', " . (int)$order . ", 1)");
+					$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock) VALUES ('" . trim($hook) . "', '" . $info_part['Code'] . "', '" . sed_sql_prep($info_part['Part']) . "', '" . sed_sql_prep($info['Name']) . "', '" . $pl_version . "', '" . $dependencies_json . "', '" . $info_part['File'] . "', " . (int)$order . ", 1, " . (int)$pl_lock . ")");
 				}
 
 				//$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
@@ -837,8 +838,9 @@ function sed_module_install($code)
 	}
 
 	// Step 5: Register in sed_core
+	$ct_lock = (isset($info['Lock_module']) && (int)$info['Lock_module'] === 1) ? 1 : 0;
 	$ct_path = 'modules/' . $code . '/';
-	$sql = sed_sql_query("INSERT INTO $db_core (ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', 1, 0, '" . sed_sql_prep($ct_path) . "', " . (int)$info['Admin'] . ")");
+	$sql = sed_sql_query("INSERT INTO $db_core (ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', 1, " . (int)$ct_lock . ", '" . sed_sql_prep($ct_path) . "', " . (int)$info['Admin'] . ")");
 	$res .= "Registered in core registry.<br />";
 
 	// Step 6: Register all module parts in sed_plugins (like plugin parts)
@@ -874,7 +876,9 @@ function sed_module_install($code)
 		$part_name = mb_substr($x, 0, -4);
 		$pl_part = ($part_name === $code) ? 'main' : $part_name;
 		$pl_file = $part_name;
-		$sql = sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_module) VALUES ('module', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($pl_part) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($pl_file) . "', " . (int)$order . ", 1, 1)");
+		$part_info = sed_infoget($module_dir . $x, 'SED');
+		$pl_lock = (isset($part_info['Lock']) && (int)$part_info['Lock'] === 1) ? 1 : 0;
+		$sql = sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock, pl_module) VALUES ('module', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($pl_part) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($pl_file) . "', " . (int)$order . ", 1, " . (int)$pl_lock . ", 1)");
 		$order += 10;
 	}
 	$res .= "Registered " . count($parts_ordered) . " part(s) in plugins registry (pl_module=1).<br />";
@@ -975,6 +979,14 @@ function sed_module_uninstall($code)
 		$code_title = $ct_row['ct_title'];
 	}
 	$code_url = sed_url("admin", "m=modules&a=details&mod=" . $code);
+
+	// Check if module is locked
+	$sql_ct_lock = sed_sql_query("SELECT ct_lock FROM $db_core WHERE ct_code='" . sed_sql_prep($code) . "' LIMIT 1");
+	$ct_lock_row = sed_sql_fetchassoc($sql_ct_lock);
+	if ($ct_lock_row && (int)$ct_lock_row['ct_lock'] === 1) {
+		$res .= "<span class=\"no\">Module is locked. Edit the setup file (Lock_module=0) to allow uninstall.</span><br />";
+		return $res;
+	}
 
 	$sql_deps = sed_sql_query("SELECT pl_code, pl_title, pl_dependencies, pl_module FROM $db_plugins WHERE pl_code!='" . sed_sql_prep($code) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != ''");
 	while ($dep_row = sed_sql_fetchassoc($sql_deps)) {

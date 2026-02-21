@@ -21,6 +21,7 @@ File=sedcaptcha.auth.tags
 Hooks=users.auth.tags
 Tags=users.auth.tpl:{USERS_REGISTER_VERIFYIMG},{USERS_REGISTER_VERIFYINPUT}
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

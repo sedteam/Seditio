@@ -491,10 +491,15 @@ $L['adm_opt_pauseall'] = "Приостановить";
 $L['adm_opt_pauseall_explain'] = "Эта опция приостановит работу всех модулей плагина.";
 $L['adm_opt_unpauseall'] = "Возобновить";
 $L['adm_opt_unpauseall_explain'] = "Эта опция возобновит работу всех модулей плагина.";
+$L['adm_lockpart'] = "Заблокированная часть";
+$L['adm_opt_pause'] = "Пауза";
+$L['adm_opt_unpause'] = "Снять паузу";
 
 /* ====== Modules ====== */
 
 $L['adm_modules'] = "Модули";
+$L['adm_locked'] = "Блокировка";
+$L['adm_module_locked'] = "Модуль заблокирован (нельзя удалить или приостановить)";
 $L['adm_modules_installed'] = "Установленные модули";
 $L['adm_modules_available'] = "Доступные модули";
 $L['adm_modules_none'] = "Нет установленных модулей.";

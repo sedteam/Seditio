@@ -22,6 +22,7 @@ Hooks=page.tags
 Tags=page.tpl {PLUGIN_SIMILAR_PAGES}
 Minlevel=0
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

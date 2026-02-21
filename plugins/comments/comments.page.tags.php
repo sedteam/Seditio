@@ -18,6 +18,7 @@ Part=main
 File=comments.page.tags
 Hooks=page.tags
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

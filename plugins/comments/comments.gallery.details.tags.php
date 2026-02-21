@@ -18,6 +18,7 @@ Part=main
 File=comments.gallery.details.tags
 Hooks=gallery.details.tags
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

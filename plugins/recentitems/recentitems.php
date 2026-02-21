@@ -22,6 +22,7 @@ Hooks=index.tags,list.tags,page.tags
 Tags=index.tpl:{PLUGIN_LATESTPAGES},{PLUGIN_LATESTTOPICS},{PLUGIN_LATESTPOLL},{PLUGIN_LATESTCOMMENTS}
 Minlevel=0
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

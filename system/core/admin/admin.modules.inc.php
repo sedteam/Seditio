@@ -173,24 +173,34 @@ if ($a == 'details' && !empty($mod_code)) {
 	}
 
 	// Options: installed or not
-	$sql_core = sed_sql_query("SELECT ct_state FROM $db_core WHERE ct_code='" . sed_sql_prep($mod_code) . "' LIMIT 1");
+	$sql_core = sed_sql_query("SELECT ct_state, ct_lock FROM $db_core WHERE ct_code='" . sed_sql_prep($mod_code) . "' LIMIT 1");
 	$core_row = sed_sql_fetchassoc($sql_core);
 	$is_installed = is_array($core_row) && isset($core_row['ct_state']);
 	$ct_state = $is_installed ? (int) $core_row['ct_state'] : -1;
+	$ct_lock = $is_installed && isset($core_row['ct_lock']) ? (int) $core_row['ct_lock'] : 0;
 
-	if (!$is_installed) {
-		$t->assign("MODULE_DETAILS_INSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=install&" . sed_xg()));
-		$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_OPT_INSTALL");
-	} else {
-		$t->assign("MODULE_DETAILS_UNINSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=uninstall&" . sed_xg()));
-		$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_OPT_UNINSTALL");
-		if ($ct_state == 1) {
-			$t->assign("MODULE_DETAILS_PAUSE_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pause&" . sed_xg()));
-			$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_OPT_PAUSE");
+	if ($ct_lock === 1) {
+		$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_LOCKED");
+	}
+
+	// Options block: hide entirely when module is installed and locked
+	if (!$is_installed || $ct_lock === 0) {
+		$opt_box = "ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_OPT_BOX";
+		if (!$is_installed) {
+			$t->assign("MODULE_DETAILS_INSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=install&" . sed_xg()));
+			$t->parse($opt_box . ".MODULE_DETAILS_OPT_INSTALL");
 		} else {
-			$t->assign("MODULE_DETAILS_UNPAUSE_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=unpause&" . sed_xg()));
-			$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_OPT_UNPAUSE");
+			$t->assign("MODULE_DETAILS_UNINSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=uninstall&" . sed_xg()));
+			$t->parse($opt_box . ".MODULE_DETAILS_OPT_UNINSTALL");
+			if ($ct_state == 1) {
+				$t->assign("MODULE_DETAILS_PAUSE_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pause&" . sed_xg()));
+				$t->parse($opt_box . ".MODULE_DETAILS_OPT_PAUSE");
+			} else {
+				$t->assign("MODULE_DETAILS_UNPAUSE_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=unpause&" . sed_xg()));
+				$t->parse($opt_box . ".MODULE_DETAILS_OPT_UNPAUSE");
+			}
 		}
+		$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_DETAILS_OPT_BOX");
 	}
 
 	// Parts: from filesystem (like plugins) so uninstalled modules still show their parts with "Not installed" status
@@ -237,16 +247,18 @@ if ($a == 'details' && !empty($mod_code)) {
 			$hooks = array_unique($hooks);
 		}
 		$hooks_display = !empty($hooks) ? implode('<br />', $hooks) : 'module';
-		$sql_pl = sed_sql_query("SELECT pl_id, pl_part, pl_file, pl_hook, pl_active FROM $db_plugins WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_part='" . sed_sql_prep($pl_part) . "' AND pl_module=1 LIMIT 1");
+		$sql_pl = sed_sql_query("SELECT pl_id, pl_part, pl_file, pl_hook, pl_active, pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_part='" . sed_sql_prep($pl_part) . "' AND pl_module=1 LIMIT 1");
 		$row_pl = sed_sql_fetchassoc($sql_pl);
 		if ($row_pl) {
 			$part_status = $status_mod[(int) $row_pl['pl_active']];
-		if ($pl_part === 'main') {
+		if ((int)$row_pl['pl_lock'] === 1) {
+			$pl_action = isset($L['adm_lockpart']) ? $L['adm_lockpart'] : 'Lock part';
+		} elseif ($pl_part === 'main') {
 			$pl_action = '-';
 		} else {
 			$pl_action = ($row_pl['pl_active'] == 1)
-				? sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_pauseall']) ? $L['adm_opt_pauseall'] : 'Pause', array('class' => 'btn btn-adm'))
-				: sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=unpausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_unpauseall']) ? $L['adm_opt_unpauseall'] : 'Un-pause', array('class' => 'btn btn-adm'));
+				? sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_pause']) ? $L['adm_opt_pause'] : 'Pause', array('class' => 'btn btn-adm'))
+				: sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=unpausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_unpause']) ? $L['adm_opt_unpause'] : 'Un-pause', array('class' => 'btn btn-adm'));
 		}
 			$t->assign(array(
 				"MODULE_PARTS_NUMBER" => $row_pl['pl_id'],
@@ -310,24 +322,34 @@ if ($a == 'details' && !empty($mod_code)) {
 
 		case 'pause':
 			sed_module_pause($mod_code, 0);
+			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_module=1");
+			sed_cache_clearall();
 			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
 			exit;
 
 		case 'unpause':
 			sed_module_pause($mod_code, 1);
+			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_module=1");
+			sed_cache_clearall();
 			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
 			exit;
 
 		case 'pausepart':
 			$part = sed_import('part', 'G', 'INT');
-			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int) $part . "' AND pl_module=1");
+			$sql_check = sed_sql_query("SELECT pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1 LIMIT 1");
+			$row_check = sed_sql_fetchassoc($sql_check);
+			if (!$row_check || (int)$row_check['pl_lock'] === 1) {
+				sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=locked", "", true));
+				exit;
+			}
+			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
 			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
 			exit;
 
 		case 'unpausepart':
 			$part = sed_import('part', 'G', 'INT');
-			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int) $part . "' AND pl_module=1");
+			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
 			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
 			exit;

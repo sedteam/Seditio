@@ -21,6 +21,7 @@ File=skineditor.common
 Hooks=common.tool.skineditor
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

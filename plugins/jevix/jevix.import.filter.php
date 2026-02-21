@@ -21,6 +21,7 @@ File=jevix.import.filter
 Hooks=import.filter
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

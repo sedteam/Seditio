@@ -22,6 +22,7 @@ Hooks=header.first
 Tags=
 Minlevel=0
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

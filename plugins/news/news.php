@@ -22,6 +22,7 @@ Hooks=index.tags
 Tags=index.tpl:{INDEX_NEWS}
 Minlevel=0
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

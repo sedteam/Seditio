@@ -29,6 +29,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345A
+Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]

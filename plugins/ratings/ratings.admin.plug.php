@@ -19,6 +19,7 @@ Part=admin.plug
 Hooks=admin.plug
 File=ratings.admin.plug
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

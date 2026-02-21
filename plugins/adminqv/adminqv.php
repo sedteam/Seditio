@@ -21,6 +21,7 @@ File=adminqv
 Hooks=admin.home
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

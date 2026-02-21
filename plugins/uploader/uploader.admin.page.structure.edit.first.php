@@ -22,6 +22,7 @@ Hooks=admin.page.structure.edit.first
 Tags=
 Minlevel=0
 Order=11
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

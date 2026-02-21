@@ -29,5 +29,6 @@ global $db_core, $db_plugins, $db_config;
 @sed_sql_query("ALTER TABLE $db_plugins ADD COLUMN pl_module TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER pl_active");
 @sed_sql_query("ALTER TABLE $db_plugins ADD COLUMN pl_version VARCHAR(16) NOT NULL DEFAULT '0.0.0' AFTER pl_title");
 @sed_sql_query("ALTER TABLE $db_plugins ADD COLUMN pl_dependencies TEXT AFTER pl_version");
+@sed_sql_query("ALTER TABLE $db_plugins ADD COLUMN pl_lock TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER pl_active");
 @sed_sql_query("ALTER TABLE $db_plugins ADD INDEX idx_type (pl_module)");
 @sed_sql_query("ALTER TABLE $db_config ADD INDEX idx_config_load (config_owner, config_cat)");

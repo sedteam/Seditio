@@ -22,6 +22,7 @@ Hooks=pfs.stndl.icons
 Tags=
 Minlevel=0
 Order=12
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

@@ -21,6 +21,7 @@ File=robots
 Hooks=common.plug.robots
 Tags=
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

@@ -29,6 +29,7 @@ Auth_guests=R
 Lock_guests=
 Auth_members=R
 Lock_members=
+Lock_module=0
 [END_SED_MODULE]
 
 ==================== */

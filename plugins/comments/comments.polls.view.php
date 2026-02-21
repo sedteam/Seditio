@@ -18,6 +18,7 @@ Part=main
 File=comments.polls.view
 Hooks=polls.view
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

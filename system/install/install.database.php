@@ -191,6 +191,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "plugins (
   pl_file varchar(255) NOT NULL DEFAULT '',
   pl_order tinyint(2) unsigned NOT NULL DEFAULT '10',
   pl_active tinyint(1) unsigned NOT NULL DEFAULT '1',
+  pl_lock tinyint(1) unsigned NOT NULL DEFAULT '0',
   pl_module tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (pl_id),
   KEY idx_type (pl_module)

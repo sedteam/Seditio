@@ -22,6 +22,7 @@ Hooks=header.first,pfs.stndl,polls.stndl
 Tags=
 Minlevel=0
 Order=10
+Lock=0
 [END_SED_EXTPLUGIN]
 ==================== */
 

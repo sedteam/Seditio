@@ -22,6 +22,7 @@ Hooks=page.add.tags
 Tags=page.add.tpl
 Minlevel=0
 Order=11
+Lock=0
 [END_SED_EXTPLUGIN]
 
 ==================== */

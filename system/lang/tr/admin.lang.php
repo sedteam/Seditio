@@ -482,6 +482,14 @@ $L['adm_opt_pauseall'] = "Tümünü duraklat";
 $L['adm_opt_pauseall_explain'] = "Bu, eklentinin tüm bölümlerini duraklatacak (devre dışı bırakacak).";
 $L['adm_opt_unpauseall'] = "Tümünü duraklatmayı kaldır";
 $L['adm_opt_unpauseall_explain'] = "Bu, eklentinin tüm bölümlerinin duraklatılmasını kaldıracak (etkinleştirecek).";
+$L['adm_lockpart'] = "Kilitli parça";
+$L['adm_opt_pause'] = "Duraklat";
+$L['adm_opt_unpause'] = "Duraklatmayı kaldır";
+
+/* ====== Modules ====== */
+
+$L['adm_locked'] = "Kilit";
+$L['adm_module_locked'] = "Modül kilitli (kaldırılamaz veya duraklatılamaz)";
 
 /* ====== Private messages ====== */
 
