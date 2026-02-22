@@ -21,5 +21,5 @@ if (!defined('SED_CODE')) {
 
 return array(
 	'title' => 'core_polls',
-	'order' => 30
+	'order' => 40
 );

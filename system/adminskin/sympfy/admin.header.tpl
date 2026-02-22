@@ -54,15 +54,6 @@
 						</li>
 						<!-- END: CONFIG_MENU -->
 
-						<!-- BEGIN: MODULES_MENU -->
-						<li>
-							<a href="{ADMIN_MENU_MODULES_URL}" class="nav-top-item no-submenu {ADMIN_MENU_MODULES_URL_CLASS}">
-								<span class="nav-icon"><i class="ic-wand"></i></span>
-								<span class="nav-title">{PHP.L.adm_modules}</span>
-							</a>
-						</li>
-						<!-- END: MODULES_MENU -->
-
 						<!-- BEGIN: MODULE_MENU_ITEM -->
 						<li>
 							<a href="{ADMIN_MODULE_MENU_URL}" class="nav-top-item {ADMIN_MODULE_MENU_SUBMENU_CLASS} {ADMIN_MODULE_MENU_URL_CLASS}" style="padding-left: 15px;">
@@ -79,15 +70,6 @@
 						</li>
 						<!-- END: MODULE_MENU_ITEM -->
 
-						<!-- BEGIN: USERS_MENU -->
-						<li>
-							<a href="{ADMIN_MENU_USERS_URL}" class="nav-top-item no-submenu {ADMIN_MENU_USERS_URL_CLASS}">
-								<span class="nav-icon"><i class="ic-users"></i></span>
-								<span class="nav-title">{PHP.L.Users}</span>
-							</a>
-						</li>
-						<!-- END: USERS_MENU -->
-
 						<!-- BEGIN: MANAGE_MENU -->
 						<li>
 							<a href="{ADMIN_MENU_MANAGE_URL}" class="nav-top-item no-submenu {ADMIN_MENU_MANAGE_URL_CLASS}">
@@ -96,6 +78,15 @@
 							</a>
 						</li>
 						<!-- END: MANAGE_MENU -->
+
+						<!-- BEGIN: MODULES_MENU -->
+						<li>
+							<a href="{ADMIN_MENU_MODULES_URL}" class="nav-top-item no-submenu {ADMIN_MENU_MODULES_URL_CLASS}">
+								<span class="nav-icon"><i class="ic-wand"></i></span>
+								<span class="nav-title">{PHP.L.adm_modules}</span>
+							</a>
+						</li>
+						<!-- END: MODULES_MENU -->
 
 						<!-- BEGIN: PLUGINS_MENU -->
 						<li>

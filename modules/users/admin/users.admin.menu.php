@@ -20,10 +20,20 @@ if (!defined('SED_CODE')) {
 }
 
 return array(
-	'title'   => 'Users',
-	'order'   => 5,
+	'title'     => 'Users',
+	'order'     => 30,
 	'adminlink' => sed_url('admin', 'm=users'),
-	'sections' => array(
-		'' => 'Users'
+	'sections'  => array(
+		'' => array(
+			'label' => 'Users',
+			'url'   => sed_url('admin', 'm=users'),
+			'match' => array('m' => 'users')
+		),
+		'banlist' => array(
+			'label' => 'Banlist',
+			'url'   => sed_url('admin', 'm=banlist'),
+			'auth'  => array('users', 'a', 'A'),
+			'match' => array('m' => 'banlist')
+		)
 	)
 );

@@ -192,12 +192,6 @@ if ($usr['id'] > 0) {
 
 	if (sed_auth('admin', 'a', 'A')) {
 		$t->assign(array(
-			"ADMIN_MENU_USERS_URL" => sed_url('admin', "m=users"),
-			"ADMIN_MENU_USERS_URL_CLASS" => ($m == 'users') ? 'current' : ''
-		));
-		$t->parse("HEADER.ADMIN_MENU.USERS_MENU");
-
-		$t->assign(array(
 			"ADMIN_MENU_PLUGINS_URL" => sed_url('admin', "m=plug"),
 			"ADMIN_MENU_PLUGINS_URL_CLASS" => ($m == 'plug') ? 'current' : ''
 		));
@@ -260,8 +254,25 @@ if ($usr['id'] > 0) {
 					if ($sauth !== null && !call_user_func_array('sed_auth', $sauth)) {
 						continue;
 					}
-					$surl = $sk === '' ? $mod_menu_url : sed_url('admin', "m=" . $mod_code . "&" . $sparam . "=" . $sk);
-					$sclass = ($m == $mod_code && $sparam === 'mn' && (string)$mn === (string)$sk) ? 'current' : (($m == $mod_code && $sparam === 's' && (string)$s === (string)$sk) ? 'current' : '');
+					// Custom URL: use $sval['url'] when set; otherwise auto-build from param+key
+					if (is_array($sval) && isset($sval['url']) && $sval['url'] !== '') {
+						$surl = $sval['url'];
+					} else {
+						$surl = $sk === '' ? $mod_menu_url : sed_url('admin', "m=" . $mod_code . "&" . $sparam . "=" . $sk);
+					}
+					// Highlight current: use $sval['match'] when set; otherwise legacy param+key logic
+					if (is_array($sval) && isset($sval['match']) && is_array($sval['match'])) {
+						$sclass = 'current';
+						foreach ($sval['match'] as $mk => $mv) {
+							$gv = (isset($GLOBALS[$mk])) ? (string)$GLOBALS[$mk] : '';
+							if ($gv !== (string)$mv) {
+								$sclass = '';
+								break;
+							}
+						}
+					} else {
+						$sclass = ($m == $mod_code && $sparam === 'mn' && (string)$mn === (string)$sk) ? 'current' : (($m == $mod_code && $sparam === 's' && (string)$s === (string)$sk) ? 'current' : '');
+					}
 					$stext = isset($L[$slabel]) ? $L[$slabel] : $slabel;
 					$t->assign(array(
 						"ADMIN_MODULE_SUB_URL" => $surl,
