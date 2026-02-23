@@ -170,7 +170,8 @@ while ($row_ua = sed_sql_fetchassoc($sql_ua)) {
 sed_sql_query("DELETE FROM $db_core WHERE ct_code='users'");
 sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='users' AND pl_module=1");
 sed_sql_query("UPDATE $db_config SET config_owner='module' WHERE config_owner='core' AND config_cat='users'");
-$adminmain .= "Users core entry removed, config owner updated.<br />";
+sed_sql_query("UPDATE $db_config SET config_owner='module', config_cat='users' WHERE config_cat='meta' AND config_name='userstitle'");
+$adminmain .= "Users core entry removed, config owner updated (incl. userstitle from meta).<br />";
 
 $adminmain .= "-----------------------<br />";
 
@@ -202,15 +203,19 @@ if (!empty($saved_users_auth)) {
 	$adminmain .= "Done.<br />";
 }
 
-/* ======== Full plugin reinstallation ======== */
-$adminmain .= "<strong>Reinstalling all plugins...</strong><br />";
-$plugin_dirs = glob(SED_ROOT . '/plugins/*/', GLOB_ONLYDIR);
-if (is_array($plugin_dirs)) {
-	foreach ($plugin_dirs as $pdir) {
-		$pcode = basename($pdir);
-		if (file_exists($pdir . $pcode . '.setup.php')) {
-			$adminmain .= sed_plugin_install($pcode);
-		}
+/* ======== Full plugin reinstallation (active plugins only) ======== */
+$adminmain .= "<strong>Reinstalling active plugins...</strong><br />";
+$active_plugins = array();
+$sql_ap = sed_sql_query("SELECT DISTINCT pl_code FROM $db_plugins WHERE pl_module=0 AND pl_active=1 ORDER BY pl_code");
+while ($row_ap = sed_sql_fetchassoc($sql_ap)) {
+	$active_plugins[] = $row_ap['pl_code'];
+}
+foreach ($active_plugins as $pcode) {
+	$setup_file = SED_ROOT . '/plugins/' . $pcode . '/' . $pcode . '.setup.php';
+	if (file_exists($setup_file)) {
+		$adminmain .= sed_plugin_install($pcode);
+	} else {
+		$adminmain .= "Plugin $pcode: setup file not found, skipped.<br />";
 	}
 }
 

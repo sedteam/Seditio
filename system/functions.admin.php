@@ -360,7 +360,7 @@ function sed_loadconfigmap()
 	$result[] = array('meta', '02', 'indextitle', 1, '{MAINTITLE} - {TITLE}', '');  //Sed 179
 	/* listtitle, pagetitle moved to modules/page/page.setup.php */
 	/* forumstitle config moved to forums module */
-	$result[] = array('meta', '06', 'userstitle', 1, '{MAINTITLE} - {TITLE}', ''); //Sed 175
+	/* userstitle moved to modules/users/users.setup.php */
 	/* pmtitle moved to modules/pm/pm.setup.php */
 	/* gallerytitle moved to modules/gallery */
 	/* pfstitle moved to modules/pfs/pfs.setup.php */

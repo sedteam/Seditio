@@ -33,25 +33,26 @@ Lock_module=1
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
-disablereg=01:radio::0:Disable registration
-defaultcountry=02:string:::Default country code
-disablewhosonline=03:radio::0:Disable Who's Online
+userstitle=01:string::{MAINTITLE} - {TITLE}:Title for users
+disablereg=02:radio::0:Disable registration
+defaultcountry=03:string:::Default country code
+disablewhosonline=04:radio::0:Disable Who's Online
 maxusersperpage=05:select:5,10,15,20,25,30,35,40,45,50,75,100,150,200:50:Maximum users per page
-regrequireadmin=07:radio::0:Registration requires admin approval
-regnoactivation=10:radio::0:Registration without activation
-useremailchange=10:radio::0:Allow users to change email
-usertextimg=10:radio::0:Allow images in user text
+regrequireadmin=06:radio::0:Registration requires admin approval
+regnoactivation=07:radio::0:Registration without activation
+useremailchange=08:radio::0:Allow users to change email
+usertextimg=09:radio::0:Allow images in user text
 color_group=10:radio::0:Color usernames by group
-av_maxsize=12:string::64000:Avatar max file size (bytes)
+av_maxsize=11:string::64000:Avatar max file size (bytes)
 av_maxx=12:string::128:Avatar max width (px)
-av_maxy=12:string::128:Avatar max height (px)
-usertextmax=12:string::300:User text max length
-sig_maxsize=13:string::64000:Signature max file size (bytes)
-sig_maxx=13:string::640:Signature max width (px)
-sig_maxy=13:string::100:Signature max height (px)
-ph_maxsize=14:string::64000:Photo max file size (bytes)
-ph_maxx=14:string::256:Photo max width (px)
-ph_maxy=14:string::256:Photo max height (px)
+av_maxy=13:string::128:Avatar max height (px)
+usertextmax=14:string::300:User text max length
+sig_maxsize=15:string::64000:Signature max file size (bytes)
+sig_maxx=16:string::640:Signature max width (px)
+sig_maxy=17:string::100:Signature max height (px)
+ph_maxsize=18:string::64000:Photo max file size (bytes)
+ph_maxx=19:string::256:Photo max width (px)
+ph_maxy=20:string::256:Photo max height (px)
 [END_SED_MODULE_CONFIG]
 
 ==================== */
