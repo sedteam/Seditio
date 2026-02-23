@@ -262,10 +262,11 @@ if ($usr['id'] > 0) {
 					}
 					// Highlight current: use $sval['match'] when set; otherwise legacy param+key logic
 					if (is_array($sval) && isset($sval['match']) && is_array($sval['match'])) {
+						$url_params = array('m' => $m, 's' => $s, 'mn' => $mn);
 						$sclass = 'current';
 						foreach ($sval['match'] as $mk => $mv) {
-							$gv = (isset($GLOBALS[$mk])) ? (string)$GLOBALS[$mk] : '';
-							if ($gv !== (string)$mv) {
+							$gv = isset($url_params[$mk]) ? $url_params[$mk] : null;
+							if ($gv === null || is_array($gv) || (string)$gv !== (string)$mv) {
 								$sclass = '';
 								break;
 							}
