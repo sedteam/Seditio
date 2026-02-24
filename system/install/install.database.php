@@ -316,9 +316,8 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "smilies VALUES (17, ':w
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "smilies VALUES (18, ':yes', 'system/smilies/icon_yes.gif', 'Yes', 11);");
 
 /* totalpages is added by modules/page/page.install.php when the page module is installed */
+/* totalpms, totalmailpmnot are added by modules/pm/pm.install.php when the PM module is installed */
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "stats (stat_name, stat_value) VALUES ('totalmailsent', '0');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "stats (stat_name, stat_value) VALUES ('totalmailpmnot', '0');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "stats (stat_name, stat_value) VALUES ('totalpms', '0');");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "stats (stat_name, stat_value) VALUES ('totalantihammer', '0');");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "stats (stat_name, stat_value) VALUES ('version', '" . $cfg['version'] . "');");
 

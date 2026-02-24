@@ -76,8 +76,6 @@ if (sed_sql_numrows($check) == 0) {
 ) ENGINE={$mysqlengine} DEFAULT CHARSET={$mysqlcharset} COLLATE={$mysqlcollate};");
 }
 
-/* Права (auth) для модуля polls выставляются из setup (Auth_guests, Auth_members) в Step 8 sed_module_install(). */
-
 /* ======== Demo poll ======== */
 
 $chk = sed_sql_query("SELECT 1 FROM " . $prefix . "polls LIMIT 1");

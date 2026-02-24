@@ -155,9 +155,8 @@ while ($row_cat = sed_sql_fetchassoc($sql_cats)) {
 
 /* ======== Stats: totalpages ======== */
 
-$chk = sed_sql_query("SELECT 1 FROM " . $prefix . "stats WHERE stat_name='totalpages' LIMIT 1");
-if (sed_sql_numrows($chk) == 0) {
-	sed_sql_query("INSERT INTO " . $prefix . "stats (stat_name, stat_value) VALUES ('totalpages', '0')");
+if (sed_stat_get('totalpages') === FALSE) {
+	sed_stat_create('totalpages', '0');
 	$res .= "Stats totalpages added.<br />";
 }
 

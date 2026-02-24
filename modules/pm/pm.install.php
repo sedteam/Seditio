@@ -48,6 +48,15 @@ if (sed_sql_numrows($check) == 0) {
 ) ENGINE={$mysqlengine} DEFAULT CHARSET={$mysqlcharset} COLLATE={$mysqlcollate};");
 }
 
-/* Права (auth) для модуля pm выставляются из setup (Auth_guests, Auth_members) в Step 8 sed_module_install(). */
+/* ======== Stats: totalpms, totalmailpmnot ======== */
+
+if (sed_stat_get('totalpms') === FALSE) {
+	sed_stat_create('totalpms', '0');
+	$res .= "Stats totalpms added.<br />";
+}
+if (sed_stat_get('totalmailpmnot') === FALSE) {
+	sed_stat_create('totalmailpmnot', '0');
+	$res .= "Stats totalmailpmnot added.<br />";
+}
 
 $res .= "PM module table installed.<br />";

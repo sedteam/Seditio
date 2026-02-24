@@ -52,7 +52,7 @@ if ($m == 'share') {
 	$output .= "&nbsp;<br />[BEGIN_SED]<br />Title=" . $cfg['maintitle'] . "<br />";
 	$output .= "Subtitle=" . $cfg['subtitle'] . "<br />Version=" . $cfg['version'] . "<br />";
 	$output .= "Pages=" . $share_pages . "<br />Users=" . sed_sql_rowcount($db_users) . "<br />";
-	$output .= "Pms=" . sed_stat_get('totalpms') . "<br />Forum_views=" . $totaldbviews . "<br />";
+	$output .= "Pms=" . (sed_stat_get('totalpms') !== FALSE ? sed_stat_get('totalpms') : '0') . "<br />Forum_views=" . $totaldbviews . "<br />";
 	$output .= "Forum_posts=" . $totaldbposts . "<br />Forum_topics=" . $totaldbtopics . "<br />[END_SED]<br />&nbsp;";
 	die($output);
 }
@@ -83,9 +83,9 @@ if (sed_module_active('forums')) {
 $totaldbfiles = sed_module_active('pfs') ? sed_sql_rowcount($db_pfs) : 0;
 $totaldbusers = sed_sql_rowcount($db_users);
 
-$totalpages = sed_stat_get('totalpages');
-$totalmailsent = sed_stat_get('totalmailsent');
-$totalpmsent = sed_stat_get('totalpms');
+$totalpages = sed_stat_get('totalpages') !== FALSE ? sed_stat_get('totalpages') : 0;
+$totalmailsent = sed_stat_get('totalmailsent') !== FALSE ? sed_stat_get('totalmailsent') : 0;
+$totalpmsent = sed_stat_get('totalpms') !== FALSE ? sed_stat_get('totalpms') : 0;
 
 $totaldbfilesize = 0;
 if (sed_module_active('pfs')) {
