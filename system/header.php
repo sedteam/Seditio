@@ -144,18 +144,18 @@ if ($usr['id'] > 0) {
 
 	$t->parse("HEADER.USER");
 } else {
-	$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"32\" />";
-	$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
+	$out['guest_username'] = sed_textbox('rusername', '', 12, 32, 'text', false, 'text');
+	$out['guest_password'] = sed_textbox('rpassword', '', 12, 32, 'text', false, 'password');
 	$out['guest_register'] = "<a href=\"" . sed_url("users", "m=register") . "\">" . $L["Register"] . "</a>";
-	$out['guest_cookiettl'] = "<select name=\"rcookiettl\" size=\"1\">";
-	$out['guest_cookiettl'] .= "<option value=\"0\" selected=\"selected\">" . $L['No'] . "</option>";
 
 	$i = array(1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 604800, 1296000, 2592000, 5184000);
-
+	$cookiettl_options = array(0 => $L['No']);
 	foreach ($i as $k => $x) {
-		$out['guest_cookiettl'] .= ($x <= $cfg['cookielifetime']) ? "<option value=\"$x\">" . sed_build_timegap($sys['now_offset'], $sys['now_offset'] + $x) . "</option>" : '';
+		if ($x <= $cfg['cookielifetime']) {
+			$cookiettl_options[$x] = sed_build_timegap($sys['now_offset'], $sys['now_offset'] + $x);
+		}
 	}
-	$out['guest_cookiettl'] .= "</select>";
+	$out['guest_cookiettl'] = sed_selectbox(0, 'rcookiettl', $cookiettl_options, FALSE, TRUE, FALSE, array('size' => 1));
 
 	$t->assign(array(
 		"HEADER_GUEST_USERNAME" => $out['guest_username'],
