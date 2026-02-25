@@ -229,6 +229,7 @@ plugins/hybridauth/*
 plugins/smtp/log/*
 plugins/thanks/*
 plugins/forumlock/*
+plugins/jevixse/*
 plugins/userlatestposts/*
 Seditio___.zip
 Seditio.zip
