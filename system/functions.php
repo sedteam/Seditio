@@ -5014,6 +5014,7 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $ge
 		$t3 = $tpl_tag . '_' . strtoupper($row['code'] . '_TITLE');
 		$t4 = $tpl_tag . '_' . strtoupper($row['code'] . '_DESC');
 		$t5 = $tpl_tag . '_' . strtoupper($row['code'] . '_MERA');
+		$t6 = $tpl_tag . '_' . strtoupper($row['code'] . '_VAL');
 
 		// Use isset to check if the key exists and provide a default value if it does not
 		$field_value = isset($data[$rowname . '_' . $row['code']]) ? $data[$rowname . '_' . $row['code']] : '';
@@ -5057,6 +5058,7 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $ge
 		$return_arr[$t3] = !empty($row['form_title']) ? $row['form_title'] : $row['title'];
 		$return_arr[$t4] = $row['form_desc'];
 		$return_arr[$t5] = $row['mera'];
+		$return_arr[$t6] = $field_value;
 	}
 
 	return $return_arr;
