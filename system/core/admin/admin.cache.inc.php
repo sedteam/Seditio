@@ -35,6 +35,19 @@ if ($a == 'purge') {
 } elseif ($a == 'delete') {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$id'");
+} elseif ($a == 'urls_delete') {
+	sed_check_xg();
+	$urls_file = SED_ROOT . '/datas/cache/sed_urls.php';
+	if (file_exists($urls_file)) {
+		@unlink($urls_file);
+	}
+	sed_redirect(sed_url("admin", "m=cache", "", true));
+	exit;
+} elseif ($a == 'urls_regenerate') {
+	sed_check_xg();
+	sed_urls_generate();
+	sed_redirect(sed_url("admin", "m=cache", "", true));
+	exit;
 }
 
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
@@ -64,6 +77,17 @@ $t->assign(array(
 	"CACHE_PURGE_URL" => sed_url("admin", "m=cache&a=purge&" . sed_xg()),
 	"CACHE_SHOWALL_URL" => sed_url("admin", "m=cache&a=showall"),
 	"CACHE_SIZE" => $cachesize
+));
+
+/* URL cache (sed_urls.php file) */
+$urls_file = SED_ROOT . '/datas/cache/sed_urls.php';
+$urls_exists = file_exists($urls_file);
+$t->assign(array(
+	"URLCACHE_EXISTS" => $urls_exists,
+	"URLCACHE_DATE" => $urls_exists ? sed_build_date(!empty($cfg['dateformat']) ? $cfg['dateformat'] : 'Y-m-d H:i', filemtime($urls_file)) : '-',
+	"URLCACHE_SIZE" => $urls_exists ? filesize($urls_file) : 0,
+	"URLCACHE_DELETE_URL" => sed_url("admin", "m=cache&a=urls_delete&" . sed_xg()),
+	"URLCACHE_REGENERATE_URL" => sed_url("admin", "m=cache&a=urls_regenerate&" . sed_xg()),
 ));
 
 $t->assign("ADMIN_CACHE_TITLE", $admintitle);

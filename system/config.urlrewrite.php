@@ -55,17 +55,7 @@ $sed_urlrewrite = array(
           'rule' => 'system/install/install.php'
      ),
 
-     /*  Captcha rewriting */
-     array(
-          'order' => 140,
-          'cond' => '#^/captcha(/?)$#',
-          'rule' => 'system/core/captcha/captcha.php'
-     ),
-     array(
-          'order' => 150,
-          'cond' => '#^/captcha.png$#',
-          'rule' => 'system/core/captcha/captcha.php'
-     ),
+     /*  Captcha: see plugins/sedcaptcha/sedcaptcha.urls.php when plugin active */
 
      /*  Robots rewriting: see plugins/robots/robots.urls.php when plugin active */
 

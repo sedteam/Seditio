@@ -103,6 +103,11 @@ IP'ler her sayfa görüntülenirken filtrelenir, email maskeleri ise yalnızca k
 $L['adm_internalcache'] = "Dahili önbellek";
 $L['adm_help_cache'] = "Kullanılamaz";
 
+$L['adm_urlcache'] = "URL önbelleği";
+$L['adm_urlcache_file'] = "Dosya";
+$L['adm_urlcache_regenerate'] = "SEF URL'lerini yeniden oluştur";
+$L['adm_urlcache_delete'] = "URL önbelleğini sil";
+
 /* ====== Configuration ====== */
 
 $L['adm_help_config'] = "Kullanılamaz";

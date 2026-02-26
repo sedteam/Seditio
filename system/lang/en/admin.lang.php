@@ -103,6 +103,11 @@ $L['adm_help_banlist'] = "Samples for IP masks:<br />
 $L['adm_internalcache'] = "Internal cache";
 $L['adm_help_cache'] = "Not available";
 
+$L['adm_urlcache'] = "URL cache";
+$L['adm_urlcache_file'] = "File";
+$L['adm_urlcache_regenerate'] = "Regenerate SEF URLs";
+$L['adm_urlcache_delete'] = "Delete URL cache";
+
 /* ====== Configuration ====== */
 
 $L['adm_help_config'] = "Not available";

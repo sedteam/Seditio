@@ -46,7 +46,6 @@ $systemfiles['launchers'][] = 'system/core/admin/admin.php';
 $systemfiles['launchers'][] = 'system/core/index/index.php';
 $systemfiles['launchers'][] = 'system/core/message/message.php';
 $systemfiles['launchers'][] = 'system/core/plug/plug.php';
-$systemfiles['launchers'][] = 'system/core/captcha/captcha.php';
 $systemfiles['launchers'][] = 'system/core/resizer/resizer.php';
 
 $syschecktitles['config'] = 'Configuration and directory blockers';
@@ -98,7 +97,6 @@ $systemfiles['core'][] = 'system/core/admin/admin.smilies.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.manage.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.trashcan.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.upgrade.inc.php';
-$systemfiles['core'][] = 'system/core/captcha/captcha.php';
 $systemfiles['core'][] = 'system/core/index/index.inc.php';
 $systemfiles['core'][] = 'system/core/index/index.php';
 $systemfiles['core'][] = 'system/core/message/message.inc.php';

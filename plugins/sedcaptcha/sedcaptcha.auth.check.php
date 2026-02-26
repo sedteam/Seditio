@@ -26,6 +26,8 @@ Lock=0
 
 ==================== */
 
+require_once(SED_ROOT . '/plugins/sedcaptcha/inc/sedcaptcha.functions.php');
+
 $captcha_auth = $cfg['plugin']['sedcaptcha']['captcha_auth'];
 
 if ($captcha_auth == "yes") {

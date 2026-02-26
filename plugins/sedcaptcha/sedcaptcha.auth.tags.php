@@ -19,7 +19,7 @@ Code=sedcaptcha
 Part=auth
 File=sedcaptcha.auth.tags
 Hooks=users.auth.tags
-Tags=users.auth.tpl:{USERS_REGISTER_VERIFYIMG},{USERS_REGISTER_VERIFYINPUT}
+Tags=users.auth.tpl:{USERS_AUTH_VERIFYIMG},{USERS_AUTH_VERIFYINPUT}
 Order=10
 Lock=0
 [END_SED_EXTPLUGIN]
@@ -29,6 +29,8 @@ Lock=0
 if (!defined('SED_CODE')) {
 	die("Wrong URL.");
 }
+
+require_once(SED_ROOT . '/plugins/sedcaptcha/inc/sedcaptcha.functions.php');
 
 $captcha_auth = $cfg['plugin']['sedcaptcha']['captcha_auth'];
 

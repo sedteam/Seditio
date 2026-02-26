@@ -30,6 +30,8 @@ if (!defined('SED_CODE')) {
 	die("Wrong URL.");
 }
 
+require_once(SED_ROOT . '/plugins/sedcaptcha/inc/sedcaptcha.functions.php');
+
 $captcha_register = $cfg['plugin']['sedcaptcha']['captcha_register'];
 
 if ($captcha_register == "yes") {

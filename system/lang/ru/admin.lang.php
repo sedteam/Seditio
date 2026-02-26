@@ -103,6 +103,11 @@ $L['adm_help_banlist'] = "Примеры масок IP:<br />
 $L['adm_internalcache'] = "Внутренний кэш";
 $L['adm_help_cache'] = "Недоступно";
 
+$L['adm_urlcache'] = "URL кэш";
+$L['adm_urlcache_file'] = "Файл";
+$L['adm_urlcache_regenerate'] = "Перегенерировать SEF URLs";
+$L['adm_urlcache_delete'] = "Удалить URL кэш";
+
 /* ====== Configuration ====== */
 
 $L['adm_help_config'] = "Недоступно";

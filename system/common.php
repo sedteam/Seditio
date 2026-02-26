@@ -56,10 +56,39 @@ $cfg['css'] = $cfg['defaultskin'];
 $usr['ip'] = sed_get_userip();
 $sys['unique'] = sed_unique(16);
 
-/* ================================== */
+
+/* ======== Active modules list and API functions ======== */
+
+if (!isset($sed_modules)) {
+	$sed_modules = array();
+	$sql_mods = sed_sql_query("SELECT * FROM $db_core WHERE ct_state=1");
+	while ($mod_row = sed_sql_fetchassoc($sql_mods)) {
+		$sed_modules[$mod_row['ct_code']] = $mod_row;
+	}
+	sed_cache_store('sed_modules', $sed_modules, 3300);
+}
+foreach ($sed_modules as $mod_row) {
+	$mod_path = isset($mod_row['ct_path']) ? (string)$mod_row['ct_path'] : '';
+	$api_file = SED_ROOT . '/' . $mod_path . 'inc/' . $mod_row['ct_code'] . '.functions.php';
+	if (file_exists($api_file)) {
+		require_once($api_file);
+	}
+}
+
+/* ======== Plugins ======== */
+
+if (!isset($sed_plugins)) {
+	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
+	if (sed_sql_numrows($sql) > 0) {
+		while ($row = sed_sql_fetcharray($sql)) {
+			$sed_plugins[$row['pl_hook']][] = $row;
+			//$sed_plugins[$row['pl_code']]['pl_title'] = $row['pl_title'];
+		}
+	}
+	sed_cache_store('sed_plugins', $sed_plugins, 3300);
+}
 
 $sys['request_uri'] = $_SERVER['REQUEST_URI'];
-
 $sys['url'] = base64_encode($sys['request_uri']);
 $sys['url_redirect'] = 'redirect=' . $sys['url'];
 $redirect = sed_import('redirect', 'G', 'SLU');
@@ -258,37 +287,6 @@ $m = sed_import('m', 'G', 'ALP', 24);
 $n = sed_import('n', 'G', 'ALP', 24);
 $a = sed_import('a', 'G', 'ALP', 24);
 $b = sed_import('b', 'G', 'ALP', 24);
-
-/* ======== Active modules list and API functions ======== */
-
-if (!isset($sed_modules)) {
-	$sed_modules = array();
-	$sql_mods = sed_sql_query("SELECT * FROM $db_core WHERE ct_state=1");
-	while ($mod_row = sed_sql_fetchassoc($sql_mods)) {
-		$sed_modules[$mod_row['ct_code']] = $mod_row;
-	}
-	sed_cache_store('sed_modules', $sed_modules, 3300);
-}
-foreach ($sed_modules as $mod_row) {
-	$mod_path = isset($mod_row['ct_path']) ? (string)$mod_row['ct_path'] : '';
-	$api_file = SED_ROOT . '/' . $mod_path . 'inc/' . $mod_row['ct_code'] . '.functions.php';
-	if (file_exists($api_file)) {
-		require_once($api_file);
-	}
-}
-
-/* ======== Plugins ======== */
-
-if (!isset($sed_plugins)) {
-	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
-	if (sed_sql_numrows($sql) > 0) {
-		while ($row = sed_sql_fetcharray($sql)) {
-			$sed_plugins[$row['pl_hook']][] = $row;
-			//$sed_plugins[$row['pl_code']]['pl_title'] = $row['pl_title'];
-		}
-	}
-	sed_cache_store('sed_plugins', $sed_plugins, 3300);
-}
 
 /* ======== Hooks for plugins (standalone) ======== */
 
