@@ -119,6 +119,19 @@ $filter_urlparams = (count($filter_urlparams_arr) > 0) ? "&" . implode('&', $fil
 $sql_where = (count($filter_sql) > 0) ? " AND " . implode(' AND ', $filter_sql) : " ";
 
 if (!array_key_exists($c, $sed_cat) && !($c == 'all')) {
+	/* Trailing slash fallback: maybe it's a page (e.g. /contacts/, /news/welcome/, /news/10/) */
+	if (!empty($c)) {
+		$pal = sed_sql_prep($c);
+		$pid = (int) $c;
+		$sql = sed_sql_query("SELECT page_id, page_alias, page_cat FROM $db_pages WHERE page_id='$pid' OR (page_alias='$pal' AND page_alias!='') LIMIT 1");
+		if (sed_sql_numrows($sql) > 0) {
+			$row = sed_sql_fetchassoc($sql);
+			$sys['catcode'] = $row['page_cat'];
+			$page_url_param = (!empty($row['page_alias'])) ? "al=" . $row['page_alias'] : "id=" . $row['page_id'];
+			sed_redirect(sed_url("page", $page_url_param, "", true));
+			exit;
+		}
+	}
 	sed_die(true, 404);
 }
 
