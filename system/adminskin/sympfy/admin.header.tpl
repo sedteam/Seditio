@@ -91,7 +91,7 @@
 						<!-- BEGIN: PLUGINS_MENU -->
 						<li>
 							<a href="{ADMIN_MENU_PLUGINS_URL}" class="nav-top-item no-submenu {ADMIN_MENU_PLUGINS_URL_CLASS}">
-								<span class="nav-icon"><i class="ic-wand"></i></span>
+								<span class="nav-icon"><i class="ic-plug"></i></span>
 								<span class="nav-title">{PHP.L.Plugins}</span>
 							</a>
 						</li>

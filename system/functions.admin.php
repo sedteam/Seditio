@@ -469,6 +469,22 @@ function sed_plugin_icon($code)
 }
 
 /** 
+ * Build module icon
+ * 
+ * @param $code Module code
+ * @return string 
+ */
+function sed_module_icon($code)
+{
+	$icon = "modules/" . $code . "/" . $code . ".png";
+	if (file_exists($icon)) {
+		return ("<img src=\"" . $icon . "\" alt=\"\" />");
+	} else {
+		return ("<img src=\"system/img/admin/module.png\" alt=\"\" />");
+	}
+}
+
+/** 
  * Plugin installation
  * 
  * @param $pl Plugin code

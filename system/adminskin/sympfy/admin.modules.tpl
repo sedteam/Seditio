@@ -208,7 +208,7 @@
 				<!-- BEGIN: MODULE_LIST -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td plug-name" data-label="{PHP.L.adm_modules} {PHP.L.adm_clicktoedit}">
-						<a href="{MODULE_LIST_DETAILS_URL}"><span class="icon"><i class="ic-forums"></i></span> {MODULE_LIST_NAME}</a>
+						<a href="{MODULE_LIST_DETAILS_URL}"><span class="icon"><i class="ic-wand ic-{MODULE_LIST_CODE}"></i></span> {MODULE_LIST_NAME}</a>
 					</div>
 					<div class="table-td text-left resp-table-td plug-code" data-label="{PHP.L.Code}">{MODULE_LIST_CODE}</div>
 					<div class="table-td text-left resp-table-td plug-version" data-label="{PHP.L.Version}">{MODULE_LIST_VERSION}</div>

@@ -248,6 +248,17 @@ pre {
     font-size: 1.1em!important;
 }
 
+.icon-img {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    line-height: 31px;
+    margin: 2px 5px;
+    vertical-align: middle;
+}
+
 a.remove-link {
     color: #bb0000;
 }

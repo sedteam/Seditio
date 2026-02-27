@@ -321,9 +321,9 @@ switch ($m) {
 				$is_locked = (isset($mod_info['Lock_module']) && (int)$mod_info['Lock_module'] === 1);
 				$checked = $is_locked ? "checked=\"checked\" disabled" : ((isset($mod_info['Installer_skip']) && $mod_info['Installer_skip'] == 1) ? '' : "checked=\"checked\"");
 
-				$res .= "<tr><td style=\"width:6%; text-align:center;\">";
-				$res .= "&bull;";
-				$res .= "</td><td><strong>" . $mod_name . "</strong><br /><span class=\"desc\">" . $mod_desc . "</span></td>";
+			$res .= "<tr><td style=\"width:6%; text-align:center;\">";
+			$res .= sed_module_icon($v);
+			$res .= "</td><td><strong>" . $mod_name . "</strong><br /><span class=\"desc\">" . $mod_desc . "</span></td>";
 				$res .= "<td style=\"width:6%; text-align:center;\">";
 				if ($is_locked) {
 					$res .= "<input type=\"hidden\" name=\"mod[]\" value=\"" . $v . "\" />";

@@ -411,6 +411,7 @@ foreach ($all_codes as $code) {
 	}
 
 	$t->assign(array(
+		"MODULE_LIST_ICON" => sed_module_icon($code),
 		"MODULE_LIST_NAME" => $name,
 		"MODULE_LIST_DETAILS_URL" => sed_url("admin", "m=modules&a=details&mod=" . $code),
 		"MODULE_LIST_CODE" => $code,
