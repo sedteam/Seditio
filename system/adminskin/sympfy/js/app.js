@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 
     // Creates sidebar instance
-    var sidebar = sedadminjs.sedSidebar('#sidebar', '.nav-trigger', 'right', '240px', 300);
+    const sidebar = sedadminjs.sedSidebar('#sidebar', '.nav-trigger', 'right', '240px', 300);
 
     // Creates scroll instance
-    var scroll = sedadminjs.sedScroll('#sidebar-wrapper', {
+    const scroll = sedadminjs.sedScroll('#sidebar-wrapper', {
         height: '100%',
         color: '#cccccc',
         allowPageScroll: true
@@ -16,29 +16,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initializes content behaviors
     sedadminjs.initContent();
 
-    var inputs = document.querySelectorAll('#addmenus input[name="mtitle"], #updatemenus input[name="mtitle"]');
-    inputs.forEach(function(input) {
+    const inputs = document.querySelectorAll('#addmenus input[name="mtitle"], #updatemenus input[name="mtitle"]');
+    inputs.forEach((input) => {
         input.sedAutoComplete({
             serviceUrl: '/ajax/?m=pages',
             minChars: 1,
             dataType: 'json',
             noCache: false,
-            onSelect: function(suggestion) {
-                var mtitleInputs = document.querySelectorAll('#addmenus input[name="mtitle"], #updatemenus input[name="mtitle"]');
-                var murlInputs = document.querySelectorAll('#addmenus input[name="murl"], #updatemenus input[name="murl"]');
-                mtitleInputs.forEach(function(mtitleInput) {
+            onSelect(suggestion) {
+                const mtitleInputs = document.querySelectorAll('#addmenus input[name="mtitle"], #updatemenus input[name="mtitle"]');
+                const murlInputs = document.querySelectorAll('#addmenus input[name="murl"], #updatemenus input[name="murl"]');
+                mtitleInputs.forEach((mtitleInput) => {
                     mtitleInput.value = suggestion.title;
                 });
-                murlInputs.forEach(function(murlInput) {
+                murlInputs.forEach((murlInput) => {
                     murlInput.value = suggestion.url;
                 });
             },
-            formatResult: function(suggestion, currentValue) {
-                var reEscape = new RegExp('(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\') + ')', 'g');
-                var pattern = '(' + currentValue.replace(reEscape, '\\$1') + ')';
-                return '<div class="autocomplete-title">' +
-                    suggestion.title.replace(new RegExp(pattern, 'gi'), '<strong>$1</strong>') +
-                    '</div><div class="autocomplete-url">' + suggestion.url + '</div>';
+            formatResult(suggestion, currentValue) {
+                const reEscape = new RegExp('(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\') + ')', 'g');
+                const pattern = `(${currentValue.replace(reEscape, '\\$1')})`;
+                return `<div class="autocomplete-title">${
+                    suggestion.title.replace(new RegExp(pattern, 'gi'), '<strong>$1</strong>')
+                }</div><div class="autocomplete-url">${suggestion.url}</div>`;
             }
         });
     });
