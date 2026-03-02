@@ -1158,7 +1158,7 @@ function sed_checkmore($text = '', $more = false)
  * @param string $css CSS content or file path
  * @param bool $is_file Whether to treat $css as a file path (true) or inline CSS (false)
  */
-function sed_add_css($css = '', $is_file = false)
+function sed_add_css($css = '', $is_file = false, $priority = 50)
 {
 	global $sed_css_collection; // Global array to store CSS
 
@@ -1173,9 +1173,18 @@ function sed_add_css($css = '', $is_file = false)
 
 	// Add CSS to the appropriate category
 	if ($is_file) {
-		// Ensure the file is added only once
-		if (!in_array($css, $sed_css_collection['files'])) {
-			$sed_css_collection['files'][] = $css;
+		// Check for duplicates (support both old string format and new array format)
+		$already_exists = false;
+		foreach ($sed_css_collection['files'] as $existing) {
+			$existing_path = is_array($existing) ? $existing['path'] : $existing;
+			if ($existing_path === $css) {
+				$already_exists = true;
+				break;
+			}
+		}
+		
+		if (!$already_exists) {
+			$sed_css_collection['files'][] = array('path' => $css, 'priority' => $priority);
 		}
 	} else {
 		$sed_css_collection['inline'][] = $css;
@@ -1199,8 +1208,24 @@ function sed_css()
 
 	// Process external files (<link>)
 	if (!empty($sed_css_collection['files'])) {
+		// Normalize array: convert old string format to new array format
+		$normalized_files = array();
 		foreach ($sed_css_collection['files'] as $file) {
-			$result .= '<link href="' . $file . '" type="text/css" rel="stylesheet" />' . "\n";
+			if (is_array($file)) {
+				$normalized_files[] = $file;
+			} else {
+				$normalized_files[] = array('path' => $file, 'priority' => 50);
+			}
+		}
+		
+		// Sort by priority (lower priority number = higher priority)
+		usort($normalized_files, function($a, $b) {
+			return $a['priority'] - $b['priority'];
+		});
+		
+		// Output sorted files
+		foreach ($normalized_files as $file) {
+			$result .= '<link href="' . $file['path'] . '" type="text/css" rel="stylesheet" />' . "\n";
 		}
 	}
 
@@ -2459,8 +2484,24 @@ function sed_javascript()
 
 	// Process external files (<script src>)
 	if (!empty($sed_js_collection['files'])) {
+		// Normalize array: convert old string format to new array format
+		$normalized_files = array();
 		foreach ($sed_js_collection['files'] as $file) {
-			$result .= '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
+			if (is_array($file)) {
+				$normalized_files[] = $file;
+			} else {
+				$normalized_files[] = array('path' => $file, 'priority' => 50);
+			}
+		}
+		
+		// Sort by priority (lower priority number = higher priority)
+		usort($normalized_files, function($a, $b) {
+			return $a['priority'] - $b['priority'];
+		});
+		
+		// Output sorted files
+		foreach ($normalized_files as $file) {
+			$result .= '<script type="text/javascript" src="' . $file['path'] . '"></script>' . "\n";
 		}
 	}
 
@@ -2481,7 +2522,7 @@ function sed_javascript()
  * @param string $js JavaScript content or file path
  * @param bool $is_file Whether to treat $js as a file path (true) or inline JS (false)
  */
-function sed_add_javascript($js = '', $is_file = false)
+function sed_add_javascript($js = '', $is_file = false, $priority = 50)
 {
 	global $sed_js_collection; // Global array to store JavaScript
 
@@ -2496,9 +2537,18 @@ function sed_add_javascript($js = '', $is_file = false)
 
 	// Add JavaScript to the appropriate category
 	if ($is_file) {
-		// Ensure the file is added only once
-		if (!in_array($js, $sed_js_collection['files'])) {
-			$sed_js_collection['files'][] = $js;
+		// Check for duplicates (support both old string format and new array format)
+		$already_exists = false;
+		foreach ($sed_js_collection['files'] as $existing) {
+			$existing_path = is_array($existing) ? $existing['path'] : $existing;
+			if ($existing_path === $js) {
+				$already_exists = true;
+				break;
+			}
+		}
+		
+		if (!$already_exists) {
+			$sed_js_collection['files'][] = array('path' => $js, 'priority' => $priority);
 		}
 	} else {
 		$sed_js_collection['inline'][] = $js;

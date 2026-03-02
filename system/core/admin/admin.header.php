@@ -19,7 +19,7 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-sed_add_javascript('system/javascript/core.js', true);
+sed_add_javascript('system/javascript/core.js', true, 10);
 
 /* === Hook === */
 $extp = sed_getextplugins('header.first');
