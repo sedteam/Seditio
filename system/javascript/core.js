@@ -1762,6 +1762,7 @@ const sedjs = {
 
     /**
      * Sortable functionality for drag-and-drop reordering of elements.
+     * Uses mouse/pointer/touch events for full control over drag behavior (jQuery UI-like).
      * @param {HTMLElement} element - The container element for sortable items.
      * @param {Object} options - Configuration options for sortable behavior.
      */
@@ -1772,6 +1773,7 @@ const sedjs = {
             handle: null, // Selector for the drag handle (optional)
             connectWith: null, // Selector for connected sortable lists (optional)
             placeholder: 'sortable-placeholder', // Class name for the placeholder
+            helper: 'sortable-helper', // Class name for the helper (dragged element)
             tolerance: 'pointer', // Tolerance mode: 'pointer' or 'intersect'
             disabled: false, // Whether the sortable is disabled initially
             axis: null, // Restrict movement to 'x' or 'y' axis (null for both)
@@ -1786,12 +1788,19 @@ const sedjs = {
         }, options);
 
         let dragItem = null; // Currently dragged item
+        let helper = null; // Helper element that follows cursor
         let placeholder = null; // Placeholder element during drag
         let connectedLists = []; // Array of connected sortable containers
         let orderChanged = false; // Flag to track if order has changed
         let items = []; // Array of current sortable items
         let observer = null; // MutationObserver instance for modern browsers
         let intervalId = null; // ID for setInterval fallback in older browsers
+        let isDragging = false; // Flag to track active dragging state
+        let startX = 0; // Initial mouse X position
+        let startY = 0; // Initial mouse Y position
+        let offsetX = 0; // Offset from mouse to element left
+        let offsetY = 0; // Offset from mouse to element top
+        let scrollIntervalId = null; // Auto-scroll interval ID
 
         /**
          * Initialize the sortable functionality.
@@ -1802,9 +1811,9 @@ const sedjs = {
                     document.querySelectorAll(settings.connectWith)
                 );
             }
-            updateItems(); // Initial population of items
+            updateItems();
             bindEvents();
-            setupDynamicCheck(); // Set up dynamic DOM checking
+            setupDynamicCheck();
             if (settings.disabled) {
                 disable();
             }
@@ -1823,7 +1832,6 @@ const sedjs = {
                 }
             }
 
-            // Check if items have changed
             let itemsChanged = newItems.length !== items.length;
             if (!itemsChanged) {
                 for (let i = 0; i < newItems.length; i++) {
@@ -1839,7 +1847,7 @@ const sedjs = {
         }
 
         /**
-         * Bind drag-and-drop events to current sortable items.
+         * Bind mouse/pointer/touch events to current sortable items.
          */
         function bindEvents() {
             for (let i = 0; i < items.length; i++) {
@@ -1847,21 +1855,18 @@ const sedjs = {
                 const dragElement = settings.handle ?
                     item.querySelector(settings.handle) || item : item;
 
-                if (!dragElement.draggable) { // Avoid re-binding if already set
-                    dragElement.draggable = true;
+                if (!dragElement._sortableBound) {
+                    dragElement._sortableBound = true;
                     dragElement.style.cursor = 'move';
-                    dragElement.ondragstart = handleDragStart;
-                    dragElement.ondragover = handleDragOver;
-                    dragElement.ondragenter = handleDragEnter;
-                    dragElement.ondragleave = handleDragLeave;
-                    dragElement.ondrop = handleDrop;
-                    dragElement.ondragend = handleDragEnd;
+                    
+                    dragElement.addEventListener('mousedown', handlePointerDown, false);
+                    dragElement.addEventListener('touchstart', handlePointerDown, false);
                 }
             }
         }
 
         /**
-         * Remove drag-and-drop events from current sortable items.
+         * Remove mouse/pointer/touch events from current sortable items.
          */
         function unbindEvents() {
             for (let i = 0; i < items.length; i++) {
@@ -1869,23 +1874,21 @@ const sedjs = {
                 const dragElement = settings.handle ?
                     item.querySelector(settings.handle) || item : item;
 
-                dragElement.draggable = false;
-                dragElement.style.cursor = '';
-                dragElement.ondragstart = null;
-                dragElement.ondragover = null;
-                dragElement.ondragenter = null;
-                dragElement.ondragleave = null;
-                dragElement.ondrop = null;
-                dragElement.ondragend = null;
+                if (dragElement._sortableBound) {
+                    dragElement._sortableBound = false;
+                    dragElement.style.cursor = '';
+                    
+                    dragElement.removeEventListener('mousedown', handlePointerDown);
+                    dragElement.removeEventListener('touchstart', handlePointerDown);
+                }
             }
         }
 
         /**
-         * Set up dynamic checking for DOM changes, preferring MutationObserver if available.
+         * Set up dynamic checking for DOM changes.
          */
         function setupDynamicCheck() {
             if (window.MutationObserver) {
-                // Use MutationObserver for modern browsers (IE11+)
                 observer = new MutationObserver((mutations) => {
                     for (let i = 0; i < mutations.length; i++) {
                         const mutation = mutations[i];
@@ -1899,11 +1902,10 @@ const sedjs = {
                     }
                 });
                 observer.observe(element, {
-                    childList: true, // Watch for addition/removal of child elements
-                    subtree: true // Watch the entire subtree
+                    childList: true,
+                    subtree: true
                 });
             } else {
-                // Fallback to setInterval for older browsers (e.g., IE9)
                 let lastChildCount = element.children.length;
                 intervalId = setInterval(() => {
                     const currentChildCount = element.children.length;
@@ -1915,36 +1917,97 @@ const sedjs = {
                         }
                         lastChildCount = currentChildCount;
                     }
-                }, 500); // Check every 500ms (adjustable)
+                }, 500);
             }
         }
 
         /**
-         * Handle the start of dragging an item.
-         * @param {Event} e - The dragstart event.
+         * Handle pointer down (mousedown/touchstart).
+         * @param {Event} e - The pointer down event.
          */
-        function handleDragStart(e) {
+        function handlePointerDown(e) {
+            if (settings.disabled || isDragging) return;
+            
             const target = getItem(e.target);
             if (!target) return;
 
+            const touch = e.touches ? e.touches[0] : e;
             dragItem = target;
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', target.outerHTML);
+            startX = touch.clientX;
+            startY = touch.clientY;
+            
+            const rect = dragItem.getBoundingClientRect();
+            offsetX = startX - rect.left;
+            offsetY = startY - rect.top;
 
-            const existingPlaceholders = element.querySelectorAll(`.${settings.placeholder}`);
-            for (let i = 0; i < existingPlaceholders.length; i++) {
-                if (existingPlaceholders[i].parentNode) {
-                    existingPlaceholders[i].parentNode.removeChild(existingPlaceholders[i]);
+            document.addEventListener('mousemove', handlePointerMove, false);
+            document.addEventListener('touchmove', handlePointerMove, false);
+            document.addEventListener('mouseup', handlePointerUp, false);
+            document.addEventListener('touchend', handlePointerUp, false);
+
+            e.preventDefault();
+        }
+
+        /**
+         * Handle pointer move (mousemove/touchmove).
+         * @param {Event} e - The pointer move event.
+         */
+        function handlePointerMove(e) {
+            if (!dragItem) return;
+
+            const touch = e.touches ? e.touches[0] : e;
+            const moveX = touch.clientX - startX;
+            const moveY = touch.clientY - startY;
+            const distance = Math.sqrt(moveX * moveX + moveY * moveY);
+
+            if (!isDragging && distance > 5) {
+                startDragging(e);
+            }
+
+            if (isDragging && helper) {
+                updateHelperPosition(touch.clientX, touch.clientY);
+                checkIntersection(touch.clientX, touch.clientY);
+                handleAutoScroll(touch.clientY);
+                
+                if (settings.sort) {
+                    settings.sort(e, { item: dragItem, helper: helper });
                 }
             }
 
-            placeholder = document.createElement(dragItem.tagName);
-            sedjs.addClass(placeholder, settings.placeholder);
-            placeholder.style.height = dragItem.offsetHeight + 'px';
+            e.preventDefault();
+        }
 
-            dragItem.style.opacity = '0.5';
-            dragItem.parentNode.insertBefore(placeholder, dragItem.nextSibling);
+        /**
+         * Handle pointer up (mouseup/touchend).
+         * @param {Event} e - The pointer up event.
+         */
+        function handlePointerUp(e) {
+            document.removeEventListener('mousemove', handlePointerMove);
+            document.removeEventListener('touchmove', handlePointerMove);
+            document.removeEventListener('mouseup', handlePointerUp);
+            document.removeEventListener('touchend', handlePointerUp);
+
+            if (isDragging) {
+                stopDragging(e);
+            }
+
+            dragItem = null;
+            isDragging = false;
+        }
+
+        /**
+         * Start the dragging operation.
+         * @param {Event} e - The triggering event.
+         */
+        function startDragging(e) {
+            isDragging = true;
             orderChanged = false;
+
+            cleanupExistingElements();
+            createHelper();
+            createPlaceholder();
+
+            dragItem.style.visibility = 'hidden';
 
             const links = dragItem.querySelectorAll('a');
             for (let i = 0; i < links.length; i++) {
@@ -1952,81 +2015,44 @@ const sedjs = {
             }
 
             if (settings.start) {
-                settings.start(e, { item: dragItem });
+                settings.start(e, { item: dragItem, helper: helper });
             }
         }
 
         /**
-         * Handle dragging over an item (required for drop to work).
-         * @param {Event} e - The dragover event.
+         * Stop the dragging operation.
+         * @param {Event} e - The triggering event.
          */
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-            if (settings.sort) {
-                settings.sort(e, { item: dragItem });
+        function stopDragging(e) {
+            if (scrollIntervalId) {
+                clearInterval(scrollIntervalId);
+                scrollIntervalId = null;
             }
-        }
-
-        /**
-         * Handle entering a potential drop target.
-         * @param {Event} e - The dragenter event.
-         */
-        function handleDragEnter(e) {
-            const target = getItem(e.target) || getClosest(e.target, settings.connectWith);
-            if (!target || target === dragItem || target === placeholder || !placeholder) return;
-
-            const rect = target.getBoundingClientRect();
-            const isVertical = !settings.axis || settings.axis === 'y';
-            const isHorizontal = settings.axis === 'x';
-
-            const shouldInsertBefore = settings.tolerance === 'pointer' ?
-                (isVertical ? e.clientY < rect.top + rect.height / 2 :
-                    e.clientX < rect.left + rect.width / 2) :
-                (isVertical ? rect.top < dragItem.getBoundingClientRect().top :
-                    rect.left < dragItem.getBoundingClientRect().left);
-
-            const parent = target.parentNode;
-            if (parent && placeholder) {
-                if (shouldInsertBefore) {
-                    parent.insertBefore(placeholder, target);
-                } else {
-                    parent.insertBefore(placeholder, target.nextSibling);
-                }
-                orderChanged = true;
-            }
-
-            if (settings.change) {
-                settings.change(e, { item: dragItem, placeholder: placeholder });
-            }
-        }
-
-        /**
-         * Handle leaving a potential drop target (currently empty).
-         * @param {Event} e - The dragleave event.
-         */
-        function handleDragLeave(e) {}
-
-        /**
-         * Handle dropping an item.
-         * @param {Event} e - The drop event.
-         */
-        function handleDrop(e) {
-            e.preventDefault();
-            if (!dragItem || !placeholder) return;
-
-            const dropTarget = placeholder.parentNode;
 
             if (settings.beforeStop) {
                 settings.beforeStop(e, { item: dragItem });
             }
 
-            dropTarget.insertBefore(dragItem, placeholder);
-            if (placeholder.parentNode) {
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.insertBefore(dragItem, placeholder);
+            }
+
+            dragItem.style.visibility = '';
+            
+            const links = dragItem.querySelectorAll('a');
+            for (let i = 0; i < links.length; i++) {
+                links[i].style.pointerEvents = 'auto';
+            }
+
+            if (helper && helper.parentNode) {
+                helper.parentNode.removeChild(helper);
+            }
+            
+            if (placeholder && placeholder.parentNode) {
                 placeholder.parentNode.removeChild(placeholder);
             }
 
-            const isReceived = dropTarget !== element;
+            const isReceived = placeholder && placeholder.parentNode !== element;
             if (isReceived && settings.receive) {
                 settings.receive(e, { item: dragItem, sender: element });
             }
@@ -2035,104 +2061,244 @@ const sedjs = {
                 settings.update(e, { item: dragItem });
             }
 
-            dragItem.style.opacity = '1';
-            const links = dragItem.querySelectorAll('a');
-            for (let i = 0; i < links.length; i++) {
-                links[i].style.pointerEvents = 'auto';
-            }
-            placeholder = null;
-            orderChanged = false;
-        }
-
-        /**
-         * Handle the end of dragging (mouse release).
-         * @param {Event} e - The dragend event.
-         */
-        function handleDragEnd(e) {
-            if (!dragItem) return;
-
-            dragItem.style.opacity = '1';
-            const links = dragItem.querySelectorAll('a');
-            for (let i = 0; i < links.length; i++) {
-                links[i].style.pointerEvents = 'auto';
-            }
-
-            if (settings.revert && placeholder) {
-                revertAnimation();
-            } else {
-                if (orderChanged && settings.update) {
-                    if (placeholder && placeholder.parentNode) {
-                        placeholder.parentNode.insertBefore(dragItem, placeholder);
-                        placeholder.parentNode.removeChild(placeholder);
-                    }
-                    settings.update(e, { item: dragItem });
-                }
-                cleanup();
-            }
-
             if (settings.stop) {
                 settings.stop(e, { item: dragItem });
             }
-        }
 
-        /**
-         * Animate the dragged item back to its original position if revert is enabled.
-         */
-        function revertAnimation() {
-            const startPos = dragItem.getBoundingClientRect();
-            const endPos = placeholder.getBoundingClientRect();
-
-            dragItem.style.transition = 'all 0.3s';
-            dragItem.style.transform = `translate(${endPos.left - startPos.left}px,${endPos.top - startPos.top}px)`;
-
-            setTimeout(() => {
-                dragItem.style.transition = '';
-                dragItem.style.transform = '';
-                cleanup();
-            }, 300);
-        }
-
-        /**
-         * Clean up after dragging by removing the placeholder.
-         */
-        function cleanup() {
-            if (placeholder && placeholder.parentNode) {
-                placeholder.parentNode.removeChild(placeholder);
-            }
+            helper = null;
             placeholder = null;
             orderChanged = false;
+        }
+
+        /**
+         * Create the helper element (clone that follows cursor).
+         */
+        function createHelper() {
+            helper = dragItem.cloneNode(true);
+            helper.removeAttribute('id');
+            sedjs.addClass(helper, settings.helper);
+            
+            const rect = dragItem.getBoundingClientRect();
+            helper.style.position = 'fixed';
+            helper.style.zIndex = '9999';
+            helper.style.width = rect.width + 'px';
+            helper.style.height = rect.height + 'px';
+            helper.style.boxSizing = 'border-box';
+            helper.style.pointerEvents = 'none';
+            helper.style.opacity = '0.8';
+            helper.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            helper.style.transform = 'rotate(-2deg)';
+            helper.style.transition = 'none';
+            
+            document.body.appendChild(helper);
+        }
+
+        /**
+         * Create the placeholder element (shows where item will be dropped).
+         */
+        function createPlaceholder() {
+            placeholder = document.createElement(dragItem.tagName);
+            sedjs.addClass(placeholder, settings.placeholder);
+            
+            const rect = dragItem.getBoundingClientRect();
+            const computedStyle = window.getComputedStyle(dragItem);
+            
+            placeholder.style.height = rect.height + 'px';
+            placeholder.style.width = rect.width + 'px';
+            placeholder.style.boxSizing = 'border-box';
+            placeholder.style.margin = computedStyle.margin;
+            placeholder.style.padding = '0';
+            placeholder.style.border = computedStyle.border;
+            placeholder.style.float = computedStyle.float;
+            placeholder.style.display = computedStyle.display;
+            placeholder.style.transition = 'all 0.2s ease';
+            
+            dragItem.parentNode.insertBefore(placeholder, dragItem);
+        }
+
+        /**
+         * Update helper position based on cursor.
+         * @param {number} clientX - Cursor X position.
+         * @param {number} clientY - Cursor Y position.
+         */
+        function updateHelperPosition(clientX, clientY) {
+            if (!helper) return;
+            
+            let x = clientX - offsetX;
+            let y = clientY - offsetY;
+
+            if (settings.axis === 'x') {
+                y = dragItem.getBoundingClientRect().top;
+            } else if (settings.axis === 'y') {
+                x = dragItem.getBoundingClientRect().left;
+            }
+
+            helper.style.left = x + 'px';
+            helper.style.top = y + 'px';
+        }
+
+        /**
+         * Check intersection with other items and update placeholder position.
+         * @param {number} clientX - Cursor X position.
+         * @param {number} clientY - Cursor Y position.
+         */
+        function checkIntersection(clientX, clientY) {
+            if (!placeholder) return;
+
+            let targetItem = null;
+            let minDistance = Infinity;
+
+            const allContainers = [element].concat(connectedLists);
+            
+            for (let c = 0; c < allContainers.length; c++) {
+                const container = allContainers[c];
+                const containerItems = container.querySelectorAll(settings.items);
+                
+                for (let i = 0; i < containerItems.length; i++) {
+                    const item = containerItems[i];
+                    if (item === dragItem || item === placeholder) continue;
+                    
+                    const rect = item.getBoundingClientRect();
+                    
+                    if (settings.tolerance === 'pointer') {
+                        if (clientX >= rect.left && clientX <= rect.right &&
+                            clientY >= rect.top && clientY <= rect.bottom) {
+                            targetItem = item;
+                            break;
+                        }
+                    } else {
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const distance = Math.sqrt(
+                            Math.pow(clientX - centerX, 2) + 
+                            Math.pow(clientY - centerY, 2)
+                        );
+                        
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            targetItem = item;
+                        }
+                    }
+                }
+                
+                if (targetItem) break;
+            }
+
+            if (targetItem) {
+                movePlaceholder(targetItem, clientX, clientY);
+            }
+        }
+
+        /**
+         * Move placeholder to appropriate position relative to target.
+         * @param {HTMLElement} target - The target item.
+         * @param {number} clientX - Cursor X position.
+         * @param {number} clientY - Cursor Y position.
+         */
+        function movePlaceholder(target, clientX, clientY) {
+            if (!placeholder) return;
+
+            const rect = target.getBoundingClientRect();
+            const isVertical = !settings.axis || settings.axis === 'y';
+            
+            const shouldInsertBefore = isVertical ?
+                clientY < rect.top + rect.height / 2 :
+                clientX < rect.left + rect.width / 2;
+
+            const parent = target.parentNode;
+            const currentPlaceholderParent = placeholder.parentNode;
+            
+            let newPosition;
+            if (shouldInsertBefore) {
+                newPosition = target;
+            } else {
+                newPosition = target.nextSibling;
+            }
+
+            if (placeholder.nextSibling !== newPosition) {
+                parent.insertBefore(placeholder, newPosition);
+                orderChanged = true;
+                
+                if (settings.change) {
+                    settings.change(null, { item: dragItem, placeholder: placeholder });
+                }
+            }
+        }
+
+        /**
+         * Handle auto-scrolling when dragging near viewport edges.
+         * @param {number} clientY - Cursor Y position.
+         */
+        function handleAutoScroll(clientY) {
+            const scrollSpeed = 10;
+            const scrollZone = 50;
+            
+            if (scrollIntervalId) {
+                clearInterval(scrollIntervalId);
+                scrollIntervalId = null;
+            }
+
+            if (clientY < scrollZone) {
+                scrollIntervalId = setInterval(() => {
+                    window.scrollBy(0, -scrollSpeed);
+                }, 50);
+            } else if (clientY > window.innerHeight - scrollZone) {
+                scrollIntervalId = setInterval(() => {
+                    window.scrollBy(0, scrollSpeed);
+                }, 50);
+            }
+        }
+
+        /**
+         * Clean up any existing helper/placeholder elements.
+         */
+        function cleanupExistingElements() {
+            const existingHelpers = document.querySelectorAll(`.${settings.helper}`);
+            for (let i = 0; i < existingHelpers.length; i++) {
+                if (existingHelpers[i].parentNode) {
+                    existingHelpers[i].parentNode.removeChild(existingHelpers[i]);
+                }
+            }
+
+            const existingPlaceholders = element.querySelectorAll(`.${settings.placeholder}`);
+            for (let i = 0; i < existingPlaceholders.length; i++) {
+                if (existingPlaceholders[i].parentNode) {
+                    existingPlaceholders[i].parentNode.removeChild(existingPlaceholders[i]);
+                }
+            }
         }
 
         /**
          * Get the sortable item from an event target.
-         * @param {HTMLElement} element - The element to check.
+         * @param {HTMLElement} el - The element to check.
          * @returns {HTMLElement|null} The matching item or null.
          */
-        function getItem(element) {
-            return getClosest(element, settings.items);
+        function getItem(el) {
+            return getClosest(el, settings.items);
         }
 
         /**
-         * Find the closest ancestor matching a selector (IE9 polyfill).
-         * @param {HTMLElement} element - The starting element.
+         * Find the closest ancestor matching a selector.
+         * @param {HTMLElement} el - The starting element.
          * @param {string} selector - The CSS selector to match.
          * @returns {HTMLElement|null} The closest matching element or null.
          */
-        function getClosest(element, selector) {
-            while (element) {
-                if (matchesSelector(element, selector)) return element;
-                element = element.parentNode;
+        function getClosest(el, selector) {
+            while (el && el !== document.body) {
+                if (matchesSelector(el, selector)) return el;
+                el = el.parentNode;
             }
             return null;
         }
 
         /**
-         * Polyfill for matches (IE9).
-         * @param {HTMLElement} element - The element to test.
+         * Check if element matches selector (polyfill).
+         * @param {HTMLElement} el - The element to test.
          * @param {string} selector - The CSS selector to match.
          * @returns {boolean} Whether the element matches the selector.
          */
         function matchesSelector(el, selector) {
+            if (!el || !el.parentNode) return false;
             if (el.matches) return el.matches(selector);
             if (el.msMatchesSelector) return el.msMatchesSelector(selector);
             const nodes = el.parentNode.querySelectorAll(selector);
@@ -2160,7 +2326,7 @@ const sedjs = {
         }
 
         /**
-         * Destroy the sortable instance, removing all events and observers.
+         * Destroy the sortable instance.
          */
         function destroy() {
             unbindEvents();
@@ -2172,12 +2338,14 @@ const sedjs = {
                 clearInterval(intervalId);
                 intervalId = null;
             }
+            if (scrollIntervalId) {
+                clearInterval(scrollIntervalId);
+                scrollIntervalId = null;
+            }
         }
 
-        // Start the sortable functionality
         init();
 
-        // Return public methods
         return {
             disable,
             enable,

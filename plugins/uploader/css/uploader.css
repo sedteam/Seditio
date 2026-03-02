@@ -27,7 +27,8 @@
     background: #fafafa;
 }
 
-#uploader .maintext {
+#uploader .maintext,
+.sortable-helper .maintext {
     position: relative;
     width: 129px;
     height: 24px;
@@ -83,7 +84,8 @@
     left: -50%;
 }
 
-#uploader .picture_uploaded {
+#uploader .picture_uploaded,
+.sortable-helper .picture_uploaded {
     max-width: 100%;
     max-height: 100%;
     height: 100%;
@@ -137,9 +139,14 @@
 
 #uploader .sortable-placeholder {
     background: #f0f0f0;
-    border: 1px dashed #ccc;
+    border: 2px dashed #999;
     height: 105px;
     width: 137px;
     display: block;
     float: left;
+    opacity: 0.6;
+}
+
+#uploader .sortable-helper {
+    cursor: move !important;
 }
