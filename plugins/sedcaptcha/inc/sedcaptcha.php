@@ -16,7 +16,10 @@ Description=Lightweight captcha image launcher (no DB, no common)
 ==================== */
 
 if (!defined('SED_CODE')) {
-	exit();
+	define('SED_CODE', TRUE);
+}
+if (!defined('SED_ROOT')) {
+	define('SED_ROOT', realpath(dirname(__FILE__) . '/../../..'));
 }
 
 session_start();

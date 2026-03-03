@@ -38,13 +38,18 @@ if ($captcha_register == "yes") {
 
 	require_once("plugins/sedcaptcha/lang/sedcaptcha." . $usr['lang'] . ".lang.php");
 
-	$verifyimg = "<img src=\"captcha/\" id=\"cha\" /><br />";
+	$captcha_url = ($cfg['sefurls'] && !empty($sed_urltrans['captcha']))
+		? sed_url("captcha")
+		: rtrim($sys['abs_url'], '/') . '/' . 'plugins/sedcaptcha/inc/sedcaptcha.php';
+
+	$verifyimg = "<img src=\"" . $captcha_url . "\" id=\"cha\" /><br />";
 	$verifyimg .= "<a href=\"" . sed_url("users", "m=register", "#change") . "\" id=\"change-image\" style=\"font-size:10px;\" name=\"change-image\">" . $L['plu_scaptcha_noties'] . "</a>";
 	$verifyimg .= "<script>
-		document.getElementById('change-image').addEventListener('click', function(event) { 
-			event.preventDefault(); 
-			document.getElementById('cha').src='captcha/?'+Math.random();  
-			document.getElementById('captcha-form').focus(); 
+		document.getElementById('change-image').addEventListener('click', function(event) {
+			event.preventDefault();
+			var img = document.getElementById('cha');
+			img.src = img.src.split('?')[0] + '?' + Math.random();
+			document.getElementById('captcha-form').focus();
 		});
 	</script>";
 	$verifyinput = "<input type=\"text\" name=\"" . sed_generate_field_code() . "\" id=\"captcha-form\" />";

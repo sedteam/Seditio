@@ -31,3 +31,11 @@ $mod_urlrewrite = array(
 		'rule' => 'plugins/sedcaptcha/inc/sedcaptcha.php'
 	),
 );
+
+$mod_urltrans = array();
+$mod_urltrans['captcha'] = array(
+	array(
+		'params' => '',
+		'rewrite' => 'captcha'
+	),
+);
