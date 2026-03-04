@@ -118,4 +118,48 @@
 
 </div>
 
+<div class="content-box">
+
+	<div class="content-box-header">
+		<h3>{PHP.L.adm_tplcache}</h3>
+	</div>
+
+	<div class="content-box-content content-table">
+
+		<div class="table cells striped resp-table">
+
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left">{PHP.L.adm_urlcache_file}</div>
+					<div class="table-th coltop text-left">{PHP.L.Date}</div>
+					<div class="table-th coltop text-left">{PHP.L.Size}</div>
+					<div class="table-th coltop text-center">{PHP.L.Options}</div>
+				</div>
+			</div>
+
+			<div class="table-body resp-table-body">
+
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_urlcache_file}">
+						datas/cache/templates/
+					</div>
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.Date}">
+						{TPLCACHE_DATE}
+					</div>
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.Size}">
+						{TPLCACHE_SIZE}
+					</div>
+					<div class="table-td text-center resp-table-td" style="width:120px;" data-label="{PHP.L.Options}">
+						<a href="{TPLCACHE_DELETE_URL}" class="btn btn-small" title="{PHP.L.adm_tplcache_delete}"><i class="ic-trash"></i></a>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
 <!-- END: ADMIN_CACHE -->

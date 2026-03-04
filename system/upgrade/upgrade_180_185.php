@@ -220,6 +220,10 @@ foreach ($active_plugins as $pcode) {
 }
 
 $adminmain .= "-----------------------<br />";
+$adminmain .= "Adding tpl_cache config option...<br />";
+sed_sql_query("INSERT INTO $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text, config_variants) VALUES ('core', 'main', '06', 'tpl_cache', 3, '0', '0', '', '')");
+$adminmain .= "tpl_cache added.<br />";
+
 $adminmain .= "Regenerating URL cache...<br />";
 sed_urls_generate();
 $adminmain .= "URL cache regenerated.<br />";

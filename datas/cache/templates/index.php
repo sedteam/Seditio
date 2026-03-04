@@ -6,7 +6,7 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=datas/cache/index.php
+File=datas/cache/templates/index.php
 Version=185
 Updated=2026-feb-14
 Type=Core

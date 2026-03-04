@@ -48,6 +48,11 @@ if ($a == 'purge') {
 	sed_urls_generate();
 	sed_redirect(sed_url("admin", "m=cache", "", true));
 	exit;
+} elseif ($a == 'tpl_delete') {
+	sed_check_xg();
+	sed_tplcache_clear();
+	sed_redirect(sed_url("admin", "m=cache", "", true));
+	exit;
 }
 
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
@@ -88,6 +93,40 @@ $t->assign(array(
 	"URLCACHE_SIZE" => $urls_exists ? filesize($urls_file) : 0,
 	"URLCACHE_DELETE_URL" => sed_url("admin", "m=cache&a=urls_delete&" . sed_xg()),
 	"URLCACHE_REGENERATE_URL" => sed_url("admin", "m=cache&a=urls_regenerate&" . sed_xg()),
+));
+
+/* Template cache (XTemplate, datas/cache/templates) */
+$tplcache_dir = SED_ROOT . '/datas/cache/templates';
+$tplcache_exists = is_dir($tplcache_dir);
+$tplcache_size = 0;
+$tplcache_date = '-';
+if ($tplcache_exists) {
+	$items = @scandir($tplcache_dir);
+	if ($items !== false) {
+		$tplcache_mtime = 0;
+		foreach ($items as $item) {
+			if ($item === '.' || $item === '..') {
+				continue;
+			}
+			$path = $tplcache_dir . '/' . $item;
+			if (is_file($path)) {
+				$tplcache_size += filesize($path);
+				$mtime = filemtime($path);
+				if ($mtime > $tplcache_mtime) {
+					$tplcache_mtime = $mtime;
+				}
+			}
+		}
+		if ($tplcache_mtime > 0) {
+			$tplcache_date = sed_build_date(!empty($cfg['dateformat']) ? $cfg['dateformat'] : 'Y-m-d H:i', $tplcache_mtime);
+		}
+	}
+}
+$t->assign(array(
+	"TPLCACHE_EXISTS" => $tplcache_exists,
+	"TPLCACHE_DATE" => $tplcache_date,
+	"TPLCACHE_SIZE" => $tplcache_size,
+	"TPLCACHE_DELETE_URL" => sed_url("admin", "m=cache&a=tpl_delete&" . sed_xg()),
 ));
 
 $t->assign("ADMIN_CACHE_TITLE", $admintitle);

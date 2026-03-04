@@ -1979,10 +1979,11 @@ class XtplCache
      */
     private function getCachePath($path, $hash)
     {
+        $path = str_replace('\\', '/', $path);
         $pathParts = pathinfo($path);
         $fileName = $pathParts['filename'];
         $fileExtension = !empty($pathParts['extension']) ? '.' . $pathParts['extension'] : '';
-        return $this->cacheDir . str_replace(array('./', '/'), '_', $pathParts['dirname']) . '_' . $fileName . '_' . $hash . $fileExtension;
+        return $this->cacheDir . $fileName . '_' . $hash . $fileExtension;
     }
 
     /**

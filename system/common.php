@@ -274,8 +274,16 @@ if ($usr['id'] == 0) {
 	$usr['lang'] = $cfg['defaultlang'];
 }
 
+$xtpl_settings = array();
+if (!empty($cfg['tpl_cache'])) {
+	$xtpl_settings['cacheEnabled'] = true;
+	$xtpl_settings['cacheDir'] = SED_ROOT . '/datas/cache';
+}
 if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
-	XTemplate::configure(['debug' => true]);
+	$xtpl_settings['debug'] = true;
+}
+if (!empty($xtpl_settings)) {
+	XTemplate::configure($xtpl_settings);
 }
 
 /* ======== GET imports ======== */

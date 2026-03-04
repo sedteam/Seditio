@@ -329,6 +329,7 @@ function sed_loadconfigmap()
 	$result[] = array('main', '04', 'adminemail', 1, 'admin@mysite.com', '');
 	$result[] = array('main', '05', 'hostip', 1, '999.999.999.999', '');
 	$result[] = array('main', '06', 'cache', 3, '1', '');
+	$result[] = array('main', '06', 'tpl_cache', 3, '0', '');
 	$result[] = array('main', '06', 'gzip', 3, '1', '');
 	$result[] = array('main', '07', 'devmode', 3, '0', '');
 	$result[] = array('main', '10', 'cookiedomain', 1, '', '');

@@ -107,6 +107,8 @@ $L['adm_urlcache'] = "URL кэш";
 $L['adm_urlcache_file'] = "Файл";
 $L['adm_urlcache_regenerate'] = "Перегенерировать SEF URLs";
 $L['adm_urlcache_delete'] = "Удалить URL кэш";
+$L['adm_tplcache'] = "Кэш шаблонов (XTemplate)";
+$L['adm_tplcache_delete'] = "Удалить кэш шаблонов";
 
 /* ====== Configuration ====== */
 
@@ -119,6 +121,7 @@ $L['cfg_clustermode'] = array("Серверный кластер", "Выбери
 $L['cfg_hostip'] = array("IP Сервера", "IP Сервера, опционально");
 $L['cfg_gzip'] = array("Gzip", "Gzip компрессия при выводе HTML");
 $L['cfg_cache'] = array("Внутренний кэш", "Оставьте включенным для лучшей производительности");
+$L['cfg_tpl_cache'] = array("Кэш шаблонов (XTemplate)", "Кэшировать скомпилированные шаблоны в datas/cache/templates/ для лучшей производительности");
 $L['cfg_devmode'] = array("Режим отладки", "Не включать на действующих сайтах");
 $L['cfg_doctypeid'] = array("Тип документа", "&lt;!DOCTYPE> в шапке HTML");
 $L['cfg_charset'] = array("HTML кодировка", "");

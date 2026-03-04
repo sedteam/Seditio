@@ -107,6 +107,8 @@ $L['adm_urlcache'] = "URL cache";
 $L['adm_urlcache_file'] = "File";
 $L['adm_urlcache_regenerate'] = "Regenerate SEF URLs";
 $L['adm_urlcache_delete'] = "Delete URL cache";
+$L['adm_tplcache'] = "Template cache (XTemplate)";
+$L['adm_tplcache_delete'] = "Delete template cache";
 
 /* ====== Configuration ====== */
 
@@ -119,6 +121,7 @@ $L['cfg_clustermode'] = array("Cluster of servers", "Set to yes if it's a load b
 $L['cfg_hostip'] = array("Server IP", "The IP of the server, optional.");
 $L['cfg_gzip'] = array("Gzip", "Gzip compression of the HTML output");
 $L['cfg_cache'] = array("Internal cache", "Keep it enabled for better performance");
+$L['cfg_tpl_cache'] = array("Template cache (XTemplate)", "Cache compiled templates in datas/cache/templates/ for better performance");
 $L['cfg_devmode'] = array("Debugging mode", "Don't let this enabled on live sites");
 $L['cfg_doctypeid'] = array("Document Type", "&lt;!DOCTYPE> of the HTML layout");
 $L['cfg_charset'] = array("HTML charset", "");

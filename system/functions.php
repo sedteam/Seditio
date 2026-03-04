@@ -939,6 +939,43 @@ function sed_cache_clearall()
 	return (TRUE);
 }
 
+/**
+ * Clears XTemplate file cache (datas/cache/templates directory).
+ *
+ * @return bool
+ */
+function sed_tplcache_clear()
+{
+	$cache_dir = SED_ROOT . '/datas/cache/templates';
+	if (!is_dir($cache_dir)) {
+		return true;
+	}
+	$items = @scandir($cache_dir);
+	if ($items === false) {
+		return false;
+	}
+	foreach ($items as $item) {
+		if ($item === '.' || $item === '..' || $item === 'index.php') {
+			continue;
+		}
+		$path = $cache_dir . '/' . $item;
+		if (is_file($path)) {
+			@unlink($path);
+		} elseif (is_dir($path)) {
+			$sub = @scandir($path);
+			if ($sub !== false) {
+				foreach ($sub as $s) {
+					if ($s !== '.' && $s !== '..' && $s !== 'index.php') {
+						@unlink($path . '/' . $s);
+					}
+				}
+			}
+			@rmdir($path);
+		}
+	}
+	return true;
+}
+
 /** 
  * Fetches cache value 
  * 

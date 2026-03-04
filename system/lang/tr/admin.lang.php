@@ -107,6 +107,8 @@ $L['adm_urlcache'] = "URL önbelleği";
 $L['adm_urlcache_file'] = "Dosya";
 $L['adm_urlcache_regenerate'] = "SEF URL'lerini yeniden oluştur";
 $L['adm_urlcache_delete'] = "URL önbelleğini sil";
+$L['adm_tplcache'] = "Şablon önbelleği (XTemplate)";
+$L['adm_tplcache_delete'] = "Şablon önbelleğini sil";
 
 /* ====== Configuration ====== */
 
@@ -119,6 +121,7 @@ $L['cfg_clustermode'] = array("Sunucu kümesi", "Yük dengeleme yapılandırmas�
 $L['cfg_hostip'] = array("Sunucu IP'si", "Sunucunun IP'si, isteğe bağlı.");
 $L['cfg_gzip'] = array("Gzip", "HTML çıktısının Gzip sıkıştırması");
 $L['cfg_cache'] = array("Dahili önbellek", "Daha iyi performans için etkin bırakın");
+$L['cfg_tpl_cache'] = array("Şablon önbelleği (XTemplate)", "Daha iyi performans için derlenmiş şablonları datas/cache/templates/ içinde önbelleğe alın");
 $L['cfg_devmode'] = array("Hata ayıklama modu", "Canlı sitelerde etkin bırakmayın");
 $L['cfg_doctypeid'] = array("Belge Türü", "&lt;!DOCTYPE> HTML düzeni");
 $L['cfg_charset'] = array("HTML karakter seti", "");
