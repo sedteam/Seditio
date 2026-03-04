@@ -274,8 +274,9 @@ list($pageprev, $pagenext) = sed_pagination_pn(sed_url("page", "c=" . $c . "&s="
 $url_list = array('part' => 'page', 'params' => "c=" . $c);
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
-$out['subtitle'] = $sed_cat[$c]['title'];
-$out['subdesc'] = $sed_cat[$c]['desc'];
+$out['subtitle'] = (empty($sed_cat[$c]['seo_title'])) ? $sed_cat[$c]['title'] : $sed_cat[$c]['seo_title'];
+$out['subdesc'] = (empty($sed_cat[$c]['seo_desc'])) ? $sed_cat[$c]['desc'] : $sed_cat[$c]['seo_desc'];
+$out['subkeywords'] = $sed_cat[$c]['seo_keywords'];
 
 $out['robots_index'] = $sed_cat[$c]['seo_index'];
 $out['robots_follow'] = $sed_cat[$c]['seo_follow'];

@@ -36,6 +36,6 @@ $mod_urltrans = array();
 $mod_urltrans['captcha'] = array(
 	array(
 		'params' => '',
-		'rewrite' => 'captcha'
+		'rewrite' => 'captcha.png'
 	),
 );
