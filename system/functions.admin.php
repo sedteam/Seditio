@@ -646,8 +646,8 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 		$blocked = false;
 		$sql_deps = sed_sql_query("SELECT pl_code, pl_title, pl_dependencies FROM $db_plugins WHERE pl_module=0 AND pl_code!='" . sed_sql_prep($pl) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != ''");
 		while ($dep_row = sed_sql_fetchassoc($sql_deps)) {
-			$deps = json_decode($dep_row['pl_dependencies'], true);
-			if (is_array($deps) && isset($deps['requires_plugins']) && is_array($deps['requires_plugins']) && in_array($pl, $deps['requires_plugins'])) {
+			$deps = sed_get_pl_dependencies($dep_row['pl_dependencies']);
+			if (in_array($pl, $deps['requires_plugins'])) {
 				$dep_name = !empty($dep_row['pl_title']) ? $dep_row['pl_title'] : $dep_row['pl_code'];
 				$dep_url = sed_url("admin", "m=plug&a=details&pl=" . $dep_row['pl_code']);
 				$res .= "<h3>Removing : plugins/" . $pl . "</h3>";
@@ -913,14 +913,8 @@ function sed_module_uninstall($code)
 
 	$sql_deps = sed_sql_query("SELECT pl_code, pl_title, pl_dependencies, pl_module FROM $db_plugins WHERE pl_code!='" . sed_sql_prep($code) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != ''");
 	while ($dep_row = sed_sql_fetchassoc($sql_deps)) {
-		$deps = json_decode($dep_row['pl_dependencies'], true);
-		if (!is_array($deps)) {
-			continue;
-		}
-		$depends = false;
-		if (isset($deps['requires']) && is_array($deps['requires']) && in_array($code, $deps['requires'])) {
-			$depends = true;
-		}
+		$deps = sed_get_pl_dependencies($dep_row['pl_dependencies']);
+		$depends = in_array($code, $deps['requires']);
 		if ($depends) {
 			$dep_name = !empty($dep_row['pl_title']) ? $dep_row['pl_title'] : $dep_row['pl_code'];
 			$dep_url = !empty($dep_row['pl_module'])

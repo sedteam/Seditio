@@ -126,16 +126,19 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
 		$out['devmode'] .= "<td class=\"coltop\">Code</td><td class=\"coltop\">Part</td>";
 		$out['devmode'] .= "<td class=\"coltop\">Plugin</td><td class=\"coltop\">File</td>";
 		$out['devmode'] .= "<td class=\"coltop\">Order</td>";
+		$out['devmode'] .= "<td class=\"coltop\">Dependencies</td>";
 		$out['devmode'] .= "</tr>";
 
-		foreach ($sys['devmode']['hooks'] as $k => $i) {
-			$out['devmode'] .= "<tr><td>" . $i[0] . "</td>";
-			$out['devmode'] .= "<td>" . $i[1] . "</td>";
-			$out['devmode'] .= "<td>" . $i[2] . "</td>";
-			$out['devmode'] .= "<td>" . $i[3] . "</td>";
-			$out['devmode'] .= "<td>" . $i[4] . "</td>";
-			$out['devmode'] .= "<td>plugins/" . $i[2] . "/" . $i[5] . ".php</td>";
-			$out['devmode'] .= "<td>" . $i[6] . "</td>";
+		foreach ($sys['devmode']['hooks'] as $k => $pl) {
+			$deps_str = sed_parse_pl_dependencies(isset($pl['pl_dependencies']) ? $pl['pl_dependencies'] : null);
+			$out['devmode'] .= "<tr><td>" . $pl['pl_id'] . "</td>";
+			$out['devmode'] .= "<td>" . sed_cc($pl['pl_hook']) . "</td>";
+			$out['devmode'] .= "<td>" . sed_cc($pl['pl_code']) . "</td>";
+			$out['devmode'] .= "<td>" . sed_cc($pl['pl_part']) . "</td>";
+			$out['devmode'] .= "<td>" . sed_cc($pl['pl_title']) . "</td>";
+			$out['devmode'] .= "<td>plugins/" . $pl['pl_code'] . "/" . $pl['pl_file'] . ".php</td>";
+			$out['devmode'] .= "<td>" . $pl['pl_order'] . "</td>";
+			$out['devmode'] .= "<td>" . sed_cc($deps_str) . "</td>";
 			$out['devmode'] .= "</tr>";
 		}
 		$out['devmode'] .= "</table>";

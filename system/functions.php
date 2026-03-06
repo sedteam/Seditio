@@ -1709,6 +1709,47 @@ function sed_getextplugins($hook, $cond = 'R')
 }
 
 /**
+ * Parse pl_dependencies JSON and return array with requires/requires_plugins.
+ *
+ * @param string|null $json pl_dependencies from DB
+ * @return array array('requires' => array(), 'requires_plugins' => array())
+ */
+function sed_get_pl_dependencies($json)
+{
+	$empty = array('requires' => array(), 'requires_plugins' => array());
+	if ($json === null || $json === '') {
+		return $empty;
+	}
+	$deps = json_decode((string) $json, true);
+	if (!is_array($deps)) {
+		return $empty;
+	}
+	return array(
+		'requires' => (isset($deps['requires']) && is_array($deps['requires'])) ? $deps['requires'] : array(),
+		'requires_plugins' => (isset($deps['requires_plugins']) && is_array($deps['requires_plugins'])) ? $deps['requires_plugins'] : array()
+	);
+}
+
+/**
+ * Parse pl_dependencies JSON and return human-readable string.
+ *
+ * @param string|null $json pl_dependencies from DB
+ * @return string e.g. "mods: pfs | plugs: uploader" or "—"
+ */
+function sed_parse_pl_dependencies($json)
+{
+	$deps = sed_get_pl_dependencies($json);
+	$parts = array();
+	if (!empty($deps['requires'])) {
+		$parts[] = 'mods: ' . implode(', ', $deps['requires']);
+	}
+	if (!empty($deps['requires_plugins'])) {
+		$parts[] = 'plugs: ' . implode(', ', $deps['requires_plugins']);
+	}
+	return !empty($parts) ? implode(' | ', $parts) : '—';
+}
+
+/**
  * Check if a plugin is active (has at least one active part, pl_module=0).
  * Uses global $sed_plugins (only pl_active=1 rows are there).
  *

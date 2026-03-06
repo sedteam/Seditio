@@ -87,13 +87,9 @@ switch ($a) {
 			$req_plugin_codes = array();
 			$sql_dep = sed_sql_query("SELECT pl_dependencies FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0 AND pl_dependencies IS NOT NULL AND pl_dependencies != '' LIMIT 1");
 			if ($dep_row = sed_sql_fetchassoc($sql_dep)) {
-				$deps = json_decode($dep_row['pl_dependencies'], true);
-				if (isset($deps['requires']) && is_array($deps['requires'])) {
-					$req_module_codes = $deps['requires'];
-				}
-				if (isset($deps['requires_plugins']) && is_array($deps['requires_plugins'])) {
-					$req_plugin_codes = $deps['requires_plugins'];
-				}
+				$deps = sed_get_pl_dependencies($dep_row['pl_dependencies']);
+				$req_module_codes = $deps['requires'];
+				$req_plugin_codes = $deps['requires_plugins'];
 			} else {
 				if (!empty($info['Requires_modules'])) {
 					$req_module_codes = array_map('trim', array_filter(explode(',', $info['Requires_modules'])));
@@ -320,24 +316,20 @@ switch ($a) {
 				$dep_ok = true;
 				$sql_dep = sed_sql_query("SELECT pl_dependencies FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_dependencies IS NOT NULL AND pl_dependencies != '' LIMIT 1");
 				if ($dep_row = sed_sql_fetchassoc($sql_dep)) {
-					$deps = json_decode($dep_row['pl_dependencies'], true);
-					if (isset($deps['requires']) && is_array($deps['requires'])) {
-						foreach ($deps['requires'] as $req_code) {
-							$sql_req = sed_sql_query("SELECT ct_state FROM $db_core WHERE ct_code='" . sed_sql_prep($req_code) . "' AND ct_state=1 LIMIT 1");
-							if (!sed_sql_fetchassoc($sql_req)) {
-								$dep_ok = false;
-								$adminwarnings .= "Cannot activate: required module '" . $req_code . "' is not installed or not active.<br />";
-							}
+					$deps = sed_get_pl_dependencies($dep_row['pl_dependencies']);
+					foreach ($deps['requires'] as $req_code) {
+						$sql_req = sed_sql_query("SELECT ct_state FROM $db_core WHERE ct_code='" . sed_sql_prep($req_code) . "' AND ct_state=1 LIMIT 1");
+						if (!sed_sql_fetchassoc($sql_req)) {
+							$dep_ok = false;
+							$adminwarnings .= "Cannot activate: required module '" . $req_code . "' is not installed or not active.<br />";
 						}
 					}
-					if ($dep_ok && isset($deps['requires_plugins']) && is_array($deps['requires_plugins'])) {
-						foreach ($deps['requires_plugins'] as $req_code) {
-							$sql_req = sed_sql_query("SELECT SUM(pl_active) AS active_count FROM $db_plugins WHERE pl_code='" . sed_sql_prep($req_code) . "' AND pl_module=0");
-							$req_row = sed_sql_fetchassoc($sql_req);
-							if (!$req_row || (int)$req_row['active_count'] < 1) {
-								$dep_ok = false;
-								$adminwarnings .= "Cannot activate: required plugin '" . $req_code . "' is not installed or not active.<br />";
-							}
+					foreach ($deps['requires_plugins'] as $req_code) {
+						$sql_req = sed_sql_query("SELECT SUM(pl_active) AS active_count FROM $db_plugins WHERE pl_code='" . sed_sql_prep($req_code) . "' AND pl_module=0");
+						$req_row = sed_sql_fetchassoc($sql_req);
+						if (!$req_row || (int)$req_row['active_count'] < 1) {
+							$dep_ok = false;
+							$adminwarnings .= "Cannot activate: required plugin '" . $req_code . "' is not installed or not active.<br />";
 						}
 					}
 				}

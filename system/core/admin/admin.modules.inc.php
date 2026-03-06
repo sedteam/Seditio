@@ -90,11 +90,9 @@ if ($a == 'details' && !empty($mod_code)) {
 		$depends = false;
 		$title = !empty($dep_row['pl_title']) ? $dep_row['pl_title'] : $dep_row['pl_code'];
 		$json = array_key_exists('pl_dependencies', $dep_row) ? $dep_row['pl_dependencies'] : null;
-		if ($json !== null && $json !== '') {
-			$deps = json_decode((string) $json, true);
-			if (is_array($deps) && isset($deps['requires']) && is_array($deps['requires']) && in_array($mod_code, $deps['requires'])) {
-				$depends = true;
-			}
+		$deps = sed_get_pl_dependencies($json);
+		if (in_array($mod_code, $deps['requires'])) {
+			$depends = true;
 		}
 		if (!$depends) {
 			// Fallback: plugin may have been installed before pl_dependencies was filled — check setup file
