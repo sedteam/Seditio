@@ -29,11 +29,11 @@
 					</div>
 
 					<div class="table-td poll-icon" style="width:30px;">
-						<a href="{POLLS_LIST_URL}"><img src="system/img/admin/polls.png" alt="" /></a>
+						<a href="{POLLS_LIST_URL}"><img src="modules/polls/polls.png" alt="" /></a>
 					</div>
 
 					<div class="table-td poll-title">
-						{POLLS_LIST_TEXT}
+						<a href="{POLLS_LIST_URL}">{POLLS_LIST_TEXT}</a>
 					</div>
 
 				</div>

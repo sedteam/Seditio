@@ -782,6 +782,56 @@ ul.content-box-tabs li a.selected {
 
 /*-------------------------*/
 
+table {
+    margin: 0.5em 0;
+}
+
+tfoot th,
+tfoot td {
+    background-color: #f2f2f2;
+}
+
+th,
+td {
+    padding: 0.5em 0.8em;
+}
+
+table caption {
+    text-transform: uppercase;
+    padding: 0 1em;
+    color: #999999;
+    font-size: 0.85em;
+}
+
+table.flat {
+    width: 100%;
+}
+
+table.flat th,
+table.flat td {
+    border: 0;
+}
+
+table.main {
+    width: 100%;
+}
+
+table.cells {
+    width: 100%;
+}
+
+table.cells td {
+    vertical-align: middle;
+}
+
+table.list {
+    width: 100%;
+}
+
+table.cells tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
 #primary table {
     width: 100%;
     border-collapse: collapse;
