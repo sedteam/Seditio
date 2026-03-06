@@ -417,27 +417,48 @@ function sed_get_forums_urltrans(&$args, &$section)
 /**
  * Ensure every forum section has auth rows for standard groups (fixes installs that missed auth).
  * Runs at most once per request.
+ * Uses sed_auth_install_option with letter masks and SED_GROUP_* constants (same as forums.install.php).
  */
 function sed_forum_ensure_section_auth()
 {
-	global $cfg, $db_auth;
+	global $cfg, $db_auth, $db_groups, $db_forum_sections;
 	static $ensured = false;
 	if ($ensured) {
 		return;
 	}
-	$db_auth = $cfg['sqldbprefix'] . 'auth';
-	$sql_fs = sed_sql_query("SELECT fs_id FROM " . $cfg['sqldbprefix'] . "forum_sections");
+	$forums_default_rights = array(
+		SED_GROUP_DEFAULT => 'RW',
+		SED_GROUP_GUESTS => 'R',
+		SED_GROUP_INACTIVE => 'R',
+		SED_GROUP_BANNED => '',
+		SED_GROUP_MEMBERS => 'RW',
+		SED_GROUP_MODERATORS => 'RWA',
+		SED_GROUP_SUPERADMINS => 'RWA12345',
+	);
+	$forums_default_lock = array(
+		SED_GROUP_DEFAULT => 'A',
+		SED_GROUP_GUESTS => 'W12345A',
+		SED_GROUP_INACTIVE => 'W12345A',
+		SED_GROUP_BANNED => 'RWA12345',
+		SED_GROUP_MEMBERS => 'A',
+		SED_GROUP_MODERATORS => '',
+		SED_GROUP_SUPERADMINS => 'RWA12345',
+	);
+	$forum_rights = array();
+	$forum_lock = array();
+	$sql_grps = sed_sql_query("SELECT grp_id FROM $db_groups WHERE grp_disabled=0");
+	while ($row = sed_sql_fetchassoc($sql_grps)) {
+		$gid = (int)$row['grp_id'];
+		$forum_rights[$gid] = isset($forums_default_rights[$gid]) ? $forums_default_rights[$gid] : $forums_default_rights[SED_GROUP_DEFAULT];
+		$forum_lock[$gid] = isset($forums_default_lock[$gid]) ? $forums_default_lock[$gid] : $forums_default_lock[SED_GROUP_DEFAULT];
+	}
+	$sql_fs = sed_sql_query("SELECT fs_id FROM $db_forum_sections");
 	$did_insert = false;
 	while ($fs = sed_sql_fetchassoc($sql_fs)) {
 		$sid = (int)$fs['fs_id'];
 		$chk = sed_sql_query("SELECT 1 FROM $db_auth WHERE auth_code='forums' AND auth_option='$sid' LIMIT 1");
 		if (sed_sql_numrows($chk) == 0) {
-			$forum_auth_defaults = array(
-				array(1, 1, 254), array(2, 1, 254), array(3, 0, 255), array(4, 3, 128), array(5, 255, 255), array(6, 131, 0)
-			);
-			foreach ($forum_auth_defaults as $row) {
-				sed_sql_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (" . (int)$row[0] . ", 'forums', '$sid', " . (int)$row[1] . ", " . (int)$row[2] . ", 1)");
-			}
+			sed_auth_install_option('forums', $sid, $forum_rights, $forum_lock, 1);
 			$did_insert = true;
 		}
 	}
