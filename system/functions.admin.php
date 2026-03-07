@@ -562,7 +562,7 @@ function sed_plugin_install($pl)
 		SED_GROUP_INACTIVE => 'R',
 		SED_GROUP_BANNED => '',
 		SED_GROUP_MEMBERS => 'RW',
-		SED_GROUP_MODERATORS => 'RWA',
+		SED_GROUP_MODERATORS => 'RW',
 		SED_GROUP_SUPERADMINS => 'RWA12345',
 	);
 	$plug_default_lock = array(
@@ -833,7 +833,7 @@ function sed_module_install($code)
 		SED_GROUP_INACTIVE => 'R',
 		SED_GROUP_BANNED => '',
 		SED_GROUP_MEMBERS => 'RW',
-		SED_GROUP_MODERATORS => 'RWA',
+		SED_GROUP_MODERATORS => 'RW',
 		SED_GROUP_SUPERADMINS => 'RWA12345',
 	);
 	$mod_default_lock = array(

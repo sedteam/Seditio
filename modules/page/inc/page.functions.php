@@ -206,7 +206,7 @@ function sed_structure_delcat($id, $c)
  */
 function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 {
-	global $db_structure, $db_auth, $sed_groups, $usr;
+	global $db_structure, $sed_groups, $usr;
 
 	$res = FALSE;
 
@@ -218,23 +218,33 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order) 
 					VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($path) . "', '" . sed_sql_prep($title) . "', '" . sed_sql_prep($desc) . "', '" . sed_sql_prep($icon) . "', " . (int)$group . ", 'date.desc')");
 
+			$page_default_rights = array(
+				SED_GROUP_DEFAULT => 'RW',
+				SED_GROUP_GUESTS => 'R',
+				SED_GROUP_INACTIVE => 'R',
+				SED_GROUP_BANNED => '',
+				SED_GROUP_MEMBERS => 'RW',
+				SED_GROUP_MODERATORS => 'RW',
+				SED_GROUP_SUPERADMINS => 'RWA12345',
+			);
+			$page_default_lock = array(
+				SED_GROUP_DEFAULT => 'A',
+				SED_GROUP_GUESTS => 'W12345A',
+				SED_GROUP_INACTIVE => 'W12345A',
+				SED_GROUP_BANNED => 'RWA12345',
+				SED_GROUP_MEMBERS => 'A',
+				SED_GROUP_MODERATORS => '',
+				SED_GROUP_SUPERADMINS => 'RWA12345',
+			);
+			$page_rights = array();
+			$page_lock = array();
 			foreach ($sed_groups as $k => $v) {
-				if ($v['id'] == 1 || $v['id'] == 2) {
-					$ins_auth = 1;
-					$ins_lock = 254;
-				} elseif ($v['id'] == 3) {
-					$ins_auth = 0;
-					$ins_lock = 255;
-				} elseif ($v['id'] == 5) {
-					$ins_auth = 255;
-					$ins_lock = 255;
-				} else {
-					$ins_auth = 3;
-					$ins_lock = ($k == 4) ? 128 : 0;
-				}
-				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (" . (int)$v['id'] . ", 'page', '$code', " . (int)$ins_auth . ", " . (int)$ins_lock . ", " . (int)$usr['id'] . ")");
-				$res = TRUE;
+				$gid = $v['id'];
+				$page_rights[$gid] = isset($page_default_rights[$gid]) ? $page_default_rights[$gid] : $page_default_rights[SED_GROUP_DEFAULT];
+				$page_lock[$gid] = isset($page_default_lock[$gid]) ? $page_default_lock[$gid] : $page_default_lock[SED_GROUP_DEFAULT];
 			}
+			sed_auth_install_option('page', $code, $page_rights, $page_lock, $usr['id']);
+			$res = TRUE;
 			sed_auth_reorder();
 			sed_auth_clear('all');
 			sed_cache_clear('sed_cat');

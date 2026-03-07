@@ -210,23 +210,32 @@ if ($n == 'edit') {
 
 			$forumid = sed_sql_insertid();
 
+			$forums_default_rights = array(
+				SED_GROUP_DEFAULT => 'RW',
+				SED_GROUP_GUESTS => 'R',
+				SED_GROUP_INACTIVE => 'R',
+				SED_GROUP_BANNED => '',
+				SED_GROUP_MEMBERS => 'RW',
+				SED_GROUP_MODERATORS => 'RW',
+				SED_GROUP_SUPERADMINS => 'RWA12345',
+			);
+			$forums_default_lock = array(
+				SED_GROUP_DEFAULT => 'A',
+				SED_GROUP_GUESTS => 'W12345A',
+				SED_GROUP_INACTIVE => 'W12345A',
+				SED_GROUP_BANNED => 'RWA12345',
+				SED_GROUP_MEMBERS => 'A',
+				SED_GROUP_MODERATORS => '',
+				SED_GROUP_SUPERADMINS => 'RWA12345',
+			);
+			$forum_rights = array();
+			$forum_lock = array();
 			foreach ($sed_groups as $k => $v) {
-				if ($k == 1 || $k == 2) {
-					$ins_auth = 1;
-					$ins_lock = 254;
-				} elseif ($k == 3) {
-					$ins_auth = 0;
-					$ins_lock = 255;
-				} elseif ($k == 5) {
-					$ins_auth = 255;
-					$ins_lock = 255;
-				} else {
-					$ins_auth = 3;
-					$ins_lock = ($k == 4) ? 128 : 0;
-				}
-
-				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (" . (int)$v['id'] . ", 'forums', " . (int)$forumid . ", " . (int)$ins_auth . ", " . (int)$ins_lock . ", " . (int)$usr['id'] . ")");
+				$gid = $v['id'];
+				$forum_rights[$gid] = isset($forums_default_rights[$gid]) ? $forums_default_rights[$gid] : $forums_default_rights[SED_GROUP_DEFAULT];
+				$forum_lock[$gid] = isset($forums_default_lock[$gid]) ? $forums_default_lock[$gid] : $forums_default_lock[SED_GROUP_DEFAULT];
 			}
+			sed_auth_install_option('forums', $forumid, $forum_rights, $forum_lock, $usr['id']);
 			sed_auth_reorder();
 			sed_auth_clear('all');
 			sed_redirect(sed_url("admin", "m=forums", "", true));

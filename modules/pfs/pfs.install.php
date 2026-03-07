@@ -83,7 +83,7 @@ if (sed_sql_numrows($chk) == 0) {
 		SED_GROUP_BANNED => '',
 		SED_GROUP_MEMBERS => 'RW',
 		SED_GROUP_SUPERADMINS => 'RWA12345',
-		SED_GROUP_MODERATORS => 'RWA',
+		SED_GROUP_MODERATORS => 'RW',
 	);
 	$pfs_default_lock = array(
 		SED_GROUP_GUESTS => 'RWA12345',
