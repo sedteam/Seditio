@@ -39,11 +39,11 @@ $admintitle = $L['Ratings'];
 
 $adminhelp = isset($L['adm_help_ratings']) ? $L['adm_help_ratings'] : '';
 
-$admin_ratings_tpl = SED_ROOT . '/plugins/ratings/tpl/admin.ratings.tpl';
-if (file_exists($admin_ratings_tpl)) {
+$admin_ratings_tpl = sed_skinfile('admin.ratings', false, true);
+if (!empty($admin_ratings_tpl)) {
 	$t = new XTemplate($admin_ratings_tpl);
 } else {
-	$t = new XTemplate(sed_skinfile('admin.ratings', false, true));
+	$t = new XTemplate(SED_ROOT . '/plugins/ratings/tpl/admin.ratings.tpl');
 }
 
 $id = sed_import('id', 'G', 'TXT');
@@ -51,8 +51,7 @@ $ii = 0;
 $jj = 0;
 
 if (sed_auth('admin', 'a', 'A')) {
-	$t->assign("BUTTON_RATINGS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=plugin&p=ratings"));
-	$t->parse("ADMIN_RATINGS.RATINGS_BUTTONS.RATINGS_BUTTONS_CONFIG");
+	$t->assign("BUTTON_RATINGS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=plug&p=ratings"));
 	$t->parse("ADMIN_RATINGS.RATINGS_BUTTONS");
 }
 

@@ -39,6 +39,18 @@ $urlpaths[sed_url("admin", "m=comments")] = $L['Comments'];
 
 $admintitle = $L['Comments'];
 
+$admin_comments_tpl = sed_skinfile('admin.comments', false, true);
+if (!empty($admin_comments_tpl)) {
+	$t = new XTemplate($admin_comments_tpl);
+} else {
+	$t = new XTemplate(SED_ROOT . '/plugins/comments/tpl/admin.comments.tpl');
+}
+
+if (sed_auth('admin', 'a', 'A')) {
+	$t->assign("BUTTON_COMMENTS_CONFIG_URL", sed_url("admin", "m=config&n=edit&o=plug&p=comments"));
+	$t->parse("ADMIN_COMMENTS.COMMENTS_BUTTONS");
+}
+
 if ($a == 'delete') {
 	sed_check_xg();
 
@@ -62,8 +74,6 @@ $pagination = sed_pagination(sed_url("admin", "m=comments"), $d, $totallines, $p
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=comments"), $d, $totallines, $perpage, TRUE);
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d," . $perpage);
-
-$t = new XTemplate(sed_skinfile('admin.comments', false, true));
 
 if (!empty($pagination)) {
 	$t->assign(array(

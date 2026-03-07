@@ -8,14 +8,10 @@
 <!-- BEGIN: RATINGS_BUTTONS -->
 
 <ul class="shortcut-buttons-set">
-
-	<!-- BEGIN: RATINGS_BUTTONS_CONFIG -->
 	<li><a class="shortcut-button" href="{BUTTON_RATINGS_CONFIG_URL}"><span>
-				<i class="ic-settings ic-3x"></i><br />
-				{PHP.L.Configuration}
-			</span></a></li>
-	<!-- END: RATINGS_BUTTONS_CONFIG -->
-
+		<i class="ic-settings ic-3x"></i><br />
+		{PHP.L.Configuration}
+	</span></a></li>
 </ul>
 
 <div class="clear"></div>
