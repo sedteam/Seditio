@@ -71,7 +71,8 @@ $sys['catcode'] = $pag['page_cat']; //new in v175
 $pag['page_date'] = sed_build_date($cfg['dateformat'], $pag['page_date']);
 $pag['page_begin'] = sed_build_date($cfg['dateformat'], $pag['page_begin']);
 $pag['page_expire'] = sed_build_date($cfg['dateformat'], $pag['page_expire']);
-$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . $pag['page_id']) : sed_url("page", "al=" . $pag['page_alias']);
+$pag['page_url_param'] = (empty($pag['page_alias'])) ? "id=" . $pag['page_id'] : "al=" . $pag['page_alias'];
+$pag['page_pageurl'] = sed_url("page", $pag['page_url_param']);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
 sed_block($usr['auth_read']);
@@ -243,7 +244,7 @@ if ($pag['page_file']) {
 	}
 
 	$t->assign(array(
-		"PAGE_FILE_URL" => sed_url("page", $url_param . "&a=dl"),
+		"PAGE_FILE_URL" => sed_url("page", $pag['page_url_param'] . "&a=dl"),
 		"PAGE_FILE_SIZE" => $pag['page_size'],
 		"PAGE_FILE_COUNT" => $pag['page_filecount'],
 		"PAGE_FILE_ICON" => $pag['page_fileicon'],
