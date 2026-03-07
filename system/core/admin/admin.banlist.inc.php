@@ -36,7 +36,14 @@ if ($a == 'update') {
 	$rbanlistip = sed_import('rbanlistip', 'P', 'TXT');
 	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
 	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
-	$sql = sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'");
+
+	$rbanlistip_normalized = sed_normalize_ip_for_banmask($rbanlistip);
+	if ($rbanlistip_normalized !== false) {
+		$rbanlistip_safe = sed_sql_prep($rbanlistip_normalized);
+		$sql = sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip_safe', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'");
+	} else {
+		$sql = sed_sql_query("UPDATE $db_banlist SET banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'");
+	}
 	sed_redirect(sed_url("admin", "m=banlist", "", true));
 	exit;
 } elseif ($a == 'add') {
@@ -46,29 +53,20 @@ if ($a == 'update') {
 	$nbanlistreason = sed_sql_prep(sed_import('nbanlistreason', 'P', 'TXT'));
 	$nexpire = sed_import('nexpire', 'P', 'INT');
 
-	// Check IPv4 format
-	$nbanlistip_cnt = explode('.', $nbanlistip);
-	if (count($nbanlistip_cnt) == 4) {
-		$nbanlistip_valid = true;
-	} else {
-		// Check IPv6 format
-		$nbanlistip_cnt = explode(':', $nbanlistip);
-		if (count($nbanlistip_cnt) <= 8) {
-			$nbanlistip_valid = true;
-		} else {
-			$nbanlistip_valid = false;
-		}
-	}
+	$nbanlistip_normalized = sed_normalize_ip_for_banmask($nbanlistip);
+	$nbanlistip_valid = ($nbanlistip_normalized !== false);
 
-	// If the IP is not valid, set it to an empty string
 	if (!$nbanlistip_valid) {
 		$nbanlistip = '';
+	} else {
+		$nbanlistip = $nbanlistip_normalized;
 	}
 
 	if ($nexpire > 0) {
 		$nexpire += $sys['now'];
 	}
-	$sql = sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip', '$nbanlistemail', '$nbanlistreason', " . (int)$nexpire . ")");
+	$nbanlistip_safe = sed_sql_prep($nbanlistip);
+	$sql = sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip_safe', '$nbanlistemail', '$nbanlistreason', " . (int)$nexpire . ")");
 	sed_log("Banlist : New line for IP " . $nbanlistip . " / Email " . $nbanlistemail, 'adm');
 	sed_redirect(sed_url("admin", "m=banlist", "", true));
 	exit;

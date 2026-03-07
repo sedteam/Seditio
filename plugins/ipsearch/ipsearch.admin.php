@@ -50,13 +50,18 @@ if ($a == 'search') {
 
   // Determine if the IP is IPv4 or IPv6
   if (strpos($id, ':') !== false) {
-    // Handle IPv6
-    $userip = explode(':', $id);
+    // Handle IPv6 - normalize to canonical form first
+    $id_normalized = sed_normalize_ip_for_banmask($id);
+    if ($id_normalized === false) {
+      sed_die();
+    }
+    $userip = explode(':', $id_normalized);
+    // For LIKE we need prefixes without * (e.g. "2001:0db8:0000:0000:0000:0000:0000:" for /112)
     $ipmasks = [
-      $id,                                                 // Full IPv6 address
-      implode(':', array_slice($userip, 0, 7)) . ':*',     // First 7 groups
-      implode(':', array_slice($userip, 0, 6)) . ':*:*',   // First 6 groups
-      implode(':', array_slice($userip, 0, 5)) . ':*:*:*', // First 5 groups
+      $id_normalized,
+      implode(':', array_slice($userip, 0, 7)) . ':',
+      implode(':', array_slice($userip, 0, 6)) . ':',
+      implode(':', array_slice($userip, 0, 5)) . ':',
     ];
   } else {
     // Handle IPv4
@@ -75,7 +80,8 @@ if ($a == 'search') {
   $res_dns = ($res_host == $id) ? 'Unknown' : $res_host;
 
   foreach ($ipmasks as $index => $ipmask) {
-    $sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask%' ");
+    $ipmask_safe = sed_sql_prep($ipmask);
+    $sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask_safe%' ");
     $totalmatches = sed_sql_numrows($sql);
 
     while ($row = sed_sql_fetchassoc($sql)) {
