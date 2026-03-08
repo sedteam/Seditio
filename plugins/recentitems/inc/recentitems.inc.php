@@ -106,7 +106,30 @@ function sed_get_latestcomments($limit, $mask)
 					WHERE c.com_id IN('" . implode("','", $com_latest) . "') 
 					ORDER BY c.com_date DESC");
 
+	$comments_rows = array();
 	while ($row = sed_sql_fetchassoc($sql)) {
+		$comments_rows[] = $row;
+	}
+
+	$page_ids = array();
+	foreach ($comments_rows as $row) {
+		$j = substr($row['com_code'], 0, 1);
+		$k = substr($row['com_code'], 1);
+		if ($j === 'p' && $k !== '' && sed_module_active('page')) {
+			$page_ids[(int)$k] = true;
+		}
+	}
+
+	$pages_data = array();
+	if (!empty($page_ids)) {
+		$ids_list = implode(',', array_map('intval', array_keys($page_ids)));
+		$sql_pages = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias FROM $db_pages WHERE page_id IN ($ids_list)");
+		while ($p = sed_sql_fetchassoc($sql_pages)) {
+			$pages_data[$p['page_id']] = $p;
+		}
+	}
+
+	foreach ($comments_rows as $row) {
 
 		$com_code = $row['com_code'];
 
@@ -118,8 +141,7 @@ function sed_get_latestcomments($limit, $mask)
 		switch ($j) {
 			case 'p':
 				if (sed_module_active('page')) {
-					$sql2 = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias FROM $db_pages WHERE page_id = " . (int)$k . " LIMIT 1");
-					$row2 = sed_sql_fetchassoc($sql2);
+					$row2 = isset($pages_data[(int)$k]) ? $pages_data[(int)$k] : null;
 					if ($row2) {
 						$sys['catcode'] = $row2['page_cat']; //new in v175
 						$row2['page_pageurl'] = (empty($row2['page_alias'])) ? sed_url("page", "id=" . $row2['page_id'] . "&comments=1", "#c" . $row['com_id']) : sed_url("page", "al=" . $row2['page_alias'] . "&comments=1", "#c" . $row['com_id']);
