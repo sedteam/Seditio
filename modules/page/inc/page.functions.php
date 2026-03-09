@@ -206,7 +206,7 @@ function sed_structure_delcat($id, $c)
  */
 function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 {
-	global $db_structure, $sed_groups, $usr;
+	global $db_structure, $sed_groups, $usr, $sed_default_auth_rights, $sed_default_auth_lock;
 
 	$res = FALSE;
 
@@ -218,24 +218,8 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order) 
 					VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($path) . "', '" . sed_sql_prep($title) . "', '" . sed_sql_prep($desc) . "', '" . sed_sql_prep($icon) . "', " . (int)$group . ", 'date.desc')");
 
-			$page_default_rights = array(
-				SED_GROUP_DEFAULT => 'RW',
-				SED_GROUP_GUESTS => 'R',
-				SED_GROUP_INACTIVE => 'R',
-				SED_GROUP_BANNED => '',
-				SED_GROUP_MEMBERS => 'RW',
-				SED_GROUP_MODERATORS => 'RW',
-				SED_GROUP_SUPERADMINS => 'RWA12345',
-			);
-			$page_default_lock = array(
-				SED_GROUP_DEFAULT => 'A',
-				SED_GROUP_GUESTS => 'W12345A',
-				SED_GROUP_INACTIVE => 'W12345A',
-				SED_GROUP_BANNED => 'RWA12345',
-				SED_GROUP_MEMBERS => 'A',
-				SED_GROUP_MODERATORS => '',
-				SED_GROUP_SUPERADMINS => 'RWA12345',
-			);
+			$page_default_rights = $sed_default_auth_rights;
+			$page_default_lock = $sed_default_auth_lock;
 			$page_rights = array();
 			$page_lock = array();
 			foreach ($sed_groups as $k => $v) {

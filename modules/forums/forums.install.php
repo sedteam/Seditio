@@ -87,26 +87,10 @@ if (sed_sql_numrows($check) == 0) {
 }
 
 // Ensure auth rows exist for all forum sections (so sections are visible to groups)
-global $sed_groups, $db_auth;
+global $sed_groups, $db_auth, $sed_default_auth_rights, $sed_default_auth_lock;
 $db_auth = $cfg['sqldbprefix'] . 'auth';
-$forums_default_rights = array(
-	SED_GROUP_DEFAULT => 'RW',
-	SED_GROUP_GUESTS => 'R',
-	SED_GROUP_INACTIVE => 'R',
-	SED_GROUP_BANNED => '',
-	SED_GROUP_MEMBERS => 'RW',
-	SED_GROUP_MODERATORS => 'RW',
-	SED_GROUP_SUPERADMINS => 'RWA12345',
-);
-$forums_default_lock = array(
-	SED_GROUP_DEFAULT => 'A',
-	SED_GROUP_GUESTS => 'W12345A',
-	SED_GROUP_INACTIVE => 'W12345A',
-	SED_GROUP_BANNED => 'RWA12345',
-	SED_GROUP_MEMBERS => 'A',
-	SED_GROUP_MODERATORS => '',
-	SED_GROUP_SUPERADMINS => 'RWA12345',
-);
+$forums_default_rights = $sed_default_auth_rights;
+$forums_default_lock = $sed_default_auth_lock;
 $forum_rights = array();
 $forum_lock = array();
 foreach ($sed_groups as $k => $v) {

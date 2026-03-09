@@ -555,25 +555,9 @@ function sed_plugin_install($pl)
 
 	$res .= "<strong>Adding the rights for the user groups...</strong><br />";
 
-	global $sed_groups;
-	$plug_default_rights = array(
-		SED_GROUP_DEFAULT => 'RW',
-		SED_GROUP_GUESTS => 'R',
-		SED_GROUP_INACTIVE => 'R',
-		SED_GROUP_BANNED => '',
-		SED_GROUP_MEMBERS => 'RW',
-		SED_GROUP_MODERATORS => 'RW',
-		SED_GROUP_SUPERADMINS => 'RWA12345',
-	);
-	$plug_default_lock = array(
-		SED_GROUP_DEFAULT => 'A',
-		SED_GROUP_GUESTS => 'W12345A',
-		SED_GROUP_INACTIVE => 'W12345A',
-		SED_GROUP_BANNED => 'RWA12345',
-		SED_GROUP_MEMBERS => 'A',
-		SED_GROUP_MODERATORS => '',
-		SED_GROUP_SUPERADMINS => 'RWA12345',
-	);
+	global $sed_groups, $sed_default_auth_rights, $sed_default_auth_lock;
+	$plug_default_rights = $sed_default_auth_rights;
+	$plug_default_lock = $sed_default_auth_lock;
 	$plug_rights = array();
 	$plug_lock = array();
 	$plug_comment = array();
@@ -826,25 +810,9 @@ function sed_module_install($code)
 
 	// Step 8: Set up rights
 	$res .= "<strong>Adding rights for user groups...</strong><br />";
-	global $sed_groups;
-	$mod_default_rights = array(
-		SED_GROUP_DEFAULT => 'RW',
-		SED_GROUP_GUESTS => 'R',
-		SED_GROUP_INACTIVE => 'R',
-		SED_GROUP_BANNED => '',
-		SED_GROUP_MEMBERS => 'RW',
-		SED_GROUP_MODERATORS => 'RW',
-		SED_GROUP_SUPERADMINS => 'RWA12345',
-	);
-	$mod_default_lock = array(
-		SED_GROUP_DEFAULT => 'A',
-		SED_GROUP_GUESTS => 'W12345A',
-		SED_GROUP_INACTIVE => 'W12345A',
-		SED_GROUP_BANNED => 'RWA12345',
-		SED_GROUP_MEMBERS => 'A',
-		SED_GROUP_MODERATORS => '',
-		SED_GROUP_SUPERADMINS => 'RWA12345',
-	);
+	global $sed_groups, $sed_default_auth_rights, $sed_default_auth_lock;
+	$mod_default_rights = $sed_default_auth_rights;
+	$mod_default_lock = $sed_default_auth_lock;
 	$mod_rights = array();
 	$mod_lock = array();
 	$mod_comment = array();

@@ -210,24 +210,9 @@ if ($n == 'edit') {
 
 			$forumid = sed_sql_insertid();
 
-			$forums_default_rights = array(
-				SED_GROUP_DEFAULT => 'RW',
-				SED_GROUP_GUESTS => 'R',
-				SED_GROUP_INACTIVE => 'R',
-				SED_GROUP_BANNED => '',
-				SED_GROUP_MEMBERS => 'RW',
-				SED_GROUP_MODERATORS => 'RW',
-				SED_GROUP_SUPERADMINS => 'RWA12345',
-			);
-			$forums_default_lock = array(
-				SED_GROUP_DEFAULT => 'A',
-				SED_GROUP_GUESTS => 'W12345A',
-				SED_GROUP_INACTIVE => 'W12345A',
-				SED_GROUP_BANNED => 'RWA12345',
-				SED_GROUP_MEMBERS => 'A',
-				SED_GROUP_MODERATORS => '',
-				SED_GROUP_SUPERADMINS => 'RWA12345',
-			);
+			global $sed_default_auth_rights, $sed_default_auth_lock;
+			$forums_default_rights = $sed_default_auth_rights;
+			$forums_default_lock = $sed_default_auth_lock;
 			$forum_rights = array();
 			$forum_lock = array();
 			foreach ($sed_groups as $k => $v) {

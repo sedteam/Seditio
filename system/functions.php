@@ -59,7 +59,27 @@ if (!defined('SED_GROUP_DEFAULT')) {
 	define('SED_GROUP_MODERATORS', 6);
 }
 
-// ALL the value below are DEFAULTS, change the value in datas/config.php if needed, NOT HERE.
+// Default rights/lock for page, forums, plugins, modules (standard RWA pattern)
+$sed_default_auth_rights = array(
+	SED_GROUP_DEFAULT => 'RW',
+	SED_GROUP_GUESTS => 'R',
+	SED_GROUP_INACTIVE => 'R',
+	SED_GROUP_BANNED => '',
+	SED_GROUP_MEMBERS => 'RW',
+	SED_GROUP_MODERATORS => 'RW',
+	SED_GROUP_SUPERADMINS => 'RWA12345',
+);
+$sed_default_auth_lock = array(
+	SED_GROUP_DEFAULT => 'A',
+	SED_GROUP_GUESTS => 'W12345A',
+	SED_GROUP_INACTIVE => 'W12345A',
+	SED_GROUP_BANNED => 'RWA12345',
+	SED_GROUP_MEMBERS => 'A',
+	SED_GROUP_MODERATORS => '',
+	SED_GROUP_SUPERADMINS => 'RWA12345',
+);
+
+// ALL the value below are DEFAULTS, change the value in datas/config.php if needed, NOT HERE., change the value in datas/config.php if needed, NOT HERE.
 
 $cfg['authmode'] = 3; 				// (1:cookies, 2:sessions, 3:cookies+sessions)
 $cfg['authsecret'] = TRUE;			// Update the secret code upon every authorization

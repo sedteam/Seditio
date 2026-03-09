@@ -112,28 +112,12 @@ if (sed_sql_numrows($chk) == 0) {
 
 /* ======== Auth for each category (all groups: guests, inactive, banned, members, admins, mods, custom) ======== */
 
-global $sed_groups, $db_auth;
+global $sed_groups, $db_auth, $sed_default_auth_rights, $sed_default_auth_lock;
 $db_auth = $prefix . 'auth';
 $setby = (isset($usr['id']) && $usr['id'] > 0) ? (int)$usr['id'] : 1;
 
-$page_default_rights = array(
-	SED_GROUP_DEFAULT => 'RW',
-	SED_GROUP_GUESTS => 'R',
-	SED_GROUP_INACTIVE => 'R',
-	SED_GROUP_BANNED => '',
-	SED_GROUP_MEMBERS => 'RW',
-	SED_GROUP_MODERATORS => 'RW',
-	SED_GROUP_SUPERADMINS => 'RWA12345',
-);
-$page_default_lock = array(
-	SED_GROUP_DEFAULT => 'A',
-	SED_GROUP_GUESTS => 'W12345A',
-	SED_GROUP_INACTIVE => 'W12345A',
-	SED_GROUP_BANNED => 'RWA12345',
-	SED_GROUP_MEMBERS => 'A',
-	SED_GROUP_MODERATORS => '',
-	SED_GROUP_SUPERADMINS => 'RWA12345',
-);
+$page_default_rights = $sed_default_auth_rights;
+$page_default_lock = $sed_default_auth_lock;
 $page_rights = array();
 $page_lock = array();
 foreach ($sed_groups as $k => $v) {
