@@ -559,8 +559,13 @@ if (!$cfg['disablehitstats']) {
 	$sys['referer'] = isset($_SERVER['HTTP_REFERER']) ? mb_substr(mb_strtolower($_SERVER['HTTP_REFERER']), 0, 255) : '';
 	$sys['httphost'] = mb_strtolower($_SERVER['HTTP_HOST']); // New Sed175
 
+	$ref_parsed = parse_url($sys['referer']);
+	$sys['referer_valid'] = !empty($sys['referer']) && !empty($ref_parsed['scheme'])
+		&& in_array($ref_parsed['scheme'], array('http', 'https'), true)
+		&& !empty($ref_parsed['host']);
+
 	if (
-		!empty($sys['referer'])
+		$sys['referer_valid']
 		&& !(
 			(!empty($cfg['mainurl']) && mb_stripos($sys['referer'], $cfg['mainurl']) !== FALSE)
 			|| (!empty($cfg['hostip']) && mb_stripos($sys['referer'], $cfg['hostip']) !== FALSE)

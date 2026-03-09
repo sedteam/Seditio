@@ -70,8 +70,9 @@ if (!empty($pagination)) {
 
 if (sed_sql_numrows($sql) > 0) {
 	while ($row = sed_sql_fetchassoc($sql)) {
-		preg_match_all("|//([^/]+)/|", $row['ref_url'], $a);
-		$referers[$a[1][0]][$row['ref_url']] = $row['ref_count'];
+		preg_match_all("|//([^/]+)/?|", $row['ref_url'], $a);
+		$host = !empty($a[1][0]) ? $a[1][0] : '(other)';
+		$referers[$host][$row['ref_url']] = $row['ref_count'];
 	}
 
 	foreach ($referers as $referer => $url) {
