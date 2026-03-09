@@ -34,7 +34,10 @@ if ($a == 'purge') {
 	sed_cache_clearall();
 } elseif ($a == 'delete') {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$id'");
+	$c_name = sed_import('c_name', 'G', 'TXT', 64);
+	if (!empty($c_name)) {
+		$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='" . sed_sql_prep($c_name) . "'");
+	}
 } elseif ($a == 'urls_delete') {
 	sed_check_xg();
 	$urls_file = SED_ROOT . '/datas/cache/sed_urls.php';
@@ -67,7 +70,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 	$cachesize += $row['size'];
 
 	$t->assign(array(
-		"CACHE_LIST_DELETE_URL" => sed_url("admin", "m=cache&a=delete&id=" . $row['c_name'] . "&" . sed_xg()),
+		"CACHE_LIST_DELETE_URL" => sed_url("admin", "m=cache&a=delete&c_name=" . $row['c_name'] . "&" . sed_xg()),
 		"CACHE_LIST_NAME" => $row['c_name'],
 		"CACHE_LIST_EXPIRE" => ($row['c_expire'] - $sys['now']),
 		"CACHE_LIST_SIZE" => $row['size'],
