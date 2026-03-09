@@ -333,10 +333,12 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, c
 /* Polls core entry is created by sed_module_install('polls') when the module is installed */
 /* Ratings: plugin only; no core entry (admin via admin.plug hook) */
 /* Users core entry is created by sed_module_install('users') when the module is installed */
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (13, 'trash', 'Trash Can', '110', 1, 1, 'system/core/', 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (13, 'trash', 'Trash Can', '110', 1, 1, 'system/core/admin/', 1);");
 /* Gallery: install via Admin → Modules (modules/gallery) */
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (15, 'dic', 'Directories', '177', 1, 0, 'system/core/', 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (16, 'menu', 'Menu manager', '178', 1, 0, 'system/core/', 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (15, 'dic', 'Directories', '177', 1, 0, 'system/core/admin/', 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (16, 'menu', 'Menu manager', '178', 1, 0, 'system/core/admin/', 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (17, 'log', 'Log', '100', 1, 1, 'system/core/admin/', 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (18, 'manage', 'Manage', '100', 1, 1, 'system/core/admin/', 1);");
 
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "groups VALUES (1, 'guests', 0, 0, 0, 'Guests', '', '', 'darkmagenta', 0, 0, 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "groups VALUES (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 'white', 0, 0, 1);");

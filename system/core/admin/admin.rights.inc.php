@@ -114,8 +114,8 @@ while ($r = sed_sql_fetchassoc($sql_core)) {
 		$core_codes[] = $r['ct_code'];
 	}
 }
-// Kernel auth codes (not in Core table): manage, log, trash
-$core_codes = array_values(array_unique(array_merge($core_codes, array('manage', 'log', 'trash'))));
+// Fallback: ensure manage, log in core_codes (for installs before they were added to db_core)
+$core_codes = array_values(array_unique(array_merge($core_codes, array('manage', 'log'))));
 $mod_rights_count = count($mod_rights_files);
 
 $sql1 = (count($core_codes) > 0) ? sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a

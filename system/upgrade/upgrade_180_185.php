@@ -60,13 +60,24 @@ $core_paths = array(
 	'pm'      => array('path' => 'modules/pm/',          'admin' => 1),
 	'polls'   => array('path' => 'modules/polls/',       'admin' => 1),
 	'users'   => array('path' => 'modules/users/',        'admin' => 1),
-	'trash'   => array('path' => 'system/core/',         'admin' => 1),
+	'trash'   => array('path' => 'system/core/admin/',   'admin' => 1),
 	'gallery' => array('path' => 'modules/gallery/',     'admin' => 1),
-	'dic'     => array('path' => 'system/core/',         'admin' => 1),
-	'menu'    => array('path' => 'system/core/',         'admin' => 1),
+	'dic'     => array('path' => 'system/core/admin/',   'admin' => 1),
+	'menu'    => array('path' => 'system/core/admin/',   'admin' => 1),
 );
 foreach ($core_paths as $code => $data) {
 	sed_sql_query("UPDATE $db_core SET ct_path='" . sed_sql_prep($data['path']) . "', ct_admin=" . (int)$data['admin'] . " WHERE ct_code='" . sed_sql_prep($code) . "'");
+}
+/* Add log and manage to core if not present (kernel auth codes) */
+$chk_log = sed_sql_query("SELECT 1 FROM $db_core WHERE ct_code='log' LIMIT 1");
+$chk_manage = sed_sql_query("SELECT 1 FROM $db_core WHERE ct_code='manage' LIMIT 1");
+if (!$chk_log || sed_sql_numrows($chk_log) == 0) {
+	sed_sql_query("INSERT INTO $db_core (ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES ('log', 'Log', '100', 1, 1, 'system/core/admin/', 1)");
+	$adminmain .= "Core: log added.<br />";
+}
+if (!$chk_manage || sed_sql_numrows($chk_manage) == 0) {
+	sed_sql_query("INSERT INTO $db_core (ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES ('manage', 'Manage', '100', 1, 1, 'system/core/admin/', 1)");
+	$adminmain .= "Core: manage added.<br />";
 }
 
 /* Comments: remove from core (handled by Comments plugin); migrate config to plug */
