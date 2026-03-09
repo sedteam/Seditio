@@ -105,7 +105,7 @@ if ($tplcache_exists) {
 	if ($items !== false) {
 		$tplcache_mtime = 0;
 		foreach ($items as $item) {
-			if ($item === '.' || $item === '..') {
+			if ($item === '.' || $item === '..' || $item === 'index.php') {
 				continue;
 			}
 			$path = $tplcache_dir . '/' . $item;

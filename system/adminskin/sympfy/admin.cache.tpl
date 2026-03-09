@@ -96,7 +96,7 @@
 
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_urlcache_file}">
-						sed_urls.php
+						datas/cache/sed_urls.php
 					</div>
 					<div class="table-td text-left resp-table-td" data-label="{PHP.L.Date}">
 						{URLCACHE_DATE}
@@ -130,7 +130,7 @@
 
 			<div class="table-head resp-table-head">
 				<div class="table-row resp-table-row">
-					<div class="table-th coltop text-left">{PHP.L.adm_urlcache_file}</div>
+					<div class="table-th coltop text-left">{PHP.L.Folder}</div>
 					<div class="table-th coltop text-left">{PHP.L.Date}</div>
 					<div class="table-th coltop text-left">{PHP.L.Size}</div>
 					<div class="table-th coltop text-center">{PHP.L.Options}</div>
@@ -140,7 +140,7 @@
 			<div class="table-body resp-table-body">
 
 				<div class="table-row resp-table-row">
-					<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_urlcache_file}">
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.Folder}">
 						datas/cache/templates/
 					</div>
 					<div class="table-td text-left resp-table-td" data-label="{PHP.L.Date}">
