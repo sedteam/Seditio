@@ -470,6 +470,7 @@ $L['adm_defauth_guests'] = "Default rights for the guests";
 $L['adm_deflock_guests'] = "Lock mask for the guests";
 $L['adm_rightspergroup'] = "Rights per group";
 $L['adm_copyrightsfrom'] = "Set the same rights as the group";
+$L['adm_syncrights_check'] = "Check rights against entities";
 $L['adm_maxsizesingle'] = "PFS max size for a single file (KB)";
 $L['adm_maxsizeallpfs'] = "Max size of all PFS files together (KB)";
 $L['adm_rights_allow10'] = "Allowed";

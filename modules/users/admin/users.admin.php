@@ -80,6 +80,12 @@ switch ($n) {
 
 	case 'edit':
 
+		if ($a == 'syncrights' && $g > 0 && sed_xg()) {
+			sed_auth_sync_orphaned();
+			sed_redirect(sed_url("admin", "m=users&n=edit&g=" . $g . "&msg=917", "", true));
+			exit;
+		}
+
 		if ($a == 'update') {
 			$rtitle = sed_import('rtitle', 'P', 'TXT');
 			$rdesc = sed_import('rdesc', 'P', 'TXT');
@@ -171,7 +177,8 @@ switch ($n) {
 			"USERS_EDIT_GRPDISABLE" => $grpdisable,
 			"USERS_EDIT_GRPHIDDEN" => $grphidden,
 			"USERS_EDIT_GRPLEVEL" => $grplevel,
-			"USERS_EDIT_RIGHT_URL" => sed_url("admin", "m=rights&g=" . $g)
+			"USERS_EDIT_RIGHT_URL" => sed_url("admin", "m=rights&g=" . $g),
+			"USERS_EDIT_SYNCRIGHTS_URL" => sed_link(sed_url("admin", "m=users&n=edit&a=syncrights&g=" . $g . "&" . sed_xg()), $L['Resync'])
 		));
 
 		$t->parse("ADMIN_USERS.USERS_EDIT");

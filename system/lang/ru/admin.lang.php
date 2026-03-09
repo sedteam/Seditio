@@ -470,6 +470,7 @@ $L['adm_defauth_guests'] = "Права по умолчанию для посет
 $L['adm_deflock_guests'] = "Маска-замок для гостей";
 $L['adm_rightspergroup'] = "Права по группам";
 $L['adm_copyrightsfrom'] = "Установить набор прав как в группе";
+$L['adm_syncrights_check'] = "Сверить права на сущности";
 $L['adm_maxsizesingle'] = "Максимальный размер одного файла для Файлового Архива (KB)";
 $L['adm_maxsizeallpfs'] = "Суммарный размер всех файлов в Файловом Архиве (KB)";
 $L['adm_rights_allow10'] = "Разрешено";

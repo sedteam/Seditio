@@ -461,6 +461,7 @@ $L['adm_defauth_guests'] = "Misafirler için varsayılan haklar";
 $L['adm_deflock_guests'] = "Misafirler için kilit maskesi";
 $L['adm_rightspergroup'] = "Grup başına haklar";
 $L['adm_copyrightsfrom'] = "Aynı hakları gruptan al";
+$L['adm_syncrights_check'] = "Varlıklara göre hakları kontrol et";
 $L['adm_maxsizesingle'] = "Tek bir dosya için PFS maksimum boyutu (KB)";
 $L['adm_maxsizeallpfs'] = "Tüm PFS dosyalarının toplam maksimum boyutu (KB)";
 $L['adm_rights_allow10'] = "İzin verildi";

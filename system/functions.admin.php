@@ -36,6 +36,93 @@ function sed_auth_reorder()
 	return (TRUE);
 }
 
+/**
+ * Sync auth table: remove orphaned rights (auth entries referencing deleted entities).
+ * Validates against: plugins, page categories, forum sections, modules/core.
+ * Handles missing tables when page/forums modules are not installed.
+ *
+ * @return int Number of deleted orphaned auth rows
+ */
+function sed_auth_sync_orphaned()
+{
+	global $db_auth, $db_plugins, $db_core, $cfg;
+
+	$valid_pairs = array();
+
+	// Core codes and modules from db_core (ct_state=1)
+	$sql = sed_sql_query("SELECT ct_code FROM $db_core WHERE ct_state=1");
+	while ($row = sed_sql_fetchassoc($sql)) {
+		$valid_pairs[($row['ct_code'] . "\t" . 'a')] = true;
+	}
+
+	// Plugins from db_plugins (pl_module=0)
+	$chk = @sed_sql_query("SHOW TABLES LIKE '" . $cfg['sqldbprefix'] . "plugins'");
+	if ($chk && sed_sql_numrows($chk) > 0) {
+		$sql = sed_sql_query("SELECT DISTINCT pl_code FROM $db_plugins WHERE pl_module=0");
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$valid_pairs[('plug' . "\t" . $row['pl_code'])] = true;
+		}
+	}
+
+	// Page categories from db_structure (only if table exists)
+	$tbl_structure = $cfg['sqldbprefix'] . 'structure';
+	$chk = @sed_sql_query("SHOW TABLES LIKE '$tbl_structure'");
+	if ($chk && sed_sql_numrows($chk) > 0) {
+		$sql = sed_sql_query("SELECT structure_code FROM $tbl_structure");
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$valid_pairs[('page' . "\t" . $row['structure_code'])] = true;
+		}
+		$valid_pairs[('page' . "\t" . 'a')] = true;
+	}
+
+	// Forum sections from db_forum_sections (only if table exists)
+	$tbl_fs = $cfg['sqldbprefix'] . 'forum_sections';
+	$chk = @sed_sql_query("SHOW TABLES LIKE '$tbl_fs'");
+	if ($chk && sed_sql_numrows($chk) > 0) {
+		$sql = sed_sql_query("SELECT fs_id FROM $tbl_fs");
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$valid_pairs[('forums' . "\t" . $row['fs_id'])] = true;
+		}
+		$valid_pairs[('forums' . "\t" . 'a')] = true;
+	}
+
+	/* === Hook: admin.auth.sync.valid === */
+	$extp = sed_getextplugins('admin.auth.sync.valid');
+	if (is_array($extp)) {
+		foreach ($extp as $k => $pl) {
+			$pl_valid = include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			if (is_array($pl_valid)) {
+				foreach ($pl_valid as $pv) {
+					if (isset($pv['code'], $pv['opt'])) {
+						$valid_pairs[(sed_sql_prep($pv['code']) . "\t" . sed_sql_prep($pv['opt']))] = true;
+					}
+				}
+			}
+		}
+	}
+	/* ===== */
+
+	$sql = sed_sql_query("SELECT auth_id, auth_code, auth_option FROM $db_auth");
+	$to_delete = array();
+	while ($row = sed_sql_fetchassoc($sql)) {
+		$key = $row['auth_code'] . "\t" . $row['auth_option'];
+		if (!isset($valid_pairs[$key])) {
+			$to_delete[] = (int)$row['auth_id'];
+		}
+	}
+
+	$deleted = 0;
+	if (!empty($to_delete)) {
+		$ids = implode(',', $to_delete);
+		sed_sql_query("DELETE FROM $db_auth WHERE auth_id IN ($ids)");
+		$deleted = count($to_delete);
+		sed_auth_reorder();
+		sed_auth_clear('all');
+	}
+
+	return $deleted;
+}
+
 /** 
  * Reset user auth
  *   

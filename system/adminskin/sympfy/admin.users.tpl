@@ -98,6 +98,11 @@
 					<div class="form-field"><a href="{USERS_EDIT_RIGHT_URL}"><i class="ic-lock"></i></a></div>
 				</li>
 
+				<li class="form-row">
+					<div class="form-label"><label>{PHP.L.adm_syncrights_check} :</label></div>
+					<div class="form-field">{USERS_EDIT_SYNCRIGHTS_URL}</div>
+				</li>
+
 				<!-- BEGIN: USERS_EDIT_ADMIN -->
 				<li class="form-row">
 					<div class="form-label"><label>{PHP.L.Delete} :</label></div>
