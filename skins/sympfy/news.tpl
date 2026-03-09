@@ -1,35 +1,34 @@
 <!-- BEGIN: NEWS -->
 
-<div class="row row-flex">
+<div class="news-box">
 
 	<!-- BEGIN: PAGE_ROW -->
-	<div class="col-xs-12 col-sm-6 col-md-4 post-col">
+	<div class="news-item">
 
-		<div class="post-item">
+		<!-- BEGIN: PAGE_ROW_THUMB -->
+		<div class="post-header">
 			<figure class="post-container">
-				<a class="post-img-link" href="{PAGE_ROW_URL}" data-page="{PAGE_ROW_ID}">
-					<picture>
-						<source type="image/webp" srcset="{PAGE_ROW_THUMB|crop_image(%s, 800, 600, 0, 1)}">
-						<img class="post-img" src="{PAGE_ROW_THUMB|crop_image(%s, 800, 600)}" />
-					</picture>
+				<a class="post-img-link" href="{PAGE_ROW_URL}">
+					<img class="post-img" src="{PAGE_ROW_THUMB|crop_image(%s, 800, 600)}" />
 				</a>
-				<figcaption class="post-content">
-					<div class="post-info">
-						<div class="post-category" data-category="{PAGE_ROW_CATID}"><a href="{PAGE_ROW_CATURL}">{PAGE_ROW_CATTITLE}</a></div>
-						<div class="post-date">{PAGE_ROW_DATE}</div>
-					</div>
-					<div class="post-title">
-						<h3><a href="{PAGE_ROW_URL}" data-page="{PAGE_ROW_ID}">{PAGE_ROW_SHORTTITLE}</a></h3>
-					</div>
-					<div class="post-desc">
-						<p>{PAGE_ROW_DESC|strip_tags}</p>
-					</div>
-					<div class="post-info">
-						<div class="post-author"><a href="{PAGE_ROW_USERURL}">{PAGE_ROW_AVATAR}<span>{PAGE_ROW_AUTHOR}</span></a></div>
-						<div class="post-comments"><i class="ic-message-circle"></i><a href="{PAGE_ROW_COMMENTS_URL}">{PAGE_ROW_COMMENTS_COUNT}</a></div>
-					</div>
-				</figcaption>
 			</figure>
+		</div>
+		<!-- END: PAGE_ROW_THUMB -->
+
+		<div class="post-category"><a href="{PAGE_ROW_CATURL}">{PAGE_ROW_CATTITLE}</a></div>
+		<div class="post-date">{PAGE_ROW_DATE}</div>
+
+		<div class="post-title">
+			<h2><a href="{PAGE_ROW_URL}" data-page="{PAGE_ROW_ID}" data-cat="{PAGE_ROW_CAT}">{PAGE_ROW_SHORTTITLE}</a></h2>
+		</div>
+
+		<div class="post-text page-text">
+			{PAGE_ROW_TEXT}
+		</div>
+
+		<div class="post-info">
+			<div class="post-author"><a href="{PAGE_ROW_USERURL}">{PAGE_ROW_AVATAR}<span>{PAGE_ROW_AUTHOR}</span></a></div>
+			<div class="post-comments"><i class="ic-message-circle"></i><a href="{PAGE_ROW_COMMENTS_URL}">{PAGE_ROW_COMMENTS_COUNT}</a></div>
 		</div>
 
 	</div>

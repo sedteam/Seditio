@@ -178,7 +178,7 @@ if ($n == 'options') {
 		$fn_icon = $row['fn_icon'];
 		$pathfieldlen = (mb_strpos($fn_path, ".") == 0) ? 3 : 9;
 		$pathfieldimg = (mb_strpos($fn_path, ".") == 0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
-		$sectioncount[$fn_code] = (!$sectioncount[$fn_code]) ? "0" : $sectioncount[$fn_code];
+		$sectioncount[$fn_code] = isset($sectioncount[$fn_code]) ? $sectioncount[$fn_code] : "0";
 
 		if (empty($row['fn_tpl'])) {
 			$fn_tpl_sym = "-";

@@ -53,7 +53,7 @@
 
 								<div class="table-tr">
 
-									<div class="table-td" style="width:32px;">
+									<div class="table-td" style="width:42px;">
 										<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
 									</div>
 
@@ -69,9 +69,13 @@
 						</div>
 
 						<div class="table-td">
-							{FORUMS_SECTIONS_ROW_LASTPOST}<br />
-							{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
-							{FORUMS_SECTIONS_ROW_TIMEAGO}
+							<div class="forum-lastposter">
+								{FORUMS_SECTIONS_ROW_LASTPOST}<br />
+								{FORUMS_SECTIONS_ROW_LASTPOSTDATE} {FORUMS_SECTIONS_ROW_LASTPOSTER}
+							</div>
+							<div class="forum-timeago">
+								{FORUMS_SECTIONS_ROW_TIMEAGO}
+							</div>
 						</div>
 
 						<div class="table-td forums-topiccount">
@@ -133,7 +137,7 @@
 
 								<div class="table-tr">
 
-									<div class="table-td centerall" style="width:32px;">
+									<div class="table-td centerall" style="width:42px;">
 										{FORUMS_TOPICS_ROW_ICON}
 									</div>
 
@@ -143,7 +147,10 @@
 									</div>
 
 									<div class="table-td forums-firstposter" style="width:160px;">
-										{FORUMS_TOPICS_ROW_CREATIONDATE}<br />{FORUMS_TOPICS_ROW_FIRSTPOSTER}
+										<div class="forum-lastposter">
+											{FORUMS_TOPICS_ROW_CREATIONDATE}<br />
+											{FORUMS_TOPICS_ROW_FIRSTPOSTER}
+										</div>
 									</div>
 
 								</div>
@@ -153,8 +160,11 @@
 						</div>
 
 						<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN} forums-lastpost">
-							{FORUMS_TOPICS_ROW_UPDATED} {FORUMS_TOPICS_ROW_LASTPOSTER}<br class="brnomobile" />
-							{FORUMS_TOPICS_ROW_TIMEAGO}
+							<div class="forum-lastposter">
+								{FORUMS_TOPICS_ROW_UPDATED}
+								{FORUMS_TOPICS_ROW_LASTPOSTER}
+							</div>
+							<div class="forum-timeago">{FORUMS_TOPICS_ROW_TIMEAGO}</div>
 						</div>
 
 						<div class="table-td {FORUMS_TOPICS_ROW_ODDEVEN} forums-postcount">

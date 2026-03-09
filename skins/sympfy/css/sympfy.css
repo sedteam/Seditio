@@ -1821,7 +1821,7 @@ a.alfabeta:hover {
 }
 
 .forum-text {
-  font-size: 1.1em;
+  font-size: 1em;
   line-height: 1.45em;
 }
 
@@ -2076,7 +2076,8 @@ ul.subforums-list li::before {
 }
 
 .forum-timeago {
-  font-size: 0.9em;
+	font-size: 0.8em;
+	color: #292929;
 }
 
 .forums-main-table .desc,
