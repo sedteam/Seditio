@@ -60,7 +60,7 @@ if ($a == 'delete') {
 	$id = sed_sql_prep($id);
 	sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='" . $id . "' ");
 	sed_sql_query("DELETE FROM $db_rated WHERE rated_code='" . $id . "' ");
-	sed_redirect(sed_url("admin", "m=ratings", "", true));
+	sed_redirect(sed_url("admin", "m=ratings&msg=302", "", true));
 	exit;
 }
 

@@ -85,7 +85,7 @@ if ($n == 'edit') {
 
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat', fs_parentcat='$rparentcat', fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_countposts='$rcountposts' WHERE fs_id='$id'");
 
-		sed_redirect(sed_url("admin", "m=forums", "", true));
+		sed_redirect(sed_url("admin", "m=forums&msg=917", "", true));
 		exit;
 	} elseif ($a == 'delete') {
 		sed_check_xg();
@@ -192,7 +192,7 @@ if ($n == 'edit') {
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='" . $row_cur['fs_order'] . "' WHERE fs_id='" . $row_oth['fs_id'] . "'");
 		}
 
-		sed_redirect(sed_url("admin", "m=forums", "", true));
+		sed_redirect(sed_url("admin", "m=forums&msg=917", "", true));
 		exit;
 	} elseif ($a == 'add') {
 		$g = array('ntitle', 'ndesc', 'ncat');
@@ -223,7 +223,7 @@ if ($n == 'edit') {
 			sed_auth_install_option('forums', $forumid, $forum_rights, $forum_lock, $usr['id']);
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			sed_redirect(sed_url("admin", "m=forums", "", true));
+			sed_redirect(sed_url("admin", "m=forums&msg=301", "", true));
 		}
 	}
 

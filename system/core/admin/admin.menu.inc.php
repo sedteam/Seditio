@@ -52,7 +52,8 @@ switch ($a) {
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
 
 		if (empty($mtitle)) {
-			$msg = 303;
+			sed_redirect(sed_url("admin", "m=menu&msg=303", "", true));
+			exit;
 		} else {
 
 			$sql = sed_sql_query("INSERT INTO $db_menu
@@ -81,7 +82,7 @@ switch ($a) {
 
 			sed_log("Add new menu item", 'adm');
 			sed_cache_clear('sed_menu');
-			sed_redirect(sed_url("admin", "m=menu&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=menu&msg=301", "", true));
 		}
 
 		break;
@@ -112,7 +113,8 @@ switch ($a) {
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
 
 		if (empty($mtitle)) {
-			$msg = 303;
+			sed_redirect(sed_url("admin", "m=menu&mn=editmenu&mid=" . $mid . "&msg=303", "", true));
+			exit;
 		} else {
 			$sql = sed_sql_query("UPDATE $db_menu SET 
 							menu_pid = " . (int)$mparent . ",
@@ -140,7 +142,7 @@ switch ($a) {
 			$sql = sed_sql_query("DELETE FROM $db_menu WHERE menu_id = '" . $mid . "'");
 			sed_log("Delete menu item #" . $mid, 'adm');
 			sed_cache_clear('sed_menu');
-			sed_redirect(sed_url("admin", "m=menu&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=menu&msg=302", "", true));
 		}
 
 		break;

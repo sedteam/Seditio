@@ -203,7 +203,7 @@ switch ($mn) {
 						$extraallownull,
 						$extraextra
 					);
-					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true));
+					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did . "&msg=301", "", true));
 				}
 			}
 			//---      	
@@ -222,7 +222,7 @@ switch ($mn) {
 						$extraextra
 					);
 				}
-				sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true));
+				sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did . "&msg=917", "", true));
 			}
 
 			$urlpaths[sed_url("admin", "m=dic&mn=dicitem&did=" . $did)] = $row['dic_title'];
@@ -339,11 +339,12 @@ switch ($mn) {
 				$sql = sed_sql_query("DELETE FROM $db_dic WHERE dic_id = '" . $did . "'");
 				sed_log("Deleted directory #" . $did, 'adm');
 				sed_cache_clear('sed_dic');
-				sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));
+				sed_redirect(sed_url("admin", "m=dic&msg=302", "", true));
 			}
 		} elseif ($a == 'add') {
 			if (empty($dtitle) || empty($dcode) || empty($dtype)) {
-				$msg = 303;
+				sed_redirect(sed_url("admin", "m=dic&msg=303", "", true));
+				exit;
 			} else {
 
 				$dcode = preg_replace('/[^a-zA-Z0-9]/', '', $dcode);

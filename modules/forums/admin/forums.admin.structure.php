@@ -58,7 +58,7 @@ if ($n == 'options') {
 			WHERE fn_id='" . $id . "'");
 
 		sed_cache_clear('sed_forums_str');
-		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true));
+		sed_redirect(sed_url("admin", "m=forums&s=structure&msg=917", "", true));
 		exit;
 	}
 
@@ -135,7 +135,7 @@ if ($n == 'options') {
 				WHERE fn_id='" . $i . "'");
 		}
 		sed_cache_clear('sed_forums_str');
-		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true));
+		sed_redirect(sed_url("admin", "m=forums&s=structure&msg=917", "", true));
 		exit;
 	} elseif ($a == 'add') {
 		$g = array('ncode', 'npath', 'ntitle', 'ndesc', 'nicon', 'ndefstate');
@@ -149,13 +149,13 @@ if ($n == 'options') {
 		}
 
 		sed_cache_clear('sed_forums_str');
-		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true));
+		sed_redirect(sed_url("admin", "m=forums&s=structure&msg=301", "", true));
 		exit;
 	} elseif ($a == 'delete') {
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 		sed_cache_clear('sed_forums_str');
-		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true));
+		sed_redirect(sed_url("admin", "m=forums&s=structure&msg=302", "", true));
 		exit;
 	}
 

@@ -322,14 +322,14 @@ if ($a == 'details' && !empty($mod_code)) {
 			sed_module_pause($mod_code, 0);
 			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
 			exit;
 
 		case 'unpause':
 			sed_module_pause($mod_code, 1);
 			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
 			exit;
 
 		case 'pausepart':
@@ -342,14 +342,14 @@ if ($a == 'details' && !empty($mod_code)) {
 			}
 			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
 			exit;
 
 		case 'unpausepart':
 			$part = sed_import('part', 'G', 'INT');
 			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
 			exit;
 
 		default:

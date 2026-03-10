@@ -306,7 +306,7 @@ switch ($a) {
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0 AND pl_lock=0");
 				sed_urls_generate();
 				sed_cache_clearall();
-				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
+				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl . "&msg=917", "", true));
 				exit;
 				break;
 
@@ -337,7 +337,7 @@ switch ($a) {
 					$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0");
 					sed_urls_generate();
 					sed_cache_clearall();
-					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl . "&msg=917", "", true));
 					exit;
 				}
 				break;
@@ -353,7 +353,7 @@ switch ($a) {
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0");
 				sed_urls_generate();
 				sed_cache_clearall();
-				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
+				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl . "&msg=917", "", true));
 				exit;
 				break;
 
@@ -362,7 +362,7 @@ switch ($a) {
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0");
 				sed_urls_generate();
 				sed_cache_clearall();
-				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true));
+				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl . "&msg=917", "", true));
 				exit;
 				break;
 

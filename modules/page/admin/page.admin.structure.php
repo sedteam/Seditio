@@ -387,7 +387,7 @@ switch ($mn) {
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
 			}
 			sed_cache_clear('sed_cat');
-			sed_redirect(sed_url("admin", "m=page&mn=catorder", "#catorder", true));
+			sed_redirect(sed_url("admin", "m=page&mn=catorder&msg=917", "#catorder", true));
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");
@@ -463,7 +463,7 @@ switch ($mn) {
 				sed_block($usr['isadmin_local']);
 				$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 				sed_cache_clear('latestpages');
-				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true));
+				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue&msg=917", "", true));
 				exit;
 			} else {
 				sed_die();
@@ -480,7 +480,7 @@ switch ($mn) {
 				$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 				sed_cache_clear('latestpages');
 				//sed_redirect(sed_url("page", "c=".$row['page_cat'], "", true));
-				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true));
+				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue&msg=917", "", true));
 				exit;
 			} else {
 				sed_die();

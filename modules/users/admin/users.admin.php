@@ -74,7 +74,7 @@ switch ($n) {
 
 		sed_auth_reorder();
 		sed_cache_clear('sed_groups');
-		sed_redirect(sed_url("admin", "m=users", "", true));
+		sed_redirect(sed_url("admin", "m=users&msg=301", "", true));
 		exit;
 		break;
 
@@ -105,7 +105,7 @@ switch ($n) {
 			$sql = sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_color='$rcolor', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'");
 
 			sed_cache_clear('sed_groups');
-			sed_redirect(sed_url("admin", "m=users", "", true));
+			sed_redirect(sed_url("admin", "m=users&msg=917", "", true));
 			exit;
 		} elseif ($a == 'delete' && $g > 5) {
 			$sql = sed_sql_query("DELETE FROM $db_groups WHERE grp_id='$g'");
@@ -113,7 +113,7 @@ switch ($n) {
 			$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 			sed_auth_clear('all');
 			sed_cache_clear('sed_groups');
-			sed_redirect(sed_url("admin", "m=users", "", true));
+			sed_redirect(sed_url("admin", "m=users&msg=302", "", true));
 			exit;
 		}
 

@@ -179,10 +179,10 @@ switch ($n) {
 
 				if ($file_isup) {
 					if ($b1) {
-						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true));
+						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&msg=917", "", true));
 						exit;
 					} else {
-						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f, "", true));
+						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f . "&msg=917", "", true));
 						exit;
 					}
 				} else {

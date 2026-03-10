@@ -55,7 +55,7 @@ if ($a == 'update') {
 
 	sed_auth_reorder();
 	sed_auth_clear('all');
-	sed_redirect(sed_url("admin", "m=rightsbyitem&ic=" . $ic . "&io=" . $io, "", true));
+	sed_redirect(sed_url("admin", "m=rightsbyitem&ic=" . $ic . "&io=" . $io . "&msg=917", "", true));
 	exit;
 }
 
