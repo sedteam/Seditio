@@ -56,9 +56,9 @@ switch ($a) {
 			$admintitle = $info['Name'] . " ($pl)";
 
 			$handle = opendir(SED_ROOT . "/plugins/" . $pl);
-			$setupfile = $pl . ".setup.php";
+			$skip = array($pl . '.setup.php', $pl . '.install.php', $pl . '.uninstall.php', $pl . '.urls.php');
 			while ($f = readdir($handle)) {
-				if ($f != "." && $f != ".." && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php') {
+				if ($f != "." && $f != ".." && !in_array($f, $skip) && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php') {
 					$parts[] = $f;
 				}
 			}
