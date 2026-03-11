@@ -463,7 +463,7 @@ switch ($mn) {
 				sed_block($usr['isadmin_local']);
 				$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 				sed_cache_clear('latestpages');
-				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true), !empty($redirect), ['msg' => '917']);
+				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true), false, ['msg' => '917']);
 				exit;
 			} else {
 				sed_die();
@@ -480,7 +480,7 @@ switch ($mn) {
 				$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 				sed_cache_clear('latestpages');
 				//sed_redirect(sed_url("page", "c=".$row['page_cat'], "", true));
-				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true), !empty($redirect), ['msg' => '917']);
+				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true), false, ['msg' => '917']);
 				exit;
 			} else {
 				sed_die();
