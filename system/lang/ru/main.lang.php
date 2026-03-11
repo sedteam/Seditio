@@ -309,6 +309,7 @@ $L['Userfirstname'] = "Имя";
 $L['Userlastname'] = "Фамилия";
 $L['Username'] = "Логин";
 $L['Users'] = "Пользователи";
+$L['Usergroups'] = "Группы пользователей";
 $L['Validate'] = "Утвердить";
 $L['Value'] = "Значение";
 $L['Values'] = "Значения";

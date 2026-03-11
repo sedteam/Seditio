@@ -2,13 +2,11 @@
 
 <div id="main">
 
-	{ADMIN_BREADCRUMBS}
-
 	<!-- BEGIN: ADMIN_MESSAGE -->
-
-	{ADMIN_MESSAGE_BODY}
-
+	<div data-autoclose="3000">{ADMIN_MESSAGE_BODY}</div>
 	<!-- END: ADMIN_MESSAGE -->
+
+	{ADMIN_BREADCRUMBS}
 
 	{ADMIN_MAIN}
 

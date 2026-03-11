@@ -1582,6 +1582,9 @@ function sed_module_active($code)
  */
 function sed_module_part_active($code, $part)
 {
+	if (!sed_module_active($code)) {
+		return false;
+	}
 	global $sed_plugins;
 	if (!is_array($sed_plugins) || !isset($sed_plugins['module'])) {
 		return false;

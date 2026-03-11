@@ -26,13 +26,27 @@
 				<!-- END: HEADER_NOTICES -->
 				<ul>
 					<li><span>{HEADER_LOGSTATUS}</span></li>
+					<!-- IF {HEADER_USER_ADMINPANEL} -->
 					<li>{HEADER_USER_ADMINPANEL}</li>
+					<!-- ENDIF -->
+					<!-- IF {HEADER_USERLIST} -->
 					<li>{HEADER_USERLIST}</li>
+					<!-- ENDIF -->
+					<!-- IF {HEADER_USER_PROFILE} -->
 					<li>{HEADER_USER_PROFILE}</li>
+					<!-- ENDIF -->
+					<!-- IF {HEADER_USER_PFS} -->
 					<li>{HEADER_USER_PFS}</li>
+					<!-- ENDIF -->
+					<!-- IF {HEADER_USER_PMREMINDER} -->
 					<li>{HEADER_USER_PMREMINDER}</li>
+					<!-- ENDIF -->
+					<!-- IF {HEADER_USER_PAGEADD} -->
 					<li>{HEADER_USER_PAGEADD}</li>
+					<!-- ENDIF -->
+					<!-- IF {HEADER_USER_LOGINOUT} -->
 					<li>{HEADER_USER_LOGINOUT}</li>
+					<!-- ENDIF -->
 				</ul>
 			</div>
 		</div>

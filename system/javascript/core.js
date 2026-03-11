@@ -1740,23 +1740,37 @@ const sedjs = {
 
     /**
      * Adds click event listeners to specified elements to fade out and slide up their parent elements.
+     * Also processes containers with data-autoclose (ms) to auto-hide alerts after the given delay.
      * @param {string} [elements] - A CSS selector for the elements to which the click event listeners should be added.
      */
     closealert(elements) {
+        const hideAlert = (alertEl) => {
+            if (!alertEl) return;
+            alertEl.style.transition = 'opacity 0.4s';
+            alertEl.style.opacity = 0;
+            setTimeout(() => {
+                alertEl.style.transition = 'height 0.4s';
+                alertEl.style.height = 0;
+                alertEl.style.overflow = 'hidden';
+                alertEl.style.display = 'none';
+            }, 400);
+        };
+
         const targets = elements || '.close, .alert-close, .fn-close';
         document.querySelectorAll(targets).forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault();
-                const parent = event.currentTarget.parentElement;
-                parent.style.transition = 'opacity 0.4s';
-                parent.style.opacity = 0;
-                setTimeout(() => {
-                    parent.style.transition = 'height 0.4s';
-                    parent.style.height = 0;
-                    parent.style.overflow = 'hidden';
-                    parent.style.display = 'none';
-                }, 400);
+                hideAlert(event.currentTarget.parentElement);
             });
+        });
+
+        document.querySelectorAll('[data-autoclose]').forEach((container) => {
+            const delay = parseInt(container.getAttribute('data-autoclose'), 10);
+            if (isNaN(delay) || delay <= 0) return;
+            const alertEl = container.querySelector('.alert');
+            if (alertEl) {
+                setTimeout(() => hideAlert(alertEl), delay);
+            }
         });
     },
 

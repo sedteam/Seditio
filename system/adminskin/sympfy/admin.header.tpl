@@ -144,11 +144,21 @@
 							<!-- BEGIN: HEADER_USER_MENU -->
 
 							<ul>
+								<!-- IF {HEADER_USERLIST} -->
 								<li>{HEADER_USERLIST}</li>
+								<!-- ENDIF -->
+								<!-- IF {HEADER_USER_PROFILE} -->
 								<li>{HEADER_USER_PROFILE}</li>
+								<!-- ENDIF -->
+								<!-- IF {HEADER_USER_PFS} -->
 								<li>{HEADER_USER_PFS}</li>
+								<!-- ENDIF -->
+								<!-- IF {HEADER_USER_PMREMINDER} -->
 								<li>{HEADER_USER_PMREMINDER}</li>
+								<!-- ENDIF -->
+								<!-- IF {HEADER_USER_LOGINOUT} -->
 								<li>{HEADER_USER_LOGINOUT}</li>
+								<!-- ENDIF -->
 							</ul>
 
 							<!-- END: HEADER_USER_MENU -->

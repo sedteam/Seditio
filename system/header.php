@@ -31,7 +31,7 @@ if (is_array($extp)) {
 /* ===== */
 
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'] . ' ' . $usr['name'] : $L['hea_youarenotlogged'];
-$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"" . sed_url("users") . "\">" . $L['hea_users'] . "</a>" : '';
+$out['userlist'] = (sed_module_active('users') && sed_module_part_active('users', 'users.main') && sed_auth('users', 'a', 'R')) ? "<a href=\"" . sed_url("users") . "\">" . $L['hea_users'] . "</a>" : '';
 
 $out['metas'] = sed_htmlmetas($out['subdesc'], $out['subkeywords'], $out['robots_index'], $out['robots_follow']) . $moremetas;
 
@@ -52,7 +52,7 @@ $out['subtitle'] = (empty($out['subtitle'])) ? sed_title('defaulttitle', $title_
 
 $out['currenturl'] = sed_getcurrenturl();
 $out['canonical_url'] = empty($out['canonical_url']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_url'];  // New in 175
-$out['register_link'] = sed_url("users", "m=register");  // New in 175
+$out['register_link'] = (sed_module_active('users') && sed_module_part_active('users', 'users.register')) ? sed_url("users", "m=register") : '';  // New in 175
 $out['auth_link'] = sed_url("users", "m=auth");  // New in 175
 $out['whosonline_link'] = sed_url("plug", "e=whosonline");  // New in 175
 
@@ -111,12 +111,12 @@ $t->assign(array(
 
 if ($usr['id'] > 0) {
 	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"" . sed_url("admin") . "\">" . $L['hea_administration'] . "</a>" : '';
-	$out['loginout_url'] = sed_url("users", "m=logout&" . sed_xg());
-	$out['loginout'] = "<a href=\"" . $out['loginout_url'] . "\">" . $L['hea_logout'] . "</a>";
-	$out['profile'] = "<a href=\"" . sed_url("users", "m=profile") . "\">" . $L['hea_profile'] . "</a>";
+	$out['loginout_url'] = (sed_module_active('users') && sed_module_part_active('users', 'users.logout')) ? sed_url("users", "m=logout&" . sed_xg()) : '';
+	$out['loginout'] = (sed_module_active('users') && sed_module_part_active('users', 'users.logout')) ? "<a href=\"" . $out['loginout_url'] . "\">" . $L['hea_logout'] . "</a>" : '';
+	$out['profile'] = (sed_module_active('users') && sed_module_part_active('users', 'users.profile')) ? "<a href=\"" . sed_url("users", "m=profile") . "\">" . $L['hea_profile'] . "</a>" : '';
 	$out['pms'] = (!sed_module_active('pm')) ? '' : "<a href=\"" . sed_url("pm") . "\">" . $L['hea_private_messages'] . "</a>";
 	$out['pfs'] = (!sed_module_active('pfs') || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : "<a href=\"" . sed_url("pfs") . "\">" . $L['hea_mypfs'] . "</a>";
-	$out['pageadd'] = (sed_module_active('page') && sed_auth('page', 'any', 'W')) ? "<a href=\"" . sed_url("page", "m=add") . "\">" . $L['hea_pageadd'] . "</a>" : "";
+	$out['pageadd'] = (sed_module_part_active('page', 'page.add') && sed_auth('page', 'any', 'W')) ? "<a href=\"" . sed_url("page", "m=add") . "\">" . $L['hea_pageadd'] . "</a>" : "";
 
 	if (sed_module_active('pm')) {
 		if ($usr['newpm']) {
@@ -146,7 +146,7 @@ if ($usr['id'] > 0) {
 } else {
 	$out['guest_username'] = sed_textbox('rusername', '', 12, 32, 'text', false, 'text');
 	$out['guest_password'] = sed_textbox('rpassword', '', 12, 32, 'text', false, 'password');
-	$out['guest_register'] = "<a href=\"" . sed_url("users", "m=register") . "\">" . $L["Register"] . "</a>";
+	$out['guest_register'] = (sed_module_active('users') && sed_module_part_active('users', 'users.register')) ? "<a href=\"" . sed_url("users", "m=register") . "\">" . $L["Register"] . "</a>" : '';
 
 	$i = array(1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 604800, 1296000, 2592000, 5184000);
 	$cookiettl_options = array(0 => $L['No']);

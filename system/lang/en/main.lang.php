@@ -308,6 +308,7 @@ $L['Userfirstname'] = "First name";
 $L['Userlastname'] = "Last name";
 $L['Username'] = "Login";
 $L['Users'] = "Users";
+$L['Usergroups'] = "User groups";
 $L['Validate'] = "Validate";
 $L['Value'] = "Value";
 $L['Values'] = "Values";

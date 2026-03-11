@@ -309,6 +309,7 @@ $L['Userfirstname'] = "Ad";
 $L['Userlastname'] = "Soyad";
 $L['Username'] = "Kullanıcı adı";
 $L['Users'] = "Kullanıcılar";
+$L['Usergroups'] = "Kullanıcı grupları";
 $L['Validate'] = "Doğrula";
 $L['Value'] = "Değer";
 $L['Values'] = "Değerler";

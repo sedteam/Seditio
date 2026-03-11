@@ -130,9 +130,9 @@
 <div class="content-box sedtabs">
 
 	<div class="content-box-header">
-		<h3 class="tab-title">{PHP.L.Users}</h3>
+		<h3 class="tab-title">{PHP.L.Groups}</h3>
 		<ul class="content-box-tabs">
-			<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.Users}">{PHP.L.Users}</a></li>
+			<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.Groups}">{PHP.L.Groups}</a></li>
 			<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.addnewentry}">{PHP.L.addnewentry}</a></li>
 		</ul>
 	</div>

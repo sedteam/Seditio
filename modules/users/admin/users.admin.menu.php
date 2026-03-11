@@ -25,7 +25,7 @@ return array(
 	'adminlink' => sed_url('admin', 'm=users'),
 	'sections'  => array(
 		'' => array(
-			'label' => 'Users',
+			'label' => 'Usergroups',
 			'url'   => sed_url('admin', 'm=users'),
 			'match' => array('m' => 'users')
 		),

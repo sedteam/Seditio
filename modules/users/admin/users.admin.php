@@ -27,9 +27,9 @@ sed_block($usr['isadmin']);
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=users")] =  $L['Users'];
+$urlpaths[sed_url("admin", "m=users")] =  $L['Usergroups'];
 
-$admintitle = $L['Users'];
+$admintitle = $L['Usergroups'];
 
 
 $t = new XTemplate(sed_skinfile('admin.users', false, true));
