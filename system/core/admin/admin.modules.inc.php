@@ -322,14 +322,14 @@ if ($a == 'details' && !empty($mod_code)) {
 			sed_module_pause($mod_code, 0);
 			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => '917']);
 			exit;
 
 		case 'unpause':
 			sed_module_pause($mod_code, 1);
 			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => '917']);
 			exit;
 
 		case 'pausepart':
@@ -337,19 +337,19 @@ if ($a == 'details' && !empty($mod_code)) {
 			$sql_check = sed_sql_query("SELECT pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1 LIMIT 1");
 			$row_check = sed_sql_fetchassoc($sql_check);
 			if (!$row_check || (int)$row_check['pl_lock'] === 1) {
-				sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=locked", "", true));
+				sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => 'locked']);
 				exit;
 			}
 			sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => '917']);
 			exit;
 
 		case 'unpausepart':
 			$part = sed_import('part', 'G', 'INT');
 			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
-			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => '917']);
 			exit;
 
 		default:

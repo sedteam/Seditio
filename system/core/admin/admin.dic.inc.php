@@ -60,12 +60,12 @@ switch ($mn) {
 
 			sed_log("Update term #" . $tid, 'adm');
 			sed_cache_clear('sed_dic');
-			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did, "", true), false, ['msg' => '917']);
 		} elseif ($a == 'delete' && (!empty($tid))) {
 			$sql = sed_sql_query("DELETE FROM $db_dic_items WHERE ditem_id = '" . $tid . "'");
 			sed_log("Deleted term #" . $tid, 'adm');
 			sed_cache_clear('sed_dic');
-			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did, "", true), false, ['msg' => '302']);
 		} elseif ($a == 'add' && (!empty($did))) {
 
 			$ditemtitle = sed_import('ditemtitle', 'P', 'TXT');
@@ -77,7 +77,7 @@ switch ($mn) {
                           VALUES (" . (int)$did . ", '" . sed_sql_prep($ditemtitle) . "', '" . sed_sql_prep($ditemcode) . "', '" . (int)$ditemchildren . "', '" . (int)$ditemdefval . "')");
 			sed_log("Added new term in directory #" . $did, 'adm');
 			sed_cache_clear('sed_dic');
-			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did . "&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did, "", true), false, ['msg' => '301']);
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_dic WHERE dic_id = '" . $did . "'");
@@ -203,7 +203,7 @@ switch ($mn) {
 						$extraallownull,
 						$extraextra
 					);
-					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did . "&msg=301", "", true));
+					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '301']);
 				}
 			}
 			//---      	
@@ -222,7 +222,7 @@ switch ($mn) {
 						$extraextra
 					);
 				}
-				sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did . "&msg=917", "", true));
+				sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '917']);
 			}
 
 			$urlpaths[sed_url("admin", "m=dic&mn=dicitem&did=" . $did)] = $row['dic_title'];
@@ -331,7 +331,7 @@ switch ($mn) {
 
 			sed_log("Update directory #" . $did, 'adm');
 			sed_cache_clear('sed_dic');
-			sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '917']);
 		} elseif ($a == 'delete' && (!empty($did))) {
 			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_dic_items WHERE ditem_dicid = '" . $did . "'");
 			$totalitems = sed_sql_result($sql, 0, "COUNT(*)");
@@ -339,11 +339,11 @@ switch ($mn) {
 				$sql = sed_sql_query("DELETE FROM $db_dic WHERE dic_id = '" . $did . "'");
 				sed_log("Deleted directory #" . $did, 'adm');
 				sed_cache_clear('sed_dic');
-				sed_redirect(sed_url("admin", "m=dic&msg=302", "", true));
+				sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '302']);
 			}
 		} elseif ($a == 'add') {
 			if (empty($dtitle) || empty($dcode) || empty($dtype)) {
-				sed_redirect(sed_url("admin", "m=dic&msg=303", "", true));
+				sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '303']);
 				exit;
 			} else {
 
@@ -379,7 +379,7 @@ switch ($mn) {
 
 				sed_log("Addded directory #" . $did, 'adm');
 				sed_cache_clear('sed_dic');
-				sed_redirect(sed_url("admin", "m=dic&msg=917", "", true));
+				sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '301']);
 			}
 		}
 

@@ -64,6 +64,8 @@ switch ($n) {
 		if ($a == 'makbak') {
 			sed_check_xg();
 			copy($skindir . $fb, $skindir . $fb . ".bak");
+			sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '917']);
+			exit;
 		} elseif ($a == 'resbak') {
 			sed_check_xg();
 			if (file_exists($skindir . $fb . ".bak")) {
@@ -74,9 +76,13 @@ switch ($n) {
 					unlink($skindir . $fb . ".bak");
 				}
 			}
+			sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '917']);
+			exit;
 		} elseif ($a == 'delbak') {
 			sed_check_xg();
 			unlink($skindir . $fb . ".bak");
+			sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '302']);
+			exit;
 		}
 
 		$handle = opendir($skindir);
@@ -179,10 +185,10 @@ switch ($n) {
 
 				if ($file_isup) {
 					if ($b1) {
-						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&msg=917", "", true));
+						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '917']);
 						exit;
 					} else {
-						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f . "&msg=917", "", true));
+						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f, "", true), false, ['msg' => '917']);
 						exit;
 					}
 				} else {

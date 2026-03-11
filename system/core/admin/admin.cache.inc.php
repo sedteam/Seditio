@@ -44,17 +44,17 @@ if ($a == 'purge') {
 	if (file_exists($urls_file)) {
 		@unlink($urls_file);
 	}
-	sed_redirect(sed_url("admin", "m=cache&msg=917", "", true));
+	sed_redirect(sed_url("admin", "m=cache", "", true), false, ['msg' => '917']);
 	exit;
 } elseif ($a == 'urls_regenerate') {
 	sed_check_xg();
 	sed_urls_generate();
-	sed_redirect(sed_url("admin", "m=cache&msg=917", "", true));
+	sed_redirect(sed_url("admin", "m=cache", "", true), false, ['msg' => '917']);
 	exit;
 } elseif ($a == 'tpl_delete') {
 	sed_check_xg();
 	sed_tplcache_clear();
-	sed_redirect(sed_url("admin", "m=cache&msg=917", "", true));
+	sed_redirect(sed_url("admin", "m=cache", "", true), false, ['msg' => '917']);
 	exit;
 }
 

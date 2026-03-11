@@ -33,6 +33,15 @@ $s = sed_import('s', 'G', 'ALP', 24);
 $msg = sed_import('msg', 'G', 'ALP');
 $num = sed_import('num', 'G', 'INT');
 
+$flash = sed_flash_get();
+if ($flash !== false) {
+	$msg = $flash['msg'];
+	if (isset($flash['num'])) $num = $flash['num'];
+	if (isset($flash['rc']))  $rc  = $flash['rc'];
+} else {
+	$rc = sed_import('rc', 'G', 'INT');
+}
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'any');
 sed_block($usr['auth_read']);
 

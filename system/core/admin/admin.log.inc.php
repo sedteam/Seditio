@@ -46,6 +46,8 @@ if (empty($d)) {
 if ($a == 'purge' && $usr['isadmin']) {
 	sed_check_xg();
 	$sql = sed_sql_query("TRUNCATE $db_logger");
+	sed_redirect(sed_url("admin", "m=log", "", true), false, ['msg' => '917']);
+	exit;
 }
 
 $totaldblog = sed_sql_rowcount($db_logger);

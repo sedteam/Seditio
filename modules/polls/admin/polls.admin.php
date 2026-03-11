@@ -42,16 +42,24 @@ if ($n == 'options') {
 	if ($a == 'update' && !empty($id) && !empty($po)) {
 		$rtext = sed_import('rtext', 'P', 'HTM');
 		$sql = sed_sql_query("UPDATE $db_polls_options SET po_text='" . sed_sql_prep($rtext) . "' WHERE po_id='$po' AND po_pollid='$id'");
+		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '917']);
+		exit;
 	} elseif ($a == 'updatetitle' && !empty($id)) {
 		$rtitle = sed_import('rtitle', 'P', 'HTM');
 		$sql = sed_sql_query("UPDATE $db_polls SET poll_text='" . sed_sql_prep($rtitle) . "' WHERE poll_id='$id'");
+		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '917']);
+		exit;
 	} elseif ($a == 'add' && !empty($id)) {
 		$g = array('ntext');
 		$ntext = sed_import('ntext', 'P', 'HTM');
 		$sql = sed_sql_query("INSERT INTO $db_polls_options (po_pollid, po_text) VALUES (" . (int)$id . ",'" . sed_sql_prep($ntext) . "')");
+		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '301']);
+		exit;
 	} elseif ($a == 'delete') {
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_id='$po' AND po_pollid='$id'");
+		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '302']);
+		exit;
 	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' ");
@@ -91,25 +99,27 @@ if ($n == 'options') {
 	if ($a == 'delete') {
 		sed_check_xg();
 		$num = sed_poll_delete($id);
-		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=" . $num, "", true));
+		sed_redirect(sed_url("admin", "m=polls", "", true), false, ['msg' => '916', 'num' => $num, 'rc' => 102]);
 		exit;
 	} elseif ($a == 'reset') {
 		sed_check_xg();
 		$num = sed_poll_reset($id);
-		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=" . $num, "", true));
+		sed_redirect(sed_url("admin", "m=polls", "", true), false, ['msg' => '916', 'num' => $num, 'rc' => 102]);
 		exit;
 	}
 
 	if ($a == 'bump') {
 		sed_check_xg();
 		sed_poll_bump($id);
-		sed_redirect(sed_url("admin", "m=polls&msg=916&rc=102&num=1", "", true));
+		sed_redirect(sed_url("admin", "m=polls", "", true), false, ['msg' => '916', 'num' => 1, 'rc' => 102]);
 		exit;
 	}
 
 	if ($a == 'add') {
 		$ntext = sed_import('ntext', 'P', 'HTM');
 		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_ownerid) VALUES (0, " . (int)$sys['now_offset'] . ", '" . sed_sql_prep($ntext) . "', " . $usr['id'] . ")");
+		sed_redirect(sed_url("admin", "m=polls", "", true), false, ['msg' => '301']);
+		exit;
 	}
 
 	if (isset($db_forum_topics)) {

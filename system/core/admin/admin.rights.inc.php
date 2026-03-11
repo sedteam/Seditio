@@ -58,7 +58,7 @@ if ($a == 'update') {
 		}
 		sed_auth_reorder();
 		sed_auth_clear('all');
-		sed_redirect(sed_url("admin", "m=rights&g=" . $g . "&msg=917", "", true));
+		sed_redirect(sed_url("admin", "m=rights&g=" . $g, "", true), false, ['msg' => '917']);
 		exit;
 	} elseif (is_array($_POST['auth'])) {
 		$mask = array();
@@ -79,7 +79,7 @@ if ($a == 'update') {
 		}
 		sed_auth_reorder();
 		sed_auth_clear('all');
-		sed_redirect(sed_url("admin", "m=rights&g=" . $g . "&msg=917", "", true));
+		sed_redirect(sed_url("admin", "m=rights&g=" . $g, "", true), false, ['msg' => '917']);
 		exit;
 	}
 }

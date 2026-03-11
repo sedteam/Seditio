@@ -127,7 +127,7 @@ if ($a == 'update') {
 				sed_log("Deleted page #" . $id, 'adm');
 
 				if (defined('SED_ADMIN')) {
-					sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row1['page_cat'] . "&msg=917", "", true));
+					sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row1['page_cat'], "", true), false, ['msg' => '917']);
 				} else {
 					sed_redirect(sed_url("page", "c=" . $row1['page_cat'], "", true));
 				}
@@ -210,7 +210,7 @@ if ($a == 'update') {
 			$url_redir = (empty($rpagealias)) ? sed_url("page", "id=" . $id, "", true) : sed_url("page", "al=" . $rpagealias, "", true);
 
 			if (defined('SED_ADMIN')) {
-				sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $rpagecat . "&msg=917", "", true));
+				sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $rpagecat, "", true), false, ['msg' => '917']);
 			} else {
 				sed_redirect($url_redir);
 			}

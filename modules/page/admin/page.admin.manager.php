@@ -41,7 +41,7 @@ if ($a == 'delete') {
 
 		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row['page_cat']);
 		if (!$usr['isadmin']) {
-			sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row['page_cat'] . "&msg=403", "", true));
+			sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row['page_cat'], "", true), false, ['msg' => '403']);
 			exit;
 		}
 
@@ -55,7 +55,7 @@ if ($a == 'delete') {
 		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 		sed_log("Deleted page #" . $id, 'adm');
-		sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row['page_cat'] . "&msg=302", "", true));
+		sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row['page_cat'], "", true), false, ['msg' => '302']);
 		exit;
 	}
 }

@@ -37,9 +37,13 @@ if (empty($d)) {
 if ($a == 'prune' && $usr['isadmin']) {
 	sed_check_xg();
 	$sql = sed_sql_query("TRUNCATE $db_referers");
+	sed_redirect(sed_url("admin", "m=referers", "", true), false, ['msg' => '917']);
+	exit;
 } elseif ($a == 'prunelowhits' && $usr['isadmin']) {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6");
+	sed_redirect(sed_url("admin", "m=referers", "", true), false, ['msg' => '917']);
+	exit;
 }
 
 $totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_referers"), 0, 0);

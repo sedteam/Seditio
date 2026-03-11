@@ -36,13 +36,19 @@ $id = sed_import('id', 'G', 'INT');
 if ($a == 'wipe') {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	sed_redirect(sed_url("admin", "m=trashcan", "", true), false, ['msg' => '302']);
+	exit;
 } elseif ($a == 'wipeall') {
 	sed_check_xg();
 	$sql = sed_sql_query("TRUNCATE $db_trash");
+	sed_redirect(sed_url("admin", "m=trashcan", "", true), false, ['msg' => '302']);
+	exit;
 } elseif ($a == 'restore') {
 	sed_check_xg();
 	if (sed_trash_restore($id)) {
 		sed_trash_delete($id);
+		sed_redirect(sed_url("admin", "m=trashcan", "", true), false, ['msg' => '917']);
+		exit;
 	}
 }
 

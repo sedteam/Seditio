@@ -44,7 +44,7 @@ if ($a == 'update') {
 	} else {
 		$sql = sed_sql_query("UPDATE $db_banlist SET banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'");
 	}
-	sed_redirect(sed_url("admin", "m=banlist&msg=917", "", true));
+	sed_redirect(sed_url("admin", "m=banlist", "", true), false, ['msg' => '917']);
 	exit;
 } elseif ($a == 'add') {
 	sed_check_xg();
@@ -68,14 +68,14 @@ if ($a == 'update') {
 	$nbanlistip_safe = sed_sql_prep($nbanlistip);
 	$sql = sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip_safe', '$nbanlistemail', '$nbanlistreason', " . (int)$nexpire . ")");
 	sed_log("Banlist : New line for IP " . $nbanlistip . " / Email " . $nbanlistemail, 'adm');
-	sed_redirect(sed_url("admin", "m=banlist&msg=301", "", true));
+	sed_redirect(sed_url("admin", "m=banlist", "", true), false, ['msg' => '301']);
 	exit;
 } elseif ($a == 'delete') {
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='$id'");
 	sed_log("Banlist : Deleted line " . $id, 'adm');
-	sed_redirect(sed_url("admin", "m=banlist&msg=302", "", true));
+	sed_redirect(sed_url("admin", "m=banlist", "", true), false, ['msg' => '302']);
 	exit;
 }
 

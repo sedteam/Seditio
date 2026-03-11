@@ -49,7 +49,8 @@ if ($a == 'move') {
 	sed_forum_sectionsetlast($targetid);
 	sed_forum_resync($sourceid);
 	sed_forum_resync($targetid);
-	$plugin_body .= "Done !";
+	sed_redirect(sed_url("admin", "m=tools&p=massmovetopics", "", true), false, ['msg' => '917']);
+	exit;
 } else {
 	$sql = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s 
 		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category

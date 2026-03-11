@@ -63,6 +63,8 @@ if ($a == 'delete') {
 		$page_id = mb_substr($row['com_code'], 1, 10);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=" . sed_get_comcount($row['com_code']) . " WHERE page_id=" . $page_id);
 	}
+	sed_redirect(sed_url("admin", "m=comments", "", true), false, ['msg' => '302']);
+	exit;
 }
 
 $d = sed_import('d', 'G', 'INT');

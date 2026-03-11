@@ -52,7 +52,7 @@ switch ($a) {
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
 
 		if (empty($mtitle)) {
-			sed_redirect(sed_url("admin", "m=menu&msg=303", "", true));
+			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '303']);
 			exit;
 		} else {
 
@@ -82,7 +82,7 @@ switch ($a) {
 
 			sed_log("Add new menu item", 'adm');
 			sed_cache_clear('sed_menu');
-			sed_redirect(sed_url("admin", "m=menu&msg=301", "", true));
+			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '301']);
 		}
 
 		break;
@@ -99,7 +99,7 @@ switch ($a) {
 
 		sed_log("Update menu positions for all items", 'adm');
 		sed_cache_clear('sed_menu');
-		sed_redirect(sed_url("admin", "m=menu&msg=917", "", true));
+		sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '917']);
 
 		break;
 
@@ -113,7 +113,7 @@ switch ($a) {
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
 
 		if (empty($mtitle)) {
-			sed_redirect(sed_url("admin", "m=menu&mn=editmenu&mid=" . $mid . "&msg=303", "", true));
+			sed_redirect(sed_url("admin", "m=menu&mn=editmenu&mid=" . $mid, "", true), false, ['msg' => '303']);
 			exit;
 		} else {
 			$sql = sed_sql_query("UPDATE $db_menu SET 
@@ -127,7 +127,7 @@ switch ($a) {
 
 			sed_log("Update menu item #" . $mid, 'adm');
 			sed_cache_clear('sed_menu');
-			sed_redirect(sed_url("admin", "m=menu&msg=917", "", true));
+			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '917']);
 		}
 
 		break;
@@ -137,12 +137,12 @@ switch ($a) {
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_menu WHERE menu_pid = '" . $mid . "'");
 		$childrens = sed_sql_result($sql, 0, "COUNT(*)");
 		if ($childrens > 0) {
-			sed_redirect(sed_url("admin", "m=menu&msg=918", "", true));
+			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '918']);
 		} else {
 			$sql = sed_sql_query("DELETE FROM $db_menu WHERE menu_id = '" . $mid . "'");
 			sed_log("Delete menu item #" . $mid, 'adm');
 			sed_cache_clear('sed_menu');
-			sed_redirect(sed_url("admin", "m=menu&msg=302", "", true));
+			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '302']);
 		}
 
 		break;

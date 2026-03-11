@@ -3349,15 +3349,25 @@ function sed_readraw($file)
 }
 
 /** 
- * Displays redirect page 
- * 
- * @param string $url Target URI 
+ * Displays redirect page.
+ * If $msg is provided (admin flash), stores it in session and redirects to $url (URL should not contain msg when using this).
+ *
+ * @param string $url Target URI
+ * @param bool   $base64 Whether URL is base64-encoded
+ * @param array  $msg Optional flash: array('msg' => '917', 'num' => 5, 'rc' => 102)
  */
-function sed_redirect($url, $base64 = false)
+function sed_redirect($url, $base64 = false, $msg = array())
 {
-	global $cfg;
+	global $cfg, $sys;
 
 	$url = ($base64) ? base64_decode($url) : $url;
+
+	if (!empty($msg) && isset($msg['msg'])) {
+		$key = (isset($sys['site_id']) ? $sys['site_id'] : 'default') . '_admin_flash';
+		$_SESSION[$key] = array('msg' => $msg['msg']);
+		if (isset($msg['num'])) $_SESSION[$key]['num'] = $msg['num'];
+		if (isset($msg['rc']))  $_SESSION[$key]['rc']  = $msg['rc'];
+	}
 
 	if ($cfg['redirmode']) {
 		$output = $cfg['doctype'] . "
@@ -3377,6 +3387,21 @@ function sed_redirect($url, $base64 = false)
 		exit;
 	}
 	return;
+}
+
+/**
+ * Get and consume admin flash message from session.
+ *
+ * @return array|false array('msg' => '917', 'num' => ..., 'rc' => ...) or false
+ */
+function sed_flash_get()
+{
+	global $sys;
+	$key = (isset($sys['site_id']) ? $sys['site_id'] : 'default') . '_admin_flash';
+	if (empty($_SESSION[$key])) return false;
+	$data = $_SESSION[$key];
+	unset($_SESSION[$key]);
+	return $data;
 }
 
 /** 

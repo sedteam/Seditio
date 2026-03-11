@@ -49,7 +49,7 @@ if ($a == 'update') {
 			WHERE smilie_id='$i'");
 	}
 	sed_cache_clear('sed_smilies');
-	sed_redirect(sed_url("admin", "m=smilies&msg=917", "", true));
+	sed_redirect(sed_url("admin", "m=smilies", "", true), false, ['msg' => '917']);
 	exit;
 } elseif ($a == 'add') {
 	$nsmiliecode = sed_sql_prep(sed_import('nsmiliecode', 'P', 'TXT'));
@@ -67,7 +67,7 @@ if ($a == 'update') {
 	}
 
 	sed_cache_clear('sed_smilies');
-	sed_redirect(sed_url("admin", "m=smilies&msg=301", "", true));
+	sed_redirect(sed_url("admin", "m=smilies", "", true), false, ['msg' => '301']);
 	exit;
 } elseif ($a == 'delete') {
 	sed_check_xg();
@@ -83,7 +83,7 @@ if ($a == 'update') {
 	}
 
 	sed_cache_clear('sed_smilies');
-	sed_redirect(sed_url("admin", "m=smilies&msg=302", "", true));
+	sed_redirect(sed_url("admin", "m=smilies", "", true), false, ['msg' => '302']);
 	exit;
 }
 

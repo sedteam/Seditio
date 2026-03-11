@@ -198,7 +198,7 @@ if ($a == 'add') {
 		sed_shield_update(30, "New page");
 
 		if (defined('SED_ADMIN')) {
-			sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $newpagecat . "&msg=300", "", true));
+			sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $newpagecat, "", true), false, ['msg' => '300']);
 		} else {
 			sed_redirect(sed_url("message", "msg=300", "", true));
 		}
