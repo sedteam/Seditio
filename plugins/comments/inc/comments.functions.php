@@ -552,6 +552,14 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			while ($rr = sed_sql_fetchassoc($sql_roots)) {
 				$root_ids[] = (int)$rr['com_id'];
 			}
+			$all_by_parent = array();
+			$sql_all = sed_sql_query("SELECT com_id, com_parent FROM $db_com WHERE com_code='$code' ORDER BY com_id " . $commentsorder);
+			while ($row = sed_sql_fetchassoc($sql_all)) {
+				$pid = (int)$row['com_parent'];
+				$cid = (int)$row['com_id'];
+				if (!isset($all_by_parent[$pid])) $all_by_parent[$pid] = array();
+				$all_by_parent[$pid][] = $cid;
+			}
 			$all_ids = array();
 			$root_tree_count = array();
 			foreach ($root_ids as $rid) {
@@ -559,11 +567,11 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				$queue = array($rid);
 				while (!empty($queue)) {
 					$pid = (int)array_shift($queue);
-					$sql_ch = sed_sql_query("SELECT com_id FROM $db_com WHERE com_code='$code' AND com_parent='$pid' ORDER BY com_id " . $commentsorder);
-					while ($ch = sed_sql_fetchassoc($sql_ch)) {
-						$cid = (int)$ch['com_id'];
-						$tree_ids[] = $cid;
-						$queue[] = $cid;
+					if (isset($all_by_parent[$pid])) {
+						foreach ($all_by_parent[$pid] as $cid) {
+							$tree_ids[] = $cid;
+							$queue[] = $cid;
+						}
 					}
 				}
 				$root_tree_count[$rid] = count($tree_ids);
