@@ -36,6 +36,7 @@ if (sed_sql_numrows($check) == 0) {
 	sed_sql_query("CREATE TABLE {$prefix}com (
   com_id int(11) NOT NULL auto_increment,
   com_code varchar(16) NOT NULL DEFAULT '',
+  com_parent int(11) NOT NULL DEFAULT '0',
   com_author varchar(24) NOT NULL DEFAULT '',
   com_authorid int(11) DEFAULT NULL,
   com_authorip varchar(45) NOT NULL DEFAULT '',
@@ -46,7 +47,8 @@ if (sed_sql_numrows($check) == 0) {
   com_rating tinyint(1) DEFAULT '0',
   com_isspecial tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (com_id),
-  KEY com_code (com_code)
+  KEY com_code (com_code),
+  KEY com_parent (com_parent)
 ) ENGINE={$mysqlengine} DEFAULT CHARSET={$mysqlcharset} COLLATE={$mysqlcollate};");
 }
 

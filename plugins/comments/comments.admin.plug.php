@@ -56,12 +56,68 @@ if ($a == 'delete') {
 
 	$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$id' LIMIT 1");
 	$row = sed_sql_fetchassoc($sql);
+	if (!$row) {
+		sed_redirect(sed_url("admin", "m=comments", "", true), false, ['msg' => '302']);
+		exit;
+	}
 
-	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+	$ids_to_delete = array((int)$id);
+	$queue = array((int)$id);
+	while (!empty($queue)) {
+		$pid = (int)array_shift($queue);
+		$ch = sed_sql_query("SELECT com_id FROM $db_com WHERE com_parent='$pid'");
+		while ($chr = sed_sql_fetchassoc($ch)) {
+			$ids_to_delete[] = (int)$chr['com_id'];
+			$queue[] = (int)$chr['com_id'];
+		}
+	}
+
+	if ($cfg['trash_comment']) {
+		$ids_str = implode(',', array_map('intval', $ids_to_delete));
+		$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id IN ($ids_str)");
+		$rows_by_id = array();
+		$tree = array();
+		while ($r = sed_sql_fetchassoc($sql)) {
+			$rows_by_id[(int)$r['com_id']] = $r;
+			$pid = isset($r['com_parent']) ? (int)$r['com_parent'] : 0;
+			if (!isset($tree[$pid])) $tree[$pid] = array();
+			$tree[$pid][] = (int)$r['com_id'];
+		}
+		$path = array();
+		$path[(int)$id] = (string)$id;
+		$queue = array((int)$id);
+		while (!empty($queue)) {
+			$pid = array_shift($queue);
+			if (isset($tree[$pid])) {
+				foreach ($tree[$pid] as $ch_id) {
+					$path[$ch_id] = $path[$pid] . '-' . $ch_id;
+					$queue[] = $ch_id;
+				}
+			}
+		}
+		$order = array((int)$id);
+		$queue = array((int)$id);
+		while (!empty($queue)) {
+			$pid = array_shift($queue);
+			if (isset($tree[$pid])) {
+				foreach ($tree[$pid] as $ch_id) {
+					$order[] = $ch_id;
+					$queue[] = $ch_id;
+				}
+			}
+		}
+		foreach ($order as $cid) {
+			$r = $rows_by_id[$cid];
+			sed_trash_put('comment', $L['Comment'] . " #" . $cid . " (" . $r['com_author'] . ")", $path[$cid], $r);
+		}
+	}
+
+	$ids_str = implode(',', array_map('intval', $ids_to_delete));
+	sed_sql_query("DELETE FROM $db_com WHERE com_id IN ($ids_str)");
 
 	if (mb_substr($row['com_code'], 0, 1) == 'p') {
 		$page_id = mb_substr($row['com_code'], 1, 10);
-		$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=" . sed_get_comcount($row['com_code']) . " WHERE page_id=" . $page_id);
+		sed_sql_query("UPDATE $db_pages SET page_comcount=" . sed_get_comcount($row['com_code']) . " WHERE page_id=" . $page_id);
 	}
 	sed_redirect(sed_url("admin", "m=comments", "", true), false, ['msg' => '302']);
 	exit;

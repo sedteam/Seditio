@@ -35,7 +35,13 @@ $id = sed_import('id', 'G', 'INT');
 
 if ($a == 'wipe') {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	$row = sed_sql_fetchassoc(sed_sql_query("SELECT tr_type, tr_itemid FROM $db_trash WHERE tr_id='$id' LIMIT 1"));
+	if ($row && $row['tr_type'] == 'comment') {
+		$path = $row['tr_itemid'];
+		sed_sql_query("DELETE FROM $db_trash WHERE tr_type='comment' AND (tr_itemid='" . sed_sql_prep($path) . "' OR tr_itemid LIKE '" . sed_sql_prep($path) . "-%')");
+	} else {
+		sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	}
 	sed_redirect(sed_url("admin", "m=trashcan", "", true), false, ['msg' => '302']);
 	exit;
 } elseif ($a == 'wipeall') {

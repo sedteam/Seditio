@@ -9,38 +9,7 @@
 <!-- END: COMMENTS_EMPTY -->
 
 <div class="commentlist">
-
-	<!-- BEGIN: COMMENTS_ROW -->
-
-	<div class="comment {COMMENTS_ROW_ODDEVEN}">
-
-		<div id="comment-{COMMENTS_ROW_ID}" class="comment-container">
-
-			<div class="comments-header">
-
-				<div class="comments-avatar">
-					{COMMENTS_ROW_AVATAR}
-				</div>
-
-				<div class="comment-head">
-					<a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}"></a>
-					<span class="name">{COMMENTS_ROW_AUTHOR}</span>
-					<span class="date">{COMMENTS_ROW_DATE}</span>
-					<span class="edit">{COMMENTS_ROW_ADMIN}</span>
-				</div>
-
-			</div>
-
-			<div class="comment-entry" id="comment-{COMMENTS_ROW_ID}">
-				{COMMENTS_ROW_TEXT}
-			</div>
-
-		</div>
-
-	</div>
-
-	<!-- END: COMMENTS_ROW -->
-
+	{COMMENTS_TREE}
 </div>
 
 <div class="paging">
@@ -62,6 +31,14 @@
 <form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 	<div class="boxed">
 		<h4>{PHP.skinlang.comments.Newcomment}</h4>
+		
+		<!-- BEGIN: COMMENTS_REPLY_NOTICE -->
+		<div class="reply-notice">
+			{COMMENTS_REPLY_TO_LABEL}: <a href="{COMMENTS_REPLY_TO_URL}">#{COMMENTS_REPLY_TO_ID}</a> {COMMENTS_REPLY_TO_BY} {COMMENTS_REPLY_TO_AUTHOR}
+			<a href="{COMMENTS_REPLY_CANCEL_URL}" class="cancel-reply btn btn-adm">{COMMENTS_REPLY_CANCEL_LABEL}</a>
+		</div>
+		<!-- END: COMMENTS_REPLY_NOTICE -->
+		
 		<a name="nc"></a>
 		{COMMENTS_FORM_TEXT}
 		<p><button type="submit" class="submit btn btn-big">{PHP.skinlang.comments.Send}</button></p>

@@ -4039,14 +4039,16 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 	$bname = is_array($base) ? $base[0] : $base;
 
 	if ($plugskin) {
-		$scan_prefix[] = SED_ROOT . '/skins/' . $usr['skin'] . '/plugins/';
+		$scan_prefix[] = SED_ROOT . '/skins/' . $usr['skin'] . '/';
 		$scan_prefix[] = SED_ROOT . '/skins/' . $usr['skin'] . '/plugin.standalone.';
-		if ($usr['skin'] != $cfg['defaultskin']) {
-			$scan_prefix[] = SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/plugins/';
-			$scan_prefix[] = SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/plugin.standalone.';
-		}
-		$scan_prefix[] = SED_ROOT . '/plugins/' . $bname . '/';
+		$scan_prefix[] = SED_ROOT . '/skins/' . $usr['skin'] . '/plugins/';
 		$scan_prefix[] = SED_ROOT . '/plugins/' . $bname . '/tpl/';
+		$scan_prefix[] = SED_ROOT . '/plugins/' . $bname . '/';
+		if ($usr['skin'] != $cfg['defaultskin']) {
+			$scan_prefix[] = SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/';
+			$scan_prefix[] = SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/plugin.standalone.';
+			$scan_prefix[] = SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/plugins/';
+		}
 	}
 
 	if ($adminskin) {
@@ -4056,9 +4058,11 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 		}
 	}
 
-	$scan_prefix[] = SED_ROOT . '/skins/' . $usr['skin'] . '/';
-	if ($usr['skin'] != $cfg['defaultskin']) {
-		$scan_prefix[] = SED_ROOT . 'skins/' . $cfg['defaultskin'] . '/';
+	if (!$plugskin) {
+		$scan_prefix[] = SED_ROOT . '/skins/' . $usr['skin'] . '/';
+		if ($usr['skin'] != $cfg['defaultskin']) {
+			$scan_prefix[] = SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/';
+		}
 	}
 
 	/* Module tpl fallback: if the base name matches a module, add its tpl/ dir */

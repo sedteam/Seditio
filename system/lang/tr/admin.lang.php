@@ -175,6 +175,8 @@ $L['cfg_maxtimeallowcomedit'] = array("Yorumları düzenlemek için izin verilen
 $L['cfg_showcommentsonpage'] = array("Sayfalarda yorumları göster", "Varsayılan olarak sayfada yorum gösterir");   //Yeni Sed171
 $L['cfg_maxcommentlenght'] = array("Bir yorumun maksimum uzunluğu", "Varsayılan: 2000 karakter");  //Yeni Sed175
 $L['cfg_countcomments'] = array("Yorum sayısını say", "Yorum simgesinin yanında yorum sayısını göster");
+$L['cfg_commaxlevel'] = array("Maksimum iç içe geçme seviyesi", "1-10, yanıt ağacı derinliği");
+$L['cfg_commaxtree'] = array("Ağaç başına maksimum yorum", "Kök ipliği başına gösterilecek yorum sınırı");
 /* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
 $L['cfg_hottopictrigger'] = array("Bir konu 'sıcak' hale gelmesi için gönderiler", "");
 $L['cfg_maxtopicsperpage'] = array("Sayfa başına maksimum konu veya gönderi", "");

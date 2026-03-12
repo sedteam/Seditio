@@ -35,6 +35,18 @@ if ($chk_fs && sed_sql_numrows($chk_fs) > 0) {
 	$adminmain .= "forum_sections: fs_title modified.<br />";
 }
 
+/* ======== Comments: add com_parent for tree nesting (only if table exists) ======== */
+$adminmain .= "Checking comments table...<br />";
+$chk_com = @sed_sql_query("SHOW TABLES LIKE '$db_com'");
+if ($chk_com && sed_sql_numrows($chk_com) > 0) {
+	$chk_col = @sed_sql_query("SHOW COLUMNS FROM $db_com LIKE 'com_parent'");
+	if (!$chk_col || sed_sql_numrows($chk_col) == 0) {
+		@sed_sql_query("ALTER TABLE $db_com ADD COLUMN com_parent int(11) NOT NULL DEFAULT '0' AFTER com_code");
+		@sed_sql_query("ALTER TABLE $db_com ADD KEY com_parent (com_parent)");
+		$adminmain .= "com: com_parent column added.<br />";
+	}
+}
+
 /* ======== Dic table alterations (only if table exists) ======== */
 $adminmain .= "Checking dic table...<br />";
 $chk_dic = @sed_sql_query("SHOW TABLES LIKE '$db_dic'");

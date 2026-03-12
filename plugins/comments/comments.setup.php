@@ -17,8 +17,8 @@ Description=Comments plugin
 [BEGIN_SED_EXTPLUGIN]
 Code=comments
 Name=Comments
-Description=Comments for pages, polls, gallery and other content
-Version=1.0
+Description=Comments for pages, polls, gallery and other content with tree structure and nesting levels
+Version=2.0
 Date=2026-feb-16
 Author=Seditio Team
 Copyright=
@@ -37,6 +37,8 @@ maxtimeallowcomedit=03:select:0,5,10,15,20,25,30,35,40,45,50,60,70,80,90:15:Max 
 maxcommentlenght=04:string::2000:Max comment length
 countcomments=05:radio:0,1:1:Count comments in link
 commentsorder=06:select:ASC,DESC:ASC:Comments order
+commaxlevel=07:select:1,2,3,4,5,6,7,8,9,10:5:Max nesting level
+commaxtree=08:select:5,10,15,20,25,30,35,45,50:30:Max comments per tree
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */

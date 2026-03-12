@@ -1380,11 +1380,11 @@ ul {
 }
 
 .comments-box-title {
-  background: #e4e7e7;
   padding: 20px;
   cursor: pointer;
   margin-bottom: 1.3em;
   position: relative;
+  border-bottom: 1px solid #e4e7e7;
 }
 
 .comments-box-title a {
@@ -1398,57 +1398,141 @@ ul {
   font-weight: 600;
 }
 
-.commentlist .comment {
-  margin-bottom: 1.3em;
-  padding: 20px;
-  position: relative;
+.commentlist {
+  max-width: 1000px;
+  margin: 0 auto;
   list-style: none;
+  padding: 0;
 }
 
-.commentlist .comment img.avatar {
-  border-radius: 50%;
-  height: auto;
-  float: left;
-  width: 52px;
+.commentlist .comment {
+  margin-bottom: 20px;
 }
 
-.commentlist .comment .comments-header {
-  display: table;
-  width: 100%;
-  margin-bottom: 0.618em;
+.commentlist .comment-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-.commentlist .comment .comments-avatar {
-  width: 80px;
-  display: table-cell;
-  vertical-align: top;
+.commentlist .comments-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
-.commentlist .comment .comment-head {
-  display: table-cell;
-  vertical-align: top;
-  margin-left: 10px;
+.commentlist .comments-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  margin-right: 12px;
 }
 
-.commentlist .comment .comment-head .name {
-  font-size: 20px;
-  font-weight: 500;
+.commentlist .comment-head {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
 }
 
-.commentlist .comment .comment-head .name a {
-  color: #010101;
+.commentlist .comment-head .name {
+  font-weight: 700;
+  color: #3b76b2;
+  margin-right: 10px;
 }
 
-.commentlist .comment .comment-head span {
-  display: block;
+.commentlist .comment-head .date {
+  color: #bbb;
+  font-size: 0.8em;
+  margin-right: 6px;
 }
 
-.commentlist .comment .comment-head .edit {
+.commentlist .comment-head .comment-anchor {
+  font-size: 0.8em;
+  margin-right: 6px;
 }
 
-.commentlist .comment .comment-container .comment-entry {
-  clear: both;
-  margin-left: 80px;
+.commentlist .comment-head .edit {
+  margin-left: auto;
+  font-size: 0.9em;
+}
+
+.commentlist .comment-head .reply {
+  font-size: 0.9em;
+}
+
+.commentlist .btn-adm {
+  text-decoration: none;
+  padding: 2px 4px;
+}
+
+.commentlist .comment-entry {
+  background: #f6f6f6;
+  border: 1px solid #dce4e9;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-left: 44px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  display: inline-block;
+  min-width: 150px;
+  max-width: calc(100% - 44px);
+}
+
+.commentlist .comment-entry::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  background: #f6f6f6;
+  border-top: 1px solid #dce4e9;
+  border-left: 1px solid #dce4e9;
+  transform: rotate(45deg);
+}
+
+.reply-notice {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: rgb(245 247 253);
+  border-left: 4px solid #ccd5e8;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.reply-notice a:hover {
+  text-decoration: underline;
+}
+
+.reply-notice .cancel-reply {
+  margin-left: 12px;
+  font-size: 0.9em;
+  color: #ffffff;
+}
+
+.commentlist .comment-replies {
+  margin-left: 44px;
+  padding-left: 15px;
+  border-left: 2px solid #edf1f3;
+  margin-top: 15px;
+}
+
+.commentlist .comment.even .comment-entry {
+  background: #f8fafb;
+}
+.commentlist .comment.even .comment-entry::before {
+  background: #f8fafb;
+}
+
+.commentlist .comment-entry p {
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+.commentlist .comment-entry p:last-child {
+  margin-bottom: 0;
 }
 
 .ratings-box-title {
@@ -2076,8 +2160,8 @@ ul.subforums-list li::before {
 }
 
 .forum-timeago {
-	font-size: 0.8em;
-	color: #292929;
+  font-size: 0.8em;
+  color: #292929;
 }
 
 .forums-main-table .desc,

@@ -174,6 +174,8 @@ $L['cfg_maxtimeallowcomedit'] = array("The time allowed to edit comments", "In m
 $L['cfg_showcommentsonpage'] = array("Show comments on pages", "By default displays comment on the page");   //New Sed171
 $L['cfg_maxcommentlenght'] = array("The maximum length of a comment", "Default: 2000 characters");  //New Sed175
 $L['cfg_countcomments'] = array("Count comments", "Display the count of comments near the icon");
+$L['cfg_commaxlevel'] = array("Max nesting level", "1-10, depth of reply tree");
+$L['cfg_commaxtree'] = array("Max comments per tree", "Limit comments shown per root thread");
 /* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
 $L['cfg_hottopictrigger'] = array("Posts for a topic to be 'hot'", "");
 $L['cfg_maxtopicsperpage'] = array("Maximum topics or posts per page", "");
