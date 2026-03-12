@@ -97,6 +97,22 @@
 						</li>
 						<!-- END: PLUGINS_MENU -->
 
+						<!-- BEGIN: PLUGIN_MENU_ITEM -->
+						<li>
+							<a href="{ADMIN_PLUGIN_MENU_URL}" class="nav-top-item {ADMIN_PLUGIN_MENU_SUBMENU_CLASS} {ADMIN_PLUGIN_MENU_URL_CLASS}" style="padding-left: 15px;">
+								<span class="nav-icon"><i class="ic-plug"></i></span>
+								<span class="nav-title">{ADMIN_PLUGIN_MENU_TITLE}</span>
+							</a>
+							<!-- BEGIN: PLUGIN_MENU_SUB -->
+							<ul class="arrow_list" {ADMIN_PLUGIN_MENU_SUB_STYLE}>
+								<!-- BEGIN: PLUGIN_MENU_SUBITEM -->
+								<li><a href="{ADMIN_PLUGIN_SUB_URL}" class="{ADMIN_PLUGIN_SUB_CLASS}"><span>{ADMIN_PLUGIN_SUB_TITLE}</span></a></li>
+								<!-- END: PLUGIN_MENU_SUBITEM -->
+							</ul>
+							<!-- END: PLUGIN_MENU_SUB -->
+						</li>
+						<!-- END: PLUGIN_MENU_ITEM -->
+
 						<!-- BEGIN: TRASHCAN_MENU -->
 						<li>
 							<a href="{ADMIN_MENU_TRASHCAN_URL}" class="nav-top-item no-submenu {ADMIN_MENU_TRASHCAN_URL_CLASS}">

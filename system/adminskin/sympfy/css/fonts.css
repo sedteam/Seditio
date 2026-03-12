@@ -267,7 +267,8 @@
 .ic-device-desktop:before {
   content: "\ea89";
 }
-.ic-directions:before {
+.ic-directions:before,
+.ic-sitemap:before {
   content: "\ea8e";
 }
 .ic-dots:before {
@@ -282,7 +283,8 @@
 .ic-external-link:before {
   content: "\ea99";
 }
-.ic-eye:before {
+.ic-eye:before,
+.ic-view:before {
   content: "\ea9a";
 }
 .ic-eye-off:before {

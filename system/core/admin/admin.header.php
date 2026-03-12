@@ -204,6 +204,92 @@ if ($usr['id'] > 0) {
 		));
 		$t->parse("HEADER.ADMIN_MENU.MODULES_MENU");
 
+		// Plugin menu items: collect from admin.plug plugins, sort by order, then output (title, order, sections with optional auth/param)
+		$plug_menu_items = array();
+		$extp_admin_plug = sed_getextplugins('admin.plug');
+		if (is_array($extp_admin_plug)) {
+			foreach ($extp_admin_plug as $pl) {
+				$plug_code = $pl['pl_code'];
+				$menu_file = SED_ROOT . '/plugins/' . $plug_code . '/admin/' . $plug_code . '.admin.menu.php';
+				if (!is_file($menu_file)) {
+					continue;
+				}
+				$menu_def = include($menu_file);
+				if ($menu_def === false || !is_array($menu_def) || empty($menu_def['title'])) {
+					continue;
+				}
+				$plug_menu_items[] = array(
+					'code'      => $plug_code,
+					'title'     => $menu_def['title'],
+					'order'     => isset($menu_def['order']) ? (int)$menu_def['order'] : 50,
+					'pl_title'  => isset($pl['pl_title']) ? $pl['pl_title'] : $plug_code,
+					'sections'  => isset($menu_def['sections']) && is_array($menu_def['sections']) ? $menu_def['sections'] : array(),
+					'adminlink' => isset($menu_def['adminlink']) ? $menu_def['adminlink'] : ''
+				);
+			}
+		}
+		usort($plug_menu_items, function ($a, $b) {
+			if ($a['order'] !== $b['order']) {
+				return $a['order'] - $b['order'];
+			}
+			return strcmp($a['pl_title'], $b['pl_title']);
+		});
+		foreach ($plug_menu_items as $plug_item) {
+			$plug_code = $plug_item['code'];
+			$plug_menu_title = isset($L[$plug_item['title']]) ? $L[$plug_item['title']] : $plug_item['title'];
+			$plug_menu_url = !empty($plug_item['adminlink']) ? $plug_item['adminlink'] : sed_url('admin', "m=" . $plug_code);
+			$is_current = ($m == $plug_code);
+			$sections = $plug_item['sections'];
+			$has_submenu = (count($sections) > 0);
+			$t->assign(array(
+				"ADMIN_PLUGIN_MENU_URL" => $plug_menu_url,
+				"ADMIN_PLUGIN_MENU_TITLE" => sed_cc($plug_menu_title),
+				"ADMIN_PLUGIN_MENU_MOD_CODE" => $plug_code,
+				"ADMIN_PLUGIN_MENU_URL_CLASS" => $is_current ? 'current' : '',
+				"ADMIN_PLUGIN_MENU_SUBMENU_CLASS" => $has_submenu ? 'yes-submenu' : 'no-submenu'
+			));
+			if ($has_submenu) {
+				$t->assign("ADMIN_PLUGIN_MENU_SUB_STYLE", $is_current ? 'style="display: block;"' : '');
+				foreach ($sections as $sk => $sval) {
+					$slabel = is_array($sval) ? (isset($sval['label']) ? $sval['label'] : '') : $sval;
+					$sparam = (is_array($sval) && isset($sval['param'])) ? $sval['param'] : 's';
+					$sauth = is_array($sval) && isset($sval['auth']) && is_array($sval['auth']) ? $sval['auth'] : null;
+					if ($sauth !== null && !call_user_func_array('sed_auth', $sauth)) {
+						continue;
+					}
+					// Custom URL: use $sval['url'] when set; otherwise auto-build from param+key
+					if (is_array($sval) && isset($sval['url']) && $sval['url'] !== '') {
+						$surl = $sval['url'];
+					} else {
+						$surl = $sk === '' ? $plug_menu_url : sed_url('admin', "m=" . $plug_code . "&" . $sparam . "=" . $sk);
+					}
+					// Highlight current: use $sval['match'] when set; otherwise legacy param+key logic
+					if (is_array($sval) && isset($sval['match']) && is_array($sval['match'])) {
+						$url_params = array('m' => $m, 's' => $s, 'mn' => $mn);
+						$sclass = 'current';
+						foreach ($sval['match'] as $mk => $mv) {
+							$gv = isset($url_params[$mk]) ? $url_params[$mk] : null;
+							if ($gv === null || is_array($gv) || (string)$gv !== (string)$mv) {
+								$sclass = '';
+								break;
+							}
+						}
+					} else {
+						$sclass = ($m == $plug_code && $sparam === 'mn' && (string)$mn === (string)$sk) ? 'current' : (($m == $plug_code && $sparam === 's' && (string)$s === (string)$sk) ? 'current' : '');
+					}
+					$stext = isset($L[$slabel]) ? $L[$slabel] : $slabel;
+					$t->assign(array(
+						"ADMIN_PLUGIN_SUB_URL" => $surl,
+						"ADMIN_PLUGIN_SUB_TITLE" => sed_cc($stext),
+						"ADMIN_PLUGIN_SUB_CLASS" => $sclass
+					));
+					$t->parse("HEADER.ADMIN_MENU.PLUGIN_MENU_ITEM.PLUGIN_MENU_SUB.PLUGIN_MENU_SUBITEM");
+				}
+				$t->parse("HEADER.ADMIN_MENU.PLUGIN_MENU_ITEM.PLUGIN_MENU_SUB");
+			}
+			$t->parse("HEADER.ADMIN_MENU.PLUGIN_MENU_ITEM");
+		}
+
 		// Module menu items: collect from modules, sort by order, then output (title, order, sections with optional auth/param)
 		$mod_menu_items = array();
 		$sql_mod_menu = sed_sql_query("SELECT ct_code, ct_title FROM $db_core WHERE ct_admin=1 AND ct_state=1 AND ct_path LIKE 'modules/%' ORDER BY ct_title ASC");
