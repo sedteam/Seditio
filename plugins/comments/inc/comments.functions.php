@@ -138,13 +138,16 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 
 	if (!empty($b)) {
 		$root_id = $b;
-		$row_b = sed_sql_fetchassoc(sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$b' AND com_code='$code' LIMIT 1"));
+		$sql_b = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$b' AND com_code='$code' LIMIT 1");
+		$row_b = sed_sql_fetchassoc($sql_b);
 		if ($row_b) {
 			while (!empty($row_b['com_parent'])) {
 				$root_id = (int)$row_b['com_parent'];
-				$row_b = sed_sql_fetchassoc(sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1"));
+				$sql_b = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1");
+				$row_b = sed_sql_fetchassoc($sql_b);
 			}
-			$roots_before = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code' AND com_parent=0 AND com_id " . (($commentsorder == "DESC") ? ">" : "<") . " '$root_id'"), 0, "COUNT(*)");
+			$sql_roots_before = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code' AND com_parent=0 AND com_id " . (($commentsorder == "DESC") ? ">" : "<") . " '$root_id'");
+			$roots_before = sed_sql_result($sql_roots_before, 0, "COUNT(*)");
 			$d = $maxcommentsperpage * (int)floor($roots_before / $maxcommentsperpage);
 		}
 	}
@@ -170,13 +173,15 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$reply_post = sed_import('reply', 'P', 'INT');
 			$com_parent = 0;
 			if ($reply_post > 0) {
-				$row_parent = sed_sql_fetchassoc(sed_sql_query("SELECT com_id, com_code, com_parent FROM $db_com WHERE com_id='" . (int)$reply_post . "' AND com_code='$code' LIMIT 1"));
+				$sql_parent = sed_sql_query("SELECT com_id, com_code, com_parent FROM $db_com WHERE com_id='" . (int)$reply_post . "' AND com_code='$code' LIMIT 1");
+				$row_parent = sed_sql_fetchassoc($sql_parent);
 				if ($row_parent) {
 					$depth = 1;
 					$walk = (int)$row_parent['com_parent'];
 					while ($walk > 0) {
 						$depth++;
-						$row_walk = sed_sql_fetchassoc(sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$walk' LIMIT 1"));
+						$sql_walk = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$walk' LIMIT 1");
+						$row_walk = sed_sql_fetchassoc($sql_walk);
 						$walk = $row_walk ? (int)$row_walk['com_parent'] : 0;
 					}
 					if ($depth < $commaxlevel) {
@@ -199,10 +204,12 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 
 			if ($com_parent > 0) {
 				$root_id = $com_parent;
-				$row_walk = sed_sql_fetchassoc(sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1"));
+				$sql_walk = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1");
+				$row_walk = sed_sql_fetchassoc($sql_walk);
 				while ($row_walk && $row_walk['com_parent'] > 0) {
 					$root_id = (int)$row_walk['com_parent'];
-					$row_walk = sed_sql_fetchassoc(sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1"));
+					$sql_walk = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1");
+					$row_walk = sed_sql_fetchassoc($sql_walk);
 				}
 				$tree_ids = array($root_id);
 				$queue = array($root_id);
@@ -509,7 +516,8 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 
 			if ($usr['auth_write_com'] && $allow) {
 				if ($reply > 0) {
-					$row_reply = sed_sql_fetchassoc(sed_sql_query("SELECT com_id, com_author FROM $db_com WHERE com_id='" . (int)$reply . "' AND com_code='$code' LIMIT 1"));
+					$sql_reply = sed_sql_query("SELECT com_id, com_author FROM $db_com WHERE com_id='" . (int)$reply . "' AND com_code='$code' LIMIT 1");
+					$row_reply = sed_sql_fetchassoc($sql_reply);
 					if ($row_reply) {
 						$cancel_params = preg_replace('/(^|&)(reply|quote)=[^&]*/', '', $url_params . $lurl);
 						$cancel_params = trim($cancel_params, '&');
@@ -636,7 +644,8 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 	$nbcomment = "";
 	$nbcomment_link = $out['ic_comment'];
 	if ($countcomments) {
-		$nbcomment = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com where com_code='$code'"), 0, "COUNT(*)");
+		$sql_count = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'");
+		$nbcomment = sed_sql_result($sql_count, 0, "COUNT(*)");
 		$nbcomment_link .= " (" . $nbcomment . ")";
 	}
 	$res = sed_link(sed_url($url_part, $url_params . $lurl), $nbcomment_link);
