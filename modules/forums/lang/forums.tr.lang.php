@@ -65,7 +65,7 @@ $L['adm_help_forums_structure'] = "Mevcut değil";
 /* ====== Config labels ======= */
 
 $L['core_forums'] = "Forumlar";
-$L['cfg_formatmonthdayhourmin'] = array("Forum tarih biçimi", "Varsayılan: m-d H:i");
+$L['cfg_formatmonthdayhourmin'] = array("Forum tarih biçimi", "Varsayılan: d.m H:i");
 $L['cfg_hideprivateforums'] = array("Özel forumları gizle", "");
 $L['cfg_hottopictrigger'] = array("Konunun 'popüler' sayılması için mesaj sayısı", "");
 $L['cfg_maxtopicsperpage'] = array("Sayfa başına en fazla konu veya mesaj", "");

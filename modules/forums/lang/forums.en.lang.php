@@ -65,7 +65,7 @@ $L['adm_help_forums_structure'] = "Not available";
 /* ====== Config labels ======= */
 
 $L['core_forums'] = "Forums";
-$L['cfg_formatmonthdayhourmin'] = array("Forum date mask", "Default: m-d H:i");
+$L['cfg_formatmonthdayhourmin'] = array("Forum date mask", "Default: d.m H:i");
 $L['cfg_hideprivateforums'] = array("Hide private forums", "");
 $L['cfg_hottopictrigger'] = array("Posts for a topic to be 'hot'", "");
 $L['cfg_maxtopicsperpage'] = array("Maximum topics or posts per page", "");

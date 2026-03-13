@@ -358,10 +358,10 @@ function sed_loadconfigmap()
 	$result[] = array('index', '02', 'homemetadescription', 1, '', ''); // ---- New in v179
 	$result[] = array('index', '03', 'homemetakeywords', 1, '', ''); // ---- New in v179
 
-	$result[] = array('time', '11', 'dateformat', 1, 'Y-m-d H:i', '');
-	$result[] = array('time', '11', 'formatmonthday', 1, 'm-d', '');
-	$result[] = array('time', '11', 'formatyearmonthday', 1, 'Y-m-d', '');
-	$result[] = array('time', '11', 'formatmonthdayhourmin', 1, 'm-d H:i', '');
+	$result[] = array('time', '11', 'dateformat', 1, 'd.m.Y H:i', '');
+	$result[] = array('time', '11', 'formatmonthday', 1, 'd.m', '');
+	$result[] = array('time', '11', 'formatyearmonthday', 1, 'd.m.Y', '');
+	$result[] = array('time', '11', 'formatmonthdayhourmin', 1, 'd.m H:i', '');
 	$result[] = array('time', '11', 'servertimezone', 1, '0', '');
 	$result[] = array('time', '12', 'defaulttimezone', 1, '0', '');
 	$result[] = array('time', '14', 'timedout', 2, '1200', array(30, 60, 120, 300, 600, 900, 1200, 1800, 2400, 3600));

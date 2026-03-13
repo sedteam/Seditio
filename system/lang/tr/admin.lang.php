@@ -143,9 +143,9 @@ $L['cfg_absurls'] = array("Mutlak URL", "Mutlak URL kullanımını etkinleştir"
 $L['cfg_sefurls'] = array("SEF URL'leri", "Sitede SEF URL'lerini etkinleştir");  // v175'te yeni
 $L['cfg_sefurls301'] = array("SEF URL'lere 301 yönlendirmesi", "Eski URL'den SEF URL'lere 301 yönlendirmesini etkinleştir");  // v175'te yeni
 
-$L['cfg_dateformat'] = array("Ana tarih maskesi", "Varsayılan: Y-m-d H:i");
-$L['cfg_formatmonthday'] = array("Kısa tarih maskesi", "Varsayılan: m-d");
-$L['cfg_formatyearmonthday'] = array("Orta tarih maskesi", "Varsayılan: Y-m-d");
+$L['cfg_dateformat'] = array("Ana tarih maskesi", "Varsayılan: d.m.Y H:i");
+$L['cfg_formatmonthday'] = array("Kısa tarih maskesi", "Varsayılan: d.m");
+$L['cfg_formatyearmonthday'] = array("Orta tarih maskesi", "Varsayılan: d.m.Y");
 /* $L['cfg_formatmonthdayhourmin'] moved to modules/forums/lang/ */
 $L['cfg_servertimezone'] = array("Sunucu zaman dilimi", "Sunucunun GMT+00'a göre farkı");
 $L['cfg_defaulttimezone'] = array("Varsayılan zaman dilimi", "Misafirler ve yeni üyeler için, -12 ile +12 arasında");

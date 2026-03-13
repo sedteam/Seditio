@@ -79,7 +79,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 
 	$t->assign(array(
 		"THANKS_LIST_ID" => $row['th_id'],
-		"THANKS_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['th_date']),
+		"THANKS_LIST_DATE" => sed_build_date(!empty($cfg['plugin']['thanks']['format']) ? $cfg['plugin']['thanks']['format'] : 'd.m.Y', $row['th_date']),
 		"THANKS_LIST_FROM" => $from_link,
 		"THANKS_LIST_TO" => $to_link,
 		"THANKS_LIST_TYPE" => $item_info['type'],

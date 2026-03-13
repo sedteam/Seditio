@@ -690,7 +690,7 @@ const sedjs = {
         if (loadingElement) {
             loaderDiv = document.createElement("div");
             const intElemOffsetHeight = Math.floor(loadingElement.offsetHeight / 2) + 16;
-            const intElemOffsetWidth = Math.floor(loadingElement.offsetWidth / 2) - 16;
+            const intElemOffsetWidth = Math.floor(loadingElement.offsetWidth / 2) - 8;
             loaderDiv.setAttribute("style", `position:absolute; margin-top:-${intElemOffsetHeight}px; margin-left:${intElemOffsetWidth}px;`);
             sedjs.addClass(loaderDiv, "loading-indicator");
             loadingElement.appendChild(loaderDiv);

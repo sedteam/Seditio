@@ -400,6 +400,7 @@ function sed_build_thanks($ext, $item, $to_userid, $allow = true, $inner_only = 
 	$maxthanked = (int)(isset($cfg['plugin']['thanks']['maxthanked']) ? $cfg['plugin']['thanks']['maxthanked'] : 10);
 	$short = !empty($cfg['plugin']['thanks']['short']);
 	$sql_limit = $maxthanked > 0 ? " LIMIT " . $maxthanked : "";
+	$thanks_dateformat = !empty($cfg['plugin']['thanks']['format']) ? $cfg['plugin']['thanks']['format'] : 'd.m.Y';
 
 	$th_users_parts = array();
 	$th_users_dates_parts = array();
@@ -408,7 +409,7 @@ function sed_build_thanks($ext, $item, $to_userid, $allow = true, $inner_only = 
 	$sql = sed_sql_query("SELECT t.*, u.user_name, u.user_maingrp FROM $db_thanks AS t LEFT JOIN $db_users AS u ON t.th_fromuser = u.user_id WHERE t.th_ext='" . $ext . "' AND t.th_item=" . $item . " ORDER BY t.th_date DESC" . $sql_limit);
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$userlink = sed_build_user($row['th_fromuser'], sed_cc($row['user_name']), $row['user_maingrp']);
-		$date = sed_build_date($cfg['formatmonthdayhourmin'], $row['th_date']);
+		$date = sed_build_date($thanks_dateformat, $row['th_date']);
 		$th_users_parts[] = sprintf($mask_user_short, $userlink);
 		$th_users_dates_parts[] = sprintf($short ? $mask_user_short : $mask_user, $userlink, $date);
 		

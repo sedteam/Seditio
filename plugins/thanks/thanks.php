@@ -71,6 +71,7 @@ if ($a == 'thank' && !empty($ext) && $item > 0 && $usr['id'] > 0) {
 $plugin_title = isset($L['thanks_title']) ? $L['thanks_title'] : 'Thanks';
 $plugin_subtitle = '';
 $urlpaths = array(sed_url('plug', 'e=thanks') => $plugin_title);
+$thanks_dateformat = !empty($cfg['plugin']['thanks']['format']) ? $cfg['plugin']['thanks']['format'] : 'd.m.Y';
 
 if ($a == 'viewdetails' && !empty($ext) && $item > 0 && thanks_count($ext, $item) > 0) {
 	$ext_ok = ($ext == 'page' && sed_module_active('page')) || ($ext == 'forums' && sed_module_active('forums')) || ($ext == 'comments' && sed_plug_active('comments'));
@@ -95,7 +96,7 @@ if ($a == 'viewdetails' && !empty($ext) && $item > 0 && thanks_count($ext, $item
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$userlink = sed_build_user($row['th_fromuser'], sed_cc($row['user_name']), $row['user_maingrp']);		
 		$t->assign(array(
-			'THANKS_LIST_ROW_DATE' => sed_build_date($cfg['formatmonthdayhourmin'], $row['th_date']),
+			'THANKS_LIST_ROW_DATE' => sed_build_date($thanks_dateformat, $row['th_date']),
 			'THANKS_LIST_ROW_FROM' => $userlink,
 			'THANKS_LIST_ROW_TYPE' => $item_info['type'],
 			'THANKS_LIST_ROW_CATEGORY' => $item_info['category'],
@@ -137,7 +138,7 @@ if ($a == 'viewdetails' && !empty($ext) && $item > 0 && thanks_count($ext, $item
 			$item_info = thanks_resolve_item_info($row['th_ext'], $row['th_item'], $L);
 			
 			$t->assign(array(
-				'THANKS_LIST_ROW_DATE' => sed_build_date($cfg['formatmonthdayhourmin'], $row['th_date']),
+				'THANKS_LIST_ROW_DATE' => sed_build_date($thanks_dateformat, $row['th_date']),
 				'THANKS_LIST_ROW_FROM' => $userlink,
 				'THANKS_LIST_ROW_TYPE' => $item_info['type'],
 				'THANKS_LIST_ROW_CATEGORY' => $item_info['category'],

@@ -142,9 +142,9 @@ $L['cfg_multihost'] = array("Multihost mode", "To enable multiple hosts");  // N
 $L['cfg_absurls'] = array("Absolute URL", "Enables the use of the absolute URL");  // New in v175
 $L['cfg_sefurls'] = array("SEF URLs", "To enables SEF URLs on the site");  // New in v175
 $L['cfg_sefurls301'] = array("301 redirect to the SEF URLs", "Enable 301 redirect from the old URL to SEF URLs");  // New in v175
-$L['cfg_dateformat'] = array("Main date mask", "Default: Y-m-d H:i");
-$L['cfg_formatmonthday'] = array("Short date mask", "Default: m-d");
-$L['cfg_formatyearmonthday'] = array("Medium date mask", "Default: Y-m-d");
+$L['cfg_dateformat'] = array("Main date mask", "Default: d.m.Y H:i");
+$L['cfg_formatmonthday'] = array("Short date mask", "Default: d.m");
+$L['cfg_formatyearmonthday'] = array("Medium date mask", "Default: d.m.Y");
 /* $L['cfg_formatmonthdayhourmin'] moved to modules/forums/lang/ */
 $L['cfg_servertimezone'] = array("Server time zone", "Offset of the server from the GMT+00");
 $L['cfg_defaulttimezone'] = array("Default time zone", "For guests and new members, from -12 to +12");

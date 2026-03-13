@@ -40,6 +40,7 @@ notify_by_pm=08:radio:0,1:0:Notify by PM on new thank
 notify_by_email=09:radio:0,1:0:Notify by email on new thank
 notify_from=10:string::noreply@example.com:Email from for notifications
 thanksperpage=11:string::20:Thanks per page in lists
+format=12:string::d.m.Y:Date format mask (empty = system default)
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */

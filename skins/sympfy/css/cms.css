@@ -631,7 +631,7 @@ ul.tabs li a.selected {
 /*-------------------------*/
 
 #loading-holder {
-  height: 32px;
+  height: 16px;
 }
 
 #loading {
@@ -640,9 +640,9 @@ ul.tabs li a.selected {
 }
 
 .loading-indicator {
-  width: 32px;
-  height: 32px;
-  background: url('/system/img/vars/loading.gif') center center no-repeat;
+  width: 16px;
+  height: 16px;
+  background: url('/system/img/vars/minloading.gif') center center no-repeat;
 }
 
 /*-------------------------*/

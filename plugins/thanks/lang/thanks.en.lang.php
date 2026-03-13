@@ -59,3 +59,4 @@ $L['cfg_notify_by_pm'] = array("Notify by PM on new thank", "");
 $L['cfg_notify_by_email'] = array("Notify by email on new thank", "");
 $L['cfg_notify_from'] = array("Email from for notifications", "");
 $L['cfg_thanksperpage'] = array("Thanks per page in lists", "");
+$L['cfg_format'] = array("Date format mask (empty = system default)", "");
