@@ -616,6 +616,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 
 	$row['fp_text'] = "<div id=\"fp" . $row['fp_id'] . "\" >" . $row['fp_text'] . "</div>";
 
+	$fp_maingrp = (!empty($row['user_maingrp']) && isset($sed_groups[$row['user_maingrp']])) ? $row['user_maingrp'] : 1;
 	$t->assign(array(
 		"FORUMS_POSTS_ROW_ID" => $row['fp_id'],
 		"FORUMS_POSTS_ROW_IDURL" => sed_link(sed_url("forums", "m=posts&p=" . $row['fp_id'], "#" . $row['fp_id']), $row['fp_id'], array('id' => $row['fp_id'])),
@@ -628,8 +629,8 @@ while ($row = sed_sql_fetchassoc($sql)) {
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_MAINGRP" => sed_build_group($row['user_maingrp']),
 		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
-		"FORUMS_POSTS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$row['user_maingrp']]['level']),
-		"FORUMS_POSTS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$row['user_maingrp']]['icon']),
+		"FORUMS_POSTS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$fp_maingrp]['level']),
+		"FORUMS_POSTS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$fp_maingrp]['icon']),
 		"FORUMS_POSTS_ROW_USERTEXT" => sed_parse($row['user_text']),
 		"FORUMS_POSTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
 		"FORUMS_POSTS_ROW_PHOTO" => sed_build_userimage($row['user_photo']),

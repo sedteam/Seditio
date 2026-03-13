@@ -33,13 +33,8 @@ $p = sed_import('p', 'G', 'ALP');
 $t = new XTemplate(sed_skinfile('admin.manage', false, true));
 
 if (!empty($p)) {
-	$path_lang_def	= SED_ROOT . "/plugins/$p/lang/$p.en.lang.php";
-	$path_lang_alt	= SED_ROOT . "/plugins/$p/lang/$p.$lang.lang.php";
-
-	if (@file_exists($path_lang_alt)) {
-		require($path_lang_alt);
-	} elseif (@file_exists($path_lang_def)) {
-		require($path_lang_def);
+	if ($path_lang = sed_langfile($p, 'plugin', $lang)) {
+		require($path_lang);
 	}
 
 	$extp = array();
@@ -163,12 +158,8 @@ if (!empty($p)) {
 	$extp = sed_getextplugins('admin.plug');
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			$path_lang_alt = SED_ROOT . "/plugins/" . $pl['pl_code'] . "/lang/" . $pl['pl_code'] . "." . $lang . ".lang.php";
-			$path_lang_def = SED_ROOT . "/plugins/" . $pl['pl_code'] . "/lang/" . $pl['pl_code'] . ".en.lang.php";
-			if (@file_exists($path_lang_alt)) {
-				require($path_lang_alt);
-			} elseif (@file_exists($path_lang_def)) {
-				require($path_lang_def);
+			if ($path_lang = sed_langfile($pl['pl_code'], 'plugin', $lang)) {
+				require($path_lang);
 			}
 			$plug_title = (isset($L[$pl['pl_title']]) ? $L[$pl['pl_title']] : $pl['pl_title']);
 			$t->assign(array(

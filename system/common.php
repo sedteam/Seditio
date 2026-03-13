@@ -436,11 +436,8 @@ foreach ($sed_modules as $mod_code => $mod_row) {
 	if ($mod_path === '' || strpos($mod_path, 'modules/') !== 0) {
 		continue;
 	}
-	$mod_lang_file = SED_ROOT . '/modules/' . $mod_code . '/lang/' . $mod_code . '.' . $lang . '.lang.php';
-	if (is_file($mod_lang_file)) {
+	if ($mod_lang_file = sed_langfile($mod_code, 'module', $lang)) {
 		include_once($mod_lang_file);
-	} elseif (is_file(SED_ROOT . '/modules/' . $mod_code . '/lang/' . $mod_code . '.en.lang.php')) {
-		include_once(SED_ROOT . '/modules/' . $mod_code . '/lang/' . $mod_code . '.en.lang.php');
 	}
 }
 
@@ -646,9 +643,15 @@ if (!isset($sed_dic) && (sed_stat_get("version") >= 177)) {
 		$sql2 = sed_sql_query("SELECT * FROM $db_dic_items");
 		if (sed_sql_numrows($sql2) > 0) {
 			while ($row2 = sed_sql_fetchassoc($sql2)) {
+				$dicid = $row2['ditem_dicid'];
+				if (!isset($sed_dicid_arr[$dicid])) {
+					continue;
+				}
 				$term_code = ($row2['ditem_code'] != "") ? $row2['ditem_code'] : $row2['ditem_id'];
-				$sed_dic[$sed_dicid_arr[$row2['ditem_dicid']]]['terms'][$term_code] = $row2['ditem_title'];
-				if (!empty($row2['ditem_defval'])) $sed_dic[$sed_dicid_arr[$row2['ditem_dicid']]]['term_default'] = $term_code;
+				$sed_dic[$sed_dicid_arr[$dicid]]['terms'][$term_code] = $row2['ditem_title'];
+				if (!empty($row2['ditem_defval'])) {
+					$sed_dic[$sed_dicid_arr[$dicid]]['term_default'] = $term_code;
+				}
 			}
 		}
 	}

@@ -29,7 +29,9 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-require_once(SED_ROOT . '/plugins/adminqv/lang/adminqv.' . $usr['lang'] . '.lang.php');
+if ($f = sed_langfile('adminqv', 'plugin')) {
+	require_once($f);
+}
 
 $timeback = $sys['now_offset'] - (7 * 86400); // 7 days
 $timeback_stats = 15; // 15 days

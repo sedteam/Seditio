@@ -30,7 +30,9 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-require_once("plugins/uploader/lang/uploader." . $usr['lang'] . ".lang.php");
+if ($f = sed_langfile('uploader', 'plugin')) {
+	require_once($f);
+}
 
 $extraslot = 'rthumb';
 

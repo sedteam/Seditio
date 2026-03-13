@@ -39,12 +39,7 @@ $admintitle = $L['Ratings'];
 
 $adminhelp = isset($L['adm_help_ratings']) ? $L['adm_help_ratings'] : '';
 
-$admin_ratings_tpl = sed_skinfile('admin.ratings', false, true);
-if (!empty($admin_ratings_tpl)) {
-	$t = new XTemplate($admin_ratings_tpl);
-} else {
-	$t = new XTemplate(SED_ROOT . '/plugins/ratings/tpl/admin.ratings.tpl');
-}
+$t = new XTemplate(sed_skinfile('admin.ratings', false, true));
 
 $id = sed_import('id', 'G', 'TXT');
 $ii = 0;

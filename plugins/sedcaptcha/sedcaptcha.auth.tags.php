@@ -36,7 +36,9 @@ $captcha_auth = $cfg['plugin']['sedcaptcha']['captcha_auth'];
 
 if ($captcha_auth == "yes") {
 
-	require_once("plugins/sedcaptcha/lang/sedcaptcha." . $usr['lang'] . ".lang.php");
+	if ($f = sed_langfile('sedcaptcha', 'plugin')) {
+		require_once($f);
+	}
 
 	$captcha_url = ($cfg['sefurls'] && !empty($sed_urltrans['captcha']))
 		? sed_url("captcha")

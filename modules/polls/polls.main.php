@@ -142,6 +142,7 @@ if ($standalone) {
 	$polls_footer2 = "</body>\n</html>";
 
 	$mskin = sed_skinfile(array('polls', 'standalone'));
+
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
@@ -195,7 +196,7 @@ if (empty($id) || $id == 'viewall') {
 		$t->parse("MAIN.POLL_ERROR");
 	}
 
-	$xpoll = new XTemplate(sed_skinfile('poll'));
+	$xpoll = new XTemplate(sed_skinfile('polls.poll'));
 
 	while ($row1 = sed_sql_fetchassoc($sql1)) {
 		$po_id = $row1['po_id'];

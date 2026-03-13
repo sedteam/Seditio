@@ -32,10 +32,7 @@ $db_rated = $cfg['sqldbprefix'] . 'rated';
 
 if (!function_exists('sed_build_ratings')) {
 	require_once(SED_ROOT . '/plugins/ratings/inc/ratings.functions.php');
-	$ratings_lang = SED_ROOT . '/plugins/ratings/lang/ratings.' . $cfg['defaultlang'] . '.lang.php';
-	if (file_exists($ratings_lang)) {
-		require_once($ratings_lang);
-	} elseif (file_exists(SED_ROOT . '/plugins/ratings/lang/ratings.en.lang.php')) {
-		require_once(SED_ROOT . '/plugins/ratings/lang/ratings.en.lang.php');
+	if ($f = sed_langfile('ratings', 'plugin')) {
+		require_once($f);
 	}
 }

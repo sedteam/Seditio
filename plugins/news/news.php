@@ -85,7 +85,7 @@ if (sed_module_active('page') && $cfg['plugin']['news']['maxpages'] > 0 && !empt
 	$pagination = sed_pagination(sed_url("index", "c=" . $c), $d, $totallines, $cfg['plugin']['news']['maxpages']);
 	list($pageprev, $pagenext) = sed_pagination_pn(sed_url("index", "c=" . $c), $d, $totallines, $cfg['plugin']['news']['maxpages'], TRUE);
 
-	$news = new XTemplate(sed_skinfile('news'));
+	$news = new XTemplate(sed_skinfile('news', true));
 
 	if (!empty($pagination)) {
 		$news->assign(array(

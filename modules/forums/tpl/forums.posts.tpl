@@ -88,6 +88,9 @@
 										{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.skinlang.forumspost.posts}<br />
 										{FORUMS_POSTS_ROW_WEBSITE}
 									</p>
+									<!-- IF {FORUMS_POSTS_ROW_THANKED} -->
+									<p class="forums-thanked">{FORUMS_POSTS_ROW_THANKED}</p>
+									<!-- ENDIF -->
 								</div>
 
 							</div>
@@ -96,11 +99,14 @@
 						</div>
 
 						<div class="table-td {FORUMS_POSTS_ROW_ODDEVEN} td-top forums-message-td">
-							<div class="forums-post-message forum-text">
-								{FORUMS_POSTS_ROW_TEXT}
-								<div class="signature">{FORUMS_POSTS_ROW_USERTEXT}</div>
+							<div class="forums-message-inner">
+								<div class="forums-post-message forum-text">
+									{FORUMS_POSTS_ROW_TEXT}
+									<div class="signature">{FORUMS_POSTS_ROW_USERTEXT}</div>
+								</div>
+								{FORUMS_POSTS_ROW_UPDATEDBY}
+								{FORUMS_POSTS_ROW_THANKS_DISPLAY}
 							</div>
-							{FORUMS_POSTS_ROW_UPDATEDBY}
 						</div>
 
 					</div>

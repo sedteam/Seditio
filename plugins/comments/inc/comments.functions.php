@@ -41,7 +41,9 @@ function _sed_comments_render_node($com_id, $level, $maxlevel, $tree, $rows_by_i
 	if (!$tree_at_limit && $usr['auth_write_com'] && $level < $maxlevel && $usr['id'] > 0) {
 		$com_reply = sed_link(sed_url($url_part, $url_params . $lurl . "&reply=" . $row['com_id'] . "&" . sed_xg(), "#nc"), $L['com_reply'], array('class' => 'btn btn-adm')) . "&nbsp;";
 	}
+	
 	$com_quote = ($usr['id'] > 0) ? sed_link(sed_url($url_part, $url_params . $lurl . "&quote=" . $row['com_id'] . "&" . sed_xg(), "#nc"), $L['Quote'], array('class' => 'btn btn-adm')) . "&nbsp;" : "";
+	
 	$com_admin = ($usr['isadmin_com'] || $usr['isowner_com']) ?
 		sed_link(sed_url($url_part, $url_params . $lurl . "&a=edit&b=" . $row['com_id'] . "&" . sed_xg(), "#c" . $row['com_id']), $L['Edit'], array('title' => $L['Edit'] . $allowed_time, 'class' => 'btn btn-adm')) . "&nbsp;" .
 		sed_link(sed_url($url_part, $url_params . $lurl . "&n=delete&b=" . $row['com_id'] . "&" . sed_xg()), $L['Delete'], array('class' => 'btn btn-adm')) . "&nbsp;" .
@@ -140,12 +142,13 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		$root_id = $b;
 		$sql_b = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$b' AND com_code='$code' LIMIT 1");
 		$row_b = sed_sql_fetchassoc($sql_b);
+		
 		if ($row_b) {
 			while (!empty($row_b['com_parent'])) {
 				$root_id = (int)$row_b['com_parent'];
 				$sql_b = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1");
 				$row_b = sed_sql_fetchassoc($sql_b);
-			}
+			}			
 			$sql_roots_before = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code' AND com_parent=0 AND com_id " . (($commentsorder == "DESC") ? ">" : "<") . " '$root_id'");
 			$roots_before = sed_sql_result($sql_roots_before, 0, "COUNT(*)");
 			$d = $maxcommentsperpage * (int)floor($roots_before / $maxcommentsperpage);
@@ -172,18 +175,22 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$rtext = sed_import('rtext', 'P', 'HTM');
 			$reply_post = sed_import('reply', 'P', 'INT');
 			$com_parent = 0;
+			
 			if ($reply_post > 0) {
 				$sql_parent = sed_sql_query("SELECT com_id, com_code, com_parent FROM $db_com WHERE com_id='" . (int)$reply_post . "' AND com_code='$code' LIMIT 1");
 				$row_parent = sed_sql_fetchassoc($sql_parent);
+				
 				if ($row_parent) {
 					$depth = 1;
 					$walk = (int)$row_parent['com_parent'];
+					
 					while ($walk > 0) {
 						$depth++;
 						$sql_walk = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$walk' LIMIT 1");
 						$row_walk = sed_sql_fetchassoc($sql_walk);
 						$walk = $row_walk ? (int)$row_walk['com_parent'] : 0;
 					}
+					
 					if ($depth < $commaxlevel) {
 						$com_parent = (int)$reply_post;
 					}
@@ -202,17 +209,20 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$error_string .= (mb_strlen($rtext) < 2) ? $L['com_commenttooshort'] . "<br />" : '';
 			$error_string .= (mb_strlen($rtext) > $maxcommentlenght) ? $L['com_commenttoolong'] . "<br />" : '';
 
-			if ($com_parent > 0) {
+			if ($com_parent > 0) {				
 				$root_id = $com_parent;
 				$sql_walk = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1");
 				$row_walk = sed_sql_fetchassoc($sql_walk);
+				
 				while ($row_walk && $row_walk['com_parent'] > 0) {
 					$root_id = (int)$row_walk['com_parent'];
 					$sql_walk = sed_sql_query("SELECT com_parent FROM $db_com WHERE com_id='$root_id' LIMIT 1");
 					$row_walk = sed_sql_fetchassoc($sql_walk);
 				}
+				
 				$tree_ids = array($root_id);
 				$queue = array($root_id);
+				
 				while (!empty($queue)) {
 					$pid = (int)array_shift($queue);
 					$sql_ch = sed_sql_query("SELECT com_id FROM $db_com WHERE com_code='$code' AND com_parent='$pid'");
@@ -221,13 +231,13 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						$queue[] = (int)$ch['com_id'];
 					}
 				}
+				
 				if (count($tree_ids) >= $commaxtree) {
 					$error_string .= $L['com_tree_limit_reached'] . "<br />";
 				}
 			}
 
 			if (empty($error_string)) {
-
 				if (count($extrafields) > 0) {
 					foreach ($extrafields as $i => $row) {
 						$ssql_extra_columns .= ', com_' . $row['code'];
@@ -292,28 +302,34 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				if ((sed_sql_numrows($sql) > 0) && ($usr['isowner_com'] || $usr['isadmin_com'])) {
 					$ids_to_delete = array((int)$b);
 					$queue = array((int)$b);
+					
 					while (!empty($queue)) {
 						$pid = (int)array_shift($queue);
 						$ch = sed_sql_query("SELECT com_id FROM $db_com WHERE com_parent='$pid'");
+						
 						while ($chr = sed_sql_fetchassoc($ch)) {
 							$ids_to_delete[] = (int)$chr['com_id'];
 							$queue[] = (int)$chr['com_id'];
 						}
 					}
+					
 					if ($cfg['trash_comment']) {
 						$ids_str = implode(',', array_map('intval', $ids_to_delete));
 						$sql_t = sed_sql_query("SELECT * FROM $db_com WHERE com_id IN ($ids_str)");
 						$rows_by_id = array();
 						$tree = array();
+						
 						while ($r = sed_sql_fetchassoc($sql_t)) {
 							$rows_by_id[(int)$r['com_id']] = $r;
 							$pid = isset($r['com_parent']) ? (int)$r['com_parent'] : 0;
 							if (!isset($tree[$pid])) $tree[$pid] = array();
 							$tree[$pid][] = (int)$r['com_id'];
 						}
+						
 						$path = array();
 						$path[(int)$b] = (string)$b;
 						$queue = array((int)$b);
+						
 						while (!empty($queue)) {
 							$pid = array_shift($queue);
 							if (isset($tree[$pid])) {
@@ -323,8 +339,10 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 								}
 							}
 						}
+						
 						$order = array((int)$b);
 						$queue = array((int)$b);
+						
 						while (!empty($queue)) {
 							$pid = array_shift($queue);
 							if (isset($tree[$pid])) {
@@ -334,6 +352,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 								}
 							}
 						}
+						
 						foreach ($order as $cid) {
 							$r = $rows_by_id[$cid];
 							sed_trash_put('comment', $L['Comment'] . " #" . $cid . " (" . $r['com_author'] . ")", $path[$cid], $r);
@@ -518,6 +537,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				if ($reply > 0) {
 					$sql_reply = sed_sql_query("SELECT com_id, com_author FROM $db_com WHERE com_id='" . (int)$reply . "' AND com_code='$code' LIMIT 1");
 					$row_reply = sed_sql_fetchassoc($sql_reply);
+					
 					if ($row_reply) {
 						$cancel_params = preg_replace('/(^|&)(reply|quote)=[^&]*/', '', $url_params . $lurl);
 						$cancel_params = trim($cancel_params, '&');
@@ -533,12 +553,14 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						$t->parse("COMMENTS.COMMENTS_NEWCOMMENT.COMMENTS_REPLY_NOTICE");
 					}
 				}
+				
 				$extp = sed_getextplugins('comments.newcomment.tags');
 				if (is_array($extp)) {
 					foreach ($extp as $k => $pl) {
 						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 					}
 				}
+				
 				$t->parse("COMMENTS.COMMENTS_NEWCOMMENT");
 			}
 
@@ -562,14 +584,17 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			}
 			$all_by_parent = array();
 			$sql_all = sed_sql_query("SELECT com_id, com_parent FROM $db_com WHERE com_code='$code' ORDER BY com_id " . $commentsorder);
+			
 			while ($row = sed_sql_fetchassoc($sql_all)) {
 				$pid = (int)$row['com_parent'];
 				$cid = (int)$row['com_id'];
 				if (!isset($all_by_parent[$pid])) $all_by_parent[$pid] = array();
 				$all_by_parent[$pid][] = $cid;
 			}
+			
 			$all_ids = array();
 			$root_tree_count = array();
+			
 			foreach ($root_ids as $rid) {
 				$tree_ids = array($rid);
 				$queue = array($rid);
@@ -585,24 +610,30 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				$root_tree_count[$rid] = count($tree_ids);
 				$all_ids = array_merge($all_ids, $tree_ids);
 			}
+			
 			$comments_tree = '';
+			
 			if (!empty($all_ids)) {
 				$ids_str = implode(',', array_map('intval', $all_ids));
 				$sql = sed_sql_query("SELECT c.*, u.user_id, u.user_avatar, u.user_maingrp FROM $db_com AS c
 					LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
 					WHERE c.com_id IN ($ids_str) ORDER BY c.com_id " . $commentsorder);
 				$rows_by_id = array();
+				
 				while ($row = sed_sql_fetchassoc($sql)) {
 					$rows_by_id[(int)$row['com_id']] = $row;
 				}
+				
 				$tree = array();
 				foreach ($rows_by_id as $id => $r) {
 					$pid = isset($r['com_parent']) ? (int)$r['com_parent'] : 0;
 					if (!isset($tree[$pid])) $tree[$pid] = array();
 					$tree[$pid][] = $id;
 				}
+				
 				$item_tpl_path = sed_skinfile('comments.item', true);
 				$extp = sed_getextplugins('comments.loop');
+				
 				$i = 0;
 				foreach ($root_ids as $rid) {
 					if (!isset($rows_by_id[$rid])) continue;
@@ -611,6 +642,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$comments_tree .= _sed_comments_render_node($rid, 1, $commaxlevel, $tree, $rows_by_id, $url_part, $url_params, $lurl, $maxtimeallowcomedit, $extrafields, $extp, $item_tpl_path, $i + $d, $tree_at_limit);
 				}
 			}
+			
 			$t->assign("COMMENTS_TREE", $comments_tree);
 
 			if (empty($comments_tree) && $allow) {

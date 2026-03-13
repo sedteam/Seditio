@@ -1,0 +1,39 @@
+.post-thanks {
+	margin-top: 0.75em;
+	padding-top: 0.5em;
+	font-size: 0.9em;
+}
+
+.post-thanks a.post-thanks-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	border: 1px solid #007cc2;
+	border-radius: 5px;
+	padding: 4px 8px;
+	text-decoration: none;
+}
+
+.post-thanks .ic-thumb-up {
+	font-size: 1em;
+}
+
+.post-thanked {
+    font-size: 0.9em;
+    color: #6b6b6c;
+}
+
+.forums-message-inner .post-thanks {
+	margin-top: auto;
+}
+
+.post-thanks-comments {
+	margin-left: 41px;
+}
+
+
+@media (max-width: 992px) {
+	.post-thanks-comments {
+		margin-left: 0;
+	}
+}

@@ -29,7 +29,9 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-require_once(SED_ROOT . '/plugins/sednews/lang/sednews.' . $usr['lang'] . '.lang.php');
+if ($f = sed_langfile('sednews', 'plugin')) {
+	require_once($f);
+}
 
 function sed_get_rss($rss_content)
 {

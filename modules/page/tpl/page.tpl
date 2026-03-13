@@ -45,6 +45,7 @@
 						{PAGE_TEXT}
 
 					</div>
+					
 					<div class="page-share">
 
 						<div class="post-info">
@@ -64,6 +65,8 @@
 					</div>
 
 					<!-- END: PAGE_FILE -->
+					
+					{PAGE_THANKS_DISPLAY}
 
 				</div>
 

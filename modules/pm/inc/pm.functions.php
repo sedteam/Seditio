@@ -20,3 +20,7 @@ if (!defined('SED_CODE')) {
 }
 
 /* PM icons are set in system/common.php (with isset protection for $L) */
+
+/* TODO: implement universal function sed_pm_send($fromuserid, $fromname, $touserid, $subject, $body) for sending PM.
+ * Used by: pm.send.php, plugins (e.g. thanks_notify_by_pm). Consolidates INSERT into db_pm + UPDATE user_newpm.
+ */

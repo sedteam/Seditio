@@ -2084,6 +2084,11 @@ a.alfabeta:hover {
   overflow-x: auto;
   overflow-y: visible;
   margin-bottom: 8px;
+  flex-grow: 1;
+}
+
+.forums-thanked {
+  font-size:0.8em;
 }
 
 .forums-table .cattop h4 {

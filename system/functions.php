@@ -4025,6 +4025,46 @@ function sed_shield_update($shield_add, $shield_newaction)
 	return;
 }
 
+/**
+ * Returns path to lang file for plugin or module.
+ * Tries {code}.{lang}.lang.php, then {code}.en.lang.php as fallback.
+ *
+ * @param string $code Plugin or module code (thanks, comments, pm, page, etc.)
+ * @param string $type 'plugin' | 'module'
+ * @param string|null $lang Lang code; if null uses $usr['lang'] or $cfg['defaultlang']
+ * @return string Full path to file, or empty string if not found
+ */
+function sed_langfile($code, $type = 'plugin', $lang = null)
+{
+	global $cfg, $usr;
+
+	$code = preg_replace('/[^a-z0-9_]/i', '', $code);
+	if ($code === '') {
+		return '';
+	}
+
+	$lang = $lang ?? ($usr['lang'] ?? null) ?? ($cfg['defaultlang'] ?? 'en');
+	$lang = preg_replace('/[^a-z0-9_-]/i', '', $lang);
+
+	if ($type === 'module') {
+		$base = SED_ROOT . '/modules/' . $code . '/lang/' . $code;
+	} else {
+		$base = SED_ROOT . '/plugins/' . $code . '/lang/' . $code;
+	}
+
+	$path = $base . '.' . $lang . '.lang.php';
+	if (file_exists($path)) {
+		return $path;
+	}
+
+	$path_en = $base . '.en.lang.php';
+	if (file_exists($path_en)) {
+		return $path_en;
+	}
+
+	return '';
+}
+
 /** 
  * Returns skin file path 
  * 
@@ -4069,15 +4109,27 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 	if (is_dir(SED_ROOT . '/modules/' . $bname . '/tpl/')) {
 		$scan_prefix[] = SED_ROOT . '/modules/' . $bname . '/tpl/';
 	}
+	/* page.print, page.alias, pfs.edit etc.: compound names -> modules/{firstpart}/tpl/ */
+	$dot = mb_strpos($bname, '.');
+	if ($dot !== false) {
+		$mod_from_compound = mb_substr($bname, 0, $dot);
+		if (is_dir(SED_ROOT . '/modules/' . $mod_from_compound . '/tpl/')) {
+			$scan_prefix[] = SED_ROOT . '/modules/' . $mod_from_compound . '/tpl/';
+		}
+	}
 	/* List skin fallback: list was merged into page module, so list.tpl etc. live in modules/page/tpl/ */
 	if ($bname === 'list' && is_dir(SED_ROOT . '/modules/page/tpl/')) {
 		$scan_prefix[] = SED_ROOT . '/modules/page/tpl/';
 	}
 	/* Admin skin fallback for modules: admin.{module} -> modules/{module}/tpl/ */
+	/* Admin skin fallback for plugins: admin.{plugin} -> plugins/{plugin}/tpl/ */
 	if ($adminskin && is_array($base) && count($base) >= 2) {
-		$mod_name = $base[1];
-		if (is_dir(SED_ROOT . '/modules/' . $mod_name . '/tpl/')) {
-			$scan_prefix[] = SED_ROOT . '/modules/' . $mod_name . '/tpl/';
+		$adm_name = $base[1];
+		if (is_dir(SED_ROOT . '/modules/' . $adm_name . '/tpl/')) {
+			$scan_prefix[] = SED_ROOT . '/modules/' . $adm_name . '/tpl/';
+		}
+		if (is_dir(SED_ROOT . '/plugins/' . $adm_name . '/tpl/')) {
+			$scan_prefix[] = SED_ROOT . '/plugins/' . $adm_name . '/tpl/';
 		}
 	}
 
@@ -4681,6 +4733,9 @@ function sed_extrafield_get($sql_table)
 	$res = array();
 	if (!empty($sed_dic)) {
 		foreach ($sed_dic as $key => $row) {
+			if (empty($row['extra_location'])) {
+				continue;
+			}
 			if ($row['extra_location'] == $sql_table) {
 				$res[$key] = $row;
 			}

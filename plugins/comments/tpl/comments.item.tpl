@@ -23,7 +23,9 @@
 		<div class="comment-entry" id="comment-{COMMENTS_ROW_ID}">
 			{COMMENTS_ROW_TEXT}
 		</div>
-
+		
+		{COMMENTS_ROW_THANKS_DISPLAY}
+		
 		<div class="comment-replies">
 			{COMMENTS_CHILDREN}
 		</div>

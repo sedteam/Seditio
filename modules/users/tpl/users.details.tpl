@@ -111,6 +111,13 @@
 					<div class="table-td">{USERS_DETAILS_REGDATE}</div>
 				</div>
 
+				<!-- BEGIN: USERS_DETAILS_THANKS -->
+				<div class="table-tr">
+					<div class="table-td">{PHP.L.thanks_title_short}</div>
+					<div class="table-td"><a href="{USERS_DETAILS_THANKS_URL}">{USERS_DETAILS_THANKS_COUNT}</a></div>
+				</div>
+				<!-- END: USERS_DETAILS_THANKS -->
+
 				<div class="table-tr">
 					<div class="table-td">{PHP.skinlang.usersdetails.Avatar}</div>
 					<div class="table-td">{USERS_DETAILS_AVATAR}</div>

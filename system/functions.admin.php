@@ -606,8 +606,7 @@ function sed_plugin_install($pl)
 		$res .= "<strong>Looking for configuration entries in the setup file...</strong> ";
 
 		/* ===== */
-		$path_lang_setup = SED_ROOT . "/plugins/" . $pl . "/lang/" . $pl . "." . $cfg['defaultlang'] . ".lang.php";
-		if (file_exists($path_lang_setup)) {
+		if ($path_lang_setup = sed_langfile($pl, 'plugin', $cfg['defaultlang'])) {
 			require($path_lang_setup);
 		}
 		/* ===== */

@@ -43,8 +43,7 @@ if (empty($a) && empty($n) && empty($o)) {
 
 if ($o == 'plug' && !empty($p))  //New in v173
 {
-	$plug_langfile = SED_ROOT . "/plugins/" . $p . "/lang/" . $p . "." . $usr['lang'] . ".lang.php";
-	if (@file_exists($plug_langfile)) {
+	if ($plug_langfile = sed_langfile($p, 'plugin')) {
 		require($plug_langfile);
 	}
 }

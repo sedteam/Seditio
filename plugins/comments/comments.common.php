@@ -28,10 +28,7 @@ if (!defined('SED_CODE')) {
 
 if (!function_exists('sed_build_comments')) {
 	require_once(SED_ROOT . '/plugins/comments/inc/comments.functions.php');
-	$comments_lang = SED_ROOT . '/plugins/comments/lang/comments.' . $cfg['defaultlang'] . '.lang.php';
-	if (file_exists($comments_lang)) {
-		require_once($comments_lang);
-	} elseif (file_exists(SED_ROOT . '/plugins/comments/lang/comments.en.lang.php')) {
-		require_once(SED_ROOT . '/plugins/comments/lang/comments.en.lang.php');
+	if ($f = sed_langfile('comments', 'plugin')) {
+		require_once($f);
 	}
 }
