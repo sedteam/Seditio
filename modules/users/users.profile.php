@@ -70,7 +70,9 @@ switch ($a) {
 			unlink($avatarpath);
 		}
 
-		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
+		if (sed_module_active('pfs')) {
+			$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
+		}
 		$sql = sed_sql_query("UPDATE $db_users SET user_avatar='' WHERE user_id='" . $usr['id'] . "'");
 		sed_redirect(sed_url("users", "m=profile", "#avatar", true));
 		exit;
@@ -90,7 +92,9 @@ switch ($a) {
 			unlink($photopath);
 		}
 
-		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
+		if (sed_module_active('pfs')) {
+			$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
+		}
 		$sql = sed_sql_query("UPDATE $db_users SET user_photo='' WHERE user_id='" . $usr['id'] . "'");
 		sed_redirect(sed_url("users", "m=profile", "#photo", true));
 		exit;
@@ -110,7 +114,9 @@ switch ($a) {
 			unlink($signaturepath);
 		}
 
-		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
+		if (sed_module_active('pfs')) {
+			$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
+		}
 		$sql = sed_sql_query("UPDATE $db_users SET user_signature='' WHERE user_id='" . $usr['id'] . "'");
 		sed_redirect(sed_url("users", "m=profile", "#signature", true));
 		exit;
@@ -199,8 +205,10 @@ switch ($a) {
 
 					$uav_size = filesize($avatarpath);
 					$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='" . $usr['id'] . "'");
-					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
-					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$avatar', '$f_extension', -1, '', " . (int)$uav_size . ", 0)");
+					if (sed_module_active('pfs')) {
+						$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
+						$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$avatar', '$f_extension', -1, '', " . (int)$uav_size . ", 0)");
+					}
 					@chmod($avatarpath, 0666);
 				}
 			}
@@ -233,8 +241,10 @@ switch ($a) {
 
 					$uph_size = filesize($photopath);
 					$sql = sed_sql_query("UPDATE $db_users SET user_photo='$photopath' WHERE user_id='" . $usr['id'] . "'");
-					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
-					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$photo', '$f_extension', -1, '', " . (int)$uph_size . ", 0)");
+					if (sed_module_active('pfs')) {
+						$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
+						$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$photo', '$f_extension', -1, '', " . (int)$uph_size . ", 0)");
+					}
 					@chmod($photopath, 0666);
 				}
 			}
@@ -267,8 +277,10 @@ switch ($a) {
 
 					$usig_size = filesize($signaturepath);
 					$sql = sed_sql_query("UPDATE $db_users SET user_signature='$signaturepath' WHERE user_id='" . $usr['id'] . "'");
-					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
-					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$signature', '$f_extension', -1, '', " . (int)$usig_size . ", 0)");
+					if (sed_module_active('pfs')) {
+						$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
+						$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (" . (int)$usr['id'] . ", '$signature', '$f_extension', -1, '', " . (int)$usig_size . ", 0)");
+					}
 					@chmod($signaturepath, 0666);
 				}
 			}
@@ -334,10 +346,20 @@ switch ($a) {
 			}
 		}
 
+		$email_editable = ($cfg['useremailchange'] || empty($urr['user_email']));
+		if ($email_editable && $ruseremail !== '') {
+			$ruseremail = mb_strtolower($ruseremail);
+			$error_string .= (mb_strlen($ruseremail) < 4) ? $L['aut_emailtooshort'] . "<br />" : '';
+			$error_string .= (!sed_validate_email($ruseremail)) ? $L['aut_emailinvalid'] . "<br />" : '';
+			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='" . sed_sql_prep($ruseremail) . "' AND user_id!='" . (int)$usr['id'] . "'");
+			$email_count = sed_sql_result($sql, 0, "COUNT(*)");
+			$error_string .= ($email_count > 0) ? $L['aut_emailalreadyindb'] . "<br />" : '';
+		}
+
 		if (empty($error_string)) {
 			$ruserbirthdate = ($rmonth == 0 || $rday == 0 || $ryear == 0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
 
-			if (!$cfg['useremailchange']) {
+			if (!$cfg['useremailchange'] && !empty($urr['user_email'])) {
 				$ruseremail = $urr['user_email'];
 			}
 
@@ -407,7 +429,7 @@ $profile_form_timezone .= "</select> " . $usr['gmttime'] . " / " . sed_build_dat
 $profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $profile_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
 $profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
-$profile_form_email = ($cfg['useremailchange']) ? sed_textbox('ruseremail', sed_cc($urr['user_email']), 32, 64, 'text') : sed_cc($urr['user_email']);
+$profile_form_email = ($cfg['useremailchange'] || empty($urr['user_email'])) ? sed_textbox('ruseremail', sed_cc($urr['user_email']), 32, 64, 'text') : sed_cc($urr['user_email']);
 
 $profile_form_avatar = (!empty($urr['user_avatar'])) ? "<img src=\"" . $urr['user_avatar'] . "\" alt=\"\" /><br />" . $L['Delete'] . " [<a href=\"" . sed_url("users", "m=profile&a=avatardelete&" . sed_xg()) . "\">x</a>]<br />&nbsp;<br />" : '';
 $profile_form_avatar .= $L['pro_avatarsupload'] . " (" . $cfg['av_maxx'] . "x" . $cfg['av_maxy'] . "x" . $cfg['av_maxsize'] . $L['bytes'] . ")<br />";

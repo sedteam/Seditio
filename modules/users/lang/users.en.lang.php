@@ -24,6 +24,7 @@ if (!defined('SED_CODE')) {
 $L['aut_usernametooshort'] = "The user name must be at least 2 chars long";
 $L['aut_passwordtooshort'] = "The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.";
 $L['aut_emailtooshort'] = "The email is not valid.";
+$L['aut_emailinvalid'] = "Invalid email format.";
 $L['aut_usernamealreadyindb'] = "The user name you provided is already in the database";
 $L['aut_emailalreadyindb'] = "The email you provided is already in the database";
 $L['aut_passwordmismatch'] = "The password fields do not match !";

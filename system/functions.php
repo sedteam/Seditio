@@ -706,6 +706,20 @@ function sed_build_email($email, $hide = false)
 	return ($result);
 }
 
+/**
+ * Validates email format
+ *
+ * @param string $email Email address to validate
+ * @return bool True if valid format, false otherwise
+ */
+function sed_validate_email($email)
+{
+	if ($email === '' || $email === null) {
+		return false;
+	}
+	return (filter_var($email, FILTER_VALIDATE_EMAIL) !== false);
+}
+
 /** 
  * Returns country flag button 
  * 
@@ -4315,10 +4329,13 @@ function sed_stringinfile($file, $str, $maxsize = 32768)
 		$data = fread($fp, $maxsize);
 		$pos = mb_strpos($data, $str);
 		$result = ($pos === FALSE) ? FALSE : TRUE;
+		fclose($fp);
 	} else {
 		$result = FALSE;
+		if (function_exists('sed_log')) {
+			sed_log('sed_stringinfile: unable to open file: ' . $file . (file_exists($file) ? ' (exists, check permissions)' : ' (file not found)'), 'sys');
+		}
 	}
-	@fclose($fp);
 	return ($result);
 }
 

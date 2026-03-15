@@ -110,6 +110,7 @@ if ($a == 'add') {
 	$error_string .= (mb_strlen($rusername) < 2) ? $L['aut_usernametooshort'] . "<br />" : '';
 	$error_string .= (mb_strlen($rpassword1) < 4) ? $L['aut_passwordtooshort'] . "<br />" : '';
 	$error_string .= (mb_strlen($ruseremail) < 4) ? $L['aut_emailtooshort'] . "<br />" : '';
+	$error_string .= (!sed_validate_email($ruseremail)) ? $L['aut_emailinvalid'] . "<br />" : '';
 	$error_string .= ($res1 > 0) ? $L['aut_usernamealreadyindb'] . "<br />" : '';
 	$error_string .= ($res2 > 0) ? $L['aut_emailalreadyindb'] . "<br />" : '';
 	$error_string .= ($rpassword1 != $rpassword2) ? $L['aut_passwordmismatch'] . "<br />" : '';

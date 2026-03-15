@@ -24,6 +24,7 @@ if (!defined('SED_CODE')) {
 $L['aut_usernametooshort'] = "Kullanıcı adı en az 2 karakter uzunluğunda olmalıdır";
 $L['aut_passwordtooshort'] = "Şifre en az 4 karakter uzunluğunda olmalı ve yalnızca alfanümerik karakterler ve alt çizgi içermelidir.";
 $L['aut_emailtooshort'] = "E-posta geçerli değil.";
+$L['aut_emailinvalid'] = "Geçersiz e-posta biçimi.";
 $L['aut_usernamealreadyindb'] = "Girdiğiniz kullanıcı adı zaten veritabanında mevcut";
 $L['aut_emailalreadyindb'] = "Girdiğiniz e-posta zaten veritabanında mevcut";
 $L['aut_passwordmismatch'] = "Şifre alanları eşleşmiyor!";

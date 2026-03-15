@@ -112,6 +112,16 @@ if ($a == 'update') {
 	$error_string .= (mb_strlen($rusername) < 2 || mb_strpos($rusername, ",") !== FALSE || mb_strpos($rusername, "'") !== FALSE) ? $L['aut_usernametooshort'] . "<br />" : '';
 	$error_string .= (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || sed_alphaonly($rusernewpass) != $rusernewpass)) ? $L['aut_passwordtooshort'] . "<br />" : '';
 
+	if ($ruseremail !== '') {
+		$ruseremail = mb_strtolower($ruseremail);
+		$error_string .= (!sed_validate_email($ruseremail)) ? $L['aut_emailinvalid'] . "<br />" : '';
+		if ($ruseremail != $urr['user_email']) {
+			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='" . sed_sql_prep($ruseremail) . "' AND user_id!='" . (int)$id . "'");
+			$email_count = sed_sql_result($sql, 0, "COUNT(*)");
+			$error_string .= ($email_count > 0) ? $L['aut_emailalreadyindb'] . "<br />" : '';
+		}
+	}
+
 	if ($ruserdelete) {
 		if ($sys['user_istopadmin'] && !$sys['edited_istopadmin']) {
 			$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id'");
@@ -122,7 +132,7 @@ if ($a == 'update') {
 				}
 				$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='$id'");
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id'");
-				if ($ruserdelpfs && function_exists('sed_pfs_deleteall_module')) {
+				if ($ruserdelpfs && sed_module_active('pfs') && function_exists('sed_pfs_deleteall_module')) {
 					sed_pfs_deleteall_module($id);
 				}
 				sed_log("Deleted user #" . $id, 'adm');
@@ -262,7 +272,7 @@ if ($a == 'update') {
 
 $user_form_pmnotify =  sed_radiobox("ruserpmnotify", $yesno_arr, $urr['user_pmnotify']);
 $user_form_hideemail =  sed_radiobox("ruserhideemail", $yesno_arr, $urr['user_hideemail']);
-$user_form_delete =  ($sys['user_istopadmin']) ? sed_radiobox("ruserdelete", $yesno_arr, 0) . "<br />+ " . $L['PFS'] . ":" . sed_checkbox('ruserdelpfs') : $L['na'];
+$user_form_delete =  ($sys['user_istopadmin']) ? sed_radiobox("ruserdelete", $yesno_arr, 0) . (sed_module_active('pfs') ? "<br />+ " . $L['PFS'] . ":" . sed_checkbox('ruserdelpfs') : '') : $L['na'];
 
 $user_form_pass = $sys['protecttopadmin'] ? sed_textbox("rusernewpass", "", 16, 32, "password", true, "password") : sed_textbox("rusernewpass", "", 16, 32, "password", false, "password");
 $user_form_username = $sys['protecttopadmin'] ? sed_textbox("rusername", $urr['user_name'], 24, 100, "text", true) : sed_textbox("rusername", $urr['user_name'], 24, 100);

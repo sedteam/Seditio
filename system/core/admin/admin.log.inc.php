@@ -35,7 +35,8 @@ $log_groups = array(
 	'for' => (isset($L['Forums']) ? $L['Forums'] : 'Forums'),
 	'sec' => $L['Security'],
 	'usr' => $L['Users'],
-	'plg' => $L['Plugins']
+	'plg' => $L['Plugins'],
+	'sys' => (isset($L['System']) ? $L['System'] : 'System')
 );
 
 $d = sed_import('d', 'G', 'INT');
@@ -92,7 +93,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 		"LOG_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['log_date']),
 		"LOG_LIST_IP" => sed_link(sed_url("admin", "m=manage&p=ipsearch&a=search&id=" . $row['log_ip'] . "&" . sed_xg()), $row['log_ip']),
 		"LOG_LIST_USER" => $row['log_name'],
-		"LOG_LIST_GROUP" => sed_link(sed_url("admin", "m=log&n=" . $row['log_group']), $log_groups[$row['log_group']]),
+		"LOG_LIST_GROUP" => sed_link(sed_url("admin", "m=log&n=" . $row['log_group']), isset($log_groups[$row['log_group']]) ? $log_groups[$row['log_group']] : $row['log_group']),
 		"LOG_LIST_DESC" => htmlspecialchars($row['log_text'])
 	));
 

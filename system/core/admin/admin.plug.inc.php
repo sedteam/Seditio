@@ -238,7 +238,9 @@ switch ($a) {
 								foreach ($tags as $k => $v) {
 									if (mb_substr(trim($v), 0, 1) == '{') {
 										$listtags .= $v . " : ";
-										$found = sed_stringinfile(SED_ROOT . '/skins/' . $cfg['defaultskin'] . '/' . $vt, trim($v));
+										$tpl_base = str_replace('.tpl', '', $vt);
+										$tpl_fullpath = sed_skinfile($tpl_base);
+										$found = ($tpl_fullpath !== '') ? sed_stringinfile($tpl_fullpath, trim($v)) : FALSE;
 										$listtags .= $found_txt[$found];
 										$listtags .= "<br />";
 									} else {

@@ -24,6 +24,7 @@ if (!defined('SED_CODE')) {
 $L['aut_usernametooshort'] = "Имя пользователя должно быть длиной не меньше 2-х символов";
 $L['aut_passwordtooshort'] = "Пароль должен быть длиной не меньшее 4-х символов и содержать только буквы, цифры, или знак подчеркивания";
 $L['aut_emailtooshort'] = "Неверный адрес e-mail";
+$L['aut_emailinvalid'] = "Неверный формат e-mail.";
 $L['aut_usernamealreadyindb'] = "Такое имя уже занято";
 $L['aut_emailalreadyindb'] = "Введённый адрес e-mail уже есть в базе";
 $L['aut_passwordmismatch'] = "Введённые пароли не совпадают";
