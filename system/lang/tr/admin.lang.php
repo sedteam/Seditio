@@ -494,6 +494,8 @@ $L['adm_opt_pauseall_explain'] = "Bu, eklentinin tüm bölümlerini duraklatacak
 $L['adm_opt_unpauseall'] = "Tümünü duraklatmayı kaldır";
 $L['adm_opt_unpauseall_explain'] = "Bu, eklentinin tüm bölümlerinin duraklatılmasını kaldıracak (etkinleştirecek).";
 $L['adm_lockpart'] = "Kilitli parça";
+$L['adm_opt_installpart'] = "Parçayı yükle";
+$L['adm_opt_deletepart'] = "Parçayı sil";
 $L['adm_opt_pause'] = "Duraklat";
 $L['adm_opt_unpause'] = "Duraklatmayı kaldır";
 

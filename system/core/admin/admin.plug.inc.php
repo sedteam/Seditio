@@ -181,7 +181,7 @@ switch ($a) {
 
 					$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST.PLUG_PARTS_ERROR");
 				} else {
-					$sql = sed_sql_query("SELECT pl_active, pl_id, pl_lock FROM $db_plugins WHERE pl_code='$pl' AND pl_part='" . $info_file['Part'] . "' LIMIT 1");
+					$sql = sed_sql_query("SELECT pl_active, pl_id, pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_file='" . sed_sql_prep($info_file['File']) . "' LIMIT 1");
 
 					if ($row = sed_sql_fetchassoc($sql)) {
 						$info_file['Status'] = $row['pl_active'];
@@ -202,7 +202,14 @@ switch ($a) {
 					}
 
 					if ($info_file['Status'] == 3) {
-						$pl_action = "-";
+						$pl_action = sed_link(
+							sed_url(
+								"admin",
+								"m=plug&a=edit&pl=" . $pl . "&b=installpart&partfile=" . urlencode($info_file['File']) . "&" . sed_xg()
+							),
+							isset($L['adm_opt_installpart']) ? $L['adm_opt_installpart'] : 'Install part',
+							array('class' => 'btn btn-adm')
+						);
 					} elseif (isset($row) && $row && (int)$row['pl_lock'] === 1) {
 						$pl_action = isset($L['adm_lockpart']) ? $L['adm_lockpart'] : 'Lock part';
 					} elseif ($row['pl_active'] == 1) {
@@ -265,6 +272,36 @@ switch ($a) {
 
 				$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST");
 			}
+
+				// Orphan detection: installed in DB but missing file on disk
+				$orphan_num = is_array($parts) ? count($parts) : 0;
+				$sql_orph = sed_sql_query("SELECT MIN(pl_id) AS pl_id, pl_file, pl_part FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0 GROUP BY pl_file, pl_part");
+				while ($orph = sed_sql_fetchassoc($sql_orph)) {
+					$orphan_file_path = SED_ROOT . "/plugins/" . $pl . "/" . $orph['pl_file'] . ".php";
+					if (!file_exists($orphan_file_path)) {
+						$orphan_num++;
+						$pl_action = sed_link(
+							sed_url(
+								"admin",
+								"m=plug&a=edit&pl=" . $pl . "&b=deletepart&part=" . (int)$orph['pl_id'] . "&" . sed_xg()
+							),
+							isset($L['adm_opt_deletepart']) ? $L['adm_opt_deletepart'] : 'Delete part',
+							array('class' => 'btn btn-adm')
+						);
+
+						$t->assign(array(
+							"PARTS_LIST_NUMBER" => $orphan_num,
+							"PARTS_LIST_PART" => $orph['pl_part'],
+							"PARTS_LIST_FILE" => $orph['pl_file'],
+							"PARTS_LIST_HOOKS" => '-',
+							"PARTS_LIST_ORDER" => '-',
+							"PARTS_LIST_STATUS" => $found_txt[0],
+							"PARTS_LIST_ACTION" => $pl_action
+						));
+						$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST.PLUG_PARTS");
+						$t->parse("ADMIN_PLUG.PLUG_DETAILS.PLUG_PARTS_LIST");
+					}
+				}
 
 			$t->parse("ADMIN_PLUG.PLUG_DETAILS");
 		} else {
@@ -362,6 +399,95 @@ switch ($a) {
 			case 'unpausepart':
 				sed_check_xg();
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0");
+				sed_urls_generate();
+				sed_cache_clearall();
+				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);
+				exit;
+				break;
+
+			case 'installpart':
+				sed_check_xg();
+
+				$partfile = sed_import('partfile', 'G', 'TXT');
+				$partfile = trim($partfile);
+				if (empty($partfile)) {
+					sed_die();
+				}
+
+				$extplugin_file = SED_ROOT . "/plugins/" . $pl . "/" . $partfile . ".php";
+				if (!file_exists($extplugin_file)) {
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);
+					exit;
+				}
+
+				$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
+				if (empty($info_part) || !empty($info_part['Error'])) {
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);
+					exit;
+				}
+
+				$extplugin_info = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".setup.php";
+				if (!file_exists($extplugin_info)) {
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);
+					exit;
+				}
+
+				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+
+				$req_modules = isset($info['Requires_modules']) ? array_map('trim', explode(',', $info['Requires_modules'])) : array();
+				$req_modules = array_filter($req_modules);
+				$req_plugins = isset($info['Requires_plugins']) ? array_map('trim', explode(',', $info['Requires_plugins'])) : array();
+				$req_plugins = array_filter($req_plugins);
+				$dependencies_json = sed_sql_prep(json_encode(array('requires' => array_values($req_modules), 'requires_plugins' => array_values($req_plugins))));
+
+				$pl_version = isset($info['Version']) ? sed_sql_prep($info['Version']) : '0.0.0';
+
+				$pl_lock = (isset($info_part['Lock']) && (int)$info_part['Lock'] === 1) ? 1 : 0;
+
+				$mhooks = explode(",", $info_part['Hooks']);
+				foreach ($mhooks as $k => $hook) {
+					$hook = trim($hook);
+					if ($hook === '') {
+						continue;
+					}
+
+					if (isset($info_part['Order'])) {
+						$morder = explode(",", $info_part['Order']);
+						$order = array_key_exists($k, $morder) ? $morder[$k] : $morder[0];
+					} else {
+						$order = 10;
+					}
+
+					$sql_exists = sed_sql_query("SELECT pl_id FROM $db_plugins WHERE pl_code='" . sed_sql_prep($info_part['Code']) . "' AND pl_module=0 AND pl_file='" . sed_sql_prep($info_part['File']) . "' AND pl_hook='" . sed_sql_prep($hook) . "' LIMIT 1", false);
+					$exists_row = ($sql_exists) ? sed_sql_fetchassoc($sql_exists) : false;
+					if ($exists_row) {
+						continue;
+					}
+
+					sed_sql_query(
+						"INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock) VALUES ('" . sed_sql_prep($hook) . "', '" . sed_sql_prep($info_part['Code']) . "', '" . sed_sql_prep($info_part['Part']) . "', '" . sed_sql_prep($info['Name']) . "', '" . $pl_version . "', '" . $dependencies_json . "', '" . sed_sql_prep($info_part['File']) . "', " . (int)$order . ", 1, " . (int)$pl_lock . ")",
+						true
+					);
+				}
+
+				sed_urls_generate();
+				sed_cache_clearall();
+				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);
+				exit;
+				break;
+
+			case 'deletepart':
+				sed_check_xg();
+
+				$sql_row = sed_sql_query("SELECT pl_file FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_id='" . (int)$part . "' AND pl_module=0 LIMIT 1", false);
+				$row = ($sql_row) ? sed_sql_fetchassoc($sql_row) : false;
+				if (!$row || empty($row['pl_file'])) {
+					sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);
+					exit;
+				}
+
+				sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='" . sed_sql_prep($pl) . "' AND pl_module=0 AND pl_file='" . sed_sql_prep($row['pl_file']) . "'");
+
 				sed_urls_generate();
 				sed_cache_clearall();
 				sed_redirect(sed_url("admin", "m=plug&a=details&pl=" . $pl, "", true), false, ['msg' => '917']);

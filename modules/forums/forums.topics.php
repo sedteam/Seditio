@@ -517,8 +517,22 @@ if ($fsn_num > 0) {
 
 /* ========================================*/
 
-$ft_num = 0;
+$topics_items = array();
 while ($row = sed_sql_fetchassoc($sql)) {
+	$topics_items[] = $row;
+}
+
+/* === Hook - forums.topics.list === */
+$extp_list = sed_getextplugins('forums.topics.list');
+if (is_array($extp_list)) {
+	foreach ($extp_list as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
+
+$ft_num = 0;
+foreach ($topics_items as $row) {
 	$row['ft_icon'] = 'posts';
 	$row['ft_postisnew'] = FALSE;
 	$row['ft_pages'] = '';

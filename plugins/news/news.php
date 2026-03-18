@@ -109,7 +109,21 @@ if (sed_module_active('page') && $cfg['plugin']['news']['maxpages'] > 0 && !empt
 	$extp = sed_getextplugins('news.loop');
 	/* ===== */
 
+	$news_items = array();
 	while ($pag = sed_sql_fetchassoc($sql)) {
+		$news_items[] = $pag;
+	}
+
+	/* === Hook - news.list === */
+	$extp_list = sed_getextplugins('news.list');
+	if (is_array($extp_list)) {
+		foreach ($extp_list as $k => $pl) {
+			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		}
+	}
+	/* ===== */
+
+	foreach ($news_items as $pag) {
 
 		/* === Hook - Part2 : Include === */
 		if (is_array($extpf)) {

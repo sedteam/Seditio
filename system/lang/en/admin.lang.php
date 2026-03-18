@@ -503,6 +503,8 @@ $L['adm_opt_pauseall_explain'] = "This will pause (disable) all the parts of the
 $L['adm_opt_unpauseall'] = "Un-pause all";
 $L['adm_opt_unpauseall_explain'] = "This will un-pause (enable) all the parts of the plugin.";
 $L['adm_lockpart'] = "Lock part";
+$L['adm_opt_installpart'] = "Install part";
+$L['adm_opt_deletepart'] = "Delete part";
 $L['adm_opt_pause'] = "Pause";
 $L['adm_opt_unpause'] = "Un-pause";
 
