@@ -16,29 +16,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initializes content behaviors
     sedadminjs.initContent();
 
-    const inputs = document.querySelectorAll('#addmenus input[name="mtitle"], #updatemenus input[name="mtitle"]');
-    inputs.forEach((input) => {
-        input.sedAutoComplete({
-            serviceUrl: '/ajax/?m=pages',
-            minChars: 1,
-            dataType: 'json',
-            noCache: false,
-            onSelect(suggestion) {
-                const mtitleInputs = document.querySelectorAll('#addmenus input[name="mtitle"], #updatemenus input[name="mtitle"]');
-                const murlInputs = document.querySelectorAll('#addmenus input[name="murl"], #updatemenus input[name="murl"]');
-                mtitleInputs.forEach((mtitleInput) => {
-                    mtitleInput.value = suggestion.title;
+    const selectors = [
+        '#addmenus input[name="mtitle"]',
+        '#updatemenus input[name="mtitle"]'
+    ];
+
+    selectors.forEach((sel) => {
+        const inputs = document.querySelectorAll(sel);
+        inputs.forEach((input) => {
+            if (input && !Autocomplete.getInstance(input)) {
+                const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+                const container = input.closest('#addmenus, #updatemenus');
+                const hintInput = container ? container.querySelector('input[data-autocomplete-hint]') : null;
+
+                new Autocomplete(input, {
+                    serviceUrl: '/ajax/?m=pages',
+                    formatResult(suggestion, currentValue) {
+                        const text = suggestion.title || suggestion.value;
+                        if (!currentValue) return text;
+                        const pattern = `(${Autocomplete.utils.escapeRegExChars(currentValue)})`;
+                        return text
+                            .replace(new RegExp(pattern, 'gi'), '<strong>$1</strong>')
+                            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+                            .replace(/&lt;(\/?strong)&gt;/g, '<$1>');
+                    },
+                    onHint: hintInput ? (hint) => {
+                        hintInput.value = hint || '';
+                    } : undefined,
+                    onSelect: (suggestion) => {
+                        const cont = input.closest('#addmenus, #updatemenus');
+                        input.value = suggestion.title || suggestion.value;
+                        if (hintInput) hintInput.value = '';
+                        if (cont) {
+                            const murl = cont.querySelector('input[name="murl"]');
+                            if (murl) murl.value = suggestion.url || '';
+                        }
+                    },
+                    ajaxSettings: {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-Seditio-Csrf': csrfMeta ? csrfMeta.content : ''
+                        },
+                        credentials: 'same-origin'
+                    }
                 });
-                murlInputs.forEach((murlInput) => {
-                    murlInput.value = suggestion.url;
-                });
-            },
-            formatResult(suggestion, currentValue) {
-                const reEscape = new RegExp('(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\') + ')', 'g');
-                const pattern = `(${currentValue.replace(reEscape, '\\$1')})`;
-                return `<div class="autocomplete-title">${
-                    suggestion.title.replace(new RegExp(pattern, 'gi'), '<strong>$1</strong>')
-                }</div><div class="autocomplete-url">${suggestion.url}</div>`;
             }
         });
     });

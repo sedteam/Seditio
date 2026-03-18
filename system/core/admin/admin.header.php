@@ -307,8 +307,8 @@ if ($usr['id'] > 0) {
 				'code'     => $mod_code,
 				'title'   => $menu_def['title'],
 				'order'   => isset($menu_def['order']) ? (int)$menu_def['order'] : 50,
-				'ct_title'=> $mod_menu_row['ct_title'],
-				'sections'=> isset($menu_def['sections']) && is_array($menu_def['sections']) ? $menu_def['sections'] : array()
+				'ct_title' => $mod_menu_row['ct_title'],
+				'sections' => isset($menu_def['sections']) && is_array($menu_def['sections']) ? $menu_def['sections'] : array()
 			);
 		}
 		usort($mod_menu_items, function ($a, $b) {

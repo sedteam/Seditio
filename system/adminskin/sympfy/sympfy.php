@@ -17,6 +17,9 @@ Description=Official Admin skin
 [END_SED]
 ==================== */
 
+sed_add_javascript('system/javascript/autocomplete.js', true, 20);
+sed_add_css('system/adminskin/sympfy/css/autocomplete.css', true, 20);
+
 $cfg['pagination'] = '<li class="page-item">%s</li>';
 $cfg['pagination_cur'] = '<li class="page-item active"><span class="page-link">%s</span></li>';
 $cfg['pagination_arrowleft'] = "<i class=\"ic-chevron-left\"></i>";
