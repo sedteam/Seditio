@@ -33,7 +33,7 @@ Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
-pfstitle=09:string::{MAINTITLE} - {TITLE}:Title for PFS
+pfstitle=01:string::{MAINTITLE} - {TITLE}:Title for PFS
 pfs_filemask=02:radio::0:Unique filenames (random suffix)
 [END_SED_MODULE_CONFIG]
 

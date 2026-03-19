@@ -15,7 +15,7 @@ Type=Plugin
 Code=tags
 Part=main
 File=tags
-Hooks=standalone
+Hooks=direct
 Order=10
 Lock=0
 [END_SED_EXTPLUGIN]
@@ -37,18 +37,31 @@ $tag_area = sed_import('a', 'G', 'ALP');
 if (empty($tag_area)) $tag_area = 'all';
 if (!in_array($tag_area, array('pages', 'forums', 'all'))) $tag_area = 'all';
 
+$page_module_ok = sed_module_active('page');
+$forums_module_ok = sed_module_active('forums');
+if ($tag_area === 'pages' && !$page_module_ok) $tag_area = ($forums_module_ok) ? 'forums' : 'all';
+if ($tag_area === 'forums' && !$forums_module_ok) $tag_area = ($page_module_ok) ? 'pages' : 'all';
+
 $d = sed_import('d', 'G', 'INT');
 if (empty($d)) $d = 0;
 
-$out['subtitle'] = $L['tags_title'];
+if (!empty($tag_query)) {
+	$out['subtitle'] = $L['tags_results'] . ': ' . sed_cc($tag_query);
+	$out['subdesc'] = $L['tags_results'] . ': ' . sed_cc($tag_query);
+	$out['subkeywords'] = sed_cc($tag_query);
+	if (!empty($cfg['plugin']['tags']['noindex'])) {
+		$out['robots_index'] = 0;
+	}
+} else {
+	$out['subtitle'] = $L['tags_title'];
+	$out['subdesc'] = $L['tags_cloud'] . '. ' . $L['tags_search'];
+	$out['subkeywords'] = $L['tags_tags'];
+}
 $title_tags[] = array('{MAINTITLE}', '{SUBTITLE}', '{TITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
-$out['subtitle'] = sed_title('tags', $title_tags, $title_data);
-
-if (!empty($cfg['plugin']['tags']['noindex']) && !empty($tag_query)) {
-	$out['head_head'] = (isset($out['head_head']) ? $out['head_head'] : '') . '<meta name="robots" content="noindex,follow" />';
-}
+$cfg['tagstitle'] = isset($cfg['plugin']['tags']['tagstitle']) ? $cfg['plugin']['tags']['tagstitle'] : '{MAINTITLE} - {TITLE}';
+$out['subtitle'] = sed_title('tagstitle', $title_tags, $title_data);
 
 $urlpaths = array();
 $urlpaths[sed_url('plug', 'e=tags')] = $L['tags_title'];
@@ -62,8 +75,12 @@ $tag_order = isset($cfg['plugin']['tags']['order']) ? $cfg['plugin']['tags']['or
 
 /* --- Search form --- */
 $area_options = '<option value="all"' . ($tag_area == 'all' ? ' selected' : '') . '>' . $L['tags_area_all'] . '</option>';
-$area_options .= '<option value="pages"' . ($tag_area == 'pages' ? ' selected' : '') . '>' . $L['tags_area_pages'] . '</option>';
-$area_options .= '<option value="forums"' . ($tag_area == 'forums' ? ' selected' : '') . '>' . $L['tags_area_forums'] . '</option>';
+if ($page_module_ok) {
+	$area_options .= '<option value="pages"' . ($tag_area == 'pages' ? ' selected' : '') . '>' . $L['tags_area_pages'] . '</option>';
+}
+if ($forums_module_ok) {
+	$area_options .= '<option value="forums"' . ($tag_area == 'forums' ? ' selected' : '') . '>' . $L['tags_area_forums'] . '</option>';
+}
 
 $t->assign(array(
 	"TAGS_PAGETITLE" => $L['tags_title'],
@@ -76,7 +93,6 @@ $t->assign(array(
 
 /* --- Results --- */
 if (!empty($tag_query)) {
-	$out['subtitle'] = $L['tags_results'] . ': ' . sed_cc($tag_query);
 	$t->assign("TAGS_RESULTS_TITLE", $L['tags_results'] . ': <strong>' . sed_cc($tag_query) . '</strong>');
 
 	$pages_pagination = '';
@@ -93,7 +109,7 @@ if (!empty($tag_query)) {
 	if ($perpage <= 0) $perpage = 30;
 
 	/* Pages results */
-	if (($tag_area == 'pages' || $tag_area == 'all') && !empty($cfg['plugin']['tags']['pages'])) {
+	if (($tag_area == 'pages' || $tag_area == 'all') && !empty($cfg['plugin']['tags']['pages']) && $page_module_ok) {
 		$where_tags = sed_tag_parse_query($tag_query, 'p.page_id', 'pages');
 		$where_extra = "p.page_state = 0 AND p.page_begin < " . (int)$sys['now_offset'] . " AND p.page_expire > " . (int)$sys['now_offset'];
 		$count_sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages AS p WHERE $where_extra AND $where_tags");
@@ -135,7 +151,7 @@ if (!empty($tag_query)) {
 	}
 
 	/* Forums results */
-	if (($tag_area == 'forums' || $tag_area == 'all') && !empty($cfg['plugin']['tags']['forums'])) {
+	if (($tag_area == 'forums' || $tag_area == 'all') && !empty($cfg['plugin']['tags']['forums']) && $forums_module_ok) {
 		$where_tags_f = sed_tag_parse_query($tag_query, 'ft.ft_id', 'forums');
 		$count_sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics AS ft WHERE ft.ft_state = 0 AND $where_tags_f");
 		$totalitems_forums = sed_sql_result($count_sql, 0, 'COUNT(*)');

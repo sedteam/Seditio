@@ -33,10 +33,10 @@ Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
-pmtitle=05:string::{MAINTITLE} - {TITLE}:Title for PM
-pm_maxsize=10:select:200,500,1000,2000,5000,10000,15000,20000,30000,50000,65000:10000:Maximum length for messages
-maxpmsperpage=05:select:5,10,15,20,25,30,35,40,50:15:Messages per page in inbox/sentbox
-pm_allownotifications=10:radio::1:Allow PM notifications by email
+pmtitle=01:string::{MAINTITLE} - {TITLE}:Title for PM
+pm_maxsize=02:select:200,500,1000,2000,5000,10000,15000,20000,30000,50000,65000:10000:Maximum length for messages
+maxpmsperpage=03:select:5,10,15,20,25,30,35,40,50:15:Messages per page in inbox/sentbox
+pm_allownotifications=04:radio::1:Allow PM notifications by email
 [END_SED_MODULE_CONFIG]
 
 ==================== */

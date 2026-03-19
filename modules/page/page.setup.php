@@ -33,11 +33,11 @@ Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
-listtitle=03:string::{MAINTITLE} - {TITLE}:cfg_listtitle
-pagetitle=04:string::{MAINTITLE} - {TITLE}:cfg_pagetitle
+listtitle=01:string::{MAINTITLE} - {TITLE}:Title for lists of pages
+pagetitle=02:string::{MAINTITLE} - {TITLE}:Title for pages
 showpagesubcatgroup=03:radio::0:Show in groups pages from the subsections
-maxrowsperpage=05:select:5,10,15,20,25,30,35,40,45,50,60,70,80,90:15:Maximum lines in lists
-genseourls=06:radio::1:Generate SEO url (auto gen* page alias)?
+maxrowsperpage=04:select:5,10,15,20,25,30,35,40,45,50,60,70,80,90:15:Maximum lines in lists
+genseourls=05:radio::1:Generate SEO url (auto gen* page alias)?
 [END_SED_MODULE_CONFIG]
 
 ==================== */

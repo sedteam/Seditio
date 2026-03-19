@@ -32,8 +32,8 @@ Installer_skip=1
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
-syntaxhighlight_theme=1:select:Default,Django,Eclipse,Emacs,FadeToGrey,Midnight,RDark:Default:Theme Syntaxhighlight
-syntaxhighlight_version=2:select:2,3:3:Version Syntaxhighlight
+syntaxhighlight_theme=01:select:Default,Django,Eclipse,Emacs,FadeToGrey,Midnight,RDark:Default:Theme Syntaxhighlight
+syntaxhighlight_version=02:select:2,3:3:Version Syntaxhighlight
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */

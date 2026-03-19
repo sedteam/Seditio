@@ -465,15 +465,19 @@ function sed_tag_cleanup()
 
 	$deleted = 0;
 
-	sed_sql_query("DELETE r FROM $db_tag_references AS r
-		LEFT JOIN $db_pages AS p ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' AND p.page_id IS NULL");
-	$deleted += sed_sql_affectedrows();
+	if (sed_module_active('page')) {
+		sed_sql_query("DELETE r FROM $db_tag_references AS r
+			LEFT JOIN $db_pages AS p ON r.tag_item = p.page_id
+			WHERE r.tag_area = 'pages' AND p.page_id IS NULL");
+		$deleted += sed_sql_affectedrows();
+	}
 
-	sed_sql_query("DELETE r FROM $db_tag_references AS r
-		LEFT JOIN $db_forum_topics AS ft ON r.tag_item = ft.ft_id
-		WHERE r.tag_area = 'forums' AND ft.ft_id IS NULL");
-	$deleted += sed_sql_affectedrows();
+	if (sed_module_active('forums')) {
+		sed_sql_query("DELETE r FROM $db_tag_references AS r
+			LEFT JOIN $db_forum_topics AS ft ON r.tag_item = ft.ft_id
+			WHERE r.tag_area = 'forums' AND ft.ft_id IS NULL");
+		$deleted += sed_sql_affectedrows();
+	}
 
 	return $deleted;
 }

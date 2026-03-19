@@ -19,7 +19,6 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-$p = sed_import('p', 'G', 'ALP');
 $e = sed_import('e', 'G', 'ALP');
 $o = sed_import('o', 'G', 'ALP');
 $s = sed_import('s', 'G', 'ALP');
@@ -31,33 +30,28 @@ $ajx = sed_import('ajx', 'G', 'ALP');
 
 unset($plugin_title, $plugin_body);
 
-if (!empty($p)) {
+if (!empty($e)) {
 
-	if ($path_lang = sed_langfile($p, 'plugin', $lang)) {
-		require($path_lang);
-	}
-
-	$extp = array();
-
-	if (is_array($sed_plugins) && isset($sed_plugins['module'])) {
-		foreach ($sed_plugins['module'] as $i => $k) {
-			if ($k['pl_code'] == $p) {
-				$extp[$i] = $k;
+	// Direct hook: plugin controls header/footer and meta itself
+	$extp_direct = array();
+	if (is_array($sed_plugins) && isset($sed_plugins['direct'])) {
+		foreach ($sed_plugins['direct'] as $i => $k) {
+			if ($k['pl_code'] == $e) {
+				$extp_direct[$i] = $k;
 			}
 		}
 	}
 
-	if (count($extp) == 0) {
-		sed_redirect(sed_url("message", "msg=907", "", true));
-		exit;
-	}
-
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
+	if (count($extp_direct) > 0) {
+		if ($path_lang = sed_langfile($e, 'plugin', $lang)) {
+			require($path_lang);
+		}
+		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', $e);
+		sed_block($usr['auth_read']);
+		foreach ($extp_direct as $k => $pl) {
 			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 		}
-	}
-} elseif (!empty($e)) {
+	} else {
 
 	if ($path_lang = sed_langfile($e, 'plugin', $lang)) {
 		require($path_lang);
@@ -147,6 +141,7 @@ if (!empty($p)) {
 	$t->out("MAIN");
 
 	require(SED_ROOT . "/system/footer.php");
+	}
 } elseif (!empty($o)) {
 
 	if ($path_lang = sed_langfile($o, 'plugin', $lang)) {

@@ -32,6 +32,10 @@ if (!$cloud_index_on) {
 }
 
 $index_area = isset($cfg['plugin']['tags']['index']) ? $cfg['plugin']['tags']['index'] : 'pages';
+$page_ok = sed_module_active('page');
+$forums_ok = sed_module_active('forums');
+if ($index_area === 'pages' && !$page_ok) $index_area = $forums_ok ? 'forums' : 'all';
+if ($index_area === 'forums' && !$forums_ok) $index_area = $page_ok ? 'pages' : 'all';
 $index_limit = isset($cfg['plugin']['tags']['lim_index']) ? (int)$cfg['plugin']['tags']['lim_index'] : 20;
 $index_order = isset($cfg['plugin']['tags']['order']) ? $cfg['plugin']['tags']['order'] : 'Alphabetical';
 

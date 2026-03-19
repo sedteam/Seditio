@@ -68,3 +68,4 @@ $L['cfg_maxrowsperpage'] = array("Maximum lines in tags", "");
 $L['cfg_cloud_index_on'] = array("Show tag cloud on index page", "");
 $L['cfg_cloud_list_on'] = array("Show tag cloud in page listings", "");
 $L['cfg_cloud_page_on'] = array("Show tag cloud on page view", "");
+$L['cfg_tagstitle'] = array("Page title mask", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");

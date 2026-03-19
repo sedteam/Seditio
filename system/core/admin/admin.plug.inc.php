@@ -562,6 +562,12 @@ switch ($a) {
 			$plg_standalone[$row3['pl_code']] = TRUE;
 		}
 
+		$plg_direct = array();
+		$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='direct'");
+		while ($row3 = sed_sql_fetchassoc($sql3)) {
+			$plg_direct[$row3['pl_code']] = TRUE;
+		}
+
 		$plg_tools = array();
 		$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
 		while ($row3 = sed_sql_fetchassoc($sql3)) {
@@ -617,7 +623,7 @@ switch ($a) {
 					if (isset($plg_tools[$info['Code']]) && $plg_tools[$info['Code']]) {
 						$pl_url = sed_url("admin", "m=manage&p=" . $info['Code']);
 					} else {
-						$pl_url = (isset($plg_standalone[$info['Code']]) && $plg_standalone[$info['Code']]) ? sed_url("plug", "e=" . $info['Code']) : '';
+						$pl_url = (isset($plg_standalone[$info['Code']]) && $plg_standalone[$info['Code']]) || (isset($plg_direct[$info['Code']]) && $plg_direct[$info['Code']]) ? sed_url("plug", "e=" . $info['Code']) : '';
 					}
 
 					if (!empty($pl_url)) {

@@ -33,11 +33,11 @@ Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
-forumstitle=05:string::{MAINTITLE} - {TITLE}:Title for forums
-hideprivateforums=10:radio::0:Hide private forums
-hottopictrigger=10:select:5,10,15,20,25,30,35,40,50:20:Posts for a topic to be hot
-maxtopicsperpage=10:select:5,10,15,20,25,30,35,40,45,50,60,70,80,90:30:Maximum topics or posts per page
-antibumpforums=12:radio::0:Anti-bump protection
+forumstitle=01:string::{MAINTITLE} - {TITLE}:Title for forums
+hideprivateforums=02:radio::0:Hide private forums
+hottopictrigger=03:select:5,10,15,20,25,30,35,40,50:20:Posts for a topic to be hot
+maxtopicsperpage=04:select:5,10,15,20,25,30,35,40,45,50,60,70,80,90:30:Maximum topics or posts per page
+antibumpforums=05:radio::0:Anti-bump protection
 [END_SED_MODULE_CONFIG]
 
 ==================== */

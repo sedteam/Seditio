@@ -31,8 +31,8 @@ Lock_members=12345A
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
-emails=1:text:::Emails, separated by commas
-recipients=2:text:::Names of the recipients, separated by commas, in the same order as the emails
+emails=01:text:::Emails, separated by commas
+recipients=02:text:::Names of the recipients, separated by commas, in the same order as the emails
 admincopy1=3:string:::Also send a copy to this email
 admincopy2=4:string:::Also send a copy to this email 
 extra1=5:text:::Extra slot #1 / {PLUGIN_CONTACT_EXTRA1} in skins/.../plugin.standalone.contact.tpl

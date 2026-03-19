@@ -33,9 +33,9 @@ Lock_module=0
 [END_SED_MODULE]
 
 [BEGIN_SED_MODULE_CONFIG]
-gallerytitle=09:string::{MAINTITLE} - {TITLE}:Title for gallery
-gallery_gcol=10:select:2,3,4,5,6,8:4:Number of columns for galleries
-gallery_bcol=11:select:4,5,6,8:6:Number of columns for pictures
+gallerytitle=01:string::{MAINTITLE} - {TITLE}:Title for gallery
+gallery_gcol=02:select:2,3,4,5,6,8:4:Number of columns for galleries
+gallery_bcol=03:select:4,5,6,8:6:Number of columns for pictures
 [END_SED_MODULE_CONFIG]
 
 ==================== */
