@@ -166,6 +166,22 @@
 
 				</div>
 
+				<!-- BEGIN: INDEX_TAGS_CLOUD_BOX -->
+				<div class="sidebar-box">
+
+					<div class="sidebar-title">
+						<h3>{PHP.L.Tags}</h3>
+					</div>
+
+					<div class="sidebar-body">
+
+						{INDEX_TAGS_CLOUD}
+
+					</div>
+
+				</div>
+				<!-- END: INDEX_TAGS_CLOUD_BOX -->
+
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">

@@ -144,6 +144,7 @@
 									<div class="table-td">
 										<strong><a href="{FORUMS_TOPICS_ROW_URL}">{FORUMS_TOPICS_ROW_TITLE}</a></strong>
 										<div class="desc">{FORUMS_TOPICS_ROW_DESC} {FORUMS_TOPICS_ROW_PAGES}</div>
+										<div class="forums-topic-tags">{FORUMS_TOPICS_ROW_TAGS}</div>
 									</div>
 
 									<div class="table-td forums-firstposter" style="width:160px;">

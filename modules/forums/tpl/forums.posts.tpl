@@ -32,6 +32,8 @@
 
 			<!-- END: FORUMS_POSTS_TOPICPRIVATE -->
 
+			<div class="forums-topic-tags">{FORUMS_POSTS_TAGS}</div>
+
 			<!-- BEGIN: FORUMS_POSTS_PAGINATION_TP -->
 
 			<div class="pagination-box">

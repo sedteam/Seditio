@@ -48,48 +48,46 @@
 
 				<!-- END: LIST_CATTEXT -->
 
-				<div class="row row-flex">
+				<div class="list-box">
 
 					<!-- BEGIN: LIST_ROW -->
+					<div class="list-item">
 
-					<div class="col-xs-12 col-sm-6 col-md-4 post-col">
-
-						<div class="post-item">
+						<!-- BEGIN: LIST_ROW_THUMB -->
+						<div class="post-header">
 							<figure class="post-container">
-
-								<!-- BEGIN: LIST_ROW_THUMB -->
 								<a class="post-img-link" href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}">
 									<picture>
-										<source type="image/webp" srcset="{LIST_ROW_THUMB|crop_image(%s, 600, 500, 0, 1)}">
-										<img class="post-img" src="{LIST_ROW_THUMB|crop_image(%s, 600, 500)}" alt="{LIST_ROW_TITLE}" />
+										<source type="image/webp" srcset="{LIST_ROW_THUMB|crop_image(%s, 800, 600, 0, 1)}">
+										<img class="post-img" src="{LIST_ROW_THUMB|crop_image(%s, 800, 600)}" alt="{LIST_ROW_TITLE}" />
 									</picture>
 								</a>
-								<!-- END: LIST_ROW_THUMB -->
-
-								<figcaption class="post-content">
-									<div class="post-info">
-										<div class="post-category"><a href="{LIST_ROW_CATURL}" data-category="{LIST_ROW_ID}">{LIST_ROW_CATTITLE}</a></div>
-										<div class="post-date">{LIST_ROW_DATE}</div>
-									</div>
-									<div class="post-title">
-										<h3><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">{LIST_ROW_TITLE}</a></h3>
-									</div>
-									<div class="post-desc">
-										<p>{LIST_ROW_DESC}</p>
-									</div>
-									<div class="post-info">
-										<div class="post-author">{LIST_ROW_OWNER_AVATAR}{LIST_ROW_OWNER}</div>
-										<div class="post-comments"><i class="ic-message-circle"></i><a href="{LIST_ROW_COMURL}">{LIST_ROW_COMCOUNT}</a></div>
-										<!-- BEGIN: LIST_ROW_FILE -->
-										<div class="post-file"><i class="ic-document-file-{LIST_ROW_FILEICON}"></i></div>
-										<!-- END: LIST_ROW_FILE -->
-									</div>
-								</figcaption>
 							</figure>
+						</div>
+						<!-- END: LIST_ROW_THUMB -->
+
+						<div class="post-category"><a href="{LIST_ROW_CATURL}" data-category="{LIST_ROW_ID}">{LIST_ROW_CATTITLE}</a></div>
+						<div class="post-date">{LIST_ROW_DATE}</div>
+
+						<div class="post-title">
+							<h2><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">{LIST_ROW_TITLE}</a></h2>
+						</div>
+
+						<div class="post-desc page-text">
+							{LIST_ROW_DESC}
+						</div>
+
+						<div class="post-tags">{LIST_ROW_TAGS}</div>
+
+						<div class="post-info">
+							<div class="post-author">{LIST_ROW_OWNER_AVATAR}{LIST_ROW_OWNER}</div>
+							<div class="post-comments"><i class="ic-message-circle"></i><a href="{LIST_ROW_COMURL}">{LIST_ROW_COMCOUNT}</a></div>
+							<!-- BEGIN: LIST_ROW_FILE -->
+							<div class="post-file"><i class="ic-document-file-{LIST_ROW_FILEICON}"></i></div>
+							<!-- END: LIST_ROW_FILE -->
 						</div>
 
 					</div>
-
 					<!-- END: LIST_ROW -->
 
 				</div>
@@ -209,6 +207,22 @@
 					</div>
 
 				</div>
+
+				<!-- BEGIN: LIST_TAGS_CLOUD_BOX -->
+				<div class="sidebar-box">
+
+					<div class="sidebar-title">
+						<h3>{PHP.L.Tags}</h3>
+					</div>
+
+					<div class="sidebar-body">
+
+						{LIST_TAGS_CLOUD}
+
+					</div>
+
+				</div>
+				<!-- END: LIST_TAGS_CLOUD_BOX -->
 
 				<div class="sidebar-box">
 

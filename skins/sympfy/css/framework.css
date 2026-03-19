@@ -1756,11 +1756,6 @@ input::placeholder {
     box-shadow: inset 0px 1px 0px 0px #448aa1;
 }
 
-.filters .btn {
-    padding: 9px 30px 10px 30px;
-    vertical-align: bottom;
-}
-
 .btn-icon {
     width: 24px;
     height: 24px;

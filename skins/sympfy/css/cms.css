@@ -1200,7 +1200,15 @@ ul.admin-buttons li {
 .filters .filters-form div {
   display: inline-block;
   padding: 5px;
+  vertical-align: middle;
 }
+
+
+.filters .btn {
+    padding: 9px 30px 10px 30px;
+    vertical-align: top;
+}
+
 
 .pfs-stats {
   color: #cccccc;
@@ -1317,6 +1325,54 @@ ul.admin-buttons li {
 
 .spoiler-content p {
   padding: 0px 0;
+}
+
+/*-------------------------*/
+
+/***** POPOVER *****/
+
+/*-------------------------*/
+
+.sed-popover {
+  position: absolute;
+  z-index: 1050;
+  min-width: 120px;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+}
+
+.sed-popover-close {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+  padding: 0;
+  background: rgb(164, 208, 74);
+  background: -moz-linear-gradient(180deg, rgba(164, 208, 74, 1) 7%, rgba(68, 147, 1, 1) 58%);
+  background: -webkit-linear-gradient(180deg, rgba(164, 208, 74, 1) 7%, rgba(68, 147, 1, 1) 58%);
+  background: linear-gradient(180deg, rgba(164, 208, 74, 1) 7%, rgba(68, 147, 1, 1) 58%);
+  filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#a4d04a", endColorstr="#449301", GradientType=1);
+  border-radius: 100%;
+  border: 1px solid #d9d9d9;
+  font-size: 18px;
+  line-height: 20px;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+  cursor: pointer;
+  text-align: center;
+}
+
+.sed-popover-close:hover {
+  color: #fffccb;
+}
+
+.sed-popover-body {
+  padding: 0;
 }
 
 /*-------------------------*/

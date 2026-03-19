@@ -38,6 +38,14 @@
 						<div class="form-field">{FORUMS_NEWTOPIC_DESC}</div>
 					</li>
 
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Tags}</label></div>
+						<div class="form-field">
+							{FORUMS_NEWTOPIC_TAGS}
+							<div class="descr">{FORUMS_NEWTOPIC_TAGS_HINT}</div>
+						</div>
+					</li>
+
 					<!-- BEGIN: PRIVATE -->
 
 					<li class="form-row">

@@ -56,7 +56,8 @@ if ($a == 'delete') {
 $d = sed_import('d', 'G', 'INT');
 if (empty($d)) $d = 0;
 
-$perpage = 30; //TODO: Make this configurable
+$perpage = isset($cfg['plugin']['thanks']['thanksperpage']) ? (int)$cfg['plugin']['thanks']['thanksperpage'] : 30;
+if ($perpage <= 0) $perpage = 30;
 $totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_thanks"), 0, 'COUNT(*)');
 $pagination = sed_pagination(sed_url("admin", "m=thanks"), $d, $totallines, $perpage);
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url("admin", "m=thanks"), $d, $totallines, $perpage, true);

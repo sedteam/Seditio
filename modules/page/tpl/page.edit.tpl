@@ -60,13 +60,21 @@
 									<div class="form-field">{PAGEEDIT_FORM_AUTHOR}</div>
 								</li>
 
-								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageedit.Alias}</label></div>
-									<div class="form-field">{PAGEEDIT_FORM_ALIAS}</div>
-								</li>
+							<li class="form-row">
+								<div class="form-label"><label>{PHP.skinlang.pageedit.Alias}</label></div>
+								<div class="form-field">{PAGEEDIT_FORM_ALIAS}</div>
+							</li>
 
-								<li class="form-row">
-									<div class="form-field-100">{PHP.skinlang.pageedit.Bodyofthepage}<br /><br />{PAGEEDIT_FORM_TEXT}</div>
+							<li class="form-row">
+								<div class="form-label"><label>{PHP.L.Tags}</label></div>
+								<div class="form-field">
+									{PAGEEDIT_FORM_TAGS}
+									<div class="descr">{PAGEEDIT_FORM_TAGS_HINT}</div>
+								</div>
+							</li>
+
+							<li class="form-row">
+								<div class="form-field-100">{PHP.skinlang.pageedit.Bodyofthepage}<br /><br />{PAGEEDIT_FORM_TEXT}</div>
 								</li>
 
 								<li class="form-row">

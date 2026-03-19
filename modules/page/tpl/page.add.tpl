@@ -60,13 +60,20 @@
 									<div class="form-field">{PAGEADD_FORM_AUTHOR}</div>
 								</li>
 
-								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Alias}</label></div>
-									<div class="form-field">{PAGEADD_FORM_ALIAS}</div>
-								</li>
+							<li class="form-row">
+								<div class="form-label"><label>{PHP.skinlang.pageadd.Alias}</label></div>
+								<div class="form-field">{PAGEADD_FORM_ALIAS}</div>
+							</li>
 
+							<li class="form-row">
+								<div class="form-label"><label>{PHP.L.Tags}</label></div>
+								<div class="form-field">
+									{PAGEADD_FORM_TAGS}
+									<div class="descr">{PAGEADD_FORM_TAGS_HINT}</div>
+								</div>
+							</li>
 
-								<!-- BEGIN: PAGEADD_PARSING -->
+							<!-- BEGIN: PAGEADD_PARSING -->
 
 								<li class="form-row">
 									<div class="form-label"><label>{PHP.skinlang.pageadd.Parsing}</label></div>

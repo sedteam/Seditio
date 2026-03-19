@@ -60,3 +60,4 @@ $L['cfg_notify_by_email'] = array("Yeni teşekkürde e-posta ile bildir", "");
 $L['cfg_notify_from'] = array("Bildirimler için e-posta gönderici adresi", "");
 $L['cfg_thanksperpage'] = array("Listelerde sayfa başına teşekkür sayısı", "");
 $L['cfg_format'] = array("Tarih format maskesi (boş = sistem varsayılanı)", "");
+$L['cfg_css'] = array("Eklenti CSS'sini dahil et", "");

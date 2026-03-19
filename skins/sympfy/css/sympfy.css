@@ -1271,6 +1271,41 @@ ul {
 
 /*-------------------------*/
 
+/***** LIST (blog-style) *****/
+
+/*-------------------------*/
+
+.list-box {
+  margin-bottom: 20px;
+}
+
+.list-item {
+  margin-bottom: 25px;
+  border: 1px solid #ececec;
+  padding: 20px;
+  border-radius: 3px;
+}
+
+.list-item .post-title h2 {
+  margin: 0 0 0 0;
+}
+
+.list-item .post-info {
+  width: 100%;
+  margin-top: 25px;
+}
+
+.list-item .post-author,
+.list-item .post-comments {
+  padding: 10px;
+}
+
+.list-item .post-comments {
+  width: 50px;
+}
+
+/*-------------------------*/
+
 /***** OTHER_PAGE *****/
 
 /*-------------------------*/

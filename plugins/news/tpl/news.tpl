@@ -26,6 +26,8 @@
 			{PAGE_ROW_TEXT}
 		</div>
 
+		<div class="post-tags">{PAGE_ROW_TAGS}</div>
+
 		<div class="post-info">
 			<div class="post-author"><a href="{PAGE_ROW_USERURL}">{PAGE_ROW_AVATAR}<span>{PAGE_ROW_AUTHOR}</span></a></div>
 			<div class="post-comments"><i class="ic-message-circle"></i><a href="{PAGE_ROW_COMMENTS_URL}">{PAGE_ROW_COMMENTS_COUNT}</a></div>

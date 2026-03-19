@@ -55,7 +55,7 @@
 
 					</div>
 
-					<!-- BEGIN: PAGE_FILE -->
+				<!-- BEGIN: PAGE_FILE -->
 
 					<div class="page-download">
 
@@ -64,8 +64,10 @@
 
 					</div>
 
-					<!-- END: PAGE_FILE -->
-					
+				<!-- END: PAGE_FILE -->
+
+					<div class="page-tags">{PAGE_TAGS}</div>
+
 					{PAGE_THANKS_DISPLAY}
 
 				</div>
@@ -155,7 +157,6 @@
 			</div>
 
 			<aside id="sidebar">
-
 
 				<!-- BEGIN: SIMILARPAGES -->
 				<div class="sidebar-box">
@@ -299,6 +300,22 @@
 					</div>
 
 				</div>
+
+				<!-- BEGIN: PAGE_TAGS_CLOUD_BOX -->
+				<div class="sidebar-box">
+
+					<div class="sidebar-title">
+						<h3>{PHP.L.Tags}</h3>
+					</div>
+
+					<div class="sidebar-body">
+
+						{PAGE_TAGS_CLOUD}
+
+					</div>
+
+				</div>
+				<!-- END: PAGE_TAGS_CLOUD_BOX -->
 
 				<div class="sidebar-box">
 

@@ -39,6 +39,14 @@
 						<div class="form-field">{FORUMS_EDITPOST_DESC}</div>
 					</li>
 
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Tags}</label></div>
+						<div class="form-field">
+							{FORUMS_EDITPOST_TAGS}
+							<div class="descr">{FORUMS_EDITPOST_TAGS_HINT}</div>
+						</div>
+					</li>
+
 					<!-- END: FORUMS_EDITPOST_FIRST -->
 
 					<li class="form-row">
