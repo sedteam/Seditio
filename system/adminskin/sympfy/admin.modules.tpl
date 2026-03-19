@@ -233,6 +233,40 @@
 
 <!-- END: MODULES_LISTING -->
 
+<!-- BEGIN: MODULE_UNINSTALL_CONFIRM -->
+
+<div class="content-box">
+
+	<div class="content-box-header">
+		<h3>{PHP.L.adm_uninstall_confirm}</h3>
+		<div class="clear"></div>
+	</div>
+
+	<div class="content-box-content">
+
+		<form action="{MODULE_UNINSTALL_CONFIRM_ACTION}" method="post">
+
+			<div class="alert alert-warning">
+				<span class="alert-icon"><i class="ic-alert-triangle"></i></span>
+				{PHP.L.adm_uninstall_drop_tables_warning}
+			</div>
+
+			<div class="form-group">
+				<p>{MODULE_UNINSTALL_CONFIRM_CHECKBOX}
+				<label for="drop_tables">{PHP.L.adm_uninstall_drop_tables}</label>
+				</p>
+				<p class="help-block">{PHP.L.adm_uninstall_drop_tables_help}</p>
+			</div>
+
+			<button type="submit" class="btn">{PHP.L.adm_uninstall_submit}</button>
+		</form>
+
+	</div>
+
+</div>
+
+<!-- END: MODULE_UNINSTALL_CONFIRM -->
+
 <!-- BEGIN: MODULE_ACTION -->
 
 <div class="content-box">

@@ -699,9 +699,10 @@ function sed_plugin_install($pl)
  * 
  * @param $pl Plugin code
  * @param $all If TRUE - uninstall all plugins 
+ * @param $drop_tables If TRUE - drop database tables in uninstall script
  * @return string 
  */
-function sed_plugin_uninstall($pl, $all = FALSE)
+function sed_plugin_uninstall($pl, $all = FALSE, $drop_tables = false)
 {
 	global $db_plugins, $db_config, $db_auth, $db_users;
 
@@ -750,6 +751,7 @@ function sed_plugin_uninstall($pl, $all = FALSE)
 		$res .= "Looking for the optional PHP file : " . $extplugin_uninstall . "... ";
 		if (file_exists($extplugin_uninstall)) {
 			$res .= "Found, executing...<br />";
+			$sed_uninstall_drop_tables = (bool) $drop_tables;
 			include($extplugin_uninstall);
 		} else {
 			$res .= "Not found.<br />";
@@ -940,9 +942,10 @@ function sed_module_install($code)
  * Module uninstallation
  *
  * @param string $code Module code
+ * @param bool $drop_tables If TRUE - drop database tables in uninstall script
  * @return string Uninstallation log
  */
-function sed_module_uninstall($code)
+function sed_module_uninstall($code, $drop_tables = false)
 {
 	global $db_core, $db_plugins, $db_config, $db_auth, $db_users;
 
@@ -986,6 +989,7 @@ function sed_module_uninstall($code)
 	$res .= "<strong>Looking for uninstall script...</strong> ";
 	if (file_exists($uninstall_file)) {
 		$res .= "Found, executing...<br />";
+		$sed_uninstall_drop_tables = (bool) $drop_tables;
 		include($uninstall_file);
 	} else {
 		$res .= "Not found (optional).<br />";

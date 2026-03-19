@@ -21,9 +21,10 @@ global $cfg;
 
 $prefix = $cfg['sqldbprefix'];
 
-/*
-
-sed_sql_query("DROP TABLE IF EXISTS {$prefix}tag_references");
-sed_sql_query("DROP TABLE IF EXISTS {$prefix}tags");
-
-*/
+if (!empty($sed_uninstall_drop_tables)) {
+	sed_sql_query("DROP TABLE IF EXISTS {$prefix}tag_references");
+	sed_sql_query("DROP TABLE IF EXISTS {$prefix}tags");
+	$res .= "Tag tables dropped.<br />";
+} else {
+	$res .= "Tags plugin uninstalled. Tag tables preserved.<br />";
+}

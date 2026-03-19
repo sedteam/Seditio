@@ -3,7 +3,7 @@
 <div id="main">
 
 	<!-- BEGIN: ADMIN_MESSAGE -->
-	<div data-autoclose="3000">{ADMIN_MESSAGE_BODY}</div>
+	<div data-autoclose="3000" class="alert-absolute">{ADMIN_MESSAGE_BODY}</div>
 	<!-- END: ADMIN_MESSAGE -->
 
 	{ADMIN_BREADCRUMBS}

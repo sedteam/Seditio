@@ -18,4 +18,12 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 }
 
 // Config and auth are removed by core (sed_plugin_uninstall) before this file is included.
-// Do not drop tables to preserve data.
+if (!empty($sed_uninstall_drop_tables)) {
+	global $cfg;
+	$prefix = $cfg['sqldbprefix'];
+	sed_sql_query("DROP TABLE IF EXISTS {$prefix}rated");
+	sed_sql_query("DROP TABLE IF EXISTS {$prefix}ratings");
+	$res .= "Ratings tables dropped.<br />";
+} else {
+	$res .= "Ratings plugin uninstalled. Ratings tables preserved.<br />";
+}

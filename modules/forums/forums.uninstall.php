@@ -20,18 +20,18 @@ if (!defined('SED_CODE')) {
 }
 
 // Remove all auth (rights) entries for forum sections (use global $db_auth from config)
-global $db_auth;
+global $db_auth, $cfg;
 if (isset($db_auth)) {
 	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='forums'");
 	$res .= "Deleted forum auth entries: " . sed_sql_affectedrows() . "<br />";
 }
 
-// WARNING: This will drop all forum tables and data!
-// Uncomment the lines below to enable full cleanup on uninstall.
-
-// sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_posts");
-// sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_topics");
-// sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_sections");
-// sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_structure");
-
-$res .= "Forums module uninstalled. Forum tables preserved.<br />";
+if (!empty($sed_uninstall_drop_tables)) {
+	sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_posts");
+	sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_topics");
+	sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_sections");
+	sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "forum_structure");
+	$res .= "Forum tables dropped.<br />";
+} else {
+	$res .= "Forums module uninstalled. Forum tables preserved.<br />";
+}

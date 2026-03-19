@@ -508,6 +508,12 @@ $L['adm_opt_deletepart'] = "Delete part";
 $L['adm_opt_pause'] = "Pause";
 $L['adm_opt_unpause'] = "Un-pause";
 
+$L['adm_uninstall_confirm'] = "Confirm uninstall";
+$L['adm_uninstall_drop_tables'] = "Drop database tables and delete all data";
+$L['adm_uninstall_drop_tables_help'] = "If unchecked, data is preserved and tables are kept for reinstall.";
+$L['adm_uninstall_drop_tables_warning'] = "Warning! Dropping tables will permanently delete all data. If you leave tables intact, data will be preserved for reinstall.";
+$L['adm_uninstall_submit'] = "Confirm uninstall";
+
 /* ====== Modules ====== */
 
 $L['adm_modules'] = "Modules";

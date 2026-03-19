@@ -508,6 +508,12 @@ $L['adm_opt_deletepart'] = "Удалить часть";
 $L['adm_opt_pause'] = "Пауза";
 $L['adm_opt_unpause'] = "Снять паузу";
 
+$L['adm_uninstall_confirm'] = "Подтверждение удаления";
+$L['adm_uninstall_drop_tables'] = "Удалить таблицы БД и все данные";
+$L['adm_uninstall_drop_tables_help'] = "При снятии флажка данные сохраняются и таблицы не удаляются.";
+$L['adm_uninstall_drop_tables_warning'] = "Внимание! Удаление таблиц приведёт к безвозвратной потере всех данных. Если таблицы оставить — данные сохранятся при переустановке.";
+$L['adm_uninstall_submit'] = "Подтвердить удаление";
+
 /* ====== Modules ====== */
 
 $L['adm_modules'] = "Модули";

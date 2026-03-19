@@ -19,9 +19,11 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 
 global $cfg;
 
-/*
-$prefix = $cfg['sqldbprefix'];
-sed_sql_query("DROP TABLE IF EXISTS {$prefix}thanks");
-
-sed_extrafield_remove('users', 'thankscount');
-*/
+if (!empty($sed_uninstall_drop_tables)) {
+	$prefix = $cfg['sqldbprefix'];
+	sed_sql_query("DROP TABLE IF EXISTS {$prefix}thanks");
+	sed_extrafield_remove('users', 'thankscount');
+	$res .= "Thanks table dropped and extrafield removed.<br />";
+} else {
+	$res .= "Thanks plugin uninstalled. Thanks table preserved.<br />";
+}

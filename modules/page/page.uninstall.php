@@ -24,16 +24,16 @@ if (!isset($res)) {
 }
 
 // Remove all auth (rights) entries for page categories (use global $db_auth from config)
-global $db_auth;
+global $db_auth, $cfg;
 if (isset($db_auth)) {
 	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page'");
 	$res .= "Deleted page auth entries: " . sed_sql_affectedrows() . "<br />";
 }
 
-// WARNING: This will drop page tables and all data!
-// Uncomment the lines below to enable full cleanup on uninstall.
-
-// sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "pages");
-// sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "structure");
-
-$res .= "Page module uninstalled. Page tables preserved.<br />";
+if (!empty($sed_uninstall_drop_tables)) {
+	sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "pages");
+	sed_sql_query("DROP TABLE IF EXISTS " . $cfg['sqldbprefix'] . "structure");
+	$res .= "Page tables dropped.<br />";
+} else {
+	$res .= "Page module uninstalled. Page tables preserved.<br />";
+}

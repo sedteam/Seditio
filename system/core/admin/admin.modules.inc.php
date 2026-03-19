@@ -188,7 +188,7 @@ if ($a == 'details' && !empty($mod_code)) {
 			$t->assign("MODULE_DETAILS_INSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=install&" . sed_xg()));
 			$t->parse($opt_box . ".MODULE_DETAILS_OPT_INSTALL");
 		} else {
-			$t->assign("MODULE_DETAILS_UNINSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=uninstall&" . sed_xg()));
+			$t->assign("MODULE_DETAILS_UNINSTALL_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=uninstall_confirm&" . sed_xg()));
 			$t->parse($opt_box . ".MODULE_DETAILS_OPT_UNINSTALL");
 			if ($ct_state == 1) {
 				$t->assign("MODULE_DETAILS_PAUSE_URL", sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pause&" . sed_xg()));
@@ -306,8 +306,40 @@ if ($a == 'details' && !empty($mod_code)) {
 			$adminmain .= $t->text("ADMIN_MODULES");
 			break;
 
+		case 'uninstall_confirm':
+			$module_dir = SED_ROOT . '/modules/' . $mod_code . '/';
+			$uninstall_file = $module_dir . $mod_code . '.uninstall.php';
+			$install_file = $module_dir . $mod_code . '.install.php';
+			$has_uninstall = file_exists($uninstall_file);
+			$has_install = file_exists($install_file);
+
+			// Skip confirmation for modules without uninstall script and without tables (no install.php)
+			if (!$has_uninstall && !$has_install) {
+				$res = sed_module_uninstall($mod_code, false);
+				$t->assign(array(
+					"MODULE_ACTION_INFO" => $res,
+					"MODULE_ACTION_URL" => sed_url("admin", "m=modules")
+				));
+				$t->parse("ADMIN_MODULES.MODULE_ACTION");
+			} else {
+				$t->assign(array(
+					"MODULE_UNINSTALL_CONFIRM_ACTION" => sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=uninstall&" . sed_xg()),
+					"MODULE_UNINSTALL_CONFIRM_CHECKBOX" => sed_checkbox('drop_tables', '1', false)
+				));
+				$t->parse("ADMIN_MODULES.MODULE_UNINSTALL_CONFIRM");
+			}
+			$t->assign("ADMIN_MODULES_TITLE", $admintitle);
+			$t->parse("ADMIN_MODULES");
+			$adminmain .= $t->text("ADMIN_MODULES");
+			break;
+
 		case 'uninstall':
-			$res = sed_module_uninstall($mod_code);
+			if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+				sed_redirect(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=uninstall_confirm&" . sed_xg()));
+				exit;
+			}
+			$drop_tables = (bool) sed_import('drop_tables', 'P', 'BOL');
+			$res = sed_module_uninstall($mod_code, $drop_tables);
 			$t->assign(array(
 				"MODULE_ACTION_INFO" => $res,
 				"MODULE_ACTION_URL" => sed_url("admin", "m=modules")

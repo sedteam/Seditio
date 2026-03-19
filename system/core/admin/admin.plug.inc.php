@@ -136,7 +136,7 @@ switch ($a) {
 				"PLUG_DETAILS_COPYRIGHT" => isset($info['Copyright']) ? $info['Copyright'] : '',
 				"PLUG_DETAILS_NOTES" => isset($info['Notes']) ? $info['Notes'] : '',
 				"PLUG_DETAILS_INSTALL_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=install&" . sed_xg()),
-				"PLUG_DETAILS_UNINSTALL_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=uninstall&" . sed_xg()),
+				"PLUG_DETAILS_UNINSTALL_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=uninstall_confirm&" . sed_xg()),
 				"PLUG_DETAILS_PAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=pause&" . sed_xg()),
 				"PLUG_DETAILS_UNPAUSE_URL" => sed_url("admin", "m=plug&a=edit&pl=" . $info['Code'] . "&b=unpause&" . sed_xg())
 			));
@@ -328,11 +328,41 @@ switch ($a) {
 
 				break;
 
+			case 'uninstall_confirm':
+				sed_check_xg();
+
+				$extplugin_uninstall = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".uninstall.php";
+				$extplugin_install = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".install.php";
+				$has_uninstall = file_exists($extplugin_uninstall);
+				$has_install = file_exists($extplugin_install);
+
+				// Skip confirmation for plugins without uninstall script and without tables (no install.php)
+				if (!$has_uninstall && !$has_install) {
+					$t->assign(array(
+						"PLUG_UN_INSTALL_INFO" => sed_plugin_uninstall($pl, false, false),
+						"PLUG_UN_INSTALL_URL" => sed_url("admin", "m=plug")
+					));
+					$t->parse("ADMIN_PLUG.PLUG_UN_INSTALL");
+				} else {
+					$t->assign(array(
+						"PLUG_UNINSTALL_CONFIRM_ACTION" => sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=uninstall&" . sed_xg()),
+						"PLUG_UNINSTALL_CONFIRM_CHECKBOX" => sed_checkbox('drop_tables', '1', false)
+					));
+					$t->parse("ADMIN_PLUG.PLUG_UNINSTALL_CONFIRM");
+				}
+
+				break;
+
 			case 'uninstall':
 				sed_check_xg();
 
+				if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+					sed_redirect(sed_url("admin", "m=plug&a=edit&pl=" . $pl . "&b=uninstall_confirm&" . sed_xg()));
+					exit;
+				}
+				$drop_tables = (bool) sed_import('drop_tables', 'P', 'BOL');
 				$t->assign(array(
-					"PLUG_UN_INSTALL_INFO" => sed_plugin_uninstall($pl),
+					"PLUG_UN_INSTALL_INFO" => sed_plugin_uninstall($pl, false, $drop_tables),
 					"PLUG_UN_INSTALL_URL" => sed_url("admin", "m=plug")
 				));
 

@@ -499,6 +499,12 @@ $L['adm_opt_deletepart'] = "Parçayı sil";
 $L['adm_opt_pause'] = "Duraklat";
 $L['adm_opt_unpause'] = "Duraklatmayı kaldır";
 
+$L['adm_uninstall_confirm'] = "Kaldırmayı onayla";
+$L['adm_uninstall_drop_tables'] = "Veritabanı tablolarını ve tüm verileri sil";
+$L['adm_uninstall_drop_tables_help'] = "İşaretlenmezse veriler korunur ve tablolar yeniden yükleme için tutulur.";
+$L['adm_uninstall_drop_tables_warning'] = "Uyarı! Tabloların silinmesi tüm verilerin kalıcı olarak silinmesine neden olacaktır. Tabloları bırakırsanız veriler yeniden yükleme için korunacaktır.";
+$L['adm_uninstall_submit'] = "Kaldırmayı onayla";
+
 /* ====== Modules ====== */
 
 $L['adm_locked'] = "Kilit";
