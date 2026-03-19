@@ -1775,6 +1775,171 @@ const sedjs = {
     },
 
     /**
+     * Popover: click-triggered floating panel with template in JS.
+     * Closes on [data-sed-popover-close] and on click outside.
+     * Position via data-sed-popover-position on trigger: left, right, top, bottom, center.
+     */
+    popover: {
+        template: '<div class="sed-popover" style="display:none;" data-sed-popover>' +
+            '<button type="button" class="sed-popover-close" data-sed-popover-close>×</button>' +
+            '<div class="sed-popover-body"></div></div>',
+        activePopover: null,
+
+        init(containerEl) {
+            const container = containerEl || document;
+            const triggers = container.querySelectorAll('[data-sed-popover-trigger]');
+
+            for (let i = 0; i < triggers.length; i++) {
+                const trigger = triggers[i];
+                if (trigger._sedPopoverInit) continue;
+                trigger._sedPopoverInit = true;
+
+                const targetId = trigger.getAttribute('data-sed-popover-target');
+                const contentEl = targetId ?
+                    document.getElementById(targetId) :
+                    trigger.parentElement.querySelector('[data-sed-popover-content]');
+                if (!contentEl) continue;
+
+                const popover = this.createFromContent(contentEl);
+                const parent = trigger.parentElement;
+                if (!parent) continue;
+
+                const cs = window.getComputedStyle(parent);
+                if (!parent.style.position || cs.position === 'static') {
+                    parent.style.position = 'relative';
+                }
+                parent.appendChild(popover);
+
+                popover._sedTrigger = trigger;
+                popover._sedContent = contentEl;
+                contentEl.style.display = 'none';
+
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.toggle(trigger, popover);
+                });
+
+                const closeBtn = popover.querySelector('[data-sed-popover-close]');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.hide(popover);
+                    });
+                }
+            }
+
+            if (!document._sedPopoverDocClick) {
+                document._sedPopoverDocClick = true;
+                document.addEventListener('click', (e) => {
+                    const active = this.activePopover;
+                    if (!active) return;
+                    const target = e.target;
+                    if (active.contains(target) || (active._sedTrigger && active._sedTrigger.contains(target))) return;
+                    this.hide(active);
+                });
+            }
+        },
+
+        createFromContent(contentEl) {
+            const wrap = document.createElement('div');
+            wrap.innerHTML = this.template.trim();
+            const popover = wrap.firstChild;
+            const body = popover.querySelector('.sed-popover-body');
+            while (contentEl.firstChild) {
+                body.appendChild(contentEl.firstChild);
+            }
+            return popover;
+        },
+
+        getPosition(trigger) {
+            const pos = (trigger.getAttribute('data-sed-popover-position') || 'bottom').toLowerCase();
+            const allowed = ['left', 'right', 'top', 'bottom', 'center'];
+            return allowed.indexOf(pos) >= 0 ? pos : 'bottom';
+        },
+
+        position(trigger, popover) {
+            const pos = this.getPosition(trigger);
+            const tRect = trigger.getBoundingClientRect();
+            const pRect = popover.getBoundingClientRect();
+            const parent = popover.offsetParent || document.body;
+            const parentRect = parent.getBoundingClientRect();
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+
+            let top = 0;
+            let left = 0;
+
+            if (parent === document.body) {
+                top = scrollY;
+                left = scrollX;
+            }
+
+            const tLeft = tRect.left - parentRect.left;
+            const tTop = tRect.top - parentRect.top;
+            const tRight = tLeft + tRect.width;
+            const tBottom = tTop + tRect.height;
+            const gap = 4;
+
+            switch (pos) {
+                case 'bottom':
+                    top = tBottom + gap;
+                    left = tLeft + (tRect.width / 2) - (pRect.width / 2);
+                    break;
+                case 'top':
+                    top = tTop - pRect.height - gap;
+                    left = tLeft + (tRect.width / 2) - (pRect.width / 2);
+                    break;
+                case 'left':
+                    top = tTop + (tRect.height / 2) - (pRect.height / 2);
+                    left = tLeft - pRect.width - gap;
+                    break;
+                case 'right':
+                    top = tTop + (tRect.height / 2) - (pRect.height / 2);
+                    left = tRight + gap;
+                    break;
+                case 'center':
+                    top = tTop + (tRect.height / 2) - (pRect.height / 2);
+                    left = tLeft + (tRect.width / 2) - (pRect.width / 2);
+                    break;
+                default:
+                    top = tBottom + gap;
+                    left = tLeft + (tRect.width / 2) - (pRect.width / 2);
+            }
+
+            popover.style.top = top + 'px';
+            popover.style.left = left + 'px';
+        },
+
+        show(triggerEl, popoverEl) {
+            if (this.activePopover && this.activePopover !== popoverEl) {
+                this.hide(this.activePopover);
+            }
+            this.activePopover = popoverEl;
+            popoverEl.style.display = 'block';
+            this.position(triggerEl, popoverEl);
+        },
+
+        hide(popoverEl) {
+            if (!popoverEl) return;
+            popoverEl.style.display = 'none';
+            if (this.activePopover === popoverEl) {
+                this.activePopover = null;
+            }
+        },
+
+        toggle(triggerEl, popoverEl) {
+            const isShown = popoverEl.style.display !== 'none';
+            if (isShown) {
+                this.hide(popoverEl);
+            } else {
+                this.show(triggerEl, popoverEl);
+            }
+        }
+    },
+
+    /**
      * Sortable functionality for drag-and-drop reordering of elements.
      * Uses mouse/pointer/touch events for full control over drag behavior (jQuery UI-like).
      * @param {HTMLElement} element - The container element for sortable items.
@@ -2384,6 +2549,7 @@ sedjs.ready(() => {
     sedjs.autofiletitle();
     sedjs.spoiler();
     sedjs.closealert();
+    sedjs.popover.init(document);
     sedjs.getrel("sedthumb");
     const cookie = sedjs.readCookie("style");
     const title = cookie ? cookie : sedjs.getPreferredStyleSheet();

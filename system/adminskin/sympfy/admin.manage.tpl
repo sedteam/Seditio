@@ -92,7 +92,7 @@
 						<!-- BEGIN: MODULES_PLUG_LIST -->
 						<div class="table-row">
 							<div class="table-td text-left">
-								<a href="{MODULES_PLUG_LIST_URL}"><span class="icon"><i class="ic-{MODULES_PLUG_LIST_CODE}"></i></span> {MODULES_PLUG_LIST_TITLE}</a>
+								<a href="{MODULES_PLUG_LIST_URL}"><span class="icon"><i class="ic-tool ic-{MODULES_PLUG_LIST_CODE}"></i></span> {MODULES_PLUG_LIST_TITLE}</a>
 							</div>
 							<div class="table-td text-center"></div>
 							<div class="table-td text-center"></div>

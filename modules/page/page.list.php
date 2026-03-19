@@ -442,7 +442,21 @@ $extpf = sed_getextplugins('list.loopfirst');
 $extp = sed_getextplugins('list.loop');
 /* ===== */
 
-while ($pag = sed_sql_fetchassoc($sql) and ($jj <= $cfg['maxrowsperpage'])) {
+$list_items = array();
+while ($row = sed_sql_fetchassoc($sql)) {
+	$list_items[] = $row;
+}
+
+/* === Hook - list.list === */
+$extp_list = sed_getextplugins('list.list');
+if (is_array($extp_list)) {
+	foreach ($extp_list as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
+
+foreach ($list_items as $pag) {
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extpf)) {
