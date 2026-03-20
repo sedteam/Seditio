@@ -33,7 +33,7 @@ if (isset($cfg['plugin']['tags']['pages']) && $cfg['plugin']['tags']['pages'] ==
 
 $page_id = (int)$pag['page_id'];
 $page_tags = sed_tag_list($page_id, 'pages');
-$t->assign("PAGE_TAGS", sed_tag_build_list($page_tags, 'pages'));
+$t->assign("PAGE_TAGS", sed_tag_build_list($page_tags, 'pages', false));
 
 $cloud_page_on = !isset($cfg['plugin']['tags']['cloud_page_on']) || $cfg['plugin']['tags']['cloud_page_on'] != 0;
 if (!$cloud_page_on) {

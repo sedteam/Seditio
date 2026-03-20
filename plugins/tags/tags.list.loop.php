@@ -39,4 +39,4 @@ if (isset($sed_tags_batch_pages) && isset($sed_tags_batch_pages[$list_page_id]))
 	$list_tags = sed_tag_list($list_page_id, 'pages');
 }
 
-$t->assign("LIST_ROW_TAGS", sed_tag_build_list($list_tags, 'pages'));
+$t->assign("LIST_ROW_TAGS", sed_tag_build_list($list_tags, 'pages', false));

@@ -33,4 +33,4 @@ if (isset($cfg['plugin']['tags']['forums']) && $cfg['plugin']['tags']['forums'] 
 
 $topic_tags = sed_tag_list((int)$q, 'forums');
 
-$t->assign("FORUMS_POSTS_TAGS", sed_tag_build_list($topic_tags, 'forums'));
+$t->assign("FORUMS_POSTS_TAGS", sed_tag_build_list($topic_tags, 'forums', false));

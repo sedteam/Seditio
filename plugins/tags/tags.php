@@ -136,7 +136,7 @@ if (!empty($tag_query)) {
 					"TAGS_RESULT_PAGE_CAT" => $cattitle,
 					"TAGS_RESULT_PAGE_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['page_date']),
 					"TAGS_RESULT_PAGE_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name']), $row['user_maingrp']),
-					"TAGS_RESULT_PAGE_TAGS" => sed_tag_build_list($item_tags, 'pages')
+					"TAGS_RESULT_PAGE_TAGS" => sed_tag_build_list($item_tags, 'pages', false)
 				));
 				$t->parse("MAIN.TAGS_RESULTS.TAGS_RESULT_PAGES.TAGS_RESULT_PAGE_ROW");
 			}
@@ -176,7 +176,7 @@ if (!empty($tag_query)) {
 					"TAGS_RESULT_TOPIC_SECTION" => sed_cc($row['fs_title']),
 					"TAGS_RESULT_TOPIC_DATE" => sed_build_date($cfg['formatmonthdayhourmin'], $row['ft_creationdate']),
 					"TAGS_RESULT_TOPIC_POSTS" => $row['ft_postcount'],
-					"TAGS_RESULT_TOPIC_TAGS" => sed_tag_build_list($item_tags, 'forums')
+					"TAGS_RESULT_TOPIC_TAGS" => sed_tag_build_list($item_tags, 'forums', false)
 				));
 				$t->parse("MAIN.TAGS_RESULTS.TAGS_RESULT_FORUMS.TAGS_RESULT_TOPIC_ROW");
 			}

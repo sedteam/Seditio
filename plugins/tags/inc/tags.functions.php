@@ -20,14 +20,14 @@ if (!defined('SED_CODE')) {
 /* ============ HTML MASKS (edit here to customize output) ============
  * cloud_wrapper: %1$s = inner links
  * cloud_link: %1$s = url, %2$s = level, %3$s = count, %4$s = display text
- * list_wrapper: %1$s = label, %2$s = links
+ * list_wrapper: %1$s = full content (label + links or links only)
  * list_link: %1$s = url, %2$s = display text
  * more_block: %1$s = url, %2$s = label
  */
 $sed_tag_masks = array(
 	'cloud_wrapper' => '<div class="tags-cloud">%1$s</div>',
 	'cloud_link'    => '<a href="%1$s" class="tag-%2$s" title="%3$s">%4$s</a> ',
-	'list_wrapper'  => '<span class="tags-list">%1$s: %2$s</span>',
+	'list_wrapper'  => '<span class="tags-list">%1$s</span>',
 	'list_link'     => '<a href="%1$s" rel="tag">%2$s</a>',
 	'more_block'    => '<div class="tags-more"><a href="%1$s">%2$s</a></div>',
 );
@@ -427,11 +427,12 @@ function sed_tag_build_cloud($cloud, $area = 'all', $base_url = '')
 /**
  * Builds inline tag list HTML for display on pages/topics.
  *
- * @param array  $tags Array of tag strings
- * @param string $area Area code
+ * @param array       $tags  Array of tag strings
+ * @param string      $area  Area code
+ * @param string|bool $label Label text, null = default from lang, false or '' = no label
  * @return string HTML
  */
-function sed_tag_build_list($tags, $area = 'pages')
+function sed_tag_build_list($tags, $area = 'pages', $label = null)
 {
 	global $L, $cfg, $sed_tag_masks;
 
@@ -446,8 +447,15 @@ function sed_tag_build_list($tags, $area = 'pages')
 
 	$separator = isset($cfg['plugin']['tags']['list_separator']) ? $cfg['plugin']['tags']['list_separator'] : ' ';
 	if ($separator === '') $separator = ' ';
-	$label = isset($L['tags_tags']) ? $L['tags_tags'] : 'Tags';
-	return sprintf($sed_tag_masks['list_wrapper'], $label, implode($separator, $links));
+
+	$links_str = implode($separator, $links);
+	if ($label !== false && $label !== '') {
+		$label_str = ($label !== null) ? $label : (isset($L['tags_tags']) ? $L['tags_tags'] : 'Tags');
+		$content = $label_str . ': ' . $links_str;
+	} else {
+		$content = $links_str;
+	}
+	return sprintf($sed_tag_masks['list_wrapper'], $content);
 }
 
 /**

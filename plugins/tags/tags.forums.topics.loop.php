@@ -39,4 +39,4 @@ if (isset($sed_tags_batch_forums) && isset($sed_tags_batch_forums[$ft_id])) {
 	$topic_tags = sed_tag_list($ft_id, 'forums');
 }
 
-$t->assign("FORUMS_TOPICS_ROW_TAGS", sed_tag_build_list($topic_tags, 'forums'));
+$t->assign("FORUMS_TOPICS_ROW_TAGS", sed_tag_build_list($topic_tags, 'forums', false));
