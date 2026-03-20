@@ -70,3 +70,4 @@ $L['cfg_cloud_list_on'] = array("Show tag cloud in page listings", "");
 $L['cfg_cloud_page_on'] = array("Show tag cloud on page view", "");
 $L['cfg_tagstitle'] = array("Page title mask", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");
 $L['cfg_list_separator'] = array("Separator between tags in list", "e.g. space, comma, dot");
+$L['cfg_cloud_forums_on'] = array("Show tag cloud on forum main page", "");

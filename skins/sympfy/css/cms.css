@@ -445,7 +445,7 @@ table.cells tr:nth-child(even) {
   margin: 0.5em 0;
   width: 100%;
   position: relative;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .table-tr,

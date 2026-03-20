@@ -32,22 +32,22 @@
 				<!-- BEGIN: TAGS_RESULT_PAGES -->
 				<div class="tags-results-pages">
 					<h4>{TAGS_RESULT_PAGES_TITLE}</h4>
-					<div class="table cells striped">
-						<div class="table-head">
-							<div class="table-row">
+					<div class="table cells striped resp-table">
+						<div class="table-head resp-table-head">
+							<div class="table-row resp-table-row">
 								<div class="table-th coltop text-left">{PHP.L.Title}</div>
 								<div class="table-th coltop text-left">{PHP.L.Category}</div>
 								<div class="table-th coltop text-left">{PHP.L.Date}</div>
 								<div class="table-th coltop text-left">{PHP.L.tags_tags}</div>
 							</div>
 						</div>
-						<div class="table-body">
+						<div class="table-body resp-table-body">
 							<!-- BEGIN: TAGS_RESULT_PAGE_ROW -->
-							<div class="table-row tags-result-item">
-								<div class="table-td text-left"><a href="{TAGS_RESULT_PAGE_URL}">{TAGS_RESULT_PAGE_TITLE}</a></div>
-								<div class="table-td text-left">{TAGS_RESULT_PAGE_CAT}</div>
-								<div class="table-td text-left">{TAGS_RESULT_PAGE_DATE}</div>
-								<div class="table-td text-left">{TAGS_RESULT_PAGE_TAGS}</div>
+							<div class="table-row resp-table-row tags-result-item">
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Title}"><a href="{TAGS_RESULT_PAGE_URL}">{TAGS_RESULT_PAGE_TITLE}</a></div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Category}">{TAGS_RESULT_PAGE_CAT}</div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Date}">{TAGS_RESULT_PAGE_DATE}</div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.tags_tags}">{TAGS_RESULT_PAGE_TAGS}</div>
 							</div>
 							<!-- END: TAGS_RESULT_PAGE_ROW -->
 						</div>
@@ -58,24 +58,24 @@
 				<!-- BEGIN: TAGS_RESULT_FORUMS -->
 				<div class="tags-results-forums">
 					<h4>{TAGS_RESULT_FORUMS_TITLE}</h4>
-					<div class="table cells striped">
-						<div class="table-head">
-							<div class="table-row">
+					<div class="table cells striped resp-table">
+						<div class="table-head resp-table-head">
+							<div class="table-row resp-table-row">
 								<div class="table-th coltop text-left">{PHP.L.Title}</div>
 								<div class="table-th coltop text-left">{PHP.L.Section}</div>
 								<div class="table-th coltop text-left">{PHP.L.Date}</div>
-								<div class="table-th coltop text-center">{PHP.L.Posts}</div>
+								<div class="table-th coltop text-left">{PHP.L.Posts}</div>
 								<div class="table-th coltop text-left">{PHP.L.tags_tags}</div>
 							</div>
 						</div>
-						<div class="table-body">
+						<div class="table-body resp-table-body">
 							<!-- BEGIN: TAGS_RESULT_TOPIC_ROW -->
-							<div class="table-row tags-result-item">
-								<div class="table-td text-left"><a href="{TAGS_RESULT_TOPIC_URL}">{TAGS_RESULT_TOPIC_TITLE}</a></div>
-								<div class="table-td text-left">{TAGS_RESULT_TOPIC_SECTION}</div>
-								<div class="table-td text-left">{TAGS_RESULT_TOPIC_DATE}</div>
-								<div class="table-td text-center">{TAGS_RESULT_TOPIC_POSTS}</div>
-								<div class="table-td text-left">{TAGS_RESULT_TOPIC_TAGS}</div>
+							<div class="table-row resp-table-row tags-result-item">
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Title}"><a href="{TAGS_RESULT_TOPIC_URL}">{TAGS_RESULT_TOPIC_TITLE}</a></div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Section}">{TAGS_RESULT_TOPIC_SECTION}</div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Date}">{TAGS_RESULT_TOPIC_DATE}</div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.Posts}">{TAGS_RESULT_TOPIC_POSTS}</div>
+								<div class="table-td text-left resp-table-td" data-label="{PHP.L.tags_tags}">{TAGS_RESULT_TOPIC_TAGS}</div>
 							</div>
 							<!-- END: TAGS_RESULT_TOPIC_ROW -->
 						</div>

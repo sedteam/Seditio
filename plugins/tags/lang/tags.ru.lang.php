@@ -70,3 +70,4 @@ $L['cfg_cloud_list_on'] = array("Показывать облако тегов в
 $L['cfg_cloud_page_on'] = array("Показывать облако тегов на странице", "");
 $L['cfg_tagstitle'] = array("Маска заголовка страницы", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}");
 $L['cfg_list_separator'] = array("Разделитель между тегами в списке", "напр. пробел, запятая, точка");
+$L['cfg_cloud_forums_on'] = array("Показывать облако тегов на главной форума", "");

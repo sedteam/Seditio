@@ -193,3 +193,22 @@
   color: #fff;
   text-decoration: none;
 }
+
+.tags-results-pages,
+.tags-results-forums,
+.tags-cloud-section {
+  padding-top: 24px;
+}
+
+.tags-more {
+  text-align: right;
+}
+
+.tags-more a {
+  color: #010101;
+  background: #f2f2f2;
+  border: 1px solid #f2f2f2;
+  padding: 3px 7px;
+  position: relative;
+  border-radius: 3px;
+}

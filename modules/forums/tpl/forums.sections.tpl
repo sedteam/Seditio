@@ -115,6 +115,13 @@
 
 			</div>
 
+			<!-- BEGIN: FORUMS_SECTIONS_TAGS_CLOUD_BOX -->
+			<div class="tags-cloud-section" style="margin-top:20px;">
+				<h4>{PHP.L.tags_cloud}</h4>
+				{FORUMS_SECTIONS_TAGS_CLOUD}
+			</div>
+			<!-- END: FORUMS_SECTIONS_TAGS_CLOUD_BOX -->
+
 		</div>
 
 	</div>
