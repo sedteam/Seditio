@@ -69,3 +69,4 @@ $L['cfg_cloud_index_on'] = array("Show tags cloud on index", "");
 $L['cfg_cloud_list_on'] = array("Show tags cloud in page list", "");
 $L['cfg_cloud_page_on'] = array("Show tags cloud on page view", "");
 $L['cfg_tagstitle'] = array("Page title mask", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");
+$L['cfg_list_separator'] = array("Listede etiketler arası ayırıcı", "örn. boşluk, virgül, nokta");

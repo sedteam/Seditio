@@ -61,6 +61,14 @@
 					</li>
 
 					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.Tags}</label></div>
+						<div class="form-field">
+							{PAGEADD_FORM_TAGS}
+							<div class="descr">{PAGEADD_FORM_TAGS_HINT}</div>
+						</div>
+					</li>
+
+					<li class="form-row">
 						<div class="form-field-100">{PHP.skinlang.pageadd.Bodyofthepage}<br /><br />{PAGEADD_FORM_TEXT}</div>
 					</li>
 

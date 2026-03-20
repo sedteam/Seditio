@@ -1,80 +1,127 @@
 /* Tags plugin styles */
 
 .tags-cloud {
-	line-height: 2;
-	padding: 8px 0;
+  line-height: 1;
+  padding: 8px 0;
+  display: flex;
+  gap: 10px 5px;
+  flex-wrap: wrap;
 }
 
 .tags-cloud a {
-	display: inline-block;
-	padding: 2px 6px;
-	margin: 2px;
-	border-radius: 3px;
-	text-decoration: none;
-	transition: opacity 0.2s;
+  display: inline-block;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: opacity 0.2s;
 }
 
 .tags-cloud a:hover {
-	opacity: 0.8;
-	text-decoration: underline;
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
-.tag-xs { font-size: 0.75em; }
-.tag-s  { font-size: 0.9em; }
-.tag-m  { font-size: 1.05em; }
-.tag-l  { font-size: 1.25em; font-weight: 500; }
-.tag-xl { font-size: 1.5em; font-weight: 600; }
+.tag-xs {
+  font-size: 0.75em;
+}
+.tag-s {
+  font-size: 0.9em;
+}
+.tag-m {
+  font-size: 1.05em;
+}
+.tag-l {
+  font-size: 1.25em;
+  font-weight: 500;
+}
+.tag-xl {
+  font-size: 1.5em;
+  font-weight: 600;
+}
 
 .tags-list {
-	display: inline-block;
-	margin: 4px 0;
-	font-size: 0.9em;
+  display: inline-block;
+  margin: 4px 0;
+  font-size: 14px;
 }
 
 .tags-list a {
-	display: inline-block;
-	padding: 1px 6px;
-	margin: 1px 2px;
-	border-radius: 3px;
-	text-decoration: none;
-	background: rgba(0, 0, 0, 0.05);
-	transition: background 0.2s;
+  background: #bfbfbf;
+  border-radius: 3px 0 0 3px;
+  color: #ffffff;
+  text-shadow: 1px 0px 1px #8b97af;
+  display: inline-block;
+  height: 22px;
+  font-size: 0.9em;
+  line-height: 23px;
+  padding: 0 6px 0 18px;
+  position: relative;
+  margin: 0 10px 5px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+.tags-list a::before {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+  content: '';
+  height: 6px;
+  left: 7px;
+  position: absolute;
+  width: 6px;
+  top: 8px;
+}
+
+.tags-list a::after {
+  border-bottom: 11px solid transparent;
+  border-left: 10px solid #bfbfbf;
+  border-top: 11px solid transparent;
+  content: '';
+  position: absolute;
+  right: -10px;
+  top: 0;
 }
 
 .tags-list a:hover {
-	background: rgba(0, 0, 0, 0.1);
+  background-color: #1a5fb4;
+}
+
+.tags-list a:hover::after {
+  border-left-color: #1a5fb4;
 }
 
 .tags-results-section {
-	margin: 15px 0;
+  margin: 15px 0;
 }
 
 .tags-results-section h3 {
-	margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .tags-result-item {
-	padding: 6px 0;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* Search form (tags-specific, no dependency on global .filters) */
 .filters-tags {
-	padding: 15px;
-	border: 1px dotted #cccccc;
-	background: #fbfbfb;
-	margin-bottom: 15px;
+  padding: 15px;
+  border: 1px dotted #cccccc;
+  background: #fbfbfb;
+  margin-bottom: 15px;
 }
 
 .filters-tags .filters-tags-form div {
-	display: inline-block;
-	padding: 5px;
-	vertical-align: top;
+  display: inline-block;
+  padding: 5px;
+  vertical-align: top;
 }
 
 .filters-tags .tags-form-hint {
-	display: block;
-	margin-top: 4px;
+  display: block;
+  margin-top: 4px;
 }
 
 /* Autocomplete (copied from admin skin) */
@@ -116,33 +163,33 @@
 
 /* Admin: alphafilter in header */
 .tags-admin-alphafilters {
-    display: inline-block;
-    padding: 20px;
-    vertical-align: middle;
-    max-width: 1000px;
+  display: inline-block;
+  padding: 20px;
+  vertical-align: middle;
+  max-width: 1000px;
 }
 
 .tags-admin-letter {
-	background: #f0f0f0;
-	padding: 5px 8px;
-	text-align: center;
-	margin: 2px 1px;
-	display: inline-block;
-	color: #333;
-	border-radius: 4px;
-	font-weight: 400;
-	text-decoration: none;
+  background: #f0f0f0;
+  padding: 5px 8px;
+  text-align: center;
+  margin: 2px 1px;
+  display: inline-block;
+  color: #333;
+  border-radius: 4px;
+  font-weight: 400;
+  text-decoration: none;
 }
 
 .tags-admin-letter:hover,
 .tags-admin-letter:focus {
-	text-decoration: none;
-	background-color: #333;
-	color: #fff;
+  text-decoration: none;
+  background-color: #333;
+  color: #fff;
 }
 
 .tags-admin-letter.active {
-	background-color: #333;
-	color: #fff;
-	text-decoration: none;
+  background-color: #333;
+  color: #fff;
+  text-decoration: none;
 }

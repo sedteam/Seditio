@@ -43,7 +43,7 @@ $index_cloud = sed_tag_cloud($index_area, $index_order, $index_limit);
 $index_cloud_html = sed_tag_build_cloud($index_cloud, $index_area);
 
 if (!empty($index_cloud_html) && !empty($cfg['plugin']['tags']['more']) && $index_limit > 0) {
-	$index_cloud_html .= '<div class="tags-more"><a href="' . sed_url('plug', 'e=tags') . '">' . $L['tags_alltags'] . '</a></div>';
+	$index_cloud_html .= sed_tag_build_more(sed_url('plug', 'e=tags'), $L['tags_alltags']);
 }
 
 $t->assign("INDEX_TAGS_CLOUD", $index_cloud_html);

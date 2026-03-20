@@ -1243,7 +1243,12 @@ ul {
 
 .news-item .post-info {
   width: 100%;
-  margin-top: 25px;
+  margin-top: 12px;
+}
+
+.news-item .post-tags {
+  width: 100%;
+  margin-top: 24px;
 }
 
 .news-item .post-author,
@@ -2123,7 +2128,7 @@ a.alfabeta:hover {
 }
 
 .forums-thanked {
-  font-size:0.8em;
+  font-size: 0.8em;
 }
 
 .forums-table .cattop h4 {

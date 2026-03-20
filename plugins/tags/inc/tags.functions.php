@@ -17,6 +17,21 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
+/* ============ HTML MASKS (edit here to customize output) ============
+ * cloud_wrapper: %1$s = inner links
+ * cloud_link: %1$s = url, %2$s = level, %3$s = count, %4$s = display text
+ * list_wrapper: %1$s = label, %2$s = links
+ * list_link: %1$s = url, %2$s = display text
+ * more_block: %1$s = url, %2$s = label
+ */
+$sed_tag_masks = array(
+	'cloud_wrapper' => '<div class="tags-cloud">%1$s</div>',
+	'cloud_link'    => '<a href="%1$s" class="tag-%2$s" title="%3$s">%4$s</a> ',
+	'list_wrapper'  => '<span class="tags-list">%1$s: %2$s</span>',
+	'list_link'     => '<a href="%1$s" rel="tag">%2$s</a>',
+	'more_block'    => '<div class="tags-more"><a href="%1$s">%2$s</a></div>',
+);
+
 /**
  * Normalizes a single tag string.
  * Lowercases, strips dangerous chars, collapses whitespace, trims.
@@ -387,13 +402,15 @@ function sed_tag_parse_query($qs, $join_col = 'r.tag_item', $area = 'all')
  */
 function sed_tag_build_cloud($cloud, $area = 'all', $base_url = '')
 {
+	global $sed_tag_masks;
+
 	if (empty($cloud)) return '';
 
 	if (empty($base_url)) {
 		$base_url = sed_url('plug', 'e=tags');
 	}
 
-	$html = '<div class="tags-cloud">';
+	$inner = '';
 	foreach ($cloud as $item) {
 		$display = sed_tag_title(sed_cc($item['tag']));
 		$sep = (strpos($base_url, '?') !== false) ? '&' : '?';
@@ -401,11 +418,10 @@ function sed_tag_build_cloud($cloud, $area = 'all', $base_url = '')
 		if ($area !== 'all') {
 			$url .= '&a=' . sed_tag_qs_value($area);
 		}
-		$html .= '<a href="' . $url . '" class="tag-' . $item['level'] . '" title="' . $item['cnt'] . '">' . $display . '</a> ';
+		$inner .= sprintf($sed_tag_masks['cloud_link'], $url, $item['level'], $item['cnt'], $display);
 	}
-	$html .= '</div>';
 
-	return $html;
+	return sprintf($sed_tag_masks['cloud_wrapper'], $inner);
 }
 
 /**
@@ -417,7 +433,7 @@ function sed_tag_build_cloud($cloud, $area = 'all', $base_url = '')
  */
 function sed_tag_build_list($tags, $area = 'pages')
 {
-	global $L;
+	global $L, $cfg, $sed_tag_masks;
 
 	if (empty($tags)) return '';
 
@@ -425,11 +441,26 @@ function sed_tag_build_list($tags, $area = 'pages')
 	foreach ($tags as $tag) {
 		$display = sed_tag_title(sed_cc($tag));
 		$url = sed_url('plug', 'e=tags&a=' . sed_tag_qs_value($area) . '&t=' . sed_tag_qs_value($tag));
-		$links[] = '<a href="' . $url . '" rel="tag">' . $display . '</a>';
+		$links[] = sprintf($sed_tag_masks['list_link'], $url, $display);
 	}
 
+	$separator = isset($cfg['plugin']['tags']['list_separator']) ? $cfg['plugin']['tags']['list_separator'] : ' ';
+	if ($separator === '') $separator = ' ';
 	$label = isset($L['tags_tags']) ? $L['tags_tags'] : 'Tags';
-	return '<span class="tags-list">' . $label . ': ' . implode(', ', $links) . '</span>';
+	return sprintf($sed_tag_masks['list_wrapper'], $label, implode($separator, $links));
+}
+
+/**
+ * Builds the "All tags" link block for limited clouds.
+ *
+ * @param string $url   URL to full tags page
+ * @param string $label Link text
+ * @return string HTML
+ */
+function sed_tag_build_more($url, $label)
+{
+	global $sed_tag_masks;
+	return sprintf($sed_tag_masks['more_block'], $url, $label);
 }
 
 /**

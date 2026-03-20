@@ -215,11 +215,7 @@ $t->assign(array(
 	"FORUMS_EDITPOST_MYPFS" => $pfs
 ));
 
-if ($firstpost) {
-	$t->parse("MAIN.FORUMS_EDITPOST_FIRST");
-}
-
-/* === Hook === */
+/* === Hook (before parse FORUMS_EDITPOST_FIRST so tags are assigned) === */
 $extp = sed_getextplugins('forums.editpost.tags');
 if (is_array($extp)) {
 	foreach ($extp as $k => $pl) {
@@ -227,6 +223,10 @@ if (is_array($extp)) {
 	}
 }
 /* ===== */
+
+if ($firstpost) {
+	$t->parse("MAIN.FORUMS_EDITPOST_FIRST");
+}
 
 $t->parse("MAIN");
 $t->out("MAIN");

@@ -41,7 +41,7 @@ $list_cloud = sed_tag_cloud('pages', $list_order, $list_limit);
 $list_cloud_html = sed_tag_build_cloud($list_cloud, 'pages');
 
 if (!empty($list_cloud_html) && !empty($cfg['plugin']['tags']['more']) && $list_limit > 0) {
-	$list_cloud_html .= '<div class="tags-more"><a href="' . sed_url('plug', 'e=tags') . '">' . $L['tags_alltags'] . '</a></div>';
+	$list_cloud_html .= sed_tag_build_more(sed_url('plug', 'e=tags'), $L['tags_alltags']);
 }
 
 $t->assign("LIST_TAGS_CLOUD", $list_cloud_html);

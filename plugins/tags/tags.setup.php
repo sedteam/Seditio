@@ -49,6 +49,7 @@ cloud_index_on=17:radio:0,1:1:Show tags cloud on index
 cloud_list_on=18:radio:0,1:1:Show tags cloud in category list
 cloud_page_on=19:radio:0,1:1:Show tags cloud on page view
 tagstitle=20:string::{MAINTITLE} - {TITLE}:Page title mask
+list_separator=21:string:: :Separator between tags in list
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */
