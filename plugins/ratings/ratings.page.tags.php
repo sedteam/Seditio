@@ -27,6 +27,7 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
+global $cfg;
 $allowratingscat = $sed_cat[$pag['page_cat']]['allowratings'];
 $allowratingspage = $pag['page_allowratings'];
 $ratings = sed_import('ratings', 'G', 'BOL');
@@ -46,7 +47,7 @@ $pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . 
 
 if (!empty($ratings_link)) {
 	$t->assign(array(
-		"PAGE_RATINGS_COUNT" => $pag['page_rating'],
+		"PAGE_RATINGS_COUNT" => sprintf($cfg['ratings_count_mask'], sed_cc($item_code), number_format((float)$pag['page_rating'], 2, '.', '')),
 		"PAGE_RATINGS_URL" => $pag['page_pageurlrat'],
 		"PAGE_RATINGS" => $ratings_link,
 		"PAGE_RATINGS_DISPLAY" => $ratings_display

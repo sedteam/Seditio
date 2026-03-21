@@ -81,7 +81,7 @@
 										<div class="post-author">{LIST_ROW_OWNER_AVATAR}{LIST_ROW_OWNER}</div>
 										<div class="post-comments"><i class="ic-message-circle"></i><a href="{LIST_ROW_COMURL}">{LIST_ROW_COMCOUNT}</a></div>
 										<!-- BEGIN: LIST_ROW_FILE -->
-										<div class="post-file"><i class="ic-document-file-{LIST_ROW_FILEICON}"></i></div>
+										<div class="post-file">{LIST_ROW_FILEICON}</div>
 										<!-- END: LIST_ROW_FILE -->
 									</div>
 								</figcaption>

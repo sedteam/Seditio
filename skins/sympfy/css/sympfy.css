@@ -1577,7 +1577,6 @@ ul {
 
 .ratings-box-title {
   padding: 20px;
-  cursor: pointer;
   margin-bottom: 1.3em;
   position: relative;
   border-bottom: 1px solid #e4e7e7;
@@ -1591,6 +1590,12 @@ ul {
 .ratings-box-title h3 {
   margin: 0;
   font-size: 1.3em;
+  font-weight: 600;
+}
+
+.ratings-box-title h3 .ratings-count-value {
+  font-size: 0.7em;
+  vertical-align: middle;
   font-weight: 600;
 }
 

@@ -653,19 +653,6 @@ ul.tabs li a.selected {
 
 .rating-box {
   display: inline-block;
-  width: 160px;
-  height: 16px;
-}
-
-.rating {
-  width: 160px;
-  height: 16px;
-  margin: 0;
-  display: inline-block;
-  padding: 0;
-  list-style: none;
-  position: relative;
-  background: url('../img/system/vote.gif') no-repeat 0 0;
 }
 
 .s0 {
@@ -1203,12 +1190,10 @@ ul.admin-buttons li {
   vertical-align: middle;
 }
 
-
 .filters .btn {
-    padding: 9px 30px 10px 30px;
-    vertical-align: top;
+  padding: 9px 30px 10px 30px;
+  vertical-align: top;
 }
-
 
 .pfs-stats {
   color: #cccccc;

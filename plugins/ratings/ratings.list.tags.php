@@ -30,8 +30,10 @@ if (!defined('SED_CODE')) {
 $allowratingscat = isset($sed_cat[$c]['allowratings']) ? $sed_cat[$c]['allowratings'] : false;
 $list_ratings = '';
 $list_ratings_display = '';
+$ratings_item_code = 'l' . (isset($c) ? $c : '');
+$ratings_url_list = array('part' => 'page', 'params' => 'c=' . (isset($c) ? $c : ''));
 if (function_exists('sed_build_ratings')) {
-	list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, $url_list, $allowratingscat, true);
+	list($list_ratings, $list_ratings_display) = sed_build_ratings($ratings_item_code, $ratings_url_list, $allowratingscat, true);
 }
 
 $t->assign(array(

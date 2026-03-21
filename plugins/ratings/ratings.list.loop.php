@@ -27,10 +27,16 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
+global $cfg;
 $pratings = "&ratings=1";
 $pag['page_pageurlrat'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . $pag['page_id'] . $pratings) : sed_url("page", "al=" . $pag['page_alias'] . $pratings);
 
-$rating_img = round((float)isset($pag['page_rating']) ? $pag['page_rating'] : 0, 0);
-$list_row_ratings = sed_link($pag['page_pageurlrat'], "<img src=\"skins/" . $usr['skin'] . "/img/system/vote" . $rating_img . ".gif\" alt=\"\" />");
+$rating_value = (float)(isset($pag['page_rating']) ? $pag['page_rating'] : 0);
+$rating_widget = function_exists('sed_ratings_render_readonly') ? sed_ratings_render_readonly($rating_value, 'p' . $pag['page_id']) : (string)$rating_value;
+$list_row_ratings = sed_link($pag['page_pageurlrat'], $rating_widget);
+$item_code = 'p' . $pag['page_id'];
 
-$t->assign("LIST_ROW_RATINGS", $list_row_ratings);
+$t->assign(array(
+	"LIST_ROW_RATINGS" => $list_row_ratings,
+	"LIST_ROW_RATINGS_COUNT" => sprintf($cfg['ratings_count_mask'], sed_cc($item_code), number_format($rating_value, 2, '.', ''))
+));

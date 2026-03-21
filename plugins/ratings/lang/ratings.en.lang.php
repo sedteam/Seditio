@@ -30,3 +30,21 @@ $L['rat_disable'] = "Rating change is disabled!";
 $L['adm_ratings_totalitems'] = "Total pages rated";
 $L['adm_ratings_totalvotes'] = "Total votes";
 $L['adm_help_ratings'] = "To reset a rating, simply delete it. It will be re-created with the first new vote.";
+
+$L['rat_labels_3'] = array("Poor", "Fair", "Excellent");
+$L['rat_labels_5'] = array("Poor", "Below average", "Average", "Good", "Excellent");
+$L['rat_labels_6'] = array("Very poor", "Poor", "Below average", "Fair", "Good", "Excellent");
+$L['rat_labels_20'] = array(
+	"Very poor", "Very poor+", "Poor", "Poor+", "Below average", "Below average+", "Fair", "Fair+",
+	"Average", "Average+", "Almost good", "Almost good+", "Good", "Good+", "Very good", "Very good+", "Excellent", "Excellent+", "Almost perfect", "Perfect"
+);
+
+$L['cfg_maxstars'] = array("Maximum number of stars", "");
+$L['cfg_ratingstep'] = array("Rating step (0.5 = half stars)", "");
+$L['cfg_css'] = array("Include plugin CSS", "");
+$L['cfg_starsize'] = array("Star size (px)", "");
+$L['cfg_starshape'] = array("Star shape", "");
+$L['cfg_strokewidth'] = array("Stroke width (0 = no stroke)", "");
+$L['cfg_usegradient'] = array("Use gradient for active stars", "");
+$L['cfg_gradient_start'] = array("Gradient start color", "");
+$L['cfg_gradient_end'] = array("Gradient end color", "");

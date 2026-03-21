@@ -12,7 +12,6 @@
 
 			<div class="page-info">
 				<div class="page-date"><i class="ic-clock"></i> {PAGE_DATE}</div>
-				<div class="page-rating"><a href="{PAGE_RATINGS_URL}"><i class="ic-star-full"></i> {PAGE_RATINGS_COUNT}</a></div>
 			</div>
 
 		</div>
@@ -132,7 +131,7 @@
 				<div class="page-ratings">
 
 					<div class="ratings-box-title">
-						<h3>{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</h3>
+						<h3>{PHP.skinlang.page.Ratings} {PAGE_RATINGS} {PAGE_RATINGS_COUNT}</h3>
 					</div>
 
 					{PAGE_RATINGS_DISPLAY}

@@ -475,7 +475,11 @@ foreach ($list_items as $pag) {
 
 	if (!empty($pag['page_url']) && $pag['page_file']) {
 		$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
-		$pag['page_fileicon'] = (mb_strlen($pag['page_url']) - $dotpos > 4) ? "doc" : mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
+		$pag['page_fileicon'] = "system/img/ext/" . mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)) . ".svg";
+		if (!file_exists(SED_ROOT . '/' . $pag['page_fileicon'])) {
+			$pag['page_fileicon'] = "system/img/ext/download.svg";
+		}
+		$pag['page_fileicon'] = "<img src=\"" . $pag['page_fileicon'] . "\" width=\"16\" alt=\"\">";
 
 		$t->assign(array(
 			"LIST_ROW_FILEICON" => $pag['page_fileicon'],
