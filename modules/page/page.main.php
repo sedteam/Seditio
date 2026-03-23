@@ -181,6 +181,7 @@ $t->assign(array(
 	"PAGE_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PAGE_CAT" => $pag['page_cat'],
 	"PAGE_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
+	"PAGE_CATURL" => sed_url("page", "c=" . $pag['page_cat']),
 	"PAGE_CATPATH" => $catpath,
 	"PAGE_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
 	"PAGE_CATICON" => $sed_cat[$pag['page_cat']]['icon'],

@@ -191,53 +191,90 @@ switch ($mn) {
 		if (sed_sql_numrows($sql) > 0) {
 			$row = sed_sql_fetchassoc($sql);
 
+			/* Build allowed_locations from active modules/plugins */
+			$location_labels = array(
+				'pages'        => 'Pages',
+				'users'        => 'Users',
+				'com'          => 'Comments',
+				'forum_topics' => 'Forum topics'
+			);
+			$allowed_locations = array();
+			if (sed_module_active('page')) {
+				$allowed_locations['pages'] = $location_labels['pages'];
+			}
+			if (sed_module_active('users')) {
+				$allowed_locations['users'] = $location_labels['users'];
+			}
+			if (sed_plug_active('comments')) {
+				$allowed_locations['com'] = $location_labels['com'];
+			}
+			if (sed_module_active('forums')) {
+				$allowed_locations['forum_topics'] = $location_labels['forum_topics'];
+			}
+			$location_arr = $allowed_locations;
+
 			//---
 			if ($a == 'add' && (!empty($did))) {
-				if (!empty($extralocation) && !empty($row['dic_code'])) {
-					sed_extrafield_add(
-						$extralocation,
-						$row['dic_code'],
-						$extratype,
-						$extrasize,
-						$extradefault,
-						$extraallownull,
-						$extraextra
-					);
-					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '301']);
+				if (empty($allowed_locations)) {
+					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '909']);
+				} elseif (!empty($extralocation) && !empty($row['dic_code'])) {
+					if (!isset($allowed_locations[$extralocation])) {
+						sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '909']);
+					} else {
+						$add_ok = sed_extrafield_add(
+							$extralocation,
+							$row['dic_code'],
+							$extratype,
+							$extrasize,
+							$extradefault,
+							$extraallownull,
+							$extraextra
+						);
+						if ($add_ok) {
+							sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '301']);
+						} else {
+							sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '500']);
+						}
+					}
 				}
 			}
-			//---      	
+			//---
 			if ($a == 'update' && (!empty($did))) {
-				$extradelete = sed_import('extradelete', 'P', 'BOL');
-				if ($extradelete) {
-					sed_extrafield_remove($row['dic_extra_location'], $row['dic_code']);
+				if (empty($allowed_locations)) {
+					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '909']);
+				} elseif (!isset($allowed_locations[$row['dic_extra_location']])) {
+					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '909']);
 				} else {
-					sed_extrafield_update(
-						$row['dic_extra_location'],
-						$row['dic_code'],
-						$extratype,
-						$extrasize,
-						$extradefault,
-						$extraallownull,
-						$extraextra
-					);
+					$extradelete = sed_import('extradelete', 'P', 'BOL');
+					if ($extradelete) {
+						$remove_ok = sed_extrafield_remove($row['dic_extra_location'], $row['dic_code']);
+						if ($remove_ok) {
+							sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '917']);
+						} else {
+							sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '500']);
+						}
+					} else {
+						$update_ok = sed_extrafield_update(
+							$row['dic_extra_location'],
+							$row['dic_code'],
+							$extratype,
+							$extrasize,
+							$extradefault,
+							$extraallownull,
+							$extraextra
+						);
+						if ($update_ok) {
+							sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '917']);
+						} else {
+							sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '500']);
+						}
+					}
 				}
-				sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '917']);
 			}
 
 			$urlpaths[sed_url("admin", "m=dic&mn=dicitem&did=" . $did)] = $row['dic_title'];
 			$urlpaths[sed_url("admin", "m=dic&mn=extra&did=" . $did)] = $L['adm_dic_extra'];
 			$admintitle = $L['adm_dic_extra'];
-
-			$location_arr = array(
-				'pages'        => 'Pages',
-				'users'        => 'Users',
-				'com'          => 'Comments'
-			);
-			/* Forum topics dict support available when forums module is active */
-			if (isset($db_forum_topics)) {
-				$location_arr['forum_topics'] = 'Forum topics';
-			}
 
 			$type_arr = array(
 				'varchar'     => 'VARCHAR',
