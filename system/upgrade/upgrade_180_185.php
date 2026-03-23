@@ -57,6 +57,17 @@ if ($chk_dic && sed_sql_numrows($chk_dic) > 0) {
 	$adminmain .= "dic: extra columns added.<br />";
 }
 
+/* ======== Menu table: add menu_cssclass (only if table exists) ======== */
+$adminmain .= "Checking menu table...<br />";
+$chk_menu = @sed_sql_query("SHOW TABLES LIKE '$db_menu'");
+if ($chk_menu && sed_sql_numrows($chk_menu) > 0) {
+	$chk_col = @sed_sql_query("SHOW COLUMNS FROM $db_menu LIKE 'menu_cssclass'");
+	if (!$chk_col || sed_sql_numrows($chk_col) == 0) {
+		@sed_sql_query("ALTER TABLE $db_menu ADD COLUMN menu_cssclass varchar(255) NOT NULL DEFAULT '' AFTER menu_target");
+		$adminmain .= "menu: menu_cssclass column added.<br />";
+	}
+}
+
 $adminmain .= "-----------------------<br />";
 
 /* ======== Modular architecture: fill ct_path, ct_admin for core entries ======== */

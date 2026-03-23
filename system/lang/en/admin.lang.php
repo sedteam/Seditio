@@ -361,7 +361,7 @@ $L['adm_dic_extra_size'] = "Length of field";
 
 $L['adm_dic_comma_separat'] = "(comma separated)";
 
-$L['adm_help_dic'] = ""; //Need add
+$L['adm_help_dic'] = "Directories store terms, while Extrapoles (Extra fields) turn those terms into template fields.<br />1) In \"Directory\" set Code (base for placeholders and the DB column), Type and (for select/radio/checkbox) Values.<br />2) In \"Terms list\" add terms: Title (shown) and Value (stored code). Optionally mark the \"default term\".<br />3) In \"Extra field\" choose the insertion Location (pages/users/com, etc.). After saving, Seditio adds a column like tableprefix_{CODE} (page_{CODE}/user_{CODE}/com_{CODE}) and uses your terms when building select/radio/checkbox inputs.<br />Template placeholders: {XXX_CODE} — the extrapole value (in forms it is an input, on output it is term-resolved); {XXX_CODE_TITLE}, {XXX_CODE_DESC}, {XXX_CODE_MERA}, {XXX_CODE_VAL} (title/description/unit/raw value).";
 
 $L['adm_dic_form_wysiwyg'] = "WYSIWYG editor type";
 
@@ -385,6 +385,8 @@ $L['adm_editmenuitem'] = "Edit menu item";
 $L['adm_parentitem'] = "Parent item";
 $L['adm_url'] = "URL";
 $L['adm_activity'] = "Active?";
+$L['adm_menu_cssclass'] = "CSS class";
+$L['adm_help_menu'] = "In \"Menu manager\" create menu items (Title), link each to a parent (Parent), and set URL, position and visibility (Visible).<br />In public templates, the menu is rendered from sed_menu, where N is the parent menu item ID (menu_pid):<br />- {PHP.sed_menu.N.childrens} — full children tree (the parent itself is not shown)<br />- {PHP.sed_menu.N.childrensonlevel} — one level of children (the parent itself is not shown)<br />- {PHP.sed_menu.N.parent} — only the parent item.";
 
 /* ====== PFS ====== */
 

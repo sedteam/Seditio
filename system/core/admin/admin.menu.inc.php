@@ -38,6 +38,7 @@ $urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
 $urlpaths[sed_url("admin", "m=menu")] =  $L['core_menu'];
 
 $admintitle = $L['core_menu'];
+$adminhelp = $L['adm_help_menu'];
 
 $t = new XTemplate(sed_skinfile('admin.menu', false, true));
 
@@ -50,6 +51,7 @@ switch ($a) {
 		$mposition = sed_import('mposition', 'P', 'INT');
 		$mvisible = sed_import('mvisible', 'P', 'BOL');
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
+		$mclass = sed_import('mclass', 'P', 'TXT');
 
 		if (empty($mtitle)) {
 			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '303']);
@@ -63,7 +65,8 @@ switch ($a) {
 						menu_url,
 						menu_position,
 						menu_visible,
-						menu_target
+						menu_target,
+						menu_cssclass
 						)
 						VALUES 
 						(
@@ -72,7 +75,8 @@ switch ($a) {
 						'" . sed_sql_prep($murl) . "',
 						" . (int)$mposition . ",
 						" . (int)$mvisible . ",
-						'" . sed_sql_prep($mtarget) . "'
+						'" . sed_sql_prep($mtarget) . "',
+						'" . sed_sql_prep($mclass) . "'
 						)");
 						
 			if (empty($mposition)) {
@@ -111,6 +115,7 @@ switch ($a) {
 		$mposition = sed_import('mposition', 'P', 'INT');
 		$mvisible = sed_import('mvisible', 'P', 'BOL');
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
+		$mclass = sed_import('mclass', 'P', 'TXT');
 
 		if (empty($mtitle)) {
 			sed_redirect(sed_url("admin", "m=menu&mn=editmenu&mid=" . $mid, "", true), false, ['msg' => '303']);
@@ -122,7 +127,8 @@ switch ($a) {
 							menu_url = '" . sed_sql_prep($murl) . "',
 							menu_position = " . (int)$mposition . ",
 							menu_visible = " . (int)$mvisible . ",
-							menu_target = '" . sed_sql_prep($mtarget) . "' 						
+							menu_target = '" . sed_sql_prep($mtarget) . "',
+							menu_cssclass = '" . sed_sql_prep($mclass) . "'
 							WHERE menu_id = " . $mid);
 
 			sed_log("Update menu item #" . $mid, 'adm');
@@ -178,7 +184,8 @@ switch ($mn) {
 			"MENU_UPDATE_URL" => sed_textbox('murl', $row['menu_url']),
 			"MENU_UPDATE_POSITION" => sed_textbox('mposition', $row['menu_position'], 3, 5),
 			"MENU_UPDATE_VISIBLE" => sed_checkbox('mvisible', "", $row['menu_visible']),
-			"MENU_UPDATE_TARGET" => sed_selectbox($row['menu_target'], 'mtarget', $target_arr)
+			"MENU_UPDATE_TARGET" => sed_selectbox($row['menu_target'], 'mtarget', $target_arr),
+			"MENU_UPDATE_CSSCLASS" => sed_textbox('mclass', isset($row['menu_cssclass']) ? $row['menu_cssclass'] : '')
 		));
 
 		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");
@@ -211,7 +218,8 @@ switch ($mn) {
 			"MENU_ADD_URL" => sed_textbox('murl', isset($murl) ? $murl : ''),
 			"MENU_ADD_POSITION" => sed_textbox('mposition', isset($mposition) ? $mposition : '', 3, 5),
 			"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', isset($mvisible) ? $mvisible : '', 1),
-			"MENU_ADD_TARGET" => sed_selectbox(isset($mtarget) ? $mtarget : '', 'mtarget', $target_arr)
+			"MENU_ADD_TARGET" => sed_selectbox(isset($mtarget) ? $mtarget : '', 'mtarget', $target_arr),
+			"MENU_ADD_CSSCLASS" => sed_textbox('mclass', isset($mclass) ? $mclass : '')
 		));
 
 		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");

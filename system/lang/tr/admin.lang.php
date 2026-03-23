@@ -356,7 +356,7 @@ $L['adm_dic_extra_location'] = "Tablo adı";
 $L['adm_dic_extra_type'] = "Alan veri tipi";
 $L['adm_dic_extra_size'] = "Alan uzunluğu";
 $L['adm_dic_comma_separat'] = "(virgülle ayrılmış)";
-$L['adm_help_dic'] = ""; //Ekleme gerekli
+$L['adm_help_dic'] = "Dizinler (Directory) terimleri saklar; Ekstrapolalar (Extra fields) bu terimleri şablonlar için alanlara dönüştürür.<br />1) \"Dizin\" kısmında Code'u ayarlayın (placeholder'ların ve DB kolonunun temeli), Type ve (select/radio/checkbox için) Values.<br />2) \"Terimler listesi\" içinde terim ekleyin: Title (gösterilen) ve Value (saklanan kod). Gerekirse \"varsayılan terim\" belirtin.<br />3) \"Ekstra alan\" kısmında Location seçin: pages/users/com vb. Kaydettikten sonra sistem tableprefix_{CODE} (page_{CODE}/user_{CODE}/com_{CODE}) biçiminde bir kolon ekler ve select/radio/checkbox alanlarını oluştururken terimlerinizi kullanır.<br />Şablon placeholder'ları: {XXX_CODE} — ekstrapole değeri (formlarda girdi, çıktıda sözlükle eşleşmiş değer); {XXX_CODE_TITLE}, {XXX_CODE_DESC}, {XXX_CODE_MERA}, {XXX_CODE_VAL} (başlık/açıklama/ölçü/ham değer).";
 
 $L['adm_dic_extra_default'] = 'Varsayılan değer';
 $L['adm_dic_extra_default_help'] = 'Boş bırakın — boş string veya 0 kullanılacak (alan türüne göre). Değer girin — bu değer DEFAULT olarak kullanılacak.';
@@ -378,6 +378,8 @@ $L['adm_editmenuitem'] = "Menü öğesini düzenle";
 $L['adm_parentitem'] = "Ana öğe";
 $L['adm_url'] = "URL";
 $L['adm_activity'] = "Aktif mi?";
+$L['adm_menu_cssclass'] = "CSS sınıfı";
+$L['adm_help_menu'] = "\"Menü yöneticisi\" içinde menü öğeleri oluşturun (Title), bunları bir üst öğeye bağlayın (Parent) ve URL, pozisyon ile görünürlüğü (Visible) ayarlayın.<br />Genel şablonlarda menü, sed_menu ağacından basılır; burada N, üst menü öğesinin ID'sidir (menu_pid):<br />- {PHP.sed_menu.N.childrens} — alt öğelerin tam ağacı (üst öğe gösterilmez)<br />- {PHP.sed_menu.N.childrensonlevel} — sadece 1 seviye alt öğe (üst öğe gösterilmez)<br />- {PHP.sed_menu.N.parent} — sadece üst menü öğesi.";
 
 /* ====== PFS ====== */
 

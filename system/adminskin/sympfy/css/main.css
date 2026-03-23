@@ -613,6 +613,7 @@ a.remove-link:hover {
 .content-box-content {
   padding: 20px;
   border-top: 1px solid #ccc;
+  line-height: 1.35em;  
 }
 
 .content-box-content i {

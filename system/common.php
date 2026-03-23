@@ -668,8 +668,9 @@ if (!isset($sed_menu) && (sed_stat_get("version") > 177)) {
 	}
 
 	foreach ($menu_row as $k => $v) {
-		$sed_menu[$k]['childrens'] = sed_menu_tree($menu_tree, $k);
-		$sed_menu[$k]['childrensonlevel'] = sed_menu_tree($menu_tree, $k, 0, false, true);
+		$ul_class = isset($menu_row[$k]['menu_cssclass']) ? $menu_row[$k]['menu_cssclass'] : '';
+		$sed_menu[$k]['childrens'] = sed_menu_tree($menu_tree, $k, 0, false, false, $ul_class);
+		$sed_menu[$k]['childrensonlevel'] = sed_menu_tree($menu_tree, $k, 0, false, true, $ul_class);
 		$sed_menu[$k]['parent'] = sed_menu_tree($menu_row, $k, 0, true);
 	}
 

@@ -2972,8 +2972,8 @@ function sed_menu_tree($menus, $parent_id, $level = 0, $only_parent = false, $on
 
 	// Check if the menu exists for the given parent_id
 	if (is_array($menus) && isset($menus[$parent_id])) {
-		$class = (!empty($class)) ? " " . $class : "";
-		$tree = "<ul class=\"level-" . $level . $class . "\">";
+		$ul_class = ($level == 0 && !empty($class)) ? " " . $class : "";
+		$tree = "<ul class=\"level-" . $level . $ul_class . "\">";
 
 		if ($only_parent == false) {
 			$level++;
@@ -2990,8 +2990,15 @@ function sed_menu_tree($menus, $parent_id, $level = 0, $only_parent = false, $on
 					$attributes['target'] = $item['menu_target'];
 				}
 
+				// Build li class from menu_cssclass and optionally has-children
+				$li_classes = array();
+				if (!empty($item['menu_cssclass'])) {
+					$li_classes[] = $item['menu_cssclass'];
+				}
+
 				if ($only_childrensonlevel) {
-					$tree .= "<li>" . sed_link($item['menu_url'], $item['menu_title'], $attributes) . "</li>";
+					$li_class_attr = empty($li_classes) ? '' : ' class="' . implode(' ', $li_classes) . '"';
+					$tree .= "<li" . $li_class_attr . ">" . sed_link($item['menu_url'], $item['menu_title'], $attributes) . "</li>";
 				} else {
 					// Check for visible children to apply 'has-children' class
 					$has_children = false;
@@ -3003,14 +3010,17 @@ function sed_menu_tree($menus, $parent_id, $level = 0, $only_parent = false, $on
 							}
 						}
 					}
-					$has_children_class = $has_children ? " class=\"has-children\"" : "";
-					$tree .= "<li" . $has_children_class . ">" . sed_link($item['menu_url'], $item['menu_title'], $attributes);
-					$tree .= sed_menu_tree($menus, $item['menu_id'], $level, false, false, $class);
+					if ($has_children) {
+						$li_classes[] = 'has-children';
+					}
+					$li_class_attr = empty($li_classes) ? '' : ' class="' . implode(' ', $li_classes) . '"';
+					$tree .= "<li" . $li_class_attr . ">" . sed_link($item['menu_url'], $item['menu_title'], $attributes);
+					$tree .= sed_menu_tree($menus, $item['menu_id'], $level, false, false, "");
 					$tree .= "</li>";
 				}
 			}
 			// Return null if no visible items remain after filtering
-			if ($tree == "<ul class=\"level-" . ($level - 1) . $class . "\">") {
+			if ($tree == "<ul class=\"level-" . ($level - 1) . $ul_class . "\">") {
 				return null;
 			}
 		} elseif ($only_parent) {

@@ -289,6 +289,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "menu (
   menu_position int(11) NOT NULL DEFAULT '0',
   menu_visible tinyint(1) NOT NULL DEFAULT '1',
   menu_target varchar(10) NOT NULL DEFAULT '',
+  menu_cssclass varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (menu_id),
   KEY menu_pid (menu_pid)
 ) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");

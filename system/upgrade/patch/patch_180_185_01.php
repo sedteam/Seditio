@@ -22,7 +22,7 @@ if (!defined('SED_CODE')) {
 /* Add columns required for v185 code to run on v180 database.
  * @ suppresses errors if columns/indexes already exist (idempotent). */
 
-global $db_core, $db_plugins, $db_config;
+global $db_core, $db_plugins, $db_config, $db_menu;
 
 @sed_sql_query("ALTER TABLE $db_core ADD COLUMN ct_path VARCHAR(255) NOT NULL DEFAULT ''");
 @sed_sql_query("ALTER TABLE $db_core ADD COLUMN ct_admin TINYINT(1) UNSIGNED NOT NULL DEFAULT 0");
@@ -32,6 +32,7 @@ global $db_core, $db_plugins, $db_config;
 @sed_sql_query("ALTER TABLE $db_plugins ADD COLUMN pl_lock TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER pl_active");
 @sed_sql_query("ALTER TABLE $db_plugins ADD INDEX idx_type (pl_module)");
 @sed_sql_query("ALTER TABLE $db_config ADD INDEX idx_config_load (config_owner, config_cat)");
+@sed_sql_query("ALTER TABLE $db_menu ADD COLUMN menu_cssclass varchar(255) NOT NULL DEFAULT ''");
 
 /* Fill ct_path and ct_admin so module functions (e.g. users/inc/users.functions.php) load correctly */
 $core_paths = array(
