@@ -4168,6 +4168,29 @@ function sed_skinfile($base, $plugskin = false, $adminskin = false)
 	return "";
 }
 
+/**
+ * Builds relative template path for display.
+ *
+ * @param string $path Full path
+ * @param array $prefixes Prefixes to strip
+ * @return string
+ */
+function sed_tpl_relpath($path, $prefixes)
+{
+	$path = str_replace('\\', '/', (string)$path);
+
+	if (!is_array($prefixes)) {
+		$prefixes = array((string)$prefixes);
+	}
+
+	$normalized = array();
+	foreach ($prefixes as $prefix) {
+		$normalized[] = str_replace('\\', '/', (string)$prefix);
+	}
+
+	return str_replace($normalized, '', $path);
+}
+
 /** 
  * Parses smilies in text 
  * 

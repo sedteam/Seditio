@@ -367,7 +367,7 @@ if ($standalone) {
 
     $pfs_header1 = $cfg['doctype'] . "\n<html>\n<head>
     <title>" . $cfg['maintitle'] . "</title>" . sed_htmlmetas() . $moremetas . sed_css();
-    $pfs_header2 = "</head>\n<body>";
+    $pfs_header2 = "</head>\n<body id=\"standalone-body\">";
     $pfs_footer1 = sed_javascript();
     $pfs_footer2 = "</body>\n</html>";
 

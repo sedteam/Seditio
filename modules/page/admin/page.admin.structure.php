@@ -249,7 +249,11 @@ switch ($mn) {
 				$pagecount[$row['page_cat']] = $row['COUNT(*)'];
 			}
 
-			$skinpath = SED_ROOT . "/skins/" . $skin . "/";
+			$tpl_prefixes = array(
+				SED_ROOT . "/skins/" . $skin . "/",
+				SED_ROOT . "/skins/" . $cfg['defaultskin'] . "/",
+				SED_ROOT . "/modules/page/tpl/"
+			);
 
 			$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
 			$rows = array();
@@ -293,12 +297,12 @@ switch ($mn) {
 				}
 
 				$st_tpl = $structure_tpl_sym . ": ";
-				$st_tpl .= "<span class=\"desc\">" . str_replace($skinpath, '', sed_skinfile(array('page', $sed_cat[$row['structure_code']]['tpl'])));
+				$st_tpl .= "<span class=\"desc\">" . sed_tpl_relpath(sed_skinfile(array('page', $sed_cat[$row['structure_code']]['tpl'])), $tpl_prefixes);
 				$st_tpl .= "+";
 				if ($sed_cat[$row['structure_code']]['group']) {
-					$st_tpl .= str_replace($skinpath, '', sed_skinfile(array('list', 'group', $sed_cat[$row['structure_code']]['tpl'])));
+					$st_tpl .= sed_tpl_relpath(sed_skinfile(array('list', 'group', $sed_cat[$row['structure_code']]['tpl'])), $tpl_prefixes);
 				} else {
-					$st_tpl .= str_replace($skinpath, '', sed_skinfile(array('list', $sed_cat[$row['structure_code']]['tpl'])));
+					$st_tpl .= sed_tpl_relpath(sed_skinfile(array('list', $sed_cat[$row['structure_code']]['tpl'])), $tpl_prefixes);
 				}
 				$st_tpl .= "</span>";
 
