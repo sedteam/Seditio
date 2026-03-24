@@ -162,6 +162,17 @@ if (!empty($p)) {
 				require($path_lang);
 			}
 			$plug_title = (isset($L[$pl['pl_title']]) ? $L[$pl['pl_title']] : $pl['pl_title']);
+
+			$t->assign(array(
+				"MODULES_PLUG_LIST_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=plug&io=" . $pl['pl_code'])
+			));
+			$t->parse("ADMIN_MANAGE.MODULES_PLUG_LIST.MODULES_PLUG_LIST_RIGHTS");
+
+			$t->assign(array(
+				"MODULES_PLUG_LIST_CONFIG_URL" => sed_url("admin", "m=config&n=edit&o=plug&p=" . $pl['pl_code'])
+			));
+			$t->parse("ADMIN_MANAGE.MODULES_PLUG_LIST.MODULES_PLUG_LIST_CONFIG");
+
 			$t->assign(array(
 				"MODULES_PLUG_LIST_URL" => sed_url("admin", "m=" . $pl['pl_code']),
 				"MODULES_PLUG_LIST_TITLE" => $plug_title,

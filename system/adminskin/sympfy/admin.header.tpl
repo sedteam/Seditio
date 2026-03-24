@@ -9,7 +9,7 @@
 	<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 	<link href="system/adminskin/{PHP.cfg.adminskin}/css/fonts.css" type="text/css" rel="stylesheet" />
 	<link href="system/adminskin/{PHP.cfg.adminskin}/css/framework.css" type="text/css" rel="stylesheet" />
-	<link href="system/adminskin/{PHP.cfg.adminskin}/css/main.css" type="text/css" rel="stylesheet" />
+	<link href="system/adminskin/{PHP.cfg.adminskin}/css/{PHP.cfg.adminskin}.css" type="text/css" rel="stylesheet" />
 	<link href="system/adminskin/{PHP.cfg.adminskin}/css/responsive.css" type="text/css" rel="stylesheet" />
 	{HEADER_CSS}
 </head>

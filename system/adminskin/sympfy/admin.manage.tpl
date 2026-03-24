@@ -94,8 +94,16 @@
 							<div class="table-td text-left">
 								<a href="{MODULES_PLUG_LIST_URL}"><span class="icon"><i class="ic-tool ic-{MODULES_PLUG_LIST_CODE}"></i></span> {MODULES_PLUG_LIST_TITLE}</a>
 							</div>
-							<div class="table-td text-center"></div>
-							<div class="table-td text-center"></div>
+							<div class="table-td text-center">
+								<!-- BEGIN: MODULES_PLUG_LIST_RIGHTS -->
+								<a href="{MODULES_PLUG_LIST_RIGHTS_URL}"><i class="ic-lock"></i></a>
+								<!-- END: MODULES_PLUG_LIST_RIGHTS -->
+							</div>
+							<div class="table-td text-center">
+								<!-- BEGIN: MODULES_PLUG_LIST_CONFIG -->
+								<a href="{MODULES_PLUG_LIST_CONFIG_URL}"><i class="ic-settings"></i></a>
+								<!-- END: MODULES_PLUG_LIST_CONFIG -->
+							</div>
 						</div>
 						<!-- END: MODULES_PLUG_LIST -->
 
