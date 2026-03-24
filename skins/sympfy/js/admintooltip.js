@@ -5,13 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var tooltipTimeout;
 
-    document.addEventListener('mouseover', function(event) {
-        var from = event.relatedTarget || event.fromElement;
-        if (!tooltip.contains(from)) {
-            clearTimeout(tooltipTimeout);
-        }
-    });
-
     document.addEventListener('mouseout', function(event) {
         var to = event.relatedTarget || event.toElement;
         if (!tooltip.contains(to)) {
@@ -32,20 +25,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    var elements = document.querySelectorAll('[data-page], [data-category], [data-config]');
-    elements.forEach(function(element) {
-        element.addEventListener('mouseover', function(event) {
-            var id = element.getAttribute('data-page');
-            var category = element.getAttribute('data-category');
-            var config = element.getAttribute('data-config');
-            if (id) {
-                showTooltip(tooltipLinks['data-page'], id, element, tooltip);
-            } else if (category) {
-                showTooltip(tooltipLinks['data-category'], category, element, tooltip);
-            } else if (config) {
-                showTooltip(tooltipLinks['data-config'], config, element, tooltip);
+    function findTooltipHost(el) {
+        while (el && el.nodeType === 1) {
+            if (el.getAttribute('data-page') || el.getAttribute('data-category') || el.getAttribute('data-config')) {
+                return el;
             }
-        });
+            el = el.parentNode;
+        }
+        return null;
+    }
+
+    document.addEventListener('mouseover', function(event) {
+        var from = event.relatedTarget || event.fromElement;
+        if (!tooltip.contains(from)) {
+            clearTimeout(tooltipTimeout);
+        }
+
+        var t = event.target;
+        if (t.nodeType === 3) {
+            t = t.parentNode;
+        }
+        var element = findTooltipHost(t);
+        if (!element) {
+            return;
+        }
+        if (from && element.contains && element.contains(from)) {
+            return;
+        }
+
+        var id = element.getAttribute('data-page');
+        var category = element.getAttribute('data-category');
+        var config = element.getAttribute('data-config');
+        if (id) {
+            showTooltip(tooltipLinks['data-page'], id, element, tooltip);
+        } else if (category) {
+            showTooltip(tooltipLinks['data-category'], category, element, tooltip);
+        } else if (config) {
+            showTooltip(tooltipLinks['data-config'], config, element, tooltip);
+        }
     });
 });
 
