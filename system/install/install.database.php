@@ -418,13 +418,13 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (124, 4, 'm
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (125, 5, 'manage', 'a', 255, 255, 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (126, 6, 'manage', 'a', 0, 0, 1);");
 
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(1, 0, 'Menu', '', 1, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(2, 1, 'Home', '/', 2, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(3, 1, 'Forums', 'forums/', 3, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(4, 1, 'Articles', 'articles/', 4, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(5, 1, 'Galleries', 'gallery/', 5, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(6, 1, 'Contact', 'plug/contact', 6, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(7, 4, 'Sample category 1', 'articles/sample1/', 1, 1, '');");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(8, 4, 'Sample category 2', 'articles/sample2/', 2, 1, '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(1, 0, 'Menu', '', 1, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(2, 1, 'Home', '/', 2, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(3, 1, 'Forums', 'forums/', 3, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(4, 1, 'Articles', 'articles/', 4, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(5, 1, 'Galleries', 'gallery/', 5, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(6, 1, 'Contact', 'plug/contact', 6, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(7, 4, 'Sample category 1', 'articles/sample1/', 1, 1, '', '');");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(8, 4, 'Sample category 2', 'articles/sample2/', 2, 1, '', '');");
 
 /* Welcome page is created by modules/page/page.install.php when the page module is installed */

@@ -51,9 +51,16 @@ if ($a == 'delete') {
 
 		$id2 = "p" . $id;
 		$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
-		$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.delete.done');
+		if (is_array($extp)) {
+			foreach ($extp as $k => $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
+		}
+		/* ===== */
+
 		sed_log("Deleted page #" . $id, 'adm');
 		sed_redirect(sed_url("admin", "m=page&s=manager&c=" . $row['page_cat'], "", true), false, ['msg' => '302']);
 		exit;

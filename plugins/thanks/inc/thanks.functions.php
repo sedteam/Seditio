@@ -331,31 +331,6 @@ function thanks_resolve_item_info($ext, $item_id, $L)
 }
 
 /**
- * Checks if item exists
- *
- * @param string $ext Extension code
- * @param int $item Item ID
- * @return bool
- */
-function thanks_item_exists($ext, $item)
-{
-	global $db_pages, $db_forum_posts, $db_com;
-
-	switch ($ext) {
-		case 'page':
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_id=" . (int)$item);
-			return sed_sql_result($sql, 0, 'COUNT(*)') > 0;
-		case 'forums':
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_id=" . (int)$item);
-			return sed_sql_result($sql, 0, 'COUNT(*)') > 0;
-		case 'comments':
-			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_id=" . (int)$item);
-			return sed_sql_result($sql, 0, 'COUNT(*)') > 0;
-	}
-	return false;
-}
-
-/**
  * Builds and renders thanks block
  *
  * @param string $ext Extension code (page, forums, comments)

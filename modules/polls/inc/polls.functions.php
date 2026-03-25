@@ -193,7 +193,7 @@ function sed_poll_check()
 
 function sed_poll_delete($id)
 {
-	global $db_polls, $db_polls_options, $db_polls_voters, $db_com;
+	global $db_polls, $db_polls_options, $db_polls_voters;
 	$id = (int) $id;
 	$num = 0;
 	if ($id != 0) {
@@ -216,8 +216,15 @@ function sed_poll_delete($id)
 		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=" . $id);
 		$num = $num + sed_sql_affectedrows();
 		$id2 = "v" . $id;
-		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
-		$num = $num + sed_sql_affectedrows();
+
+		/* === Hook === */
+		$extp = sed_getextplugins('polls.delete.done');
+		if (is_array($extp)) {
+			foreach ($extp as $k => $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
+		}
+		/* ===== */
 	}
 	return $num;
 }

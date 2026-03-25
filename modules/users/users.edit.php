@@ -183,7 +183,6 @@ if ($a == 'update') {
 				$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_postername='$newname' WHERE fp_postername='$oldname'");
 			}
 			$sql = sed_sql_query("UPDATE $db_pages SET page_author='$newname' WHERE page_author='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_com SET com_author='$newname' WHERE com_author='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_online SET online_name='$newname' WHERE online_name='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
 		}
