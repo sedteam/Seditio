@@ -29,9 +29,6 @@
 	<li><a href="{ADMINMENU_PLUGINS_URL}" class="nav-top-item no-submenu {ADMINMENU_PLUGINS_URL_CLASS}"><i class="ic-wand"></i> {PHP.L.Plugins}</a></li>
 	<!-- END: PLUGINS_MENU -->
 
-	<!-- BEGIN: TRASHCAN_MENU -->
-	<li><a href="{ADMINMENU_TRASHCAN_URL}" class="nav-top-item no-submenu {ADMINMENU_TRASHCAN_URL_CLASS}"><i class="ic-trash"></i> {PHP.L.Trashcan}</a></li>
-	<!-- END: TRASHCAN_MENU -->
 
 	<!-- BEGIN: LOG_MENU -->
 	<li><a href="{ADMINMENU_LOG_URL}" class="nav-top-item no-submenu {ADMINMENU_LOG_URL_CLASS}"><i class="ic-clock"></i> {PHP.L.adm_log}</a></li>

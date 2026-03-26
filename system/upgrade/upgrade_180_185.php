@@ -83,7 +83,6 @@ $core_paths = array(
 	'pm'      => array('path' => 'modules/pm/',          'admin' => 1),
 	'polls'   => array('path' => 'modules/polls/',       'admin' => 1),
 	'users'   => array('path' => 'modules/users/',        'admin' => 1),
-	'trash'   => array('path' => 'system/core/admin/',   'admin' => 1),
 	'gallery' => array('path' => 'modules/gallery/',     'admin' => 1),
 	'dic'     => array('path' => 'system/core/admin/',   'admin' => 1),
 	'menu'    => array('path' => 'system/core/admin/',   'admin' => 1),
@@ -252,6 +251,27 @@ foreach ($active_plugins as $pcode) {
 		$adminmain .= "Plugin $pcode: setup file not found, skipped.<br />";
 	}
 }
+
+/* ======== Trash can: move from core to plugin trashcan ======== */
+$adminmain .= "Migrating trash can to plugin trashcan...<br />";
+$old_trash_cfg = array();
+$sql = sed_sql_query("SELECT config_name, config_value FROM $db_config WHERE config_owner='core' AND config_cat='trash'");
+while ($r = sed_sql_fetchassoc($sql)) {
+	$old_trash_cfg[$r['config_name']] = $r['config_value'];
+}
+sed_sql_query("DELETE FROM $db_config WHERE config_owner='core' AND config_cat='trash'");
+sed_sql_query("DELETE FROM $db_core WHERE ct_code='trash'");
+sed_sql_query("DELETE FROM $db_auth WHERE auth_code='trash'");
+$adminmain .= sed_plugin_install('trashcan');
+foreach ($old_trash_cfg as $name => $val) {
+	sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($val) . "' WHERE config_owner='plug' AND config_cat='trashcan' AND config_name='" . sed_sql_prep($name) . "'");
+}
+$sql_tf = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='trashcan' AND config_name='trash_forum'");
+if ((int)sed_sql_result($sql_tf, 0, 'COUNT(*)') == 0) {
+	sed_config_add('plug', 'trashcan', '06', 'trash_forum', 'radio', '1', '1', '', '0,1');
+	$adminmain .= "Added trash_forum to trashcan plugin config.<br />";
+}
+$adminmain .= "Trash can migration done.<br />";
 
 $adminmain .= "-----------------------<br />";
 $adminmain .= "Adding tpl_cache config option...<br />";

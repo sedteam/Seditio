@@ -313,51 +313,54 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						}
 					}
 					
-					if ($cfg['trash_comment']) {
-						$ids_str = implode(',', array_map('intval', $ids_to_delete));
-						$sql_t = sed_sql_query("SELECT * FROM $db_com WHERE com_id IN ($ids_str)");
-						$rows_by_id = array();
-						$tree = array();
-						
-						while ($r = sed_sql_fetchassoc($sql_t)) {
-							$rows_by_id[(int)$r['com_id']] = $r;
-							$pid = isset($r['com_parent']) ? (int)$r['com_parent'] : 0;
-							if (!isset($tree[$pid])) $tree[$pid] = array();
-							$tree[$pid][] = (int)$r['com_id'];
-						}
-						
-						$path = array();
-						$path[(int)$b] = (string)$b;
-						$queue = array((int)$b);
-						
-						while (!empty($queue)) {
-							$pid = array_shift($queue);
-							if (isset($tree[$pid])) {
-								foreach ($tree[$pid] as $ch_id) {
-									$path[$ch_id] = $path[$pid] . '-' . $ch_id;
-									$queue[] = $ch_id;
-								}
+					$ids_str = implode(',', array_map('intval', $ids_to_delete));
+					$sql_t = sed_sql_query("SELECT * FROM $db_com WHERE com_id IN ($ids_str)");
+					$rows_by_id = array();
+					$tree = array();
+
+					while ($r = sed_sql_fetchassoc($sql_t)) {
+						$rows_by_id[(int)$r['com_id']] = $r;
+						$pid = isset($r['com_parent']) ? (int)$r['com_parent'] : 0;
+						if (!isset($tree[$pid])) $tree[$pid] = array();
+						$tree[$pid][] = (int)$r['com_id'];
+					}
+
+					$path = array();
+					$path[(int)$b] = (string)$b;
+					$queue = array((int)$b);
+
+					while (!empty($queue)) {
+						$pid = array_shift($queue);
+						if (isset($tree[$pid])) {
+							foreach ($tree[$pid] as $ch_id) {
+								$path[$ch_id] = $path[$pid] . '-' . $ch_id;
+								$queue[] = $ch_id;
 							}
-						}
-						
-						$order = array((int)$b);
-						$queue = array((int)$b);
-						
-						while (!empty($queue)) {
-							$pid = array_shift($queue);
-							if (isset($tree[$pid])) {
-								foreach ($tree[$pid] as $ch_id) {
-									$order[] = $ch_id;
-									$queue[] = $ch_id;
-								}
-							}
-						}
-						
-						foreach ($order as $cid) {
-							$r = $rows_by_id[$cid];
-							sed_trash_put('comment', $L['Comment'] . " #" . $cid . " (" . $r['com_author'] . ")", $path[$cid], $r);
 						}
 					}
+
+					$order = array((int)$b);
+					$queue = array((int)$b);
+
+					while (!empty($queue)) {
+						$pid = array_shift($queue);
+						if (isset($tree[$pid])) {
+							foreach ($tree[$pid] as $ch_id) {
+								$order[] = $ch_id;
+								$queue[] = $ch_id;
+							}
+						}
+					}
+
+					/* === Hook === */
+					$extp = sed_getextplugins('comments.delete.first');
+					if (is_array($extp)) {
+						foreach ($extp as $k => $pl) {
+							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+						}
+					}
+					/* ===== */
+
 					$ids_str = implode(',', array_map('intval', $ids_to_delete));
 					sed_sql_query("DELETE FROM $db_com WHERE com_id IN ($ids_str)");
 
@@ -365,6 +368,16 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						$page_id = mb_substr($row['com_code'], 1, 10);
 						$sql = sed_sql_query("UPDATE $db_pages SET page_comcount=" . sed_get_comcount($row['com_code']) . " WHERE page_id=" . $page_id);
 					}
+
+					/* === Hook === */
+					$extp = sed_getextplugins('comments.delete.done');
+					if (is_array($extp)) {
+						foreach ($extp as $k => $pl) {
+							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+						}
+					}
+					/* ===== */
+
 					$com_grp = ($usr['isadmin']) ? "adm" : "usr";
 					sed_log("Deleted comment #" . $b . " in '" . $code . "'", $com_grp);
 				}

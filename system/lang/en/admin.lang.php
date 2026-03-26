@@ -270,12 +270,7 @@ $L['cfg_disable_pfs'] = array("Disable the PFS", "");
 $L['cfg_disable_ratings'] = array("Disable the ratings", "");
 $L['cfg_disable_page'] = array("Disable the pages", "");
 $L['cfg_disable_plug'] = array("Disable the plugins", "");
-$L['cfg_trash_prunedelay'] = array("Remove the items from the trash can after * days (Zero to keep forever)", "");
-$L['cfg_trash_comment'] = array("Use the trash can for the comments", "");
-/* $L['cfg_trash_forum'] moved to modules/forums/lang/ */
-$L['cfg_trash_page'] = array("Use the trash can for the pages", "");
-$L['cfg_trash_pm'] = array("Use the trash can for the private messages", "");
-$L['cfg_trash_user'] = array("Use the trash can for the users", "");
+/* Trash can plugin strings: plugins/trashcan/lang/trashcan.*.lang.php */
 
 $L['cfg_color_group'] = array("Colorize group of users", "Default: No, for better performance");  // New in v175
 
@@ -461,10 +456,6 @@ $L['adm_byweek'] = "By week";
 $L['adm_ratings_totalitems'] = "Total pages rated";
 $L['adm_ratings_totalvotes'] = "Total votes";
 $L['adm_help_ratings'] = "To reset a rating, simply delete it. It will be re-created with the first new vote.";
-
-/* ====== Trash can ====== */
-
-$L['adm_help_trashcan'] = "Here are listed the items recently deleted by the users and moderators.<br />Note that restoring a forum topic will also restore all the posts that belongs to the topic.<br />And restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />&nbsp;<br />Wipe : Delete the item forever.<br />Restore : Put the item back in the live database.";
 
 /* ====== Users ====== */
 

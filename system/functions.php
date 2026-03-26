@@ -248,6 +248,17 @@ function sed_alphaonly($text)
 	return (preg_replace('/[^a-zA-Z0-9_]/', '', $text));
 }
 
+/**
+ * Strips everything but digits and plus sign
+ *
+ * @param string $text Input
+ * @return string
+ */
+function sed_onlydigits($text)
+{
+	return (preg_replace('/[^0-9+]/', '', $text));
+}
+
 /** 
  * Displays results AJAX request 
  * 
@@ -4398,25 +4409,6 @@ function sed_title($mask, $tags, $data)
 	}
 	$title = vsprintf($mask, $data);
 	return $title;
-}
-
-/** 
- * Sends item to trash 
- * 
- * @param string $type Item type 
- * @param string $title Title 
- * @param int $itemid Item ID 
- * @param mixed $datas Item contents 
- */
-function sed_trash_put($type, $title, $itemid, $datas)
-{
-	global $db_trash, $sys, $usr;
-
-	$sql = sed_sql_query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
-		VALUES
-		(" . $sys['now_offset'] . ", '" . sed_sql_prep($type) . "', '" . sed_sql_prep($title) . "', '" . sed_sql_prep($itemid) . "', " . $usr['id'] . ", '" . sed_sql_prep(serialize($datas)) . "')");
-
-	return;
 }
 
 /** 

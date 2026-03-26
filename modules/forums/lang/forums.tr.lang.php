@@ -71,6 +71,6 @@ $L['cfg_hottopictrigger'] = array("Konunun 'popüler' sayılması için mesaj sa
 $L['cfg_maxtopicsperpage'] = array("Sayfa başına en fazla konu veya mesaj", "");
 $L['cfg_antibumpforums'] = array("Ardışık mesaj koruması", "Aynı konuda art arda iki mesaj yazılmasını engeller");
 $L['cfg_disable_forums'] = array("Forumları devre dışı bırak", "");
-$L['cfg_trash_forum'] = array("Forumlar için çöp kutusu kullan", "");
+/* $L['cfg_trash_forum'] — plugins/trashcan/lang/trashcan.*.lang.php */
 $L['cfg_forumstitle'] = array("Forum başlığı", "Mevcut seçenekler: {MAINTITLE}, {SUBTITLE}, {TITLE}");
 $L['cfg_disable_rssforums'] = array("Forum RSS beslemesini devre dışı bırak", "");

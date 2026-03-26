@@ -100,7 +100,7 @@
 						<!-- BEGIN: PLUGIN_MENU_ITEM -->
 						<li>
 							<a href="{ADMIN_PLUGIN_MENU_URL}" class="nav-top-item {ADMIN_PLUGIN_MENU_SUBMENU_CLASS} {ADMIN_PLUGIN_MENU_URL_CLASS}" style="padding-left: 15px;">
-								<span class="nav-icon"><i class="ic-plug"></i></span>
+								<span class="nav-icon"><i class="ic-plug ic-{ADMIN_PLUGIN_MENU_MOD_CODE}"></i></span>
 								<span class="nav-title">{ADMIN_PLUGIN_MENU_TITLE}</span>
 							</a>
 							<!-- BEGIN: PLUGIN_MENU_SUB -->
@@ -112,15 +112,6 @@
 							<!-- END: PLUGIN_MENU_SUB -->
 						</li>
 						<!-- END: PLUGIN_MENU_ITEM -->
-
-						<!-- BEGIN: TRASHCAN_MENU -->
-						<li>
-							<a href="{ADMIN_MENU_TRASHCAN_URL}" class="nav-top-item no-submenu {ADMIN_MENU_TRASHCAN_URL_CLASS}">
-								<span class="nav-icon"><i class="ic-trash"></i></span>
-								<span class="nav-title">{PHP.L.Trashcan}</span>
-							</a>
-						</li>
-						<!-- END: TRASHCAN_MENU -->
 
 						<!-- BEGIN: LOG_MENU -->
 						<li>

@@ -127,14 +127,30 @@ if ($a == 'update') {
 			$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id'");
 
 			if ($row = sed_sql_fetchassoc($sql)) {
-				if ($cfg['trash_user']) {
-					sed_trash_put('user', $L['User'] . " #" . $id . " " . $row['user_name'], $id, $row);
+				/* === Hook === */
+				$extp = sed_getextplugins('users.delete.first');
+				if (is_array($extp)) {
+					foreach ($extp as $k => $pl) {
+						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					}
 				}
+				/* ===== */
+
 				$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='$id'");
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id'");
 				if ($ruserdelpfs && sed_module_active('pfs') && function_exists('sed_pfs_deleteall_module')) {
 					sed_pfs_deleteall_module($id);
 				}
+
+				/* === Hook === */
+				$extp = sed_getextplugins('users.delete.done');
+				if (is_array($extp)) {
+					foreach ($extp as $k => $pl) {
+						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					}
+				}
+				/* ===== */
+
 				sed_log("Deleted user #" . $id, 'adm');
 				sed_redirect(sed_url("message", "msg=109&rc=200&id=" . $id, "", true));
 				exit;

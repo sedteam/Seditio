@@ -226,16 +226,7 @@ $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "stats (
   PRIMARY KEY (stat_name)
 ) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
 
-$sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "trash (
-  tr_id int(11) NOT NULL auto_increment,
-  tr_date int(11) unsigned NOT NULL DEFAULT '0',
-  tr_type varchar(24) NOT NULL DEFAULT '',
-  tr_title varchar(128) NOT NULL DEFAULT '',
-  tr_itemid varchar(24) NOT NULL DEFAULT '',
-  tr_trashedby int(11) NOT NULL DEFAULT '0',
-  tr_datas mediumblob,
-  PRIMARY KEY (tr_id)
-) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
+/* Table {prefix}trash: created by plugins/trashcan/trashcan.install.php when Trash can plugin is installed */
 
 $sql = sed_sql_query("CREATE TABLE " . $cfg['mysqldb'] . "users (
   user_id int(11) unsigned NOT NULL auto_increment,
@@ -334,7 +325,7 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, c
 /* Polls core entry is created by sed_module_install('polls') when the module is installed */
 /* Ratings: plugin only; no core entry (admin via admin.plug hook) */
 /* Users core entry is created by sed_module_install('users') when the module is installed */
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (13, 'trash', 'Trash Can', '110', 1, 1, 'system/core/admin/', 1);");
+/* Trash can: plugins/trashcan (install via Admin → Plugins) */
 /* Gallery: install via Admin → Modules (modules/gallery) */
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (15, 'dic', 'Directories', '177', 1, 0, 'system/core/admin/', 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "core (ct_id, ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES (16, 'menu', 'Menu manager', '178', 1, 0, 'system/core/admin/', 1);");
@@ -404,19 +395,14 @@ $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (112, 4, 'l
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (113, 5, 'log', 'a', 255, 255, 1);");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (114, 6, 'log', 'a', 0, 0, 1);");
 
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (115, 1, 'trash', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (116, 2, 'trash', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (117, 3, 'trash', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (118, 4, 'trash', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (119, 5, 'trash', 'a', 255, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (120, 6, 'trash', 'a', 0, 0, 1);");
+/* Trash auth: plugins/trashcan (plug/trashcan) when plugin is installed */
 
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (121, 1, 'manage', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (122, 2, 'manage', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (123, 3, 'manage', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (124, 4, 'manage', 'a', 0, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (125, 5, 'manage', 'a', 255, 255, 1);");
-$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (126, 6, 'manage', 'a', 0, 0, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (115, 1, 'manage', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (116, 2, 'manage', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (117, 3, 'manage', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (118, 4, 'manage', 'a', 0, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (119, 5, 'manage', 'a', 255, 255, 1);");
+$sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "auth VALUES (120, 6, 'manage', 'a', 0, 0, 1);");
 
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(1, 0, 'Menu', '', 1, 1, '', '');");
 $sql = sed_sql_query("INSERT INTO " . $cfg['mysqldb'] . "menu VALUES(2, 1, 'Home', '/', 2, 1, '', '');");

@@ -272,12 +272,7 @@ $L['cfg_disable_pfs'] = array("PFS'yi devre dışı bırak", "");
 $L['cfg_disable_ratings'] = array("Değerlendirmeleri devre dışı bırak", "");
 $L['cfg_disable_page'] = array("Sayfaları devre dışı bırak", "");
 $L['cfg_disable_plug'] = array("Eklentileri devre dışı bırak", "");
-$L['cfg_trash_prunedelay'] = array("Çöp kutasındaki öğeleri * gün sonra sil (Sonsuza kadar tutmak için sıfır)", "");
-$L['cfg_trash_comment'] = array("Yorumlar için çöp kutusunu kullan", "");
-/* $L['cfg_trash_forum'] moved to modules/forums/lang/ */
-$L['cfg_trash_page'] = array("Sayfalar için çöp kutusunu kullan", "");
-$L['cfg_trash_pm'] = array("Özel mesajlar için çöp kutusunu kullan", "");
-$L['cfg_trash_user'] = array("Kullanıcılar için çöp kutusunu kullan", "");
+/* Çöp kutusu eklentisi: plugins/trashcan/lang/trashcan.*.lang.php */
 
 $L['cfg_color_group'] = array("Kullanıcı gruplarını renkli yap", "Varsayılan: Hayır, daha iyi performans için");  // Yeni v175
 $L['cfg_ajax'] = array("AJAX'ı etkinleştir", "");  // Yeni v175
@@ -452,10 +447,6 @@ $L['adm_byweek'] = "Haftaya göre";
 $L['adm_ratings_totalitems'] = "Toplam puanlanan sayfalar";
 $L['adm_ratings_totalvotes'] = "Toplam oylar";
 $L['adm_help_ratings'] = "Bir oyu sıfırlamak için, onu basitçe silin. İlk yeni oy ile yeniden oluşturulacaktır.";
-
-/* ====== Trash can ====== */
-
-$L['adm_help_trashcan'] = "Burada kullanıcılar ve moderatörler tarafından yeni silinen öğeler listelenmiştir.<br />Bir forum konusunu geri yüklemek, konuya ait tüm gönderileri de geri yükleyecektir.<br />Ve silinmiş bir konudaki bir gönderiyi geri yüklemek, tüm konuyu (mevcutsa) ve tüm alt gönderileri geri yükleyecektir.<br />&nbsp;<br />Sil : Öğeyi sonsuza kadar sil.<br />Geri Yükle : Öğeyi canlı veritabanına geri koy.";
 
 /* ====== Users ====== */
 

@@ -205,15 +205,6 @@ if ($a == 'newpost' && $usr['auth_write']) {
 } elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($p) && ($usr['isadmin'] || $fp_posterid == $usr['id'])) {
 	sed_check_xg();
 
-	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.delete.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
-	}
-	/* ===== */
-
 	if ($post12[0] == $p && $post12[1] > 0) {
 		sed_die();
 	}
@@ -221,9 +212,15 @@ if ($a == 'newpost' && $usr['auth_write']) {
 	$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_sectionid='$s'");
 
 	if ($row = sed_sql_fetchassoc($sql)) {
-		if ($cfg['trash_forum']) {
-			sed_trash_put('forumpost', $L['Post'] . " #" . $p . " from topic #" . $q, "p" . $p . "-q" . $q, $row);
+		/* === Hook === */
+		$extp = sed_getextplugins('forums.posts.delete.first');
+		if (is_array($extp)) {
+			foreach ($extp as $k => $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
 		}
+		/* ===== */
+
 	} else {
 		sed_die();
 	}
@@ -252,9 +249,14 @@ if ($a == 'newpost' && $usr['auth_write']) {
 		$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 
 		if ($row = sed_sql_fetchassoc($sql)) {
-			if ($cfg['trash_forum']) {
-				sed_trash_put('forumtopic', $L['Topic'] . " #" . $q . " (no post left)", "q" . $q, $row);
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.posts.topic.delete.first');
+			if (is_array($extp)) {
+				foreach ($extp as $k => $pl) {
+					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+				}
 			}
+			/* ===== */
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
@@ -266,6 +268,15 @@ if ($a == 'newpost' && $usr['auth_write']) {
 				fs_postcount=fs_postcount-1,
 				fs_postcount_pruned=fs_postcount_pruned+1
 				WHERE fs_id='$s'");
+
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.posts.topic.delete.done');
+			if (is_array($extp)) {
+				foreach ($extp as $k => $pl) {
+					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+				}
+			}
+			/* ===== */
 
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.posts.emptytopicdel');

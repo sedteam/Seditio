@@ -6,26 +6,34 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.trashcan.inc.php
+File=plugins/trashcan/trashcan.admin.plug.php
 Version=185
-Updated=2026-feb-14
-Type=Core.admin
-Author=Seditio Team
-Description=Trash can
+Updated=2026-mar-26
+Type=Plugin
 [END_SED]
+
+[BEGIN_SED_EXTPLUGIN]
+Code=trashcan
+Part=admin.plug
+Hooks=admin.plug
+File=trashcan.admin.plug
+Order=15
+Lock=0
+[END_SED_EXTPLUGIN]
+
 ==================== */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 	die('Wrong URL.');
 }
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('trash', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', 'trashcan');
 sed_block($usr['isadmin']);
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("admin", "m=manage")] =  $L['adm_manage'];
-$urlpaths[sed_url("admin", "m=trashcan")] =  $L['Trashcan'];
+$urlpaths[sed_url("admin", "m=manage")] = $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=trashcan")] = $L['Trashcan'];
 
 $admintitle = $L['Trashcan'];
 
@@ -119,7 +127,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 }
 
 $t->assign(array(
-	"TRASHCAN_CONFIGURATION_URL" => sed_url("admin", "m=config&n=edit&o=core&p=trash"),
+	"TRASHCAN_CONFIGURATION_URL" => sed_url("admin", "m=config&n=edit&o=plug&p=trashcan"),
 	"TRASHCAN_WIPEALL_URL" => sed_url("admin", "m=trashcan&a=wipeall&" . sed_xg()),
 	"TRASHCAN_TOTAL" => $ii
 ));

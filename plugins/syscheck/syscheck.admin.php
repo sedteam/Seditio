@@ -95,7 +95,6 @@ $systemfiles['core'][] = 'system/core/admin/admin.rights.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.rightsbyitem.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.smilies.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.manage.inc.php';
-$systemfiles['core'][] = 'system/core/admin/admin.trashcan.inc.php';
 $systemfiles['core'][] = 'system/core/admin/admin.upgrade.inc.php';
 $systemfiles['core'][] = 'system/core/index/index.inc.php';
 $systemfiles['core'][] = 'system/core/index/index.php';

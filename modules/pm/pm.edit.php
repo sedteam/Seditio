@@ -86,10 +86,25 @@ if ($a == 'archive') {
 	$sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id='$id' LIMIT 1");
 
 	if ($row = sed_sql_fetchassoc($sql)) {
-		if ($cfg['trash_pm']) {
-			sed_trash_put('pm', $L['Private_Messages'] . " #" . $id . " " . $row['pm_title'] . " (" . $row['pm_fromuser'] . ")", $id, $row);
+		/* === Hook === */
+		$extp = sed_getextplugins('pm.delete.first');
+		if (is_array($extp)) {
+			foreach ($extp as $k => $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
 		}
+		/* ===== */
+
 		$sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='$id'");
+
+		/* === Hook === */
+		$extp = sed_getextplugins('pm.delete.done');
+		if (is_array($extp)) {
+			foreach ($extp as $k => $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
+		}
+		/* ===== */
 	}
 
 	sed_redirect(sed_url("pm", "f=" . $f, "", true));

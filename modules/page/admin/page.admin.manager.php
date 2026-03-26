@@ -45,9 +45,14 @@ if ($a == 'delete') {
 			exit;
 		}
 
-		if ($cfg['trash_page']) {
-			sed_trash_put('page', $L['Page'] . " #" . $id . " " . $row['page_title'], $id, $row);
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.delete.first');
+		if (is_array($extp)) {
+			foreach ($extp as $k => $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
 		}
+		/* ===== */
 
 		$id2 = "p" . $id;
 		$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");

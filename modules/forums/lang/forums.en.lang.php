@@ -71,6 +71,6 @@ $L['cfg_hottopictrigger'] = array("Posts for a topic to be 'hot'", "");
 $L['cfg_maxtopicsperpage'] = array("Maximum topics or posts per page", "");
 $L['cfg_antibumpforums'] = array("Anti-bump protection", "Will prevent users from posting twice in a row in the same topic");
 $L['cfg_disable_forums'] = array("Disable the forums", "");
-$L['cfg_trash_forum'] = array("Use the trash can for the forums", "");
+/* $L['cfg_trash_forum'] — plugins/trashcan/lang/trashcan.*.lang.php */
 $L['cfg_forumstitle'] = array("Title for forums", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");
 $L['cfg_disable_rssforums'] = array("Disable RSS feed for the forums", "");

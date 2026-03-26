@@ -46,7 +46,6 @@ $core_paths = array(
 	'pm'      => array('path' => 'modules/pm/',          'admin' => 1),
 	'polls'   => array('path' => 'modules/polls/',       'admin' => 1),
 	'users'   => array('path' => 'modules/users/',       'admin' => 1),
-	'trash'   => array('path' => 'system/core/',         'admin' => 1),
 	'gallery' => array('path' => 'modules/gallery/',     'admin' => 1),
 	'dic'     => array('path' => 'system/core/',         'admin' => 1),
 	'menu'    => array('path' => 'system/core/',         'admin' => 1),

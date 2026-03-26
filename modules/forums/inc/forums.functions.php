@@ -163,27 +163,57 @@ function sed_forum_prunetopics($mode, $section, $param)
 		while ($row1 = sed_sql_fetchassoc($sql1)) {
 			$q = $row1['ft_id'];
 
-			if ($cfg['trash_forum']) {
-				$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
+			$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
 
-				while ($row = sed_sql_fetchassoc($sql)) {
-					sed_trash_put('forumpost', $L['Post'] . " #" . $row['fp_id'] . " from topic #" . $q, "p" . $row['fp_id'] . "-q" . $q, $row);
+			while ($row = sed_sql_fetchassoc($sql)) {
+				/* === Hook === */
+				$extp = sed_getextplugins('forums.prune.post.delete.first');
+				if (is_array($extp)) {
+					foreach ($extp as $k => $pl) {
+						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					}
 				}
+				/* ===== */
+
 			}
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
 			$num += sed_sql_affectedrows();
 
-			if ($cfg['trash_forum']) {
-				$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
-
-				while ($row = sed_sql_fetchassoc($sql)) {
-					sed_trash_put('forumtopic', $L['Topic'] . " #" . $q . " (no post left)", "q" . $q, $row);
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.prune.post.delete.done');
+			if (is_array($extp)) {
+				foreach ($extp as $k => $pl) {
+					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 				}
+			}
+			/* ===== */
+
+			$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
+
+			while ($row = sed_sql_fetchassoc($sql)) {
+				/* === Hook === */
+				$extp = sed_getextplugins('forums.prune.topic.delete.first');
+				if (is_array($extp)) {
+					foreach ($extp as $k => $pl) {
+						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					}
+				}
+				/* ===== */
+
 			}
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 			$num1 += sed_sql_affectedrows();
+
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.prune.topic.delete.done');
+			if (is_array($extp)) {
+				foreach ($extp as $k => $pl) {
+					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+				}
+			}
+			/* ===== */
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");

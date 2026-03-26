@@ -172,14 +172,6 @@ if ($usr['id'] > 0) {
 		$t->parse("HEADER.ADMIN_MENU.LOG_MENU");
 	}
 
-	if (sed_auth('trash', 'a', 'A')) {
-		$t->assign(array(
-			"ADMIN_MENU_TRASHCAN_URL" => sed_url('admin', "m=trashcan"),
-			"ADMIN_MENU_TRASHCAN_URL_CLASS" => ($m == 'trashcan') ? 'current' : ''
-		));
-		$t->parse("HEADER.ADMIN_MENU.TRASHCAN_MENU");
-	}
-
 	if (sed_auth('manage', 'a', 'A')) {
 		$t->assign(array(
 			"ADMIN_MENU_MANAGE_URL" => sed_url('admin', "m=manage"),
@@ -224,7 +216,8 @@ if ($usr['id'] > 0) {
 					'order'     => isset($menu_def['order']) ? (int)$menu_def['order'] : 50,
 					'pl_title'  => isset($pl['pl_title']) ? $pl['pl_title'] : $plug_code,
 					'sections'  => isset($menu_def['sections']) && is_array($menu_def['sections']) ? $menu_def['sections'] : array(),
-					'adminlink' => isset($menu_def['adminlink']) ? $menu_def['adminlink'] : ''
+					'adminlink' => isset($menu_def['adminlink']) ? $menu_def['adminlink'] : '',
+					'auth'      => (isset($menu_def['auth']) && is_array($menu_def['auth'])) ? $menu_def['auth'] : null
 				);
 			}
 		}
@@ -235,6 +228,9 @@ if ($usr['id'] > 0) {
 			return strcmp($a['pl_title'], $b['pl_title']);
 		});
 		foreach ($plug_menu_items as $plug_item) {
+			if (!empty($plug_item['auth']) && is_array($plug_item['auth']) && !call_user_func_array('sed_auth', $plug_item['auth'])) {
+				continue;
+			}
 			$plug_code = $plug_item['code'];
 			$plug_menu_title = isset($L[$plug_item['title']]) ? $L[$plug_item['title']] : $plug_item['title'];
 			$plug_menu_url = !empty($plug_item['adminlink']) ? $plug_item['adminlink'] : sed_url('admin', "m=" . $plug_code);

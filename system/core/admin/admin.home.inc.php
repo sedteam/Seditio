@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.home.inc.php
 Version=185
-Updated=2026-feb-14
+Updated=2026-mar-26
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -18,6 +18,15 @@ Description=Administration panel
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 	die('Wrong URL.');
 }
+
+/* === Hook: early tasks on admin home (before breadcrumbs / template) === */
+$extp = sed_getextplugins('admin.home.first');
+if (is_array($extp)) {
+	foreach ($extp as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
 
 // ---------- Breadcrumbs
 $urlpaths = array();
@@ -33,15 +42,6 @@ if (sed_module_active('page')) {
 $upgstat = '';
 
 $sys['user_istopadmin'] = sed_auth('admin', 'a', 'A');
-
-if ($cfg['trash_prunedelay'] > 0) {
-	$timeago = $sys['now_offset'] - ($cfg['trash_prunedelay'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_trash WHERE tr_date<$timeago");
-	$deleted = sed_sql_affectedrows();
-	if ($deleted > 0) {
-		sed_log($deleted . ' old item(s) removed from the trashcan, older than ' . $cfg['trash_prunedelay'] . ' days', 'adm');
-	}
-}
 
 $t = new XTemplate(sed_skinfile('admin.home', false, true));
 
