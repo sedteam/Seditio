@@ -134,6 +134,9 @@ if ($a == 'add') {
 		$validationkey = md5(microtime());
 		sed_shield_update(20, "Registration");
 
+		$ssql_extra_columns = '';
+		$ssql_extra_values = '';
+
 		// ------ Extra fields 
 		if (count($extrafields) > 0) {
 			foreach ($extrafields as $i => $row) {

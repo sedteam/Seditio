@@ -1102,7 +1102,7 @@ class Jevix
 		$resParams = array();
 		foreach ($params as $param => $value) {
 			$param = mb_strtolower($param, 'UTF-8');
-			$value = trim($value);
+			$value = trim((string) $value);
 			if ($value == '') continue;
 			$paramAllowedValues = isset($tagRules[self::TR_PARAM_ALLOWED][$param]) ? $tagRules[self::TR_PARAM_ALLOWED][$param] : false;
 			if (empty($paramAllowedValues)) continue;

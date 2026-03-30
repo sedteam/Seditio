@@ -58,7 +58,7 @@ switch ($n) {
 
 			$sql = sed_sql_query("SELECT config_owner, config_name FROM $db_config WHERE config_owner='$o' AND config_cat='$p'");
 			while ($row = sed_sql_fetchassoc($sql)) {
-				$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
+				$cfg_value = trim((string) sed_import($row['config_name'], 'P', 'NOC'));
 				$sql1 = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($cfg_value) . "' WHERE config_name='" . $row['config_name'] . "' AND config_owner='$o' AND config_cat='$p'");
 			}
 			sed_redirect(sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p, "", true), false, ['msg' => '917']);
