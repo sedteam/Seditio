@@ -426,7 +426,7 @@ function sed_loadconfigmap()
 	$result[] = array('images', '21', 'th_logopos', 2, 'Bottom left', array('Top left', 'Top right', 'Bottom left', 'Bottom right'));
 	$result[] = array('images', '22', 'th_logotrsp', 2, '50', array(0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100));
 	$result[] = array('images', '23', 'th_logojpegqual', 2, '90', array(0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100));
-	/* RSS config moved to modules/rss (install via Admin → Modules) */
+	/* RSS config: plugins/rss (Admin → Plugins, or plug owner in DB) */
 	/* Gallery config moved to modules/gallery (install via Admin → Modules) */
 	$result[] = array('plug', '01', 'disable_plug', 3, '0', '');
 	/* PM config (pm_maxsize, pm_allownotifications) in modules/pm/pm.setup.php */

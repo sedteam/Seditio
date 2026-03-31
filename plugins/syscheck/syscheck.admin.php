@@ -37,9 +37,6 @@ $systemfiles['launchers'][] = 'modules/pm/pm.php';
 $systemfiles['launchers'][] = 'modules/polls/polls.php';
 $systemfiles['launchers'][] = 'modules/gallery/gallery.php';
 $systemfiles['launchers'][] = 'modules/users/users.php';
-$systemfiles['launchers'][] = 'modules/view/view.php';
-$systemfiles['launchers'][] = 'modules/sitemap/sitemap.php';
-$systemfiles['launchers'][] = 'modules/rss/rss.php';
 $systemfiles['launchers'][] = 'modules/forums/forums.php';
 
 $systemfiles['launchers'][] = 'system/core/admin/admin.php';
@@ -106,6 +103,27 @@ $systemfiles['core'][] = 'system/core/resizer/resizer.php';
 
 $syschecktitles['modules'] = 'Modules';
 
+$syschecktitles['plugin_rss'] = 'RSS plugin';
+
+$systemfiles['plugin_rss'][] = 'plugins/rss/rss.php';
+$systemfiles['plugin_rss'][] = 'plugins/rss/rss.setup.php';
+$systemfiles['plugin_rss'][] = 'plugins/rss/rss.urls.php';
+$systemfiles['plugin_rss'][] = 'plugins/rss/lang/rss.en.lang.php';
+
+$syschecktitles['plugin_sitemap'] = 'Sitemap plugin';
+
+$systemfiles['plugin_sitemap'][] = 'plugins/sitemap/sitemap.php';
+$systemfiles['plugin_sitemap'][] = 'plugins/sitemap/sitemap.setup.php';
+$systemfiles['plugin_sitemap'][] = 'plugins/sitemap/sitemap.urls.php';
+$systemfiles['plugin_sitemap'][] = 'plugins/sitemap/lang/sitemap.en.lang.php';
+
+$syschecktitles['plugin_view'] = 'View plugin';
+
+$systemfiles['plugin_view'][] = 'plugins/view/view.php';
+$systemfiles['plugin_view'][] = 'plugins/view/view.setup.php';
+$systemfiles['plugin_view'][] = 'plugins/view/view.urls.php';
+$systemfiles['plugin_view'][] = 'plugins/view/lang/view.en.lang.php';
+
 $systemfiles['modules'][] = 'modules/page/page.php';
 $systemfiles['modules'][] = 'modules/page/page.add.php';
 $systemfiles['modules'][] = 'modules/page/page.edit.php';
@@ -162,27 +180,6 @@ $systemfiles['modules'][] = 'modules/polls/polls.setup.php';
 $systemfiles['modules'][] = 'modules/polls/polls.urls.php';
 $systemfiles['modules'][] = 'modules/polls/polls.uninstall.php';
 $systemfiles['modules'][] = 'modules/polls/admin/polls.admin.menu.php';
-
-$systemfiles['modules'][] = 'modules/rss/rss.main.php';
-$systemfiles['modules'][] = 'modules/rss/rss.php';
-$systemfiles['modules'][] = 'modules/rss/rss.install.php';
-$systemfiles['modules'][] = 'modules/rss/rss.setup.php';
-$systemfiles['modules'][] = 'modules/rss/rss.urls.php';
-$systemfiles['modules'][] = 'modules/rss/admin/rss.admin.menu.php';
-
-$systemfiles['modules'][] = 'modules/sitemap/sitemap.main.php';
-$systemfiles['modules'][] = 'modules/sitemap/sitemap.php';
-$systemfiles['modules'][] = 'modules/sitemap/sitemap.install.php';
-$systemfiles['modules'][] = 'modules/sitemap/sitemap.setup.php';
-$systemfiles['modules'][] = 'modules/sitemap/sitemap.urls.php';
-$systemfiles['modules'][] = 'modules/sitemap/admin/sitemap.admin.menu.php';
-
-$systemfiles['modules'][] = 'modules/view/view.main.php';
-$systemfiles['modules'][] = 'modules/view/view.php';
-$systemfiles['modules'][] = 'modules/view/view.install.php';
-$systemfiles['modules'][] = 'modules/view/view.setup.php';
-$systemfiles['modules'][] = 'modules/view/view.urls.php';
-$systemfiles['modules'][] = 'modules/view/admin/view.admin.menu.php';
 
 $systemfiles['modules'][] = 'modules/users/users.auth.php';
 $systemfiles['modules'][] = 'modules/users/users.details.php';

@@ -6,33 +6,33 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/sitemap/sitemap.setup.php
+File=plugins/sitemap/sitemap.setup.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=Sitemap module
+Description=Sitemap plugin setup
 [END_SED]
 
-[BEGIN_SED_MODULE]
+[BEGIN_SED_EXTPLUGIN]
 Code=sitemap
 Name=Sitemap
 Description=XML sitemap for search engines
 Version=1.0.0
-Date=2026-feb-10
+Date=2026-mar-31
 Author=Seditio Team
 Copyright=
 Notes=
-Requires=
-Admin=1
+SQL=
 Auth_guests=R
-Lock_guests=
+Lock_guests=W12345A
 Auth_members=R
-Lock_members=
-Lock_module=0
-[END_SED_MODULE]
+Lock_members=W12345A
+Requires_modules=
+Requires_plugins=
+[END_SED_EXTPLUGIN]
 
-[BEGIN_SED_MODULE_CONFIG]
+[BEGIN_SED_EXTPLUGIN_CONFIG]
 disable_sitemap_pages=01:radio::0:Disable sitemap for pages and lists
 disable_sitemap_forums=02:radio::0:Disable sitemap for forums
 sm_pages_changefreq=03:select:always,hourly,daily,weekly,monthly,yearly,never:daily:Pages changefreq
@@ -46,7 +46,7 @@ sm_index_priority=10:string::1.0:Index priority
 sm_forums_changefreq=11:select:always,hourly,daily,weekly,monthly,yearly,never:daily:Forums changefreq
 sm_forums_priority=12:string::0.2:Forums priority
 sm_forums_limit=13:string::3000:Forums limit
-[END_SED_MODULE_CONFIG]
+[END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */
 

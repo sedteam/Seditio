@@ -6,31 +6,31 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/view/view.setup.php
+File=plugins/view/view.setup.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=View module
+Description=View plugin setup
 [END_SED]
 
-[BEGIN_SED_MODULE]
+[BEGIN_SED_EXTPLUGIN]
 Code=view
 Name=View
 Description=HTML/TXT file viewer from datas/html/
 Version=1.0.0
-Date=2026-feb-10
+Date=2026-mar-31
 Author=Seditio Team
 Copyright=
 Notes=
-Requires=
-Admin=0
+SQL=
 Auth_guests=R
-Lock_guests=
+Lock_guests=W12345A
 Auth_members=R
-Lock_members=
-Lock_module=0
-[END_SED_MODULE]
+Lock_members=W12345A
+Requires_modules=
+Requires_plugins=
+[END_SED_EXTPLUGIN]
 
 ==================== */
 

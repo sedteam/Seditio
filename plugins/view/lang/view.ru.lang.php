@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/sitemap/admin/sitemap.admin.menu.php
+File=plugins/view/lang/view.ru.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.admin
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
-Description=Sitemap admin menu (no sidebar button)
+Description=View Russian language file
 [END_SED]
 ==================== */
 
@@ -19,7 +19,4 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-return array(
-	'adminlink' => sed_url('sitemap')
-);
-
+$L['core_view'] = "Просмотр";

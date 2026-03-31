@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/rss/lang/rss.tr.lang.php
+File=plugins/rss/lang/rss.tr.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.lang
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
-Description=RSS Turkish language file
+Description=RSS plugin Turkish
 [END_SED]
 ==================== */
 
@@ -24,6 +24,7 @@ $L['core_rss'] = "RSS beslemeleri";
 $L['cfg_disable_rss'] = array("RSS beslemelerini devre dışı bırak", "");
 $L['cfg_disable_rsspages'] = array("Sayfalar için RSS beslemesini devre dışı bırak", "");
 $L['cfg_disable_rsscomments'] = array("Yorumlar için RSS beslemesini devre dışı bırak", "");
+$L['cfg_disable_rssforums'] = array("Forumlar için RSS beslemesini devre dışı bırak", "");
 $L['cfg_rss_timetolive'] = array("RSS önbellek süresi", "saniye cinsinden");
 $L['cfg_rss_defaultcode'] = array("Varsayılan RSS", "kategori kodu");
 $L['cfg_rss_maxitems'] = array("RSS beslemesindeki maksimum kayıt sayısı", "");

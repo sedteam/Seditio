@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/rss/lang/rss.en.lang.php
+File=plugins/rss/lang/rss.en.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.lang
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
-Description=RSS English language file
+Description=RSS plugin English
 [END_SED]
 ==================== */
 
@@ -24,6 +24,7 @@ $L['core_rss'] = "RSS feeds";
 $L['cfg_disable_rss'] = array("Disable RSS feeds", "");
 $L['cfg_disable_rsspages'] = array("Disable RSS feed for pages", "");
 $L['cfg_disable_rsscomments'] = array("Disable RSS feed for comments", "");
+$L['cfg_disable_rssforums'] = array("Disable RSS feed for forums", "");
 $L['cfg_rss_timetolive'] = array("Cache time for RSS feed", "in seconds");
 $L['cfg_rss_defaultcode'] = array("Default RSS feed", "enter the category code");
 $L['cfg_rss_maxitems'] = array("The maximum number of rows in the RSS feed", "");

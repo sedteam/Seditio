@@ -48,6 +48,12 @@ if ($o == 'plug' && !empty($p))  //New in v173
 	}
 }
 
+if ($o == 'module' && !empty($p)) {
+	if ($module_langfile = sed_langfile($p, 'module')) {
+		require($module_langfile);
+	}
+}
+
 switch ($n) {
 	case 'edit':
 		$o = (empty($o)) ? 'core' : $o;
@@ -114,7 +120,6 @@ switch ($n) {
 			$urlpaths[sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p)] = $L["core_" . $p];
 			$admintitle = $L["core_" . $p];
 
-			$adminhelpconfig = isset($L["adm_help_config_$p"]) ? $L["adm_help_config_$p"] : '';
 			$adminlegend = $L["core_" . $p];
 		} elseif ($o == 'module') {
 			$module_info = SED_ROOT . "/modules/" . $p . "/" . $p . ".setup.php";
@@ -135,6 +140,8 @@ switch ($n) {
 
 			$adminlegend = $L['Plugin'] . ' : ' . $name . ' (' . $p . ')';
 		}
+
+		$adminhelpconfig = isset($L["adm_help_config_$p"]) ? $L["adm_help_config_$p"] : '';
 
 		$t = new XTemplate(sed_skinfile('admin.config', false, true));
 

@@ -294,7 +294,8 @@ $L['cfg_userstitle'] = array("Title for users", "Available options: {MAINTITLE},
 $L['cfg_pfstitle'] = array("Title for PFS", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 $L['cfg_plugtitle'] = array("Title for plugins", "Available options: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 
-/* ====== Rss: cfg_* and adm_help_config_rss moved to modules/rss/lang/ ====== */
+/* ====== Rss: cfg_* and adm_help_config_rss in plugins/rss/lang/ ====== */
+/* ====== Sitemap: cfg_* and adm_help_config_sitemap in plugins/sitemap/lang/ ====== */
 
 /* ====== Forums ====== */
 

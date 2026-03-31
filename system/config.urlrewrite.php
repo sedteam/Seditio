@@ -18,7 +18,7 @@ Description=Url rewriting config
 /**
  * URL rewrite rules use numeric 'order' for processing sequence (lower = earlier).
  * Ranges: 100-199 system (go, ajax, resizer, install, captcha, robots);
- * 200-499 modules (view, rss, sitemap, polls, gallery, pfs, pm, forums);
+ * 200-499 modules (polls, gallery, pfs, pm, forums); RSS/Sitemap/View via plugins/rss, plugins/sitemap, plugins/view;
  * 500-549 plug, admin; 550-599 users, message; 600-649 list; 650-699 page; 700 index.
  * Modules set $mod_urlrewrite_order in their .urls.php.
  * Plugins set $mod_urlrewrite_order in plugins/{code}/{code}.urls.php.

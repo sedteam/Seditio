@@ -144,10 +144,29 @@ foreach ($gallery_to_images as $old_name => $new_data) {
 sed_sql_query("DELETE FROM $db_config WHERE config_owner='core' AND config_cat='gallery' AND config_name IN ('gallery_imgmaxwidth','gallery_logofile','gallery_logopos','gallery_logotrsp','gallery_logojpegqual')");
 $adminmain .= "Done.<br />";
 
-/* ======== RSS config migration ======== */
-$adminmain .= "Migrating RSS config from core to module...<br />";
-sed_sql_query("UPDATE $db_config SET config_owner='module' WHERE config_owner='core' AND config_cat='rss'");
-sed_sql_query("DELETE FROM $db_config WHERE config_cat='rss' AND config_name='disable_rssforums'");
+/* ======== RSS: migrate from core/module to plugin ======== */
+$adminmain .= "Preparing RSS migration to plugin...<br />";
+sed_sql_query("DELETE FROM $db_config WHERE config_cat='rss' AND config_owner IN ('core','module')");
+sed_sql_query("DELETE FROM $db_core WHERE ct_code='rss'");
+sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='rss' AND pl_module=1");
+sed_sql_query("DELETE FROM $db_auth WHERE auth_code='rss'");
+$adminmain .= "RSS module registry removed (plugin will install with defaults).<br />";
+
+/* ======== Sitemap: migrate from module to plugin ======== */
+$adminmain .= "Preparing Sitemap migration to plugin...<br />";
+sed_sql_query("DELETE FROM $db_config WHERE config_cat='sitemap' AND config_owner IN ('core','module')");
+sed_sql_query("DELETE FROM $db_core WHERE ct_code='sitemap'");
+sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='sitemap' AND pl_module=1");
+sed_sql_query("DELETE FROM $db_auth WHERE auth_code='sitemap'");
+$adminmain .= "Sitemap module registry removed (plugin will install with defaults).<br />";
+
+/* ======== View: migrate from module to plugin ======== */
+$adminmain .= "Preparing View migration to plugin...<br />";
+sed_sql_query("DELETE FROM $db_config WHERE config_cat='view' AND config_owner IN ('core','module')");
+sed_sql_query("DELETE FROM $db_core WHERE ct_code='view'");
+sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='view' AND pl_module=1");
+sed_sql_query("DELETE FROM $db_auth WHERE auth_code='view'");
+$adminmain .= "View module registry removed.<br />";
 
 /* ======== Remove obsolete disable_* configs ======== */
 $adminmain .= "Removing obsolete disable_* configs...<br />";
@@ -210,7 +229,7 @@ $adminmain .= "-----------------------<br />";
 
 /* ======== Clean up old core configs that now belong to modules ======== */
 $adminmain .= "Removing old core configs for modules (will be recreated by module install)...<br />";
-$modules_to_install = array('users', 'page', 'forums', 'pfs', 'pm', 'polls', 'gallery', 'rss', 'sitemap', 'view');
+$modules_to_install = array('users', 'page', 'forums', 'pfs', 'pm', 'polls', 'gallery');
 foreach ($modules_to_install as $mod_code) {
 	sed_sql_query("DELETE FROM $db_config WHERE config_owner='core' AND config_cat='" . sed_sql_prep($mod_code) . "'");
 }
@@ -244,12 +263,33 @@ while ($row_ap = sed_sql_fetchassoc($sql_ap)) {
 	$active_plugins[] = $row_ap['pl_code'];
 }
 foreach ($active_plugins as $pcode) {
+	if ($pcode === 'rss' || $pcode === 'sitemap') {
+		continue;
+	}
 	$setup_file = SED_ROOT . '/plugins/' . $pcode . '/' . $pcode . '.setup.php';
 	if (file_exists($setup_file)) {
 		$adminmain .= sed_plugin_install($pcode);
 	} else {
 		$adminmain .= "Plugin $pcode: setup file not found, skipped.<br />";
 	}
+}
+
+/* ======== RSS plugin (replaces former module; always install after 180→185) ======== */
+if (file_exists(SED_ROOT . '/plugins/rss/rss.setup.php')) {
+	$adminmain .= "<strong>Installing RSS plugin...</strong><br />";
+	$adminmain .= sed_plugin_install('rss');
+}
+
+/* ======== Sitemap plugin (replaces former module; always install after 180→185) ======== */
+if (file_exists(SED_ROOT . '/plugins/sitemap/sitemap.setup.php')) {
+	$adminmain .= "<strong>Installing Sitemap plugin...</strong><br />";
+	$adminmain .= sed_plugin_install('sitemap');
+}
+
+/* ======== View plugin (replaces former module; always install after 180→185) ======== */
+if (file_exists(SED_ROOT . '/plugins/view/view.setup.php')) {
+	$adminmain .= "<strong>Installing View plugin...</strong><br />";
+	$adminmain .= sed_plugin_install('view');
 }
 
 /* ======== Trash can: move from core to plugin trashcan ======== */

@@ -1588,7 +1588,7 @@ function sed_url_check($url)
  * Uses global $sed_modules (only modules with ct_state=1 are loaded there).
  * Pause is managed via Admin → Modules (ct_state), not via config.
  *
- * @param string $code Module code (e.g. 'forums', 'gallery', 'rss')
+ * @param string $code Module code (e.g. 'forums', 'gallery')
  * @return bool
  */
 function sed_module_active($code)

@@ -358,7 +358,7 @@ $t->assign(array(
 	"LIST_CATDESC" => $sed_cat[$c]['desc'],
 	"LIST_CATTEXT" => $list_text,
 	"LIST_CATICON" => $sed_cat[$c]['icon'],
-	"LIST_RSS" => sed_url("rss", "m=pages&c=" . $c),
+	"LIST_RSS" => sed_url("plug", "e=rss&m=pages&c=" . $c),
 	"LIST_EXTRATEXT" => $extratext
 ));
 

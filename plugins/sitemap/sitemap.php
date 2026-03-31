@@ -6,47 +6,93 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/sitemap/sitemap.main.php
+File=plugins/sitemap/sitemap.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=XML Sitemap Generator
-Lock=0
+Description=XML Sitemap (direct)
 [END_SED]
+
+[BEGIN_SED_EXTPLUGIN]
+Code=sitemap
+Part=main
+File=sitemap
+Hooks=direct
+Order=10
+Lock=0
+[END_SED_EXTPLUGIN]
+
 ==================== */
 
-if (!defined('SED_CODE')) {
+if (!defined('SED_CODE') || !defined('SED_PLUG')) {
 	die('Wrong URL.');
 }
 
-/* Build $smcfg from module config ($cfg) */
+if (!sed_plug_active('sitemap')) {
+	exit();
+}
+
+/**
+ * @param string $name Config key under $cfg['plugin']['sitemap']
+ * @param string $default
+ * @return string
+ */
+function sed_sitemap_cfg($name, $default = '')
+{
+	global $cfg;
+	if (isset($cfg['plugin']['sitemap'][$name]) && $cfg['plugin']['sitemap'][$name] !== '') {
+		return $cfg['plugin']['sitemap'][$name];
+	}
+	if (isset($cfg[$name]) && $cfg[$name] !== '') {
+		return $cfg[$name];
+	}
+	return $default;
+}
+
+/**
+ * Absolute &lt;loc&gt; URL: sed_url with enableamp (&amp; for XML); if not http(s), prefix mainurl.
+ */
+function sed_sitemap_loc($section, $params = '')
+{
+	global $cfg;
+
+	$url = sed_url($section, $params, '', false, true);
+	if (preg_match('#^https?://#i', $url)) {
+		return preg_replace('~(^|[^:])//+~', '\\1/', $url);
+	}
+	$base = rtrim($cfg['mainurl'], '/') . '/';
+
+	return preg_replace('~(^|[^:])//+~', '\\1/', $base . $url);
+}
+
+global $cfg, $usr, $sys, $sed_cat, $db_pages, $db_structure, $db_forum_posts, $db_forum_topics, $db_forum_sections, $db_forum_structure;
+
+$m = sed_import('m', 'G', 'ALP');
+$c = sed_import('c', 'G', 'TXT');
+
 $smcfg['index'] = array(
-	'changefreq' => isset($cfg['sm_index_changefreq']) ? $cfg['sm_index_changefreq'] : 'always',
-	'priority'   => isset($cfg['sm_index_priority']) ? $cfg['sm_index_priority'] : '1.0',
+	'changefreq' => sed_sitemap_cfg('sm_index_changefreq', 'always'),
+	'priority'   => sed_sitemap_cfg('sm_index_priority', '1.0'),
 );
 $smcfg['pages'] = array(
-	'changefreq' => isset($cfg['sm_pages_changefreq']) ? $cfg['sm_pages_changefreq'] : 'daily',
-	'priority'   => isset($cfg['sm_pages_priority']) ? $cfg['sm_pages_priority'] : '0.8',
-	'limit'      => isset($cfg['sm_pages_limit']) ? (int)$cfg['sm_pages_limit'] : 40000,
+	'changefreq' => sed_sitemap_cfg('sm_pages_changefreq', 'daily'),
+	'priority'   => sed_sitemap_cfg('sm_pages_priority', '0.8'),
+	'limit'      => (int) sed_sitemap_cfg('sm_pages_limit', '40000'),
 );
 $smcfg['lists'] = array(
-	'changefreq' => isset($cfg['sm_lists_changefreq']) ? $cfg['sm_lists_changefreq'] : 'weekly',
-	'priority'   => isset($cfg['sm_lists_priority']) ? $cfg['sm_lists_priority'] : '0.5',
-	'limit'      => isset($cfg['sm_lists_limit']) ? (int)$cfg['sm_lists_limit'] : 1000,
+	'changefreq' => sed_sitemap_cfg('sm_lists_changefreq', 'weekly'),
+	'priority'   => sed_sitemap_cfg('sm_lists_priority', '0.5'),
+	'limit'      => (int) sed_sitemap_cfg('sm_lists_limit', '1000'),
 );
 $smcfg['forums'] = array(
-	'changefreq' => isset($cfg['sm_forums_changefreq']) ? $cfg['sm_forums_changefreq'] : 'daily',
-	'priority'   => isset($cfg['sm_forums_priority']) ? $cfg['sm_forums_priority'] : '0.2',
-	'limit'      => isset($cfg['sm_forums_limit']) ? (int)$cfg['sm_forums_limit'] : 3000,
+	'changefreq' => sed_sitemap_cfg('sm_forums_changefreq', 'daily'),
+	'priority'   => sed_sitemap_cfg('sm_forums_priority', '0.2'),
+	'limit'      => (int) sed_sitemap_cfg('sm_forums_limit', '3000'),
 );
-
-$m = sed_import('m', 'G', 'ALP'); // (index/lists/pages/forums)
 
 $items = array();
 $feed = '';
-
-$main_url = ($cfg['absurls']) ? $sys['abs_url'] : $cfg['mainurl'] . "/";
 
 if (isset($smcfg[$m])) {
 	$feed .= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -58,7 +104,7 @@ $i = 1;
 switch ($m) {
 	case 'index':
 
-		$items[$i]['loc'] = $cfg['mainurl'] . "/";
+		$items[$i]['loc'] = sed_sitemap_loc('index', '');
 		$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $sys['now']);
 		$items[$i]['changefreq'] = $smcfg['index']['changefreq'];
 		$items[$i]['priority'] = $smcfg['index']['priority'];
@@ -67,7 +113,7 @@ switch ($m) {
 
 	case 'lists':
 
-		if (isset($cfg['disable_sitemap_pages']) && $cfg['disable_sitemap_pages'] == '1') {
+		if (sed_sitemap_cfg('disable_sitemap_pages', '0') === '1') {
 			break;
 		}
 
@@ -78,8 +124,7 @@ switch ($m) {
 			if ($usr['auth_read']) {
 				$i++;
 				$sys['catcode'] = $row['structure_code'];
-				$row['list_url'] = sed_url("page", "c=" . $row['structure_code'], "", false, false);
-				$items[$i]['loc'] = $main_url . $row['list_url'];
+				$items[$i]['loc'] = sed_sitemap_loc('page', 'c=' . $row['structure_code']);
 				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $sys['now']);
 				$items[$i]['changefreq'] = $smcfg['lists']['changefreq'];
 				$items[$i]['priority'] = $smcfg['lists']['priority'];
@@ -90,7 +135,7 @@ switch ($m) {
 
 	case 'pages':
 
-		if (isset($cfg['disable_sitemap_pages']) && $cfg['disable_sitemap_pages'] == '1') {
+		if (sed_sitemap_cfg('disable_sitemap_pages', '0') === '1') {
 			break;
 		}
 
@@ -120,8 +165,9 @@ switch ($m) {
 			if ($usr['auth_read']) {
 				$i++;
 				$sys['catcode'] = $row['page_cat'];
-				$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=" . $row['page_id'], "", false, false) : sed_url("page", "al=" . $row['page_alias'], "", false, false);
-				$items[$i]['loc'] = $main_url . $row['page_pageurl'];
+				$items[$i]['loc'] = empty($row['page_alias'])
+					? sed_sitemap_loc('page', 'id=' . $row['page_id'])
+					: sed_sitemap_loc('page', 'al=' . $row['page_alias']);
 				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['page_date']);
 				$items[$i]['changefreq'] = $smcfg['pages']['changefreq'];
 				$items[$i]['priority'] = $smcfg['pages']['priority'];
@@ -135,11 +181,9 @@ switch ($m) {
 		if (!sed_module_active('forums')) {
 			break;
 		}
-		if (isset($cfg['disable_sitemap_forums']) && $cfg['disable_sitemap_forums'] == '1') {
+		if (sed_sitemap_cfg('disable_sitemap_forums', '0') === '1') {
 			break;
 		}
-
-		// forum sections
 
 		$sql = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_topiccount, s.fs_postcount, s.fs_lt_date FROM $db_forum_sections AS s LEFT JOIN
         $db_forum_structure AS n ON n.fn_code=s.fs_category ORDER by fn_path ASC, fs_order ASC");
@@ -148,15 +192,12 @@ switch ($m) {
 			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $row['fs_id']);
 			if ($usr['auth_read']) {
 				$i++;
-				$row['fs_url'] = sed_url("forums", "m=topics&s=" . $row['fs_id'] . "&al=" . $row['fs_title'], "", false, false);
-				$items[$i]['loc'] = $main_url . $row['fs_url'];
+				$items[$i]['loc'] = sed_sitemap_loc('forums', 'm=topics&s=' . $row['fs_id'] . '&al=' . $row['fs_title']);
 				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fs_lt_date']);
 				$items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
 				$items[$i]['priority'] = $smcfg['forums']['priority'];
 			}
 		}
-
-		// forum posts
 
 		$sql = sed_sql_query("SELECT t.ft_id, t.ft_title, t.ft_movedto, s.fs_id, p.fp_updated FROM $db_forum_posts p 
        LEFT JOIN $db_forum_topics t ON ( p.fp_topicid = t.ft_id ) LEFT JOIN $db_forum_sections s ON ( p.fp_sectionid = s.fs_id ) 
@@ -167,8 +208,7 @@ switch ($m) {
 			if ($usr['auth_read']) {
 				$i++;
 				$moved = ($row['ft_movedto']) ? $row['ft_movedto'] : $row['ft_id'];
-				$row['fp_url'] = sed_url('forums', 'm=posts&q=' . $moved . "&al=" . $row['ft_title'], "", false, false);
-				$items[$i]['loc'] = $main_url . $row['fp_url'];
+				$items[$i]['loc'] = sed_sitemap_loc('forums', 'm=posts&q=' . $moved . '&al=' . $row['ft_title']);
 				$items[$i]['lastmod'] = @date("Y-m-d\TH:i:s+00:00", $row['fp_updated']);
 				$items[$i]['changefreq'] = $smcfg['forums']['changefreq'];
 				$items[$i]['priority'] = $smcfg['forums']['priority'];
@@ -179,23 +219,21 @@ switch ($m) {
 
 	default:
 
-		// sitemap index: only include sections that are enabled
 		$feed .= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		$feed .= "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
 
 		$index_sections = array('index');
-		if (empty($cfg['disable_sitemap_pages']) || $cfg['disable_sitemap_pages'] != '1') {
+		if (sed_sitemap_cfg('disable_sitemap_pages', '0') !== '1') {
 			$index_sections[] = 'pages';
 			$index_sections[] = 'lists';
 		}
-		if (sed_module_active('forums') &&
-			(empty($cfg['disable_sitemap_forums']) || $cfg['disable_sitemap_forums'] != '1')) {
+		if (sed_module_active('forums') && sed_sitemap_cfg('disable_sitemap_forums', '0') !== '1') {
 			$index_sections[] = 'forums';
 		}
 
 		foreach ($index_sections as $key) {
 			$feed .= "<sitemap>\n";
-			$feed .= "<loc>" . $main_url . sed_url("sitemap", "m=" . $key, "", false, false) . "</loc>\n";
+			$feed .= "<loc>" . sed_sitemap_loc('plug', 'e=sitemap&m=' . $key) . "</loc>\n";
 			$feed .= "<lastmod>" . @date("Y-m-d\TH:i:s+00:00", $sys['now']) . "</lastmod>\n";
 			$feed .= "</sitemap>\n";
 		}

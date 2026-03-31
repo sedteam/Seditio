@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/view/view.urls.php
+File=plugins/view/view.urls.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=View URL rewrite rules
+Description=View URL rewrite (plug.php?e=view)
 [END_SED]
 ==================== */
 
@@ -21,12 +21,17 @@ if (!defined('SED_CODE')) {
 
 $mod_urlrewrite_order = 200;
 
-/* View: /view/{v} -> view.php?v=$1 */
 $mod_urlrewrite = array(
 	array(
 		'cond' => '#^/view/([a-zA-Z0-9]+)(/?)$#',
-		'rule' => 'modules/view/view.php?v=$1'
+		'rule' => 'system/core/plug/plug.php?e=view&v=$1'
 	),
 );
 
 $mod_urltrans = array();
+$mod_urltrans['plug'] = array(
+	array(
+		'params' => 'e=view&v=*',
+		'rewrite' => 'view/{v}'
+	),
+);

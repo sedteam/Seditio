@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/rss/lang/rss.ru.lang.php
+File=plugins/rss/lang/rss.ru.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.lang
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
-Description=RSS Russian language file
+Description=RSS plugin Russian
 [END_SED]
 ==================== */
 
@@ -24,6 +24,7 @@ $L['core_rss'] = "RSS-ленты";
 $L['cfg_disable_rss'] = array("Отключить RSS-ленты", "");
 $L['cfg_disable_rsspages'] = array("Отключить RSS для страниц", "");
 $L['cfg_disable_rsscomments'] = array("Отключить RSS для комментариев", "");
+$L['cfg_disable_rssforums'] = array("Отключить RSS для форумов", "");
 $L['cfg_rss_timetolive'] = array("Время кэширования RSS", "в секундах");
 $L['cfg_rss_defaultcode'] = array("RSS по умолчанию", "код категории");
 $L['cfg_rss_maxitems'] = array("Максимум записей в RSS-ленте", "");

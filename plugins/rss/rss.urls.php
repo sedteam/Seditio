@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/rss/rss.urls.php
+File=plugins/rss/rss.urls.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=RSS URL rewrite and translation rules
+Description=RSS URL rewrite and translation (plug.php?e=rss)
 [END_SED]
 ==================== */
 
@@ -21,26 +21,25 @@ if (!defined('SED_CODE')) {
 
 $mod_urlrewrite_order = 210;
 
-/* RSS rewriting */
 $mod_urlrewrite = array(
 	array(
 		'cond' => '#^/rss/([a-zA-Z0-9]+)(/?)$#',
-		'rule' => 'modules/rss/rss.php?m=$1'
+		'rule' => 'system/core/plug/plug.php?e=rss&m=$1'
 	),
 	array(
 		'cond' => '#^/rss(/?)$#',
-		'rule' => 'modules/rss/rss.php'
+		'rule' => 'system/core/plug/plug.php?e=rss'
 	),
 );
 
 $mod_urltrans = array();
-$mod_urltrans['rss'] = array(
+$mod_urltrans['plug'] = array(
 	array(
-		'params' => 'm=*',
+		'params' => 'e=rss&m=*',
 		'rewrite' => 'rss/{m}'
 	),
 	array(
-		'params' => '',
+		'params' => 'e=rss',
 		'rewrite' => 'rss'
-	)
+	),
 );

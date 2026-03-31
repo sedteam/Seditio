@@ -55,7 +55,7 @@ if (!empty($comments_link)) {
 		"PAGE_COMMENTS_ISSHOW" => ($showcommentsonpage || $comments) ? " active" : "",
 		"PAGE_COMMENTS_JUMP" => ($showcommentsonpage || $comments) ? "<span class=\"spoiler-jump\"></span>" : "",
 		"PAGE_COMMENTS_COUNT" => $pag['page_comcount'],
-		"PAGE_COMMENTS_RSS" => sed_url("rss", "m=comments&id=" . $pag['page_id']),
+		"PAGE_COMMENTS_RSS" => sed_url("plug", "e=rss&m=comments&id=" . $pag['page_id']),
 		"PAGE_COMMENTS_URL" => $pag['page_pageurlcom']
 	));
 	$t->parse("MAIN.PAGE_COMMENTS");

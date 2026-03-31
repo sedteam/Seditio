@@ -6,10 +6,10 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/sitemap/lang/sitemap.en.lang.php
+File=plugins/sitemap/lang/sitemap.en.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.lang
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
 Description=Sitemap English language file
 [END_SED]
@@ -34,3 +34,5 @@ $L['cfg_sm_index_priority'] = array("Index priority", "");
 $L['cfg_sm_forums_changefreq'] = array("Forums changefreq", "");
 $L['cfg_sm_forums_priority'] = array("Forums priority", "");
 $L['cfg_sm_forums_limit'] = array("Forums limit", "");
+
+$L['adm_help_config_sitemap'] = "XML sitemap URLs (when friendly URLs are on): <br />" . (isset($cfg['mainurl']) ? $cfg['mainurl'] : '') . "/sitemap.xml (index) <br />" . (isset($cfg['mainurl']) ? $cfg['mainurl'] : '') . "/sitemap_pages.xml, sitemap_lists.xml, sitemap_forums.xml, sitemap_index.xml";

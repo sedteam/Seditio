@@ -6,23 +6,36 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/view/view.main.php
+File=plugins/view/view.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=HTML/TXT viewer
-Lock=0
+Description=HTML/TXT view (direct)
 [END_SED]
+
+[BEGIN_SED_EXTPLUGIN]
+Code=view
+Part=main
+File=view
+Hooks=direct
+Order=10
+Lock=0
+[END_SED_EXTPLUGIN]
+
 ==================== */
 
-if (!defined('SED_CODE')) {
+if (!defined('SED_CODE') || !defined('SED_PLUG')) {
 	die('Wrong URL.');
+}
+
+if (!sed_plug_active('view')) {
+	exit();
 }
 
 $v = sed_import('v', 'G', 'TXT');
 
-if (mb_strpos($v, "\.") !== FALSE || mb_strpos($v, "/") !== FALSE) {
+if (mb_strpos($v, "\.") !== false || mb_strpos($v, "/") !== false) {
 	die('Wrong URL.');
 }
 
@@ -46,15 +59,15 @@ if (file_exists($incl_txt)) {
 	sed_die();
 }
 
-/* ============= */
+$ext_head = '';
+$ext_body = '';
 
-
-if (preg_match('@<head>(.*?)</head>@si', $vd, $ext_head) == 1) {
-	$ext_head = $ext_head[1];
+if (preg_match('@<head>(.*?)</head>@si', $vd, $head_match) == 1) {
+	$ext_head = $head_match[1];
 }
 
-if (preg_match('@<body[^>]*?>(.*?)</body>@si', $vd, $ext_body) == 1) {
-	$ext_body = $ext_body[1];
+if (preg_match('@<body[^>]*?>(.*?)</body>@si', $vd, $body_match) == 1) {
+	$ext_body = $body_match[1];
 }
 
 $vt = '&nbsp;';
@@ -68,6 +81,9 @@ if (mb_stristr($ext_head, '<meta name="sed_title"') !== false) {
 } elseif (preg_match('@<title>(.*?)</title>@si', $ext_head, $vt) == 1) {
 	$vt = $vt[1];
 }
+
+$morejavascript = '';
+$moremetas = '';
 
 if (preg_match_all('@<script[^>]*?>(.*?)</script>@si', $ext_head, $ext_js) > 0) {
 	foreach ($ext_js[1] as $js) {

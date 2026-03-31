@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/sitemap/sitemap.urls.php
+File=plugins/sitemap/sitemap.urls.php
 Version=185
-Updated=2026-feb-14
-Type=Module
+Updated=2026-mar-31
+Type=Plugin
 Author=Seditio Team
-Description=Sitemap URL rewrite and translation rules
+Description=Sitemap URL rewrite (plug.php?e=sitemap)
 [END_SED]
 ==================== */
 
@@ -21,26 +21,25 @@ if (!defined('SED_CODE')) {
 
 $mod_urlrewrite_order = 220;
 
-/* Sitemap: root-level only - /sitemap.xml and /sitemap_{m}.xml (no virtual /sitemap/ directory) */
 $mod_urlrewrite = array(
 	array(
 		'cond' => '#^/sitemap_([a-zA-Z0-9]+)\.xml$#',
-		'rule' => 'modules/sitemap/sitemap.php?m=$1'
+		'rule' => 'system/core/plug/plug.php?e=sitemap&m=$1'
 	),
 	array(
 		'cond' => '#^/sitemap\.xml$#',
-		'rule' => 'modules/sitemap/sitemap.php'
+		'rule' => 'system/core/plug/plug.php?e=sitemap'
 	),
 );
 
 $mod_urltrans = array();
-$mod_urltrans['sitemap'] = array(
+$mod_urltrans['plug'] = array(
 	array(
-		'params' => 'm=*',
+		'params' => 'e=sitemap&m=*',
 		'rewrite' => 'sitemap_{m}.xml'
 	),
 	array(
-		'params' => '',
+		'params' => 'e=sitemap',
 		'rewrite' => 'sitemap.xml'
-	)
+	),
 );

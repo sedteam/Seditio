@@ -33,7 +33,7 @@ $sed_urltrans['go'] = array(
       )
 );
 
-/* RSS and Sitemap translation: see modules/rss/rss.urls.php and modules/sitemap/sitemap.urls.php when modules are active */
+/* RSS: plugins/rss/rss.urls.php; Sitemap: plugins/sitemap/sitemap.urls.php; View: plugins/view/view.urls.php when plugins active */
 
 /* Polls translation: see modules/polls/polls.urls.php when module is active */
 

@@ -6,10 +6,10 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/sitemap/lang/sitemap.ru.lang.php
+File=plugins/sitemap/lang/sitemap.ru.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.lang
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
 Description=Sitemap Russian language file
 [END_SED]
@@ -34,3 +34,5 @@ $L['cfg_sm_index_priority'] = array("Приоритет индекса", "");
 $L['cfg_sm_forums_changefreq'] = array("Частота изменений форумов", "");
 $L['cfg_sm_forums_priority'] = array("Приоритет форумов", "");
 $L['cfg_sm_forums_limit'] = array("Лимит форумов", "");
+
+$L['adm_help_config_sitemap'] = "Адреса XML-карты (при ЧПУ): <br />" . (isset($cfg['mainurl']) ? $cfg['mainurl'] : '') . "/sitemap.xml (индекс) <br />" . (isset($cfg['mainurl']) ? $cfg['mainurl'] : '') . "/sitemap_pages.xml, sitemap_lists.xml, sitemap_forums.xml, sitemap_index.xml";

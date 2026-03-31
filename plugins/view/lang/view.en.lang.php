@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=modules/view/admin/view.admin.menu.php
+File=plugins/view/lang/view.en.lang.php
 Version=185
-Updated=2026-feb-14
-Type=Module.admin
+Updated=2026-mar-31
+Type=Plugin.lang
 Author=Seditio Team
-Description=View admin menu (no sidebar button)
+Description=View English language file
 [END_SED]
 ==================== */
 
@@ -19,4 +19,4 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-return array();
+$L['core_view'] = "View";

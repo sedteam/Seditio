@@ -294,7 +294,8 @@ $L['cfg_userstitle'] = array("Заголовок для пользователе
 $L['cfg_pfstitle'] = array("Заголовок для файлового архива", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 $L['cfg_plugtitle'] = array("Заголовок для плагинов", "Доступные опции: {MAINTITLE}, {SUBTITLE}, {TITLE}");        ///Sed 175
 
-/* ====== Rss: cfg_* and adm_help_config_rss moved to modules/rss/lang/ ====== */
+/* ====== Rss: cfg_* and adm_help_config_rss in plugins/rss/lang/ ====== */
+/* ====== Sitemap: cfg_* and adm_help_config_sitemap in plugins/sitemap/lang/ ====== */
 
 /* ====== Forums ====== */
 
