@@ -29,27 +29,6 @@ if (!defined('SED_CODE') || !defined('SED_PLUG')) {
 	die('Wrong URL.');
 }
 
-if (!sed_plug_active('rss')) {
-	exit();
-}
-
-/**
- * @param string $name Config key under $cfg['plugin']['rss']
- * @param string $default
- * @return string
- */
-function sed_rss_cfg($name, $default = '')
-{
-	global $cfg;
-	if (isset($cfg['plugin']['rss'][$name]) && $cfg['plugin']['rss'][$name] !== '') {
-		return $cfg['plugin']['rss'][$name];
-	}
-	if (isset($cfg[$name]) && $cfg[$name] !== '') {
-		return $cfg[$name];
-	}
-	return $default;
-}
-
 global $cfg, $usr, $L, $sys, $sed_cat, $db_pages, $db_com, $db_users, $db_forum_posts, $db_forum_topics, $db_forum_sections;
 
 $c = sed_import('c', 'G', 'TXT');
@@ -58,10 +37,19 @@ $id = sed_import('id', 'G', 'INT');
 $q = sed_import('q', 'G', 'INT');
 $s = sed_import('s', 'G', 'INT');
 
-$c = empty($c) ? sed_rss_cfg('rss_defaultcode', 'news') : $c;
+$rsscfg = array(
+	'rss_defaultcode' => ($cfg['plugin']['rss']['rss_defaultcode'] !== '') ? $cfg['plugin']['rss']['rss_defaultcode'] : 'news',
+	'rss_maxitems' => (int) (($cfg['plugin']['rss']['rss_maxitems'] !== '') ? $cfg['plugin']['rss']['rss_maxitems'] : '30'),
+	'rss_timetolive' => (int) (($cfg['plugin']['rss']['rss_timetolive'] !== '') ? $cfg['plugin']['rss']['rss_timetolive'] : '300'),
+	'disable_rsspages' => $cfg['plugin']['rss']['disable_rsspages'] === '1',
+	'disable_rsscomments' => $cfg['plugin']['rss']['disable_rsscomments'] === '1',
+	'disable_rssforums' => $cfg['plugin']['rss']['disable_rssforums'] === '1',
+);
 
-$rss_maxitems = (int) sed_rss_cfg('rss_maxitems', '30');
-$rss_timetolive = (int) sed_rss_cfg('rss_timetolive', '300');
+$c = empty($c) ? $rsscfg['rss_defaultcode'] : $c;
+
+$rss_maxitems = $rsscfg['rss_maxitems'];
+$rss_timetolive = $rsscfg['rss_timetolive'];
 if ($rss_maxitems < 1) {
 	$rss_maxitems = 30;
 }
@@ -97,7 +85,7 @@ if (is_array($extp)) {
 switch ($m) {
 	case "comments":
 
-		if (!sed_plug_active('comments') || sed_rss_cfg('disable_rsscomments', '0') === '1') {
+		if (!sed_plug_active('comments') || $rsscfg['disable_rsscomments']) {
 			$i = 0;
 			break;
 		}
@@ -136,7 +124,7 @@ switch ($m) {
 
 	case "forums":
 
-		if (!sed_module_active('forums') || sed_rss_cfg('disable_rssforums', '0') === '1') {
+		if (!sed_module_active('forums') || $rsscfg['disable_rssforums']) {
 			$i = 0;
 			break;
 		}
@@ -178,7 +166,7 @@ switch ($m) {
 
 	default:
 
-		if (!sed_module_active('page') || sed_rss_cfg('disable_rsspages', '0') === '1') {
+		if (!sed_module_active('page') || $rsscfg['disable_rsspages']) {
 			$i = 0;
 			break;
 		}

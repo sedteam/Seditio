@@ -29,27 +29,6 @@ if (!defined('SED_CODE') || !defined('SED_PLUG')) {
 	die('Wrong URL.');
 }
 
-if (!sed_plug_active('sitemap')) {
-	exit();
-}
-
-/**
- * @param string $name Config key under $cfg['plugin']['sitemap']
- * @param string $default
- * @return string
- */
-function sed_sitemap_cfg($name, $default = '')
-{
-	global $cfg;
-	if (isset($cfg['plugin']['sitemap'][$name]) && $cfg['plugin']['sitemap'][$name] !== '') {
-		return $cfg['plugin']['sitemap'][$name];
-	}
-	if (isset($cfg[$name]) && $cfg[$name] !== '') {
-		return $cfg[$name];
-	}
-	return $default;
-}
-
 /**
  * Absolute &lt;loc&gt; URL: sed_url with enableamp (&amp; for XML); if not http(s), prefix mainurl.
  */
@@ -72,23 +51,23 @@ $m = sed_import('m', 'G', 'ALP');
 $c = sed_import('c', 'G', 'TXT');
 
 $smcfg['index'] = array(
-	'changefreq' => sed_sitemap_cfg('sm_index_changefreq', 'always'),
-	'priority'   => sed_sitemap_cfg('sm_index_priority', '1.0'),
+	'changefreq' => ($cfg['plugin']['sitemap']['sm_index_changefreq'] !== '') ? $cfg['plugin']['sitemap']['sm_index_changefreq'] : 'always',
+	'priority'   => ($cfg['plugin']['sitemap']['sm_index_priority'] !== '') ? $cfg['plugin']['sitemap']['sm_index_priority'] : '1.0',
 );
 $smcfg['pages'] = array(
-	'changefreq' => sed_sitemap_cfg('sm_pages_changefreq', 'daily'),
-	'priority'   => sed_sitemap_cfg('sm_pages_priority', '0.8'),
-	'limit'      => (int) sed_sitemap_cfg('sm_pages_limit', '40000'),
+	'changefreq' => ($cfg['plugin']['sitemap']['sm_pages_changefreq'] !== '') ? $cfg['plugin']['sitemap']['sm_pages_changefreq'] : 'daily',
+	'priority'   => ($cfg['plugin']['sitemap']['sm_pages_priority'] !== '') ? $cfg['plugin']['sitemap']['sm_pages_priority'] : '0.8',
+	'limit'      => (int) (($cfg['plugin']['sitemap']['sm_pages_limit'] !== '') ? $cfg['plugin']['sitemap']['sm_pages_limit'] : '40000'),
 );
 $smcfg['lists'] = array(
-	'changefreq' => sed_sitemap_cfg('sm_lists_changefreq', 'weekly'),
-	'priority'   => sed_sitemap_cfg('sm_lists_priority', '0.5'),
-	'limit'      => (int) sed_sitemap_cfg('sm_lists_limit', '1000'),
+	'changefreq' => ($cfg['plugin']['sitemap']['sm_lists_changefreq'] !== '') ? $cfg['plugin']['sitemap']['sm_lists_changefreq'] : 'weekly',
+	'priority'   => ($cfg['plugin']['sitemap']['sm_lists_priority'] !== '') ? $cfg['plugin']['sitemap']['sm_lists_priority'] : '0.5',
+	'limit'      => (int) (($cfg['plugin']['sitemap']['sm_lists_limit'] !== '') ? $cfg['plugin']['sitemap']['sm_lists_limit'] : '1000'),
 );
 $smcfg['forums'] = array(
-	'changefreq' => sed_sitemap_cfg('sm_forums_changefreq', 'daily'),
-	'priority'   => sed_sitemap_cfg('sm_forums_priority', '0.2'),
-	'limit'      => (int) sed_sitemap_cfg('sm_forums_limit', '3000'),
+	'changefreq' => ($cfg['plugin']['sitemap']['sm_forums_changefreq'] !== '') ? $cfg['plugin']['sitemap']['sm_forums_changefreq'] : 'daily',
+	'priority'   => ($cfg['plugin']['sitemap']['sm_forums_priority'] !== '') ? $cfg['plugin']['sitemap']['sm_forums_priority'] : '0.2',
+	'limit'      => (int) (($cfg['plugin']['sitemap']['sm_forums_limit'] !== '') ? $cfg['plugin']['sitemap']['sm_forums_limit'] : '3000'),
 );
 
 $items = array();
@@ -113,7 +92,7 @@ switch ($m) {
 
 	case 'lists':
 
-		if (sed_sitemap_cfg('disable_sitemap_pages', '0') === '1') {
+		if (!sed_module_active('page') || $cfg['plugin']['sitemap']['disable_sitemap_pages'] === '1') {
 			break;
 		}
 
@@ -135,11 +114,7 @@ switch ($m) {
 
 	case 'pages':
 
-		if (sed_sitemap_cfg('disable_sitemap_pages', '0') === '1') {
-			break;
-		}
-
-		if (!sed_module_active('page')) {
+		if (!sed_module_active('page') || $cfg['plugin']['sitemap']['disable_sitemap_pages'] === '1') {
 			break;
 		}
 
@@ -178,10 +153,7 @@ switch ($m) {
 
 	case 'forums':
 
-		if (!sed_module_active('forums')) {
-			break;
-		}
-		if (sed_sitemap_cfg('disable_sitemap_forums', '0') === '1') {
+		if (!sed_module_active('forums') || $cfg['plugin']['sitemap']['disable_sitemap_forums'] === '1') {
 			break;
 		}
 
@@ -223,11 +195,11 @@ switch ($m) {
 		$feed .= "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
 
 		$index_sections = array('index');
-		if (sed_sitemap_cfg('disable_sitemap_pages', '0') !== '1') {
+		if (sed_module_active('page') && $cfg['plugin']['sitemap']['disable_sitemap_pages'] !== '1') {
 			$index_sections[] = 'pages';
 			$index_sections[] = 'lists';
 		}
-		if (sed_module_active('forums') && sed_sitemap_cfg('disable_sitemap_forums', '0') !== '1') {
+		if (sed_module_active('forums') && $cfg['plugin']['sitemap']['disable_sitemap_forums'] !== '1') {
 			$index_sections[] = 'forums';
 		}
 
