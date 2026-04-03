@@ -282,7 +282,7 @@ $skinfiles[] = 'pfs.tpl';
 $skinfiles[] = 'plugin.tpl';
 $skinfiles[] = 'pm.send.tpl';
 $skinfiles[] = 'pm.tpl';
-$skinfiles[] = 'poll.tpl';
+$skinfiles[] = 'polls.poll.tpl';
 $skinfiles[] = 'polls.tpl';
 $skinfiles[] = 'polls.standalone.tpl';
 $skinfiles[] = 'popup.tpl';
@@ -334,6 +334,9 @@ $admskinfiles[] = 'admin.users.tpl';
 
 $color[0] = "#bc6262";
 $color[1] = "#62bc6a";
+
+/* First segment of template basename -> use sed_skinfile(..., true) like plugin code */
+$syscheck_public_tpl_plugskin = array('comments' => true, 'news' => true, 'ratings' => true);
 
 $plugin_body = '';
 
@@ -398,15 +401,20 @@ $plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Found ?</td>";
 $plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Size (Bytes)</td>";
 $plugin_body .= "</tr>";
 
-foreach ($skinfiles as $file) {
-	$file = "skins/" . $skin . "/" . $file;
+foreach ($skinfiles as $tplfile) {
+	$basename = preg_replace('/\.tpl$/i', '', $tplfile);
+	$dotpos = mb_strpos($basename, '.');
+	$firstseg = ($dotpos !== false) ? mb_substr($basename, 0, $dotpos) : $basename;
+	$plugskin = !empty($syscheck_public_tpl_plugskin[$firstseg]);
+	$resolved = sed_skinfile($basename, $plugskin);
 	$plugin_body .= "<tr>";
-	$plugin_body .= "<td>" . $file . "</td>";
-
-	if (file_exists(SED_ROOT . "/" . $file)) {
+	if ($resolved !== '') {
+		$relpath = sed_tpl_relpath($resolved, SED_ROOT);
+		$plugin_body .= "<td>" . htmlspecialchars($relpath) . "</td>";
 		$plugin_body .= "<td style=\"background-color:" . $color[1] . "!important; text-align:center;\">Present</td>";
-		$plugin_body .= "<td style=\"text-align:right;\">" . @filesize($file) . "</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">" . (int)@filesize($resolved) . "</td>";
 	} else {
+		$plugin_body .= "<td>" . htmlspecialchars($tplfile) . "</td>";
 		$plugin_body .= "<td style=\"background-color:" . $color[0] . "!important; text-align:center;\">Missing !</td>";
 		$plugin_body .= "<td style=\"text-align:right;\">0</td>";
 	}
@@ -433,15 +441,17 @@ $plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Found ?</td>";
 $plugin_body .= "<td class=\"coltop\" style=\"width:100px;\">Size (Bytes)</td>";
 $plugin_body .= "</tr>";
 
-foreach ($admskinfiles as $file) {
-	$file = "system/adminskin/" . $skin . "/" . $file;
+foreach ($admskinfiles as $tplfile) {
+	$basename = preg_replace('/\.tpl$/i', '', $tplfile);
+	$resolved = sed_skinfile($basename, false, true);
 	$plugin_body .= "<tr>";
-	$plugin_body .= "<td>" . $file . "</td>";
-
-	if (file_exists(SED_ROOT . "/" . $file)) {
+	if ($resolved !== '') {
+		$relpath = sed_tpl_relpath($resolved, SED_ROOT);
+		$plugin_body .= "<td>" . htmlspecialchars($relpath) . "</td>";
 		$plugin_body .= "<td style=\"background-color:" . $color[1] . "!important; text-align:center;\">Present</td>";
-		$plugin_body .= "<td style=\"text-align:right;\">" . @filesize($file) . "</td>";
+		$plugin_body .= "<td style=\"text-align:right;\">" . (int)@filesize($resolved) . "</td>";
 	} else {
+		$plugin_body .= "<td>" . htmlspecialchars($tplfile) . "</td>";
 		$plugin_body .= "<td style=\"background-color:" . $color[0] . "!important; text-align:center;\">Missing !</td>";
 		$plugin_body .= "<td style=\"text-align:right;\">0</td>";
 	}
