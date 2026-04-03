@@ -15,7 +15,13 @@ Description=
 [END_SED]
 ==================== */
 
-$L['plu_makbak'] = "Şimdi yedekle";
-$L['plu_delbak'] = "Yedeklemeyi sil";
-$L['plu_resbak'] = "Yedeklemeyi geri yükle";
-$L['plu_reopen'] = "Güncelle ve buraya geri gel";
+$L['skineditor_makbak'] = "Şimdi yedekle";
+$L['skineditor_delbak'] = "Yedeklemeyi sil";
+$L['skineditor_resbak'] = "Yedeklemeyi geri yükle";
+$L['skineditor_reopen'] = "Güncelle ve buraya geri gel";
+$L['skineditor_tpl_skin'] = "Görünüm";
+$L['skineditor_tpl_module'] = "Modül";
+$L['skineditor_tpl_plugin'] = "Eklenti";
+$L['skineditor_modules_title'] = "Modül şablonları (tpl/)";
+$L['skineditor_plugins_title'] = "Eklenti şablonları (tpl/)";
+$L['skineditor_admin_tpl_note'] = "Modül ve eklenti tpl/ klasörlerinde admin.*.tpl dosyaları listelenmez ve burada düzenlenemez.";

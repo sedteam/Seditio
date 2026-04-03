@@ -29,250 +29,292 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 	die('Wrong URL.');
 }
 
+require_once SED_ROOT . '/plugins/skineditor/inc/skineditor.functions.php';
+
+$scope_raw = sed_import('scope', 'G', 'ALP', 16);
+$scope = ($scope_raw === 'module' || $scope_raw === 'plugin') ? $scope_raw : 'skin';
 $sk = sed_import('sk', 'G', 'ALP', 24);
+$mod = sed_import('mod', 'G', 'ALP', 24);
+$pl = sed_import('pl', 'G', 'ALP', 24);
 $f = sed_import('f', 'G', 'TXT', 128);
 $fb = sed_import('fb', 'G', 'TXT', 128);
 
 $error_string = '';
 
-// For show & edit php file add into array 'php'
 $allow_extensions = array('tpl', 'txt', 'css', 'js');
 
-$sx = new XTemplate(SED_ROOT . '/plugins/skineditor/skineditor.tpl');
+global $L;
 
-if (!empty($sk)) {
-	if (!empty($f)) {
-		$n = 'edit';
-	} else {
-		$n = 'skin';
-	}
+$mskin = sed_skinfile('admin.skineditor', false, true);
+if ($mskin === '') {
+	$mskin = SED_ROOT . '/plugins/skineditor/tpl/admin.skineditor.tpl';
+}
+$sx = new XTemplate($mskin);
+
+$ctx = skineditor_resolve_context($scope, $sk, $mod, $pl);
+
+$n = 'home';
+if ($ctx !== null) {
+	$n = ($f !== '' && $f !== null) ? 'edit' : 'list';
 }
 
 switch ($n) {
-	case 'skin':
+	case 'list':
+		$adminpath[] = array(skineditor_list_back_url($ctx), $ctx['title']);
 
-		$skininfo = SED_ROOT . "/skins/" . $sk . "/" . $sk . ".php";
-		$skindir = SED_ROOT . "/skins/" . $sk . "/";
-
-		if (!file_exists($skininfo)) {
-			sed_die('Wrong skin code.');
-		}
-
-		$info = sed_infoget($skininfo);
-		$adminpath[] = array(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk), $info['Name']);
+		$root = $ctx['root'];
+		$qbase = skineditor_context_query($ctx);
 
 		if ($a == 'makbak') {
 			sed_check_xg();
-			copy($skindir . $fb, $skindir . $fb . ".bak");
-			sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '917']);
+			$fbn = basename($fb);
+			$src = skineditor_safe_file_under_root($root, $fbn, $allow_extensions);
+			if ($src !== false) {
+				copy($src, $src . '.bak');
+			}
+			sed_redirect(sed_url('admin', 'm=manage&p=skineditor&' . $qbase, '', true), false, array('msg' => '917'));
 			exit;
 		} elseif ($a == 'resbak') {
 			sed_check_xg();
-			if (file_exists($skindir . $fb . ".bak")) {
-				if (file_exists($skindir . $fb)) {
-					unlink($skindir . $fb);
-				}
-				if (copy($skindir . $fb . ".bak", $skindir . $fb)) {
-					unlink($skindir . $fb . ".bak");
+			$fbn = basename($fb);
+			$src = skineditor_safe_file_under_root($root, $fbn, $allow_extensions);
+			if ($src !== false) {
+				$bak = $src . '.bak';
+				if (is_file($bak)) {
+					if (is_file($src)) {
+						unlink($src);
+					}
+					if (copy($bak, $src)) {
+						unlink($bak);
+					}
 				}
 			}
-			sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '917']);
+			sed_redirect(sed_url('admin', 'm=manage&p=skineditor&' . $qbase, '', true), false, array('msg' => '917'));
 			exit;
 		} elseif ($a == 'delbak') {
 			sed_check_xg();
-			unlink($skindir . $fb . ".bak");
-			sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '302']);
+			$fbn = basename($fb);
+			$src = skineditor_safe_file_under_root($root, $fbn, $allow_extensions);
+			if ($src !== false && is_file($src . '.bak')) {
+				unlink($src . '.bak');
+			}
+			sed_redirect(sed_url('admin', 'm=manage&p=skineditor&' . $qbase, '', true), false, array('msg' => '302'));
 			exit;
 		}
 
-		$handle = opendir($skindir);
-
-		while ($f = readdir($handle)) {
-			$extension_arr = explode(".", $f);
+		$skinlist = array();
+		$baklist = array();
+		$handle = opendir($root);
+		if ($handle === false) {
+			sed_die('Could not open directory');
+		}
+		while (($fe = readdir($handle)) !== false) {
+			$extension_arr = explode(".", $fe);
 			$extension = end($extension_arr);
-
-			if (in_array(mb_strtolower($extension), $allow_extensions) && (mb_strrpos($f, ".") > 0)) {
-				$skinlist[] = $f;
+			if (skineditor_tpl_is_editable($fe, $allow_extensions)) {
+				$skinlist[] = $fe;
 			} elseif (mb_strtolower($extension) == 'bak') {
-				$baklist[] = $f;
+				$baklist[] = $fe;
 			}
 		}
-
 		closedir($handle);
 		sort($skinlist);
 
+		$backupfile = array();
 		if (isset($baklist) && is_array($baklist)) {
 			@sort($baklist);
-			foreach ($baklist as $i => $x) {
-				$backupfile[$x] = TRUE;
+			foreach ($baklist as $i => $xb) {
+				$backupfile[$xb] = true;
 			}
 		}
 
 		$j = 0;
 		$total_size = 0;
 
+		if ($ctx['scope'] === 'skin') {
+			$list_title = $L['skineditor_tpl_skin'] . ': ' . sed_cc($ctx['title']);
+		} elseif ($ctx['scope'] === 'module') {
+			$list_title = $L['skineditor_tpl_module'] . ': ' . sed_cc($ctx['code']);
+		} else {
+			$list_title = $L['skineditor_tpl_plugin'] . ': ' . sed_cc($ctx['code']);
+		}
+		$sx->assign('TPL_SKIN_LIST_HEADER', $list_title);
+
 		foreach ($skinlist as $i => $x) {
-			$file_size = @filesize($skindir . $x);
+			$file_size = @filesize($root . $x);
 
 			$sx->assign(array(
-				"TPL_SKIN_LIST_ROW_EDIT" => "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $x) . "\">" . $out['ic_edit'] . "</a>",
-				"TPL_SKIN_LIST_ROW_EDITURL" => sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $x),
-				"TPL_SKIN_LIST_ROW_TPLFILE" => $x,
-				"TPL_SKIN_LIST_ROW_TPLSIZE" => $file_size
+				'TPL_SKIN_LIST_ROW_EDIT' => '<a href="' . sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&f=' . rawurlencode($x)) . '">' . $out['ic_edit'] . '</a>',
+				'TPL_SKIN_LIST_ROW_EDITURL' => sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&f=' . rawurlencode($x)),
+				'TPL_SKIN_LIST_ROW_TPLFILE' => sed_cc($x),
+				'TPL_SKIN_LIST_ROW_TPLSIZE' => $file_size
 			));
 
-			$xbak = $x . ".bak";
-
-			$bcf = (isset($backupfile[$xbak]) && $backupfile[$xbak]) ? TRUE : FALSE;
+			$xbak = $x . '.bak';
+			$bcf = (isset($backupfile[$xbak]) && $backupfile[$xbak]) ? true : false;
 
 			$sx->assign(array(
-				"TPL_SKIN_LIST_ROW_BACKUP" => ($bcf) ? "" : "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=makbak&" . sed_xg()) . "\">" . $out['ic_checked'] . "</a>",
-				"TPL_SKIN_LIST_ROW_BACKUPURL" => ($bcf) ? "" : sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=makbak&" . sed_xg()),
-				"TPL_SKIN_LIST_ROW_DELETE_BACKUP" => ($bcf) ? "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=delbak&" . sed_xg()) . "\">" . $out['ic_unchecked'] . "</a>" : "",
-				"TPL_SKIN_LIST_ROW_DELETE_BACKUPURL" => ($bcf) ? sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=delbak&" . sed_xg()) : "",
-				"TPL_SKIN_LIST_ROW_RESTORE_BACKUP" => ($bcf) ? "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=resbak&" . sed_xg()) . "\">" . $out['ic_reset'] . "</a>" : "",
-				"TPL_SKIN_LIST_ROW_RESTORE_BACKUPURL" => ($bcf) ? sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&fb=" . $x . "&a=resbak&" . sed_xg()) : "",
-				"TPL_SKIN_LIST_ROW_XBACKUP" => ($bcf) ? $xbak : ""
+				'TPL_SKIN_LIST_ROW_BACKUP' => ($bcf) ? '' : '<a href="' . sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&fb=' . rawurlencode($x) . '&a=makbak&' . sed_xg()) . '">' . $out['ic_checked'] . '</a>',
+				'TPL_SKIN_LIST_ROW_BACKUPURL' => ($bcf) ? '' : sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&fb=' . rawurlencode($x) . '&a=makbak&' . sed_xg()),
+				'TPL_SKIN_LIST_ROW_DELETE_BACKUP' => ($bcf) ? '<a href="' . sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&fb=' . rawurlencode($x) . '&a=delbak&' . sed_xg()) . '">' . $out['ic_unchecked'] . '</a>' : '',
+				'TPL_SKIN_LIST_ROW_DELETE_BACKUPURL' => ($bcf) ? sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&fb=' . rawurlencode($x) . '&a=delbak&' . sed_xg()) : '',
+				'TPL_SKIN_LIST_ROW_RESTORE_BACKUP' => ($bcf) ? '<a href="' . sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&fb=' . rawurlencode($x) . '&a=resbak&' . sed_xg()) . '">' . $out['ic_reset'] . '</a>' : '',
+				'TPL_SKIN_LIST_ROW_RESTORE_BACKUPURL' => ($bcf) ? sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&fb=' . rawurlencode($x) . '&a=resbak&' . sed_xg()) : '',
+				'TPL_SKIN_LIST_ROW_XBACKUP' => ($bcf) ? $xbak : ''
 			));
 
 			$j++;
 			$total_size += $file_size;
 
-			$sx->parse("SKINEDITOR.TPL_SKIN_LIST.TPL_SKIN_LIST_ROW");
+			$sx->parse('SKINEDITOR.TPL_SKIN_LIST.TPL_SKIN_LIST_ROW');
 		}
 
 		$sx->assign(array(
-			"TPL_SKIN_LIST_TOTALSIZE" => $total_size,
-			"TPL_SKIN_LIST_FILES" => $j
+			'TPL_SKIN_LIST_TOTALSIZE' => $total_size,
+			'TPL_SKIN_LIST_FILES' => $j
 		));
 
-		$sx->parse("SKINEDITOR.TPL_SKIN_LIST");
+		$sx->parse('SKINEDITOR.TPL_SKIN_LIST');
 
 		break;
 
 	case 'edit':
-
-		$skininfo = SED_ROOT . "/skins/" . $sk . "/" . $sk . ".php";
-		$skindir = SED_ROOT . "/skins/" . $sk . "/";
-
 		$b1 = sed_import('b1', 'P', 'ALP', 16);
+		$adminpath[] = array(skineditor_list_back_url($ctx), $ctx['title']);
 
-		if (!file_exists($skininfo)) {
+		$root = $ctx['root'];
+		$qbase = skineditor_context_query($ctx);
+		$editfile = skineditor_safe_file_under_root($root, $f, $allow_extensions);
+
+		if ($editfile === false) {
 			sed_die('Wrong file name');
 		}
 
-		$info = sed_infoget($skininfo);
-		$adminpath[] = array(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk), $info['Name']);
-
-		$editfile = SED_ROOT . "/skins/" . $sk . "/" . $f;
-
-		$extension_arr = explode(".", $f);
+		$fbasename = basename($editfile);
+		$extension_arr = explode('.', $fbasename);
 		$extension = end($extension_arr);
 
-		if (in_array(mb_strtolower($extension), $allow_extensions) && (mb_strrpos($f, ".") > 0)) {
-			if ($a == 'update') {
-				$content = sed_import('content', 'P', 'HTR');
-				$file_isup = TRUE;
-
-				if (!($fp = @fopen($editfile, 'w'))) {
-					$file_isup = FALSE;
-				}
+		if ($a == 'update') {
+			$content = sed_import('content', 'P', 'HTR');
+			$file_isup = true;
+			if (!($fp = @fopen($editfile, 'w'))) {
+				$file_isup = false;
+			} else {
 				if (!(@fwrite($fp, $content))) {
-					$file_isup = FALSE;
+					$file_isup = false;
 				}
-
 				@fclose($fp);
+			}
 
-				if ($file_isup) {
-					if ($b1) {
-						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk, "", true), false, ['msg' => '917']);
-						exit;
-					} else {
-						sed_redirect(sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f, "", true), false, ['msg' => '917']);
-						exit;
-					}
+			if ($file_isup) {
+				if ($b1) {
+					sed_redirect(sed_url('admin', 'm=manage&p=skineditor&' . $qbase, '', true), false, array('msg' => '917'));
+					exit;
 				} else {
-					$error_string .= "Error !<br />Could not write the file : " . $editfile;
+					sed_redirect(sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&f=' . rawurlencode($fbasename), '', true), false, array('msg' => '917'));
+					exit;
 				}
+			} else {
+				$error_string .= 'Error !<br />Could not write the file : ' . sed_cc($editfile);
 			}
-
-			if (!($fp = @fopen($editfile, 'r'))) {
-				sed_die('Could not open the file');
-			}
-
-			$filecont = fread($fp, 256000);
-			@fclose($fp);
-
-			switch ($extension) {
-				case 'css':
-					$hmode = 'text/css';
-					break;
-				case 'js':
-					$hmode = 'text/javascript';
-					break;
-				case 'php':
-					$hmode = 'application/x-httpd-php';
-					break;
-				default:
-					$hmode = 'text/html';
-			}
-
-			$sx->assign(array(
-				"TPL_SKIN_EDIT_SEND" => sed_url("admin", "m=manage&p=skineditor&sk=" . $sk . "&f=" . $f . "&a=update&" . sed_xg()),
-				"TPL_SKIN_EDIT_FILE" => $editfile,
-				"TPL_SKIN_EDIT_CHANCEL_URL" => sed_url("admin", "m=manage&p=skineditor&sk=" . $sk),
-				"TPL_SKIN_EDIT_TEXTAREA" => "<textarea cols=\"96\" rows=\"16\" name=\"content\" id=\"content\" class=\"noeditor\">" . sed_cc($filecont, ENT_QUOTES) . "</textarea>",
-				"TPL_SKIN_EDIT_HMODE" => $hmode
-			));
-
-			$sx->parse("SKINEDITOR.TPL_SKIN_EDIT");
-		} else {
-			$error_string .= "Not allowed file extension : " . $editfile;
 		}
+
+		if (!($fp = @fopen($editfile, 'r'))) {
+			sed_die('Could not open the file');
+		}
+
+		$filecont = fread($fp, 256000);
+		@fclose($fp);
+
+		switch ($extension) {
+			case 'css':
+				$hmode = 'text/css';
+				break;
+			case 'js':
+				$hmode = 'text/javascript';
+				break;
+			case 'php':
+				$hmode = 'application/x-httpd-php';
+				break;
+			default:
+				$hmode = 'text/html';
+		}
+
+		$sx->assign(array(
+			'TPL_SKIN_EDIT_SEND' => sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&f=' . rawurlencode($fbasename) . '&a=update&' . sed_xg()),
+			'TPL_SKIN_EDIT_FILE' => sed_cc($editfile),
+			'TPL_SKIN_EDIT_CHANCEL_URL' => skineditor_list_back_url($ctx),
+			'TPL_SKIN_EDIT_TEXTAREA' => '<textarea cols="96" rows="16" name="content" id="content" class="noeditor">' . sed_cc($filecont, ENT_QUOTES) . '</textarea>',
+			'TPL_SKIN_EDIT_HMODE' => $hmode
+		));
+
+		$sx->parse('SKINEDITOR.TPL_SKIN_EDIT');
 
 		break;
 
 	default:
-
-		$handle = opendir(SED_ROOT . "/skins/");
-
-		while ($f = readdir($handle)) {
-			if (mb_strpos($f, '.')  === FALSE) {
-				$skinlist[] = $f;
+		$handle = opendir(SED_ROOT . '/skins/');
+		$skinlist = array();
+		if ($handle !== false) {
+			while (($fe = readdir($handle)) !== false) {
+				if (mb_strpos($fe, '.') === false) {
+					$skinlist[] = $fe;
+				}
 			}
+			closedir($handle);
 		}
-		closedir($handle);
 		sort($skinlist);
 
 		foreach ($skinlist as $i => $x) {
-
-			$skininfo = SED_ROOT . "/skins/" . $x . "/" . $x . ".php";
+			$skininfo = SED_ROOT . '/skins/' . $x . '/' . $x . '.php';
 			$info = sed_infoget($skininfo);
 
 			$sx->assign(array(
-				"SKIN_LIST_ROW_EDIT" => "<a href=\"" . sed_url("admin", "m=manage&p=skineditor&sk=" . $x) . "\">" . $out['ic_edit'] . "</a>",
-				"SKIN_LIST_ROW_EDITURL" => sed_url("admin", "m=manage&p=skineditor&sk=" . $x),
-				"SKIN_LIST_ROW_NAME" => $info['Name'],
-				"SKIN_LIST_ROW_CODE" => $x,
-				"SKIN_LIST_ROW_VERSION" => $info['Version'],
-				"SKIN_LIST_ROW_UPDATED" => $info['Updated'],
-				"SKIN_LIST_ROW_AUTHOR" => $info['Author'],
-				"SKIN_LIST_ROW_DEFAULT" => ($x == $cfg['defaultskin']) ? $out['ic_checked'] : '',
-				"SKIN_LIST_ROW_SET" => ($x == $skin) ? $out['ic_checked'] : ''
+				'SKIN_LIST_ROW_EDIT' => '<a href="' . sed_url('admin', 'm=manage&p=skineditor&sk=' . $x) . '">' . $out['ic_edit'] . '</a>',
+				'SKIN_LIST_ROW_EDITURL' => sed_url('admin', 'm=manage&p=skineditor&sk=' . $x),
+				'SKIN_LIST_ROW_NAME' => $info['Name'],
+				'SKIN_LIST_ROW_CODE' => $x,
+				'SKIN_LIST_ROW_VERSION' => $info['Version'],
+				'SKIN_LIST_ROW_UPDATED' => $info['Updated'],
+				'SKIN_LIST_ROW_AUTHOR' => $info['Author'],
+				'SKIN_LIST_ROW_DEFAULT' => ($x == $cfg['defaultskin']) ? $out['ic_checked'] : '',
+				'SKIN_LIST_ROW_SET' => ($x == $skin) ? $out['ic_checked'] : ''
 			));
 
-			$sx->parse("SKINEDITOR.SKIN_LIST.SKIN_LIST_ROW");
+			$sx->parse('SKINEDITOR.SKIN_LIST.SKIN_LIST_ROW');
 		}
 
-		$sx->parse("SKINEDITOR.SKIN_LIST");
+		$sx->parse('SKINEDITOR.SKIN_LIST');
+
+		$modlist = skineditor_scan_ext_with_tpl('modules', $allow_extensions);
+		foreach ($modlist as $x) {
+			$sx->assign(array(
+				'MODULE_LIST_ROW_EDIT' => '<a href="' . sed_url('admin', 'm=manage&p=skineditor&scope=module&mod=' . $x) . '">' . $out['ic_edit'] . '</a>',
+				'MODULE_LIST_ROW_EDITURL' => sed_url('admin', 'm=manage&p=skineditor&scope=module&mod=' . $x),
+				'MODULE_LIST_ROW_CODE' => sed_cc($x)
+			));
+			$sx->parse('SKINEDITOR.MODULE_LIST.MODULE_LIST_ROW');
+		}
+		$sx->parse('SKINEDITOR.MODULE_LIST');
+
+		$pluglist = skineditor_scan_ext_with_tpl('plugins', $allow_extensions);
+		foreach ($pluglist as $x) {
+			$sx->assign(array(
+				'PLUGIN_LIST_ROW_EDIT' => '<a href="' . sed_url('admin', 'm=manage&p=skineditor&scope=plugin&pl=' . $x) . '">' . $out['ic_edit'] . '</a>',
+				'PLUGIN_LIST_ROW_EDITURL' => sed_url('admin', 'm=manage&p=skineditor&scope=plugin&pl=' . $x),
+				'PLUGIN_LIST_ROW_CODE' => sed_cc($x)
+			));
+			$sx->parse('SKINEDITOR.PLUGIN_LIST.PLUGIN_LIST_ROW');
+		}
+		$sx->parse('SKINEDITOR.PLUGIN_LIST');
 
 		break;
 }
 
 if (!empty($error_string)) {
-	$sx->assign("SKINEDITOR_ERROR_BODY", sed_alert($error_string, 'e'));
-	$sx->parse("SKINEDITOR.SKINEDITOR_ERROR");
+	$sx->assign('SKINEDITOR_ERROR_BODY', sed_alert($error_string, 'e'));
+	$sx->parse('SKINEDITOR.SKINEDITOR_ERROR');
 }
 
-$sx->parse("SKINEDITOR");
-$plugin_body = $sx->text("SKINEDITOR");
+$sx->parse('SKINEDITOR');
+$plugin_body = $sx->text('SKINEDITOR');

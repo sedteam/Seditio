@@ -15,7 +15,13 @@ Description=
 [END_SED]
 ==================== */
 
-$L['plu_makbak'] = "Сделать бэкап";
-$L['plu_delbak'] = "Удалить бэкап";
-$L['plu_resbak'] = "Восстановить из бэкапа";
-$L['plu_reopen'] = "Обновить и вернутся обратно";
+$L['skineditor_makbak'] = "Сделать бэкап";
+$L['skineditor_delbak'] = "Удалить бэкап";
+$L['skineditor_resbak'] = "Восстановить из бэкапа";
+$L['skineditor_reopen'] = "Обновить и вернутся обратно";
+$L['skineditor_tpl_skin'] = "Скин";
+$L['skineditor_tpl_module'] = "Модуль";
+$L['skineditor_tpl_plugin'] = "Плагин";
+$L['skineditor_modules_title'] = "Шаблоны модулей (tpl/)";
+$L['skineditor_plugins_title'] = "Шаблоны плагинов (tpl/)";
+$L['skineditor_admin_tpl_note'] = "В папках tpl/ модулей и плагинов файлы вида admin.*.tpl не показываются и недоступны для правки.";
