@@ -83,6 +83,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 				'td',
 				'th',
 				'video',
+				'audio',
 				'source'
 			));
 			// Establish short tags. (Not having closing tag)
@@ -122,6 +123,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
 			$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
 			$jevix->cfgAllowTagParams('video', array('controls', 'style', 'class', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'poster' => '#link', 'preload' => '#text'));
+			$jevix->cfgAllowTagParams('audio', array('controls', 'style', 'class', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'preload' => '#text'));
 			$jevix->cfgAllowTagParams('source', array('src' => '#link', 'type' => '#text'));
 			// Establish the resolved parametres css styles for tags
 			$jevix->cfgSetTagStyleParams(
@@ -159,14 +161,15 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagChilds('object', 'param', false, true);
 			$jevix->cfgSetTagChilds('object', 'embed', false, false);
 			$jevix->cfgSetTagChilds('video', 'source', false, true);
+			$jevix->cfgSetTagChilds('audio', 'source', false, true);
 			// Establish tags which can be empty
-			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'iframe', 'source', 'video'));
+			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'iframe', 'source', 'video', 'audio'));
 			// Establish attributes tags which will be automatically added
 			$jevix->cfgSetTagParamDefault('embed', 'wmode',	'opaque',	true);
 			// Establish autoreplacement
 			$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));
 			// Disconnect typografy in defined tag	
-			$jevix->cfgSetTagNoTypography('code', 'video', 'object');
+			$jevix->cfgSetTagNoTypography('code', 'video', 'audio', 'object');
 
 			break;
 		/* ---- */

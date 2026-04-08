@@ -98,6 +98,7 @@ $cfg['res_dir'] = 'datas/resized/';
 $cfg['font_dir'] = 'datas/fonts/';
 $cfg['gd_supported'] = array('jpg', 'jpeg', 'png', 'gif', 'webp');
 $cfg['video_supported'] = array('mp4', 'ogv', 'webm');
+$cfg['audio_supported'] = array('mp3', 'ogg', 'wav');
 $cfg['pagination'] = '<li class="page-item">[ %s ]</li>';
 $cfg['pagination_cur'] = '<li class="page-item active"><strong class="page-link">&gt; %s &lt;</strong></li>';
 $cfg['pagination_arrowleft'] = "<";

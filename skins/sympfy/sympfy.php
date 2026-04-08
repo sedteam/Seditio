@@ -40,6 +40,7 @@ $out['ic_pastefile'] = "<i class=\"ic-link\"></i>";
 $out['ic_pasteimage'] = "<i class=\"ic-photo\"></i>";
 
 $out['ic_pastevideo'] = "<i class=\"ic-movie\"></i>";
+$out['ic_pasteaudio'] = "<i class=\"ic-speakerphone\"></i>";
 
 $out['ic_alert_error'] = "<i class=\"ic-circle-x\"></i>";
 $out['ic_alert_info'] = "<i class=\"ic-alert-circle\"></i>";

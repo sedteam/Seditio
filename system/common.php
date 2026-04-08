@@ -476,6 +476,8 @@ $out['ic_pasteimage'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-p
 
 $out['ic_pastevideo'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pastevideo.gif\" alt=\"" . (isset($L['pfs_insertasvideo']) ? $L['pfs_insertasvideo'] : '') . "\" />";
 
+$out['ic_pasteaudio'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-pasteaudio.gif\" alt=\"" . (isset($L['pfs_insertasaudio']) ? $L['pfs_insertasaudio'] : '') . "\" />";
+
 $out['ic_comment'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/icon-comment.gif\" alt=\"\" />";
 
 $out['ic_posts_moved'] = "<img src=\"skins/" . $usr['skin'] . "/img/system/posts_moved.gif\" alt=\"\" />";

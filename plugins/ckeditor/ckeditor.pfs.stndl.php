@@ -60,6 +60,11 @@ function addvideo(gfile)
 	var html = '<div class=\"ckeditor-html5-video\" style=\"text-align: center;\"><video controls=\"controls\" src=\"'+gfile+'\"></video></div>';
 	window." . $openerparent . ".CKEDITOR.instances['" . $c2 . "'].insertHtml(html); " . $auto_popup_close . "
 	}
+function addaudio(gfile)
+	{
+	var html = '<div class=\"ckeditor-html5-audio\"><audio controls=\"controls\" src=\"'+gfile+'\"></audio></div>';
+	window." . $openerparent . ".CKEDITOR.instances['" . $c2 . "'].insertHtml(html); " . $auto_popup_close . "
+	}
 ";
 
 sed_add_javascript('plugins/ckeditor/lib/ckeditor.js?v=4', true);

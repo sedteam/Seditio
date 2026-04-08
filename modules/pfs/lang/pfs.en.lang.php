@@ -47,6 +47,7 @@ $L['pfs_insertaslink'] = "Insert as a link to the file"; // New in v175
 $L['pfs_multiuploading'] = "Multiple File Upload"; // New in v175
 
 $L['pfs_insertasvideo'] = "Insert as video"; // New in v180
+$L['pfs_insertasaudio'] = "Insert as audio";
 
 $L['pfs_setassample'] = "Set as sample";  // New in v150
 $L['pfs_addlogo'] = "Add the logo";  // New in v150

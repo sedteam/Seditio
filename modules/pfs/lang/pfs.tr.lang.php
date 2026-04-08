@@ -47,6 +47,7 @@ $L['pfs_insertaslink'] = "Dosyaya link olarak ekle"; // New in v175
 $L['pfs_multiuploading'] = "Birden fazla dosya yükleme"; // New in v175
 
 $L['pfs_insertasvideo'] = "Video olarak ekle"; // New in v180
+$L['pfs_insertasaudio'] = "Ses olarak ekle";
 
 $L['pfs_setassample'] = "Örnek olarak ayarla";  // New in v150
 $L['pfs_addlogo'] = "Logoyu ekle";  // New in v150

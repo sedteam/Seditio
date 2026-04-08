@@ -501,6 +501,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
     $add_image = '';
     $add_file = '';
     $add_video = '';
+    $add_audio = '';
 
     if ($pfs_extension != $pfs_realext) {
         $sql1 = sed_sql_query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' ");
@@ -541,6 +542,10 @@ while ($row = sed_sql_fetchassoc($sql)) {
         if ($standalone) {
             $add_video = sed_link("javascript:addvideo('" . $pfs_fullfile . "')", $out['ic_pastevideo'], array('title' => $L['pfs_insertasvideo'], 'class' => 'btn-icon'));
         }
+    } elseif (in_array($pfs_extension, $cfg['audio_supported'])) {
+        if ($standalone) {
+            $add_audio = sed_link("javascript:addaudio('" . $pfs_fullfile . "')", $out['ic_pasteaudio'], array('title' => $L['pfs_insertasaudio'], 'class' => 'btn-icon'));
+        }
     }
 
     $add_file = ($standalone) ? sed_link("javascript:addfile('" . $pfs_file . "','" . $pfs_fullfile . "', '" . $pfs_title . "', '" . $pfs_extension . "')", $out['ic_pastefile'], array('title' => $L['pfs_insertaslink'], 'class' => 'btn-icon')) : '';
@@ -568,10 +573,10 @@ while ($row = sed_sql_fetchassoc($sql)) {
         $t->parse("MAIN.PFS_FILES.PFS_LIST_FILES.PFS_LIST_FILES_ICON");
     }
 
-    if (!empty($add_thumbnail) || !empty($add_image) || !empty($add_file) || !empty($add_video) || !empty($stndl_icons_list)) {
+    if (!empty($add_thumbnail) || !empty($add_image) || !empty($add_file) || !empty($add_video) || !empty($add_audio) || !empty($stndl_icons_list)) {
         $stndl_flag = true;
         $t->assign(array(
-            "PFS_LIST_FILES_STNDL"  => (empty($stndl_icons_list)) ? $add_thumbnail . " " . $add_image . " " . $add_video . " " .  $add_file : $stndl_icons_list
+            "PFS_LIST_FILES_STNDL"  => (empty($stndl_icons_list)) ? $add_thumbnail . " " . $add_image . " " . $add_video . " " . $add_audio . " " .  $add_file : $stndl_icons_list
         ));
         $t->parse("MAIN.PFS_FILES.PFS_LIST_FILES.PFS_LIST_FILES_STNDL");
     }

@@ -47,6 +47,7 @@ $L['pfs_insertaslink'] = "Вставить ссылку на файл"; // New i
 $L['pfs_multiuploading'] = "Мультизагрузка файлов"; // New in v175
 
 $L['pfs_insertasvideo'] = "Вставить видео"; // New in v180
+$L['pfs_insertasaudio'] = "Вставить аудио";
 
 $L['pfs_setassample'] = "Образец";  // New in v150
 $L['pfs_addlogo'] = "Добавить лого";  // New in v150
