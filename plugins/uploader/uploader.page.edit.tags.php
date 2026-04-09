@@ -48,14 +48,10 @@ $pageextra = 'page_' . $extraslot;
 
 $uploader = new XTemplate('plugins/uploader/uploader.tpl');
 
-$page_thumbs_array = rtrim($pag[$pageextra]);
+$page_thumbs_array = sed_thumb_list($pag[$pageextra]);
 $preload_images = '[]';
 
-if (!empty($page_thumbs_array)) {
-	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') {
-		$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);
-	}
-	$page_thumbs_array = explode(";", $page_thumbs_array);
+if (count($page_thumbs_array) > 0) {
 	$preload_images_arr = array();
 	foreach ($page_thumbs_array as $imgfile) {
 		if ($imgfile && ($imgfile != '')) $preload_images_arr[] =  "'" . $imgfile . "'";

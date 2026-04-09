@@ -180,16 +180,10 @@ if (sed_module_active('page') && $cfg['plugin']['news']['maxpages'] > 0 && !empt
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 		));
 
-		if (!empty($pag['page_thumb'])) {
-			$page_thumbs_array = rtrim($pag['page_thumb']);
-			if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') {
-				$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);
-			}
-			$page_thumbs_array = explode(";", $page_thumbs_array);
-			if (count($page_thumbs_array) > 0) {
-				$news->assign("PAGE_ROW_THUMB", $page_thumbs_array[0]);
-				$news->parse("NEWS.PAGE_ROW.PAGE_ROW_THUMB");
-			}
+		$page_thumbs_array = sed_thumb_list($pag['page_thumb']);
+		if (count($page_thumbs_array) > 0) {
+			$news->assign("PAGE_ROW_THUMB", $page_thumbs_array[0]);
+			$news->parse("NEWS.PAGE_ROW.PAGE_ROW_THUMB");
 		} else {
 			$news->assign("PAGE_ROW_THUMB", "noimg.jpg");
 		}

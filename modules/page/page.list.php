@@ -236,16 +236,9 @@ $urlpaths = array();
 sed_build_list_bc($c);
 
 // ---------- List thumb
-$list_thumbs_array = array();
-if (!empty($sed_cat[$c]['thumb'])) {
-	$list_thumbs_array = rtrim($sed_cat[$c]['thumb']);
-	if ($list_thumbs_array[mb_strlen($list_thumbs_array) - 1] == ';') {
-		$list_thumbs_array = mb_substr($list_thumbs_array, 0, -1);
-	}
-	$list_thumbs_array = explode(";", $list_thumbs_array);
-	if (count($list_thumbs_array) > 0) {
-		$out['image'] = $list_thumbs_array[0];
-	}
+$list_thumbs_array = sed_thumb_list($sed_cat[$c]['thumb']);
+if (count($list_thumbs_array) > 0) {
+	$out['image'] = $list_thumbs_array[0];
 }
 
 /* === Hook === */
@@ -443,7 +436,6 @@ foreach ($list_items as $pag) {
 		"LIST_ROW_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
 		"LIST_ROW_KEY" => sed_cc($pag['page_key']),
 		"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
-		"LIST_ROW_THUMB" => sed_cc($pag['page_thumb']),
 		"LIST_ROW_DESC" => $pag['page_desc'],
 		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
 		"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
@@ -457,16 +449,10 @@ foreach ($list_items as $pag) {
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 	));
 
-	if (!empty($pag['page_thumb'])) {
-		$page_thumbs_array = rtrim($pag['page_thumb']);
-		if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') {
-			$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);
-		}
-		$page_thumbs_array = explode(";", $page_thumbs_array);
-		if (count($page_thumbs_array) > 0) {
-			$t->assign("LIST_ROW_THUMB", $page_thumbs_array[0]);
-			$t->parse("MAIN.LIST_ROW.LIST_ROW_THUMB");
-		}
+	$page_thumbs_array = sed_thumb_list($pag['page_thumb']);
+	if (count($page_thumbs_array) > 0) {
+		$t->assign("LIST_ROW_THUMB", $page_thumbs_array[0]);
+		$t->parse("MAIN.LIST_ROW.LIST_ROW_THUMB");
 	} else {
 		$t->assign("LIST_ROW_THUMB", "noimg.jpg");
 	}

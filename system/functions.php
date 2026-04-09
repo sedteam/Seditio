@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=185
-Updated=2026-feb-14
+Updated=2026-apr-09
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -258,6 +258,38 @@ function sed_alphaonly($text)
 function sed_onlydigits($text)
 {
 	return (preg_replace('/[^0-9+]/', '', $text));
+}
+
+/**
+ * Parses a semicolon-separated list of thumb paths (page_thumb, category thumb, etc.).
+ * Trailing whitespace is stripped; a trailing semicolon is removed; each segment is trimmed;
+ * empty segments are omitted. Safe for null/non-string input (PHP 8+).
+ *
+ * @param mixed $raw Raw field value from DB or form
+ * @return array List of non-empty thumb path strings
+ */
+function sed_thumb_list($raw)
+{
+	$s = is_string($raw) ? $raw : '';
+	$s = rtrim($s);
+	if ($s === '') {
+		return array();
+	}
+	if (mb_substr($s, -1, 1) === ';') {
+		$s = mb_substr($s, 0, mb_strlen($s) - 1);
+	}
+	if ($s === '') {
+		return array();
+	}
+	$parts = explode(';', $s);
+	$out = array();
+	foreach ($parts as $p) {
+		$p = trim($p);
+		if ($p !== '') {
+			$out[] = $p;
+		}
+	}
+	return $out;
 }
 
 /** 

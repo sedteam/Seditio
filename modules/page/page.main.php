@@ -138,16 +138,9 @@ sed_build_list_bc($pag['page_cat']);
 $urlpaths[$pag['page_pageurl']] = $pag['page_title'];
 
 // ---------- Page thumb
-$page_thumbs_array = array();
-if (!empty($pag['page_thumb'])) {
-	$page_thumbs_array = rtrim($pag['page_thumb']);
-	if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') {
-		$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);
-	}
-	$page_thumbs_array = explode(";", $page_thumbs_array);
-	if (count($page_thumbs_array) > 0) {
-		$out['image'] = $page_thumbs_array[0];
-	}
+$page_thumbs_array = sed_thumb_list($pag['page_thumb']);
+if (count($page_thumbs_array) > 0) {
+	$out['image'] = $page_thumbs_array[0];
 }
 
 /* === Hook === */

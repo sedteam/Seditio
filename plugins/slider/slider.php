@@ -83,18 +83,11 @@ if (sed_sql_numrows($sql) > 0) {
 
 			// ------- thumb
 
-			$row['page_first_thumb'] = "";
-			if (!empty($row['page_thumb'])) {
-				$page_thumbs_array = rtrim($row['page_thumb']);
-				if ($page_thumbs_array[mb_strlen($page_thumbs_array) - 1] == ';') {
-					$page_thumbs_array = mb_substr($page_thumbs_array, 0, -1);
-				}
-				$page_thumbs_array = explode(";", $page_thumbs_array);
-				if (count($page_thumbs_array) > 0) {
-					$row['page_first_thumb'] = $page_thumbs_array[0];
-					$t->assign("SLIDER_ROW_THUMB", $page_thumbs_array[0]);
-					$t->parse("MAIN.SLIDER.SLIDER_ROW.SLIDER_ROW_THUMB");
-				}
+			$page_thumbs_array = sed_thumb_list($row['page_thumb']);
+			if (count($page_thumbs_array) > 0) {
+				$row['page_first_thumb'] = $page_thumbs_array[0];
+				$t->assign("SLIDER_ROW_THUMB", $page_thumbs_array[0]);
+				$t->parse("MAIN.SLIDER.SLIDER_ROW.SLIDER_ROW_THUMB");
 			} else {
 				$row['page_first_thumb'] = sed_cc($row['page_thumb']);
 				$t->assign("SLIDER_ROW_THUMB", sed_cc($row['page_thumb']));
