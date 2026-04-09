@@ -21,10 +21,10 @@
 			<div class="table-head resp-table-head">
 
 				<div class="table-row resp-table-row">
-					<div class="table-th coltop text-left" style="width:40px;">#ID</div>
-					<div class="table-th coltop text-left">{PHP.L.Title}</div>
-					<div class="table-th coltop text-left" style="width:100px;">{PHP.L.Date}</div>
-					<div class="table-th coltop text-left" style="width:180px;">{PHP.L.Owner}</div>
+					<div class="table-th coltop text-left" style="width:77px;">{PAGE_TOP_ID}</div>
+					<div class="table-th coltop text-left">{PAGE_TOP_TITLE}</div>
+					<div class="table-th coltop text-left" style="width:100px;">{PAGE_TOP_DATE}</div>
+					<div class="table-th coltop text-left" style="width:180px;">{PAGE_TOP_OWNER}</div>
 					<div class="table-th coltop text-center" style="width:30px;">{PHP.L.Status}</div>
 					<div class="table-th coltop text-center" style="width:135px;">{PHP.L.Action}</div>
 				</div>

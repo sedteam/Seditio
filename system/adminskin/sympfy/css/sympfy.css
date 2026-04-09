@@ -613,12 +613,16 @@ a.remove-link:hover {
 .content-box-content {
   padding: 20px;
   border-top: 1px solid #ccc;
-  line-height: 1.35em;  
+  line-height: 1.35em;
 }
 
 .content-box-content i {
   font-size: 1.3em;
   vertical-align: middle;
+}
+
+.content-box-content .table-head i {
+  font-size: 1em;
 }
 
 .content-tab {

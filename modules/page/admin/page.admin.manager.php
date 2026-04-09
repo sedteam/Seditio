@@ -72,10 +72,17 @@ if ($a == 'delete') {
 	}
 }
 
-if (empty($s) && !empty($c)) {
+if (empty($s) && !empty($c) && isset($sed_cat[$c])) {
 	$sm = $sed_cat[$c]['order'];
 	$wm = $sed_cat[$c]['way'];
 }
+
+$page_manager_sort_map = array(
+	'id' => 'page_id',
+	'title' => 'page_title',
+	'date' => 'page_date',
+	'owner' => 'page_ownerid',
+);
 
 if (empty($sm)) {
 	$sm = 'title';
@@ -83,6 +90,14 @@ if (empty($sm)) {
 if (empty($wm)) {
 	$wm = 'asc';
 }
+if ($wm != 'asc' && $wm != 'desc') {
+	$wm = 'asc';
+}
+if (!isset($page_manager_sort_map[$sm])) {
+	$sm = 'title';
+}
+$order_col = $page_manager_sort_map[$sm];
+
 if (empty($d)) {
 	$d = '0';
 }
@@ -102,7 +117,7 @@ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_maingrp
 					  FROM $db_pages as p 
 					  LEFT JOIN $db_users AS u 
 					  ON u.user_id=p.page_ownerid" . $sqlcat . "
-					  ORDER BY page_$sm $wm 
+					  ORDER BY p." . $order_col . " " . $wm . " 
 					  LIMIT $d," . $perpage);
 
 $totalpages = ceil($totallines / $perpage);
@@ -176,7 +191,11 @@ if (!empty($pagination)) {
 
 $t->assign(array(
 	"PAGE_MANAGER_CATEGORY" => sed_selectbox_categories($c, "rpagecat", TRUE, $redirecturl, $additional),
-	"PAGE_MANAGER_COUNT" => $totallines
+	"PAGE_MANAGER_COUNT" => $totallines,
+	"PAGE_TOP_ID" => sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=id&wm=asc"), $out['ic_arrow_down']) . sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=id&wm=desc"), $out['ic_arrow_up']) . " #ID",
+	"PAGE_TOP_TITLE" => sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=title&wm=asc"), $out['ic_arrow_down']) . sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=title&wm=desc"), $out['ic_arrow_up']) . " " . $L['Title'],
+	"PAGE_TOP_DATE" => sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=date&wm=asc"), $out['ic_arrow_down']) . sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=date&wm=desc"), $out['ic_arrow_up']) . " " . $L['Date'],
+	"PAGE_TOP_OWNER" => sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=owner&wm=asc"), $out['ic_arrow_down']) . sed_link(sed_url("admin", "m=page&s=manager&c=" . $c . "&sm=owner&wm=desc"), $out['ic_arrow_up']) . " " . $L['Owner'],
 ));
 
 $t->assign("ADMIN_PAGE_MANAGER_TITLE", $admintitle);
