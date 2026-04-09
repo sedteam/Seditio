@@ -8,10 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/inc/page.functions.php
 Version=185
-Updated=2026-feb-14
+Updated=2026-apr-09
 Type=Module
 Author=Seditio Team
-Description=Page structure and list API
+Description=Page structure, list API, list filters
 [END_SED]
 ==================== */
 
@@ -235,6 +235,125 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 		}
 	}
 	return ($res);
+}
+
+/**
+ * Build SQL WHERE fragment and URL query string for page list filters (GET filter_*).
+ *
+ * @param array  $sort_filterable Column key (without table prefix) => vartype: INT, BOL, TXT, ARR
+ * @param array|null $get         Input parameters (null = use $_GET)
+ * @param string $column_prefix   SQL column prefix for $db_pages (default page_)
+ * @return array  Keys: urlparams (leading "&" or ""), sql_where (" AND ..." or single space)
+ */
+function sed_page_list_build_filters($sort_filterable, $get = null, $column_prefix = 'page_')
+{
+	$src = ($get === null) ? $_GET : $get;
+	$filter_sql = array();
+	$filter_urlparams_arr = array();
+	$col = $column_prefix;
+
+	foreach ($sort_filterable as $key => $vartype) {
+		if (!preg_match('/^[a-zA-Z0-9_]+$/', $key)) {
+			continue;
+		}
+		if (!in_array($vartype, array('INT', 'BOL', 'TXT', 'ARR'))) {
+			continue;
+		}
+
+		$param = 'filter_' . $key;
+		if (!isset($src[$param])) {
+			continue;
+		}
+
+		$raw = $src[$param];
+		$fv = sed_import($raw, 'D', 'ARR');
+		if (!is_array($fv)) {
+			$fv = sed_import($raw, 'D', $vartype, 255);
+		}
+
+		if (is_array($fv)) {
+			if (count($fv) > 50) {
+				continue;
+			}
+			$escaped_values = array();
+			$find_parts = array();
+			foreach ($fv as $value) {
+				if ($vartype === 'ARR') {
+					$filtered_value = sed_import($value, 'D', 'TXT', 255);
+					if ($filtered_value === null || $filtered_value === '') {
+						continue;
+					}
+					$find_parts[] = "FIND_IN_SET('" . sed_sql_prep($filtered_value) . "', " . $col . $key . ")";
+				} else {
+					$filtered_value = sed_import($value, 'D', $vartype, 255);
+					if ($vartype === 'INT') {
+						if ($filtered_value === null) {
+							continue;
+						}
+						$escaped_values[] = sed_sql_prep((string)(int) $filtered_value);
+					} elseif ($vartype === 'BOL') {
+						if ($filtered_value === null || !is_bool($filtered_value)) {
+							continue;
+						}
+						$escaped_values[] = $filtered_value ? '1' : '0';
+					} else {
+						if ($filtered_value === null || $filtered_value === '') {
+							continue;
+						}
+						$escaped_values[] = sed_sql_prep($filtered_value);
+					}
+				}
+			}
+			if ($vartype === 'ARR') {
+				if (count($find_parts) > 0) {
+					$filter_sql[] = '(' . implode(' OR ', $find_parts) . ')';
+					foreach ($fv as $value) {
+						$filter_urlparams_arr[] = $param . '[]=' . urlencode($value);
+					}
+				}
+			} elseif (count($escaped_values) > 0) {
+				$filter_sql[] = $col . $key . " IN ('" . implode("','", $escaped_values) . "')";
+				foreach ($fv as $value) {
+					$filter_urlparams_arr[] = $param . '[]=' . urlencode($value);
+				}
+			}
+		} else {
+			if ($vartype === 'ARR') {
+				if ($fv === null || $fv === '') {
+					continue;
+				}
+				$filter_sql[] = "FIND_IN_SET('" . sed_sql_prep($fv) . "', " . $col . $key . ")";
+				$filter_urlparams_arr[] = $param . '=' . urlencode($fv);
+			} elseif ($vartype === 'TXT') {
+				if ($fv === null || $fv === '') {
+					continue;
+				}
+				$filter_sql[] = $col . $key . " LIKE '%" . sed_sql_prep($fv) . "%'";
+				$filter_urlparams_arr[] = $param . '=' . urlencode($fv);
+			} elseif ($vartype === 'INT') {
+				if ($fv === null || $fv === '') {
+					continue;
+				}
+				$filter_sql[] = $col . $key . " = '" . sed_sql_prep((string)(int) $fv) . "'";
+				$filter_urlparams_arr[] = $param . '=' . urlencode((string)(int) $fv);
+			} elseif ($vartype === 'BOL') {
+				if ($fv === null || !is_bool($fv)) {
+					continue;
+				}
+				$bval = $fv ? '1' : '0';
+				$filter_sql[] = $col . $key . " = '" . $bval . "'";
+				$filter_urlparams_arr[] = $param . '=' . $bval;
+			}
+		}
+	}
+
+	$filter_urlparams = (count($filter_urlparams_arr) > 0) ? "&" . implode('&', $filter_urlparams_arr) : "";
+	$sql_where = (count($filter_sql) > 0) ? " AND " . implode(' AND ', $filter_sql) : " ";
+
+	return array(
+		'urlparams' => $filter_urlparams,
+		'sql_where' => $sql_where,
+	);
 }
 
 /* ======== Load page structure into global $sed_cat when module is active ======== */
