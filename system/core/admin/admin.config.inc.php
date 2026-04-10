@@ -59,6 +59,18 @@ switch ($n) {
 		$o = (empty($o)) ? 'core' : $o;
 		$p = (empty($o)) ? 'main' : $p;
 
+		if ($a == 'addmissing' && ($o == 'module' || $o == 'plug') && !empty($p) && $v !== '') {
+			sed_check_xg();
+			$parsed_add = sed_config_parse_setup_lines($o, $p);
+			$missing_add = sed_config_get_missing_names($o, $p, $parsed_add);
+			if (in_array($v, $missing_add, true)) {
+				sed_config_add_from_parsed_line($o, $p, $v, $parsed_add);
+				sed_cache_clearall();
+			}
+			sed_redirect(sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p, "", true), false, array('msg' => '919'));
+			exit;
+		}
+
 		if ($a == 'update' && !empty($n)) {
 			sed_check_xg();
 
@@ -114,7 +126,17 @@ switch ($n) {
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
-		sed_die(sed_sql_numrows($sql) == 0);
+		$config_numrows = sed_sql_numrows($sql);
+		if ($config_numrows == 0) {
+			$allow_empty_config = false;
+			if (($o == 'module' || $o == 'plug') && !empty($p)) {
+				$parsed_empty = sed_config_parse_setup_lines($o, $p);
+				$allow_empty = !empty($parsed_empty);
+			}
+			if (!$allow_empty) {
+				sed_die(true);
+			}
+		}
 
 		if ($o == 'core') {
 			$urlpaths[sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p)] = $L["core_" . $p];
@@ -203,6 +225,25 @@ switch ($n) {
 			));
 
 			$t->parse("ADMIN_CONFIG.CONFIG_LIST");
+		}
+
+		if (($o == 'module' || $o == 'plug') && !empty($p)) {
+			$parsed_missing = sed_config_parse_setup_lines($o, $p);
+			$missing_names = sed_config_get_missing_names($o, $p, $parsed_missing);
+			if (!empty($missing_names)) {
+				$t->assign("CONFIG_MISSING_SECTION_TITLE", $L['adm_config_missing_title']);
+				foreach ($missing_names as $mname) {
+					$mtitle = isset($L['cfg_' . $mname][0]) ? $L['cfg_' . $mname][0] : $mname;
+					$t->assign(array(
+						"CONFIG_MISSING_TITLE" => $mtitle,
+						"CONFIG_MISSING_NAME" => $mname,
+						"CONFIG_MISSING_ADD_URL" => sed_url("admin", "m=config&n=edit&o=" . $o . "&p=" . $p . "&a=addmissing&v=" . rawurlencode($mname) . "&" . sed_xg()),
+						"CONFIG_MISSING_ADD_LABEL" => $L['adm_config_missing_add']
+					));
+					$t->parse("ADMIN_CONFIG.CONFIG_MISSING_SECTION.CONFIG_MISSING_LIST");
+				}
+				$t->parse("ADMIN_CONFIG.CONFIG_MISSING_SECTION");
+			}
 		}
 
 		if (!empty($adminhelpconfig)) {

@@ -309,6 +309,7 @@ switch ($a) {
 		$ruserpmnotify = sed_import('ruserpmnotify', 'P', 'BOL');
 		$rnewpass1 = sed_import('rnewpass1', 'P', 'TXT');
 		$rnewpass2 = sed_import('rnewpass2', 'P', 'TXT');
+		$ruseroldpass = sed_import('ruseroldpass', 'P', 'TXT');
 		$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
 
 		// --------- Extra fields     
@@ -318,6 +319,19 @@ switch ($a) {
 		if (!empty($rnewpass1) && !empty($rnewpass2)) {
 			$rnewpass1 = sed_import('rnewpass1', 'P', 'TXT');
 			$rnewpass2 = sed_import('rnewpass2', 'P', 'TXT');
+
+			$strictpasschange = (isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1;
+
+			if ($strictpasschange) {
+				if (empty($ruseroldpass)) {
+					$error_string .= $L['pro_oldpassrequired'] . "<br />";
+				} else {
+					$rmdold = ($urr['user_passtype'] == 0) ? sed_hash($ruseroldpass, 0) : sed_hash($ruseroldpass, 1, $urr['user_salt']);
+					if ($rmdold !== $urr['user_password']) {
+						$error_string .= $L['pro_oldpasswrong'] . "<br />";
+					}
+				}
+			}
 
 			$error_string .= ($rnewpass1 != $rnewpass2) ? $L['pro_passdiffer'] . "<br />" : '';
 			$error_string .= (mb_strlen($rnewpass1) < 4 || sed_alphaonly($rnewpass1) != $rnewpass2) ? $L['pro_passtoshort'] . "<br />" : '';
@@ -494,7 +508,9 @@ $urlpaths = array();
 $urlpaths[sed_url("users")] = $L['Users'];
 $urlpaths[sed_url("users", "m=profile")] = $L['pro_title'];
 
-$t->assign(array(
+$strictpasschange = (isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1;
+
+$profile_tags = array(
 	"USERS_PROFILE_TITLE" => sed_link(sed_url("users", "m=profile"), $L['pro_title']),
 	"USERS_PROFILE_SHORTTITLE" => $L['pro_title'],
 	"USERS_PROFILE_URL" => sed_url("users", "m=profile"),
@@ -530,7 +546,17 @@ $t->assign(array(
 	"USERS_PROFILE_ADMINRIGHTS" => '',
 	"USERS_PROFILE_NEWPASS1" => sed_textbox("rnewpass1", "", 16, 32, "password", false, "password"),
 	"USERS_PROFILE_NEWPASS2" => sed_textbox("rnewpass2", "", 16, 32, "password", false, "password")
-));
+);
+
+if ($strictpasschange) {
+	$profile_tags['USERS_PROFILE_OLDPASS'] = sed_textbox("ruseroldpass", "", 16, 32, "password", false, "password");
+}
+
+$t->assign($profile_tags);
+
+if ($strictpasschange) {
+	$t->parse("MAIN.USERS_PROFILE_OLDPASS");
+}
 
 // Extra fields 
 if (count($extrafields) > 0) {

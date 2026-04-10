@@ -28,7 +28,7 @@
 
 			<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile" id="profile">
 
-				<input type="hidden" name="userid" value="{USERS_PROFILE_ID}"><input type="hidden" name="curpassword" value="{USERS_PROFILE_PASSWORD}">
+				<input type="hidden" name="userid" value="{USERS_PROFILE_ID}">
 
 				<ul class="form responsive-form">
 					<li class="form-row">
@@ -125,6 +125,16 @@
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Signature}</label></div>
 						<div class="form-field">{USERS_PROFILE_TEXT}</div>
 					</li>
+
+					<!-- BEGIN: USERS_PROFILE_OLDPASS -->
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.usersprofile.Oldpassword}</label></div>
+						<div class="form-field">
+							{USERS_PROFILE_OLDPASS}
+							<div class="descr">{PHP.skinlang.usersprofile.Oldpasswordhint}</div>
+						</div>
+					</li>
+					<!-- END: USERS_PROFILE_OLDPASS -->
 
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Newpassword}</label></div>

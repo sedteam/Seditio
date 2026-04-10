@@ -113,6 +113,10 @@ $L['adm_tplcache_delete'] = "Delete template cache";
 /* ====== Configuration ====== */
 
 $L['adm_help_config'] = "Not available";
+$L['adm_config_missing_title'] = "Setup options missing from database";
+$L['adm_config_missing_descr'] = "These keys exist in the setup file but not in the database (e.g. after an engine update). Use Add to insert them with defaults from the setup file.";
+$L['adm_config_missing_action'] = "Action";
+$L['adm_config_missing_add'] = "Add";
 $L['cfg_adminemail'] = array("Administrator's email", "Required");
 $L['cfg_maintitle'] = array("Site title", "Main title for the website, required");
 $L['cfg_subtitle'] = array("Description", "Optional, will be displayed after the title of the site");
@@ -164,6 +168,7 @@ $L['cfg_sig_maxy'] = array("Signature, maximum height", "Default: 60 pixels");
 $L['cfg_ph_maxsize'] = array("Photo, maximum file size", "Default: 8000 bytes");
 $L['cfg_ph_maxx'] = array("Photo, maximum width", "Default: 96 pixels");
 $L['cfg_ph_maxy'] = array("Photo, maximum height", "Default: 96 pixels");
+$L['cfg_strictpasschange'] = array("Strict password change in profile", "If Yes, users must enter their current password before setting a new one. Default: Yes");
 $L['cfg_maxrowsperpage'] = array("Maximum lines in lists", "");
 $L['cfg_showpagesubcatgroup'] = array("Show in groups pages from the subsections", "");   //New Sed171
 $L['cfg_genseourls'] = array("Generate SEO url (auto gen* page alias)? ", "");   //New Sed178

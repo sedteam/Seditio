@@ -58,6 +58,52 @@
 
 </div>
 
+<!-- BEGIN: CONFIG_MISSING_SECTION -->
+
+<div class="content-box">
+
+	<div class="content-box-header">
+		<h3>{CONFIG_MISSING_SECTION_TITLE}</h3>
+	</div>
+
+	<div class="content-box-content content-table">
+
+		<div class="descr" style="padding:12px;">{PHP.L.adm_config_missing_descr}</div>
+
+		<div class="table cells striped resp-table">
+
+			<div class="table-head resp-table-head">
+				<div class="table-row resp-table-row">
+					<div class="table-th coltop text-left" style="width:400px;">{PHP.L.Configname}</div>
+					<div class="table-th coltop text-left">{PHP.L.adm_config_missing_action}</div>
+				</div>
+			</div>
+
+			<div class="table-body resp-table-body">
+
+				<!-- BEGIN: CONFIG_MISSING_LIST -->
+
+				<div class="table-row resp-table-row">
+					<div class="table-td text-left resp-table-td config-title">
+						{CONFIG_MISSING_TITLE}<br /><span class="descr">{CONFIG_MISSING_NAME}</span>
+					</div>
+					<div class="table-td text-left resp-table-td">
+						<a href="{CONFIG_MISSING_ADD_URL}" class="btn">{CONFIG_MISSING_ADD_LABEL}</a>
+					</div>
+				</div>
+
+				<!-- END: CONFIG_MISSING_LIST -->
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+<!-- END: CONFIG_MISSING_SECTION -->
+
 <!-- BEGIN: HELP -->
 
 <div class="content-box">

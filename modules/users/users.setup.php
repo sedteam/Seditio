@@ -53,6 +53,7 @@ sig_maxy=17:string::100:Signature max height (px)
 ph_maxsize=18:string::64000:Photo max file size (bytes)
 ph_maxx=19:string::256:Photo max width (px)
 ph_maxy=20:string::256:Photo max height (px)
+strictpasschange=21:radio::1:Strict password change in profile
 [END_SED_MODULE_CONFIG]
 
 ==================== */

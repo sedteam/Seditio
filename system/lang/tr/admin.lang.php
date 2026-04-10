@@ -113,6 +113,10 @@ $L['adm_tplcache_delete'] = "Şablon önbelleğini sil";
 /* ====== Configuration ====== */
 
 $L['adm_help_config'] = "Kullanılamaz";
+$L['adm_config_missing_title'] = "Veritabanında eksik setup seçenekleri";
+$L['adm_config_missing_descr'] = "Bu anahtarlar setup dosyasında vardır ancak veritabanında yoktur (ör. güncelleme sonrası). Eklemek, setup’taki varsayılanlarla satır ekler.";
+$L['adm_config_missing_action'] = "İşlem";
+$L['adm_config_missing_add'] = "Ekle";
 $L['cfg_adminemail'] = array("Yönetici e-posta adresi", "Gerekli");
 $L['cfg_maintitle'] = array("Site başlığı", "Web sitesi için ana başlık, gerekli");
 $L['cfg_subtitle'] = array("Açıklama", "Opsiyonel, site başlığının ardından gösterilecektir");
@@ -165,6 +169,7 @@ $L['cfg_sig_maxy'] = array("İmza, maksimum yükseklik", "Varsayılan: 60 piksel
 $L['cfg_ph_maxsize'] = array("Fotoğraf, maksimum dosya boyutu", "Varsayılan: 8000 bayt");
 $L['cfg_ph_maxx'] = array("Fotoğraf, maksimum genişlik", "Varsayılan: 96 piksel");
 $L['cfg_ph_maxy'] = array("Fotoğraf, maksimum yükseklik", "Varsayılan: 96 piksel");
+$L['cfg_strictpasschange'] = array("Profilde katı şifre değişimi", "\"Evet\" ise yeni şifre için önce mevcut şifre gerekir. Varsayılan: Evet");
 $L['cfg_maxrowsperpage'] = array("Listelerdeki maksimum satır", "");
 $L['cfg_showpagesubcatgroup'] = array("Alt kategorilerden sayfaları gruplar halinde göster", "");   //Yeni Sed171
 $L['cfg_genseourls'] = array("SEO URL'si oluştur (otomatik oluştur* sayfa takma adı)?", "");   //Yeni Sed178

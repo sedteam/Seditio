@@ -265,6 +265,111 @@ function sed_config_add($owner, $cat, $order, $name, $type, $value, $default, $t
             VALUES ('$owner', '$cat', '$order', '$name', " . (int)$type1 . ", '$value', '$default', '" . sed_sql_prep($text) . "', '$variants')");
 }
 
+/**
+ * Parse module/plugin setup file config section (same rules as sed_module_install / sed_plugin_install).
+ * Uses explode(":", ...) — same limitation as installers if colons appear inside fields.
+ *
+ * @param string $owner "module" or "plug"
+ * @param string $cat Module or plugin code (folder name)
+ * @return array Map config_name => array with keys order, type, variants, value, text
+ */
+function sed_config_parse_setup_lines($owner, $cat)
+{
+	$out = array();
+	$owner = (string) $owner;
+	$cat = preg_replace('/[^a-zA-Z0-9_]/', '', (string) $cat);
+	if ($cat === '') {
+		return $out;
+	}
+	if ($owner === 'module') {
+		$file = SED_ROOT . '/modules/' . $cat . '/' . $cat . '.setup.php';
+		$section = 'SED_MODULE_CONFIG';
+	} elseif ($owner === 'plug') {
+		$file = SED_ROOT . '/plugins/' . $cat . '/' . $cat . '.setup.php';
+		$section = 'SED_EXTPLUGIN_CONFIG';
+	} else {
+		return $out;
+	}
+	if (!is_file($file)) {
+		return $out;
+	}
+	$info_cfg = sed_infoget($file, $section);
+	if (empty($info_cfg) || !empty($info_cfg['Error']) || !is_array($info_cfg)) {
+		return $out;
+	}
+	foreach ($info_cfg as $i => $x) {
+		if ($i === 'Error' || $i === '' || !is_string($x)) {
+			continue;
+		}
+		$line = explode(":", $x);
+		if (!is_array($line) || empty($line[1]) || $i === '') {
+			continue;
+		}
+		$out[$i] = array(
+			'order' => isset($line[0]) ? $line[0] : '',
+			'type' => $line[1],
+			'variants' => isset($line[2]) ? $line[2] : '',
+			'value' => isset($line[3]) ? $line[3] : '',
+			'text' => isset($line[4]) ? $line[4] : '',
+		);
+	}
+	return $out;
+}
+
+/**
+ * Config keys present in setup but not in database for the given owner/cat.
+ *
+ * @param string $owner "module" or "plug"
+ * @param string $cat Category code
+ * @param array $parsed From sed_config_parse_setup_lines()
+ * @return array List of config_name strings
+ */
+function sed_config_get_missing_names($owner, $cat, $parsed)
+{
+	global $db_config;
+
+	if (empty($parsed) || !is_array($parsed)) {
+		return array();
+	}
+	$db_names = array();
+	$sql = sed_sql_query("SELECT config_name FROM $db_config WHERE config_owner='" . sed_sql_prep($owner) . "' AND config_cat='" . sed_sql_prep($cat) . "'");
+	while ($row = sed_sql_fetchassoc($sql)) {
+		$db_names[] = $row['config_name'];
+	}
+	return array_values(array_diff(array_keys($parsed), $db_names));
+}
+
+/**
+ * Insert one config row from parsed setup data (same as installers).
+ *
+ * @param string $owner "module" or "plug"
+ * @param string $cat Category code
+ * @param string $name Config key
+ * @param array $parsed From sed_config_parse_setup_lines()
+ * @return bool True if inserted
+ */
+function sed_config_add_from_parsed_line($owner, $cat, $name, $parsed)
+{
+	if (!isset($parsed[$name]) || !is_array($parsed[$name])) {
+		return false;
+	}
+	$e = $parsed[$name];
+	$owner = (string) $owner;
+	$cat = preg_replace('/[^a-zA-Z0-9_]/', '', (string) $cat);
+	if ($cat === '') {
+		return false;
+	}
+	if ($owner === 'module') {
+		sed_config_add('module', $cat, $e['order'], $name, $e['type'], $e['value'], $e['value'], $e['text'], $e['variants']);
+		return true;
+	}
+	if ($owner === 'plug') {
+		sed_config_add('plug', $cat, $e['order'], $name, $e['type'], $e['value'], $e['value'], $e['text'], $e['variants']);
+		return true;
+	}
+	return false;
+}
+
 /* Forum admin functions moved to modules/forums/inc/forums.functions.php */
 
 /** 
