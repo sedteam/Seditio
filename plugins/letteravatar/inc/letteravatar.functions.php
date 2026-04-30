@@ -107,7 +107,6 @@ function letteravatar_gen_letteravatar($text, $uid, $fontSize, $imgWidth, $imgHe
 	imagettftext($im, $fontSize, 0, $x, $y, $textColor, $font, $text);
 
 	if (imagejpeg($im, $cfg['av_dir'] . $fileName, 90)) {
-		imagedestroy($im);
 		return array('status' => TRUE, 'image' => $fileName, 'imagepath' => $cfg['av_dir'] . $fileName);
 	}
 	return array('status' => FALSE);

@@ -315,7 +315,6 @@ function sed_image_constrain_gd(
         imagealphablending($_dst_img, false);
         imagesavealpha($_dst_img, true);
         imagecopy($_dst_img, $dst_img, 0, 0, (int)$x0, (int)$y0, $max_w, $max_h);
-        imagedestroy($dst_img);
         $dst_img = $_dst_img;
         $dst_w = $max_w;
         $dst_h = $max_h;
@@ -351,7 +350,6 @@ function sed_image_constrain_gd(
         }
 
         sed_imagecopymerge_alpha($dst_img, $overlay, $watermark_x, $watermark_y, 0, 0, $owidth, $oheight, $watermark_opacity);
-        imagedestroy($overlay);
     }
 
     // Adjust quality for PNG if not using WebP
@@ -382,9 +380,6 @@ function sed_image_constrain_gd(
             $result = false;
     }
 
-    // Clean up resources
-    imagedestroy($src_img);
-    imagedestroy($dst_img);
     return $result;
 }
 
@@ -944,7 +939,6 @@ function sed_rotateimage($image_source, $degree_lvl, $jpegquality = 90)
         $rotated_image = imagerotate($source, -90 * $degree_lvl, $transColor);
 
         if (!$rotated_image) {
-            imagedestroy($source);
             return false;
         }
 
@@ -970,9 +964,6 @@ function sed_rotateimage($image_source, $degree_lvl, $jpegquality = 90)
                 break;
         }
 
-        // Clean up
-        imagedestroy($rotated_image);
-        imagedestroy($source);
         return $result;
     }
 }

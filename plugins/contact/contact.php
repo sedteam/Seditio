@@ -117,10 +117,9 @@ if ($a == 'send') {
 $error_string .= (!empty($error_string)) ? $L['plu_notsent'] : '';
 
 $recipients = "<select name=\"sender_recip\">\n";
-foreach ($cfg_emails as $k => $i) {
-	$selected = ($i == $id) ? "selected=\"selected\"" : "";
+foreach (array_keys($cfg_emails) as $k) {
+	$selected = ($k == $id) ? "selected=\"selected\"" : "";
 	$recipients .= "<option value=\"" . $k . "\" $selected >" . trim($cfg_names[$k]) . "</option>\n";
-	$i++;
 }
 $recipients .= "</select>\n";
 

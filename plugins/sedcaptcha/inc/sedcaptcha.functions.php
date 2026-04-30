@@ -183,5 +183,4 @@ function sed_captcha_image($code)
 	header("Pragma: no-cache");
 	header("Content-type: image/png");
 	imagepng($image);
-	imagedestroy($image);
 }

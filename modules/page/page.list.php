@@ -404,6 +404,13 @@ foreach ($list_items as $pag) {
 	$pag['page_desc'] = sed_cc($pag['page_desc']);
 	$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url("page", "id=" . $pag['page_id']) : sed_url("page", "al=" . $pag['page_alias']);
 
+	if (sed_findreadmore($pag['page_text']) > 0) {
+		$pag['page_announcement'] = sed_parse($pag['page_text']);
+		$pag['page_announcement'] = sed_cutreadmore($pag['page_announcement'], $pag['page_pageurl']);
+	} else {
+		$pag['page_announcement'] = $pag['page_desc'];
+	}
+	
 	if (!empty($pag['page_url']) && $pag['page_file']) {
 		$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
 		$pag['page_fileicon'] = "system/img/ext/" . mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)) . ".svg";
@@ -437,6 +444,7 @@ foreach ($list_items as $pag) {
 		"LIST_ROW_KEY" => sed_cc($pag['page_key']),
 		"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
 		"LIST_ROW_DESC" => $pag['page_desc'],
+		"LIST_ROW_ANNOUNCEMENT" => $pag['page_announcement'],
 		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
 		"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name']), $pag['user_maingrp']),
 		"LIST_ROW_OWNER_AVATAR" => sed_build_userimage($pag['user_avatar']),

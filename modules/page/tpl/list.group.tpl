@@ -74,15 +74,12 @@
 									<div class="post-title">
 										<h3><a href="{LIST_ROW_URL}" data-page="{LIST_ROW_ID}" data-cat="{LIST_ROW_CAT}">{LIST_ROW_TITLE}</a></h3>
 									</div>
-									<div class="post-desc">
-										<p>{LIST_ROW_DESC}</p>
+									<div class="post-desc page-text">
+										{LIST_ROW_ANNOUNCEMENT}
 									</div>
 									<div class="post-info">
 										<div class="post-author">{LIST_ROW_OWNER_AVATAR}{LIST_ROW_OWNER}</div>
 										<div class="post-comments"><i class="ic-message-circle"></i><a href="{LIST_ROW_COMURL}">{LIST_ROW_COMCOUNT}</a></div>
-										<!-- BEGIN: LIST_ROW_FILE -->
-										<div class="post-file">{LIST_ROW_FILEICON}</div>
-										<!-- END: LIST_ROW_FILE -->
 									</div>
 								</figcaption>
 							</figure>

@@ -1260,17 +1260,20 @@ ul {
   width: 50px;
 }
 
-.news-item .readmore {
+.news-item .readmore,
+.list-item .readmore {
   margin-top: 35px;
 }
 
-.news-item .readmore a {
+.news-item .readmore a,
+.list-item .readmore a {
   padding: 10px 20px;
   border: 1px solid #90a4ae;
   border-radius: 3px;
 }
 
-.news-item .readmore a:hover {
+.news-item .readmore a:hover,
+.list-item .readmore a:hover {
   text-decoration: none;
 }
 

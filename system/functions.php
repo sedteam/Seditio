@@ -1551,25 +1551,39 @@ function sed_cutstring($res, $l, $ellipsis = '...')
 	return ($res);
 }
 
-/** 
- * Truncates a string and add readmore link 
- * 
- * @param string $text Source string 
- * @param string $url Url 
- * @return string 
+/**
+ * Finds readmore delimiter position in parsed text.
+ *
+ * @param string $text Source string
+ * @return int|false Character offset of marker, or false if none
  */
-function sed_cutreadmore($text, $url)
+function sed_findreadmore($text)
 {
-	global $cfg, $L;
-
 	$readmore = mb_strpos($text, "<!--readmore-->");
 	if ($readmore == 0) {
 		$readmore = mb_strpos($text, "[more]");
 	}
 
+	return $readmore;
+}
+
+/** 
+ * Truncates a string and add readmore link 
+ * 
+ * @param string $text Source string 
+ * @param string $url Url 
+ * @param string $class CSS class for the read-more link
+ * @return string 
+ */
+function sed_cutreadmore($text, $url, $class = 'readmore')
+{
+	global $cfg, $L;
+
+	$readmore = sed_findreadmore($text);
+
 	if ($readmore > 0) {
 		$text = mb_substr($text, 0, $readmore) . " ";
-		$text .= sprintf($cfg['readmore'], sed_link($url, $L['ReadMore']));
+		$text .= sprintf($cfg['readmore'], sed_link($url, $L['ReadMore'], array('class' => $class)));
 	}
 
 	return ($text);
@@ -5702,7 +5716,6 @@ function sed_browser($url, $options = array())
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		$fp = fopen($options['output_file'], 'w');
 		if ($fp === false) {
-			curl_close($ch);
 			return false;
 		}
 		curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -5713,15 +5726,13 @@ function sed_browser($url, $options = array())
 
 	// Check for CURL errors
 	if ($result === false) {
-		curl_close($ch);
 		if ($fp) {
 			fclose($fp);
 		}
 		return false;
 	}
 
-	// Close CURL and file pointer
-	curl_close($ch);
+	// Close file pointer if opened (cURL session ends when $ch goes out of scope)
 	if ($fp) {
 		fclose($fp);
 	}
