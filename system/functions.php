@@ -4486,8 +4486,10 @@ function sed_parse_str($str)
 {
 	$res = array();
 	foreach (explode('&', $str) as $item) {
-		if (!empty($item)) {
-			list($key, $val) = explode('=', $item);
+		if ($item !== '') {
+			$parts = explode('=', $item, 2);
+			$key = $parts[0];
+			$val = isset($parts[1]) ? $parts[1] : '';
 			$res[$key] = $val;
 		}
 	}
