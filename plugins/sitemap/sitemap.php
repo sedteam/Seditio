@@ -49,6 +49,9 @@ global $cfg, $usr, $sys, $sed_cat, $db_pages, $db_structure, $db_forum_posts, $d
 
 $m = sed_import('m', 'G', 'ALP');
 $c = sed_import('c', 'G', 'TXT');
+if ($m === null) {
+	$m = '';
+}
 
 $smcfg['index'] = array(
 	'changefreq' => ($cfg['plugin']['sitemap']['sm_index_changefreq'] !== '') ? $cfg['plugin']['sitemap']['sm_index_changefreq'] : 'always',
