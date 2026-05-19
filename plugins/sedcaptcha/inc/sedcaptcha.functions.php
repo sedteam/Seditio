@@ -82,9 +82,9 @@ function sed_verify_code()
 {
 	global $L;
 
-	$captcha_value = $_SESSION['captcha_value'];
-	$captcha_field = $_SESSION['captcha_field'];
-	$answer_time = $_SESSION['answer_time'];
+	$captcha_value = isset($_SESSION['captcha_value']) ? $_SESSION['captcha_value'] : '';
+	$captcha_field = isset($_SESSION['captcha_field']) ? $_SESSION['captcha_field'] : '';
+	$answer_time = isset($_SESSION['answer_time']) ? $_SESSION['answer_time'] : '';
 
 	if (isset($_SESSION[$_SERVER['REMOTE_ADDR']]) && $_SESSION[$_SERVER['REMOTE_ADDR']] >= 10)
 		return sed_error_msg($L['captcha_error_many_incorrect']);
@@ -94,11 +94,13 @@ function sed_verify_code()
 
 		if ($current_time - $answer_time < 6)
 			return sed_error_msg($L['captcha_error_you_robot_or_too_fast']);
-		if ($_POST[$captcha_field] == '')
+
+		$post_value = (isset($_POST[$captcha_field]) ? $_POST[$captcha_field] : '');
+		if ($post_value == '')
 			return sed_error_msg($L['captcha_error_go_bad_robot']);
 
-		if (md5(md5($_POST[$captcha_field])) == $captcha_value) {
-			$ok = 1;
+		if (md5(md5($post_value)) == $captcha_value) {
+			unset($_SESSION['captcha_value'], $_SESSION['captcha_field'], $_SESSION['answer_time'], $_SESSION['captcha_plain']);
 		} else {
 			return sed_error_msg($L['captcha_error_incorrect']);
 		}
@@ -113,6 +115,7 @@ function sed_verify_code()
 function sed_session_write($code)
 {
 	$_SESSION['captcha_value'] = md5(md5($code));
+	$_SESSION['captcha_plain'] = $code;
 	$_SESSION['answer_time'] = strtotime(date('d-m-Y H:i:s'));
 }
 

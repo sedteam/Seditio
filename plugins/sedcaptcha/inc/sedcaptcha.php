@@ -34,6 +34,11 @@ if (empty($cfg['font_dir'])) {
 
 require(SED_ROOT . '/plugins/sedcaptcha/inc/sedcaptcha.functions.php');
 
-$captcha_code = sed_generate_code();
+if (isset($_GET['screload']) || empty($_SESSION['captcha_plain'])) {
+	$captcha_code = sed_generate_code();
+} else {
+	$captcha_code = $_SESSION['captcha_plain'];
+}
+
 sed_captcha_image($captcha_code);
 exit;

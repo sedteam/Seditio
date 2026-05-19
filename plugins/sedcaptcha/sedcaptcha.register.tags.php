@@ -40,6 +40,8 @@ if ($captcha_register == "yes") {
 		require_once($f);
 	}
 
+	sed_generate_code();
+
 	$captcha_url = ($cfg['sefurls'] && !empty($sed_urltrans['captcha']))
 		? sed_url("captcha")
 		: rtrim($sys['abs_url'], '/') . '/' . 'plugins/sedcaptcha/inc/sedcaptcha.php';
@@ -50,7 +52,7 @@ if ($captcha_register == "yes") {
 		document.getElementById('change-image').addEventListener('click', function(event) {
 			event.preventDefault();
 			var img = document.getElementById('cha');
-			img.src = img.src.split('?')[0] + '?' + Math.random();
+			img.src = img.src.split('?')[0] + '?screload=1&' + Math.random();
 			document.getElementById('captcha-form').focus();
 		});
 	</script>";

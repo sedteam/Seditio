@@ -30,7 +30,7 @@ require_once(SED_ROOT . '/plugins/sedcaptcha/inc/sedcaptcha.functions.php');
 
 $captcha_auth = $cfg['plugin']['sedcaptcha']['captcha_auth'];
 
-if ($captcha_auth == "yes") {
+if ($captcha_auth == "yes" && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$verify = sed_verify_code();
 	$error_string .= (!empty($verify)) ? $verify . "<br />" : "";
