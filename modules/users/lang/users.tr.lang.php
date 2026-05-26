@@ -72,6 +72,15 @@ $L['pro_photoupload'] = "Bir fotoğraf yükleyin";
 $L['pro_avatarspreset'] = "...veya buraya tıklayarak önceden yüklenmiş avatarlar galerisini görüntüleyebilirsiniz";
 $L['pro_avatarschoose'] = "Kendi avatarınızı ayarlamak için aşağıdaki resme tıklayın";
 $L['pro_avataruploadfailed'] = "Yükleme başarısız oldu, eski avatarı silerek slotu boşaltın!";
+$L['pro_photouploadfailed'] = "Fotoğraf yüklenemedi";
+$L['pro_siguploadfailed'] = "İmza yüklenemedi";
+$L['pro_imageupload_item'] = "%s: %s";
+$L['pro_imageupload_toobig'] = "dosya çok büyük (maks. %s bayt)";
+$L['pro_imageupload_toobig_server'] = "dosya sunucu yükleme sınırını aşıyor";
+$L['pro_imageupload_badext'] = "dosya türüne izin verilmiyor (izin verilen: %s)";
+$L['pro_imageupload_process'] = "görüntü işleme başarısız";
+$L['pro_imageupload_php'] = "yükleme hatası (kod %s)";
+$L['pro_imageupload_failed'] = "yükleme başarısız";
 
 /* ====== Config ====== */
 

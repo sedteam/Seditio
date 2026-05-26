@@ -220,6 +220,7 @@ datas/users/*
 datas/thumbs/*
 datas/avatars/*
 datas/resized/*
+datas/shop/*
 plugins/karma/*
 plugins/ogmetas/*
 plugins/feedback/*
@@ -234,3 +235,5 @@ Seditio___.zip
 Seditio.zip
 docs/test_sortable.html
 docs/SORTABLE_README.md
+system/javascript/README.imageupload.md
+.editorconfig

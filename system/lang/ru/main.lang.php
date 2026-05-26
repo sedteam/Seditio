@@ -816,6 +816,13 @@ $sed_translit = array(
 	'#' => 'sharp'
 );
 
+/* sedjs.imageUpload widget */
+$L['sed_image_upload_drop'] = 'Перетащите файлы сюда';
+$L['sed_image_upload_add'] = 'Добавить изображение';
+$L['sed_image_upload_select'] = 'Нажмите, чтобы выбрать';
+$L['sed_image_upload_add_url'] = 'загрузить из интернета';
+$L['sed_image_upload_sort_hint'] = 'Перетаскивайте миниатюры для изменения порядка изображений';
+
 $sed_months_list = array(
 	1 => 'января',
 	2 => 'февраля',

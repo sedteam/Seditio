@@ -122,6 +122,11 @@
 					</li>
 
 					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.usersprofile.Photo}</label></div>
+						<div class="form-field">{USERS_PROFILE_PHOTO}</div>
+					</li>
+
+					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Signature}</label></div>
 						<div class="form-field">{USERS_PROFILE_TEXT}</div>
 					</li>

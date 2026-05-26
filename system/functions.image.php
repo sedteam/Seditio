@@ -25,20 +25,203 @@ $cfg['watermark_offset_y'] = 8;
 $cfg['images_sharpen'] = 0;
 $cfg['quality'] = 85;
 
-function resize_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
-{
-    global $cfg;
+/**
+ * Registered resize namespaces: cache key => relative source directory under SED_ROOT.
+ *
+ * @var array
+ */
+$sed_image_resize_namespaces = array();
 
-    $resized_filename = sed_add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp);
-    return $cfg['res_dir'] . $resized_filename;
+/**
+ * Sanitize namespace key (alphanumeric, underscore, hyphen).
+ *
+ * @param string $namespace
+ * @return string
+ */
+function sed_image_resize_namespace_sanitize($namespace)
+{
+    return preg_replace('/[^a-z0-9_\-]/i', '', (string)$namespace);
 }
 
-function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
+/**
+ * Register a source directory for a resize namespace.
+ *
+ * Cache files are stored as datas/resized/{namespace}/{basename}.resizeWxH.ext
+ * while originals live in the registered relative directory.
+ *
+ * @param string $namespace Cache folder name (e.g. products, brands)
+ * @param string $source_dir Relative path under SED_ROOT (e.g. datas/shop/products/)
+ * @return bool
+ */
+function sed_image_resize_namespace_register($namespace, $source_dir)
+{
+    global $sed_image_resize_namespaces;
+
+    if (!is_array($sed_image_resize_namespaces)) {
+        $sed_image_resize_namespaces = array();
+    }
+
+    $namespace = sed_image_resize_namespace_sanitize($namespace);
+    $source_dir = str_replace('\\', '/', trim((string)$source_dir));
+    $source_dir = ltrim($source_dir, '/');
+
+    if ($namespace === '' || $source_dir === '' || strpos($source_dir, '..') !== false) {
+        return false;
+    }
+
+    $sed_image_resize_namespaces[$namespace] = rtrim($source_dir, '/') . '/';
+    return true;
+}
+
+/**
+ * Whether a resize namespace is registered.
+ *
+ * @param string $namespace
+ * @return bool
+ */
+function sed_image_resize_namespace_registered($namespace)
+{
+    global $sed_image_resize_namespaces;
+
+    $namespace = sed_image_resize_namespace_sanitize($namespace);
+    return is_array($sed_image_resize_namespaces) && isset($sed_image_resize_namespaces[$namespace]);
+}
+
+/**
+ * Resolve absolute path to an original image file.
+ *
+ * @param string $filename Basename or legacy PFS filename
+ * @param string $namespace Registered namespace or empty for legacy PFS
+ * @return string|false Absolute path or false if not found
+ */
+function sed_image_resolve_original_path($filename, $namespace = '')
+{
+    global $cfg, $sed_image_resize_namespaces;
+
+    $filename = basename(str_replace('\\', '/', trim((string)$filename)));
+    if ($filename === '' || strpos($filename, '..') !== false) {
+        return false;
+    }
+
+    $namespace = sed_image_resize_namespace_sanitize($namespace);
+
+    if ($namespace !== '' && sed_image_resize_namespace_registered($namespace)) {
+        $rel = $sed_image_resize_namespaces[$namespace] . $filename;
+        $path = SED_ROOT . '/' . $rel;
+        if (!is_file($path)) {
+            return false;
+        }
+        $real = realpath($path);
+        $root = realpath(SED_ROOT);
+        if ($real !== false && $root !== false && strpos($real, $root) === 0) {
+            return $real;
+        }
+        return false;
+    }
+
+    $path = SED_ROOT . '/' . $cfg['pfs_dir'] . $filename;
+    if (is_file($path)) {
+        $real = realpath($path);
+        return ($real !== false) ? $real : false;
+    }
+
+    return false;
+}
+
+/**
+ * Delete generated resize/crop cache files for a basename.
+ *
+ * @param string $filename Original basename
+ * @param string $namespace Registered namespace or empty for legacy PFS cache root
+ */
+function sed_image_delete_resized_cache($filename, $namespace = '')
 {
     global $cfg;
 
-    $resized_filename = sed_add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp);
-    return $cfg['res_dir'] . $resized_filename;
+    $filename = basename(str_replace('\\', '/', trim((string)$filename)));
+    if ($filename === '') {
+        return;
+    }
+
+    $base = pathinfo($filename, PATHINFO_FILENAME);
+    $namespace = sed_image_resize_namespace_sanitize($namespace);
+    $prefix = SED_ROOT . '/' . $cfg['res_dir'];
+    if ($namespace !== '') {
+        $prefix .= $namespace . '/';
+    }
+
+    $patterns = array(
+        $prefix . $base . '.resize*',
+        $prefix . $base . '.crop*',
+    );
+
+    foreach ($patterns as $pattern) {
+        $files = glob($pattern);
+        if (!is_array($files)) {
+            continue;
+        }
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                @unlink($file);
+            }
+        }
+    }
+}
+
+function resize_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
+{
+    global $cfg;
+
+    $resized_filename = sed_add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp, $namespace);
+    $url = $cfg['res_dir'] . $resized_filename;
+    if ($url !== '' && $url[0] !== '/') {
+        $url = '/' . $url;
+    }
+    return $url;
+}
+
+function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
+{
+    global $cfg;
+
+    $resized_filename = sed_add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp, $namespace);
+    $url = $cfg['res_dir'] . $resized_filename;
+    if ($url !== '' && $url[0] !== '/') {
+        $url = '/' . $url;
+    }
+    return $url;
+}
+
+/**
+ * Build resized image URL for a registered namespace (XTemplate-friendly wrapper).
+ *
+ * @param string $namespace
+ * @param string $filename
+ * @param int $width
+ * @param int $height
+ * @param bool $set_watermark
+ * @param bool $use_webp
+ * @return string
+ */
+function resize_image_ns($namespace, $filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
+{
+    return resize_image($filename, $width, $height, $set_watermark, $use_webp, $namespace);
+}
+
+/**
+ * Build cropped image URL for a registered namespace (XTemplate-friendly wrapper).
+ *
+ * @param string $namespace
+ * @param string $filename
+ * @param int $width
+ * @param int $height
+ * @param bool $set_watermark
+ * @param bool $use_webp
+ * @return string
+ */
+function crop_image_ns($namespace, $filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
+{
+    return crop_image($filename, $width, $height, $set_watermark, $use_webp, $namespace);
 }
 
 /**
@@ -50,14 +233,23 @@ function sed_resize($filename)
 {
     global $cfg;
 
-    // Picture folder paths
-    $originals_dir = SED_ROOT . '/' . $cfg['pfs_dir'];
     $preview_dir = SED_ROOT . '/' . $cfg['res_dir'];
 
-    list($original_file, $type, $width, $height, $set_watermark, $use_webp) = sed_get_resize_params($filename);
+    $parsed = sed_get_resize_params($filename);
+    if ($parsed === false) {
+        header("HTTP/1.1 404 Not Found");
+        exit;
+    }
 
-    // Check if parameters are valid
-    if ($original_file === false) {
+    list($original_file, $type, $width, $height, $set_watermark, $use_webp, $namespace) = $parsed;
+
+    if (empty($original_file)) {
+        header("HTTP/1.1 404 Not Found");
+        exit;
+    }
+
+    $src_path = sed_image_resolve_original_path($original_file, $namespace);
+    if ($src_path === false) {
         header("HTTP/1.1 404 Not Found");
         exit;
     }
@@ -74,12 +266,12 @@ function sed_resize($filename)
 
     $check_ais = (count($cfg['available_image_sizes']) > 0) ? in_array($size, $cfg['available_image_sizes']) : TRUE;
 
-    if (!file_exists($originals_dir . $original_file) || empty($original_file) || !$check_ais) {
+    if (!$check_ais) {
         header("HTTP/1.1 404 Not Found");
         exit;
     }
 
-    $resized_file = sed_add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp);
+    $resized_file = sed_add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp, $namespace);
 
     $watermark_offset_x = $cfg['watermark_offset_x'];
     $watermark_offset_y = $cfg['watermark_offset_y'];
@@ -101,7 +293,7 @@ function sed_resize($filename)
 
     if (class_exists('Imagick') && ($cfg['th_amode'] == 'Imagick')) {
         sed_image_constrain_imagick(
-            $originals_dir . $original_file,
+            $src_path,
             $preview_dir . $resized_file,
             $type,
             $width,
@@ -119,7 +311,7 @@ function sed_resize($filename)
         );
     } else {
         sed_image_constrain_gd(
-            $originals_dir . $original_file,
+            $src_path,
             $preview_dir . $resized_file,
             $type,
             $width,
@@ -147,17 +339,24 @@ function sed_resize($filename)
  * @param bool $set_watermark
  * @return string
  */
-function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
+function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
 {
     $resized_filename = '';
     if (!empty($filename)) {
-        if ('.' != ($dirname = pathinfo($filename, PATHINFO_DIRNAME))) {
-            $file = $dirname . '/' . pathinfo($filename, PATHINFO_FILENAME);
-        } else {
-            $file = pathinfo($filename, PATHINFO_FILENAME);
+        $filename = basename(str_replace('\\', '/', $filename));
+        if ($filename === '' || strpos($filename, '..') !== false) {
+            return '';
         }
 
+        $namespace = sed_image_resize_namespace_sanitize($namespace);
+        $base = pathinfo($filename, PATHINFO_FILENAME);
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+        if ($namespace !== '') {
+            $file = $namespace . '/' . $base;
+        } else {
+            $file = $base;
+        }
 
         if ($width > 0 || $height > 0) {
             $resized_filename = $file . '.' . $type . $width . 'x' . $height . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
@@ -190,7 +389,19 @@ function sed_get_resize_params($filename)
     $ext = $matches[6];                     // file extension
     $use_webp = !empty($matches[7]) ? true : false;
 
-    return array($file . '.' . $ext, $type, $width, $height, $set_watermark, $use_webp);
+    $namespace = '';
+    $original_file = $file . '.' . $ext;
+
+    if (strpos($file, '/') !== false) {
+        $slash = strpos($file, '/');
+        $ns = substr($file, 0, $slash);
+        if (sed_image_resize_namespace_registered($ns)) {
+            $namespace = $ns;
+            $original_file = substr($file, $slash + 1) . '.' . $ext;
+        }
+    }
+
+    return array($original_file, $type, $width, $height, $set_watermark, $use_webp, $namespace);
 }
 
 /**
@@ -966,4 +1177,304 @@ function sed_rotateimage($image_source, $degree_lvl, $jpegquality = 90)
 
         return $result;
     }
+}
+
+/* ---------- Deferred image upload UI (sedjs.imageUpload) ---------- */
+
+/**
+ * Resolve $_FILES entry for image upload drop field (with legacy fallback).
+ *
+ * @param string $drop_field Field name without [] (e.g. category_images_drop)
+ * @param string $legacy_field Legacy field name (default dropped_images)
+ * @return array|null
+ */
+function sed_image_upload_get_dropped_files($drop_field, $legacy_field = 'dropped_images')
+{
+	if (!empty($drop_field) && !empty($_FILES[$drop_field]['name'])) {
+		return $_FILES[$drop_field];
+	}
+	if (!empty($legacy_field) && !empty($_FILES[$legacy_field]['name'])) {
+		return $_FILES[$legacy_field];
+	}
+	return null;
+}
+
+/**
+ * Normalized image extensions allowed for upload (from $cfg['gd_supported']).
+ *
+ * @return array Lowercase extensions without dots
+ */
+function sed_image_upload_gd_extensions()
+{
+	global $cfg;
+
+	$list = array();
+	if (!empty($cfg['gd_supported']) && is_array($cfg['gd_supported'])) {
+		foreach ($cfg['gd_supported'] as $ext) {
+			$ext = strtolower(trim($ext));
+			if ($ext !== '' && !in_array($ext, $list, true)) {
+				$list[] = $ext;
+			}
+		}
+	}
+
+	if (count($list) === 0) {
+		$list = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+	}
+
+	return $list;
+}
+
+/**
+ * Build HTML accept attribute value from GD-supported extensions.
+ *
+ * @param array|null $extensions Extension list or null to use $cfg['gd_supported']
+ * @return string Comma-separated MIME types and .ext entries
+ */
+function sed_image_upload_accept_attr($extensions = null)
+{
+	if ($extensions === null) {
+		$extensions = sed_image_upload_gd_extensions();
+	}
+
+	$mime_map = array(
+		'jpg' => 'image/jpeg',
+		'jpeg' => 'image/jpeg',
+		'png' => 'image/png',
+		'gif' => 'image/gif',
+		'webp' => 'image/webp',
+		'bmp' => 'image/bmp',
+	);
+
+	$parts = array();
+	foreach ($extensions as $ext) {
+		$ext = strtolower(trim($ext));
+		if ($ext === '') {
+			continue;
+		}
+		if (isset($mime_map[$ext]) && !in_array($mime_map[$ext], $parts, true)) {
+			$parts[] = $mime_map[$ext];
+		}
+		$dot_ext = '.' . $ext;
+		if (!in_array($dot_ext, $parts, true)) {
+			$parts[] = $dot_ext;
+		}
+	}
+
+	return implode(',', $parts);
+}
+
+/**
+ * Register image upload widget JS/CSS (once per request, when widget HTML is built).
+ */
+function sed_image_upload_register_assets()
+{
+	static $done = false;
+	if ($done) {
+		return;
+	}
+	$done = true;
+	sed_add_javascript('system/javascript/imageupload.js', true, 15);
+	sed_add_css('system/adminskin/sympfy/css/imageupload.css', true, 15);
+}
+
+/**
+ * Build HTML for deferred image upload widget (sedjs.imageUpload).
+ *
+ * @param array $opts prefix, title, max_files, sortable, dropzone, url_upload, existing, id, accept
+ * @return string
+ */
+function sed_image_upload_html($opts)
+{
+	global $L;
+
+	sed_image_upload_register_assets();
+
+	$gd_extensions = sed_image_upload_gd_extensions();
+	$gd_accept = sed_image_upload_accept_attr($gd_extensions);
+
+	$defaults = array(
+		'prefix' => 'images',
+		'title' => '',
+		'max_files' => 0,
+		'sortable' => true,
+		'dropzone' => true,
+		'url_upload' => true,
+		'existing' => array(),
+		'id' => '',
+		'accept' => $gd_accept,
+	);
+	$opts = array_merge($defaults, is_array($opts) ? $opts : array());
+
+	if (empty($opts['accept'])) {
+		$opts['accept'] = $gd_accept;
+	}
+
+	$prefix = preg_replace('/[^a-z0-9_]/i', '', $opts['prefix']);
+	if ($prefix === '') {
+		$prefix = 'images';
+	}
+
+	$max_files = (int)$opts['max_files'];
+	$single = ($max_files === 1);
+	if ($single) {
+		$opts['sortable'] = false;
+	}
+
+	$widget_id = !empty($opts['id']) ? $opts['id'] : 'sed-image-upload-' . $prefix;
+	$keep_name = $prefix . '[]';
+	$drop_name = $single ? $prefix : ($prefix . '_drop[]');
+	$upload_name = $single ? $prefix : ($prefix . '_upload[]');
+
+	$label_drop = !empty($L['sed_image_upload_drop']) ? $L['sed_image_upload_drop'] : 'Drag files here';
+	$label_add = !empty($L['sed_image_upload_add']) ? $L['sed_image_upload_add'] : 'Add image';
+	$label_select = !empty($L['sed_image_upload_select']) ? $L['sed_image_upload_select'] : 'Choose file';
+	$label_url = !empty($L['sed_image_upload_add_url']) ? $L['sed_image_upload_add_url'] : 'upload from the internet';
+	$label_sort = !empty($L['sed_image_upload_sort_hint']) ? $L['sed_image_upload_sort_hint'] : '';
+	$label_or = !empty($L['Or']) ? $L['Or'] : 'or';
+	$label_delete = !empty($L['Delete']) ? $L['Delete'] : 'Delete';
+
+	$config = array(
+		'prefix' => $prefix,
+		'maxFiles' => $max_files,
+		'sortable' => !empty($opts['sortable']),
+		'dropzone' => !empty($opts['dropzone']),
+		'urlUpload' => !empty($opts['url_upload']),
+		'accept' => $opts['accept'],
+		'extensions' => $gd_extensions,
+		'singleField' => $single,
+		'labels' => array(
+			'delete' => $label_delete,
+			'select' => $label_select,
+		),
+	);
+
+	$config_json = htmlspecialchars(json_encode($config), ENT_QUOTES, 'UTF-8');
+
+	$mode_class = empty($opts['dropzone']) ? ' sed-image-upload-mode-tiles' : ' sed-image-upload-mode-dropzone';
+
+	$html = '<div class="sed-image-upload' . $mode_class . '" id="' . sed_cc($widget_id) . '" data-sed-image-upload="' . $config_json . '">';
+
+	if (!empty($opts['title'])) {
+		$html .= '<h3>' . sed_cc($opts['title']) . '</h3>';
+	}
+
+	if (!empty($opts['sortable']) && $label_sort !== '') {
+		$html .= '<p class="sed-image-upload-sort-hint">' . sed_cc($label_sort) . '</p>';
+	}
+
+	$html .= '<ul class="sed-image-upload-list">';
+
+	if (!empty($opts['existing']) && is_array($opts['existing'])) {
+		foreach ($opts['existing'] as $item) {
+			if (empty($item['url'])) {
+				continue;
+			}
+			$item_id = isset($item['id']) ? (int)$item['id'] : 0;
+			$html .= '<li>';
+			$html .= '<a href="#" class="delete" title="' . sed_cc($label_delete) . '"></a>';
+			$html .= '<img src="' . sed_cc($item['url']) . '" alt="" />';
+			if ($item_id > 0) {
+				$html .= '<input type="hidden" name="' . sed_cc($keep_name) . '" value="' . $item_id . '" />';
+			} elseif (!empty($item['keep'])) {
+				$html .= '<input type="hidden" name="' . sed_cc($prefix . '_keep') . '" value="1" />';
+			}
+			$html .= '</li>';
+		}
+	}
+
+	$html .= '</ul>';
+
+	if (!empty($opts['dropzone'])) {
+		$drop_multiple = $single ? '' : ' multiple="multiple"';
+		$html .= '<div class="sed-image-upload-dropzone">';
+		$html .= '<div class="sed-image-upload-dropicon"></div>';
+		$html .= '<div class="sed-image-upload-dropmessage">' . sed_cc($label_drop) . '</div>';
+		$html .= '<div class="sed-image-upload-dropor">' . sed_cc($label_or) . '</div>';
+		$html .= '<button type="button" class="sed-image-upload-select-btn">' . sed_cc($label_select) . '</button>';
+		$html .= '<input type="file" name="' . sed_cc($drop_name) . '"' . $drop_multiple . ' class="sed-image-upload-dropinput" accept="' . sed_cc($opts['accept']) . '" />';
+		$html .= '</div>';
+	}
+
+	$html .= '<div class="sed-image-upload-add-box"></div>';
+
+	if (!empty($opts['url_upload'])) {
+		$html .= '<div class="sed-image-upload-url-link"><i class="dash_link">' . sed_cc($label_url) . '</i></div>';
+	}
+
+	$html .= '</div>';
+
+	return $html;
+}
+
+/**
+ * Move uploaded image to destination; optionally resize or crop to fit limits.
+ *
+ * @param string $tmp_path Source temp path
+ * @param string $dest_path Destination path (relative to SED_ROOT or absolute)
+ * @param int $max_w Target max width (0 = no limit)
+ * @param int $max_h Target max height (0 = no limit)
+ * @param string $mode resize|crop — fit inside box or center crop to exact size
+ * @param bool $is_uploaded Whether tmp_path is from is_uploaded_file()
+ * @return bool True on success
+ */
+function sed_image_upload_save($tmp_path, $dest_path, $max_w, $max_h, $mode = 'crop', $is_uploaded = true)
+{
+	$dest_abs = (strpos($dest_path, SED_ROOT) === 0) ? $dest_path : SED_ROOT . '/' . ltrim($dest_path, '/');
+
+	if ($is_uploaded) {
+		if (!is_uploaded_file($tmp_path) || !move_uploaded_file($tmp_path, $dest_abs)) {
+			return false;
+		}
+	} elseif (!@copy($tmp_path, $dest_abs)) {
+		return false;
+	}
+
+	$info = @getimagesize($dest_abs);
+	if (!$info) {
+		@unlink($dest_abs);
+		return false;
+	}
+
+	$w = (int)$info[0];
+	$h = (int)$info[1];
+	$max_w = (int)$max_w;
+	$max_h = (int)$max_h;
+
+	$mode = ($mode === 'resize') ? 'resize' : 'crop';
+
+	if ($max_w > 0 && $max_h > 0 && ($w > $max_w || $h > $max_h)) {
+		$keepratio = ($mode === 'resize');
+		$result = sed_image_process(
+			$dest_abs,
+			$dest_abs,
+			$max_w,
+			$max_h,
+			$keepratio,
+			$mode,
+			'Width',
+			null,
+			false,
+			true
+		);
+		if ($result !== true) {
+			@unlink($dest_abs);
+			return false;
+		}
+	}
+
+	@chmod($dest_abs, 0666);
+	return true;
+}
+
+/**
+ * Generic deferred image upload POST processor (stub for extrafields / custom storage).
+ *
+ * @param array $opts Handler options (storage path, field prefix, callbacks)
+ * @return array|false Processed file list or false
+ */
+function sed_image_upload_process($opts)
+{
+	// Stage 3: extrafields and custom entity handlers will implement storage here.
+	return false;
 }

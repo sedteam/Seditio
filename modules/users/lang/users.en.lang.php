@@ -72,6 +72,15 @@ $L['pro_photoupload'] = "Upload a photography";
 $L['pro_avatarspreset'] = "...or click here to display a gallery of pre-loaded avatars";
 $L['pro_avatarschoose'] = "Click an image below to set it as your own avatar";
 $L['pro_avataruploadfailed'] = "The upload failed, delete the old avatar before to free the slot !";
+$L['pro_photouploadfailed'] = "Photo upload failed";
+$L['pro_siguploadfailed'] = "Signature upload failed";
+$L['pro_imageupload_item'] = "%s: %s";
+$L['pro_imageupload_toobig'] = "file is too large (max %s bytes)";
+$L['pro_imageupload_toobig_server'] = "file exceeds server upload limit";
+$L['pro_imageupload_badext'] = "file type not allowed (allowed: %s)";
+$L['pro_imageupload_process'] = "image processing failed";
+$L['pro_imageupload_php'] = "upload error (code %s)";
+$L['pro_imageupload_failed'] = "upload failed";
 
 /* ====== Config ====== */
 

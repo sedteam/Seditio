@@ -72,6 +72,15 @@ $L['pro_photoupload'] = "Загрузить фотографию";
 $L['pro_avatarspreset'] = "...или выберите себе аватар из галлереи";
 $L['pro_avatarschoose'] = "Кликните на изображение ниже, чтобы установить его в качестве своего аватара";
 $L['pro_avataruploadfailed'] = "Загрузка не удалась, сначала удалите старый аватар !";
+$L['pro_photouploadfailed'] = "Не удалось загрузить фотографию";
+$L['pro_siguploadfailed'] = "Не удалось загрузить картинку подписи";
+$L['pro_imageupload_item'] = "%s: %s";
+$L['pro_imageupload_toobig'] = "файл слишком большой (макс. %s байт)";
+$L['pro_imageupload_toobig_server'] = "файл превышает лимит загрузки на сервере";
+$L['pro_imageupload_badext'] = "тип файла не разрешён (допустимо: %s)";
+$L['pro_imageupload_process'] = "ошибка обработки изображения";
+$L['pro_imageupload_php'] = "ошибка загрузки (код %s)";
+$L['pro_imageupload_failed'] = "загрузка не удалась";
 
 /* ====== Config ====== */
 
