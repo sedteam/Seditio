@@ -285,68 +285,9 @@ $profile_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
 $profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
 $profile_form_email = ($cfg['useremailchange'] || empty($urr['user_email'])) ? sed_textbox('ruseremail', sed_cc($urr['user_email']), 32, 64, 'text') : sed_cc($urr['user_email']);
 
-$profile_form_avatar = '';
-$profile_form_avatar .= $L['pro_avatarsupload'] . ' (' . $cfg['av_maxx'] . 'x' . $cfg['av_maxy'] . 'x' . $cfg['av_maxsize'] . $L['bytes'] . ')<br />';
-$profile_form_avatar .= sed_textbox_hidden('MAX_FILE_SIZE', ($cfg['av_maxsize'] * 1024));
-$avatar_existing = array();
-if (!empty($urr['user_avatar'])) {
-	$avatar_existing[] = array(
-		'id' => 0,
-		'url' => sed_userimage_url($urr['user_avatar']),
-		'keep' => true
-	);
-}
-$profile_form_avatar .= sed_image_upload_html(array(
-	'prefix' => 'userfile',
-	'max_files' => 1,
-	'sortable' => false,
-	'dropzone' => false,
-	'url_upload' => false,
-	'existing' => $avatar_existing,
-	'id' => 'profile-avatar-upload',
-));
-
-$profile_form_photo = '';
-$profile_form_photo .= $L['pro_photoupload'] . ' (' . $cfg['ph_maxx'] . 'x' . $cfg['ph_maxy'] . 'x' . $cfg['ph_maxsize'] . $L['bytes'] . ')<br />';
-$profile_form_photo .= sed_textbox_hidden('MAX_FILE_SIZE', ($cfg['ph_maxsize'] * 1024));
-$photo_existing = array();
-if (!empty($urr['user_photo'])) {
-	$photo_existing[] = array(
-		'id' => 0,
-		'url' => sed_userimage_url($urr['user_photo']),
-		'keep' => true
-	);
-}
-$profile_form_photo .= sed_image_upload_html(array(
-	'prefix' => 'userphoto',
-	'max_files' => 1,
-	'sortable' => false,
-	'dropzone' => false,
-	'url_upload' => false,
-	'existing' => $photo_existing,
-	'id' => 'profile-photo-upload',
-));
-
-$profile_form_signature = '';
-$profile_form_signature .= $L['pro_sigupload'] . ' (' . $cfg['sig_maxx'] . 'x' . $cfg['sig_maxy'] . 'x' . $cfg['sig_maxsize'] . $L['bytes'] . ')<br />';
-$profile_form_signature .= sed_textbox_hidden('MAX_FILE_SIZE', ($cfg['sig_maxsize'] * 1024));
-$sig_existing = array();
-if (!empty($urr['user_signature'])) {
-	$sig_existing[] = array(
-		'id' => 0,
-		'url' => sed_userimage_url($urr['user_signature']),
-		'keep' => true
-	);
-}
-$profile_form_signature .= sed_image_upload_html(array(
-	'prefix' => 'usersig',
-	'max_files' => 1,
-	'sortable' => false,
-	'dropzone' => false,
-	'url_upload' => false,
-	'existing' => $sig_existing,
-	'id' => 'profile-signature-upload',
-));
+$profile_form_avatar = sed_users_profile_image_upload_html('avatar', $urr, 'profile-avatar-upload');
+$profile_form_photo = sed_users_profile_image_upload_html('photo', $urr, 'profile-photo-upload');
+$profile_form_signature = sed_users_profile_image_upload_html('signature', $urr, 'profile-signature-upload');
 
 if ($a == 'avatarchoose') {
 	sed_check_xg();
@@ -398,7 +339,7 @@ $urlpaths[sed_url("users", "m=profile")] = $L['pro_title'];
 
 $strictpasschange = (isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1;
 
-$profile_tags = array(
+$t->assign(array(
 	"USERS_PROFILE_TITLE" => sed_link(sed_url("users", "m=profile"), $L['pro_title']),
 	"USERS_PROFILE_SHORTTITLE" => $L['pro_title'],
 	"USERS_PROFILE_URL" => sed_url("users", "m=profile"),
@@ -434,15 +375,10 @@ $profile_tags = array(
 	"USERS_PROFILE_ADMINRIGHTS" => '',
 	"USERS_PROFILE_NEWPASS1" => sed_textbox("rnewpass1", "", 16, 32, "password", false, "password"),
 	"USERS_PROFILE_NEWPASS2" => sed_textbox("rnewpass2", "", 16, 32, "password", false, "password")
-);
+));
 
 if ($strictpasschange) {
-	$profile_tags['USERS_PROFILE_OLDPASS'] = sed_textbox("ruseroldpass", "", 16, 32, "password", false, "password");
-}
-
-$t->assign($profile_tags);
-
-if ($strictpasschange) {
+	$t->assign("USERS_PROFILE_OLDPASS", sed_textbox("ruseroldpass", "", 16, 32, "password", false, "password"));
 	$t->parse("MAIN.USERS_PROFILE_OLDPASS");
 }
 

@@ -26,7 +26,7 @@
 
 			<!-- END: USERS_EDIT_ERROR -->
 
-			<form action="{USERS_EDIT_SEND}" method="post" name="useredit">
+			<form action="{USERS_EDIT_SEND}" method="post" enctype="multipart/form-data" name="useredit">
 
 				<input type="hidden" name="id" value="{USERS_EDIT_ID}">
 
@@ -84,6 +84,11 @@
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersedit.Avatar}</label></div>
 						<div class="form-field">{USERS_EDIT_AVATAR}</div>
+					</li>
+
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.usersedit.Photo}</label></div>
+						<div class="form-field">{USERS_EDIT_PHOTO}</div>
 					</li>
 
 					<li class="form-row">

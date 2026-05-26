@@ -728,6 +728,77 @@ function sed_build_date($dateformat, $udate, $mask = "")
 	return ($result);
 }
 
+/**
+ * Format byte count for human-readable display.
+ *
+ * @param int $bytes Size in bytes
+ * @param array $opts precision (int), unit (auto|b|kb|mb), spaced (bool)
+ * @return string
+ */
+function sed_format_size($bytes, $opts = array())
+{
+	global $L;
+
+	$bytes = (int)$bytes;
+	$precision = isset($opts['precision']) ? (int)$opts['precision'] : 0;
+	$unit = isset($opts['unit']) ? $opts['unit'] : 'auto';
+	$spaced = !isset($opts['spaced']) || !empty($opts['spaced']);
+
+	$label_bytes = isset($L['bytes']) ? $L['bytes'] : ' bytes';
+	$label_kb = isset($L['kb']) ? $L['kb'] : 'KB';
+	$label_mb = isset($L['mb']) ? $L['mb'] : 'MB';
+
+	if ($bytes <= 0) {
+		return '0';
+	}
+
+	$sep = $spaced ? ' ' : '';
+
+	if ($unit === 'b') {
+		return $bytes . $sep . $label_bytes;
+	}
+
+	if ($unit === 'kb') {
+		return sed_format_size_round($bytes / 1024, $precision) . $sep . $label_kb;
+	}
+
+	if ($unit === 'mb') {
+		return sed_format_size_round($bytes / 1048576, $precision) . $sep . $label_mb;
+	}
+
+	if ($bytes >= 1048576) {
+		if ($precision === 0 && ($bytes % 1048576) === 0) {
+			return ($bytes / 1048576) . $sep . $label_mb;
+		}
+		return sed_format_size_round($bytes / 1048576, $precision > 0 ? $precision : 1) . $sep . $label_mb;
+	}
+
+	if ($bytes >= 1024) {
+		if ($precision === 0 && ($bytes % 1024) === 0) {
+			return ($bytes / 1024) . $sep . $label_kb;
+		}
+		return sed_format_size_round($bytes / 1024, $precision > 0 ? $precision : 0) . $sep . $label_kb;
+	}
+
+	return $bytes . $sep . $label_bytes;
+}
+
+/**
+ * Round size value for sed_format_size display.
+ *
+ * @param float $value Numeric value
+ * @param int $precision Decimal places
+ * @return string
+ */
+function sed_format_size_round($value, $precision)
+{
+	if ($precision <= 0) {
+		return (string)round($value);
+	}
+
+	return number_format($value, $precision, '.', '');
+}
+
 /** 
  * Returns user email link 
  * 

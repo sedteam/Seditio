@@ -201,7 +201,7 @@ $t->assign(array(
 	"PLUGIN_STATISTICS_TOTALDBPOLLS" => $totaldbpolls,
 	"PLUGIN_STATISTICS_TOTALDBPOLLSVOTES" => $totaldbpollsvotes,
 	"PLUGIN_STATISTICS_TOTALDBFILES" => $totaldbfiles,
-	"PLUGIN_STATISTICS_TOTALDBFILESIZE" => floor($totaldbfilesize / 1024),
+	"PLUGIN_STATISTICS_TOTALDBFILESIZE" => sed_format_size($totaldbfilesize),
 	"PLUGIN_STATISTICS_UNKNOWN_COUNT" => $totalusers - $ii,
 	"PLUGIN_STATISTICS_TOTALUSERS" => $totalusers
 ));

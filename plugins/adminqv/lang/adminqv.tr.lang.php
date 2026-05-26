@@ -33,9 +33,9 @@ $L['plu_newpms'] = "Yeni özel mesajlar";
 $L['plu_db'] = "SQL veritabanı İstatistiği";
 
 $L['plu_db_rows'] = "SQL veritabanı, satır sayısı";
-$L['plu_db_indexsize'] = "SQL veritabanı, indeks boyutu (KB)";
-$L['plu_db_datassize'] = "SQL veritabanı, veri boyutu (KB)";
-$L['plu_db_totalsize'] = "SQL veritabanı, toplam boyut (KB)";
-$L['plu_db_fragmented'] = "SQL veritabanı, parçalanmış veri boyutu (KB)";
+$L['plu_db_indexsize'] = "SQL veritabanı, indeks boyutu";
+$L['plu_db_datassize'] = "SQL veritabanı, veri boyutu";
+$L['plu_db_totalsize'] = "SQL veritabanı, toplam boyut";
+$L['plu_db_fragmented'] = "SQL veritabanı, parçalanmış veri boyutu";
 
 $L['plu_hitsmonth'] = "Son 15 günün hitleri";

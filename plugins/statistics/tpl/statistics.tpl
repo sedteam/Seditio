@@ -159,7 +159,7 @@
 					</div>
 
 					<div class="table-row">
-						<div class="table-td">{PHP.L.plu_pfssize}, {PHP.L.kb}</div>
+						<div class="table-td">{PHP.L.plu_pfssize}</div>
 						<div class="table-td text-center">{PLUGIN_STATISTICS_TOTALDBFILESIZE}</div>
 					</div>
 

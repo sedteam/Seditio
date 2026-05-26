@@ -64,7 +64,7 @@ $sql_stats = sed_sql_query("SELECT SUM(pfs_count), SUM(pfs_size)
 		WHERE f.pff_type=2");
 
 $stats_totalviews = sed_sql_result($sql_stats, 0, "SUM(pfs_count)");
-$stats_totalsize = floor(sed_sql_result($sql_stats, 0, "SUM(pfs_size)") / 1024);
+$stats_totalsize = (int)sed_sql_result($sql_stats, 0, "SUM(pfs_size)");
 
 $title = $L['gallery_home_title'];
 $subtitle = '';
@@ -128,7 +128,7 @@ while ($row = sed_sql_fetchassoc($sql_gal)) {
 $t->assign(array(
 	"GALLERY_HOME_TOTALFOLDERS" => $gals,
 	"GALLERY_HOME_TOTALFILES" => $gals_t,
-	"GALLERY_HOME_TOTALSIZE" => $stats_totalsize,
+	"GALLERY_HOME_TOTALSIZE" => sed_format_size($stats_totalsize),
 	"GALLERY_HOME_TOTALVIEWS" => $stats_totalviews
 ));
 

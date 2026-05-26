@@ -431,9 +431,8 @@ if ($f > 0) {
         $pff_type = $row1['pff_type'];
         $pff_count = $row1['pff_count'];
         $pff_fcount = isset($pff_filescount[$pff_id]) ? $pff_filescount[$pff_id] : 0;
-        $pff_fsize = isset($pff_filessize[$pff_id]) ? floor($pff_filessize[$pff_id] / 1024) : 0;
+        $pff_fsize_bytes = isset($pff_filessize[$pff_id]) ? (int)$pff_filessize[$pff_id] : 0;
         $pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
-        $pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 
         if ($pff_type == 2) {
             $icon_f = $out['ic_gallery'];
@@ -461,7 +460,7 @@ if ($f > 0) {
             "PFS_LIST_FOLDERS_EDIT_URL" => sed_url("pfs", "m=editfolder&f=" . $pff_id . "&" . $more),
             "PFS_LIST_FOLDERS_TYPE" => $icon_f . " " . $L_pff_type[$pff_type] . " " . $icon_g,
             "PFS_LIST_FOLDERS_HITS" => $pff_fcount,
-            "PFS_LIST_FOLDERS_SIZE" => $pff_fsize . " " . $L['kb'],
+            "PFS_LIST_FOLDERS_SIZE" => sed_format_size($pff_fsize_bytes),
             "PFS_LIST_FOLDERS_UPDATE" => sed_build_date($cfg['dateformat'], $row1['pff_updated']),
             "PFS_LIST_FOLDERS_VIEWCOUNTS" => $pff_count
         ));
@@ -491,7 +490,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
     $pfs_desc = $row['pfs_desc'];
     $pfs_title = $row['pfs_title'];
     $pfs_fullfile = $cfg['pfs_dir'] . $pfs_file;
-    $pfs_filesize = floor($row['pfs_size'] / 1024);
+    $pfs_filesize_bytes = (int)$row['pfs_size'];
     $pfs_icon = $icon[$pfs_extension];
 
     $dotpos = mb_strrpos($pfs_file, ".") + 1;
@@ -588,7 +587,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
         "PFS_LIST_FILES_URL" => $pfs_fullfile,
         "PFS_LIST_FILES_TITLE" => $pfs_title,
         "PFS_LIST_FILES_EDIT_URL" => sed_url("pfs", "m=edit&id=" . $pfs_id . "&" . $more),
-        "PFS_LIST_FILES_SIZE" => $pfs_filesize . " " . $L['kb'],
+        "PFS_LIST_FILES_SIZE" => sed_format_size($pfs_filesize_bytes),
         "PFS_LIST_FILES_UPDATE" => sed_build_date($cfg['dateformat'], $pfs_date),
         "PFS_LIST_FILES_VIEWCOUNTS" => $row['pfs_count'],
         "PFS_LIST_FILES_SETASSAMPLE" => $setassample
@@ -596,7 +595,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 
     $t->parse("MAIN.PFS_FILES.PFS_LIST_FILES");
 
-    $pfs_foldersize = $pfs_foldersize + $pfs_filesize;
+    $pfs_foldersize = $pfs_foldersize + $pfs_filesize_bytes;
 }
 
 if ($files_count > 0) {
@@ -616,9 +615,9 @@ if ($files_count > 0) {
 // ========== Statistics =========
 
 $pfs_precentbar = @floor(100 * $pfs_totalsize / 1024 / $maxtotal);
-$disp_stats = $L['pfs_totalsize'] . " : " . floor($pfs_totalsize / 1024) . $L['kb'] . " / " . $maxtotal . $L['kb'];
+$disp_stats = $L['pfs_totalsize'] . " : " . sed_format_size($pfs_totalsize) . " / " . sed_format_size($maxtotal * 1024);
 $disp_stats .= " (" . @floor(100 * $pfs_totalsize / 1024 / $maxtotal) . "%) ";
-$disp_stats .= " &nbsp; " . $L['pfs_maxsize'] . " : " . $maxfile . $L['kb'];
+$disp_stats .= " &nbsp; " . $L['pfs_maxsize'] . " : " . sed_format_size($maxfile * 1024);
 $disp_stats .= "<div style=\"width:300px; margin:6px 0 0 0;\"><div class=\"bar_back\">";
 $disp_stats .= "<div class=\"bar_front\" style=\"width:" . $pfs_precentbar . "%;\"></div></div></div>";
 

@@ -140,14 +140,16 @@ switch ($n) {
 		}
 		$sx->assign('TPL_SKIN_LIST_HEADER', $list_title);
 
+		$skineditor_size_opts = array('unit' => 'kb', 'precision' => 1);
+
 		foreach ($skinlist as $i => $x) {
-			$file_size = @filesize($root . $x);
+			$file_size = (int)@filesize($root . $x);
 
 			$sx->assign(array(
 				'TPL_SKIN_LIST_ROW_EDIT' => '<a href="' . sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&f=' . rawurlencode($x)) . '">' . $out['ic_edit'] . '</a>',
 				'TPL_SKIN_LIST_ROW_EDITURL' => sed_url('admin', 'm=manage&p=skineditor&' . $qbase . '&f=' . rawurlencode($x)),
 				'TPL_SKIN_LIST_ROW_TPLFILE' => sed_cc($x),
-				'TPL_SKIN_LIST_ROW_TPLSIZE' => $file_size
+				'TPL_SKIN_LIST_ROW_TPLSIZE' => sed_format_size($file_size, $skineditor_size_opts)
 			));
 
 			$xbak = $x . '.bak';
@@ -170,7 +172,7 @@ switch ($n) {
 		}
 
 		$sx->assign(array(
-			'TPL_SKIN_LIST_TOTALSIZE' => $total_size,
+			'TPL_SKIN_LIST_TOTALSIZE' => sed_format_size($total_size, $skineditor_size_opts),
 			'TPL_SKIN_LIST_FILES' => $j
 		));
 

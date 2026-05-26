@@ -141,6 +141,7 @@ $L['Item'] = "Item";
 $L['Items'] = "Items";
 $L['Key'] = "Key";
 $L['kb'] = "KB";
+$L['mb'] = "MB";
 $L['Lastlogged'] = "Last logged";
 $L['Lastpost'] = "Last post";
 $L['Left'] = "Left";

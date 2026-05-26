@@ -87,7 +87,7 @@ if ($row = sed_sql_fetchassoc($sql)) {
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = $row['pfs_desc'];
 	$pfs_title = sed_cc($row['pfs_title']);
-	$pfs_size = floor($row['pfs_size'] / 1024);
+	$pfs_size_bytes = (int)$row['pfs_size'];
 	$ff = $cfg['pfs_dir'] . $pfs_file;
 } else {
 	sed_die();
@@ -162,7 +162,7 @@ $t->assign(array(
 	"PFS_EDITFILE_FOLDER" => sed_selectbox_folders($userid, "", $pfs_folderid),
 	"PFS_EDITFILE_DATE" => $pfs_date,
 	"PFS_EDITFILE_URL" => sed_link($ff, $ff),
-	"PFS_EDITFILE_SIZE" => $pfs_size . " " . $L['kb'],
+	"PFS_EDITFILE_SIZE" => sed_format_size($pfs_size_bytes),
 ));
 
 $t->parse("MAIN.PFS_EDITFILE");

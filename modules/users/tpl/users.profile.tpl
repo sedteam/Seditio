@@ -128,6 +128,11 @@
 
 					<li class="form-row">
 						<div class="form-label"><label>{PHP.skinlang.usersprofile.Signature}</label></div>
+						<div class="form-field">{USERS_PROFILE_SIGNATURE}</div>
+					</li>
+
+					<li class="form-row">
+						<div class="form-label"><label>{PHP.skinlang.usersprofile.Signature}</label></div>
 						<div class="form-field">{USERS_PROFILE_TEXT}</div>
 					</li>
 

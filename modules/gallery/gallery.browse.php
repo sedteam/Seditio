@@ -90,8 +90,6 @@ $jj = 0;
 while ($pfs = sed_sql_fetchassoc($sql)) {
 	$jj++;
 	$pfs['pfs_fullfile'] = $cfg['pfs_dir'] . $pfs['pfs_file'];
-	$pfs['pfs_filesize'] = floor($pfs['pfs_size'] / 1024);
-
 	if (($pfs['pfs_extension'] == 'jpg' || $pfs['pfs_extension'] == 'jpeg' || $pfs['pfs_extension'] == 'png') && $cfg['th_amode'] != 'Disabled') {
 		if (!file_exists($cfg['th_dir'] . $pfs['pfs_file']) && file_exists($cfg['pfs_dir'] . $pfs['pfs_file'])) {
 			sed_image_process(
@@ -127,7 +125,7 @@ while ($pfs = sed_sql_fetchassoc($sql)) {
 		"GALLERY_BROWSE_ROW_DESC" => $pfs['pfs_desc'],
 		"GALLERY_BROWSE_ROW_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
 		"GALLERY_BROWSE_ROW_DATE" => sed_build_date($cfg['dateformat'], $pfs['pfs_date']),
-		"GALLERY_BROWSE_ROW_SIZE" => $pfs['pfs_filesize'] . $L['kb'],
+		"GALLERY_BROWSE_ROW_SIZE" => sed_format_size($pfs['pfs_size']),
 		"GALLERY_BROWSE_ROW_COUNT" => $pfs['pfs_count'],
 		"GALLERY_BROWSE_ROW_ADMIN" => isset($pfs['admin']) ? $pfs['admin'] : ''
 	));

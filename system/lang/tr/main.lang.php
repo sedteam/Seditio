@@ -141,6 +141,7 @@ $L['Item'] = "Öğe";
 $L['Items'] = "Öğeler";
 $L['Key'] = "Anahtar";
 $L['kb'] = "KB";
+$L['mb'] = "MB";
 $L['Lastlogged'] = "Son giriş";
 $L['Lastpost'] = "Son gönderi";
 $L['Left'] = "Sol";

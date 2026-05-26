@@ -43,16 +43,16 @@ regnoactivation=07:radio::0:Registration without activation
 useremailchange=08:radio::0:Allow users to change email
 usertextimg=09:radio::0:Allow images in user text
 color_group=10:radio::0:Color usernames by group
-av_maxsize=11:string::64000:Avatar max file size (bytes)
+av_maxsize=11:string::131072:Avatar max file size (bytes)
 av_maxx=12:string::128:Avatar max width (px)
 av_maxy=13:string::128:Avatar max height (px)
 usertextmax=14:string::300:User text max length
-sig_maxsize=15:string::64000:Signature max file size (bytes)
+sig_maxsize=15:string::524288:Signature max file size (bytes)
 sig_maxx=16:string::640:Signature max width (px)
 sig_maxy=17:string::100:Signature max height (px)
-ph_maxsize=18:string::64000:Photo max file size (bytes)
-ph_maxx=19:string::256:Photo max width (px)
-ph_maxy=20:string::256:Photo max height (px)
+ph_maxsize=18:string::1048576:Photo max file size (bytes)
+ph_maxx=19:string::512:Photo max width (px)
+ph_maxy=20:string::512:Photo max height (px)
 strictpasschange=21:radio::1:Strict password change in profile
 [END_SED_MODULE_CONFIG]
 

@@ -450,7 +450,7 @@ foreach ($list_items as $pag) {
 		"LIST_ROW_OWNER_AVATAR" => sed_build_userimage($pag['user_avatar']),
 		"LIST_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $pag['page_date']),
 		"LIST_ROW_FILEURL" => $pag['page_url'],
-		"LIST_ROW_SIZE" => $pag['page_size'],
+		"LIST_ROW_SIZE" => ((int)$pag['page_size'] > 0) ? sed_format_size((int)$pag['page_size'] * 1024) : '',
 		"LIST_ROW_COUNT" => $pag['page_count'],
 		"LIST_ROW_JUMP" => $pag['page_pageurl'] . "&a=dl",
 		"LIST_ROW_ADMIN" => $pag['admin'],

@@ -239,7 +239,7 @@ if ($pag['page_file']) {
 
 	$t->assign(array(
 		"PAGE_FILE_URL" => sed_url("page", $pag['page_url_param'] . "&a=dl"),
-		"PAGE_FILE_SIZE" => $pag['page_size'],
+		"PAGE_FILE_SIZE" => ((int)$pag['page_size'] > 0) ? sed_format_size((int)$pag['page_size'] * 1024) : '',
 		"PAGE_FILE_COUNT" => $pag['page_filecount'],
 		"PAGE_FILE_ICON" => $pag['page_fileicon'],
 		"PAGE_FILE_NAME" => basename($pag['page_url'])

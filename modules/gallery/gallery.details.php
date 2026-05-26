@@ -79,7 +79,6 @@ $browse_back = sed_link(sed_url("gallery", "f=" . $f), $out['ic_gallery_back']);
 $browse_zoom = '';
 
 $pfs['pfs_fullfile'] = $cfg['pfs_dir'] . $pfs['pfs_file'];
-$pfs['pfs_filesize'] = floor($pfs['pfs_size'] / 1024);
 $pfs['pfs_imgsize'] = @getimagesize($pfs['pfs_fullfile']);
 $pfs['pfs_imgsize_xy'] = $pfs['pfs_imgsize'][0] . 'x' . $pfs['pfs_imgsize'][1];
 $pfs['pfs_img'] = "<img src=\"" . $cfg['pfs_dir'] . $pfs['pfs_file'] . "\" alt=\"\" />";
@@ -160,7 +159,7 @@ $t->assign(array(
 	"GALLERY_DETAILS_DESC" => $pfs['pfs_desc'],
 	"GALLERY_DETAILS_SHORTDESC" => sed_cutstring(strip_tags($pfs['pfs_desc']), 48),
 	"GALLERY_DETAILS_DATE" => sed_build_date($cfg['dateformat'], $pfs['pfs_date']),
-	"GALLERY_DETAILS_SIZE" => $pfs['pfs_filesize'] . $L['kb'],
+	"GALLERY_DETAILS_SIZE" => sed_format_size($pfs['pfs_size']),
 	"GALLERY_DETAILS_ROW_DIMX" => $pfs['pfs_imgsize'][0],
 	"GALLERY_DETAILS_ROW_DIMY" => $pfs['pfs_imgsize'][1],
 	"GALLERY_DETAILS_ROW_DIMXY" => $pfs['pfs_imgsize_xy'],

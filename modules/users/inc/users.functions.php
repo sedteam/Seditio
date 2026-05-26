@@ -292,9 +292,10 @@ function sed_users_profile_image_attempted($file)
  * @param array $file $_FILES element
  * @param int $user_id User ID
  * @param string $kind avatar|photo|signature
+ * @param bool $enforce_size Apply configured max file size in bytes
  * @return array Result with success flag; on success path, filename, extension
  */
-function sed_users_profile_image_save($file, $user_id, $kind)
+function sed_users_profile_image_save($file, $user_id, $kind, $enforce_size = true)
 {
 	global $cfg;
 
@@ -319,7 +320,7 @@ function sed_users_profile_image_save($file, $user_id, $kind)
 	if ($size <= 0) {
 		return array('success' => false, 'error' => 'empty');
 	}
-	if ($size > (int)$limits['max_size']) {
+	if ($enforce_size && $size > (int)$limits['max_size']) {
 		return array('success' => false, 'error' => 'size', 'max_size' => (int)$limits['max_size']);
 	}
 
@@ -422,7 +423,8 @@ function sed_users_profile_image_error_message($kind, $result)
 	switch ($code) {
 		case 'size':
 			$max = isset($result['max_size']) ? (int)$result['max_size'] : 0;
-			$msg = !empty($L['pro_imageupload_toobig']) ? sprintf($L['pro_imageupload_toobig'], $max) : 'File is too large';
+			$max_label = sed_format_size($max);
+			$msg = !empty($L['pro_imageupload_toobig']) ? sprintf($L['pro_imageupload_toobig'], $max_label) : 'File is too large';
 			break;
 		case 'extension':
 			$exts = implode(', ', sed_image_upload_gd_extensions());
@@ -559,9 +561,10 @@ function sed_users_profile_images_process_removals($user_id, $saved = array())
  * Process all profile image uploads from current POST (avatar, photo, signature).
  *
  * @param int $user_id User ID
+ * @param bool $enforce_size Apply configured max file size in bytes
  * @return array errors (array of HTML strings), saved (array kind => saved data)
  */
-function sed_users_profile_images_process($user_id)
+function sed_users_profile_images_process($user_id, $enforce_size = true)
 {
 	$errors = array();
 	$saved = array();
@@ -583,7 +586,7 @@ function sed_users_profile_images_process($user_id)
 		}
 
 		$attempted = true;
-		$result = sed_users_profile_image_save($_FILES[$prefix], $user_id, $kind);
+		$result = sed_users_profile_image_save($_FILES[$prefix], $user_id, $kind, $enforce_size);
 
 		if (!empty($result['success'])) {
 			sed_users_profile_image_apply($user_id, $kind, $result);
@@ -604,4 +607,65 @@ function sed_users_profile_images_process($user_id)
 		'errors' => $errors,
 		'saved' => $saved,
 	);
+}
+
+/**
+ * Build profile image upload widget HTML for avatar, photo, or signature.
+ *
+ * @param string $kind avatar|photo|signature
+ * @param array $urr User row from DB
+ * @param string $widget_id DOM id for sedjs.imageUpload container
+ * @param array $opts enforce_size (bool, default true)
+ * @return string
+ */
+function sed_users_profile_image_upload_html($kind, $urr, $widget_id, $opts = array())
+{
+	global $L;
+
+	$enforce_size = !isset($opts['enforce_size']) || !empty($opts['enforce_size']);
+	$limits = sed_users_profile_image_limits($kind);
+	if (!$limits || !is_array($urr)) {
+		return '';
+	}
+
+	$labels = array(
+		'avatar' => !empty($L['pro_avatarsupload']) ? $L['pro_avatarsupload'] : 'Avatar',
+		'photo' => !empty($L['pro_photoupload']) ? $L['pro_photoupload'] : 'Photo',
+		'signature' => !empty($L['pro_sigupload']) ? $L['pro_sigupload'] : 'Signature',
+	);
+	$label = isset($labels[$kind]) ? $labels[$kind] : $kind;
+
+	$html = $label;
+	if ($enforce_size) {
+		$html .= ' (' . $limits['max_w'] . 'x' . $limits['max_h'] . ', ' . sed_format_size((int)$limits['max_size']) . ')';
+	} elseif ((int)$limits['max_w'] > 0 || (int)$limits['max_h'] > 0) {
+		$html .= ' (' . $limits['max_w'] . 'x' . $limits['max_h'] . ')';
+	}
+	$html .= '<br />';
+
+	if ($enforce_size && (int)$limits['max_size'] > 0) {
+		$html .= sed_textbox_hidden('MAX_FILE_SIZE', (int)$limits['max_size']);
+	}
+
+	$existing = array();
+	$db_field = $limits['db_field'];
+	if (!empty($urr[$db_field])) {
+		$existing[] = array(
+			'id' => 0,
+			'url' => sed_userimage_url($urr[$db_field]),
+			'keep' => true,
+		);
+	}
+
+	$html .= sed_image_upload_html(array(
+		'prefix' => $limits['prefix'],
+		'max_files' => 1,
+		'sortable' => false,
+		'dropzone' => false,
+		'url_upload' => false,
+		'existing' => $existing,
+		'id' => $widget_id,
+	));
+
+	return $html;
 }

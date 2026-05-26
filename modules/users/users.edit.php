@@ -72,6 +72,12 @@ if ($a == 'update') {
 	}
 	/* ===== */
 
+	$profile_images = sed_users_profile_images_process($id, false);
+	if (!empty($profile_images['errors'])) {
+		$error_string .= implode('', $profile_images['errors']);
+	}
+	sed_users_profile_images_process_removals($id, $profile_images['saved']);
+
 	$rusername = sed_import('rusername', 'P', 'TXT');
 
 	$ruserfirstname = sed_import('ruserfirstname', 'P', 'TXT', 100, TRUE);   // sed 177
@@ -80,9 +86,6 @@ if ($a == 'update') {
 	$rusermaingrp = sed_import('rusermaingrp', 'P', 'INT');
 	$ruserbanexpire = sed_import('ruserbanexpire', 'P', 'INT');
 	$rusercountry = sed_import('rusercountry', 'P', 'ALP');
-	$ruseravatar = sed_import('ruseravatar', 'P', 'TXT');
-	$ruserphoto = sed_import('ruserphoto', 'P', 'TXT');
-	$rusersignature = sed_import('rusersignature', 'P', 'TXT');
 	$rusertext = sed_import('rusertext', 'P', 'HTM');
 	$ruseremail = sed_import('ruseremail', 'P', 'TXT');
 	$ruserhideemail = sed_import('ruserhideemail', 'P', 'INT');
@@ -222,9 +225,6 @@ if ($a == 'update') {
 			user_passtype =" . (int)$ruserpasstype . ",
 			user_country='" . sed_sql_prep($rusercountry) . "',
 			user_text='" . sed_sql_prep($rusertext) . "',
-			user_avatar='" . sed_sql_prep($ruseravatar) . "',
-			user_signature='" . sed_sql_prep($rusersignature) . "',
-			user_photo='" . sed_sql_prep($ruserphoto) . "',
 			user_email='" . sed_sql_prep($ruseremail) . "',
 			user_hideemail='$ruserhideemail',
 			user_pmnotify='$ruserpmnotify',
@@ -297,6 +297,11 @@ $user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
 $user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
 $urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
+$image_upload_opts = array('enforce_size' => false);
+$user_form_avatar = sed_users_profile_image_upload_html('avatar', $urr, 'edit-avatar-upload', $image_upload_opts);
+$user_form_photo = sed_users_profile_image_upload_html('photo', $urr, 'edit-photo-upload', $image_upload_opts);
+$user_form_signature = sed_users_profile_image_upload_html('signature', $urr, 'edit-signature-upload', $image_upload_opts);
+
 $out['subtitle'] = sed_cc($urr['user_name']);
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s');
@@ -347,9 +352,9 @@ $t->assign(array(
 	"USERS_EDIT_HIDEEMAIL" => $user_form_hideemail,
 	"USERS_EDIT_PMNOTIFY" => $user_form_pmnotify,
 	"USERS_EDIT_TEXT" => sed_textarea("rusertext", $urr['user_text'], 8, $cfg['textarea_default_width']),
-	"USERS_EDIT_AVATAR" => sed_textbox('ruseravatar', $urr['user_avatar'], 32, 255),
-	"USERS_EDIT_PHOTO" => sed_textbox('ruserphoto', $urr['user_photo'], 32, 255),
-	"USERS_EDIT_SIGNATURE" => sed_textbox('rusersignature', $urr['user_signature'], 32, 255),
+	"USERS_EDIT_AVATAR" => $user_form_avatar,
+	"USERS_EDIT_PHOTO" => $user_form_photo,
+	"USERS_EDIT_SIGNATURE" => $user_form_signature,
 	"USERS_EDIT_WEBSITE" => sed_textbox('ruserwebsite', $urr['user_website'], 56, 128),
 	"USERS_EDIT_SKYPE" => sed_textbox('ruserskype', $urr['user_skype'], 32, 64),
 	"USERS_EDIT_GENDER" => $user_form_gender,

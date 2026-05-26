@@ -145,12 +145,13 @@ if (sed_module_active('pm')) {
 	$qv->parse("ADMIN_QV.ADMIN_QV_NEWPMS");
 }
 
+$qv_size_opts = array('precision' => 1);
 $qv->assign(array(
 	"QV_DB_ROWS" => $total_rows,
-	"QV_DB_INDEXSIZE" => number_format(($total_index_length / 1024), 1, '.', ' '),
-	"QV_DB_DATASSIZE" => number_format(($total_data_length / 1024), 1, '.', ' '),
-	"QV_DB_TOTALSIZE" => number_format(($total_length / 1024), 1, '.', ' '),
-	"QV_DB_TOTALFRAGMENTED" => number_format(($total_fragmented / 1024), 1, '.', ' ')
+	"QV_DB_INDEXSIZE" => sed_format_size($total_index_length, $qv_size_opts),
+	"QV_DB_DATASSIZE" => sed_format_size($total_data_length, $qv_size_opts),
+	"QV_DB_TOTALSIZE" => sed_format_size($total_length, $qv_size_opts),
+	"QV_DB_TOTALFRAGMENTED" => sed_format_size($total_fragmented, $qv_size_opts)
 ));
 
 $qv->parse("ADMIN_QV.ADMIN_QV_DB");
