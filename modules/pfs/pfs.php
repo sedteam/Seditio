@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/pfs.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-jun-18
 Type=Module
 Author=Seditio Team
 Description=PFS loader

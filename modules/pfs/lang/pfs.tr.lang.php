@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/lang/pfs.tr.lang.php
-Version=185
-Updated=2026-feb-16
+Version=186
+Updated=2026-jun-18
 Type=Module.lang
 Author=Seditio Team
 Description=PFS module Turkish language file
@@ -37,6 +37,7 @@ $L['pfs_newfile'] = "Bir dosya yükleyin:";
 $L['pfs_newfolder'] = "Yeni bir klasör oluşturun:";
 $L['pfs_editfolder'] = "Bir klasörü düzenliyorum";
 $L['pfs_editfile'] = "Bir dosyayı düzenliyorum";
+$L['pfs_parentfolder'] = "Üst klasör";
 $L['pfs_ispublic'] = "Herkese açık?";
 $L['pfs_isgallery'] = "Galeri?";
 $L['pfs_extallowed'] = "İzin verilen uzantılar";

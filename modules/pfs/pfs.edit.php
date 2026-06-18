@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/pfs.edit.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-jun-18
 Type=Module
 Author=Seditio Team
 Description=PFS edit file
@@ -119,7 +119,7 @@ if ($a == 'update' && !empty($id)) {
 		pfs_folderid='$folderid'
 		WHERE pfs_userid='$userid' AND pfs_id='$id'");
 
-	sed_redirect(sed_url("pfs", "f=" . $pfs_folderid . "&" . $more, "", true));
+	sed_redirect(sed_url("pfs", "f=" . $folderid . "&" . $more, "", true));
 	exit;
 }
 

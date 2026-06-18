@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/lang/pfs.en.lang.php
-Version=185
-Updated=2026-feb-16
+Version=186
+Updated=2026-jun-18
 Type=Module.lang
 Author=Seditio Team
 Description=PFS module English language file
@@ -37,6 +37,7 @@ $L['pfs_newfile'] = "Upload a file :";
 $L['pfs_newfolder'] = "Create a new folder :";
 $L['pfs_editfolder'] = "Editing a folder";
 $L['pfs_editfile'] = "Editing a file";
+$L['pfs_parentfolder'] = "Parent folder";
 $L['pfs_ispublic'] = "Public?";
 $L['pfs_isgallery'] = "Gallery?";
 $L['pfs_extallowed'] = "Extensions allowed";

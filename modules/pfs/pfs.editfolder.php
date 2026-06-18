@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/pfs.editfolder.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-jun-18
 Type=Module
 Author=Seditio Team
 Description=PFS edit folder
@@ -76,7 +76,6 @@ $shorttitle = $L['pfs_editfolder'];
 // ---------- Breadcrumbs
 $urlpaths = array();
 $urlpaths[sed_url("pfs", $more)] = $L['PFS'] . $moretitle;
-$urlpaths[sed_url("pfs", "m=editfolder&f=" . $f . "&" . $more)] = $L['pfs_editfolder'];
 
 if ($userid != $usr['id']) {
 	sed_block($usr['isadmin']);
@@ -99,7 +98,15 @@ if ($row = sed_sql_fetchassoc($sql)) {
 	$pff_desc = $row['pff_desc'];
 	$pff_type = $row['pff_type'];
 	$pff_count = $row['pff_count'];
+	$pff_parentid = (int)$row['pff_parentid'];
 	$title = sed_cc($pff_title);
+
+	$pfs_parents = sed_pfs_folders_get_parents($f, $userid);
+	foreach ($pfs_parents as $prow) {
+		$urlpaths[sed_url("pfs", "f=" . $prow['pff_id'] . "&" . $more)] = $prow['pff_title'];
+	}
+	$urlpaths[sed_url("pfs", "f=" . $pff_id . "&" . $more)] = $pff_title;
+	$urlpaths[sed_url("pfs", "m=editfolder&f=" . $f . "&" . $more)] = $L['pfs_editfolder'];
 } else {
 	sed_die();
 }
@@ -113,14 +120,21 @@ if ($a == 'update' && !empty($f)) {
 	sed_die(sed_sql_numrows($sql) == 0);
 	$rtype = ($rtype == 2 && !$usr['auth_write_gal']) ? 1 : $rtype;
 
+	if (!sed_pfs_folders_validate_parent($f, $folderid, $userid)) {
+		$folderid = $pff_parentid;
+	}
+
 	$sql = sed_sql_query("UPDATE $db_pfs_folders SET
 		pff_title='" . sed_sql_prep($rtitle) . "',
 		pff_updated='" . $sys['now'] . "',
 		pff_desc='" . sed_sql_prep($rdesc) . "',
-		pff_type='$rtype'
+		pff_type='$rtype',
+		pff_parentid='" . (int)$folderid . "'
 		WHERE pff_userid='$userid' AND pff_id='$f' ");
 
-	sed_redirect(sed_url("pfs", $more, "", true));
+	sed_pfs_folders_cache_clear($userid);
+
+	sed_redirect(sed_url("pfs", "f=" . $f . "&" . $more, "", true));
 	exit;
 }
 
@@ -163,7 +177,8 @@ $t->assign(array(
 	"PFS_EDITFOLDER_DESC" => sed_textarea('rdesc', $pff_desc, 8, 56, 'Micro'),
 	"PFS_EDITFOLDER_DATE" => $pff_date,
 	"PFS_EDITFOLDER_UPDATE" => $pff_updated,
-	"PFS_EDITFOLDER_TYPE" => sed_radiobox("rtype", $rtype_arr, $pff_type)
+	"PFS_EDITFOLDER_TYPE" => sed_radiobox("rtype", $rtype_arr, $pff_type),
+	"PFS_EDITFOLDER_PARENT" => sed_selectbox_folders($userid, $pff_id, $pff_parentid)
 ));
 
 $t->parse("MAIN.PFS_EDITFOLDER");

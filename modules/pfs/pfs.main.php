@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/pfs.main.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-jun-18
 Type=Module
 Author=Seditio Team
 Description=PFS main
@@ -298,9 +298,18 @@ if ($a == 'upload') {
     $ndesc = sed_import('ndesc', 'P', 'TXT');
     $ntype = sed_import('ntype', 'P', 'INT');
     $ntitle = (empty($ntitle)) ? '???' : $ntitle;
+    $parentid = sed_import('f', 'G', 'INT');
+
+    if ($parentid > 0) {
+        $sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$parentid'");
+        sed_die(sed_sql_numrows($sql) == 0);
+    }
+
+    $ntype = ($ntype == 2 && !$usr['auth_write_gal']) ? 1 : $ntype;
 
     $sql = sed_sql_query("INSERT INTO $db_pfs_folders
         (pff_userid,
+        pff_parentid,
         pff_title,
         pff_date,
         pff_updated,
@@ -309,14 +318,18 @@ if ($a == 'upload') {
         pff_count)
         VALUES
         (" . (int)$userid . ",
+        " . (int)$parentid . ",
         '" . sed_sql_prep($ntitle) . "',
         " . (int)$sys['now'] . ",
         " . (int)$sys['now'] . ",
-        '" . sed_sql_prep($ndesc) . "', 
+        '" . sed_sql_prep($ndesc) . "',
         " . (int)$ntype . ",
         0)");
 
-    sed_redirect(sed_url("pfs", $more, "", true));
+    sed_pfs_folders_cache_clear($userid);
+
+    $redir = ($parentid > 0) ? "f=" . $parentid . "&" : "";
+    sed_redirect(sed_url("pfs", $redir . $more, "", true));
     exit;
 } elseif ($a == 'deletefolder') {
     sed_block($usr['auth_write']);
@@ -324,9 +337,10 @@ if ($a == 'upload') {
 
     $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
     $files_count = sed_sql_result($sql, 0, "COUNT(*)");
-    if ($files_count == 0) {
+    $subfolders_count = sed_pfs_folders_count_children($f, $userid);
+    if ($files_count == 0 && $subfolders_count == 0) {
         $sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f'");
-        $sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
+        sed_pfs_folders_cache_clear($userid);
     }
 
     sed_redirect(sed_url("pfs", $more, "", true));
@@ -389,6 +403,17 @@ if ($standalone) {
     $t = new XTemplate($mskin);
 }
 
+$pff_filescount = array();
+$pff_filessize = array();
+$pff_sample = 0;
+
+$sql3 = sed_sql_query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
+
+while ($row3 = sed_sql_fetchassoc($sql3)) {
+    $pff_filescount[$row3['pfs_folderid']] = $row3['COUNT(*)'];
+    $pff_filessize[$row3['pfs_folderid']] = $row3['SUM(pfs_size)'];
+}
+
 if ($f > 0) {
     $sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_id='$f' AND pff_userid='$userid'");
     if ($row1 = sed_sql_fetchassoc($sql1)) {
@@ -400,81 +425,82 @@ if ($f > 0) {
         $pff_count = $row1['pff_count'];
         $pff_sample = $row1['pff_sample'];
 
-        $sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_date DESC");
+        $pfs_parents = sed_pfs_folders_get_parents($f, $userid);
+        foreach ($pfs_parents as $prow) {
+            $urlpaths[sed_url("pfs", "f=" . $prow['pff_id'] . "&" . $more)] = $prow['pff_title'];
+            $title .= " " . $cfg['separator'] . " " . sed_link(sed_url("pfs", "f=" . $prow['pff_id'] . "&" . $more), $prow['pff_title']);
+        }
+
         $title .= " " . $cfg['separator'] . " " . sed_link(sed_url("pfs", "f=" . $pff_id . "&" . $more), $pff_title);
         $shorttitle = $pff_title;
         $urlpaths[sed_url("pfs", "f=" . $pff_id . "&" . $more)] = $pff_title;
     } else {
         sed_die();
     }
-    $movebox = sed_selectbox_folders($userid, "", $f);
+}
+
+$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_date DESC");
+$sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_parentid='$f' ORDER BY pff_type DESC, pff_title ASC");
+if ($f > 0) {
+    $subfiles_count = isset($pff_filescount[$f]) ? (int)$pff_filescount[$f] : 0;
 } else {
-    $sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_date DESC");
-    $sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_type DESC, pff_title ASC");
     $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
-    $sql3 = sed_sql_query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
-
-    while ($row3 = sed_sql_fetchassoc($sql3)) {
-        $pff_filescount[$row3['pfs_folderid']] = $row3['COUNT(*)'];
-        $pff_filessize[$row3['pfs_folderid']] = $row3['SUM(pfs_size)'];
-    }
-
-    $folders_count = sed_sql_numrows($sql1);
     $subfiles_count = sed_sql_result($sql2, 0, "COUNT(*)");
-    $movebox = sed_selectbox_folders($userid, "/", "");
+}
+$folders_count = sed_sql_numrows($sql1);
 
-    while ($row1 = sed_sql_fetchassoc($sql1)) {
-        $pff_id = $row1['pff_id'];
-        $pff_title = $row1['pff_title'];
-        $pff_updated = $row1['pff_updated'];
-        $pff_desc = $row1['pff_desc'];
-        $pff_type = $row1['pff_type'];
-        $pff_count = $row1['pff_count'];
-        $pff_fcount = isset($pff_filescount[$pff_id]) ? $pff_filescount[$pff_id] : 0;
-        $pff_fsize_bytes = isset($pff_filessize[$pff_id]) ? (int)$pff_filessize[$pff_id] : 0;
-        $pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
+while ($row1 = sed_sql_fetchassoc($sql1)) {
+    $pff_id = $row1['pff_id'];
+    $pff_title = $row1['pff_title'];
+    $pff_updated = $row1['pff_updated'];
+    $pff_desc = $row1['pff_desc'];
+    $pff_type = $row1['pff_type'];
+    $pff_count = $row1['pff_count'];
+    $pff_fcount = isset($pff_filescount[$pff_id]) ? $pff_filescount[$pff_id] : 0;
+    $pff_fsize_bytes = isset($pff_filessize[$pff_id]) ? (int)$pff_filessize[$pff_id] : 0;
+    $pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
+    $pff_subcount = sed_pfs_folders_count_children($pff_id, $userid);
 
-        if ($pff_type == 2) {
-            $icon_f = $out['ic_gallery'];
-        } else {
-            $icon_f = $out['ic_folder'];
-        }
-
-        if ($pff_type == 2 && sed_module_active('gallery')) {
-            $icon_g = sed_link(sed_url("gallery", "f=" . $pff_id), $out['ic_jumpto']);
-        } else {
-            $icon_g = '';
-        }
-
-        if ($pff_fcount == 0) {
-            $t->assign(array(
-                "PFS_LIST_FOLDERS_DELETE_URL" => sed_url("pfs", "a=deletefolder&" . sed_xg() . "&f=" . $pff_id . "&" . $more)
-            ));
-            $t->parse("MAIN.PFS_FOLDERS.PFS_LIST_FOLDERS.PFS_LIST_FOLDERS_DELETE_URL");
-        }
-
-        $t->assign(array(
-            "PFS_LIST_FOLDERS_ID" => $pff_id,
-            "PFS_LIST_FOLDERS_URL" => sed_url("pfs", "f=" . $pff_id . "&" . $more),
-            "PFS_LIST_FOLDERS_TITLE" => $pff_title,
-            "PFS_LIST_FOLDERS_EDIT_URL" => sed_url("pfs", "m=editfolder&f=" . $pff_id . "&" . $more),
-            "PFS_LIST_FOLDERS_TYPE" => $icon_f . " " . $L_pff_type[$pff_type] . " " . $icon_g,
-            "PFS_LIST_FOLDERS_HITS" => $pff_fcount,
-            "PFS_LIST_FOLDERS_SIZE" => sed_format_size($pff_fsize_bytes),
-            "PFS_LIST_FOLDERS_UPDATE" => sed_build_date($cfg['dateformat'], $row1['pff_updated']),
-            "PFS_LIST_FOLDERS_VIEWCOUNTS" => $pff_count
-        ));
-
-        $t->parse("MAIN.PFS_FOLDERS.PFS_LIST_FOLDERS");
+    if ($pff_type == 2) {
+        $icon_f = $out['ic_gallery'];
+    } else {
+        $icon_f = $out['ic_folder'];
     }
 
-    if ($folders_count > 0) {
-        $t->assign(array(
-            "PFS_FOLDERS_COUNT" => $folders_count,
-            "PFS_FOLDERS_SUBFILES_COUNT" => $subfiles_count
-        ));
-        $t->parse("MAIN.PFS_FOLDERS");
+    if ($pff_type == 2 && sed_module_active('gallery')) {
+        $icon_g = sed_link(sed_url("gallery", "f=" . $pff_id), $out['ic_jumpto']);
+    } else {
+        $icon_g = '';
     }
+
+    if ($pff_fcount == 0 && $pff_subcount == 0) {
+        $t->assign(array(
+            "PFS_LIST_FOLDERS_DELETE_URL" => sed_url("pfs", "a=deletefolder&" . sed_xg() . "&f=" . $pff_id . "&" . $more)
+        ));
+        $t->parse("MAIN.PFS_FOLDERS.PFS_LIST_FOLDERS.PFS_LIST_FOLDERS_DELETE_URL");
+    }
+
+    $t->assign(array(
+        "PFS_LIST_FOLDERS_ID" => $pff_id,
+        "PFS_LIST_FOLDERS_URL" => sed_url("pfs", "f=" . $pff_id . "&" . $more),
+        "PFS_LIST_FOLDERS_TITLE" => $pff_title,
+        "PFS_LIST_FOLDERS_EDIT_URL" => sed_url("pfs", "m=editfolder&f=" . $pff_id . "&" . $more),
+        "PFS_LIST_FOLDERS_TYPE" => $icon_f . " " . $L_pff_type[$pff_type] . " " . $icon_g,
+        "PFS_LIST_FOLDERS_HITS" => $pff_fcount,
+        "PFS_LIST_FOLDERS_SIZE" => sed_format_size($pff_fsize_bytes),
+        "PFS_LIST_FOLDERS_UPDATE" => sed_build_date($cfg['dateformat'], $row1['pff_updated']),
+        "PFS_LIST_FOLDERS_VIEWCOUNTS" => $pff_count
+    ));
+
+    $t->parse("MAIN.PFS_FOLDERS.PFS_LIST_FOLDERS");
+}
+
+if ($folders_count > 0) {
+    $t->assign(array(
+        "PFS_FOLDERS_COUNT" => $folders_count,
+        "PFS_FOLDERS_SUBFILES_COUNT" => $subfiles_count
+    ));
+    $t->parse("MAIN.PFS_FOLDERS");
 }
 
 $files_count = sed_sql_numrows($sql);
@@ -703,13 +729,15 @@ if ($usr['auth_write']) {
 
 // ========== Create a new folder =========
 
-if ($f == 0 && $usr['auth_write']) {
+if ($usr['auth_write']) {
     $t->parse("MAIN.PFS_NEWFOLDER_TAB");
 
     $ntype_arr = ($usr['auth_write_gal']) ? array(0 => $L['Private'], 1 => $L['Public'], 2 => $L['Gallery']) : array(0 => $L['Private'], 1 => $L['Public']);
 
+    $newfolder_more = ($f > 0) ? "f=" . $f . "&" . $more : $more;
+
     $t->assign(array(
-        "PFS_NEWFOLDER_SEND" => sed_url("pfs", "a=newfolder" . "&" . $more),
+        "PFS_NEWFOLDER_SEND" => sed_url("pfs", "a=newfolder&" . $newfolder_more),
         "PFS_NEWFOLDER_TITLE" => sed_textbox('ntitle', '', 56, 255),
         "PFS_NEWFOLDER_DESC" => sed_textarea('ndesc', '', 8, 56, 'Micro'),
         "PFS_NEWFOLDER_TYPE" => sed_radiobox("ntype", $ntype_arr, 0)

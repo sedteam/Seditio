@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/lang/pfs.ru.lang.php
-Version=185
-Updated=2026-feb-16
+Version=186
+Updated=2026-jun-18
 Type=Module.lang
 Author=Seditio Team
 Description=PFS module Russian language file
@@ -37,6 +37,7 @@ $L['pfs_newfile'] = "Загрузить файл";
 $L['pfs_newfolder'] = "Создать новую папку";
 $L['pfs_editfolder'] = "Редактирование папки";
 $L['pfs_editfile'] = "Редактирование файла";
+$L['pfs_parentfolder'] = "Родительская папка";
 $L['pfs_ispublic'] = "Публичная?";
 $L['pfs_isgallery'] = "Галерея?";
 $L['pfs_extallowed'] = "Допустимые расширения";

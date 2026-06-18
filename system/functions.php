@@ -3732,37 +3732,7 @@ function sed_selectbox_date($utime, $mode, $ext = '')
 	return ($result);
 }
 
-/** 
- * Renders PFS folder selection dropdown 
- * 
- * @param int $user User ID 
- * @param int $skip Skip folder 
- * @param int $check Checked folder 
- * @return string 
- */
-function sed_selectbox_folders($user, $skip, $check)
-{
-	global $db_pfs_folders;
-
-	$sql = sed_sql_query("SELECT pff_id, pff_title, pff_type FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
-
-	$result =  "<select name=\"folderid\" size=\"1\">";
-
-	if ($skip != "/" && $skip != "0") {
-		$selected = (empty($check) || $check == "/") ? "selected=\"selected\"" : '';
-		$result .=  "<option value=\"0\" $selected>/ &nbsp; &nbsp;</option>";
-	}
-
-	while ($row = sed_sql_fetchassoc($sql)) {
-		if ($skip != $row['pff_id']) {
-			$selected = ($row['pff_id'] == $check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"" . $row['pff_id'] . "\" $selected>" . sed_cc($row['pff_title']) . "</option>";
-		}
-	}
-	$result .= "</select>";
-	return ($result);
-}
-
+/* sed_selectbox_folders moved to modules/pfs/inc/pfs.functions.php */
 /* sed_selectbox_forumcat moved to modules/forums/inc/forums.functions.php */
 
 

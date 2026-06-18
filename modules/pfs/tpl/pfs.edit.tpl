@@ -82,6 +82,11 @@
 					</li>
 
 					<li class="form-row">
+						<div class="form-label"><label>{PHP.L.pfs_parentfolder}:</label></div>
+						<div class="form-field">{PFS_EDITFOLDER_PARENT}</div>
+					</li>
+
+					<li class="form-row">
 						<div class="form-label"><label>{PHP.L.Type}:</label></div>
 						<div class="form-field">{PFS_EDITFOLDER_TYPE}</div>
 					</li>

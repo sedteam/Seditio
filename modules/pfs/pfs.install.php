@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/pfs/pfs.install.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-jun-18
 Type=Module.install
 Author=Seditio Team
 Description=PFS module install: tables and auth
@@ -57,6 +57,7 @@ if (sed_sql_numrows($check) == 0) {
 	sed_sql_query("CREATE TABLE {$prefix}pfs_folders (
   pff_id int(11) NOT NULL auto_increment,
   pff_userid int(11) NOT NULL DEFAULT '0',
+  pff_parentid int(11) NOT NULL DEFAULT '0',
   pff_date int(11) NOT NULL DEFAULT '0',
   pff_updated int(11) NOT NULL DEFAULT '0',
   pff_title varchar(255) NOT NULL DEFAULT '',
@@ -65,7 +66,8 @@ if (sed_sql_numrows($check) == 0) {
   pff_sample int(11) NOT NULL DEFAULT '0',
   pff_count int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (pff_id),
-  KEY pff_userid (pff_userid)
+  KEY pff_userid (pff_userid),
+  KEY pff_userid_parent (pff_userid, pff_parentid)
 ) ENGINE={$mysqlengine} DEFAULT CHARSET={$mysqlcharset} COLLATE={$mysqlcollate};");
 }
 
