@@ -265,6 +265,12 @@ switch ($mn) {
 				usort($rows, 'sed_structure_sort');
 			}
 
+			$rows_tree = sed_tree_flat_from_dotpath($rows, 'structure_path');
+			$rows_meta = array();
+			foreach ($rows_tree as $tr) {
+				$rows_meta[$tr['structure_id']] = $tr;
+			}
+
 			$jj = 0;
 			foreach ($rows as $row) {
 				$jj++;
@@ -281,7 +287,10 @@ switch ($mn) {
 				$structure_seo_h1 = $row['structure_seo_h1'];
 				$structure_group = $row['structure_group'];
 				$pathfieldlen = (mb_strpos($structure_path, ".") == 0) ? 3 : 9;
-				$pathfieldimg = (mb_strpos($structure_path, ".") == 0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
+				$path_meta = isset($rows_meta[$structure_id]) ? $rows_meta[$structure_id] : null;
+				$pathfieldimg = ($path_meta && $path_meta['depth'] > 0)
+					? sed_tree_format_prefix($path_meta['depth'], $path_meta['is_last'], $path_meta['prefix_continues'], 'unicode')
+					: '';
 				$pagecount[$structure_code] = (isset($pagecount[$structure_code]) && $pagecount[$structure_code]) ? $pagecount[$structure_code] : "0";
 
 				if (empty($row['structure_tpl'])) {

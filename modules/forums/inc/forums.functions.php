@@ -295,48 +295,134 @@ function sed_load_forum_structure()
 	return ($res);
 }
 
-/** 
- * Returns forum category dropdown code 
- * 
- * @param int $check Selected category 
- * @param string $name Dropdown name 
- * @return string 
+/**
+ * Flat forum category list with depth metadata for tree selects.
+ *
+ * @return array
+ */
+function sed_forum_categories_list_with_level()
+{
+	global $sed_forums_str;
+
+	$rows = array();
+	foreach ($sed_forums_str as $code => $x) {
+		$rows[] = array(
+			'fn_code' => $code,
+			'fn_path' => $x['rpath'],
+			'fn_title' => $x['title'],
+		);
+	}
+
+	usort($rows, function ($a, $b) {
+		$a_parts = explode('.', $a['fn_path']);
+		$b_parts = explode('.', $b['fn_path']);
+		$max = max(count($a_parts), count($b_parts));
+		for ($i = 0; $i < $max; $i++) {
+			$av = isset($a_parts[$i]) ? $a_parts[$i] : '';
+			$bv = isset($b_parts[$i]) ? $b_parts[$i] : '';
+			if ($av != $bv) {
+				return strnatcmp($av, $bv);
+			}
+		}
+		return 0;
+	});
+
+	return sed_tree_flat_from_dotpath($rows, 'fn_path');
+}
+
+/**
+ * Forum category dropdown with tree prefix.
+ *
+ * @param string $check Selected category code
+ * @param string $name  Dropdown name
+ * @return string
  */
 function sed_selectbox_forumcat($check, $name)
 {
-	global $usr, $sed_forums_str, $L;
+	$items = array();
 
-	$result =  "<select name=\"$name\" size=\"1\">";
-
-	foreach ($sed_forums_str as $i => $x) {
-		$selected = ($i == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"" . $i . "\" $selected> " . $x['tpath'] . "</option>";
+	foreach (sed_forum_categories_list_with_level() as $item) {
+		$items[] = array(
+			'value' => $item['fn_code'],
+			'title' => $item['fn_title'],
+			'depth' => $item['depth'],
+			'is_last' => $item['is_last'],
+			'prefix_continues' => $item['prefix_continues'],
+		);
 	}
-	$result .= "</select>";
-	return ($result);
+
+	return sed_selectbox_tree_html($name, $items, $check);
 }
 
-/** 
- * Renders forum section selection dropdown 
- * 
- * @param string $check Selected value 
- * @param string $name Dropdown name 
- * @return string 
+/**
+ * Forum section selection dropdown.
+ *
+ * @param string $check Selected section ID
+ * @param string $name  Dropdown name
+ * @return string
  */
 function sed_selectbox_sections($check, $name)
 {
 	global $cfg;
 
-	$tree = sed_forum_get_tree();
-	$result = "<select name=\"$name\" size=\"1\">";
-	foreach ($tree as $item) {
-		$prefix = sed_forum_format_tree_prefix_html($item['depth'], $item['is_last'], $item['prefix_continues']);
-		$selected = ($item['fs_id'] == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"" . $item['fs_id'] . "\" $selected>" . $prefix . sed_cc(sed_cutstring($item['fs_category'], 24));
-		$result .= ' ' . $cfg['separator'] . ' ' . sed_cc(sed_cutstring($item['fs_title'], 32)) . "</option>";
+	$items = array();
+
+	foreach (sed_forum_get_tree() as $item) {
+		$label = sed_cutstring($item['fs_category'], 24) . ' ' . $cfg['separator'] . ' ' . sed_cutstring($item['fs_title'], 32);
+		$items[] = array(
+			'value' => $item['fs_id'],
+			'title' => $label,
+			'depth' => $item['depth'],
+			'is_last' => $item['is_last'],
+			'prefix_continues' => $item['prefix_continues'],
+		);
 	}
-	$result .= "</select>";
-	return ($result);
+
+	return sed_selectbox_tree_html($name, $items, $check);
+}
+
+/**
+ * Parent forum section dropdown with optgroups.
+ *
+ * @param string $name     HTML name attribute
+ * @param int    $selected Currently selected parent ID
+ * @param string $category Limit to this category code
+ * @param array  $exclude  Section IDs to exclude (with descendants)
+ * @return string
+ */
+function sed_selectbox_forum_parent($name, $selected = 0, $category = '', $exclude = array())
+{
+	global $sed_forums_str;
+
+	$tree = sed_forum_get_tree($category, $exclude);
+	$show_cat = empty($category);
+
+	$result = '<select name="' . $name . '"><option value="0">--</option>';
+	$prev_cat = '';
+
+	foreach ($tree as $item) {
+		if ($show_cat && $item['fs_category'] !== $prev_cat) {
+			if ($prev_cat !== '') {
+				$result .= '</optgroup>';
+			}
+			$cat_label = isset($sed_forums_str[$item['fs_category']]['title'])
+				? sed_cc($sed_forums_str[$item['fs_category']]['title'])
+				: sed_cc($item['fs_category']);
+			$result .= '<optgroup label="' . $cat_label . '">';
+			$prev_cat = $item['fs_category'];
+		}
+		$prefix = sed_tree_format_prefix($item['depth'], $item['is_last'], $item['prefix_continues']);
+		$sel = ((int)$item['fs_id'] === (int)$selected) ? ' selected="selected"' : '';
+		$result .= '<option value="' . $item['fs_id'] . '"' . $sel . '>' . $prefix . sed_cc($item['fs_title']) . '</option>';
+	}
+
+	if ($show_cat && $prev_cat !== '') {
+		$result .= '</optgroup>';
+	}
+
+	$result .= '</select>';
+
+	return $result;
 }
 
 /** 
@@ -471,32 +557,6 @@ function sed_forum_load_sections()
 		$cache[(int)$row['fs_id']] = $row;
 	}
 	return $cache;
-}
-
-/**
- * HTML prefix for one tree row (box-drawing: │ ├ └ ─).
- *
- * @param int   $depth
- * @param bool  $is_last
- * @param array $prefix_continues  Per ancestor level: true = draw vertical bar (│)
- * @return string
- */
-function sed_forum_format_tree_prefix_html($depth, $is_last, $prefix_continues)
-{
-	if ($depth < 1) {
-		return '';
-	}
-	$out = '';
-	$pc = is_array($prefix_continues) ? $prefix_continues : array();
-	for ($k = 0; $k < $depth - 1; $k++) {
-		if (!empty($pc[$k])) {
-			$out .= '&#x2502;&nbsp;&nbsp;';
-		} else {
-			$out .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-		}
-	}
-	$out .= $is_last ? '&#x2514;&#x2500;&nbsp;' : '&#x251C;&#x2500;&nbsp;';
-	return $out;
 }
 
 /**
@@ -724,46 +784,6 @@ function sed_forum_validate_parent($section_id, $new_parent_id, $max_depth = 5)
 	}
 
 	return true;
-}
-
-/**
- * Builds a parent-section <select> dropdown with tree indentation.
- *
- * @param string $name       HTML name attribute
- * @param int    $selected   Currently selected parent ID
- * @param string $category   Limit to this category code
- * @param array  $exclude    Section IDs to exclude (with descendants)
- * @return string HTML
- */
-function sed_selectbox_forum_parent($name, $selected = 0, $category = '', $exclude = array())
-{
-	global $sed_forums_str;
-
-	$tree = sed_forum_get_tree($category, $exclude);
-	$show_cat = empty($category);
-
-	$result = "<select name=\"" . $name . "\"><option value=\"0\">--</option>";
-	$prev_cat = '';
-	foreach ($tree as $item) {
-		if ($show_cat && $item['fs_category'] !== $prev_cat) {
-			if ($prev_cat !== '') {
-				$result .= "</optgroup>";
-			}
-			$cat_label = isset($sed_forums_str[$item['fs_category']]['title'])
-				? sed_cc($sed_forums_str[$item['fs_category']]['title'])
-				: sed_cc($item['fs_category']);
-			$result .= "<optgroup label=\"" . $cat_label . "\">";
-			$prev_cat = $item['fs_category'];
-		}
-		$prefix = sed_forum_format_tree_prefix_html($item['depth'], $item['is_last'], $item['prefix_continues']);
-		$sel = ((int)$item['fs_id'] === (int)$selected) ? " selected=\"selected\"" : "";
-		$result .= "<option value=\"" . $item['fs_id'] . "\"" . $sel . ">" . $prefix . sed_cc($item['fs_title']) . "</option>";
-	}
-	if ($show_cat && $prev_cat !== '') {
-		$result .= "</optgroup>";
-	}
-	$result .= "</select>";
-	return $result;
 }
 
 /**

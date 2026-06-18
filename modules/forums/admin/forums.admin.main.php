@@ -283,7 +283,7 @@ if ($n == 'edit') {
 			$line = 1;
 		}
 
-		$tree_prefix = sed_forum_format_tree_prefix_html($depth, $row['is_last'], $row['prefix_continues']);
+		$tree_prefix = sed_tree_format_prefix($depth, $row['is_last'], $row['prefix_continues'], 'unicode');
 
 		$t->assign(array(
 			"FS_LIST_TITLE" => $tree_prefix . sed_link(sed_url("admin", "m=forums&n=edit&id=" . $fs_id), $fs_title),

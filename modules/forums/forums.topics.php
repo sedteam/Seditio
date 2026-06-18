@@ -264,7 +264,7 @@ $jumpbox .= "<option value=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</o
 
 foreach ($jumpbox_tree as $jb_item) {
 	if (sed_auth('forums', $jb_item['fs_id'], 'R')) {
-		$jb_prefix = sed_forum_format_tree_prefix_html($jb_item['depth'], $jb_item['is_last'], $jb_item['prefix_continues']);
+		$jb_prefix = sed_tree_format_prefix($jb_item['depth'], $jb_item['is_last'], $jb_item['prefix_continues']);
 		$selected = ($jb_item['fs_id'] == $s) ? "selected=\"selected\"" : '';
 		$jumpbox .= "<option $selected value=\"" . sed_url("forums", "m=topics&s=" . $jb_item['fs_id'] . "&al=" . $jb_item['fs_title']) . "\">" . $jb_prefix . sed_cc($jb_item['fs_title']) . "</option>";
 	}

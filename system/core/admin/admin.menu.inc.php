@@ -165,16 +165,7 @@ switch ($mn) {
 		$sql = sed_sql_query("SELECT * FROM $db_menu WHERE menu_id = " . (int)$mid);
 		$row = sed_sql_fetchassoc($sql);
 
-		$options = sed_menu_options($menu_row, 0, "");
-
-		$parent_select = "<select name=\"mparent\">\n";
-		$parent_select .= "<option value=\"0\">---</option>\n";
-		foreach ($options as $key => $val) {
-			$k = substr($key, 1);
-			$selected = ($k == $row['menu_pid']) ? " selected" : "";
-			$parent_select .= "<option value=\"" . substr($key, 1) . "\"" . $selected . ">" . $val . "</option>\n";
-		}
-		$parent_select .= "</select>\n";
+		$parent_select = sed_selectbox_menu_parent($row['menu_pid'], 'mparent', $mid);
 
 
 		$t->assign(array(
@@ -202,14 +193,9 @@ switch ($mn) {
 			$menu_row[$row['menu_id']] = $row;
 		}
 
-		$options = sed_menu_options($menu_row, 0, "");
-		$parent_select = "<select name=\"mparent\">\n";
-		$parent_select .= "<option value=\"0\">---</option>\n";
-		foreach ($options as $key => $val) {
-			$k = substr($key, 1);
-			$parent_select .= "<option value=\"" . substr($key, 1) . "\">" . $val . "</option>\n";
-		}
-		$parent_select .= "</select>\n";
+		$parent_select = sed_selectbox_menu_parent(0, 'mparent');
+
+		$menu_flat = sed_menu_list_with_level($menu_row);
 
 		$t->assign(array(
 			"MENU_ADD_SEND" => sed_url('admin', 'm=menu&a=add'),
@@ -224,13 +210,16 @@ switch ($mn) {
 
 		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");
 
-		foreach ($options as $key => $val) {
-			$k = substr($key, 1);
-			$frow = $menu_row[$k];
-
+		foreach ($menu_flat as $frow) {
+			$k = $frow['menu_id'];
+			$prefix = sed_tree_format_prefix($frow['depth'], $frow['is_last'], $frow['prefix_continues'], 'dash', 3);
+			$title = $prefix . sed_cc($frow['menu_title']);
+			if (!$frow['menu_pid']) {
+				$title = "<strong>" . $title . "</strong>";
+			}
 			$t->assign(array(
 				"MENU_ID" => $k,
-				"MENU_TITLE" => $frow['menu_pid'] ? $val : "<strong>" . $val . "</strong>",
+				"MENU_TITLE" => $title,
 				"MENU_URL" => $frow['menu_url'],
 				"MENU_POSITION" => sed_textbox('mposition[' . $k . ']', $frow['menu_position'], 2, 3),
 				"MENU_DELETE_URL" => sed_url("admin", "m=menu&a=delete&mid=" . $k),

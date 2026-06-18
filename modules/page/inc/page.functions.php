@@ -103,6 +103,66 @@ function sed_load_page_structure()
 }
 
 /**
+ * Flat page category list with depth metadata for tree selects and admin UI.
+ *
+ * @return array
+ */
+function sed_page_categories_list_with_level()
+{
+	global $sed_cat, $cfg;
+
+	$rows = array();
+	foreach ($sed_cat as $code => $x) {
+		if ($code === 'all') {
+			continue;
+		}
+		$rows[] = array(
+			'structure_code' => $code,
+			'structure_path' => $x['rpath'],
+			'structure_title' => $x['title'],
+		);
+	}
+
+	if ($cfg['structuresort']) {
+		usort($rows, 'sed_structure_sort');
+	}
+
+	return sed_tree_flat_from_dotpath($rows, 'structure_path');
+}
+
+/**
+ * Renders page category dropdown with tree prefix.
+ *
+ * @param string $check Selected value
+ * @param string $name Dropdown name
+ * @param bool   $hideprivate Hide private categories
+ * @param string $redirecturl Redirect URL
+ * @param string $additional Selectbox additional
+ * @return string
+ */
+function sed_selectbox_categories($check, $name, $hideprivate = TRUE, $redirecturl = "", $additional = "")
+{
+	$onchange = (!empty($redirecturl)) ? " onchange=\"sedjs.redirect(this)\"" : "";
+	$items = array();
+
+	foreach (sed_page_categories_list_with_level() as $item) {
+		$code = $item['structure_code'];
+		$display = ($hideprivate) ? sed_auth('page', $code, 'W') : TRUE;
+		if (sed_auth('page', $code, 'R') && $display) {
+			$items[] = array(
+				'value' => $redirecturl . $code,
+				'title' => $item['structure_title'],
+				'depth' => $item['depth'],
+				'is_last' => $item['is_last'],
+				'prefix_continues' => $item['prefix_continues'],
+			);
+		}
+	}
+
+	return sed_selectbox_tree_html($name, $items, $check, $additional, $onchange);
+}
+
+/**
  * Function for natural sorting by splitting a specified field into parts.
  *
  * @param array $a The first row from the database.

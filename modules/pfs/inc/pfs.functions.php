@@ -69,36 +69,6 @@ function sed_pfs_folders_cache_clear($userid)
 }
 
 /**
- * HTML prefix for one tree row (box-drawing: │ ├ └ ─).
- *
- * @param int   $depth
- * @param bool  $is_last
- * @param array $prefix_continues Per ancestor level: true = draw vertical bar
- * @return string
- */
-function sed_pfs_folders_format_prefix_html($depth, $is_last, $prefix_continues)
-{
-	if ($depth < 1) {
-		return '';
-	}
-
-	$out = '';
-	$pc = is_array($prefix_continues) ? $prefix_continues : array();
-
-	for ($k = 0; $k < $depth - 1; $k++) {
-		if (!empty($pc[$k])) {
-			$out .= '&#x2502;&nbsp;&nbsp;';
-		} else {
-			$out .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-		}
-	}
-
-	$out .= $is_last ? '&#x2514;&#x2500;&nbsp;' : '&#x251C;&#x2500;&nbsp;';
-
-	return $out;
-}
-
-/**
  * @param array $children
  * @param array $all
  * @param array $exclude_set
@@ -295,33 +265,36 @@ function sed_pfs_folders_count_children($folder_id, $userid)
 /**
  * Renders PFS folder selection dropdown (hierarchical).
  *
- * @param int $user User ID
+ * @param int        $user User ID
  * @param int|string $skip Folder ID to exclude with all descendants
- * @param int $check Selected folder ID
+ * @param int        $check Selected folder ID
  * @return string
  */
 function sed_selectbox_folders($user, $skip, $check)
 {
-	$result = "<select name=\"folderid\" size=\"1\">";
-
+	$extra = '';
 	if ($skip != "/" && $skip != "0") {
-		$selected = (empty($check) || $check == "/") ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"0\" $selected>/ &nbsp; &nbsp;</option>";
+		$selected = (empty($check) || $check == "/") ? ' selected="selected"' : '';
+		$extra = '<option value="0"' . $selected . '>/ &nbsp; &nbsp;</option>';
 	}
 
 	$exclude = array();
 	if ($skip != "/" && $skip != "0" && $skip != "") {
 		$exclude[] = (int)$skip;
 	}
-	$tree = sed_pfs_folders_get_tree($user, $exclude);
-	foreach ($tree as $item) {
-		$prefix = sed_pfs_folders_format_prefix_html($item['depth'], $item['is_last'], $item['prefix_continues']);
-		$selected = ((int)$item['pff_id'] === (int)$check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"" . $item['pff_id'] . "\" $selected>" . $prefix . sed_cc($item['pff_title']) . "</option>";
+
+	$items = array();
+	foreach (sed_pfs_folders_get_tree($user, $exclude) as $item) {
+		$items[] = array(
+			'value' => $item['pff_id'],
+			'title' => $item['pff_title'],
+			'depth' => $item['depth'],
+			'is_last' => $item['is_last'],
+			'prefix_continues' => $item['prefix_continues'],
+		);
 	}
 
-	$result .= "</select>";
-	return ($result);
+	return sed_selectbox_tree_html('folderid', $items, $check, $extra);
 }
 
 /**

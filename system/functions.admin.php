@@ -1150,4 +1150,63 @@ function sed_module_pause($code, $state)
 
 /* sed_structure_delcat, sed_structure_newcat moved to modules/page/inc/page.functions.php */
 
+/**
+ * Flat menu rows with depth metadata for admin UI and parent select.
+ *
+ * @param array|null $rows Map menu_id => row; loads from DB when null
+ * @return array
+ */
+function sed_menu_list_with_level($rows = null)
+{
+	global $db_menu;
+
+	if ($rows === null) {
+		$rows = array();
+		$sql = sed_sql_query("SELECT * FROM $db_menu ORDER BY menu_position ASC");
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$rows[$row['menu_id']] = $row;
+		}
+	}
+
+	$sort_cb = function ($a, $b) {
+		$pa = (int)$a['menu_position'];
+		$pb = (int)$b['menu_position'];
+		if ($pa != $pb) {
+			return $pa - $pb;
+		}
+		return (int)$a['menu_id'] - (int)$b['menu_id'];
+	};
+
+	return sed_tree_flat_from_parent($rows, 'menu_id', 'menu_pid', 0, $sort_cb);
+}
+
+/**
+ * Menu parent dropdown with unified tree prefix.
+ *
+ * @param int    $selected Selected menu_id (0 = root)
+ * @param string $name     Select name attribute
+ * @param int    $exclude  menu_id to omit (edit form: current item)
+ * @return string
+ */
+function sed_selectbox_menu_parent($selected, $name = 'mparent', $exclude = 0)
+{
+	$flat = sed_menu_list_with_level();
+	$items = array();
+
+	foreach ($flat as $item) {
+		if ((int)$exclude > 0 && (int)$item['menu_id'] === (int)$exclude) {
+			continue;
+		}
+		$items[] = array(
+			'value' => $item['menu_id'],
+			'title' => $item['menu_title'],
+			'depth' => $item['depth'],
+			'is_last' => $item['is_last'],
+			'prefix_continues' => $item['prefix_continues'],
+		);
+	}
+
+	return sed_selectbox_tree_html($name, $items, $selected, '<option value="0">---</option>');
+}
+
 /* sed_trash_* moved to plugins/trashcan/inc/trashcan.functions.php */
