@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/page/inc/page.functions.php
-Version=185
-Updated=2026-apr-09
+Version=186
+Updated=2026-jun-23
 Type=Module
 Author=Seditio Team
 Description=Page structure, list API, list filters
@@ -251,6 +251,7 @@ function sed_structure_delcat($id, $c)
 	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
 	sed_auth_clear('all');
 	sed_cache_clear('sed_cat');
+	sed_page_clear_menu_cache();
 }
 
 /** 
@@ -292,6 +293,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 			sed_auth_reorder();
 			sed_auth_clear('all');
 			sed_cache_clear('sed_cat');
+	sed_page_clear_menu_cache();
 		}
 	}
 	return ($res);
@@ -414,6 +416,152 @@ function sed_page_list_build_filters($sort_filterable, $get = null, $column_pref
 		'urlparams' => $filter_urlparams,
 		'sql_where' => $sql_where,
 	);
+}
+
+/**
+ * Direct child categories of a page category (readable by current user).
+ *
+ * @param string $parent_code Parent category code; empty = root categories
+ * @return array code => category row from $sed_cat
+ */
+function sed_page_category_children($parent_code = '')
+{
+	global $sed_cat, $cfg;
+
+	$children = array();
+
+	if ($parent_code === '' || $parent_code === 'all') {
+		foreach ($sed_cat as $code => $cat) {
+			if ($code === 'all' || $code === 'system') {
+				continue;
+			}
+			if (!empty($cat['spath'])) {
+				continue;
+			}
+			if (sed_auth('page', $code, 'R')) {
+				$children[$code] = $cat;
+			}
+		}
+	} else {
+		if (!isset($sed_cat[$parent_code])) {
+			return array();
+		}
+
+		$mtch = $sed_cat[$parent_code]['path'] . '.';
+		$mtchlen = mb_strlen($mtch);
+		$mtchlvl = mb_substr_count($mtch, '.');
+
+		foreach ($sed_cat as $code => $cat) {
+			if ($code === 'all' || $code === 'system') {
+				continue;
+			}
+			if (mb_substr($cat['path'], 0, $mtchlen) == $mtch
+				&& mb_substr_count($cat['path'], '.') == $mtchlvl
+				&& sed_auth('page', $code, 'R')) {
+				$children[$code] = $cat;
+			}
+		}
+	}
+
+	if (!empty($cfg['structuresort']) && count($children) > 1) {
+		uasort($children, function ($a, $b) {
+			return sed_structure_sort(
+				array('structure_path' => $a['rpath']),
+				array('structure_path' => $b['rpath'])
+			);
+		});
+	}
+
+	return $children;
+}
+
+/**
+ * Published pages of a category (same rules as page.list.php).
+ *
+ * @param string $cat_code
+ * @return array
+ */
+function sed_page_category_pages($cat_code)
+{
+	global $db_pages, $sed_cat;
+
+	if (!isset($sed_cat[$cat_code])) {
+		return array();
+	}
+
+	$order = $sed_cat[$cat_code]['order'];
+	$way = $sed_cat[$cat_code]['way'];
+
+	if (empty($order)) {
+		$order = 'title';
+	}
+	if ($way != 'asc' && $way != 'desc') {
+		$way = 'asc';
+	}
+
+	$allowed_orders = array(
+		'id', 'key', 'title', 'desc', 'author', 'ownerid',
+		'date', 'begin', 'expire', 'count', 'filecount'
+	);
+	if (!in_array($order, $allowed_orders)) {
+		$order = 'title';
+	}
+
+	$sql = sed_sql_query("SELECT page_id, page_title, page_alias, page_cat
+		FROM $db_pages
+		WHERE page_cat='" . sed_sql_prep($cat_code) . "'
+		AND (page_state='0' OR page_state='2')
+		ORDER BY page_" . $order . " " . $way);
+
+	$pages = array();
+	while ($row = sed_sql_fetchassoc($sql)) {
+		$pages[] = $row;
+	}
+
+	return $pages;
+}
+
+/**
+ * Build public URL for a page row (sets catcode for SEF category path).
+ *
+ * @param array $page Row with page_id, page_alias, page_cat
+ * @return string
+ */
+function sed_page_build_url($page)
+{
+	global $sys, $sed_cat;
+
+	if (!isset($page['page_cat']) || !isset($sed_cat[$page['page_cat']])) {
+		if (!empty($page['page_alias'])) {
+			return sed_url('page', 'al=' . $page['page_alias']);
+		}
+		return sed_url('page', 'id=' . (int)$page['page_id']);
+	}
+
+	$prev_catcode = array_key_exists('catcode', $sys) ? $sys['catcode'] : null;
+	$sys['catcode'] = $page['page_cat'];
+
+	if (!empty($page['page_alias'])) {
+		$url = sed_url('page', 'al=' . $page['page_alias']);
+	} else {
+		$url = sed_url('page', 'id=' . (int)$page['page_id']);
+	}
+
+	if ($prev_catcode !== null) {
+		$sys['catcode'] = $prev_catcode;
+	} else {
+		unset($sys['catcode']);
+	}
+
+	return $url;
+}
+
+/**
+ * Clear menu cache when page content or structure affects auto menu items.
+ */
+function sed_page_clear_menu_cache()
+{
+	sed_cache_clear('sed_menu');
 }
 
 /* ======== Load page structure into global $sed_cat when module is active ======== */

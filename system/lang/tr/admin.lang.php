@@ -380,7 +380,13 @@ $L['adm_parentitem'] = "Ana öğe";
 $L['adm_url'] = "URL";
 $L['adm_activity'] = "Aktif mi?";
 $L['adm_menu_cssclass'] = "CSS sınıfı";
-$L['adm_help_menu'] = "\"Menü yöneticisi\" içinde menü öğeleri oluşturun (Title), bunları bir üst öğeye bağlayın (Parent) ve URL, pozisyon ile görünürlüğü (Visible) ayarlayın.<br />Genel şablonlarda menü, sed_menu ağacından basılır; burada N, üst menü öğesinin ID'sidir (menu_pid):<br />- {PHP.sed_menu.N.childrens} — alt öğelerin tam ağacı (üst öğe gösterilmez)<br />- {PHP.sed_menu.N.childrensonlevel} — sadece 1 seviye alt öğe (üst öğe gösterilmez)<br />- {PHP.sed_menu.N.parent} — sadece üst menü öğesi.";
+$L['adm_menu_cat_none'] = "— yalnızca manuel alt menü —";
+$L['adm_menu_cat_source'] = "Kaynak kategori";
+$L['adm_menu_cat_source_hint'] = "İsteğe bağlı. Seçilirse alt menü bu sayfa kategorisinden otomatik oluşturulur (aşağıdaki onay kutularına bakın). Önce veritabanındaki manuel alt öğeler, sonra otomatik öğeler listelenir.";
+$L['adm_menu_cat_subcats'] = "Alt kategorileri dahil et";
+$L['adm_menu_cat_pages'] = "Kategori sayfalarını dahil et";
+$L['adm_menu_cat_auto'] = "oto";
+$L['adm_help_menu'] = "\"Menü yöneticisi\" içinde menü öğeleri oluşturun (Title), bunları bir üst öğeye bağlayın (Parent) ve URL, pozisyon ile görünürlüğü (Visible) ayarlayın.<br />İsteğe bağlı: alt menünün otomatik oluşması için bir sayfa kategorisi kaynağı seçin (Page modülü gerekir).<br />Genel şablonlarda menü, sed_menu ağacından basılır; burada N, üst menü öğesinin ID'sidir (menu_pid):<br />- {PHP.sed_menu.N.childrens} — alt öğelerin tam ağacı (üst öğe gösterilmez)<br />- {PHP.sed_menu.N.childrensonlevel} — sadece 1 seviye alt öğe (üst öğe gösterilmez)<br />- {PHP.sed_menu.N.parent} — sadece üst menü öğesi.";
 
 /* ====== PFS ====== */
 

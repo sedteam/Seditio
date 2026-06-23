@@ -195,6 +195,8 @@ if ($a == 'add') {
 		}
 		/* ===== */
 
+		sed_page_clear_menu_cache();
+
 		sed_shield_update(30, "New page");
 
 		if (defined('SED_ADMIN')) {

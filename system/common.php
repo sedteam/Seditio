@@ -669,6 +669,8 @@ if (!isset($sed_menu) && (sed_stat_get("version") > 177)) {
 		$menu_row[$row['menu_id']] = $row;
 	}
 
+	sed_menu_merge_category_children($menu_tree, $menu_row);
+
 	foreach ($menu_row as $k => $v) {
 		$ul_class = isset($menu_row[$k]['menu_cssclass']) ? $menu_row[$k]['menu_cssclass'] : '';
 		$sed_menu[$k]['childrens'] = sed_menu_tree($menu_tree, $k, 0, false, false, $ul_class);

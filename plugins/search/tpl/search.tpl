@@ -18,6 +18,18 @@
 
 		<div class="section-body">
 
+			<style>
+			.search-results { margin-top: 1em; }
+			.search-result-item { margin-bottom: 1.5em; padding-bottom: 1em; border-bottom: 1px solid #eee; }
+			.search-result-item:last-child { border-bottom: 0; }
+			.search-result-title { margin: 0 0 0.25em; font-size: 1.15em; font-weight: 600; }
+			.search-result-title a { text-decoration: none; }
+			.search-result-meta { font-size: 0.85em; color: #666; margin-bottom: 0.5em; }
+			.search-result-snippet { line-height: 1.5; color: #444; }
+			.search-result-snippet .word,
+			.search-result-title .word { background: #fff3a0; font-weight: 600; padding: 0 2px; }
+			</style>
+
 			<!-- BEGIN: PLUGIN_SEARCH_ERROR -->
 
 			{PLUGIN_SEARCH_ERROR_BODY}
@@ -67,43 +79,21 @@
 
 			<div class="descr">{PHP.L.plu_found} {PLUGIN_SEARCH_PAGE_FOUND} {PHP.L.plu_match}</div>
 
-			<div class="table cells striped resp-table">
+			<div class="search-results">
 
-				<div class="table-head resp-table-head">
+				<!-- BEGIN: PLUGIN_SEARCH_PAGES_ROW -->
 
-					<div class="table-row resp-table-row">
-						<div class="table-th coltop text-left">{PHP.L.Category}</div>
-						<div class="table-th coltop text-left">{PHP.L.Page}</div>
-						<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Date}</div>
-						<div class="table-th coltop text-left" style="width:100px;">{PHP.L.Owner}</div>
+				<article class="search-result-item">
+					<h3 class="search-result-title">
+						<a href="{PLUGIN_SEARCH_ROW_PAGE_URL}">{PLUGIN_SEARCH_ROW_PAGE_TITLE}</a>
+					</h3>
+					<div class="search-result-meta">
+						<a href="{PLUGIN_SEARCH_ROW_PAGE_CATEGORY_URL}">{PLUGIN_SEARCH_ROW_PAGE_CATEGORY_TITLE}</a>
 					</div>
+					<div class="search-result-snippet">{PLUGIN_SEARCH_ROW_PAGE_SNIPPET}</div>
+				</article>
 
-				</div>
-
-				<div class="table-body resp-table-body">
-
-					<!-- BEGIN: PLUGIN_SEARCH_PAGES_ROW -->
-
-					<div class="table-row resp-table-row">
-
-						<div class="table-td text-left resp-table-td pl-search-category">
-							<a href="{PLUGIN_SEARCH_ROW_PAGE_CATEGORY_URL}">{PLUGIN_SEARCH_ROW_PAGE_CATEGORY_TITLE}</a>
-						</div>
-						<div class="table-td text-left resp-table-td pl-search-page">
-							<a href="{PLUGIN_SEARCH_ROW_PAGE_URL}"><strong>{PLUGIN_SEARCH_ROW_PAGE_TITLE}</strong></a>
-						</div>
-						<div class="table-td text-left resp-table-td pl-search-date">
-							{PLUGIN_SEARCH_ROW_PAGE_DATE}
-						</div>
-						<div class="table-td text-left resp-table-td pl-search-owner">
-							{PLUGIN_SEARCH_ROW_PAGE_OWNER}
-						</div>
-
-					</div>
-
-					<!-- END: PLUGIN_SEARCH_PAGES_ROW -->
-
-				</div>
+				<!-- END: PLUGIN_SEARCH_PAGES_ROW -->
 
 			</div>
 
@@ -116,43 +106,21 @@
 
 			<div class="descr">{PHP.L.plu_found} {PLUGIN_SEARCH_FORUM_FOUND} {PHP.L.plu_match}</div>
 
-			<div class="table cells striped resp-table">
+			<div class="search-results">
 
-				<div class="table-head resp-table-head">
+				<!-- BEGIN: PLUGIN_SEARCH_FORUMS_ROW -->
 
-					<div class="table-row resp-table-row">
-						<div class="table-th coltop text-left">{PHP.L.Section}</div>
-						<div class="table-th coltop text-left">{PHP.L.Topic}</div>
-						<div class="table-th coltop text-left" style="width:150px;">{PHP.L.Date}</div>
-						<div class="table-th coltop text-left" style="width:100px;">{PHP.L.Poster}</div>
+				<article class="search-result-item">
+					<h3 class="search-result-title">
+						<a href="{PLUGIN_SEARCH_ROW_FORUM_TOPIC_URL}">{PLUGIN_SEARCH_ROW_FORUM_TOPIC_TITLE}</a>
+					</h3>
+					<div class="search-result-meta">
+						{PLUGIN_SEARCH_ROW_FORUM_SECTION}
 					</div>
+					<div class="search-result-snippet">{PLUGIN_SEARCH_ROW_FORUM_SNIPPET}</div>
+				</article>
 
-				</div>
-
-				<div class="table-body resp-table-body">
-
-					<!-- BEGIN: PLUGIN_SEARCH_FORUMS_ROW -->
-
-					<div class="table-row resp-table-row">
-
-						<div class="table-td text-left resp-table-td pl-search-category">
-							{PLUGIN_SEARCH_ROW_FORUM_SECTION}
-						</div>
-						<div class="table-td text-left resp-table-td pl-search-page">
-							<a href="{PLUGIN_SEARCH_ROW_FORUM_TOPIC_URL}"><strong>{PLUGIN_SEARCH_ROW_FORUM_TOPIC_TITLE}</strong></a>
-						</div>
-						<div class="table-td text-left resp-table-td pl-search-date">
-							{PLUGIN_SEARCH_ROW_FORUM_DATE}
-						</div>
-						<div class="table-td text-left resp-table-td pl-search-owner">
-							{PLUGIN_SEARCH_ROW_FORUM_POSTER}
-						</div>
-
-					</div>
-
-					<!-- END: PLUGIN_SEARCH_FORUMS_ROW -->
-
-				</div>
+				<!-- END: PLUGIN_SEARCH_FORUMS_ROW -->
 
 			</div>
 

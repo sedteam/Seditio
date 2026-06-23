@@ -1209,4 +1209,66 @@ function sed_selectbox_menu_parent($selected, $name = 'mparent', $exclude = 0)
 	return sed_selectbox_tree_html($name, $items, $selected, '<option value="0">---</option>');
 }
 
+/**
+ * Import and validate menu category auto-children fields from POST.
+ *
+ * @return array (menu_cat, menu_cat_subcats, menu_cat_pages)
+ */
+function sed_menu_import_category_fields()
+{
+	global $sed_cat;
+
+	if (!isset($sed_cat) || !is_array($sed_cat)) {
+		return array('', 0, 0);
+	}
+
+	$mcat = sed_import('mcat', 'P', 'TXT');
+	$mcat_subcats = sed_import('mcat_subcats', 'P', 'BOL');
+	$mcat_pages = sed_import('mcat_pages', 'P', 'BOL');
+
+	if ($mcat === 'system' || $mcat === 'all' || !isset($sed_cat[$mcat])) {
+		$mcat = '';
+	}
+	if ($mcat === '') {
+		$mcat_subcats = 0;
+		$mcat_pages = 0;
+	}
+
+	return array($mcat, (int)$mcat_subcats, (int)$mcat_pages);
+}
+
+/**
+ * Assign template tags for menu category auto-children form fields.
+ *
+ * @param object $t              XTemplate instance
+ * @param string $block          Block path to parse
+ * @param string $mcat           Selected category code
+ * @param int    $mcat_subcats   Include subcategories flag
+ * @param int    $mcat_pages     Include pages flag
+ */
+function sed_menu_assign_category_form($t, $block, $mcat, $mcat_subcats, $mcat_pages)
+{
+	global $L;
+
+	if (!sed_module_active('page') || !function_exists('sed_selectbox_categories')) {
+		return;
+	}
+
+	$cat_select = sed_selectbox_categories(
+		$mcat,
+		'mcat',
+		true,
+		'',
+		'<option value="">' . $L['adm_menu_cat_none'] . '</option>'
+	);
+
+	$t->assign(array(
+		'MENU_CAT_SELECT' => $cat_select,
+		'MENU_CAT_SUBCATS' => sed_checkbox('mcat_subcats', '', (int)$mcat_subcats),
+		'MENU_CAT_PAGES' => sed_checkbox('mcat_pages', '', (int)$mcat_pages),
+	));
+
+	$t->parse($block);
+}
+
 /* sed_trash_* moved to plugins/trashcan/inc/trashcan.functions.php */

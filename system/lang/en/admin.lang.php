@@ -380,7 +380,13 @@ $L['adm_parentitem'] = "Parent item";
 $L['adm_url'] = "URL";
 $L['adm_activity'] = "Active?";
 $L['adm_menu_cssclass'] = "CSS class";
-$L['adm_help_menu'] = "In \"Menu manager\" create menu items (Title), link each to a parent (Parent), and set URL, position and visibility (Visible).<br />In public templates, the menu is rendered from sed_menu, where N is the parent menu item ID (menu_pid):<br />- {PHP.sed_menu.N.childrens} — full children tree (the parent itself is not shown)<br />- {PHP.sed_menu.N.childrensonlevel} — one level of children (the parent itself is not shown)<br />- {PHP.sed_menu.N.parent} — only the parent item.";
+$L['adm_menu_cat_none'] = "— manual submenu only —";
+$L['adm_menu_cat_source'] = "Category source";
+$L['adm_menu_cat_source_hint'] = "Optional. When set, submenu items are built automatically from this page category (see checkboxes below). Manual child items in the database are listed first, then auto items.";
+$L['adm_menu_cat_subcats'] = "Include subcategories";
+$L['adm_menu_cat_pages'] = "Include category pages";
+$L['adm_menu_cat_auto'] = "auto";
+$L['adm_help_menu'] = "In \"Menu manager\" create menu items (Title), link each to a parent (Parent), and set URL, position and visibility (Visible).<br />Optional: set a page category as source to auto-build submenu from its subcategories and/or pages (requires Page module).<br />In public templates, the menu is rendered from sed_menu, where N is the parent menu item ID (menu_pid):<br />- {PHP.sed_menu.N.childrens} — full children tree (the parent itself is not shown)<br />- {PHP.sed_menu.N.childrensonlevel} — one level of children (the parent itself is not shown)<br />- {PHP.sed_menu.N.parent} — only the parent item.";
 
 /* ====== PFS ====== */
 

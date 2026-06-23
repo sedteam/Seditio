@@ -7,8 +7,8 @@ https://seditio.org
 
 [BEGIN_SED]
 File=admin.menu.inc.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-jun-23
 Type=Core.admin
 Author=Amro
 Description=Menu build module
@@ -52,11 +52,15 @@ switch ($a) {
 		$mvisible = sed_import('mvisible', 'P', 'BOL');
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
 		$mclass = sed_import('mclass', 'P', 'TXT');
+		list($mcat, $mcat_subcats, $mcat_pages) = sed_menu_import_category_fields();
 
 		if (empty($mtitle)) {
 			sed_redirect(sed_url("admin", "m=menu", "", true), false, ['msg' => '303']);
 			exit;
 		} else {
+			if ($mcat !== '' && $murl === '' && isset($sed_cat[$mcat])) {
+				$murl = sed_url('page', 'c=' . $mcat);
+			}
 
 			$sql = sed_sql_query("INSERT INTO $db_menu
 						(
@@ -66,7 +70,10 @@ switch ($a) {
 						menu_position,
 						menu_visible,
 						menu_target,
-						menu_cssclass
+						menu_cssclass,
+						menu_cat,
+						menu_cat_subcats,
+						menu_cat_pages
 						)
 						VALUES 
 						(
@@ -76,7 +83,10 @@ switch ($a) {
 						" . (int)$mposition . ",
 						" . (int)$mvisible . ",
 						'" . sed_sql_prep($mtarget) . "',
-						'" . sed_sql_prep($mclass) . "'
+						'" . sed_sql_prep($mclass) . "',
+						'" . sed_sql_prep($mcat) . "',
+						" . (int)$mcat_subcats . ",
+						" . (int)$mcat_pages . "
 						)");
 						
 			if (empty($mposition)) {
@@ -116,11 +126,16 @@ switch ($a) {
 		$mvisible = sed_import('mvisible', 'P', 'BOL');
 		$mtarget = sed_import('mtarget', 'P', 'TXT');
 		$mclass = sed_import('mclass', 'P', 'TXT');
+		list($mcat, $mcat_subcats, $mcat_pages) = sed_menu_import_category_fields();
 
 		if (empty($mtitle)) {
 			sed_redirect(sed_url("admin", "m=menu&mn=editmenu&mid=" . $mid, "", true), false, ['msg' => '303']);
 			exit;
 		} else {
+			if ($mcat !== '' && $murl === '' && isset($sed_cat[$mcat])) {
+				$murl = sed_url('page', 'c=' . $mcat);
+			}
+
 			$sql = sed_sql_query("UPDATE $db_menu SET 
 							menu_pid = " . (int)$mparent . ",
 							menu_title = '" . sed_sql_prep($mtitle) . "',
@@ -128,7 +143,10 @@ switch ($a) {
 							menu_position = " . (int)$mposition . ",
 							menu_visible = " . (int)$mvisible . ",
 							menu_target = '" . sed_sql_prep($mtarget) . "',
-							menu_cssclass = '" . sed_sql_prep($mclass) . "'
+							menu_cssclass = '" . sed_sql_prep($mclass) . "',
+							menu_cat = '" . sed_sql_prep($mcat) . "',
+							menu_cat_subcats = " . (int)$mcat_subcats . ",
+							menu_cat_pages = " . (int)$mcat_pages . "
 							WHERE menu_id = " . $mid);
 
 			sed_log("Update menu item #" . $mid, 'adm');
@@ -167,6 +185,9 @@ switch ($mn) {
 
 		$parent_select = sed_selectbox_menu_parent($row['menu_pid'], 'mparent', $mid);
 
+		$mcat = isset($row['menu_cat']) ? $row['menu_cat'] : '';
+		$mcat_subcats = isset($row['menu_cat_subcats']) ? (int)$row['menu_cat_subcats'] : 0;
+		$mcat_pages = isset($row['menu_cat_pages']) ? (int)$row['menu_cat_pages'] : 0;
 
 		$t->assign(array(
 			"MENU_UPDATE_SEND" => sed_url('admin', 'm=menu&a=update&mid=' . $mid),
@@ -179,7 +200,7 @@ switch ($mn) {
 			"MENU_UPDATE_CSSCLASS" => sed_textbox('mclass', isset($row['menu_cssclass']) ? $row['menu_cssclass'] : '')
 		));
 
-		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");
+		sed_menu_assign_category_form($t, 'ADMIN_MENU.MENU_EDIT.MENU_CAT_FIELDS', $mcat, $mcat_subcats, $mcat_pages);
 
 		$t->parse("ADMIN_MENU.MENU_EDIT");
 
@@ -208,7 +229,7 @@ switch ($mn) {
 			"MENU_ADD_CSSCLASS" => sed_textbox('mclass', isset($mclass) ? $mclass : '')
 		));
 
-		$t->parse("ADMIN_MENU.MENU_DEFAULT.MENU_ADD");
+		sed_menu_assign_category_form($t, 'ADMIN_MENU.MENU_DEFAULT.MENU_CAT_FIELDS', '', 0, 0);
 
 		foreach ($menu_flat as $frow) {
 			$k = $frow['menu_id'];
@@ -216,6 +237,9 @@ switch ($mn) {
 			$title = $prefix . sed_cc($frow['menu_title']);
 			if (!$frow['menu_pid']) {
 				$title = "<strong>" . $title . "</strong>";
+			}
+			if (!empty($frow['menu_cat'])) {
+				$title .= ' <span class="hint">[' . $L['adm_menu_cat_auto'] . ': ' . sed_cc($frow['menu_cat']) . ']</span>';
 			}
 			$t->assign(array(
 				"MENU_ID" => $k,

@@ -110,6 +110,7 @@ switch ($mn) {
     			WHERE structure_id = '" . $id . "'");
 
 				sed_cache_clear('sed_cat');
+				sed_page_clear_menu_cache();
 				sed_redirect(sed_url("admin", "m=page&mn=structure", "", true), false, ['msg' => '917']);
 				exit;
 			}
@@ -227,6 +228,7 @@ switch ($mn) {
 				}
 				sed_auth_clear('all');
 				sed_cache_clear('sed_cat');
+				sed_page_clear_menu_cache();
 				sed_redirect(sed_url("admin", "m=page&mn=structure", "", true), false, ['msg' => '917']);
 				exit;
 			} elseif ($a == 'add') {
@@ -400,6 +402,7 @@ switch ($mn) {
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
 			}
 			sed_cache_clear('sed_cat');
+			sed_page_clear_menu_cache();
 			sed_redirect(sed_url("admin", "m=page&mn=catorder", "#catorder", true), false, ['msg' => '917']);
 		}
 
@@ -476,6 +479,7 @@ switch ($mn) {
 				sed_block($usr['isadmin_local']);
 				$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 				sed_cache_clear('latestpages');
+				sed_page_clear_menu_cache();
 				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true), false, ['msg' => '917']);
 				exit;
 			} else {
@@ -492,6 +496,7 @@ switch ($mn) {
 				sed_block($usr['isadmin_local']);
 				$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 				sed_cache_clear('latestpages');
+				sed_page_clear_menu_cache();
 				//sed_redirect(sed_url("page", "c=".$row['page_cat'], "", true));
 				sed_redirect((!empty($redirect)) ? base64_decode($redirect) : sed_url("admin", "m=page&mn=queue", "", true), false, ['msg' => '917']);
 				exit;

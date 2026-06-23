@@ -125,10 +125,44 @@ $cfg['adminskin'] = "sympfy";
 
 /* Message type:  warning => w, error => e, success => s, info => i */
 $cfg['msgtype'] = array(
-	'100' => 'e', '101' => 'e', '102' => 'i', '104' => 'i', '105' => 's', '106' => 's', '109' => 's', '113' => 's', '117' => 'i',
-	'118' => 's', '151' => 'e', '152' => 'e', '153' => 'e', '157' => 'w', '300' => 's', '301' => 's', '302' => 's', '303' => 'e', '918' => 'w', '400' => 'e', '401' => 'e', '403' => 'e',
-	'404' => 'e', '500' => 'e', '502' => 's', '602' => 'w', '603' => 'w', '900' => 'w', '904' => 'w', '907' => 'e', '911' => 'e',
-	'915' => 'e', '916' => 's', '917' => 's', '919' => 's', '930' => 'w', '940' => 'w', '950' => 'e' 
+	'100' => 'e',
+	'101' => 'e',
+	'102' => 'i',
+	'104' => 'i',
+	'105' => 's',
+	'106' => 's',
+	'109' => 's',
+	'113' => 's',
+	'117' => 'i',
+	'118' => 's',
+	'151' => 'e',
+	'152' => 'e',
+	'153' => 'e',
+	'157' => 'w',
+	'300' => 's',
+	'301' => 's',
+	'302' => 's',
+	'303' => 'e',
+	'918' => 'w',
+	'400' => 'e',
+	'401' => 'e',
+	'403' => 'e',
+	'404' => 'e',
+	'500' => 'e',
+	'502' => 's',
+	'602' => 'w',
+	'603' => 'w',
+	'900' => 'w',
+	'904' => 'w',
+	'907' => 'e',
+	'911' => 'e',
+	'915' => 'e',
+	'916' => 's',
+	'917' => 's',
+	'919' => 's',
+	'930' => 'w',
+	'940' => 'w',
+	'950' => 'e'
 );
 
 $cfg['msgtype_name'] = array('e' => 'error', 's' => 'success', 'i' => 'info', 'w' => 'warning');
@@ -192,9 +226,39 @@ $shield_hammer = 0;
 /* ======== Names of the SQL tables ========= */
 
 $sed_dbnames = array(
-	'auth', 'banlist', 'cache', 'com', 'core', 'config', 'dic', 'dic_items', 'forum_posts', 'forum_sections', 'forum_structure', 'forum_topics',
-	'groups', 'groups_users', 'logger', 'menu', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters',
-	'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users'
+	'auth',
+	'banlist',
+	'cache',
+	'com',
+	'core',
+	'config',
+	'dic',
+	'dic_items',
+	'forum_posts',
+	'forum_sections',
+	'forum_structure',
+	'forum_topics',
+	'groups',
+	'groups_users',
+	'logger',
+	'menu',
+	'online',
+	'pages',
+	'pfs',
+	'pfs_folders',
+	'plugins',
+	'pm',
+	'polls_options',
+	'polls',
+	'polls_voters',
+	'rated',
+	'ratings',
+	'referers',
+	'smilies',
+	'stats',
+	'structure',
+	'trash',
+	'users'
 );
 
 foreach ($sed_dbnames as $k => $i) {
@@ -1103,13 +1167,13 @@ function sed_br2nl($text)
 	return (preg_replace('#<br\s*/?>#i', "\n", $text));
 }
 
-/** 
- * Build breadcrumbs 
- * 
+/**
+ * Build breadcrumbs
+ *
  * @global array $urlpaths Urls and titles array
- * @global int $startpos Position 
- * @param bool $home Home link flag 
- * @return string 
+ * @global int $startpos Position
+ * @param bool $home Home link flag
+ * @return string
  */
 function sed_breadcrumbs($urlpaths, $startpos = 1, $home = true)
 {
@@ -1125,13 +1189,19 @@ function sed_breadcrumbs($urlpaths, $startpos = 1, $home = true)
 
 	$b = new XTemplate(sed_skinfile('breadcrumbs'));
 
+	$total = count($urlpaths);
+	$i = 1;
 	foreach ($urlpaths as $url => $title) {
+		$class = ($i === $total) ? 'active' : '';
+
 		$b->assign(array(
 			"BREADCRUMB_URL" => $url,
 			"BREADCRUMB_TITLE" => $title,
-			"BREADCRUMB_POSITION" => $startpos
+			"BREADCRUMB_POSITION" => $startpos,
+			"BREADCRUMB_CLASS" => $class
 		));
 		$startpos++;
+		$i++;
 		$b->parse("BREADCRUMBS.BREADCRUMBS_LIST");
 	}
 
@@ -1537,7 +1607,7 @@ function sed_add_css($css = '', $is_file = false, $priority = 50)
 				break;
 			}
 		}
-		
+
 		if (!$already_exists) {
 			$sed_css_collection['files'][] = array('path' => $css, 'priority' => $priority);
 		}
@@ -1572,12 +1642,12 @@ function sed_css()
 				$normalized_files[] = array('path' => $file, 'priority' => 50);
 			}
 		}
-		
+
 		// Sort by priority (lower priority number = higher priority)
-		usort($normalized_files, function($a, $b) {
+		usort($normalized_files, function ($a, $b) {
 			return $a['priority'] - $b['priority'];
 		});
-		
+
 		// Output sorted files
 		foreach ($normalized_files as $file) {
 			$result .= '<link href="' . $file['path'] . '" type="text/css" rel="stylesheet" />' . "\n";
@@ -2906,12 +2976,12 @@ function sed_javascript()
 				$normalized_files[] = array('path' => $file, 'priority' => 50);
 			}
 		}
-		
+
 		// Sort by priority (lower priority number = higher priority)
-		usort($normalized_files, function($a, $b) {
+		usort($normalized_files, function ($a, $b) {
 			return $a['priority'] - $b['priority'];
 		});
-		
+
 		// Output sorted files
 		foreach ($normalized_files as $file) {
 			$result .= '<script type="text/javascript" src="' . $file['path'] . '"></script>' . "\n";
@@ -2959,7 +3029,7 @@ function sed_add_javascript($js = '', $is_file = false, $priority = 50)
 				break;
 			}
 		}
-		
+
 		if (!$already_exists) {
 			$sed_js_collection['files'][] = array('path' => $js, 'priority' => $priority);
 		}
@@ -3082,6 +3152,115 @@ function sed_mail($fmail, $subject, $body, $headers = '', $param = '', $content 
 
 			sed_stat_inc('totalmailsent');
 			return (TRUE);
+		}
+	}
+}
+
+/**
+ * Build virtual menu rows from a page category (auto-children for menu manager).
+ *
+ * @param array $menu_item Parent row from $db_menu
+ * @return array List of pseudo menu rows keyed by synthetic menu_id
+ */
+function sed_menu_items_from_category($menu_item)
+{
+	global $sed_cat;
+
+	if (!sed_module_active('page') || !function_exists('sed_page_category_children')) {
+		return array();
+	}
+
+	$cat = isset($menu_item['menu_cat']) ? $menu_item['menu_cat'] : '';
+	$show_subcats = !empty($menu_item['menu_cat_subcats']);
+	$show_pages = !empty($menu_item['menu_cat_pages']);
+
+	if ($cat === '' || $cat === 'system' || !isset($sed_cat[$cat])) {
+		return array();
+	}
+	if (!$show_subcats && !$show_pages) {
+		return array();
+	}
+
+	$items = array();
+	$pos = 0;
+
+	if ($show_subcats) {
+		foreach (sed_page_category_children($cat) as $code => $cdata) {
+			$pos++;
+			$items['cat_' . $code] = array(
+				'menu_id' => 'cat_' . $code,
+				'menu_pid' => $menu_item['menu_id'],
+				'menu_title' => $cdata['title'],
+				'menu_url' => sed_url('page', 'c=' . $code),
+				'menu_position' => $pos,
+				'menu_visible' => 1,
+				'menu_target' => '',
+				'menu_cssclass' => '',
+				'menu_cat' => '',
+				'menu_cat_subcats' => 0,
+				'menu_cat_pages' => 0,
+			);
+		}
+	}
+
+	if ($show_pages) {
+		foreach (sed_page_category_pages($cat) as $page) {
+			$pos++;
+			$url = sed_page_build_url($page);
+
+			$items['page_' . $page['page_id']] = array(
+				'menu_id' => 'page_' . $page['page_id'],
+				'menu_pid' => $menu_item['menu_id'],
+				'menu_title' => $page['page_title'],
+				'menu_url' => $url,
+				'menu_position' => $pos,
+				'menu_visible' => 1,
+				'menu_target' => '',
+				'menu_cssclass' => '',
+				'menu_cat' => '',
+				'menu_cat_subcats' => 0,
+				'menu_cat_pages' => 0,
+			);
+		}
+	}
+
+	return $items;
+}
+
+/**
+ * Append auto-generated category children to the menu tree.
+ *
+ * @param array $menu_tree Tree indexed by menu_pid (modified by reference)
+ * @param array $menu_row  Flat menu rows indexed by menu_id
+ */
+function sed_menu_merge_category_children(&$menu_tree, $menu_row)
+{
+	foreach ($menu_row as $id => $item) {
+		if (empty($item['menu_cat'])) {
+			continue;
+		}
+
+		$auto = sed_menu_items_from_category($item);
+		if (count($auto) === 0) {
+			continue;
+		}
+
+		$maxpos = 0;
+		if (isset($menu_tree[$id]) && is_array($menu_tree[$id])) {
+			foreach ($menu_tree[$id] as $child) {
+				if ((int)$child['menu_position'] > $maxpos) {
+					$maxpos = (int)$child['menu_position'];
+				}
+			}
+		} else {
+			$menu_tree[$id] = array();
+		}
+
+		$pos = $maxpos;
+		foreach ($auto as $key => $child) {
+			$pos++;
+			$child['menu_position'] = $pos;
+			$menu_tree[$id][$key] = $child;
 		}
 	}
 }

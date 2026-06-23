@@ -219,6 +219,8 @@ if ($a == 'update') {
 
 			sed_log("Edited page #" . $id, 'adm');
 
+			sed_page_clear_menu_cache();
+
 			$url_redir = (empty($rpagealias)) ? sed_url("page", "id=" . $id, "", true) : sed_url("page", "al=" . $rpagealias, "", true);
 
 			if (defined('SED_ADMIN')) {

@@ -115,6 +115,24 @@
 							<div class="table-td text-left resp-table-td">{MENU_ADD_CSSCLASS}</div>
 						</div>
 
+						<!-- BEGIN: MENU_CAT_FIELDS -->
+						<div class="table-row resp-table-row">
+							<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cat_source} :</div>
+							<div class="table-td text-left resp-table-td">
+								{MENU_CAT_SELECT}
+								<div class="descr">{PHP.L.adm_menu_cat_source_hint}</div>
+							</div>
+						</div>
+						<div class="table-row resp-table-row">
+							<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cat_subcats} :</div>
+							<div class="table-td text-left resp-table-td">{MENU_CAT_SUBCATS}</div>
+						</div>
+						<div class="table-row resp-table-row">
+							<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cat_pages} :</div>
+							<div class="table-td text-left resp-table-td">{MENU_CAT_PAGES}</div>
+						</div>
+						<!-- END: MENU_CAT_FIELDS -->
+
 						<div class="table-row resp-table-row">
 							<div class="table-td text-left resp-table-td">{PHP.L.adm_activity} :</div>
 							<div class="table-td text-left resp-table-td">{MENU_ADD_VISIBLE}</div>
@@ -189,6 +207,24 @@
 						<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cssclass} :</div>
 						<div class="table-td text-left resp-table-td">{MENU_UPDATE_CSSCLASS}</div>
 					</div>
+
+					<!-- BEGIN: MENU_CAT_FIELDS -->
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cat_source} :</div>
+						<div class="table-td text-left resp-table-td">
+							{MENU_CAT_SELECT}
+							<div class="descr">{PHP.L.adm_menu_cat_source_hint}</div>
+						</div>
+					</div>
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cat_subcats} :</div>
+						<div class="table-td text-left resp-table-td">{MENU_CAT_SUBCATS}</div>
+					</div>
+					<div class="table-row resp-table-row">
+						<div class="table-td text-left resp-table-td">{PHP.L.adm_menu_cat_pages} :</div>
+						<div class="table-td text-left resp-table-td">{MENU_CAT_PAGES}</div>
+					</div>
+					<!-- END: MENU_CAT_FIELDS -->
 
 					<div class="table-row resp-table-row">
 						<div class="table-td text-left resp-table-td">{PHP.L.adm_activity} :</div>
