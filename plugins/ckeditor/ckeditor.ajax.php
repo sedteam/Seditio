@@ -105,9 +105,8 @@ if ($usr['isadmin']) {
 if (empty($disp_errors) && !empty($u_name)) {
 	// Check file extension
 	$filename = sed_newname($usr['id']."-".$u_name, TRUE);
-
-	if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'].$filename)) {
-		$filename = sed_newname($usr['id']."-".time().sed_unique(3)."-".$u_name, TRUE);
+	if (function_exists('sed_pfs_unique_filename')) {
+		$filename = sed_pfs_unique_filename($filename, $cfg['pfs_dir'], !empty($cfg['pfs_filemask']));
 	}
 
 	//$allow_extension = array('gif','png','jpg','jpeg','bmp');
@@ -123,8 +122,6 @@ if (empty($disp_errors) && !empty($u_name)) {
 		$disp_errors = "Bad file extension";
 	} elseif ((($pfs_totalsize + $u_size) > $maxtotal * 1024) || ($u_size > ($maxfile * 1024))) {
 		$disp_errors = $L['pfs_filetoobigorext'];
-	} elseif (file_exists($cfg['pfs_dir'].$filename)) {
-		$disp_errors = $L['pfs_fileexists'];
 	} elseif (empty($disp_errors)) {
 		if ($u_tmp_name && file_exists($u_tmp_name)) {
 			if ($imageUrl) {

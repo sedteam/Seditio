@@ -350,3 +350,43 @@ function sed_pfs_deleteall_module($userid)
 
 	return $num;
 }
+
+/**
+ * Resolve PFS filename collision by appending a suffix before the extension.
+ *
+ * @param string $filename  Sanitized name after sed_newname() (e.g. "5-report.pdf")
+ * @param string $dir       PFS directory path (with trailing slash)
+ * @param bool   $timestamp When true, use Unix timestamp suffix; otherwise -2, -3, ...
+ * @return string           Unique filename for the given directory
+ */
+function sed_pfs_unique_filename($filename, $dir, $timestamp = false)
+{
+	$filename = basename(str_replace('\\', '/', $filename));
+	$dotpos = mb_strrpos($filename, '.');
+	if ($dotpos === false) {
+		return $filename;
+	}
+
+	$base = mb_substr($filename, 0, $dotpos);
+	$ext = mb_substr($filename, $dotpos + 1);
+
+	if (!file_exists($dir . $filename)) {
+		return $filename;
+	}
+
+	if ($timestamp) {
+		$suffix = (string) time();
+		$candidate = $base . '-' . $suffix . '.' . $ext;
+		while (file_exists($dir . $candidate)) {
+			$suffix = (string) ((int) $suffix + 1);
+			$candidate = $base . '-' . $suffix . '.' . $ext;
+		}
+		return $candidate;
+	}
+
+	$n = 2;
+	while (file_exists($dir . $base . '-' . $n . '.' . $ext)) {
+		$n++;
+	}
+	return $base . '-' . $n . '.' . $ext;
+}

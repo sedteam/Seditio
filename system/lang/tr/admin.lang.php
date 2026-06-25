@@ -197,7 +197,7 @@ $L['cfg_th_jpeg_quality'] = array("Küçük resimler, Jpeg kalitesi", "Varsayıl
 $L['cfg_th_rel'] = array("Küçük resimler, rel özniteliği", "Varsayılan: sedthumb"); // Yeni v175
 $L['cfg_th_dimpriority'] = array("Küçük resimler, yeniden boyutlandırma önceliği", "Varsayılan: Genişlik"); // Yeni v160
 //$L['cfg_th_textsize'] = array("Küçük resimler, yazı boyutu", "");
-$L['cfg_pfs_filemask'] = array("Dosya isimleri zaman desenine göre", "Zaman desenine göre dosya isimleri oluştur");  // Yeni sed172
+$L['cfg_pfs_filemask'] = array("İsim çakışmasında zaman damgası", "Aynı isimde dosya yüklenirken sıra numarası (-2, -3) yerine Unix zaman damgası (-1730000123) ekler.");  // Yeni sed172
 
 $L['cfg_available_image_sizes'] = array("Mevcut görüntü çözünürlükleri", "Virgülle sıralanmış, boşluk yok. Örnek: 120x80,800x600");  // Yeni sed180
 

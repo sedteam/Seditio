@@ -30,7 +30,7 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-global $usr, $db_smilies;
+	global $usr, $db_smilies;
 
 if ($usr['maingrp'] > 3) {
 

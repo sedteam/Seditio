@@ -197,7 +197,7 @@ $L['cfg_th_jpeg_quality'] = array("Thumbnails, Jpeg quality", "Default: 85");
 $L['cfg_th_rel'] = array("Thumbnail rel attribute", "Default: sedthumb"); // New in v175
 $L['cfg_th_dimpriority'] = array("Thumbnails, resize by", "Default: Width");       // New in v160
 //$L['cfg_th_textsize'] = array("Thumbnails, size of the text", "");
-$L['cfg_pfs_filemask'] = array("File names based on pattern of time", "Generate file names on a pattern of time");  // New in sed172
+$L['cfg_pfs_filemask'] = array("Timestamp suffix on name collision", "When uploading a file whose name already exists, append a Unix timestamp (-1730000123) instead of a sequential number (-2, -3).");  // New in sed172
 
 $L['cfg_available_image_sizes'] = array("Available image resolutions", "Listed with commas, no spaces. Example: 120x80,800x600");  // New in sed180
 

@@ -156,11 +156,8 @@ if ($a == 'upload') {
             $f_extension = mb_substr($u_name, $dotpos, 5);
             $f_extension_ok = 0;
 
-            if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'] . $userid . "-" . $u_name)) {
-                $u_name = sed_newname($userid . "-" . time() . sed_unique(3) . "-" . $u_name, TRUE);
-            } else {
-                $u_name = sed_newname($userid . "-" . $u_name, TRUE);
-            }
+            $u_name = sed_newname($userid . "-" . $u_name, TRUE);
+            $u_name = sed_pfs_unique_filename($u_name, $cfg['pfs_dir'], !empty($cfg['pfs_filemask']));
 
             $u_sqlname = sed_sql_prep($u_name);
 
@@ -173,92 +170,88 @@ if ($a == 'upload') {
             }
 
             if (is_uploaded_file($u_tmp_name) && $u_size > 0 && $u_size < ($maxfile * 1024) && $f_extension_ok && ($pfs_totalsize + $u_size) < $maxtotal * 1024) {
-                if (!file_exists($cfg['pfs_dir'] . $u_name)) {
-                    move_uploaded_file($u_tmp_name, $cfg['pfs_dir'] . $u_name);
-                    @chmod($cfg['pfs_dir'] . $u_name, 0766);
+                move_uploaded_file($u_tmp_name, $cfg['pfs_dir'] . $u_name);
+                @chmod($cfg['pfs_dir'] . $u_name, 0766);
 
-                    /* === Hook === */
-                    $extp = sed_getextplugins('pfs.upload.moved');
-                    if (is_array($extp)) {
-                        foreach ($extp as $k => $pl) {
-                            include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-                        }
+                /* === Hook === */
+                $extp = sed_getextplugins('pfs.upload.moved');
+                if (is_array($extp)) {
+                    foreach ($extp as $k => $pl) {
+                        include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
                     }
-                    /* ===== */
+                }
+                /* ===== */
 
-                    // Combined resize and watermark processing
-                    if (($nresize || $naddlogo) && in_array($f_extension, $cfg['gd_supported'])) {
-                        $do_resize = $nresize && $cfg['th_imgmaxwidth'] > 0;
-                        $do_watermark = $naddlogo && !empty($cfg['th_logofile']) && @file_exists($cfg['th_logofile']);
+                // Combined resize and watermark processing
+                if (($nresize || $naddlogo) && in_array($f_extension, $cfg['gd_supported'])) {
+                    $do_resize = $nresize && $cfg['th_imgmaxwidth'] > 0;
+                    $do_watermark = $naddlogo && !empty($cfg['th_logofile']) && @file_exists($cfg['th_logofile']);
 
-                        sed_image_process(
-                            $cfg['pfs_dir'] . $u_name,                      // $source
-                            $cfg['pfs_dir'] . $u_name,                      // $dest (overwrite source)
-                            $do_resize ? $cfg['th_imgmaxwidth'] : 0,   // $width
-                            0,                                              // $height (auto)
-                            $do_resize,                                     // $keepratio (only if resizing)
-                            'resize',                                       // $type
-                            'Width',                                        // $dim_priority
-                            $cfg['th_logojpegqual'],                   // $quality
-                            $do_watermark ? true : false,                   // $set_watermark
-                            true                                            // $preserve_source
-                        );
+                    sed_image_process(
+                        $cfg['pfs_dir'] . $u_name,                      // $source
+                        $cfg['pfs_dir'] . $u_name,                      // $dest (overwrite source)
+                        $do_resize ? $cfg['th_imgmaxwidth'] : 0,   // $width
+                        0,                                              // $height (auto)
+                        $do_resize,                                     // $keepratio (only if resizing)
+                        'resize',                                       // $type
+                        'Width',                                        // $dim_priority
+                        $cfg['th_logojpegqual'],                   // $quality
+                        $do_watermark ? true : false,                   // $set_watermark
+                        true                                            // $preserve_source
+                    );
+                }
+
+                $u_size = filesize($cfg['pfs_dir'] . $u_name);
+
+                $sql = sed_sql_query("INSERT INTO $db_pfs
+                    (pfs_userid,
+                    pfs_date,
+                    pfs_file,
+                    pfs_extension,
+                    pfs_folderid,
+                    pfs_title,
+                    pfs_desc,
+                    pfs_size,
+                    pfs_count)
+                    VALUES
+                    (" . (int)$userid . ",
+                    " . (int)$sys['now_offset'] . ",
+                    '" . sed_sql_prep($u_sqlname) . "',
+                    '" . sed_sql_prep($f_extension) . "',
+                    " . (int)$folderid . ",
+                    '" . sed_sql_prep($u_title) . "',
+                    '" . sed_sql_prep($desc) . "',
+                    " . (int)$u_size . ",
+                    0) ");
+
+                $sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='" . $sys['now'] . "' WHERE pff_id='$folderid'");
+                $upl_stats .= $L['Yes'];
+                $pfs_totalsize += $u_size;
+
+                /* === Hook === */
+                $extp = sed_getextplugins('pfs.upload.done');
+                if (is_array($extp)) {
+                    foreach ($extp as $k => $pl) {
+                        include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
                     }
+                }
+                /* ===== */
 
-                    $u_size = filesize($cfg['pfs_dir'] . $u_name);
-
-                    $sql = sed_sql_query("INSERT INTO $db_pfs
-                        (pfs_userid,
-                        pfs_date,
-                        pfs_file,
-                        pfs_extension,
-                        pfs_folderid,
-                        pfs_title,
-                        pfs_desc,
-                        pfs_size,
-                        pfs_count)
-                        VALUES
-                        (" . (int)$userid . ",
-                        " . (int)$sys['now_offset'] . ",
-                        '" . sed_sql_prep($u_sqlname) . "',
-                        '" . sed_sql_prep($f_extension) . "',
-                        " . (int)$folderid . ",
-                        '" . sed_sql_prep($u_title) . "',
-                        '" . sed_sql_prep($desc) . "',
-                        " . (int)$u_size . ",
-                        0) ");
-
-                    $sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='" . $sys['now'] . "' WHERE pff_id='$folderid'");
-                    $upl_stats .= $L['Yes'];
-                    $pfs_totalsize += $u_size;
-
-                    /* === Hook === */
-                    $extp = sed_getextplugins('pfs.upload.done');
-                    if (is_array($extp)) {
-                        foreach ($extp as $k => $pl) {
-                            include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-                        }
-                    }
-                    /* ===== */
-
-                    // Thumbnail creation
-                    if (in_array($f_extension, $cfg['gd_supported']) && $cfg['th_amode'] != 'Disabled' && file_exists($cfg['pfs_dir'] . $u_name)) {
-                        @unlink($cfg['th_dir'] . $u_name);
-                        sed_image_process(
-                            $cfg['pfs_dir'] . $u_name,    // $source
-                            $cfg['th_dir'] . $u_name,     // $dest
-                            $cfg['th_x'],                 // $width
-                            $cfg['th_y'],                 // $height
-                            $cfg['th_keepratio'],         // $keepratio
-                            'resize',                     // $type
-                            $cfg['th_dimpriority'],       // $dim_priority
-                            $cfg['th_jpeg_quality'],      // $quality
-                            false,                        // $set_watermark
-                            false                         // $preserve_source
-                        );
-                    }
-                } else {
-                    $upl_stats .= $L['pfs_fileexists'];
+                // Thumbnail creation
+                if (in_array($f_extension, $cfg['gd_supported']) && $cfg['th_amode'] != 'Disabled' && file_exists($cfg['pfs_dir'] . $u_name)) {
+                    @unlink($cfg['th_dir'] . $u_name);
+                    sed_image_process(
+                        $cfg['pfs_dir'] . $u_name,    // $source
+                        $cfg['th_dir'] . $u_name,     // $dest
+                        $cfg['th_x'],                 // $width
+                        $cfg['th_y'],                 // $height
+                        $cfg['th_keepratio'],         // $keepratio
+                        'resize',                     // $type
+                        $cfg['th_dimpriority'],       // $dim_priority
+                        $cfg['th_jpeg_quality'],      // $quality
+                        false,                        // $set_watermark
+                        false                         // $preserve_source
+                    );
                 }
             } else {
                 $upl_stats .= $L['pfs_filetoobigorext'];

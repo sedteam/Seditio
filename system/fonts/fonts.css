@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Seditio';
-  src:  url('Seditio.eot?9mnif5');
-  src:  url('Seditio.eot?9mnif5#iefix') format('embedded-opentype'),
-    url('Seditio.ttf?9mnif5') format('truetype'),
-    url('Seditio.woff?9mnif5') format('woff'),
-    url('Seditio.svg?9mnif5#Seditio') format('svg');
+  src:  url('Seditio/Seditio.eot?f9faem');
+  src:  url('Seditio/Seditio.eot?f9faem#iefix') format('embedded-opentype'),
+    url('Seditio/Seditio.ttf?f9faem') format('truetype'),
+    url('Seditio/Seditio.woff?f9faem') format('woff'),
+    url('Seditio/Seditio.svg?f9faem#Seditio') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ic-2x {
+	font-size: 1.8em;
+}
+.ic-3x {
+	font-size: 2.5em;
+}
 .ic-arrow-left:before {
   content: "\ea19";
 }
@@ -214,7 +220,8 @@
 .ic-settings:before {
   content: "\eb20";
 }
-.ic-tool:before {
+.ic-tool:before,
+.ic-manage:before {
   content: "\eb40";
 }
 .ic-chart-candle:before {
@@ -232,7 +239,8 @@
 .ic-circle-x:before {
   content: "\ea6a";
 }
-.ic-clock:before {
+.ic-clock:before,
+.ic-log:before {
   content: "\ea70";
 }
 .ic-cloud-download:before {

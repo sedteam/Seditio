@@ -7,7 +7,7 @@
 	{HEADER_COMPOPUP}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
-	<link href="system/adminskin/{PHP.cfg.adminskin}/css/fonts.css" type="text/css" rel="stylesheet" />
+	<link href="system/fonts/fonts.css" type="text/css" rel="stylesheet" />
 	<link href="system/adminskin/{PHP.cfg.adminskin}/css/framework.css" type="text/css" rel="stylesheet" />
 	<link href="system/adminskin/{PHP.cfg.adminskin}/css/{PHP.cfg.adminskin}.css" type="text/css" rel="stylesheet" />
 	<link href="system/adminskin/{PHP.cfg.adminskin}/css/responsive.css" type="text/css" rel="stylesheet" />

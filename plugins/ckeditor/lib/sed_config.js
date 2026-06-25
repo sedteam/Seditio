@@ -1,7 +1,9 @@
 CKEDITOR.editorConfig = function(config) {
     config.toolbar = 'Basic';
 
-    config.extraPlugins = 'more,html5video,spoiler,internallink,tabber,syntaxhighlight,layoutmanager';
+    config.extraPlugins = 'more,html5video,spoiler,internallink,tabber,syntaxhighlight,layoutmanager,iconic';
+
+    config.iconic_columns = 14;
 
     config.internallinkServiceURL = "/ajax/?m=pages";
 	config.imageUploadUrl = 'plug/?ajx=ckeditor';
@@ -35,7 +37,7 @@ CKEDITOR.editorConfig = function(config) {
         ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'],
         ['Link', 'Unlink', 'Anchor', 'InternalLink'],
         ['Image', 'Youtube', 'MediaEmbed', 'Html5video'],
-        ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'],
+        ['Table', 'HorizontalRule', 'Smiley', 'Iconic', 'SpecialChar', 'PageBreak', 'Iframe'],
         '/', ['Styles', 'Format', 'Font', 'FontSize'],
         ['TextColor', 'BGColor'],
         ['Syntaxhighlight'],
@@ -46,7 +48,7 @@ CKEDITOR.editorConfig = function(config) {
     config.toolbar_Extended = [
         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SpellChecker'],
         ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat'],
-        ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
+        ['Table', 'HorizontalRule', 'Smiley', 'Iconic', 'SpecialChar', 'PageBreak'],
         ['Link', 'Unlink', 'Anchor', 'InternalLink'],
         ['Image', 'Youtube', 'MediaEmbed', 'Html5video'],
         ['Syntaxhighlight', 'More', 'Maximize', 'ShowBlocks'],
@@ -63,7 +65,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
         ['NumberedList', 'BulletedList', '-', 'Blockquote'],
         ['Undo', 'Redo', '-', 'SelectAll', 'RemoveFormat'],
-        ['Image', 'Youtube', 'MediaEmbed', 'Link', 'Unlink', 'Anchor', 'Smiley'],
+        ['Image', 'Youtube', 'MediaEmbed', 'Link', 'Unlink', 'Anchor', 'Smiley', 'Iconic'],
         ['TextColor', 'BGColor'],
         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
         ['Syntaxhighlight', 'Spoiler']

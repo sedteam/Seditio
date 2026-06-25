@@ -4,7 +4,7 @@
 
 {POLLS_STANDALONE_HEADER1}
 <link href="skins/{PHP.skin}/css/framework.css" type="text/css" rel="stylesheet" />
-<link href="skins/{PHP.skin}/css/fonts.css" type="text/css" rel="stylesheet" />
+<link href="system/fonts/fonts.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/css/plugins.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/css/cms.css" type="text/css" rel="stylesheet" />
 <link href="skins/{PHP.skin}/css/sympfy.css" type="text/css" rel="stylesheet" />

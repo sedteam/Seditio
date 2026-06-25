@@ -34,7 +34,7 @@ Lock_module=0
 
 [BEGIN_SED_MODULE_CONFIG]
 pfstitle=01:string::{MAINTITLE} - {TITLE}:Title for PFS
-pfs_filemask=02:radio::0:Unique filenames (random suffix)
+pfs_filemask=02:radio::0:Timestamp suffix on name collision
 [END_SED_MODULE_CONFIG]
 
 ==================== */

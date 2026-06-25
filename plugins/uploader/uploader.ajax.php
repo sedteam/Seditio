@@ -106,9 +106,8 @@ if ($maxfile == 0 || $maxtotal == 0 || !$usr['auth_write']) {
 }
 
 $filename = sed_newname($usr['id'] . "-" . $upl_filename, TRUE);
-
-if ($cfg['pfs_filemask'] || file_exists($cfg['pfs_dir'] . $filename)) {
-	$filename = sed_newname($usr['id'] . "-" . time() . sed_unique(3) . "-" . $upl_filename, TRUE);
+if (function_exists('sed_pfs_unique_filename')) {
+	$filename = sed_pfs_unique_filename($filename, $cfg['pfs_dir'], !empty($cfg['pfs_filemask']));
 }
 
 $allow_extension = array('gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp');
@@ -117,8 +116,6 @@ $f_extension = end($extension_arr);
 
 if (in_array($f_extension, $allow_extension) == FALSE) {
 	$disp_errors = "Bad file extension";
-} elseif (file_exists($cfg['pfs_dir'] . $filename)) {
-	$disp_errors = $L['pfs_fileexists'];
 } elseif (empty($disp_errors)) {
 	$u_size = file_put_contents($cfg['pfs_dir'] . $filename, file_get_contents('php://input'));
 	$imgsize = @getimagesize($cfg['pfs_dir'] . $filename);
