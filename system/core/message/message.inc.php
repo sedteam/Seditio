@@ -82,11 +82,6 @@ switch ($msg) {
 		$body = $L['msg109_1'];
 		break;
 
-	case '110':
-		$message = $L['msg110_0'];
-		$body = $L['msg110_1'];
-		break;
-
 	case '113':
 		$message = $L['msg113_0'];
 		$body = $L['msg113_1'];

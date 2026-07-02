@@ -173,11 +173,7 @@ function resize_image($filename, $width = 0, $height = 0, $set_watermark = false
     global $cfg;
 
     $resized_filename = sed_add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp, $namespace);
-    $url = $cfg['res_dir'] . $resized_filename;
-    if ($url !== '' && $url[0] !== '/') {
-        $url = '/' . $url;
-    }
-    return $url;
+    return $cfg['res_dir'] . $resized_filename;
 }
 
 function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
@@ -185,11 +181,7 @@ function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, 
     global $cfg;
 
     $resized_filename = sed_add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp, $namespace);
-    $url = $cfg['res_dir'] . $resized_filename;
-    if ($url !== '' && $url[0] !== '/') {
-        $url = '/' . $url;
-    }
-    return $url;
+    return $cfg['res_dir'] . $resized_filename;
 }
 
 /**
