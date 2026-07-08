@@ -4374,11 +4374,7 @@ function sed_setcookie($name, $value, $expire = '', $path = '/', $domain = '', $
 		if (mb_substr($domain, 0, 1) != '.') $domain = '.' . $domain;
 	}
 
-	if (PHP_VERSION < '5.2.0') {
-		return setcookie($name, $value, $expire, $path, $domain, $secure);
-	} else {
-		return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
-	}
+	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
 }
 
 /** 
@@ -4406,11 +4402,7 @@ function sed_setcookie_params($expire = 0, $path = '/', $domain = '', $secure = 
 		if (mb_substr($domain, 0, 1) != '.') $domain = '.' . $domain;
 	}
 
-	if (PHP_VERSION < '5.2.0') {
-		return session_set_cookie_params($expire, $path, $domain, $secure);
-	} else {
-		return session_set_cookie_params($expire, $path, $domain, $secure, $httponly);
-	}
+	return session_set_cookie_params($expire, $path, $domain, $secure, $httponly);
 }
 
 /** 
@@ -4906,11 +4898,7 @@ function sed_title($mask, $tags, $data)
 	$cnt = count($data);
 	for ($i = 0; $i < $cnt; $i++) {
 		$data_val = is_null($data[$i]) ? '' : $data[$i];
-		if (version_compare(PHP_VERSION, '5.2.2', '<=')) {
-			$data[$i] = htmlspecialchars($data_val, ENT_COMPAT, 'UTF-8');
-		} else {
-			$data[$i] = htmlspecialchars($data_val, ENT_COMPAT, 'UTF-8', false);
-		}
+		$data[$i] = htmlspecialchars($data_val, ENT_COMPAT, 'UTF-8', false);
 	}
 	$title = vsprintf($mask, $data);
 	return $title;

@@ -717,7 +717,7 @@ switch ($m) {
 		$res .= "</td></tr>";
 
 		$res .= "<tr><td style=\"width:150px;\">" . $L['install_phpversion'] . "</td><td>";
-		$res .= (version_compare(PHP_VERSION, '5.3') > 0) ? '<span class="yes">' . PHP_VERSION . ' : ' . $L['install_ok'] . '</span>' : '<span class="no">' . PHP_VERSION . ' : ' . $L['install_too_old'] . '</span>';
+		$res .= (version_compare(PHP_VERSION, '5.6') >= 0) ? '<span class="yes">' . PHP_VERSION . ' : ' . $L['install_ok'] . '</span>' : '<span class="no">' . PHP_VERSION . ' : ' . $L['install_too_old'] . '</span>';
 		$res .= "</td></tr>";
 
 		$res .= "<tr><td style=\"width:150px;\">MB String</td><td>";
