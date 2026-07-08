@@ -58,6 +58,7 @@ if ($a == 'details' && !empty($mod_code)) {
 		sed_redirect(sed_url("message", "msg=909", "", true));
 		exit;
 	}
+	$info_sed = sed_infoget($setup_file, 'SED');
 	$mod_name = isset($info['Name']) ? $info['Name'] : $mod_code;
 
 	$urlpaths[sed_url("admin", "m=modules&a=details&mod=" . $mod_code)] = $mod_name . ' (' . $mod_code . ')';
@@ -148,7 +149,7 @@ if ($a == 'details' && !empty($mod_code)) {
 		"MODULE_DETAILS_NAME" => $mod_name,
 		"MODULE_DETAILS_CODE" => isset($info['Code']) ? $info['Code'] : $mod_code,
 		"MODULE_DETAILS_DESC" => isset($info['Description']) ? $info['Description'] : '',
-		"MODULE_DETAILS_VERSION" => isset($info['Version']) ? $info['Version'] : '',
+		"MODULE_DETAILS_VERSION" => (isset($info['Version']) ? $info['Version'] : '') . (!empty($info_sed['Version']) ? ' <span style="color:#999; font-weight:normal;">(sed ' . $info_sed['Version'] . ')</span>' : ''),
 		"MODULE_DETAILS_DATE" => isset($info['Date']) ? $info['Date'] : '',
 		"MODULE_DETAILS_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=" . $mod_code . "&io=a"),
 		"MODULE_DETAILS_DEFAUTH_GUESTS" => sed_build_admrights($auth_guests),
@@ -423,8 +424,10 @@ $t->assign("MODULES_LISTING_COUNT", count($all_codes));
 foreach ($all_codes as $code) {
 	$setup_file = SED_ROOT . '/modules/' . $code . '/' . $code . '.setup.php';
 	$info = file_exists($setup_file) ? sed_infoget($setup_file, 'SED_MODULE') : array();
+	$info_sed = file_exists($setup_file) ? sed_infoget($setup_file, 'SED') : array();
 	$name = isset($info['Name']) ? $info['Name'] : $code;
 	$version = isset($info['Version']) ? $info['Version'] : '?';
+	$system_version = isset($info_sed['Version']) ? $info_sed['Version'] : '';
 
 	$row = isset($installed[$code]) ? $installed[$code] : null;
 	if ($row) {
@@ -438,6 +441,10 @@ foreach ($all_codes as $code) {
 		$status = $status_mod[(int) $row['ct_state']];
 	} else {
 		$status = '<span style="color:#AC5866; font-weight:bold;">' . $L['adm_notinstalled'] . '</span>';
+	}
+
+	if (!empty($system_version)) {
+		$version .= ' <span style="color:#999; font-weight:normal;">(' . $system_version . ')</span>';
 	}
 
 	$t->assign(array(

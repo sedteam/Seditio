@@ -51,6 +51,7 @@ switch ($a) {
 		if (file_exists($extplugin_info)) {
 			$extplugin_info = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".setup.php";
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+			$info_sed = sed_infoget($extplugin_info, 'SED');
 
 			$urlpaths[sed_url("admin", "m=plug&a=details&pl=" . $pl)] = $info['Name'] . " ($pl)";
 			$admintitle = $info['Name'] . " ($pl)";
@@ -123,7 +124,7 @@ switch ($a) {
 				"PLUG_DETAILS_NAME" => $info['Name'],
 				"PLUG_DETAILS_CODE" => $info['Code'],
 				"PLUG_DETAILS_DESC" => isset($info['Description']) ? $info['Description'] : '',
-				"PLUG_DETAILS_VERSION" => isset($info['Version']) ? $info['Version'] : '',
+				"PLUG_DETAILS_VERSION" => (isset($info['Version']) ? $info['Version'] : '') . (!empty($info_sed['Version']) ? ' <span style="color:#999; font-weight:normal;">(sed ' . $info_sed['Version'] . ')</span>' : ''),
 				"PLUG_DETAILS_DATE" => isset($info['Date']) ? $info['Date'] : '',
 				"PLUG_DETAILS_REQUIRES_MODULES" => $req_modules_str,
 				"PLUG_DETAILS_REQUIRES_PLUGINS" => $req_plugins_str,
@@ -582,6 +583,7 @@ switch ($a) {
 			$extplugin_info = SED_ROOT . "/plugins/" . $x . "/" . $x . ".setup.php";
 			if (file_exists($extplugin_info)) {
 				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+				$info_sed = sed_infoget($extplugin_info, 'SED');
 
 				if (!empty($info['Error'])) {
 
@@ -639,7 +641,7 @@ switch ($a) {
 						"PLUG_LIST_NAME" => $info['Name'],
 						"PLUG_LIST_DETAILS_URL" => sed_url("admin", "m=plug&a=details&pl=" . $info['Code']),
 						"PLUG_LIST_CODE" => $x,
-						"PLUG_LIST_VERSION" => $info['Version'],
+						"PLUG_LIST_VERSION" => (isset($info['Version']) ? $info['Version'] : '') . (!empty($info_sed['Version']) ? ' <span style="color:#999; font-weight:normal;">(' . $info_sed['Version'] . ')</span>' : ''),
 						"PLUG_LIST_STATUS" => $status[$part_status],
 						"PLUG_LIST_PARTS_COUNT" => $info['Partscount'],
 						"PLUG_LIST_RIGHTS_URL" => sed_url("admin", "m=rightsbyitem&ic=plug&io=" . $info['Code'])

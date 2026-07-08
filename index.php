@@ -21,8 +21,10 @@ define('SED_ROOT', dirname(__FILE__));
 /* Load URL rewrite rules from cache or system config */
 $sed_urls_cache = SED_ROOT . '/datas/cache/sed_urls.php';
 if (file_exists($sed_urls_cache)) {
+  $gen_sed_urls_cache = FALSE;
   require($sed_urls_cache);
 } else {
+  $gen_sed_urls_cache = TRUE;
   require(SED_ROOT . '/system/config.urlrewrite.php');
 }
 

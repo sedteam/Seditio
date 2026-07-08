@@ -714,6 +714,12 @@ if (is_array($extp)) {
 	}
 }
 
+/* ======== Auto-generate URL cache if missing ======== */
+
+if ($gen_sed_urls_cache === TRUE) {
+	sed_urls_generate();
+}
+
 /* ======== 301 Redirect to SEF URL's ======== */
 
 if ($cfg['sefurls'] && $cfg['sefurls301']) {
