@@ -24,6 +24,7 @@
 			<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.Page}">{PHP.L.Page}</a></li>
 			<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.Meta}">{PHP.L.Meta}</a></li>
 			<li><a href="{PHP.sys.request_uri}#tab3" data-tabtitle="{PHP.L.Options}">{PHP.L.Options}</a></li>
+			{PAGEEDIT_I18N_TABS_HEADERS}
 		</ul>
 	</div>
 
@@ -216,6 +217,8 @@
 				</ul>
 
 			</div>
+
+			{PAGEEDIT_I18N_TABS_BODY}
 
 			<div class="help">{PHP.skinlang.pageedit.Formhint} </div>
 

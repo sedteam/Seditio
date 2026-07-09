@@ -201,8 +201,10 @@ if ($n == 'edit') {
 		sed_redirect(sed_url("admin", "m=forums", "", true), false, ['msg' => '917']);
 		exit;
 	} elseif ($a == 'add') {
-		$g = array('ntitle', 'ndesc', 'ncat');
-		foreach ($g as $k => $x) $$x = $_POST[$x];
+		sed_check_xg();
+		$ntitle    = sed_import('ntitle', 'P', 'TXT');
+		$ndesc     = sed_import('ndesc',  'P', 'TXT');
+		$ncat      = sed_import('ncat',   'P', 'ALP');
 		$nparentcat = sed_import('nparentcat', 'P', 'INT');
 		$max_depth = (int)(isset($cfg['maxforumdepth']) ? $cfg['maxforumdepth'] : 5);
 		if ($nparentcat > 0 && $max_depth > 0) {
@@ -305,7 +307,7 @@ if ($n == 'edit') {
 
 	$t->assign(array(
 		"FS_CAT_SEND" => sed_url("admin", "m=forums"),
-		"FS_ADD_SEND" => sed_url("admin", "m=forums&a=add"),
+		"FS_ADD_SEND" => sed_url("admin", "m=forums&a=add&" . sed_xg()),
 		"FS_ADD_CATEGORY" => sed_selectbox_forumcat('', 'ncat'),
 		"FS_ADD_PARENTCAT" => sed_selectbox_forum_parent('nparentcat', 0),
 		"FS_ADD_TITLE" => sed_textbox('ntitle', '', 64, 128),

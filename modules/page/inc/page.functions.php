@@ -252,6 +252,15 @@ function sed_structure_delcat($id, $c)
 	sed_auth_clear('all');
 	sed_cache_clear('sed_cat');
 	sed_page_clear_menu_cache();
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.page.structure.delete.done');
+	if (is_array($extp)) {
+		foreach ($extp as $pl) {
+			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		}
+	}
+	/* ============ */
 }
 
 /** 

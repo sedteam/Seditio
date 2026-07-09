@@ -39,7 +39,21 @@ function sed_get_latestpages($limit, $mask)
 						WHERE p.page_state = 0 AND p.page_cat NOT LIKE 'system' 
 						ORDER BY p.page_date DESC LIMIT $limit");
 
+	$latestpages_rows = array();
 	while ($row = sed_sql_fetchassoc($sql)) {
+		$latestpages_rows[] = $row;
+	}
+
+	/* === Hook === */
+	$extp = sed_getextplugins('recentitems.pages.main');
+	if (is_array($extp)) {
+		foreach ($extp as $pl) {
+			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		}
+	}
+	/* ============ */
+
+	foreach ($latestpages_rows as $row) {
 		if (sed_auth('page', $row['page_cat'], 'R')) {
 			$sys['catcode'] = $row['page_cat']; //new in v175
 			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=" . $row['page_id']) : sed_url("page", "al=" . $row['page_alias']);
@@ -127,6 +141,15 @@ function sed_get_latestcomments($limit, $mask)
 		while ($p = sed_sql_fetchassoc($sql_pages)) {
 			$pages_data[$p['page_id']] = $p;
 		}
+
+		/* === Hook === */
+		$extp = sed_getextplugins('recentitems.comments.pages');
+		if (is_array($extp)) {
+			foreach ($extp as $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
+		}
+		/* ============ */
 	}
 
 	foreach ($comments_rows as $row) {

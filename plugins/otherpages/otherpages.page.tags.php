@@ -57,7 +57,21 @@ function sed_get_otherpages($pid, $cat, $limit)
 						ORDER BY p.page_date DESC LIMIT $limit)");
 
 	if (sed_sql_numrows($sql) > 0) {
+		$otherpages_rows = array();
 		while ($row = sed_sql_fetchassoc($sql)) {
+			$otherpages_rows[] = $row;
+		}
+
+		/* === Hook === */
+		$extp = sed_getextplugins('otherpages.pages.main');
+		if (is_array($extp)) {
+			foreach ($extp as $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
+		}
+		/* ============ */
+
+		foreach ($otherpages_rows as $row) {
 			if (sed_auth('page', $row['page_cat'], 'R')) {
 				$sys['catcode'] = $row['page_cat']; //new in v175
 				$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url("page", "id=" . $row['page_id']) : sed_url("page", "al=" . $row['page_alias']);

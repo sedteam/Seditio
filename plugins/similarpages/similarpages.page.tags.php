@@ -84,8 +84,21 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 
 	if (sed_sql_numrows($sql) > 0) {
 		$jj = 0;
+		$similarpages_rows = array();
 		while ($row = sed_sql_fetchassoc($sql)) {
+			$similarpages_rows[] = $row;
+		}
 
+		/* === Hook === */
+		$extp = sed_getextplugins('similarpages.pages.main');
+		if (is_array($extp)) {
+			foreach ($extp as $pl) {
+				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			}
+		}
+		/* ============ */
+
+		foreach ($similarpages_rows as $row) {
 			if (sed_auth('page', $row['page_cat'], 'R')) {
 				$jj++;
 				$sys['catcode'] = $row['page_cat']; //new in v175

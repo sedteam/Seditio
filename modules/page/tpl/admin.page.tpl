@@ -14,6 +14,7 @@
 		<ul class="content-box-tabs">
 			<li><a href="{PHP.sys.request_uri}#tab1" class="selected" data-tabtitle="{PHP.L.Structure}">{PHP.L.Structure}</a></li>
 			<li><a href="{PHP.sys.request_uri}#tab2" data-tabtitle="{PHP.L.Meta}">{PHP.L.Meta}</a></li>
+			{STRUCTURE_UPDATE_I18N_TABS_HEADERS}
 		</ul>
 	</div>
 
@@ -126,6 +127,8 @@
 				</ul>
 
 			</div>
+
+			{STRUCTURE_UPDATE_I18N_TABS_BODY}
 
 			<div style="text-align: center; padding:15px 0;">
 				<button type="submit" class="submit btn">{PHP.L.Update}</button>

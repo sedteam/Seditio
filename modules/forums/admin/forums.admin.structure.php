@@ -129,23 +129,28 @@ if ($n == 'options') {
 
 		foreach ($s as $i => $k) {
 			$sql1 = sed_sql_query("UPDATE $db_forum_structure SET
-				fn_path='" . $s[$i]['rpath'] . "',
-				fn_title='" . $s[$i]['rtitle'] . "',
-				fn_defstate='" . $s[$i]['rdefstate'] . "'
-				WHERE fn_id='" . $i . "'");
+				fn_path='" . sed_sql_prep($s[$i]['rpath']) . "',
+				fn_title='" . sed_sql_prep($s[$i]['rtitle']) . "',
+				fn_defstate='" . (int)$s[$i]['rdefstate'] . "'
+				WHERE fn_id='" . (int)$i . "'");
 		}
 		sed_cache_clear('sed_forums_str');
 		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true), false, ['msg' => '917']);
 		exit;
 	} elseif ($a == 'add') {
-		$g = array('ncode', 'npath', 'ntitle', 'ndesc', 'nicon', 'ndefstate');
-		foreach ($g as $k => $x) $$x = $_POST[$x];
+		sed_check_xg();
+		$ncode    = sed_import('ncode',    'P', 'ALP');
+		$npath    = sed_import('npath',    'P', 'TXT');
+		$ntitle   = sed_import('ntitle',   'P', 'TXT');
+		$ndesc    = sed_import('ndesc',    'P', 'TXT');
+		$nicon    = sed_import('nicon',    'P', 'TXT');
+		$ndefstate = sed_import('ndefstate', 'P', 'INT');
 
 		if (!empty($ntitle) && !empty($ncode) && !empty($npath) && $ncode != 'all') {
 			$sql = sed_sql_query("SELECT fn_code FROM $db_forum_structure WHERE fn_code='" . sed_sql_prep($ncode) . "' LIMIT 1");
 			$ncode .= (sed_sql_numrows($sql) > 0) ? "_" . rand(100, 999) : '';
 
-			$sql = sed_sql_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', " . (int)$ndefstate . ")");
+			$sql = sed_sql_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('" . sed_sql_prep($ncode) . "', '" . sed_sql_prep($npath) . "', '" . sed_sql_prep($ntitle) . "', '" . sed_sql_prep($ndesc) . "', '" . sed_sql_prep($nicon) . "', " . (int)$ndefstate . ")");
 		}
 
 		sed_cache_clear('sed_forums_str');
@@ -153,7 +158,7 @@ if ($n == 'options') {
 		exit;
 	} elseif ($a == 'delete') {
 		sed_check_xg();
-		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
+		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='" . (int)$id . "'");
 		sed_cache_clear('sed_forums_str');
 		sed_redirect(sed_url("admin", "m=forums&s=structure", "", true), false, ['msg' => '302']);
 		exit;
@@ -218,7 +223,7 @@ if ($n == 'options') {
 
 	$t->assign(array(
 		"FORUMS_STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&a=update"),
-		"FN_ADD_SEND" => sed_url("admin", "m=forums&s=structure&a=add"),
+		"FN_ADD_SEND" => sed_url("admin", "m=forums&s=structure&a=add&" . sed_xg()),
 		"FN_ADD_CODE" => sed_textbox('ncode', isset($ncode) ? $ncode : '', 16, 16),
 		"FN_ADD_PATH" => sed_textbox('npath', isset($npath) ? $npath : '', 16, 16),
 		"FN_ADD_DEFSTATE" => $fn_defstate,

@@ -232,8 +232,14 @@ switch ($mn) {
 				sed_redirect(sed_url("admin", "m=page&mn=structure", "", true), false, ['msg' => '917']);
 				exit;
 			} elseif ($a == 'add') {
-				$g = array('ncode', 'npath', 'ntitle', 'ndesc', 'nicon', 'nthumb', 'ngroup');
-				foreach ($g as $k => $x) $$x = $_POST[$x];
+				sed_check_xg();
+				$ncode  = sed_import('ncode',  'P', 'ALP');
+				$npath  = sed_import('npath',  'P', 'TXT');
+				$ntitle = sed_import('ntitle', 'P', 'TXT');
+				$ndesc  = sed_import('ndesc',  'P', 'TXT');
+				$nicon  = sed_import('nicon',  'P', 'TXT');
+				$nthumb = sed_import('nthumb', 'P', 'TXT');
+				$ngroup = sed_import('ngroup', 'P', 'INT');
 				$group = (isset($group)) ? 1 : 0;
 				sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
 				sed_redirect(sed_url("admin", "m=page&mn=structure", "", true), false, ['msg' => '301']);
@@ -345,7 +351,7 @@ switch ($mn) {
 
 			$t->assign(array(
 				"PAGE_STRUCTURE_SEND" => sed_url("admin", "m=page&mn=structure&a=update"),
-				"PAGE_STRUCTURE_ADD_SEND" => sed_url("admin", "m=page&mn=structure&a=add"),
+				"PAGE_STRUCTURE_ADD_SEND" => sed_url("admin", "m=page&mn=structure&a=add&" . sed_xg()),
 				"PAGE_STRUCTURE_ADD_CODE" => sed_textbox('ncode', isset($ncode) ? $ncode : '', 48, 255),
 				"PAGE_STRUCTURE_ADD_PATH" => sed_textbox('npath', isset($npath) ? $npath : '', 16, 16),
 				"PAGE_STRUCTURE_ADD_TITLE" => sed_textbox('ntitle', isset($ntitle) ? $ntitle : '', 48, 64),
