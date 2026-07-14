@@ -10,6 +10,10 @@
 			<div class="form-field">{STRUCTURE_UPDATE_I18N_DESC}</div>
 		</li>
 		<li class="form-row">
+			<div class="form-label"><label>{PHP.L.i18n_field_text} ({LANG_UPPER})</label></div>
+			<div class="form-field">{STRUCTURE_UPDATE_I18N_TEXT}</div>
+		</li>
+		<li class="form-row">
 			<div class="form-label"><label>{PHP.L.i18n_field_seo_title} ({LANG_UPPER})</label></div>
 			<div class="form-field">{STRUCTURE_UPDATE_I18N_SEO_TITLE}</div>
 		</li>

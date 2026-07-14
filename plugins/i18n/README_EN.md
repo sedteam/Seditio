@@ -7,8 +7,8 @@ The `i18n` plugin is designed to organize multilingual content for pages and cat
 ## 1. Installation and Configuration
 
 1. Copy the plugin files to the `plugins/i18n/` directory.
-2. Go to the Admin Panel -> **Plugins** and install the **i18n** plugin. During installation, the necessary database tables will be created automatically (`{prefix}i18n_pages` and `{prefix}i18n_structure`).
-3. In the plugin settings (Admin Panel -> Plugins -> i18n -> Configuration), specify the translation language codes separated by commas.
+2. Go to the Admin Panel -> **Plugins** (at `/admin/plug` or `index.php?module=admin&m=plug` without SEF) and install the **i18n** plugin. During installation, the necessary database tables will be created automatically (`{prefix}i18n_pages` and `{prefix}i18n_structure`).
+3. In the plugin settings (at `/admin/plug` or `index.php?module=admin&m=plug` without SEF inside the i18n configuration section), specify the translation language codes separated by commas.
    - *Example:* `en,de`
    - *Note:* The default website language (e.g., `ru`) **does not** need to be specified. It is considered the base language.
 
@@ -20,7 +20,7 @@ To make tabs for other languages appear in the page and category add/edit forms,
 
 ### A. Adding Pages (`skins/your_theme/page.add.tpl` or `modules/page/tpl/page.add.tpl`)
 
-Find the tab container block (class `tabs` inside `sedtabs`) and add the tab headers tag:
+Find the tab headers block (class `tabs` inside `sedtabs`) and add the tab headers tag:
 ```html
 <ul class="tabs">
     <li><a href="{PHP.sys.request_uri}#tab1" class="selected">{PHP.L.Page}</a></li>
@@ -31,7 +31,7 @@ Find the tab container block (class `tabs` inside `sedtabs`) and add the tab hea
 </ul>
 ```
 
-Then find the closing tag of the tab container (`tab-box`) and add the tab body tag right before it:
+Then find the closing tag of the tab box container (`tab-box`) and add the tab body tag right before it:
 ```html
 <div class="tab-box">
     ... (standard tabs tab1, tab2, tab3) ...
@@ -45,7 +45,7 @@ Then find the closing tag of the tab container (`tab-box`) and add the tab body 
 
 ### B. Editing Pages (`skins/your_theme/page.edit.tpl` or `modules/page/tpl/page.edit.tpl`)
 
-Make similar edits in the editing form.
+Make similar changes in the edit form.
 
 Add headers:
 ```html
@@ -104,3 +104,27 @@ Add the tab body:
    - If their language matches the default language (`$cfg['defaultlang']`), the base text from the main tables is displayed.
    - If their language is switched (e.g., to `en`), the plugin automatically replaces titles, descriptions, page bodies, and metatags with the translated values.
    - If a translation for the selected language is missing for some element, a **Fallback** mechanism is triggered, and the page will be displayed in the default language.
+
+---
+
+## 4. Language Switcher on the Website
+
+To allow guests and visitors to switch the language of the website, add the `{HEADER_I18N_SELECTOR}` tag to the header template of your site (`skins/your_theme/header.tpl`).
+
+This tag outputs a block with links to the available translation languages (the currently active language is automatically hidden, leaving only alternative options to switch to).
+
+For example, when viewing the website in Russian, the switcher will display a link only to English:
+```html
+<div class="i18n-switcher">
+    <a href="/some-page?id=123&lang=en" class="i18n-lang-en">EN</a>
+</div>
+```
+
+You can style this widget in your theme's CSS file, for example:
+```css
+.i18n-switcher a {
+    text-decoration: none;
+    margin: 0 5px;
+    font-weight: bold;
+}
+```

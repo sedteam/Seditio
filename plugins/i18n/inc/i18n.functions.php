@@ -169,12 +169,13 @@ function i18n_save_structure_translations($structure_code, $data) {
 		
 		$ist_title = isset($fields['ist_title']) ? sed_sql_prep($fields['ist_title']) : '';
 		$ist_desc = isset($fields['ist_desc']) ? sed_sql_prep($fields['ist_desc']) : '';
+		$ist_text = isset($fields['ist_text']) ? sed_sql_prep($fields['ist_text']) : '';
 		$ist_seo_title = isset($fields['ist_seo_title']) ? sed_sql_prep($fields['ist_seo_title']) : '';
 		$ist_seo_desc = isset($fields['ist_seo_desc']) ? sed_sql_prep($fields['ist_seo_desc']) : '';
 		$ist_seo_keywords = isset($fields['ist_seo_keywords']) ? sed_sql_prep($fields['ist_seo_keywords']) : '';
 		$ist_seo_h1 = isset($fields['ist_seo_h1']) ? sed_sql_prep($fields['ist_seo_h1']) : '';
 		
-		$is_empty = (empty($ist_title) && empty($ist_desc) && empty($ist_seo_title) && empty($ist_seo_desc) && 
+		$is_empty = (empty($ist_title) && empty($ist_desc) && empty($ist_text) && empty($ist_seo_title) && empty($ist_seo_desc) && 
 		             empty($ist_seo_keywords) && empty($ist_seo_h1));
 		
 		if ($exists) {
@@ -184,6 +185,7 @@ function i18n_save_structure_translations($structure_code, $data) {
 				sed_sql_query("UPDATE $db_i18n_structure SET
 					ist_title = '$ist_title',
 					ist_desc = '$ist_desc',
+					ist_text = '$ist_text',
 					ist_seo_title = '$ist_seo_title',
 					ist_seo_desc = '$ist_seo_desc',
 					ist_seo_keywords = '$ist_seo_keywords',
@@ -193,9 +195,9 @@ function i18n_save_structure_translations($structure_code, $data) {
 		} else {
 			if (!$is_empty) {
 				sed_sql_query("INSERT INTO $db_i18n_structure 
-					(ist_structure_code, ist_lang, ist_title, ist_desc, ist_seo_title, ist_seo_desc, ist_seo_keywords, ist_seo_h1)
+					(ist_structure_code, ist_lang, ist_title, ist_desc, ist_text, ist_seo_title, ist_seo_desc, ist_seo_keywords, ist_seo_h1)
 					VALUES
-					('$structure_code', '$lang', '$ist_title', '$ist_desc', '$ist_seo_title', '$ist_seo_desc', '$ist_seo_keywords', '$ist_seo_h1')");
+					('$structure_code', '$lang', '$ist_title', '$ist_desc', '$ist_text', '$ist_seo_title', '$ist_seo_desc', '$ist_seo_keywords', '$ist_seo_h1')");
 			}
 		}
 	}
@@ -293,6 +295,7 @@ function i18n_build_page_tabs_body($langs, $translations, $action = 'add') {
  * @return string HTML of all tab content containers for Category Edit
  */
 function i18n_build_structure_tabs_body($langs, $translations) {
+	global $cfg;
 	$tpl_file = SED_ROOT . '/plugins/i18n/tpl/i18n.structure.edit.tpl';
 	if (!file_exists($tpl_file)) {
 		return 'Template file not found: ' . $tpl_file;
@@ -310,6 +313,7 @@ function i18n_build_structure_tabs_body($langs, $translations) {
 		
 		$title_val = isset($val['ist_title']) ? $val['ist_title'] : '';
 		$desc_val = isset($val['ist_desc']) ? $val['ist_desc'] : '';
+		$text_val = isset($val['ist_text']) ? $val['ist_text'] : '';
 		$seo_title_val = isset($val['ist_seo_title']) ? $val['ist_seo_title'] : '';
 		$seo_desc_val = isset($val['ist_seo_desc']) ? $val['ist_seo_desc'] : '';
 		$seo_key_val = isset($val['ist_seo_keywords']) ? $val['ist_seo_keywords'] : '';
@@ -318,6 +322,7 @@ function i18n_build_structure_tabs_body($langs, $translations) {
 		// Build form inputs using Seditio API
 		$input_title = sed_textbox('rstructure_i18n_' . $lang_lower . '[ist_title]', $title_val, 48, 64);
 		$input_desc = sed_textbox('rstructure_i18n_' . $lang_lower . '[ist_desc]', $desc_val, 64, 255);
+		$input_text = sed_textarea('rstructure_i18n_' . $lang_lower . '[ist_text]', $text_val, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended');
 		$input_seo_title = sed_textbox('rstructure_i18n_' . $lang_lower . '[ist_seo_title]', $seo_title_val, 64, 255);
 		$input_seo_desc = sed_textbox('rstructure_i18n_' . $lang_lower . '[ist_seo_desc]', $seo_desc_val, 64, 255);
 		$input_seo_key = sed_textbox('rstructure_i18n_' . $lang_lower . '[ist_seo_keywords]', $seo_key_val, 64, 255);
@@ -326,6 +331,7 @@ function i18n_build_structure_tabs_body($langs, $translations) {
 		$t_item->assign(array(
 			'STRUCTURE_UPDATE_I18N_TITLE' => $input_title,
 			'STRUCTURE_UPDATE_I18N_DESC' => $input_desc,
+			'STRUCTURE_UPDATE_I18N_TEXT' => $input_text,
 			'STRUCTURE_UPDATE_I18N_SEO_TITLE' => $input_seo_title,
 			'STRUCTURE_UPDATE_I18N_SEO_DESC' => $input_seo_desc,
 			'STRUCTURE_UPDATE_I18N_SEO_KEYWORDS' => $input_seo_key,
@@ -414,4 +420,53 @@ function i18n_translate_pages(&$pages, $id_key = 'page_id') {
 	
 	return true;
 }
+
+/**
+ * Build language switcher HTML widget for templates
+ * 
+ * @return string HTML code for switcher
+ */
+function i18n_build_lang_switcher() {
+	global $cfg, $usr, $sys, $i18n_langs;
+	
+	if (empty($i18n_langs) || !is_array($i18n_langs)) {
+		return '';
+	}
+	
+	$all_langs = array_merge(array($cfg['defaultlang']), $i18n_langs);
+	$current_lang = $usr['lang'];
+	
+	// Get query params from native Seditio request URI
+	$request_uri = isset($sys['request_uri']) ? $sys['request_uri'] : '/';
+	$parts = parse_url($request_uri);
+	$path = isset($parts['path']) ? $parts['path'] : '';
+	$query = isset($parts['query']) ? $parts['query'] : '';
+	
+	$params = array();
+	if (!empty($query)) {
+		parse_str($query, $params);
+	}
+	
+	// Remove temporary switcher flags
+	unset($params['setlang']);
+	
+	$html = '<div class="i18n-switcher">';
+	foreach ($all_langs as $lang) {
+		$lang_lower = mb_strtolower($lang);
+		if ($lang_lower == mb_strtolower($current_lang)) {
+			continue;
+		}
+		$lang_upper = mb_strtoupper($lang);
+		
+		$params['lang'] = $lang_lower;
+		$new_query = http_build_query($params, '', '&');
+		$url = $path . ($new_query !== '' ? '?' . $new_query : '');
+		
+		$html .= '<a href="' . htmlspecialchars($url) . '" class="i18n-lang-' . $lang_lower . '">' . $lang_upper . '</a> ';
+	}
+	$html .= '</div>';
+	
+	return $html;
+}
+
 

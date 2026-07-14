@@ -43,6 +43,9 @@ if (in_array($usr['lang'], $i18n_langs)) {
 			if (!empty($row_i18n['ist_desc'])) {
 				$sed_cat[$code]['desc'] = $row_i18n['ist_desc'];
 			}
+			if (!empty($row_i18n['ist_text'])) {
+				$sed_cat[$code]['text'] = $row_i18n['ist_text'];
+			}
 			if (!empty($row_i18n['ist_seo_title'])) {
 				$sed_cat[$code]['seo_title'] = $row_i18n['ist_seo_title'];
 			}

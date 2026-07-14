@@ -56,6 +56,7 @@
 							<div class="form-field">{USERS_REGISTER_COUNTRY}</div>
 						</li>
 
+
 						<!-- BEGIN: USERS_REGISTER_VERIFY -->
 						<li class="form-row">
 							<div class="form-label"><label>{PHP.L.Captcha}: </label></div>
@@ -65,6 +66,14 @@
 							</div>
 						</li>
 						<!-- END: USERS_REGISTER_VERIFY -->
+
+						<!-- IF {USERS_REGISTER_AGREEMENT} -->
+						<li class="form-row">
+							<div class="form-field-100">
+								{USERS_REGISTER_AGREEMENT}
+							</div>
+						</li>
+						<!-- ENDIF -->
 
 						<li class="form-row">
 							<div class="form-field-100 text-center">

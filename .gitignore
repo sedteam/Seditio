@@ -240,3 +240,4 @@ datas/signatures/
 datas/photos/
 datas/avatars/
 modules/shop/*
+plugins/tableofcontents/*

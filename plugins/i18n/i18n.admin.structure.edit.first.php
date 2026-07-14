@@ -47,6 +47,7 @@ if ($id > 0 && !empty($i18n_langs) && is_array($i18n_langs)) {
 					$data[$lang_lower] = array(
 						'ist_title' => isset($raw['ist_title']) ? sed_import($raw['ist_title'], 'D', 'TXT') : '',
 						'ist_desc' => isset($raw['ist_desc']) ? sed_import($raw['ist_desc'], 'D', 'TXT') : '',
+						'ist_text' => isset($raw['ist_text']) ? sed_import($raw['ist_text'], 'D', 'HTM') : '',
 						'ist_seo_title' => isset($raw['ist_seo_title']) ? sed_import($raw['ist_seo_title'], 'D', 'TXT') : '',
 						'ist_seo_desc' => isset($raw['ist_seo_desc']) ? sed_import($raw['ist_seo_desc'], 'D', 'TXT') : '',
 						'ist_seo_keywords' => isset($raw['ist_seo_keywords']) ? sed_import($raw['ist_seo_keywords'], 'D', 'TXT') : '',

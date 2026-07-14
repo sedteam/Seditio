@@ -59,6 +59,7 @@ if (sed_sql_numrows($check) == 0) {
 		ist_lang varchar(5) NOT NULL DEFAULT '',
 		ist_title varchar(100) DEFAULT NULL,
 		ist_desc varchar(255) DEFAULT NULL,
+		ist_text text,
 		ist_seo_title varchar(255) DEFAULT NULL,
 		ist_seo_desc varchar(255) DEFAULT NULL,
 		ist_seo_keywords varchar(255) DEFAULT NULL,
