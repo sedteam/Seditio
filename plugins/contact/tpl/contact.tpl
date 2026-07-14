@@ -66,12 +66,21 @@
 					</li>
 
 					<li class="form-row">
-						<div class="form-field-100">{PLUGIN_CONTACT_REQUIRED}</div>
+						<div class="form-label">{PLUGIN_CONTACT_REQUIRED}</div>
+						<div class="form-field">{PLUGIN_CONTACT_ANTISPAM}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-field-100 text-center">{PLUGIN_CONTACT_ANTISPAM}</div>
+						
 					</li>
+
+					<!-- IF {PLUGIN_CONTACT_AGREEMENT} -->
+					<li class="form-row">
+						<div class="form-field-100">
+							{PLUGIN_CONTACT_AGREEMENT}
+						</div>
+					</li>
+					<!-- ENDIF -->
 
 					<li class="form-row">
 						<div class="form-field-100 text-center">

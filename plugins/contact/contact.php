@@ -58,6 +58,15 @@ $cfg_names = explode(",", $cfg['plugin']['contact']['recipients']);
 
 if ($a == 'send') {
 
+	/* === Hook === */
+	$extp = sed_getextplugins('contact.send.first');
+	if (is_array($extp)) {
+		foreach ($extp as $k => $pl) {
+			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		}
+	}
+	/* ===== */
+
 	if (!empty($sender_tarp)) {
 		die("Error.");
 	}
@@ -154,6 +163,15 @@ if (!empty($message)) {
 	$t->assign("PLUGIN_CONTACT_DONE_BODY", sed_alert($message, 's'));
 	$t->parse("MAIN.PLUGIN_CONTACT_DONE");
 }
+
+/* === Hook === */
+$extp = sed_getextplugins('contact.tags');
+if (is_array($extp)) {
+	foreach ($extp as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
 
 $t->assign(array(
 	"PLUGIN_CONTACT_TITLE" => "<a href=\"" . sed_url("plug", "e=contact") . "\">" . $L['plu_title'] . "</a>",
