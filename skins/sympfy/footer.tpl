@@ -14,7 +14,7 @@
 
 					<p>Seditio is an ultra-fast, lightweight PHP Content Management Framework with a 20-year history. Built on a clean procedural core and the flexible XTemplate engine, it keeps design strictly separated from logic.</p>
 
-					<p>The system is completely open-source (BSD 3-Clause License) and free for both personal and commercial projects. Track development, report security issues, or join our community on <a href="https://github.com/seditio/seditio" target="_blank">GitHub</a>.</p>
+					<p>The system is completely open-source (BSD 3-Clause License) and free for both personal and commercial projects. Track development, report security issues, or join our community on GitHub.</p>
 
 				</div>
 				<div class="footer-menu-col">
