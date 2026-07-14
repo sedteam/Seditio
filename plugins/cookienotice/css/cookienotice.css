@@ -1,0 +1,87 @@
+/* Cookie Notice Plugin Styles */
+
+.cookie-notice {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 800px;
+    background-color: rgb(255, 255, 255);
+    color: #000;
+    padding: 15px 20px;
+    text-align: center;
+    z-index: 1000;
+    font-size: 0.8em;
+    line-height: 1.5;
+    border: 1px solid rgba(239, 240, 245, 0.95);
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+
+.cookie-buttons {
+    padding-top: 10px;
+}
+
+.cookie-notice a {
+    color: #000;
+    text-decoration: underline;
+}
+
+.cookie-notice a:hover {
+    text-decoration: none;
+}
+
+.cookie-notice p {
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 95%;
+}
+
+.cookie-notice button {
+    border: none;
+    padding: 4px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.cookie-notice .close-btn {
+    margin-left: 10px;
+	padding: 4px 15px;
+    cursor: pointer;
+}
+
+.cookie-notice.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .cookie-notice {
+        padding: 12px;
+        text-align: center;
+        bottom: 8px;
+        width: 95%;
+        max-width: 500px;
+    }
+	
+	.cookie-buttons {
+		padding-top: 0;
+	}	
+
+    .cookie-notice p {
+        max-width: 100%;
+        padding-bottom: 7px;
+    }
+
+    .cookie-notice button {
+        margin-left: 5px;
+    }
+
+    .cookie-notice .close-btn {
+        margin-left: 5px;
+    }
+}

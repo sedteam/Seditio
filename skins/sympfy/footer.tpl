@@ -88,6 +88,7 @@
 
 </footer>
 
+{FOOTER_COOKIENOTICE}
 {FOOTER_JAVASCRIPT}
 <script src="skins/{PHP.skin}/js/jquery.min.js"></script>
 <script src="skins/{PHP.skin}/js/jquery.plugins.min.js"></script>
