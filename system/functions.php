@@ -1582,7 +1582,69 @@ function sed_checkmore($text = '', $more = false)
  * @param string $css CSS content or file path
  * @param bool $is_file Whether to treat $css as a file path (true) or inline CSS (false)
  */
-function sed_add_css($css = '', $is_file = false, $priority = 50)
+/**
+ * Normalizes relative paths in CSS content to absolute paths relative to the site root
+ *
+ * @param string $css_content The CSS code
+ * @param string $file_path Path to the CSS file
+ * @return string
+ */
+function sed_normalize_css_paths($css_content, $file_path)
+{
+	global $cfg;
+
+	$file_dir = dirname($file_path) . '/';
+	$file_dir = str_replace('\\', '/', $file_dir);
+
+	return preg_replace_callback('/url\(\s*(?:([\'"])(.*?)\1|([^\'")\s]+))\s*\)/i', function($matches) use ($file_dir, $cfg) {
+		$url = !empty($matches[2]) ? $matches[2] : $matches[3];
+		
+		// If path is absolute, starts with scheme, // or data:, leave it untouched
+		if (preg_match('/^(https?:|data:|ftp:|\/\/|\/)/i', $url)) {
+			return $matches[0];
+		}
+		
+		// Separate query string or anchor if present
+		$suffix = '';
+		if (($pos = strpos($url, '?')) !== false) {
+			$suffix = substr($url, $pos);
+			$url = substr($url, 0, $pos);
+		} elseif (($pos = strpos($url, '#')) !== false) {
+			$suffix = substr($url, $pos);
+			$url = substr($url, 0, $pos);
+		}
+		
+		// Combine directory of the CSS file and the relative path
+		$combined = $file_dir . $url;
+		
+		// Resolve components like ../ and ./
+		$parts = explode('/', $combined);
+		$absolutes = array();
+		foreach ($parts as $part) {
+			if ('.' == $part || empty($part)) continue;
+			if ('..' == $part) {
+				array_pop($absolutes);
+			} else {
+				$absolutes[] = $part;
+			}
+		}
+		$canonical_path = implode('/', $absolutes);
+		
+		// Build full URL using mainurl
+		$site_url = rtrim($cfg['mainurl'], '/') . '/';
+		return "url('" . $site_url . $canonical_path . $suffix . "')";
+	}, $css_content);
+}
+
+/**
+ * Adds CSS to the global collection, either as a file path or inline code
+ *
+ * @param string $css CSS content or file path
+ * @param bool $is_file Whether to treat $css as a file path (true) or inline CSS (false)
+ * @param int $priority Priority for order of inclusion
+ * @param bool $cache Whether to group and cache the file in a combined CSS file
+ */
+function sed_add_css($css = '', $is_file = false, $priority = 50, $cache = false)
 {
 	global $sed_css_collection; // Global array to store CSS
 
@@ -1608,7 +1670,7 @@ function sed_add_css($css = '', $is_file = false, $priority = 50)
 		}
 
 		if (!$already_exists) {
-			$sed_css_collection['files'][] = array('path' => $css, 'priority' => $priority);
+			$sed_css_collection['files'][] = array('path' => $css, 'priority' => $priority, 'cache' => $cache);
 		}
 	} else {
 		$sed_css_collection['inline'][] = $css;
@@ -1622,7 +1684,7 @@ function sed_add_css($css = '', $is_file = false, $priority = 50)
  */
 function sed_css()
 {
-	global $sed_css_collection;
+	global $sed_css_collection, $cfg;
 	$result = '';
 
 	// Return empty string if collection is empty or doesn't exist
@@ -1636,19 +1698,83 @@ function sed_css()
 		$normalized_files = array();
 		foreach ($sed_css_collection['files'] as $file) {
 			if (is_array($file)) {
-				$normalized_files[] = $file;
+				$normalized_files[] = array(
+					'path' => $file['path'],
+					'priority' => isset($file['priority']) ? $file['priority'] : 50,
+					'cache' => isset($file['cache']) ? $file['cache'] : false
+				);
 			} else {
-				$normalized_files[] = array('path' => $file, 'priority' => 50);
+				$normalized_files[] = array('path' => $file, 'priority' => 50, 'cache' => false);
 			}
 		}
 
-		// Sort by priority (lower priority number = higher priority)
-		usort($normalized_files, function ($a, $b) {
+		// Separate files to cached and non-cached
+		$cached_files = array();
+		$non_cached_files = array();
+
+		foreach ($normalized_files as $file) {
+			// Check if file is local (does not start with http/https or //) and has cache option enabled
+			$is_local = !preg_match('/^(https?:|\/\/)/i', $file['path']);
+			if ($file['cache'] && $is_local && file_exists($file['path'])) {
+				$cached_files[] = $file;
+			} else {
+				$non_cached_files[] = $file;
+			}
+		}
+
+		$final_files = $non_cached_files;
+
+		if (!empty($cached_files)) {
+			// Sort cached files by priority to combine in the correct order
+			usort($cached_files, function ($a, $b) {
+				return $a['priority'] - $b['priority'];
+			});
+
+			// Generate cache filename based on files and their modification times
+			$cache_key = '';
+			foreach ($cached_files as $file) {
+				$cache_key .= $file['path'] . @filemtime($file['path']);
+			}
+			$cache_hash = md5($cache_key);
+			$cache_filename = 'datas/cache/css_' . $cache_hash . '.css';
+
+			$cache_success = true;
+			if (!file_exists($cache_filename)) {
+				$combined_css = '';
+				foreach ($cached_files as $file) {
+					$content = @file_get_contents($file['path']);
+					if ($content !== false) {
+						$content = sed_normalize_css_paths($content, $file['path']);
+						$combined_css .= "/* " . $file['path'] . " */\n" . $content . "\n\n";
+					}
+				}
+				if (!is_dir('datas/cache')) {
+					@mkdir('datas/cache', 0777, true);
+				}
+				if (@file_put_contents($cache_filename, $combined_css) === false) {
+					$cache_success = false;
+				}
+			}
+
+			if ($cache_success && file_exists($cache_filename)) {
+				// Use the priority of the first cached file to maintain output order
+				$min_priority = $cached_files[0]['priority'];
+				$final_files[] = array('path' => $cache_filename, 'priority' => $min_priority, 'cache' => false);
+			} else {
+				// Fallback to normal files if caching failed
+				foreach ($cached_files as $file) {
+					$final_files[] = $file;
+				}
+			}
+		}
+
+		// Sort all final files by priority
+		usort($final_files, function ($a, $b) {
 			return $a['priority'] - $b['priority'];
 		});
 
 		// Output sorted files
-		foreach ($normalized_files as $file) {
+		foreach ($final_files as $file) {
 			$result .= '<link href="' . $file['path'] . '" type="text/css" rel="stylesheet" />' . "\n";
 		}
 	}
@@ -2970,19 +3096,82 @@ function sed_javascript()
 		$normalized_files = array();
 		foreach ($sed_js_collection['files'] as $file) {
 			if (is_array($file)) {
-				$normalized_files[] = $file;
+				$normalized_files[] = array(
+					'path' => $file['path'],
+					'priority' => isset($file['priority']) ? $file['priority'] : 50,
+					'cache' => isset($file['cache']) ? $file['cache'] : false
+				);
 			} else {
-				$normalized_files[] = array('path' => $file, 'priority' => 50);
+				$normalized_files[] = array('path' => $file, 'priority' => 50, 'cache' => false);
 			}
 		}
 
-		// Sort by priority (lower priority number = higher priority)
-		usort($normalized_files, function ($a, $b) {
+		// Separate files to cached and non-cached
+		$cached_files = array();
+		$non_cached_files = array();
+
+		foreach ($normalized_files as $file) {
+			// Check if file is local (does not start with http/https or //) and has cache option enabled
+			$is_local = !preg_match('/^(https?:|\/\/)/i', $file['path']);
+			if ($file['cache'] && $is_local && file_exists($file['path'])) {
+				$cached_files[] = $file;
+			} else {
+				$non_cached_files[] = $file;
+			}
+		}
+
+		$final_files = $non_cached_files;
+
+		if (!empty($cached_files)) {
+			// Sort cached files by priority to combine in the correct order
+			usort($cached_files, function ($a, $b) {
+				return $a['priority'] - $b['priority'];
+			});
+
+			// Generate cache filename based on files and their modification times
+			$cache_key = '';
+			foreach ($cached_files as $file) {
+				$cache_key .= $file['path'] . @filemtime($file['path']);
+			}
+			$cache_hash = md5($cache_key);
+			$cache_filename = 'datas/cache/js_' . $cache_hash . '.js';
+
+			$cache_success = true;
+			if (!file_exists($cache_filename)) {
+				$combined_js = '';
+				foreach ($cached_files as $file) {
+					$content = @file_get_contents($file['path']);
+					if ($content !== false) {
+						$combined_js .= "/* " . $file['path'] . " */\n" . $content . "\n;\n\n";
+					}
+				}
+				if (!is_dir('datas/cache')) {
+					@mkdir('datas/cache', 0777, true);
+				}
+				if (@file_put_contents($cache_filename, $combined_js) === false) {
+					$cache_success = false;
+				}
+			}
+
+			if ($cache_success && file_exists($cache_filename)) {
+				// Use the priority of the first cached file to maintain output order
+				$min_priority = $cached_files[0]['priority'];
+				$final_files[] = array('path' => $cache_filename, 'priority' => $min_priority, 'cache' => false);
+			} else {
+				// Fallback to normal files if caching failed
+				foreach ($cached_files as $file) {
+					$final_files[] = $file;
+				}
+			}
+		}
+
+		// Sort all final files by priority
+		usort($final_files, function ($a, $b) {
 			return $a['priority'] - $b['priority'];
 		});
 
 		// Output sorted files
-		foreach ($normalized_files as $file) {
+		foreach ($final_files as $file) {
 			$result .= '<script type="text/javascript" src="' . $file['path'] . '"></script>' . "\n";
 		}
 	}
@@ -3004,7 +3193,15 @@ function sed_javascript()
  * @param string $js JavaScript content or file path
  * @param bool $is_file Whether to treat $js as a file path (true) or inline JS (false)
  */
-function sed_add_javascript($js = '', $is_file = false, $priority = 50)
+/**
+ * Adds JavaScript to the global collection, either as a file path or inline code
+ *
+ * @param string $js JavaScript content or file path
+ * @param bool $is_file Whether to treat $js as a file path (true) or inline JS (false)
+ * @param int $priority Priority for order of inclusion
+ * @param bool $cache Whether to group and cache the file in a combined JS file
+ */
+function sed_add_javascript($js = '', $is_file = false, $priority = 50, $cache = false)
 {
 	global $sed_js_collection; // Global array to store JavaScript
 
@@ -3030,7 +3227,7 @@ function sed_add_javascript($js = '', $is_file = false, $priority = 50)
 		}
 
 		if (!$already_exists) {
-			$sed_js_collection['files'][] = array('path' => $js, 'priority' => $priority);
+			$sed_js_collection['files'][] = array('path' => $js, 'priority' => $priority, 'cache' => $cache);
 		}
 	} else {
 		$sed_js_collection['inline'][] = $js;

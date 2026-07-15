@@ -66,7 +66,7 @@
 							</div>
 						</li>
 						<!-- END: USERS_REGISTER_VERIFY -->
-
+						
 						<!-- IF {USERS_REGISTER_AGREEMENT} -->
 						<li class="form-row">
 							<div class="form-field-100">
