@@ -2906,10 +2906,12 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabl
  * @param string $name Checkbox name attribute 
  * @param mixed $data Checkbox value or array of values (for multiple checkboxes) 
  * @param mixed $check_data Checked value(s) 
+ * @param string $label Checkbox label text
  * @param bool $disabled Disable the checkbox (true or false) 
+ * @param array $additionalAttributes Additional HTML attributes for the input tag
  * @return string HTML representation of the checkbox(es) 
  */
-function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE, $additionalAttributes = array())
+function sed_checkbox($name, $data = '', $check_data = FALSE, $label = '', $disabled = FALSE, $additionalAttributes = array())
 {
 	if (empty($data) || !is_array($data)) {
 		$val = (empty($data)) ? '1' : $data;
@@ -2929,7 +2931,8 @@ function sed_checkbox($name, $data = '', $check_data = FALSE, $disabled = FALSE,
 		}
 		$attributes = array_merge($attributes, $additionalAttributes);
 
-		$result = '<span class="checkbox-item"><input' . sed_attr($attributes) . ' /><label for="' . $name . '"> </label></span>';
+		$lbl_text = (empty($label)) ? ' ' : $label;
+		$result = '<span class="checkbox-item"><input' . sed_attr($attributes) . ' /><label for="' . $attributes['id'] . '">' . $lbl_text . '</label></span>';
 	} else {
 		if (!is_array($data)) {
 			$data = explode(',', $data);

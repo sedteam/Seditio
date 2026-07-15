@@ -572,15 +572,15 @@ a.remove-link:hover {
 }
 
 .content-box-header {
-  background: rgba(237, 237, 237, 1);
-  background: -moz-linear-gradient(top, rgba(226, 226, 226, 1) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
-  background: -webkit-linear-gradient(top, rgb(226 226 226) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
-  background: -o-linear-gradient(top, rgba(226, 226, 226, 1) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
-  background: -ms-linear-gradient(top, rgba(226, 226, 226, 1) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
-  background: linear-gradient(to bottom, rgb(226 226 226) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
-  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=0);
-  margin-top: 1px;
-  position: relative;
+    background: rgba(237, 237, 237, 1);
+    background: -moz-linear-gradient(top, rgba(226, 226, 226, 1) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-linear-gradient(top, rgb(226 226 226) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: -o-linear-gradient(top, rgba(226, 226, 226, 1) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(226, 226, 226, 1) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to bottom, rgb(226 226 226) 0%, rgba(240, 240, 240, 1) 53%, rgba(255, 255, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=0);
+    margin-top: 1px;
+    position: relative;
 }
 
 .content-box-header:before,
@@ -594,11 +594,11 @@ a.remove-link:hover {
 }
 
 .content-box-header h3 {
-  padding: 16px 15px 13px 24px;
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.41em;
-  float: left;
+    padding: 16px 15px 13px 24px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.41em;
+    float: left;
 }
 
 .content-box-header-right {
@@ -608,13 +608,13 @@ a.remove-link:hover {
 }
 
 .content-box-content-tabs {
-  border-top: 1px solid #dfdfdf;
+    border-top: 1px solid #dfdfdf;
 }
 
 .content-box-content {
-  padding: 20px;
-  border-top: 1px solid #dfdfdf;
-  line-height: 1.35em;
+    padding: 20px;
+    border-top: 1px solid #dfdfdf;
+    line-height: 1.35em;
 }
 
 .content-box-content i {
@@ -704,10 +704,10 @@ ul.tabs li a.selected {
 }
 
 ul.content-box-tabs {
-  position: relative;
-  padding: 17px 15px 0 0 !important;
-  margin: 0px 0 -2px 0;
-  float: right;
+    position: relative;
+    padding: 17px 15px 0 0 !important;
+    margin: 0px 0 -2px 0;
+    float: right;
 }
 
 ul.content-box-tabs li {

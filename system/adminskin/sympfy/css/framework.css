@@ -129,9 +129,9 @@ select {
   text-transform: none;
 }
 button,
-html input[type='button'],
-input[type='reset'],
-input[type='submit'] {
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
 }
@@ -147,25 +147,25 @@ input::-moz-focus-inner {
 input {
   line-height: normal;
 }
-input[type='checkbox'],
-input[type='radio'] {
+input[type="checkbox"],
+input[type="radio"] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
 }
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   height: auto;
 }
-input[type='search'] {
+input[type="search"] {
   -webkit-appearance: textfield;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
-input[type='search']::-webkit-search-cancel-button,
-input[type='search']::-webkit-search-decoration {
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 fieldset {
@@ -259,7 +259,7 @@ hr {
   border-top: 1px solid #eeeeee;
 }
 
-[role='button'] {
+[role="button"] {
   cursor: pointer;
 }
 .container {
@@ -294,7 +294,7 @@ hr {
   .container {
     width: 1360px;
   }
-} 
+}
 */
 
 .container-fluid {
@@ -1050,7 +1050,7 @@ hr {
 .container-fluid:after,
 .row:before,
 .row:after {
-  content: ' ';
+  content: " ";
   display: block;
 }
 .clearfix:after,
@@ -1297,8 +1297,8 @@ hr {
   flex-flow: row wrap;
 }
 
-input[type='checkbox'],
-input[type='radio'] {
+input[type="checkbox"],
+input[type="radio"] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1317,11 +1317,11 @@ input[type='radio'] {
 }
 .checkbox + label {
   position: relative;
-  padding: 0 0 0 24px;
+  padding: 4px 0 0 24px;
   cursor: pointer;
 }
 .checkbox + label:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -1332,13 +1332,13 @@ input[type='radio'] {
   background: #fff;
 }
 .checkbox + label:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0px;
   left: 0px;
   width: 18px;
   height: 18px;
-  background: url('../img/input_icons.svg') 50% 4px no-repeat;
+  background: url("../img/input_icons.svg") 50% 4px no-repeat;
   opacity: 0;
   transition: 0.2s;
 }
@@ -1377,7 +1377,7 @@ input[type='radio'] {
   cursor: pointer;
 }
 .radio + label:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0px;
   left: 0;
@@ -1388,14 +1388,14 @@ input[type='radio'] {
   background: #fff;
 }
 .radio + label:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0px;
   left: 0px;
   width: 18px;
   height: 18px;
   border-radius: 100%;
-  background: url('../img/input_icons.svg') 50% -17px no-repeat;
+  background: url("../img/input_icons.svg") 50% -17px no-repeat;
   opacity: 0;
   transition: 0.2s;
 }
@@ -1421,10 +1421,10 @@ input[type='radio'] {
 /***** INPUT, TEXTAREA, SELECT STYLES *****/
 /*----------------------------------------*/
 
-input[type='email'],
-input[type='password'],
-input[type='tel'],
-input[type='text'],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="text"],
 textarea {
   background: #ffffff;
   border: 1px solid #e4e2e2;
@@ -1452,10 +1452,10 @@ select {
   max-width: 100%;
 }
 
-input[type='text']:focus,
-input[type='text']:hover,
-input[type='password']:focus,
-input[type='password']:hover,
+input[type="text"]:focus,
+input[type="text"]:hover,
+input[type="password"]:focus,
+input[type="password"]:hover,
 textarea:focus,
 textarea:hover {
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
@@ -1490,7 +1490,7 @@ blockquote {
 
 blockquote:before {
   display: block;
-  content: '\201C';
+  content: "\201C";
   font-size: 80px;
   position: absolute;
   left: -10px;
@@ -1505,12 +1505,13 @@ blockquote cite {
 }
 
 blockquote cite:before {
-  content: '\2014 \2009';
+  content: "\2014 \2009";
 }
 
 /*-------------------------*/
 /***** RESPONSIVE TABLE *****/
 /*-------------------------*/
+
 .table {
   display: table;
   width: 100%;
@@ -1637,13 +1638,17 @@ blockquote cite:before {
   background: #fafafa;
 }
 
+.form .form-row:last-child {
+  border-bottom: 0;
+}
+
 .form .form-row:hover {
   background: rgb(226 250 178 / 20%);
 }
 
 .form .form-row:after,
 .form .form-row:before {
-  content: ' ';
+  content: " ";
   display: table;
   clear: both;
 }

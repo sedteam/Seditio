@@ -51,7 +51,7 @@ if ($mask > 0) {
 		$text
 	);
 
-	$agreement_checkbox = sed_checkbox('ruseragreement', '1', false, false, array('style' => 'margin-top: 4px; flex-shrink: 0;'));
+	$agreement_checkbox = sed_checkbox('ruseragreement', '1', false, '', false, array('style' => 'margin-top: 4px; flex-shrink: 0;'));
 	$agreement_html = str_replace(' </label>', $text . '</label>', $agreement_checkbox);
 
 	$t->assign("PLUGIN_CONTACT_AGREEMENT", $agreement_html);

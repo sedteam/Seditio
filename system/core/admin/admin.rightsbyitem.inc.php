@@ -143,9 +143,9 @@ function sed_rights_parseline($row, $title, $link)
 
 		if ($locked[$code]) {
 			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[" . $row['auth_groupid'] . "][" . $code . "]\" value=\"" . $checked[$code] . "\" />" : '';
-			$box[$code] .= sed_checkbox("", $checked[$code], $state[$code], $locked[$code]);
+			$box[$code] .= sed_checkbox("", $checked[$code], $state[$code], '', $locked[$code]);
 		} else {
-			$box[$code] = sed_checkbox("auth[" . $row['auth_groupid'] . "][" . $code . "]", $checked[$code], $state[$code], $locked[$code]);
+			$box[$code] = sed_checkbox("auth[" . $row['auth_groupid'] . "][" . $code . "]", $checked[$code], $state[$code], '', $locked[$code]);
 		}
 
 		$t->assign(array(
