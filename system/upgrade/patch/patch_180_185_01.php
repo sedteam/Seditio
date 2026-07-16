@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/upgrade/patch/patch_180_185_01.php
-Version=185
+Version=186
 Updated=2026-feb-20
 Type=Core.patch
 Author=Seditio Team

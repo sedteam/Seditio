@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/tags/lang/tags.ru.lang.php
-Version=185
+Version=186
 Type=Plugin
 [END_SED]
 

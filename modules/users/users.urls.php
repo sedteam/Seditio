@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/users/users.urls.php
-Version=185
+Version=186
 Updated=2026-feb-21
 Type=Module
 Author=Seditio Team

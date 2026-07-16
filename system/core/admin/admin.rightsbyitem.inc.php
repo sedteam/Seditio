@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/core/admin/admin.rightsbyitem.inc.php
-Version=185
+Version=186
 Updated=2026-feb-14
 Type=Core.admin
 Author=Seditio Team

@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.list.loop.php
-Version=185
+Version=186
 Type=Plugin
 Description=Comments row data for list (variant B, list.loop)
 [END_SED]

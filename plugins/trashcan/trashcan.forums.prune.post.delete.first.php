@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/trashcan/trashcan.forums.prune.post.delete.first.php
-Version=185
+Version=186
 Updated=2026-mar-26
 Type=Plugin
 [END_SED]

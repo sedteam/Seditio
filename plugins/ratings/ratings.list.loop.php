@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ratings/ratings.list.loop.php
-Version=185
+Version=186
 Type=Plugin
 Description=Ratings row for list (list.loop)
 [END_SED]

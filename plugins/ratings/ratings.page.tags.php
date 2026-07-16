@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ratings/ratings.page.tags.php
-Version=185
+Version=186
 Type=Plugin
 Description=Ratings block for page (page.tags)
 [END_SED]

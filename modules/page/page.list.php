@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/page/page.list.php
-Version=185
+Version=186
 Updated=2026-apr-09
 Type=Module
 Author=Seditio Team

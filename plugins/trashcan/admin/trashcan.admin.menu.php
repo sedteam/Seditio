@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/trashcan/admin/trashcan.admin.menu.php
-Version=185
+Version=186
 Updated=2026-mar-26
 Type=Plugin.admin
 [END_SED]

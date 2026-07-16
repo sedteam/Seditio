@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/thanks/thanks.admin.plug.php
-Version=185
+Version=186
 Type=Plugin
 Description=Thanks administration
 [END_SED]

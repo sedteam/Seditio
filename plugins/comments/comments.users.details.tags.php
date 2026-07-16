@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.users.details.tags.php
-Version=185
+Version=186
 Type=Plugin
 Description=Comments block for user profile (variant B, users.details.tags)
 [END_SED]

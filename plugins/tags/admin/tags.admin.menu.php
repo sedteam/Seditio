@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/tags/admin/tags.admin.menu.php
-Version=185
+Version=186
 Type=Plugin
 Description=Tags admin menu definition
 [END_SED]

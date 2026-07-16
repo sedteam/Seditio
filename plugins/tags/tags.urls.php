@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/tags/tags.urls.php
-Version=185
+Version=186
 Updated=2026-mar-18
 Type=Plugin
 Author=Seditio Team

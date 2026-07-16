@@ -487,13 +487,14 @@ const sedadminjs = (() => {
      * Initializes content-related behaviors including collapsible boxes, table styling, and checkbox controls
      */
     const initContent = () => {
-        const headers = document.querySelectorAll('.content-box-header h3');
+        const headers = document.querySelectorAll('.content-box-header h3, .content-header h3');
         for (const header of headers) {
             setStyles(header, { cursor: 's-resize' });
             header.addEventListener('click', function() {
                 const contentBox = this.parentNode.parentNode;
                 const content = contentBox.querySelector('.content-box-content-tabs') ||
-                    contentBox.querySelector('.content-box-content');
+                    contentBox.querySelector('.content-box-content') ||
+                    contentBox.querySelector('.content-card-content');
                 const tabs = contentBox.querySelector('.content-box-tabs');
 
                 toggleElement(content);
@@ -513,7 +514,8 @@ const sedadminjs = (() => {
         const closedBoxes = document.querySelectorAll('.closed-box');
         for (const closedBox of closedBoxes) {
             const content = closedBox.querySelector('.content-box-content-tabs') ||
-                closedBox.querySelector('.content-box-content');
+                closedBox.querySelector('.content-box-content') ||
+                closedBox.querySelector('.content-card-content');
             const tabs = closedBox.querySelector('.content-box-tabs');
             if (content) content.style.display = 'none';
             if (tabs) tabs.style.display = 'none';

@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/whosonline/whosonline.urls.php
-Version=185
+Version=186
 Updated=2026-feb-21
 Type=Plugin
 Author=Seditio Team

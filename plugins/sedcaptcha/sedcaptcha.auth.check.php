@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/sedcaptcha/sedcaptcha.auth.check.php
-Version=185
+Version=186
 Updated=2026-feb-14
 Type=Plugin
 Author=Amro

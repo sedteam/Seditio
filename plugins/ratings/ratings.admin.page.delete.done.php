@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ratings/ratings.admin.page.delete.done.php
-Version=185
+Version=186
 Type=Plugin
 Description=Remove ratings for deleted page (admin.page.delete.done)
 [END_SED]

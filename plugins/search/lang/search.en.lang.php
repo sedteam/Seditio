@@ -3,7 +3,7 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.en.lang.php
-Version=185
+Version=186
 Updated=2026-feb-14
 Type=
 Author=Seditio Team

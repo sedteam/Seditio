@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/tags/tags.admin.plug.php
-Version=185
+Version=186
 Type=Plugin
 Description=Tags administration
 [END_SED]

@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/thanks/thanks.header.first.php
-Version=185
+Version=186
 Type=Plugin
 Description=Thanks CSS
 [END_SED]

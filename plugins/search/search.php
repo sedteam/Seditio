@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/search/search.php
-Version=185
+Version=186
 Date=2022-jul-28
 Type=Plugin
 Author=Amro

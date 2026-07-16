@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ratings/ratings.ajax.php
-Version=185
+Version=186
 Type=Plugin
 Description=Ratings AJAX handler
 [END_SED]

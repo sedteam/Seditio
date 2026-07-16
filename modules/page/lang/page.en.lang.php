@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=modules/page/lang/page.en.lang.php
-Version=185
+Version=186
 Updated=2026-feb-16
 Type=Module.lang
 Author=Seditio Team

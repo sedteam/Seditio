@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=system/upgrade/upgrade_180_185.php
-Version=185
+Version=186
 Updated=2026-feb-20
 Type=Core.upgrade
 Author=Seditio Team

@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.polls.view.php
-Version=185
+Version=186
 Type=Plugin
 Description=Comments block for poll (variant B, polls.view)
 [END_SED]

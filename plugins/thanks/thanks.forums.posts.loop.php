@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/thanks/thanks.forums.posts.loop.php
-Version=185
+Version=186
 Type=Plugin
 [END_SED]
 

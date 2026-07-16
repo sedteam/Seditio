@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/ratings/ratings.admin.plug.php
-Version=185
+Version=186
 Updated=2026-feb-18
 Type=Plugin
 Description=Ratings administration

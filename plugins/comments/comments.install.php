@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.install.php
-Version=185
+Version=186
 Type=Plugin
 [END_SED]
 

@@ -12,7 +12,7 @@ Localization done by : Antar, http://subs.com.ru;
 -----------------------
 [BEGIN_SED]
 File=system/lang/ru/message.lang.php
-Version=185
+Version=186
 Updated=2026-feb-14
 Type=Lang
 Author=Seditio Team

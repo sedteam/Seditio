@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.page.tags.php
-Version=185
+Version=186
 Type=Plugin
 Description=Comments block for page (variant B, page.tags)
 [END_SED]

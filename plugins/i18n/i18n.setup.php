@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/i18n/i18n.setup.php
-Version=185
+Version=186
 Updated=2026-jul-09
 Type=Plugin
 Author=Seditio Team

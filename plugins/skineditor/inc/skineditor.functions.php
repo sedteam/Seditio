@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/skineditor/inc/skineditor.functions.php
-Version=185
+Version=186
 Updated=2026-apr-03
 Type=Plugin
 Author=Seditio Team

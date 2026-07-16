@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.gallery.details.tags.php
-Version=185
+Version=186
 Type=Plugin
 Description=Comments block for gallery (variant B, gallery.details.tags)
 [END_SED]

@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/comments/comments.admin.plug.php
-Version=185
+Version=186
 Updated=2026-feb-18
 Type=Plugin
 Author=Seditio Team

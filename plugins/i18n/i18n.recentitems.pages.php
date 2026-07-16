@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/i18n/i18n.recentitems.pages.php
-Version=185
+Version=186
 Type=Plugin
 [END_SED]
 

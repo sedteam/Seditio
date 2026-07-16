@@ -7,7 +7,7 @@ https://seditio.org
 
 [BEGIN_SED]
 File=plugins/rss/lang/rss.ru.lang.php
-Version=185
+Version=186
 Updated=2026-mar-31
 Type=Plugin.lang
 Author=Seditio Team
