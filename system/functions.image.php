@@ -1266,8 +1266,8 @@ function sed_image_upload_register_assets()
 		return;
 	}
 	$done = true;
-	sed_add_javascript('system/javascript/imageupload.js', true, 15);
-	sed_add_css('system/adminskin/sympfy/css/imageupload.css', true, 15);
+	sed_add_javascript('system/assets/js/imageupload.js', true, 15);
+	sed_add_css('system/assets/css/imageupload.css', true, 15);
 }
 
 /**

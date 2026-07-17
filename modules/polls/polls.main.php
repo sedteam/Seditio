@@ -122,7 +122,7 @@ $out['subtitle'] = sed_title('polltitle', $title_tags, $title_data);
 if ($standalone) {
 	sed_sendheaders();
 
-	sed_add_javascript('system/javascript/core.js', true);
+	sed_add_javascript('system/assets/js/core.js', true);
 	sed_add_javascript($morejavascript);
 	sed_add_css($morecss);
 

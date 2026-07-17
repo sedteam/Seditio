@@ -531,7 +531,7 @@ function sed_tags_add_autocomplete()
 	if ($added) return;
 	$added = true;
 
-	sed_add_javascript('system/javascript/autocomplete.js', true);
+	sed_add_javascript('system/assets/js/autocomplete.js', true);
 	$min = isset($cfg['plugin']['tags']['autocomplete_minlen']) ? (int)$cfg['plugin']['tags']['autocomplete_minlen'] : 3;
 	sed_add_javascript(
 		"document.addEventListener('DOMContentLoaded',function(){"

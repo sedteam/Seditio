@@ -1,0 +1,231 @@
+/* sedjs.imageUpload — deferred form image upload UI */
+.sed-image-upload-col {
+	padding: 12px 12px 0;
+	box-sizing: border-box;
+}
+.sed-image-upload-col .sed-image-upload {
+	margin-top: 0;
+}
+.sed-image-upload {
+	margin: 10px 0 20px;
+}
+.sed-image-upload h3 {
+	margin: 0 0 12px;
+	font-size: 1.1em;
+}
+.sed-image-upload-list {
+	list-style: none;
+	margin: 0 0 10px;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
+.sed-image-upload-list li {
+	border: 1px solid #d0d0d0;
+	width: 100px;
+	height: 100px;
+	margin: 0 7px 7px 0;
+	background: #fff;
+	position: relative;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+.sed-image-upload-list li:not(.sed-image-upload-add-tile) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: top;
+	cursor: move;
+	line-height: 0;
+}
+.sed-image-upload-mode-tiles .sed-image-upload-list li:not(.sed-image-upload-add-tile) {
+	cursor: default;
+}
+.sed-image-upload-list li.sed-image-upload-add-tile {
+	border: 2px dashed #c8c8c8;
+	background: #fafafa;
+	cursor: pointer;
+	line-height: normal;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+}
+.sed-image-upload-list li.sed-image-upload-add-tile:hover {
+	border-color: #8cbf32;
+	background: #f8fff4;
+}
+.sed-image-upload-add-icon {
+	font-size: 2rem;
+	line-height: 1;
+	color: #888;
+	font-weight: 300;
+}
+.sed-image-upload-add-label {
+	font-size: 0.75rem;
+	line-height: 1.2;
+	color: #666;
+	margin-top: 4px;
+	text-align: center;
+}
+.sed-image-upload-addinput {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+.sed-image-upload-list li.sortable-helper {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	opacity: 0.85;
+	z-index: 100;
+}
+li.sortable-helper {
+	width: 100px !important;
+	height: 100px !important;
+	overflow: hidden;
+	box-sizing: border-box;
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	line-height: 0;
+	background: #fff;
+	border: 1px solid #d0d0d0;
+	list-style: none;
+}
+li.sortable-helper img {
+	display: block;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	width: auto;
+	height: auto;
+}
+.sed-image-upload-list .sortable-placeholder {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	height: 100px;
+	margin: 0 7px 7px 0;
+	background: #e3f2fd;
+	border: 2px dashed #2196F3;
+	opacity: 0.7;
+	box-sizing: border-box;
+}
+.sed-image-upload-sort-hint {
+	margin: 0 0 8px;
+	color: #888;
+	font-size: 0.9em;
+}
+.sed-image-upload-list li img {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+}
+.sed-image-upload-list li input[type="file"]:not(.sed-image-upload-addinput) {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+.sed-image-upload-list li a.delete {
+	display: block;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 18px;
+	height: 18px;
+	line-height: 19px;
+	text-align: center;
+	background: #c00;
+	color: #fff;
+	font-weight: bold;
+	text-decoration: none;
+	border-radius: 50%;
+	font-size: 16px;
+	opacity: 0;
+	z-index: 2;
+}
+.sed-image-upload-list li:hover a.delete,
+.sed-image-upload-list li.wizard a.delete {
+	opacity: 1;
+}
+.sed-image-upload-list li a.delete:before {
+	content: "\00d7";
+}
+.sed-image-upload-dropzone {
+	border: 2px dashed #d0d0d0;
+	display: flex;
+	border-radius: 8px;
+	padding: 24px 16px;
+	background: #fff;
+	text-align: center;
+	position: relative;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 120px;
+}
+.sed-image-upload-dropzone.is-dragover {
+	border-color: #8cbf32;
+	background: #f5fff0;
+}
+.sed-image-upload-dropicon {
+	width: 40px;
+	height: 40px;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238cbf32' stroke-width='1.5'%3E%3Cpath d='M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2'/%3E%3C/svg%3E") center/contain no-repeat;
+	opacity: 0.85;
+}
+.sed-image-upload-dropmessage {
+	color: #444;
+	font-weight: 600;
+	pointer-events: none;
+}
+.sed-image-upload-dropor {
+	color: #999;
+	font-size: 0.85em;
+	pointer-events: none;
+}
+.sed-image-upload-select-btn {
+	display: inline-block;
+	padding: 8px 18px;
+	border: none;
+	border-radius: 4px;
+	background: #8cbf32;
+	color: #fff;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+.sed-image-upload-select-btn:hover {
+	background: #7aab2a;
+}
+.sed-image-upload-dropinput {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+}
+.sed-image-upload-url-link {
+	display: inline-block;
+	margin-top: 6px;
+}
+.sed-image-upload-url-link .dash_link {
+	cursor: pointer;
+	color: #0066cc;
+	font-style: normal;
+	text-decoration: underline;
+}
+.sed-image-upload-add-box .sed-image-upload-remote-input {
+	margin-top: 6px;
+}
