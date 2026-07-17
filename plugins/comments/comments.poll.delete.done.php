@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.poll.delete.done.php
 Version=186
+Updated=2026-mar-25
 Type=Plugin
 Description=Remove comments for deleted poll (polls.delete.done)
 [END_SED]

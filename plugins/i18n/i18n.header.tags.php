@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/i18n/i18n.header.tags.php
 Version=186
+Updated=2026-jul-14
 Type=Plugin
 [END_SED]
 

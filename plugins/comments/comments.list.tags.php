@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.list.tags.php
 Version=186
+Updated=2026-feb-26
 Type=Plugin
 Description=Comments block for list/category (variant B, list.tags)
 [END_SED]

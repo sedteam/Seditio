@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.list.loop.php
 Version=186
+Updated=2026-feb-26
 Type=Plugin
 Description=Comments row data for list (variant B, list.loop)
 [END_SED]

@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/tags/inc/tags.functions.php
 Version=186
+Updated=2026-jul-17
 Type=Plugin
 [END_SED]
 

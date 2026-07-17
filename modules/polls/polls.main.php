@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/polls/polls.main.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-jul-17
 Type=Module
 Author=Seditio Team
 Description=Polls

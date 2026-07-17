@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/search/search.php
 Version=186
+Updated=2026-feb-26
 Date=2022-jul-28
 Type=Plugin
 Author=Amro

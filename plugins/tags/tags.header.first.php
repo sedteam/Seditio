@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/tags/tags.header.first.php
 Version=186
+Updated=2026-mar-18
 Type=Plugin
 Description=Tags CSS and JS
 [END_SED]

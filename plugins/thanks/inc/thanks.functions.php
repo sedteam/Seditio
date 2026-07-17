@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/inc/thanks.functions.php
 Version=186
+Updated=2026-mar-12
 Type=Plugin
 Description=Thanks API
 [END_SED]

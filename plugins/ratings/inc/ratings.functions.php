@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ratings/inc/ratings.functions.php
 Version=186
+Updated=2026-feb-26
 Type=Plugin
 Description=Ratings API
 [END_SED]

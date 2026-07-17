@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.page.delete.done.php
 Version=186
+Updated=2026-mar-25
 Type=Plugin
 Description=Remove comments for deleted page (page.delete.done)
 [END_SED]

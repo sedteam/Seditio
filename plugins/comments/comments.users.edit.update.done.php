@@ -8,6 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.users.edit.update.done.php
 Version=186
+Updated=2026-mar-25
 Type=Plugin
 Description=Sync com_author when user name changes (users.edit.update.done)
 [END_SED]
