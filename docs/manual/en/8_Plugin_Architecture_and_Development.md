@@ -210,7 +210,7 @@ Allows running scripts without registering parts in the `sed_plugins` table.
 * **Features:** Directly loads the PHP file at `plugins/code/myscript.php` (if it exists). This is useful for utilities or administrative tasks running outside the hook architecture.
 
 ### 8.5.7. Plugin SEF URL Routing
-A custom plugin can declare its own URL routing rules by creating a `myplugin.urls.php` file. The structure is identical to module URL files (see [Chapter 6. Module Architecture and Development](/doc/modules-dev#64-developing-sef-url-rules-module_nameurlsphp)). Translation rules from this file are automatically imported during cache generation.
+A custom plugin can declare its own URL routing rules by creating a `myplugin.urls.php` file. The structure is identical to module URL files (see [Chapter 6. Module Architecture and Development](6_Module_Architecture_and_Development.md#64-developing-sef-url-rules-module_nameurlsphp)). Translation rules from this file are automatically imported during cache generation.
 
 ---
 

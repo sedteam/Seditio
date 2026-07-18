@@ -49,7 +49,7 @@ $main .= $t->text('MAIN');
 
 ### 6.1.3. Administrative Section of the Module
 If the module registers configuration settings or administration panels (defined as `Admin=1` in the `[BEGIN_SED_MODULE]` section), then:
-* In the control panel at `/admin/mymodule` (or `index.php?module=admin&m=mymodule` without SEF URLs), the core will automatically load the controller `admin/mymodule.admin.php`. For a detailed description of the routing logic of module administration panels (using `page.admin.php` as an example), see [Chapter 3. Control Panel (Administration Area)](/doc/admin-panel#313-internal-admin-panel-routing-adminincphp).
+* In the control panel at `/admin/mymodule` (or `index.php?module=admin&m=mymodule` without SEF URLs), the core will automatically load the controller `admin/mymodule.admin.php`. For a detailed description of the routing logic of module administration panels (using `page.admin.php` as an example), see [Chapter 3. Control Panel (Administration Area)](3_Control_Panel_Administration_Area.md#313-internal-admin-panel-routing-adminincphp).
 * To display the module management item in the left sidebar of the control panel, an `admin/mymodule.admin.menu.php` file is created. The menu item is declared in it:
   ```php
   $adminmenu[] = array(
@@ -170,7 +170,7 @@ sed_sql_query("DROP TABLE IF EXISTS $db_my_table;");
 For the module to support clean, friendly URLs, the developer must provide routing rules in the `{module_name}.urls.php` file. A sample of such rules can be studied in the page module file `modules/page/page.urls.php`.
 
 > [!NOTE]
-> Module SEF URL rules are dynamically compiled by the core into a single cache file `datas/cache/sed_urls.php` on module installation/activation or manual cache clearing. For more details on the assembly mechanism, priority weights, and rules caching, see [Chapter 2. Installation, Configuration, and Deployment](/doc/install-deploy#243-sef-url-architecture-and-internal-logic).
+> Module SEF URL rules are dynamically compiled by the core into a single cache file `datas/cache/sed_urls.php` on module installation/activation or manual cache clearing. For more details on the assembly mechanism, priority weights, and rules caching, see [Chapter 2. Installation, Configuration, and Deployment](2_Installation_Configuration_and_Deployment.md#243-sef-url-architecture-and-internal-logic).
 
 The file must return the priority value and the URL transformation rules:
 

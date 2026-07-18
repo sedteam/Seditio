@@ -3,7 +3,7 @@
 This chapter discusses in detail the architecture, internal design, data storage structure, and capabilities of the seven key built-in modules of Seditio CMS: Pages (`page`), Forums (`forums`), Users (`users`), Personal File System (`pfs`), Private Messages (`pm`), Polls (`polls`), and Gallery (`gallery`).
 
 > [!NOTE]
-> Control panels for built-in modules (located in `admin/` subdirectories) are connected dynamically by the core. A detailed description of the routing mechanism for built-in module admin panels is provided in [Chapter 3. Control Panel (Administration Area)](/doc/admin-panel#313-internal-admin-panel-routing-adminincphp).
+> Control panels for built-in modules (located in `admin/` subdirectories) are connected dynamically by the core. A detailed description of the routing mechanism for built-in module admin panels is provided in [Chapter 3. Control Panel (Administration Area)](3_Control_Panel_Administration_Area.md#313-internal-admin-panel-routing-adminincphp).
 
 ---
 
@@ -59,7 +59,7 @@ To ensure the safety and neatness of texts, Seditio uses the **Jevix** typograph
 For search engine optimization (SEO), friendly URLs (SEF URLs) are supported. If the "Alias" field (`page_alias`) is filled when creating a page, the core will replace the numeric ID with it in the SEF URL (e.g., `/news/my-article` instead of `/news/12`). Furthermore, Seditio supports full management of SEO parameters: manual filling of meta tags title (`page_seo_title`), description (`page_seo_desc`), keywords (`page_seo_keywords`), and a separate H1 header (`page_seo_h1`), which is displayed on the page instead of the default `page_title`.
 
 ### 5.1.5. Page Extrapoles
-If the standard fields of the `sed_pages` table (title, text, description, date) are insufficient, the administrator can create custom fields (extrapoles) using the directory constructor at `/admin/dic` (or `index.php?module=admin&m=dic` without SEF URLs; for details, see [Chapter 3. Control Panel (Administration Area)](/doc/admin-panel#36-managing-directories-and-cck-extra-fields-mdic)). New fields (e.g., price `page_price` or source link `page_source`) are physically added to the `sed_pages` table and output in the `page.tpl` template via corresponding tags `{PAGE_PRICE}` and `{PAGE_SOURCE}`.
+If the standard fields of the `sed_pages` table (title, text, description, date) are insufficient, the administrator can create custom fields (extrapoles) using the directory constructor at `/admin/dic` (or `index.php?module=admin&m=dic` without SEF URLs; for details, see [Chapter 3. Control Panel (Administration Area)](3_Control_Panel_Administration_Area.md#36-managing-directories-and-cck-extra-fields-mdic)). New fields (e.g., price `page_price` or source link `page_source`) are physically added to the `sed_pages` table and output in the `page.tpl` template via corresponding tags `{PAGE_PRICE}` and `{PAGE_SOURCE}`.
 
 ---
 
@@ -104,7 +104,7 @@ The users module manages new account registrations, authentication, personal pro
 > The `users` module is a locked system core module (`Lock_module = 1` in the configuration file `modules/users/users.setup.php`), so it cannot be disabled or removed from the system.
 
 > [!NOTE]
-> The architecture of access rights delimitation (ACL), sessions, cookie authorization, and secure salted password hashing is described in detail in [Chapter 4. User System and Access Control (ACL)](/doc/users-acl). The `users` module acts as an interface wrapper over these system mechanisms.
+> The architecture of access rights delimitation (ACL), sessions, cookie authorization, and secure salted password hashing is described in detail in [Chapter 4. User System and Access Control (ACL)](4_User_System_and_Access_Control_ACL.md). The `users` module acts as an interface wrapper over these system mechanisms.
 
 ### 5.3.1. Main Components and Controllers of the Module
 The module is divided into several controller files, each responsible for its own part of the logic:

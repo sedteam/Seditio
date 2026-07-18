@@ -131,7 +131,7 @@ To avoid executing resource-heavy SQL queries and bitwise array merging on every
 Each user has an individual profile card, whose data is stored in the `sed_users` table.
 
 > [!NOTE]
-> The logic of outputting registration and login forms, changing profile settings, and public user information on the site is handled by the built-in `users` module (a detailed description of its structure, controllers, and TPL templates is provided in [Chapter 5. Built-in Modules](/doc/core-modules#53-users-module-users)).
+> The logic of outputting registration and login forms, changing profile settings, and public user information on the site is handled by the built-in `users` module (a detailed description of its structure, controllers, and TPL templates is provided in [Chapter 5. Built-in Modules](5_Core_Modules.md#53-users-module-users)).
 
 ### 4.4.1. System Profile Structure
 By default, the user profile includes the following key fields:
