@@ -57,7 +57,7 @@
 						<!-- BEGIN: MODULE_MENU_ITEM -->
 						<li>
 							<a href="{ADMIN_MODULE_MENU_URL}" class="nav-top-item {ADMIN_MODULE_MENU_SUBMENU_CLASS} {ADMIN_MODULE_MENU_URL_CLASS}" style="padding-left: 15px;">
-								<span class="nav-icon"><i class="ic-{ADMIN_MODULE_MENU_MOD_CODE}"></i></span>
+								<span class="nav-icon"><i class="{ADMIN_MODULE_MENU_ICON}"></i></span>
 								<span class="nav-title">{ADMIN_MODULE_MENU_TITLE}</span>
 							</a>
 							<!-- BEGIN: MODULE_MENU_SUB -->
@@ -100,7 +100,7 @@
 						<!-- BEGIN: PLUGIN_MENU_ITEM -->
 						<li>
 							<a href="{ADMIN_PLUGIN_MENU_URL}" class="nav-top-item {ADMIN_PLUGIN_MENU_SUBMENU_CLASS} {ADMIN_PLUGIN_MENU_URL_CLASS}" style="padding-left: 15px;">
-								<span class="nav-icon"><i class="ic-plug ic-{ADMIN_PLUGIN_MENU_MOD_CODE}"></i></span>
+								<span class="nav-icon"><i class="{ADMIN_PLUGIN_MENU_ICON}"></i></span>
 								<span class="nav-title">{ADMIN_PLUGIN_MENU_TITLE}</span>
 							</a>
 							<!-- BEGIN: PLUGIN_MENU_SUB -->

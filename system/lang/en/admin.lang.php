@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/admin.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-jul-17
 Type=Lang
 Author=Seditio Team
 Description=Admin panel
@@ -85,6 +85,8 @@ $L['adm_manage'] = "Manage";  // New in v150
 $L['adm_pagemanager'] = "Page manager";  // New in v177
 $L['adm_module_name'] = "Module name";  // New in v178
 $L['adm_tool_name'] = "Tool name";  // New in v178
+$L['adm_syscomponents'] = "System components";  // New in v186
+$L['adm_component_name'] = "Component name";  // New in v186
 
 /* ====== Banlist ====== */
 

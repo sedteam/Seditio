@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/admin/comments.admin.menu.php
 Version=186
-Updated=2026-mar-12
+Updated=2026-jul-17
 Type=Plugin.admin
 Author=Seditio Team
 Description=Comments admin menu definition (sidebar item and submenu with auth)
@@ -49,6 +49,7 @@ return array(
 	'title'     => 'Comments',
 	'order'     => 50,
 	'adminlink' => sed_url('admin', 'm=comments'),
+	'icon'      => 'ic-comments',
 	// One button without submenu:
 	'sections'  => array()
 

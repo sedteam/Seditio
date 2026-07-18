@@ -1,64 +1,83 @@
-<h2>Seditio</h2>
+# Seditio CMS
 
-Seditio is a modular content management system and content management framework powered by PHP and MySQL.
+**Seditio** is a powerful, fast, and flexible Content Management System (CMS) and Content Management Framework (CMF) powered by PHP and MySQL.
 
-The engine distinguishes itself from other content management systems by keeping the HTML code completely separate from the PHP.
-This allows graphic designers to create skins without having to know much PHP. Seditio can be skinned by editing pre-made skins
-supplied by the community, or easily making one's own by creating a template, and simply substituting for the TPL tags.
+The key distinguishing feature of Seditio is the complete separation of HTML design and layout from PHP business logic, achieved using the **XTemplate SE** template engine. This enables web designers and front-end developers to craft rich themes and skins without requiring deep PHP knowledge.
 
-<h2>Requirements</h2>
+---
 
-To install Seditio you need the following server software pre-installed:
+## 🚀 Key Features
 
-<ul>
-<li>WWW Server (Apache, nginx, etc)</li>
-<li>PHP 5.6.0 or higher</li>
-<li>MySQL 5.0.7 or higher</li>
-</ul>
+- **High Performance & Optimization**: Minimal database load with built-in two-level caching system.
+- **Flexible Access Control (ACL)**: Granular per-category and per-module permissions for user groups.
+- **Modular & Extensible**: Event hook-driven plugin system and standalone core modules.
+- **Strict Separation of Logic & Presentation**: Clean TPL templates powered by XTemplate SE.
+- **Personal File System (PFS)**: Per-user file management, quota system, and seamless media integration.
+- **PHP 5.6 to 8.x Compatibility**: Full support across legacy and modern PHP environments.
 
-<h2>Server configuration</h2>
+---
 
-<p>You MUST ensure that PHP has been compiled with support for:</p>
+## 📚 Documentation (Manual)
 
-<ul>
-<li>GD</li>
-<li>Hash</li>
-<li>Mbstring</li>
-<li>MySQL</li>
-<li>PCRE</li>
-<li>Sessions</li>
-</ul>
+Comprehensive user and developer documentation is available in the [`docs/manual/en`](docs/manual/en/) directory.
 
-<h2>Installation</h2>
+*(Note: Documentation is also available in Russian in [`docs/manual/ru`](docs/manual/ru/)).*
 
-<p>1. Copy all files of the engine in the root directory or subdirectory</p>
+### 📖 User & Developer Manual (`docs/manual/en`)
 
-<p>2. Make the following directory and all their subdirectories writable too with CHMOD 777 or CHMOD 775:</p>
+1. 📖 [Introduction and System Architecture](docs/manual/en/1_Introduction_and_System_Architecture.md) — History, philosophy, directory structure, global variables, and system architecture.
+2. 🛠️ [Installation, Configuration, and Deployment](docs/manual/en/2_Installation_Configuration_and_Deployment.md) — Server requirements, installation steps, directory permissions (CHMOD), and configuration.
+3. ⚙️ [Control Panel (Administration Area)](docs/manual/en/3_Control_Panel_Administration_Area.md) — Admin interface overview, managing categories, pages, users, and system settings.
+4. 🔐 [User System and Access Control (ACL)](docs/manual/en/4_User_System_and_Access_Control_ACL.md) — ACL access matrix, permission masks (Read/Write/Admin), and group management.
+5. 📦 [Core Modules](docs/manual/en/5_Core_Modules.md) — Overview of built-in modules (Pages, Forums, PM, PFS, Users, Polls, etc.).
+6. 🧩 [Module Architecture and Development](docs/manual/en/6_Module_Architecture_and_Development.md) — Module file structure, URL routing, and database interactions.
+7. 🔌 [Core Plugins](docs/manual/en/7_Core_Plugins.md) — Built-in plugins overview (Cleaner, Hitcounter, CKEditor, etc.).
+8. ⚡ [Plugin Architecture and Development](docs/manual/en/8_Plugin_Architecture_and_Development.md) — `.setup.php` manifest files, event hook system, and building custom plugins.
+9. 🎨 [XTemplate SE Template Engine and Skin Development](docs/manual/en/9_XTemplate_SE_Template_Engine_and_Skin_Development.md) — XTemplate syntax, `BEGIN/END` blocks, `TPLTAG` tags, `IF/ELSE` logic, and skin creation.
+10. 🛡️ [Security and Performance Optimization](docs/manual/en/10_Security_and_Performance_Optimization.md) — SQL escaping (`sed_sql_prep`), input sanitation (`sed_import`), XSS/CSRF protections, and caching engine.
+11. 🌐 [Localization and Internationalization](docs/manual/en/11_Localization_and_Internationalization.md) — Language files organization (`lang/*.lang.php`) and multi-language configuration.
+12. 📁 [Personal File System (PFS) and Media Processing](docs/manual/en/12_Personal_File_System_and_Media_Processing.md) — File uploads, thumbnail generation, storage quotas, and editor integration.
 
-<ul>
-<li>/datas/avatars</li>
-<li>/datas/defaultav</li>
-<li>/datas/photos</li>
-<li>/datas/thumbs</li>
-<li>/datas/resized</li>
-<li>/datas/signatures</li>
-<li>/datas/users</li>
-</ul>
+---
 
-<p>3. Arrive at <strong>http://your_site/install</strong></p>
+## 💻 System Requirements
 
-<p>4. Follow the instructions of the installer.</p>
+To install and run Seditio, you need the following server environment pre-installed:
 
-<h2>Copyright</h2>
+- **Web Server**: Apache, Nginx, or IIS with URL Rewrite (SEF URLs) support.
+- **PHP**: Version 5.6.0 or higher (fully compatible with PHP 7.x and PHP 8.x).
+- **Database**: MySQL 5.0.7 or higher / MariaDB.
+- **Required PHP Extensions**:
+  - `gd` (image processing & thumbnail creation)
+  - `hash`
+  - `mbstring` (multibyte string handling)
+  - `mysqli`
+  - `pcre`
+  - `session`
 
-<p>Copyright (c) 2011-2026, Seditio Team<br />
-Copyright (c) 2001-2011, Neocrome</p>
+---
 
-<p>All rights reserved.</p>
+## ⚙️ Installation
 
-<h2>License</h2>
+1. Copy all engine files to your web server root directory or a subdirectory.
+2. Make the following directories and all their subdirectories writable with `CHMOD 777` or `CHMOD 775`:
+   - `/datas/avatars`
+   - `/datas/defaultav`
+   - `/datas/photos`
+   - `/datas/thumbs`
+   - `/datas/resized`
+   - `/datas/signatures`
+   - `/datas/users`
+3. Open your web browser and navigate to `http://your_domain/install` (or `http://your_domain/path_to_seditio/install`).
+4. Follow the step-by-step instructions of the setup wizard.
 
-<p>Seditio is free software; you can redistribute it and/or modify it under the terms 
-of the BSD 3-Clause License ("BSD New" or "BSD Simplified") as published by Regents of the University of California.</p>
+---
 
-<p><a href="https://github.com/sedteam/Seditio/blob/master/LICENSE">BSD 3-Clause License</a></p>
+## 📄 License and Copyright
+
+- **Copyright (c) 2011-2026, Seditio Team**
+- **Copyright (c) 2001-2011, Neocrome**
+
+Seditio is free software; you can redistribute it and/or modify it under the terms of the **BSD 3-Clause License**.
+
+For full license details, please see the [LICENSE](LICENSE) file.

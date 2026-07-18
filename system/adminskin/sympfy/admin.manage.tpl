@@ -12,7 +12,7 @@
 		<div class="content-box">
 
 			<div class="content-box-header">
-				<h3>{PHP.L.Modules}</h3>
+				<h3>{PHP.L.adm_syscomponents}</h3>
 			</div>
 
 			<div class="content-box-content content-table">
@@ -21,7 +21,7 @@
 
 					<div class="table-head">
 						<div class="table-row modules-row">
-							<div class="table-th coltop text-left">{PHP.L.adm_module_name}</div>
+							<div class="table-th coltop text-left">{PHP.L.adm_component_name}</div>
 							<div class="table-th coltop text-center" style="width:80px;">{PHP.L.Rights}</div>
 							<div class="table-th coltop text-center" style="width:128px;">{PHP.L.Configuration}</div>
 						</div>
