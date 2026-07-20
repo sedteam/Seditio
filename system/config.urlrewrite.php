@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/config.urlrewrite.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-jul-20
 Type=Core
 Author=Seditio Team
 Description=Url rewriting config
@@ -52,7 +52,12 @@ $sed_urlrewrite = array(
      array(
           'order' => 130,
           'cond' => '#^/install(/?)$#',
-          'rule' => 'system/install/install.php'
+          'rule' => 'system/setup/setup.php'
+     ),
+     array(
+          'order' => 135,
+          'cond' => '#^/setup(/?)$#',
+          'rule' => 'system/setup/setup.php'
      ),
 
      /*  Captcha: see plugins/sedcaptcha/sedcaptcha.urls.php when plugin active */

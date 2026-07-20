@@ -74,7 +74,7 @@ The installer scans the `/plugins/` folder and displays a list of plugins with t
 
 #### Stage 7: Completion and Transition to the Site
 The installer displays a report on the successful completion of the installation of all components and a "Go to Main Page" button.
-> **CRITICALLY IMPORTANT:** After completing the installation, **be sure to delete the `/system/install/` folder** from the server. Leaving the installer folder poses a security threat, as an attacker could rerun the installation and compromise the site.
+> **CRITICALLY IMPORTANT:** After completing the installation, **be sure to delete the `/system/setup/` folder** from the server. Leaving the installer folder poses a security threat, as an attacker could rerun the installation and compromise the site.
 
 ---
 

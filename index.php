@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=index.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-jul-20
 Type=Core
 Author=Seditio Team
 Description=SEF Url's loader
@@ -102,8 +102,8 @@ if (!empty($module)) {
       die();
     }
 
-    if ($m == 'install') {
-      $path_core = SED_ROOT . "/system/install/install.php";
+    if ($m == 'install' || $m == 'setup') {
+      $path_core = SED_ROOT . "/system/setup/setup.php";
     } else {
       $path_core = SED_ROOT . "/system/core/" . $m . "/" . $m . ".php";
     }

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/syscheck/syscheck.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-jul-20
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -231,11 +231,11 @@ $systemfiles['modules'][] = 'modules/forums/admin/forums.admin.rightsbyitem.php'
 
 $syschecktitles['install'] = 'Installation and upgrade';
 
-$systemfiles['install'][] = 'system/install/install.php';
-$systemfiles['install'][] = 'system/install/install.config.php';
-$systemfiles['install'][] = 'system/install/install.database.php';
-$systemfiles['install'][] = 'system/install/install.main.php';
-$systemfiles['install'][] = 'system/install/install.setup.php';
+$systemfiles['install'][] = 'system/setup/setup.php';
+$systemfiles['install'][] = 'system/setup/setup.config.php';
+$systemfiles['install'][] = 'system/setup/setup.database.php';
+$systemfiles['install'][] = 'system/setup/setup.main.php';
+$systemfiles['install'][] = 'system/setup/inc/setup.functions.php';
 $systemfiles['install'][] = 'system/upgrade/upgrade_125_130.php';
 $systemfiles['install'][] = 'system/upgrade/upgrade_126_130.php';
 $systemfiles['install'][] = 'system/upgrade/upgrade_130_150.php';

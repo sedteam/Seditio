@@ -6,12 +6,12 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=system/install/install.config.php
+File=system/setup/setup.config.php
 Version=186
-Updated=2026-feb-14
-Type=Core.install
+Updated=2026-jul-20
+Type=Core.setup
 Author=Seditio Team
-Description=Configuration builder
+Description=Default system configuration generator for setup installer
 [END_SED]
 ==================== */
 
@@ -47,7 +47,7 @@ $cfg_data .= "// Default skin and default language\n";
 $cfg_data .= "// ========================\n";
 
 $cfg_data .= "\n\$cfg['defaultskin'] = '" . $defaultskin . "';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/...\n";
-$cfg_data .= "\$cfg['defaultlang'] = '" . $defaultlang . "';	// Default language code\n";
+$cfg_data .= "\n\$cfg['defaultlang'] = '" . $defaultlang . "';	// Default language code\n";
 $cfg_data .= "\$cfg['adminskin'] = 'sympfy';				// Default admin skin\n";
 
 $cfg_data .= "\n// ========================\n";
