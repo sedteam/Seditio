@@ -1,0 +1,1 @@
+CKEDITOR.plugins.setLang("layoutmanager","tr",{title:"Düzenler",addLayoutDialogTitle:"Düzen seç",manageLayoutDialogTitle:"Düzeni şununla değiştir:",removeLayoutMenuLabel:"Düzeni kaldır",manageLayoutMenuLabel:"Düzeni değiştir"});

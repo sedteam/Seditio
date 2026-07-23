@@ -12,7 +12,7 @@
 			var pluginPath = this.path;
 			var iconsReady = false;
 			var fontsCssPath = 'system/assets/fonts/fonts.css';
-			var fontsCssUrl = CKEDITOR.getUrl(fontsCssPath);
+			var fontsCssUrl = editor.config.baseHref + fontsCssPath;
 
 			CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl(pluginPath + 'iconic.css'));
 

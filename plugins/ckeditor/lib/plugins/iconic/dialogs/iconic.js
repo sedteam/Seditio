@@ -5,7 +5,7 @@ CKEDITOR.dialog.add('iconic', function(editor) {
 	var columns = editor.config.iconic_columns || 8;
 	var dialogRef;
 	var fontsLoaded = false;
-	var fontsCssUrl = CKEDITOR.getUrl('system/assets/fonts/fonts.css');
+	var fontsCssUrl = editor.config.baseHref + 'system/assets/fonts/fonts.css';
 
 	function getIcons() {
 		return editor.config.iconic_list || [];

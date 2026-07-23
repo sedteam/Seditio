@@ -1,0 +1,20 @@
+CKEDITOR.plugins.setLang( 'html5video', 'tr', {
+    button: 'HTML5 video ekle',
+    title: 'HTML5 video',
+    infoLabel: 'Video bilgisi',
+    allowed: 'İzin verilen dosya uzantıları: MP4, WebM, Ogv',
+    urlMissing: 'Video kaynak URL\'si eksik.',
+    videoProperties: 'Video özellikleri',
+    upload: 'Yükle',
+    btnUpload: 'Sunucuya gönder',
+    advanced: 'Gelişmiş',
+    autoplay: 'Otomatik oynatılsın mı?',
+    allowdownload: 'İndirmeye izin verilsin mi?',
+    yes: 'Evet',
+    no: 'Hayır',
+    responsive: 'Duyarlı genişlik (Responsive)',
+    controls: 'Kontrolleri göster',
+    loop: 'Döngü?',
+    poster: 'Küçük resim (Poster)',
+    advisorytitle: 'Açıklayıcı Başlık'
+} );

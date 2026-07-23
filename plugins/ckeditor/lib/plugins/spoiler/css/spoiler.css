@@ -1,74 +1,78 @@
+/* Spoiler Plugin Styles for CKEditor */
+
 .spoiler {
-    background-color: rgb(255, 255, 255);
-    border: 1px solid #ebe1e1;
-    border-radius: 30px;
     margin-bottom: 24px;
-    position: relative;
+    border: 1px solid #dcdcdc !important;
+    border-radius: 6px !important;
+    overflow: hidden;
+    background-color: #ffffff;
 }
 
 .spoiler .spoiler-title {
     display: block;
     width: 100%;
-    cursor: pointer;
+    background-color: #f7f9fa !important;
+    color: #2c3e50 !important;
+    padding: 14px 20px !important;
     font-weight: 600;
-    font-size: 1.1em;
-    padding: 17px 20px 17px 28px;
-    color: #010101;
+    font-size: 1.05em;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    box-sizing: border-box;
+    border-bottom: none !important;
+}
+
+.spoiler .spoiler-title:hover {
+    background-color: #edf2f7 !important;
+    color: #1a252f !important;
+}
+
+.spoiler .spoiler-title.active {
+    background-color: #e8f0fe !important;
+    color: #1a73e8 !important;
+}
+
+.spoiler .spoiler-title.active:hover {
+    background-color: #d2e3fc !important;
 }
 
 .spoiler .spoiler-title p {
     margin: 0;
-	padding: 0;
+    padding: 0;
+    display: inline-block;
 }
 
+/* Hide the old toggle element if it exists in the database/HTML */
 .spoiler-toggle {
-    width: 22px;
-    height: 22px;
-    position: relative;
-    float: right;
-    display: block;
-    color: #ffffff;
-    border-radius: 100%;
-    text-decoration: none;
-    text-align: center;
-    -webkit-transition: .2s ease-out;
-    -o-transition: .2s ease-out;
-    transition: .2s ease-out;
+    display: none !important;
 }
 
-.spoiler-toggle br {
-    display: none;
-}
-
-.spoiler-toggle:after {
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    left: 0;
-    line-height: 22px;
+/* Render the arrow exactly like the accordion */
+.spoiler .spoiler-title:after {
+    content: '\25BC';
     position: absolute;
-    width: 22px;
-    color: #bac0d0;
-    content: "\25B2";
-    font-size: 22px;
-    -webkit-transition: .2s ease-out;
-    -o-transition: .2s ease-out;
-    transition: .2s ease-out;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #888888;
+    transition: transform 0.25s ease, color 0.25s ease;
 }
 
-.spoiler-toggle.show-icon:after {
-    content: "\25BC";
+.spoiler .spoiler-title.active:after {
+    transform: translateY(-50%) rotate(180deg);
+    color: #1a73e8;
 }
 
 .spoiler-content {
-    -webkit-transition: height 0.5s ease-out;
-    transition: height 0.5s ease-out;
-    padding: 20px 20px;
-    border-top: 1px solid #dfdfdf;
+    padding: 16px 20px !important;
+    background-color: #ffffff;
+    border-top: 1px solid #eef2f5 !important;
 }
 
-.spoiler-content p {
-    padding: 0px 0;
+.spoiler-content p:last-child {
+    margin-bottom: 0;
 }

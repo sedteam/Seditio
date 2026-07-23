@@ -34,11 +34,16 @@ CKEDITOR.plugins.add('spoiler', {
             }
         }
 
-        function setSwitcher(element) {
-            toggleClass(element, 'hide-icon');
-            toggleClass(element, 'show-icon');
-            var content = element.getParent().getParent().findOne('.spoiler-content');
-            toggle(content);
+        function getAscendantByClass(node, tagName, className, includeSelf) {
+            if (!node) return null;
+            var current = includeSelf ? node : node.getParent();
+            while (current) {
+                if (current.is && current.is(tagName) && current.hasClass(className)) {
+                    return current;
+                }
+                current = current.getParent();
+            }
+            return null;
         }
 
         // Register dialog
@@ -92,24 +97,21 @@ CKEDITOR.plugins.add('spoiler', {
                     }
                     // If editing an existing spoiler
                     else {
-                        var content = editor.spoilerElement.findOne('.spoiler-content');
+                        var content = editor.spoilerElement.find('.spoiler-content').getItem(0);
                         setSpoilerData(content, minlevel, mingroup);
                     }
                 },
 
                 onShow: function() {
-                    // If the element is not selected via double-click
                     if (!editor.spoilerElement) {
                         var selection = editor.getSelection();
                         var element = selection.getStartElement();
                         // Find the nearest spoiler among all parents
-                        editor.spoilerElement = element.getAscendant(function(el) {
-                            return el.type === CKEDITOR.NODE_ELEMENT && el.getName() === 'div' && el.hasClass('spoiler');
-                        }, true);
+                        editor.spoilerElement = getAscendantByClass(element, 'div', 'spoiler', true);
                     }
 
                     if (editor.spoilerElement) {
-                        var content = editor.spoilerElement.findOne('.spoiler-content');
+                        var content = editor.spoilerElement.find('.spoiler-content').getItem(0);
                         this.setValueOf('tab-settings', 'minlevel', content.getAttribute('data-minlevel') || '');
                         this.setValueOf('tab-settings', 'mingroup', content.getAttribute('data-mingroup') || '');
                     }
@@ -117,7 +119,7 @@ CKEDITOR.plugins.add('spoiler', {
             };
         });
 
-        // Function to create a spoiler
+        // Function to create a spoiler (no spoiler-toggle link generated!)
         function createSpoiler(editor, minlevel, mingroup) {
             var spoiler = editor.document.createElement('div', {
                 attributes: { 'class': 'spoiler' }
@@ -127,21 +129,12 @@ CKEDITOR.plugins.add('spoiler', {
                 attributes: { 'class': 'spoiler-title' }
             });
 
-            var toggle = editor.document.createElement('div', {
-                attributes: { 'class': 'spoiler-toggle hide-icon' }
-            });
-
             var content = editor.document.createElement('div', {
                 attributes: { 'class': 'spoiler-content' }
             });
 
             setSpoilerData(content, minlevel, mingroup);
 
-            toggle.on('click', function(event) {
-                setSwitcher(event.sender);
-            });
-
-            title.append(toggle);
             spoiler.append(title);
             title.appendHtml('<p>' + editor.lang.spoiler.toolbar + '</p>');
             content.appendHtml('<p><br></p>');
@@ -152,23 +145,26 @@ CKEDITOR.plugins.add('spoiler', {
         function setSpoilerData(element, minlevel, mingroup) {
             element.setAttribute('data-minlevel', minlevel || '');
             element.setAttribute('data-mingroup', mingroup || '');
-        }
 
-        function getDivWithClass(className) {
-            var divs = editor.document.getElementsByTag('div'),
-                len = divs.count(),
-                elements = [],
-                element;
-            for (var i = 0; i < len; ++i) {
-                element = divs.getItem(i);
-                if (element.hasClass(className)) {
-                    elements.push(element);
-                }
+            var text = '';
+            if (minlevel != '') {
+                text += 'Min Level: ' + minlevel;
             }
-            return elements;
+            if (mingroup != '') {
+                if (text != '') {
+                    text += ', ';
+                }
+                text += 'Min Group: ' + mingroup;
+            }
+
+            if (text != '') {
+                element.setAttribute('data-info', text);
+            } else {
+                element.removeAttribute('data-info');
+            }
         }
 
-        // Register command for the button
+        // Add command
         editor.addCommand('spoiler', {
             exec: function(editor) {
                 editor.spoilerElement = null; // Reset the element for editing
@@ -176,40 +172,57 @@ CKEDITOR.plugins.add('spoiler', {
             }
         });
 
-        // Add button to the toolbar
+        // Add button to toolbar
         editor.ui.addButton('Spoiler', {
             label: editor.lang.spoiler.toolbar,
             command: 'spoiler',
             toolbar: 'insert'
         });
 
-        // Double-click handler
+        // Add double click handler to edit spoiler settings
         editor.on('doubleclick', function(evt) {
             var element = evt.data.element;
             // Find the nearest parent spoiler
-            var spoilerDiv = element.getAscendant(function(el) {
-                return el.type === CKEDITOR.NODE_ELEMENT && el.getName() === 'div' && el.hasClass('spoiler');
-            }, true);
-
+            var spoilerDiv = getAscendantByClass(element, 'div', 'spoiler', true);
             if (spoilerDiv) {
                 evt.data.dialog = 'spoilerDialog';
                 editor.spoilerElement = spoilerDiv; // Save for editing
             }
         });
 
+        // Interactive toggle inside WYSIWYG editor
+        editor.on('contentDom', function() {
+            var editable = editor.editable();
+
+            editable.attachListener(editable, 'click', function(evt) {
+                var target = evt.data.getTarget();
+                if (!target) return;
+
+                var title = getAscendantByClass(target, 'div', 'spoiler-title', true);
+
+                if (title) {
+                    var spoiler = title.getParent();
+                    if (spoiler && spoiler.is && spoiler.is('div') && spoiler.hasClass('spoiler')) {
+                        evt.data.preventDefault();
+                        var isAlreadyActive = title.hasClass('active');
+
+                        var content = spoiler.find('.spoiler-content').getItem(0);
+                        if (isAlreadyActive) {
+                            title.removeClass('active');
+                            if (content) content.setStyle('display', 'none');
+                        } else {
+                            title.addClass('active');
+                            if (content) content.setStyle('display', 'block');
+                        }
+                    }
+                }
+            });
+        });
+
         var path = this.path;
-        // Initialize existing spoilers
         editor.on('mode', function() {
-            if (this.mode != 'wysiwyg') {
-                return;
-            }
-            registerCssFile(path + 'css/spoiler.css?v1');
-            var elements = getDivWithClass('spoiler-toggle'),
-                len = elements.length;
-            for (var i = 0; i < len; ++i) {
-                elements[i].on('click', function(event) {
-                    setSwitcher(event.sender);
-                });
+            if (this.mode == 'wysiwyg') {
+                registerCssFile(path + 'css/spoiler.css?v=2026-jul-23');
             }
         });
     }

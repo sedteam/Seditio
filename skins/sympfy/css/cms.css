@@ -553,9 +553,176 @@ table.cells tr:nth-child(even) {
 
 /*-------------------------*/
 
+/***** ACCORDION *****/
+
+/*-------------------------*/
+
+.sedaccordion {
+  margin-bottom: 20px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.sedaccordion .accordion-item {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.sedaccordion .accordion-item:last-child {
+  border-bottom: none;
+}
+
+.sedaccordion .accordion-header {
+  background-color: #f7f9fa;
+  color: #2c3e50;
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 1.05em;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sedaccordion .accordion-header:hover {
+  background-color: #edf2f7;
+  color: #1a252f;
+}
+
+.sedaccordion .accordion-header:after {
+  content: '\25BC';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #888888;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.sedaccordion .accordion-item.active .accordion-header {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+}
+
+.sedaccordion .accordion-item.active .accordion-header:hover {
+  background-color: #d2e3fc;
+}
+
+.sedaccordion .accordion-item.active .accordion-header:after {
+  transform: translateY(-50%) rotate(180deg);
+  color: #1a73e8;
+}
+
+.sedaccordion .accordion-content {
+  display: none;
+  padding: 16px 20px;
+  background-color: #ffffff;
+  border-top: 1px solid #eef2f5;
+}
+
+.sedaccordion .accordion-item.active .accordion-content {
+  display: block;
+}
+
+.sedaccordion .accordion-content p:last-child {
+  margin-bottom: 0;
+}
+
+/*-------------------------*/
+
+/***** SPOILER *****/
+
+/*-------------------------*/
+
+.spoiler {
+  margin-bottom: 24px;
+  border: 1px solid #dcdcdc !important;
+  border-radius: 6px !important;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.spoiler .spoiler-title {
+  display: block;
+  width: 100%;
+  background-color: #f7f9fa !important;
+  color: #2c3e50 !important;
+  padding: 14px 20px !important;
+  font-weight: 600;
+  font-size: 1.05em;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  box-sizing: border-box;
+  border-bottom: none !important;
+}
+
+.spoiler .spoiler-title:hover {
+  background-color: #edf2f7 !important;
+  color: #1a252f !important;
+}
+
+.spoiler .spoiler-title.active {
+  background-color: #e8f0fe !important;
+  color: #1a73e8 !important;
+}
+
+.spoiler .spoiler-title.active:hover {
+  background-color: #d2e3fc !important;
+}
+
+.spoiler .spoiler-title p {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+/* Hide the old toggle element if it exists in the database/HTML */
+.spoiler-toggle {
+  display: none !important;
+}
+
+/* Render the arrow exactly like the accordion */
+.spoiler .spoiler-title:after {
+  content: '\25BC';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #888888;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.spoiler .spoiler-title.active:after {
+  transform: translateY(-50%) rotate(180deg);
+  color: #1a73e8;
+}
+
+.spoiler-content {
+  padding: 16px 20px !important;
+  background-color: #ffffff;
+  border-top: 1px solid #eef2f5 !important;
+}
+
+.spoiler-content p:last-child {
+  margin-bottom: 0;
+}
+
+/*-------------------------*/
+
 /***** TABS *****/
 
 /*-------------------------*/
+
+.sedtabs {
+  margin-bottom: 20px;
+}
 
 .sedtabs div.tabs {
   display: none;

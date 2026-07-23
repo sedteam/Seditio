@@ -6,63 +6,71 @@
  */
 (function() {
 CKEDITOR.plugins.add('tabber', {
-    // Indicates that the plugin supports high-resolution screens
     hidpi: true,
-    // Supported languages
     lang: 'en,ru',
-    // Plugin icon
     icons: 'tabber',
-    // Plugin initialization
     init: function(editor) {
-        // Function to escape special characters in CSS selectors
         function cssEscape(str) {
+            if (!str) return '';
             return str.replace(/([!"#$%&'()*+,\-./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
         }
+
+        function getAscendantByClass(node, tagName, className, includeSelf) {
+            if (!node) return null;
+            var current = includeSelf ? node : node.getParent();
+            while (current) {
+                if (current.is && current.is(tagName) && current.hasClass(className)) {
+                    return current;
+                }
+                current = current.getParent();
+            }
+            return null;
+        }
+
+        function getTabContentElement(start) {
+            var current = start;
+            while (current) {
+                if (current.is && current.is('div') && current.hasClass('tabs')) {
+                    var parent = current.getParent();
+                    if (parent && parent.is && parent.is('div') && parent.hasClass('tab-box')) {
+                        return current;
+                    }
+                }
+                current = current.getParent();
+            }
+            return null;
+        }
 		
-		// Adding a button to the editor's toolbar
         editor.ui.addButton('Tabber', {
-            // Command executed when the button is clicked
             command: 'addTabCmd',
-            // Path to the button's icon
             icon: this.path + 'icons/tabber.png',
-            // Button label
             label: editor.lang.tabber.toolbar
         });
 
-        // Path to the plugin's CSS file
         var cssPath = this.path + 'tabber.css';
-        // Appending the CSS file when switching to WYSIWYG mode
         editor.on('mode', function() {
             if (editor.mode === 'wysiwyg') {
                 this.document.appendStyleSheet(cssPath);
             }
         });
 
-        // Changing the command state when the selection changes
         editor.on('selectionChange', function(evt) {
             if (editor.readOnly) return;
             var command = editor.getCommand('addTabCmd'),
                 element = evt.data.path.lastElement,
-                sedtabs = element.getAscendant('div', true, function(el) {
-                    return el.hasClass('sedtabs');
-                });
+                sedtabs = getAscendantByClass(element, 'div', 'sedtabs', true);
 
-            // Disabling the command if the selection is inside the tabs
             command.setState(sedtabs ? CKEDITOR.TRISTATE_DISABLED : CKEDITOR.TRISTATE_OFF);
         });
 
-        // Allowed content for the command
         var allowedContent = 'div(sedtabs); ul(tabs); li; a[href]; div(tab-box); div(tabs)[id]';
 
-        // Adding a command to insert tabs
         editor.addCommand('addTabCmd', {
             allowedContent: allowedContent,
             exec: function(editor) {
-                // Generating unique IDs for the tabs
                 var tabId1 = 'tab_' + CKEDITOR.tools.getUniqueId('tab'),
                     tabId2 = 'tab_' + CKEDITOR.tools.getUniqueId('tab');
 
-                // HTML template for the tabs
                 var template =
                     '<div class="sedtabs">' +
                     '<ul class="tabs">' +
@@ -75,41 +83,45 @@ CKEDITOR.plugins.add('tabber', {
                     '</div>' +
                     '</div>';
 
-                // Inserting the template into the editor
                 editor.insertHtml(template);
             }
         });
 
-        // Function to get the context of the tabs
-        function getTabContext(editor) {
-            var sel = editor.getSelection(),
-                start = sel.getStartElement(),
-                sedtabs = start.getAscendant('div', true, function(el) {
-                    return el.hasClass('sedtabs');
-                });
+        function getTabContext(editor, element) {
+            var start = element;
+            if (!start) {
+                var sel = editor.getSelection();
+                start = sel ? sel.getStartElement() : null;
+            }
+            if (!start) return null;
 
+            var sedtabs = getAscendantByClass(start, 'div', 'sedtabs', true);
             if (!sedtabs) return null;
+
+            // Exclude if inside an accordion container
+            var sedaccordion = getAscendantByClass(start, 'div', 'sedaccordion', true);
+            if (sedaccordion) return null;
 
             var context = {
                 sedtabs: sedtabs,
                 header: start.getAscendant('a', true),
-                content: start.getAscendant('div', true, function(el) {
-                    return el.hasClass('tabs') && el.getParent().hasClass('tab-box');
-                })
+                content: getTabContentElement(start)
             };
 
             if (context.header) {
-                context.id = context.header.getAttribute('href').substring(1);
-                context.content = sedtabs.findOne('.tab-box #' + cssEscape(context.id));
+                var href = context.header.getAttribute('href');
+                context.id = href ? href.substring(1) : null;
+                context.content = context.id ? sedtabs.find('.tab-box #' + cssEscape(context.id)).getItem(0) : null;
             } else if (context.content) {
                 context.id = context.content.getAttribute('id');
-                context.header = sedtabs.findOne('a[href="#' + cssEscape(context.id) + '"]');
+                context.header = context.id ? sedtabs.find('a[href="#' + cssEscape(context.id) + '"]').getItem(0) : null;
+            } else {
+                return null;
             }
 
             return context;
         }
 
-        // Adding a command to add a tab before the current one
         editor.addCommand('addTabBefore', {
             allowedContent: allowedContent,
             exec: function(editor) {
@@ -129,7 +141,6 @@ CKEDITOR.plugins.add('tabber', {
             }
         });
 
-        // Adding a command to add a tab after the current one
         editor.addCommand('addTabAfter', {
             allowedContent: allowedContent,
             exec: function(editor) {
@@ -149,7 +160,6 @@ CKEDITOR.plugins.add('tabber', {
             }
         });
 
-        // Adding a command to remove a tab
         editor.addCommand('removeTab', {
             exec: function(editor) {
                 var ctx = getTabContext(editor);
@@ -165,21 +175,17 @@ CKEDITOR.plugins.add('tabber', {
             }
         });
 
-        // Initializing tab switching
         function initTabSwitching(editor) {
             var editable = editor.editable();
 
             editable.attachListener(editable, 'click', function(evt) {
                 var target = evt.data.getTarget();
-                var link = target.getAscendant('a', true);
+                var link = target ? target.getAscendant('a', true) : null;
 
-                if (link && link.getParent().getParent().hasClass('tabs')) {
+                if (link && link.getParent() && link.getParent().getParent() && link.getParent().getParent().hasClass('tabs')) {
                     evt.data.preventDefault();
 
-                    var sedtabs = link.getAscendant('div', true, function(el) {
-                        return el.hasClass('sedtabs');
-                    });
-
+                    var sedtabs = getAscendantByClass(link, 'div', 'sedtabs', true);
                     if (!sedtabs) return;
 
                     var allLinks = sedtabs.find('a');
@@ -194,8 +200,9 @@ CKEDITOR.plugins.add('tabber', {
                         contents.getItem(i).setStyle('display', 'none');
                     }
 
-                    var targetId = link.getAttribute('href').substring(1);
-                    var content = sedtabs.findOne('#' + cssEscape(targetId));
+                    var href = link.getAttribute('href');
+                    var targetId = href ? href.substring(1) : '';
+                    var content = targetId ? sedtabs.find('#' + cssEscape(targetId)).getItem(0) : null;
                     if (content) {
                         content.setStyle('display', 'block');
                     }
@@ -203,7 +210,6 @@ CKEDITOR.plugins.add('tabber', {
             });
         }
 
-        // Initializing tabs when content is loaded
         editor.on('contentDom', function() {
             initTabSwitching(editor);
 
@@ -211,24 +217,21 @@ CKEDITOR.plugins.add('tabber', {
             for (var i = 0; i < sedtabsElements.count(); i++) {
                 var sedtabs = sedtabsElements.getItem(i);
 
-                // Resetting all selections
                 var allLinks = sedtabs.find('.tabs a');
                 for (var j = 0; j < allLinks.count(); j++) {
                     allLinks.getItem(j).removeClass('selected');
                 }
 
-                // Hiding all content
-                var allContents = sedtabs.find('.tab-box  > div');
+                var allContents = sedtabs.find('.tab-box > div');
                 for (j = 0; j < allContents.count(); j++) {
                     allContents.getItem(j).setStyle('display', 'none');
                 }
 
-                // Activating the first tab
-                var tabsHeader = sedtabs.findOne('.tabs');
+                var tabsHeader = sedtabs.find('.tabs').getItem(0);
                 if (!tabsHeader) continue;
 
-                var firstLink = tabsHeader.findOne('a:first-child');
-                var firstContent = sedtabs.findOne('.tab-box .tabs:first-child');
+                var firstLink = tabsHeader.find('a:first-child').getItem(0);
+                var firstContent = sedtabs.find('.tab-box .tabs:first-child').getItem(0);
 
                 if (firstLink && firstContent) {
                     firstLink.addClass('selected');
@@ -237,7 +240,6 @@ CKEDITOR.plugins.add('tabber', {
             }
         });
 
-        // Adding context menu
         if (editor.contextMenu) {
             editor.addMenuGroup('tabberGroup');
             editor.addMenuItem('tabBeforeItem', {
@@ -257,7 +259,7 @@ CKEDITOR.plugins.add('tabber', {
             });
 
             editor.contextMenu.addListener(function(element) {
-                return getTabContext(editor) ? {
+                return getTabContext(editor, element) ? {
                     tabBeforeItem: CKEDITOR.TRISTATE_OFF,
                     tabAfterItem: CKEDITOR.TRISTATE_OFF,
                     removeTab: CKEDITOR.TRISTATE_OFF

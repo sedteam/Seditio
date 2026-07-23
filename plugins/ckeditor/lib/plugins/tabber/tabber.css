@@ -1,3 +1,7 @@
+.sedtabs {
+    margin-bottom: 20px;
+}
+
 .sedtabs div.tabs {
     display: none;
 }
