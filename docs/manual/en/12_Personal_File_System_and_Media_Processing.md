@@ -65,6 +65,12 @@ SELECT SUM(pfs_size) FROM sed_pfs WHERE pfs_userid = $userid
 ```
 And matches the total sum (including the new file size) against the group's `grp_pfs_maxtotal` limit. If the limit is exceeded, the upload is aborted.
 
+### 12.2.3. Site File Space (SFS)
+Alongside personal user storages, Seditio 186 enhances the **Site File Space (SFS)** architecture:
+* SFS files and virtual folders share a special owner identifier `pfs_userid = 0` (and `pff_userid = 0`).
+* SFS acts as a shared central repository for theme assets, company documents, static illustrations, and banners.
+* SFS files do not affect personal user quotas and can only be managed by administrators with elevated privileges.
+
 ---
 
 ## 12.3. Image API
@@ -121,6 +127,8 @@ For convenient batch uploads, Seditio CMS features an integrated asynchronous up
   * `'accept'` (string) — allowed file types (defaults to values derived from GD/ImageMagick configurations).
 * **`sed_image_upload_save($tmp_path, $dest_path, $max_w, $max_h, $mode = 'crop', $is_uploaded = true)`** — handles low-level resizing/cropping and saves the file securely on disk.
 * **`sed_image_upload_process($opts)`** — processes the asynchronous POST request containing files, validates ACL permissions and group storage quotas, saves source files, and generates thumbnail previews.
+* **Client UI Module `sedjs.imageUpload` (`system/assets/js/imageupload.js`):**
+  Renders a client-side Tile UI featuring Drag & Drop file submission, upload queue and progress indicators, drag-and-drop thumbnail sorting, and immediate item actions (delete, modal preview).
 
 ### 12.4.2. Integrating Drag & Drop Uploads in Plugins
 To integrate the uploader into a content editing form, call the helper inside the PHP controller:
@@ -141,3 +149,14 @@ And output the tag in the TPL template:
 </div>
 ```
 Upon form submission, Seditio automatically handles uploaded files, binding them to the user's PFS session, and saving paths to the database.
+
+### 12.4.3. Formatting File Sizes (sed_format_size)
+To display file sizes and storage quotas in human-readable notation, Seditio 186 includes the `sed_format_size()` helper (`system/functions.php`):
+```php
+sed_format_size($bytes, $opts = array())
+```
+* **Options Array (`$opts`):**
+  - `'precision'` (int) — decimal rounding precision (defaults to `0`).
+  - `'unit'` (string) — target scale unit (`'auto'`, `'b'`, `'kb'`, `'mb'`).
+  - `'spaced'` (bool) — space separator between number and unit (defaults to `true`).
+* **Localization:** Integrates with localized labels `$L['bytes']`, `$L['kb']`, `$L['mb']`, scaling bytes and megabytes without trailing fractional zeros.

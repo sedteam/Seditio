@@ -74,8 +74,8 @@ This block registers the plugin in the system, defines dependencies, and configu
 /* ====================
 [BEGIN_SED]
 File=plugins/myplugin/myplugin.setup.php
-Version=185
-Updated=2026-apr-10
+Version=186
+Updated=2026-sep-07
 Type=Plugin
 Author=Developer
 Description=My custom plugin

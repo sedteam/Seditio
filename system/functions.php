@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-sep-08
+Updated=2026-sep-14
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -4202,13 +4202,11 @@ function sed_redirect($url, $base64 = false, $msg = array(), $status = 302)
 		<body>Redirecting to " . sed_link($url, $cfg['mainurl'] . "/") . "
 		</body>
 		</html>";
-		http_response_code($status);
-		header("Refresh: 0; URL=" . $url);
+		header("Refresh: 0; URL=" . $url, true, $status);
 		echo ($output);
 		exit;
 	} else {
-		http_response_code($status);
-		header("Location: " . $url);
+		header("Location: " . $url, true, $status);
 		exit;
 	}
 	return;

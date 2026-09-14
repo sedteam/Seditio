@@ -96,8 +96,12 @@ Any operations that modify system state via GET requests (e.g., deleting a page,
 
 When parsing this request, the core controller must call the validator:
 ```php
-sed_check_xg(); // Compares $_GET['x'] with the token from sed_sourcekey() and aborts on mismatch
+sed_check_xg(); // Compares $_GET['x'] with current sed_sourcekey() or previous sed_sourcekey_prev() and aborts on mismatch
 ```
+
+> [!NOTE]
+> **Previous Token Support (`sed_sourcekey_prev`):**
+> Starting with version 186, both `sed_check_xg()` and `sed_check_xp()` validate incoming security tokens against both the current `$sk = sed_sourcekey()` and the previous session token `$sk_prev = sed_sourcekey_prev()`. This prevents false-positive "Wrong parameter in the URL" errors when working across multiple browser tabs or after background session timestamp updates.
 
 ### 10.2.3. Automatic POST Forms Protection (sed_check_xp)
 To defend against CSRF attacks, all POST forms must submit the security token in a hidden field named `x`.
@@ -122,7 +126,7 @@ Seditio CMS implements an **automatic replacement mechanism** that relieves temp
 
 In the PHP controller handling the form, validation is executed by calling:
 ```php
-sed_check_xp(); // Protects forms from submission by third-party scripts
+sed_check_xp(); // Protects forms from submission by third-party scripts (supports both sk and sk_prev)
 ```
 
 ### 10.2.4. AJAX Calls Security (sed_check_csrf)
@@ -132,6 +136,18 @@ if (!sed_check_csrf()) {
     sed_diefatal('Invalid CSRF token for AJAX request.');
 }
 ```
+
+### 10.2.5. Flood and Hammering Attack Protection (sed_shield)
+To protect websites against aggressive request bursts (page flooding, automated form submission, and hammering attacks), Seditio 186 features a dedicated Shield subsystem backed by the database table `sed_shield`:
+* **Table Schema (`sed_shield`):**
+  - `shield_ip` — Client IP address (supports both IPv4 and canonical IPv6).
+  - `shield_lastseen` — UNIX timestamp of the last seen request.
+  - `shield_hammer` — Counter for frequent back-to-back requests (< 4 seconds apart).
+  - `shield_limit` — Timestamp until which the client is temporarily blocked.
+  - `shield_action` — Description of the blocked action (e.g., `Hammering`).
+* **Operational Flow:**
+  During each request in `system/common.php`, `sed_shield_hammer()` is invoked. If requests arrive faster than 4 seconds apart, `shield_hammer` increments. When it exceeds `$cfg['shieldzhammer']`, `sed_shield_update(180, 'Hammering')` temporarily bans the IP for 3 minutes and writes an entry to the security audit log (`sed_log`). Subsequent requests within the ban period trigger `sed_shield_protect()`, halting execution with a timeout notice.
+* **Architecture Improvement in 186:** Previously, anti-hammer protection was tightly coupled with the online users plugin and the `sed_online` table. In version 186, `sed_online` was retired from core, and anti-hammer protection was migrated into the streamlined, standalone `sed_shield` table.
 
 ---
 
@@ -199,3 +215,8 @@ At the template engine level, a basic whitespace sanitization option is availabl
 > [!WARNING]
 > **No Specialized Minification:**
 > The `cleanup()` method **does not** delete HTML comments and **does not** compress inline JS/CSS. Because line breaks surrounding tags are stripped, using single-line JS comments (`//`) can lead to script syntax errors (all subsequent code is merged into the commented line). In inline scripts, only block comments `/* ... */` must be used.
+
+### 10.4.4. SEF Route Caching (sed_urls.php)
+To eliminate expensive recalculations of Search Engine Friendly (SEF) routing rules on every page load, routing paths are compiled into `datas/cache/sed_urls.php`.
+In version 186, **automatic regeneration of the SEF URL cache** is triggered whenever category structures or URL configuration rules are altered in the administration area (`system/core/admin/admin.inc.php`). Administrators no longer need to manually clear the system cache or resave settings to reflect URL changes.
+

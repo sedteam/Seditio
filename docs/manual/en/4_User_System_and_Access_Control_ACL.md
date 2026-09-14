@@ -197,6 +197,14 @@ To protect passwords from compromise, Seditio uses two-factor salted hashing usi
 
 ---
 
-### 4.5.3. Brute Force Protection and Banlist
-* **Audit of Failed Logins:** A security log is kept. All failed login attempts under any name are recorded in the security log (`sec`), along with the attacker's IP address.
-* **IP and E-mail Blockings (Banlist):** In the control panel at `/admin/banlist` (or `index.php?module=admin&m=banlist` without SEF URLs), the administrator can block access to the site by IP address, email mask (e.g., `*@spamdomain.com`), or subnet mask. The system fully supports both IPv4 and IPv6 addresses (the `banlist_ip` field is `VARCHAR(45)`). Verification is performed by the `sed_check_banlist($userip)` function (located in `system/functions.php`), which checks the visitor's IP against the database on every page view, automatically building comparison masks (e.g., `192.168.1.*` for IPv4 or `2001:db8:85a3:0:*:*:*:*` for IPv6). If a match is found, script execution is terminated immediately.
+### 4.5.3. Brute-Force Protection and Banlist
+* **Audit of Failed Login Attempts:** The system maintains a security journal. All failed authentication attempts under any username are recorded in the security log (`sec`), including the attacker's IP address.
+* **IP and E-mail Blocking (Banlist):** In the control panel at `/admin/banlist` (or `index.php?module=admin&m=banlist` without SEF URLs), administrators can ban access by specific IP address, email mask (e.g., `*@spamdomain.com`), or subnet mask. Both IPv4 and IPv6 addresses are fully supported (the `banlist_ip` field is `VARCHAR(45)`). Checks are handled by `sed_check_banlist($userip)` (`system/functions.php`), which scans incoming IPs against the database on every request. If a match is detected, execution halts immediately.
+
+---
+
+### 4.5.4. Registration and Profile Management (in Version 186)
+* **Safe Registration Handling:** The registration controller (`modules/users/users.register.php`) processes account creation strictly on `POST` requests. Direct `GET` requests never trigger validation logic, preventing unintended error states.
+* **PHP 8.1+ Compatibility:** Form string inputs are sanitized prior to passing into `mb_strtolower()`, `str_replace()`, and `mb_strlen()`, preventing deprecation warnings when `null` values are encountered.
+* **Safe Authorization Initialization:** During user session bootstrapping, the `$user_auth` array is guaranteed to be initialized as an empty array if unset, avoiding undefined array key issues.
+* **Modern Profile Upload Widget:** User avatar, photo, and signature upload fields in `users.profile.tpl` are upgraded to the modern `sedjs.imageUpload` tile widget, offering live previews and preserving selections during server validation.

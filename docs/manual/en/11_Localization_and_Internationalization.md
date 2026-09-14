@@ -14,8 +14,16 @@ The interface language for each visitor is determined during page loading in the
 * **For Guests:** The default value from the global configuration file (`datas/config.php`) is used, which is stored in `$cfg['defaultlang']` (typically `'en'` or `'ru'`).
 * **Final Selection:** The selected two-character language code (e.g., `'ru'`, `'en'`, `'tr'`) is written to the global `$lang` variable, which is used in all subsequent localization queries.
 
-### 11.1.2. Site Structure Localization
-To support multilingual page categories (structure) and forum sections, alternative titles and description fields are available in the administrator panel. This allows categories to be displayed in the user's active language without duplicating the category tree.
+### 11.1.2. Site Structure and Page Content Localization (i18n Plugin)
+For full-featured multilingual content management, Seditio 186 includes the dedicated **i18n** plugin:
+* **Page Content Multilingualism:** The plugin translates all page textual fields (`title`, `desc`, `text`, `text2`) and all SEO metadata (`seo_title`, `seo_desc`, `seo_keywords`, `seo_h1`) into configured target languages without duplicating records in the primary pages table. Translations are stored in the separate `sed_i18n_pages` table.
+* **Category Tree Localization:** In category structures (`sed_structure`), translated titles and descriptions are persisted in the `sed_i18n_structure` table.
+* **Template Translation Tabs:** In page creation/editing forms and category configuration views, language tabs are rendered via template tags:
+  - `{PAGEADD_I18N_TABS_HEADERS}` and `{PAGEADD_I18N_TABS_BODY}` — in `page.add.tpl`.
+  - `{PAGEEDIT_I18N_TABS_HEADERS}` and `{PAGEEDIT_I18N_TABS_BODY}` — in `page.edit.tpl`.
+  - `{STRUCTURE_UPDATE_I18N_TABS_HEADERS}` and `{STRUCTURE_UPDATE_I18N_TABS_BODY}` — in the category update template.
+* **Language Switcher (`{HEADER_I18N_SELECTOR}`):** In the global header template (`header.tpl`), the `{HEADER_I18N_SELECTOR}` tag renders links to switch languages, automatically hiding the currently active language.
+* **Automatic Fallback:** When a translation is missing for the active language, the system automatically falls back to content in the default site language (`$cfg['defaultlang']`).
 
 ---
 
@@ -118,7 +126,17 @@ foreach ($sed_modules as $mod_code => $mod_row) {
 }
 ```
 
-### 11.5.3. Overriding Strings at Skin (Theme) Level
+### 11.5.3. Global Loading of System Messages (message.lang.php)
+In version 186, the core message file `message.lang.php` is loaded globally during system initialization in `system/common.php`:
+```php
+$msg_lang_file = SED_ROOT . '/system/lang/' . $usr['lang'] . '/message.lang.php';
+if (file_exists($msg_lang_file)) {
+    include_once($msg_lang_file);
+}
+```
+Consequently, the system message array `$L['msg...']` (error alerts, authentication notices, informational banners) is accessible universally across all modules, plugins, and XTemplate templates without manual lookup or re-inclusion.
+
+### 11.5.4. Overriding Strings at Skin (Theme) Level
 The active site skin has the highest priority in localization. After loading all core and module files, Seditio checks for a language file inside the active theme directory (e.g., `skins/sympfy/sympfy.ru.lang.php`):
 ```php
 if (@file_exists($usr['skin_lang'])) {

@@ -136,6 +136,7 @@ The PFS (Personal File System) module is the system manager for uploading and st
 ### 5.4.1. PFS, Folder Hierarchy, and Disk Space Quotas
 All uploaded files are distributed across user folders:
 * **Hierarchical Folder Structure:** The `sed_pfs_folders` table stores information about user folders and albums. The system supports **full hierarchy (nested folders)**. Each folder has a unique ID, and linking to a parent folder is done via the `pff_parentid` column. If a folder is in the user's PFS root, the `pff_parentid` value is `0`. When creating a nested folder, the ID of the parent folder is recorded in this field. Folders are also separated by access types into "Private" and "Public" (`pff_type`).
+* **Site File Space (SFS):** Alongside personal user directories, administrators can manage shared site-wide storage (`userid = 0`). In version 186, parameter routing in `sed_url()` was fixed for zero-value parameters, ensuring that site-wide files are reliably separated from personal administrator archives.
 * The `sed_pfs` table registers the files themselves (system name on the server, original name, size, file type, upload date, owner ID).
 * **Quotas and Limits:** Rigid disk space limits are defined in user group settings (ACL). Each group is assigned a maximum total upload volume (e.g., 50 MB for regular users) and a maximum size for a single file. When the quota is exceeded, PFS will block uploading new files until the user clears their storage.
 

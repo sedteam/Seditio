@@ -16,7 +16,9 @@ The admin panel interface is divided into two main functional areas:
    Has a dark layout. The avatar of the current administrator and a greeting (e.g., *"Hi, Amro"*) are displayed at the top. Below is a vertical list of links to the main management sections.
 2. **Main Content (Right Panel):**
    This displays working forms, lists of elements, and statistics tables.
-   * **Top Horizontal Menu:** Located directly above the main content area. On the left side, breadcrumbs are displayed (e.g., `Administration panel > Home` or `Administration panel > Configuration`), along with a quick link to the website `Go to site`. On the right side, there are links to the administrator profile (`Profile`), personal files (`My files`), count of unread PMs (`No private messages`), and the logout button (`Logout`).
+   * **Top Horizontal Menu:** Located directly above the main content area. On the left side, breadcrumbs are displayed (e.g., `Administration panel > Home` or `Administration panel > Configuration`), along with a quick link to the website `Go to site`. On the right side, there are:
+     * **Topbar Notifications:** An interactive bell icon with a dropdown listing system alerts, notifications, and instant health checks for core modules.
+     * Links to the administrator profile (`Profile`), personal files (`My files`), count of unread PMs (`No private messages`), and the logout button (`Logout`).
 
 ---
 
@@ -41,6 +43,15 @@ The file `system/core/admin/admin.inc.php` is responsible for dispatching the co
      * In all other cases (by default), the file `page.admin.structure.php` is included (management of categories and structure of pages).
 2. **Plugin Check:** If the module is not found, the router checks if a plugin with code `m` is active. If so, the plugin administration file is included: `plugins/{m}/{m}.admin.plug.php` (for example, for the trashcan plugin at `/admin/trashcan` or `index.php?module=admin&m=trashcan` without SEF URLs).
 3. **Core Fallback:** If both checks yield no results, the corresponding core administration file from the `system/core/admin/` folder is loaded. By default, `admin.home.inc.php` is loaded (if `m` is empty), `admin.{m}.inc.php`, or `admin.{m}.{s}.inc.php` (if section parameter `s` is present).
+
+#### Main Dashboard (`admin.home.inc.php`)
+The main dashboard has been modernized into a comprehensive situation room:
+* **KPI Metrics Cards:** Key summary metrics (total pages, comments, forum posts, polls, users, and PFS disk space usage).
+* **Interactive Charting (`SedChart`):** Real-time activity charts powered by the built-in standalone HTML5 Canvas charting engine `system/assets/js/sedchart.js` (operates with zero external dependencies).
+* **Quick Action Widgets:** One-click maintenance tools integrated directly onto the dashboard:
+  * *Clear Cache* (instant flush of database and template caches).
+  * *Optimize Database* (defragment MySQL tables).
+* **Quick View Plugin (`adminqv`):** Completely rewritten using a responsive, modern Flexbox architecture.
 
 #### Example 1. Dynamic Menu of the Page Module (`page`)
 File: `/modules/page/admin/page.admin.menu.php`
@@ -121,7 +132,7 @@ In Seditio, the **Modules** (`m=modules`) and **Plugins** (`m=plug`) sections ar
 This section displays a summary table of all modules discovered in the `/modules/` directory:
 * **Modules:** The name of the module (with an icon) and a link to its details.
 * **Code:** System identifier of the module in the CMS (e.g., `forums`, `gallery`, `page`, `pfs`, `pm`, `polls`, `users`).
-* **Version:** Module build version (e.g., `1.0.0`).
+* **Version:** Module build version (e.g., `1.0.0`). The target compatible Seditio core version is explicitly displayed in parentheses next to it (e.g., `1.0.0 (186)`), eliminating ambiguity between extension releases and engine versions.
 * **Running:** The current state of the module:
   * `Running` — active and available.
   * `Paused` — temporarily disabled by the administrator.
@@ -134,7 +145,7 @@ This section displays a summary table of all modules discovered in the `/modules
 ### 3.3.2. Plugins Control Panel (`m=plug`)
 This section displays all plugins from the `/plugins/` folder:
 * **Name and description:** Plugin icon, name, and description.
-* **Code and Version:** System identifier (e.g., `comments`, `tags`, `sedcaptcha`) and version.
+* **Code and Version:** System identifier (e.g., `comments`, `tags`, `sedcaptcha`) and version, with the compatible core version in parentheses (e.g., `2.0.0 (186)`).
 * **Status:**
   * `Running` — fully active.
   * `Paused` — disabled.
@@ -275,7 +286,7 @@ This section acts as a dispatcher (dashboard) for accessing auxiliary system too
    * **Banlist (`m=banlist`):** View and edit blocked IP addresses, subnets, and email addresses.
    * **Internal Cache (`m=cache`):** Manage database, SEF URL, and template caches.
    * **Smilies (`m=smilies`):** Configure text code replacements and map them to smiley images.
-   * **Hits (`m=hits`):** Site traffic logs grouped by years, months, and days.
+   * **Hits (`m=hits`):** Site traffic logs with an interactive HTML5 Canvas chart and 3-level period filtering (Year, Month, Week).
    * **Referers (`m=referers`):** Track incoming traffic sources.
 * **Additional Modules:** Management of modules (e.g., `forums`, `pfs`, `gallery`, `polls`) that are not part of the basic system core.
 * **Plugin Tools:** Launches administrative panels for plugins that register handlers via the `tools` hook (e.g., `skineditor` for skin customization, `syscheck` for server checks, etc.).

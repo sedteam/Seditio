@@ -251,17 +251,16 @@ The `uploader` plugin extends the Personal File System (PFS) with asynchronous f
 
 ---
 
-## 7.19. whosonline (Activity Monitor "Who's Online")
+## 7.19. whosonline (Activity Monitor "Who's Online" — v3.0)
 
-The `whosonline` plugin records and displays lists of users and guests currently browsing the site.
-
+The `whosonline` plugin version 3.0 is a fully modular extension that records and displays users and guests currently browsing the site:
+* **Architecture & Optimization:**
+  * User activity tracking has been decoupled from the core and moved entirely to plugin hooks.
+  * Internal TTL caching (`inc/whosonline.functions.php`) minimizes database traffic under high load.
+  * Anti-hammer flood protection has been moved to the core `sed_shield` table, keeping the online tracking table lightweight.
 * **Database Table (`sed_online`):**
-  * `online_ip` (VARCHAR) — visitor's IP address.
-  * `online_user` (VARCHAR) — username (or "Guest").
-  * `online_userid` (INT) — user ID (0 for guests).
-  * `online_lastactive` (INT) — UNIX timestamp of the last activity.
-  * `online_location` (VARCHAR) — current site section (determined by GET URL parameters).
-  * `online_sublocation` (VARCHAR) — additional location info (e.g., forum topic title).
+  * Created automatically upon plugin installation (`whosonline.install.php`).
+  * Fields: `online_id` (PK, INT), `online_ip` (VARCHAR(45)), `online_name` (VARCHAR(24)), `online_lastseen` (INT), `online_location` (VARCHAR(32)), `online_subloc` (VARCHAR(255)), `online_userid` (INT).
 * **SEF URLs:**
   * Online users list page: `/plug/whosonline` or `index.php?module=plug&e=whosonline`.
 
@@ -294,7 +293,15 @@ The `cleaner` plugin performs routine database cleanup in the background.
 
 ## 7.22. Other Built-in Plugins
 
-* **`adminqv` (Quick View)** — displays widgets of general site statistics, latest logs, and quick configuration options on the homepage of the control panel.
+* **`adminqv` (Quick View)** — modern control center for the main dashboard featuring responsive Flexbox styling, KPI cards, real-time `SedChart` graphics, and one-click maintenance tools.
+* **`cookienotice` (Cookie Consent Notice)** — responsive privacy banner alerting visitors about cookie usage in full compliance with data regulations.
+* **`ckeditor` (WYSIWYG Visual Editor)** — integrates the CKEditor visual editor for textarea inputs across the site. Connecting the editor to any `<textarea>` in TPL templates is controlled via the `data-editor` attribute:
+  * `data-editor="Micro"` — compact toolbar (150px height) designed for short descriptions and comments.
+  * `data-editor="Basic"` — basic toolbar (200px height) providing essential text formatting tools.
+  * `data-editor="Extended"` — extended toolbar (400px height) for standard page and article content.
+  * `data-editor="Full"` — full-featured toolbar (600px height) unlocking all available formatting controls.
+  * `data-editor="noeditor"` — explicitly disables the visual editor for the field (plain HTML/text mode).
+  The plugin supports custom skins, toolbar color theming, database smileys integration, and direct media insertion from PFS.
 * **`letteravatar` (Letter Avatars)** — automatically generates avatars with the first letter of the username for registered members who have not uploaded a custom avatar.
 * **`massmovetopics` (Mass Move Topics)** — provides forum moderators with a tool for batch moving topics from one forum category to another in a single click.
 * **`otherpages` (Other Pages)** — forms a list of random or most viewed pages from selected categories for sidebar widgets.
@@ -303,5 +310,5 @@ The `cleaner` plugin performs routine database cleanup in the background.
 * **`slider` (Image Slider)** — displays an adaptive slider on the homepage based on media files uploaded to PFS.
 * **`statistics` (Site Statistics)** — gathers and outputs detailed general statistics of the CMS (total count of pages, forum topics, posts, comments, users, and uploaded file sizes).
 * **`syntaxhighlight` (Syntax Highlighting)** — connects JavaScript libraries to highlight code inside `[code]` BB-code tags in page and forum posts.
-* **`syscheck` (System Diagnostics)** — outputs a report on the server meeting Seditio system requirements (PHP, DBMS versions, extensions, directory write permissions).
+* **`syscheck` (System Diagnostics)** — outputs a report on the server meeting Seditio system requirements (PHP, DBMS versions, extensions, validation of new `system/setup/` installer files, directory write permissions).
 * **`ipsearch` (IP Search)** — admin panel tool that quickly locates geographic and ISP details for a given user IP address using external API services.

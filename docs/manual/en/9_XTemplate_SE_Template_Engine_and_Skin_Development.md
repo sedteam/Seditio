@@ -466,3 +466,18 @@ In template files, localized phrases are loaded via: `{PHP.skinlang.header.Login
 </div>
 <!-- END: MAIN -->
 ```
+
+---
+
+### 9.7.4. System Assets & CSS Custom Properties (in Version 186)
+
+Starting with version 186, theme development has been significantly streamlined by consolidating common core components and UI styles:
+
+1. **System Static Assets (`system/assets/`):**
+   * **`core.css`**: Automatically registered by the core. Contains standardized styles for forms, modals, tooltips, spoilers, user panel toggles, and PFS file format icons. Themes no longer need to duplicate these systemic UI rules.
+   * **`fonts.css`**: Centralized Seditio vector icon font, available for front-end themes as well as the CKEditor WYSIWYG environment (via the `iconic` plugin).
+2. **CSS Custom Properties (Variables):**
+   * Centralized `:root` design tokens: palette (`--core-color-primary`, `--core-color-accent`, borders, backgrounds), spacing, and corner radiuses (`--core-border-radius`).
+   * Themes can override skin color variables (`--sympfy-*` or custom variables), instantly altering the site palette across all system elements without rewriting complex CSS rules.
+3. **Modernized Window Manager `sedjs.modal`:**
+   * Uses the Pointer Events standard with iframe hover protection, full-screen expansion (Maximize), bottom-left docking (Minimize), and crisp SVG controls.

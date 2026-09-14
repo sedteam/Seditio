@@ -36,7 +36,7 @@ The history of Seditio spans more than twenty years. During this time, the engin
 * **The LDU Era: A Gamer and Hacker Favorite (2001–2006).** It all started in France, where programmer Olivier Chapuis from Neocrome (Grenoble) created the Land Down Under (LDU) engine. The system turned out to be so fast, lightweight, and secure that it instantly became a cult favorite in two completely different yet highly demanding spheres. On one hand, it was widely used to build massive gaming portals and gaming community websites. On the other hand, due to its obsessive resistance to hacking, LDU became the primary choice for creating private forums and major sites dedicated to hacking and cybersecurity, which were constantly under severe attack in those years.
 * **The Birth of Seditio and the Emergence of Cotonti (2006–2009).** In 2006, the engine underwent a global architectural redesign and changed its name to Seditio (officially, LDU Second Edition). The main focus was shifted to an efficient and user-friendly plugin system. When Olivier took a break from development in 2008, a part of the team, with his official consent, created an independent fork — Cotonti, which began to develop in parallel as a fully open-source project.
 * **The End of the Author's Phase (2011–2012).** Olivier Chapuis brought the system to version 150 and announced the closure of the LDU and Seditio projects. He later attempted to return to release the 160/170 branch and transition the system to HTML parsing instead of the familiar BBcodes. However, this introduced serious security issues. Unwilling to compromise the engine's security, Olivier made the final decision to shut down the project.
-* **The Modern Phase: Relocating to Russia (from 2012 to the present).** The engine did not die. In 2012, Russian developers Alexander Tishov (Amro) and Anton Sazanov (Antony) received official permission from Olivier to take Seditio completely under their wing. From that moment on, Alexander Tishov (Amro) became the primary author of all program code. Anton Sazanov (Antony) — owner of the historical portal ldu.ru (which has been the main Russian-language support hub since the early 2000s and is now essentially a mirror of the official site) — took charge of the philosophy, conceptual design, and documentation development. The Turkish community also made a huge contribution to the project's development. The project was transitioned to the free BSD license, fully modernized, and brought to the stable version 185.
+* **The Modern Phase: Relocating to Russia (from 2012 to the present).** The engine did not die. In 2012, Russian developers Alexander Tishov (Amro) and Anton Sazanov (Antony) received official permission from Olivier to take Seditio completely under their wing. From that moment on, Alexander Tishov (Amro) became the primary author of all program code. Anton Sazanov (Antony) — owner of the historical portal ldu.ru (which has been the main Russian-language support hub since the early 2000s and is now essentially a mirror of the official site) — took charge of the philosophy, conceptual design, and documentation development. The Turkish community also made a huge contribution to the project's development. The project was transitioned to the free BSD license, fully modernized, and brought to the stable version 186.
 
 ### 1.2.1. From Origins to Modernity: Carefully Developing Olivier's Legacy
 
@@ -52,7 +52,7 @@ Behind each release lies its own philosophy of working with content and code:
 
 * **Olivier Chapuis's Versions (Neocrome):** `100`, `102`, `110`, `120`, `121`, `125`, `126`, `130`, `150`, `161`, `170`.
   Olivier created a wonderful concept: fast, lightweight, and easy to understand. In those years, text formatting relied entirely on the safe but limited BBcode standard. The engine was stable, but when web standards began to require full-fledged HTML, Olivier attempted to introduce HTML parsing in versions 160 and 170. Unfortunately, without a robust input filtering system, this led to critical vulnerabilities and hacks of the neocrome.net site, which prompted the author to stop development.
-* **Alexander Tishov's Versions (Seditio Team):** `171`, `172`, `173`, `175`, `177`, `178`, `179`, `180`, `185`.
+* **Alexander Tishov's Versions (Seditio Team):** `171`, `172`, `173`, `175`, `177`, `178`, `179`, `180`, `185`, `186`.
   Alexander (Amro) got acquainted with the LDU engine back in version 801 while studying at the university. The project immediately attracted him with its logical structure and simplicity of understanding. Later, he founded his own web studio and created commercial client websites based on the same system. When Olivier announced the closure of the platform, he faced a serious choice. If there were only a few active websites, it would be easier to migrate to another CMS. However, obligations to clients and an impressive number of active studio projects literally forced him to fight for the survival of the engine. Alexander took on the challenging task — to fully transition Seditio to modern HTML markup and visual editors, preserving and even enhancing site security. The solution was the development of a fundamentally new input import and strict filtering system, which marked the beginning of a deep modernization.
 
 ### 1.2.3. Evolution in Numbers: The Scale of Changes Under the Hood
@@ -60,7 +60,7 @@ Behind each release lies its own philosophy of working with content and code:
 Although Seditio remains just as fast and resource-efficient, major changes occurred in its codebase under the hood, which are best understood in the language of statistics:
 
 * **Deep Code Refactoring:** About 94% of the core and modules' logical PHP code today is entirely new or completely rewritten from scratch. Only 6% of the original version 170 PHP code lines (Olivier's last version) remained unchanged.
-* **Threefold Growth of Capabilities:** The overall volume of clean core and module PHP code has grown more than 3 times — from 26,000 lines (in version 170) to 85,000 lines (in the current stable version v185).
+* **Threefold Growth of Capabilities:** The overall volume of clean core and module PHP code has grown more than 3 times — from 26,000 lines (in version 170) to more than 88,000 lines (in the current stable version v186).
 
 ### 1.2.4. What Has Changed for the Developer and Site Owner?
 
@@ -139,6 +139,8 @@ The root directory of Seditio contains the following main directories and files:
 * **`/plugins/`** — contains subfolders with all plugins (for example, `/plugins/comments/`, `/plugins/ckeditor/`).
 * **`/skins/`** — site design themes. Each theme contains template files with the `.tpl` extension, images, scripts, and styles.
 * **`/system/`** — system core:
+  * `/system/assets/` — centralized repository for system static assets: stylesheets (`/system/assets/css/core.css`), core JavaScript libraries (`core.js`, `imageupload.js`, `autocomplete.js`, `sedchart.js`), and system icon fonts (`/system/assets/fonts/`).
+  * `/system/setup/` — modern step-by-step Setup Wizard.
   * `/system/common.php` — the main configuration and initialization script. Connects database, loads settings, sessions, and access rights.
   * `/system/functions.php` — the main set of global Seditio API functions (including work with users, strings, SEF URLs).
   * `/system/functions.admin.php` — auxiliary functions for the administration panel (management of structure, access rights, logging, list rendering).
@@ -149,7 +151,7 @@ The root directory of Seditio contains the following main directories and files:
   * `/system/config.urltranslation.php` — rules of parameter and character translation/transliteration when generating URLs.
   * `/system/config.extensions.php` — configuration file with an array of allowed extensions, groups, and file icons for PFS.
   * `/system/core/` — core base controllers (for example, `/system/core/admin/` for the control panel, `/system/core/plug/` for processing plugins).
-  * `/system/lang/` — system localization files in different languages.
+  * `/system/lang/` — system localization files in different languages, including the global dictionary of system alerts `message.lang.php`.
 * **`/index.php`** — the main entry file. Parses incoming URI, matches it with rewrite rules, and connects the required core module or script.
 * **`/.htaccess`** — Apache configuration file containing rewrite rules redirecting requests to `index.php` for SEF URLs.
 

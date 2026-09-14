@@ -74,8 +74,8 @@ A standard block containing information about the file:
 /* ====================
 [BEGIN_SED]
 File=modules/mymodule/mymodule.setup.php
-Version=185
-Updated=2026-feb-14
+Version=186
+Updated=2026-sep-07
 Type=Module
 Author=Developer Name
 Description=Custom Module for Seditio

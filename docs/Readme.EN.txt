@@ -5,7 +5,7 @@
 *
 *--------------------------------------------------------*/
 
-Seditio 180
+Seditio 186
 
 INSTALLATION
 
@@ -21,6 +21,7 @@ INSTALLATION
 /datas/resized
 /datas/signatures
 /datas/users
+/datas/cache
 
 3. Arrive at http://your_site/install
 
