@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-sep-14
+Updated=2026-sep-15
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -5598,14 +5598,32 @@ function sed_array_buildvars($data)
 
 /** 
  * Build extra field variable 
+ * 
+ * @param array $extrafields Extra fields array
+ * @param string $var_prefix Variable prefix in POST (e.g. 'ruser', 'rpage')
+ * @param string $table_prefix Table prefix (e.g. 'user', 'page')
+ * @return array Processed extra fields values or null for unsubmitted fields
  */
 function sed_extrafield_buildvar($extrafields, $var_prefix, $table_prefix)
 {
+	$res = array();
 	if (count($extrafields) > 0) {
 		foreach ($extrafields as $row) {
-			$import = sed_import($var_prefix . $row['code'], 'P', $row['vartype']);
-			$import = (is_array($import)) ? implode(',', sed_array_buildvars($import)) : $import;
-			$res[$table_prefix . '_' . $row['code']] = $import;
+			$post_name = $var_prefix . $row['code'];
+			$present_name = $post_name . '_present';
+			$field_key = $table_prefix . '_' . $row['code'];
+
+			if (isset($_POST[$post_name])) {
+				$import = sed_import($post_name, 'P', $row['vartype']);
+				$import = (is_array($import)) ? implode(',', sed_array_buildvars($import)) : $import;
+				$res[$field_key] = $import;
+			} elseif (isset($_POST[$present_name])) {
+				// Form field was present (e.g. multi-checkbox or multi-select), but no options selected
+				$res[$field_key] = '';
+			} else {
+				// Field was not submitted in the form
+				$res[$field_key] = null;
+			}
 		}
 	}
 	return $res;
@@ -6038,11 +6056,15 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 
 			case 'multipleselect':
 				$t2_check = !empty($field_value) ? explode(',', $field_value) : $field_value;
-				$t2 = sed_selectbox($t2_check, $importrowname . $row['code'] . "[]", $row['terms'], true, true, true);
+				$t2 = '<input type="hidden" name="' . $importrowname . $row['code'] . '_present" value="1" />' . sed_selectbox($t2_check, $importrowname . $row['code'] . "[]", $row['terms'], true, true, true);
 				break;
 
 			case 'checkbox':
-				$t2 = sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value);
+				if (empty($row['terms']) || !is_array($row['terms'])) {
+					$t2 = '<input type="hidden" name="' . $importrowname . $row['code'] . '" value="0" />' . sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value);
+				} else {
+					$t2 = '<input type="hidden" name="' . $importrowname . $row['code'] . '_present" value="1" />' . sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value);
+				}
 				break;
 
 			case 'radio':

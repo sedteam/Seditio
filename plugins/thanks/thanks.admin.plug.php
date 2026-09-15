@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/thanks.admin.plug.php
 Version=186
-Updated=2026-mar-12
+Updated=2026-sep-15
 Type=Plugin
 Description=Thanks administration
 [END_SED]
@@ -54,6 +54,13 @@ if ($a == 'delete') {
 	}
 }
 
+if ($a == 'resync') {
+	sed_check_xg();
+	thanks_resync_all();
+	sed_redirect(sed_url("admin", "m=thanks", "", true), false, array('msg' => '302'));
+	exit;
+}
+
 $d = sed_import('d', 'G', 'INT');
 if (empty($d)) $d = 0;
 
@@ -95,7 +102,8 @@ while ($row = sed_sql_fetchassoc($sql)) {
 $t->assign(array(
 	"ADMIN_THANKS_TITLE" => $admintitle,
 	"ADMIN_THANKS_TOTAL" => $L['thanks_total'],
-	"ADMIN_THANKS_TOTALITEMS" => $totallines
+	"ADMIN_THANKS_TOTALITEMS" => $totallines,
+	"ADMIN_THANKS_RESYNC_URL" => sed_url("admin", "m=thanks&a=resync&" . sed_xg())
 ));
 
 $t->parse("ADMIN_THANKS");

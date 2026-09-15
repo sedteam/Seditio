@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.edit.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-15
 Type=Module
 Author=Seditio Team
 Description=User editing
@@ -209,7 +209,10 @@ if ($a == 'update') {
 		$ssql_extra = '';
 		if (count($extrafields) > 0) {
 			foreach ($extrafields as $i => $row) {
-				$ssql_extra .= ", user_" . $row['code'] . " = " . "'" . sed_sql_prep($ruserextrafields['user_' . $row['code']]) . "'";
+				$field_key = 'user_' . $row['code'];
+				if (isset($ruserextrafields[$field_key]) && $ruserextrafields[$field_key] !== null) {
+					$ssql_extra .= ", " . $field_key . " = '" . sed_sql_prep($ruserextrafields[$field_key]) . "'";
+				}
 			}
 		}
 		// ----------------------			

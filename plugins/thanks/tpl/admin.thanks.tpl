@@ -32,8 +32,9 @@
 				<!-- END: THANKS_LIST -->
 			</div>
 		</div>
-		<div style="padding:10px;">
-			{ADMIN_THANKS_TOTAL} : {ADMIN_THANKS_TOTALITEMS}
+		<div style="padding:10px; display:flex; justify-content:space-between; align-items:center;">
+			<div>{ADMIN_THANKS_TOTAL} : {ADMIN_THANKS_TOTALITEMS}</div>
+			<div><a href="{ADMIN_THANKS_RESYNC_URL}" class="btn btn-adm">{PHP.L.thanks_resync}</a></div>
 		</div>
 		<!-- BEGIN: THANKS_PAGINATION_TP -->
 		<div class="paging">

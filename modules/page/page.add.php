@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.add.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-15
 Type=Module
 Author=Seditio Team
 Description=Add page
@@ -126,8 +126,12 @@ if ($a == 'add') {
 		$ssql_extra_values = '';
 		if (count($extrafields) > 0) {
 			foreach ($extrafields as $i => $row) {
-				$ssql_extra_columns .= ', page_' . $row['code'];
-				$ssql_extra_values .= ", '" . sed_sql_prep($newpageextrafields['page_' . $row['code']]) . "'";
+				$field_key = 'page_' . $row['code'];
+				$val = (isset($newpageextrafields[$field_key]) && $newpageextrafields[$field_key] !== null)
+					? $newpageextrafields[$field_key]
+					: (isset($row['extra_default']) ? $row['extra_default'] : '');
+				$ssql_extra_columns .= ', ' . $field_key;
+				$ssql_extra_values .= ", '" . sed_sql_prep($val) . "'";
 			}
 		}
 		// ----------------------

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/inc/comments.functions.php
 Version=186
-Updated=2026-feb-16
+Updated=2026-sep-15
 Type=Plugin
 Author=Seditio Team
 Description=Comments API
@@ -240,8 +240,12 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			if (empty($error_string)) {
 				if (count($extrafields) > 0) {
 					foreach ($extrafields as $i => $row) {
-						$ssql_extra_columns .= ', com_' . $row['code'];
-						$ssql_extra_values .= ", '" . sed_sql_prep($newcommentextrafields['com_' . $row['code']]) . "'";
+						$field_key = 'com_' . $row['code'];
+						$val = (isset($newcommentextrafields[$field_key]) && $newcommentextrafields[$field_key] !== null)
+							? $newcommentextrafields[$field_key]
+							: (isset($row['extra_default']) ? $row['extra_default'] : '');
+						$ssql_extra_columns .= ', ' . $field_key;
+						$ssql_extra_values .= ", '" . sed_sql_prep($val) . "'";
 					}
 				}
 
@@ -424,7 +428,10 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$ssql_extra = '';
 					if (count($extrafields) > 0) {
 						foreach ($extrafields as $i => $row) {
-							$ssql_extra .= ", com_" . $row['code'] . " = " . "'" . sed_sql_prep($rcommentextrafields['com_' . $row['code']]) . "'";
+							$field_key = 'com_' . $row['code'];
+							if (isset($rcommentextrafields[$field_key]) && $rcommentextrafields[$field_key] !== null) {
+								$ssql_extra .= ", " . $field_key . " = '" . sed_sql_prep($rcommentextrafields[$field_key]) . "'";
+							}
 						}
 					}
 

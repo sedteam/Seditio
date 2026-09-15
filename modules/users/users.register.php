@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.register.php
 Version=186
-Updated=2026-sep-02
+Updated=2026-sep-15
 Type=Module
 Author=Seditio Team
 Description=User registration
@@ -150,8 +150,12 @@ if ($a == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 		// ------ Extra fields 
 		if (count($extrafields) > 0) {
 			foreach ($extrafields as $i => $row) {
-				$ssql_extra_columns .= ', user_' . $row['code'];
-				$ssql_extra_values .= ", '" . sed_sql_prep($ruserextrafields['user_' . $row['code']]) . "'";
+				$field_key = 'user_' . $row['code'];
+				$val = (isset($ruserextrafields[$field_key]) && $ruserextrafields[$field_key] !== null)
+					? $ruserextrafields[$field_key]
+					: (isset($row['extra_default']) ? $row['extra_default'] : '');
+				$ssql_extra_columns .= ', ' . $field_key;
+				$ssql_extra_values .= ", '" . sed_sql_prep($val) . "'";
 			}
 		}
 		// ----------------------		

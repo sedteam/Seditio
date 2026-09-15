@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/inc/thanks.functions.php
 Version=186
-Updated=2026-mar-12
+Updated=2026-sep-15
 Type=Plugin
 Description=Thanks API
 [END_SED]
@@ -97,7 +97,7 @@ function thanks_add($touser, $fromuser, $ext, $item)
 	$ext = sed_sql_prep($ext);
 	$ins = sed_sql_query("INSERT INTO $db_thanks (th_ext, th_item, th_fromuser, th_touser, th_date) VALUES ('" . $ext . "', " . (int)$item . ", " . (int)$fromuser . ", " . (int)$touser . ", " . (int)$sys['now_offset'] . ")");
 	if ($ins && $touser > 0) {
-		sed_sql_query("UPDATE $db_users SET user_thankscount = user_thankscount + 1 WHERE user_id = " . (int)$touser);
+		thanks_user_resync($touser);
 		if (!empty($cfg['plugin']['thanks']['notify_by_pm'])) {
 			thanks_notify_by_pm($touser, $fromuser, $ext, $item);
 		}
@@ -199,7 +199,7 @@ function thanks_remove($id)
 	$row = sed_sql_fetchassoc($sql);
 	$rm = sed_sql_query("DELETE FROM $db_thanks WHERE th_id = $id");
 	if ($rm && $row && $row['th_touser'] > 0) {
-		sed_sql_query("UPDATE $db_users SET user_thankscount = GREATEST(0, user_thankscount - 1) WHERE user_id = " . (int)$row['th_touser']);
+		thanks_user_resync($row['th_touser']);
 	}
 	return (bool)$rm;
 }
@@ -232,6 +232,39 @@ function thanks_user_thanks_count($user_id)
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_thanks WHERE th_touser=" . (int)$user_id);
 	return (int)sed_sql_result($sql, 0, 'COUNT(*)');
+}
+
+/**
+ * Resyncs user thanks count by calculating actual count from thanks table
+ *
+ * @param int $user_id User ID
+ * @return int Total thanks count
+ */
+function thanks_user_resync($user_id)
+{
+	global $db_thanks, $db_users;
+
+	$user_id = (int)$user_id;
+	if ($user_id <= 0) {
+		return 0;
+	}
+
+	$cnt = (int)sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_thanks WHERE th_touser = " . $user_id), 0, 'COUNT(*)');
+	sed_sql_query("UPDATE $db_users SET user_thankscount = " . $cnt . " WHERE user_id = " . $user_id);
+	return $cnt;
+}
+
+/**
+ * Resyncs all users' thanks counts from thanks table
+ *
+ * @return bool
+ */
+function thanks_resync_all()
+{
+	global $db_thanks, $db_users;
+
+	$sql = sed_sql_query("UPDATE $db_users u SET u.user_thankscount = (SELECT COUNT(*) FROM $db_thanks t WHERE t.th_touser = u.user_id)");
+	return (bool)$sql;
 }
 
 /**

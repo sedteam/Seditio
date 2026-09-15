@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/lang/thanks.tr.lang.php
 Version=186
-Updated=2026-mar-12
+Updated=2026-sep-15
 Type=Plugin
 [END_SED]
 
@@ -40,6 +40,7 @@ $L['thanks_type_page'] = 'Sayfa';
 $L['thanks_type_post'] = 'Gönderi';
 $L['thanks_type_comment'] = 'Yorum';
 $L['thanks_total'] = 'Toplam';
+$L['thanks_resync'] = 'Sayaçları yeniden hesapla';
 $L['thanks_thanked'] = 'Teşekkür edenler';
 $L['thanks_thanked_times'] = 'Teşekkür: %s kez';
 $L['thanks_etc'] = '...';

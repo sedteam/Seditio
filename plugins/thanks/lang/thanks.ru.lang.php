@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/lang/thanks.ru.lang.php
 Version=186
-Updated=2026-mar-12
+Updated=2026-sep-15
 Type=Plugin
 [END_SED]
 
@@ -40,6 +40,7 @@ $L['thanks_type_page'] = 'Страница';
 $L['thanks_type_post'] = 'Пост';
 $L['thanks_type_comment'] = 'Комментарий';
 $L['thanks_total'] = 'Всего';
+$L['thanks_resync'] = 'Пересчитать счётчики';
 $L['thanks_thanked'] = 'Поблагодарили';
 $L['thanks_thanked_times'] = 'Поблагодарили: %s раз';
 $L['thanks_etc'] = '...';
