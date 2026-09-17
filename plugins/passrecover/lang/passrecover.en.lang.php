@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.en.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=Plugin.standalone
 Author=Seditio Team
 Description=
@@ -32,3 +32,5 @@ $L['plu_email1'] = "You are receiving this email because you have (or someone pr
 $L['plu_email2'] = "You're asked to enter the password recovery to our website. \r\nClick the link below to generate a new password. A new password will be sent to your e-mail.";
 $L['plu_email3'] = "In your request a new password. Change it as soon as possible and delete this email.\r\n\r\nYour new password: ";
 $L['plu_newpass'] = "Done!<br /><br />Soon you will receive a new password to access the site.";
+
+$L['cfg_generate_password'] = array("Generate new password and send via email?", "");

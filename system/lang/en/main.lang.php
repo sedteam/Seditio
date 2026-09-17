@@ -12,8 +12,10 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
 Version=186
-Updated=2026-aug-13
+Updated=2026-sep-17
 Type=Lang
+Name=English
+Native=English
 Author=Seditio Team
 Description=Language main
 [END_SED]
@@ -25,13 +27,8 @@ $L['Access'] = "Access";
 $L['Action'] = "Action";
 $L['Active'] = "Active";
 $L['Add'] = "Add";
-$L['Admin.'] = "Admin.";
 $L['Administration'] = "Administration";
 $L['Adminpanel'] = "Administration panel";
-$L['admintooltip']['pageadd'] = "Add page";
-$L['admintooltip']['pageedit'] = "Edit page";
-$L['admintooltip']['pageeditcategory'] = "Edit category";
-$L['admintooltip']['pageeditoption'] = "Edit config option";
 $L['Age'] = "Age";
 $L['Ago'] = "ago";
 $L['AIM'] = "AIM Address";
@@ -580,6 +577,12 @@ $L['sed_image_upload_add'] = 'Add image';
 $L['sed_image_upload_select'] = 'Choose file';
 $L['sed_image_upload_add_url'] = 'upload from the internet';
 $L['sed_image_upload_sort_hint'] = 'Drag thumbnails to change image order';
+
+/* Admin tooltips */
+$L['admintooltip_pageadd'] = "Add page";
+$L['admintooltip_pageedit'] = "Edit page";
+$L['admintooltip_pageeditcategory'] = "Edit category";
+$L['admintooltip_pageeditoption'] = "Edit config option";
 
 $sed_months_list = array(
 	1 => 'january',

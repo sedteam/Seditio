@@ -12,10 +12,10 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/admin.lang.php
 Version=186
-Updated=2026-jul-17
+Updated=2026-sep-16
 Type=Lang
 Author=Seditio Team
-Description=Admin panel
+Description=Admin English language file
 [END_SED]
 ==================== */
 
@@ -119,6 +119,9 @@ $L['adm_urlcache_regenerate'] = "Regenerate SEF URLs";
 $L['adm_urlcache_delete'] = "Delete URL cache";
 $L['adm_tplcache'] = "Template cache (XTemplate)";
 $L['adm_tplcache_delete'] = "Delete template cache";
+$L['adm_langcache'] = "Language cache";
+$L['adm_langcache_regenerate'] = "Regenerate language cache";
+$L['adm_langcache_delete'] = "Delete language cache";
 
 /* ====== Configuration ====== */
 
@@ -536,3 +539,46 @@ $L['adm_modules_noavailable'] = "No new modules available for installation.";
 
 $L['adm_pm_totaldb'] = "Private messages in the database";
 $L['adm_pm_totalsent'] = "Total of private messages ever sent";
+
+/* ====== Translations (v186) ====== */
+
+$L['adm_translations'] = "Translations";
+$L['adm_translations_title'] = "Translations and Languages Management";
+$L['adm_translations_add'] = "Add Translation";
+$L['adm_translations_languages'] = "Languages";
+$L['adm_translations_tools'] = "Tools";
+$L['adm_translations_key'] = "Variable Key";
+$L['adm_translations_val'] = "Value";
+$L['adm_translations_scope'] = "Scope";
+$L['adm_translations_code'] = "Component";
+$L['adm_translations_type'] = "Type";
+$L['adm_translations_custom'] = "Custom";
+$L['adm_translations_system'] = "System";
+$L['adm_translations_locked'] = "Locked";
+$L['adm_translations_all_scopes'] = "All Scopes";
+$L['adm_translations_regenerate'] = "Compile Language Cache";
+$L['adm_translations_import'] = "Import from Files";
+$L['adm_translations_import_confirm'] = "Import missing translations from files into database? Custom translations will not be overwritten.";
+$L['adm_translations_reset'] = "Reset to Default";
+$L['adm_translations_reset_confirm'] = "Reset translation value to the original file default?";
+$L['adm_translations_delete_confirm'] = "Delete this language variable?";
+$L['adm_translations_added'] = "Translation added successfully.";
+$L['adm_translations_updated'] = "Translations saved successfully.";
+$L['adm_translations_deleted'] = "Translation deleted.";
+$L['adm_translations_cache_generated'] = "Language cache generated successfully.";
+$L['adm_translations_imported'] = "Translations import completed.";
+$L['adm_translations_lang_code'] = "Language code";
+$L['adm_translations_lang_title'] = "Title (English)";
+$L['adm_translations_lang_native'] = "Native title";
+$L['adm_translations_lang_direction'] = "Text direction";
+$L['adm_translations_lang_add'] = "Add Language";
+$L['adm_translations_lang_edit'] = "Edit Language";
+$L['adm_translations_lang_base'] = "Base language (copy translations from)";
+$L['adm_translations_lang_nobase'] = "-- Do not copy (empty language) --";
+$L['adm_translations_lang_delete_confirm'] = "Are you sure you want to delete this language and all its translations?";
+$L['adm_translations_lang_deleted'] = "Language and related translations were deleted.";
+$L['adm_translations_search'] = "Search by key or value...";
+$L['adm_translations_all_types'] = "All types";
+$L['adm_translations_show'] = "Show per page";
+$L['adm_translations_key_hint'] = "Latin letters, digits and underscores only (e.g., my_header_title)";
+$L['adm_langcache_regenerate_hint'] = "Recompiles all database translations into compiled PHP cache files (datas/cache/sed_lang.*.php) for instant high-speed execution.";

@@ -30,7 +30,7 @@
 
 <form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 	<div class="boxed">
-		<h4>{PHP.skinlang.comments.Newcomment}</h4>
+		<h4>{PHP.L.comments_newcomment}</h4>
 		
 		<!-- BEGIN: COMMENTS_REPLY_NOTICE -->
 		<div class="reply-notice">
@@ -41,7 +41,7 @@
 		
 		<a name="nc"></a>
 		{COMMENTS_FORM_TEXT}
-		<p><button type="submit" class="submit btn btn-big">{PHP.skinlang.comments.Send}</button></p>
+		<p><button type="submit" class="submit btn btn-big">{PHP.L.comments_send}</button></p>
 	</div>
 </form>
 
@@ -51,10 +51,10 @@
 
 <form action="{COMMENTS_EDIT_FORM_SEND}" method="post" name="editcomment">
 	<div class="boxed">
-		<h4>{PHP.skinlang.comments.Commentedit}:</h4>
+		<h4>{PHP.L.comments_commentedit}:</h4>
 		<a name="c{COMMENTS_EDIT_FORM_ID}"></a>
 		{COMMENTS_EDIT_FORM_TEXT}
-		<p><button type="submit" class="submit btn btn-big">{PHP.skinlang.comments.Update}</button></p>
+		<p><button type="submit" class="submit btn btn-big">{PHP.L.comments_update}</button></p>
 	</div>
 </form>
 

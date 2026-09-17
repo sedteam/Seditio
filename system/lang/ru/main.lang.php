@@ -12,8 +12,10 @@ Localization done by : Antar, Antony & Amro
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
 Version=186
-Updated=2026-aug-13
+Updated=2026-sep-17
 Type=Lang
+Name=Russian
+Native=Русский
 Author=Seditio Team
 Description=Language main
 [END_SED]
@@ -23,15 +25,10 @@ Description=Language main
 
 $L['Access'] = "Доступ";
 $L['Action'] = "Действие";
-$L['Active'] = "Активныx";
+$L['Active'] = "Активный";
 $L['Add'] = "Добавить";
-$L['Admin.'] = "Админ.";
 $L['Administration'] = "Панель управления";
 $L['Adminpanel'] = "Управление сайтом";
-$L['admintooltip']['pageadd'] = "Добавить страницу";
-$L['admintooltip']['pageedit'] = "Редактировать страницу";
-$L['admintooltip']['pageeditcategory'] = "Редактировать категорию";
-$L['admintooltip']['pageeditoption'] = "Редактировать свойство";
 $L['Age'] = "Возраст";
 $L['Ago'] = "назад";
 $L['AIM'] = "Адрес AIM";
@@ -827,6 +824,12 @@ $L['sed_image_upload_add'] = 'Добавить изображение';
 $L['sed_image_upload_select'] = 'Нажмите, чтобы выбрать';
 $L['sed_image_upload_add_url'] = 'загрузить из интернета';
 $L['sed_image_upload_sort_hint'] = 'Перетаскивайте миниатюры для изменения порядка изображений';
+
+/* Admin tooltips */
+$L['admintooltip_pageadd'] = "Добавить страницу";
+$L['admintooltip_pageedit'] = "Редактировать страницу";
+$L['admintooltip_pageeditcategory'] = "Редактировать категорию";
+$L['admintooltip_pageeditoption'] = "Редактировать свойство";
 
 $sed_months_list = array(
 	1 => 'января',

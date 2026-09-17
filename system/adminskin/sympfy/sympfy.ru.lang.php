@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/adminskin/sympfy/sympfy.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-16
 Type=Skin
 Name=Sympfy
 Author=Amro
@@ -18,56 +18,56 @@ Description=Official Admin skin
 ==================== */
 
 //page.add.tpl
-$skinlang['pageadd']['Category'] = "Раздел:";
-$skinlang['pageadd']['Title'] = "Заголовок:";
-$skinlang['pageadd']['Description'] = "Описание:";
-$skinlang['pageadd']['Author'] = "Автор:";
-$skinlang['pageadd']['Extrakey'] = "Дополнительное поле (опционально):";
-$skinlang['pageadd']['Alias'] = "URL для страницы:";
-$skinlang['pageadd']['Owner'] = "Владелец:";
-$skinlang['pageadd']['Begin'] = "Начата:";
-$skinlang['pageadd']['Expire'] = "Истекает:";
-$skinlang['pageadd']['Bodyofthepage'] = "Текст страницы:";
-$skinlang['pageadd']['File'] = "Прикрепить файл?";
-$skinlang['pageadd']['Filehint'] = "(Если выбрать 'да', это активирует блок для скачки файла на странице)";
-$skinlang['pageadd']['URL'] = "Ссылка на файл:";
-$skinlang['pageadd']['URLhint'] = "(Указать если \"Прикрепить файл\" = Да)";
-$skinlang['pageadd']['Filesize'] = "Размер файла (KB):";
-$skinlang['pageadd']['Filesizehint'] = "(Указать если \"Прикрепить файл\" = Да)";
-$skinlang['pageadd']['Formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"" . sed_url("plug", "e=contact") . "\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
-$skinlang['pageadd']['Submit'] = "Отправить";
-$skinlang['pageadd']['Publish'] = "Опубликовать"; // New v173
-$skinlang['pageadd']['Parsing'] = "Парсинг:"; // New v173
-$skinlang['pageadd']['Thumbs'] = "Миниатюры:"; // New v178
+$L['pageadd_category'] = "Раздел:";
+$L['pageadd_title'] = "Заголовок:";
+$L['pageadd_description'] = "Описание:";
+$L['pageadd_author'] = "Автор:";
+$L['pageadd_extrakey'] = "Дополнительное поле (опционально):";
+$L['pageadd_alias'] = "URL для страницы:";
+$L['pageadd_owner'] = "Владелец:";
+$L['pageadd_begin'] = "Начата:";
+$L['pageadd_expire'] = "Истекает:";
+$L['pageadd_bodyofthepage'] = "Текст страницы:";
+$L['pageadd_file'] = "Прикрепить файл?";
+$L['pageadd_filehint'] = "(Если выбрать 'да', это активирует блок для скачки файла на странице)";
+$L['pageadd_url'] = "Ссылка на файл:";
+$L['pageadd_urlhint'] = "(Указать если \"Прикрепить файл\" = Да)";
+$L['pageadd_filesize'] = "Размер файла (KB):";
+$L['pageadd_filesizehint'] = "(Указать если \"Прикрепить файл\" = Да)";
+$L['pageadd_formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"" . sed_url("plug", "e=contact") . "\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
+$L['pageadd_submit'] = "Отправить";
+$L['pageadd_publish'] = "Опубликовать"; // New v173
+$L['pageadd_parsing'] = "Парсинг:"; // New v173
+$L['pageadd_thumbs'] = "Миниатюры:"; // New v178
 
-$skinlang['pageadd']['Allowcomments'] = "Разрешить комментирование?"; // New v173
-$skinlang['pageadd']['Allowratings'] = "Разрешить изменение рейтинга?"; // New v173
+$L['pageadd_allowcomments'] = "Разрешить комментирование?"; // New v173
+$L['pageadd_allowratings'] = "Разрешить изменение рейтинга?"; // New v173
 
 //page.edit.tpl
-$skinlang['pageedit']['Category'] = "Раздел:";
-$skinlang['pageedit']['Title'] = "Заголовок:";
-$skinlang['pageedit']['Description'] = "Описание:";
-$skinlang['pageedit']['Author'] = "Автор:";
-$skinlang['pageedit']['Owner'] = "Владелец:";
-$skinlang['pageedit']['Date'] = "Дата:";
-$skinlang['pageedit']['Begin'] = "Начато:";
-$skinlang['pageedit']['Expire'] = "Истекает:";
-$skinlang['pageedit']['Pagehitcount'] = "Просмотров:";
-$skinlang['pageedit']['Extrakey'] = "Дополнительное поле";
-$skinlang['pageedit']['Alias'] = "Псевдоним страницы (алиас):";
-$skinlang['pageedit']['Parsing'] = "Парсинг:";
-$skinlang['pageedit']['Bodyofthepage'] = "Текст страницы:";
-$skinlang['pageedit']['Filedownload'] = "Прикрепить файл ?";
-$skinlang['pageedit']['URL'] = "Ссылка:";
-$skinlang['pageedit']['URLhint'] = "(Если 'Прикрепить файл'='Да')";
-$skinlang['pageedit']['Filesize'] = "Размер файла (KB):";
-$skinlang['pageedit']['Filesizehint'] = "(Если 'Прикрепить файл'='Да')";
-$skinlang['pageedit']['Filehitcount'] = "Обращений:";
-$skinlang['pageedit']['Filehitcounthint'] = "(Если 'Прикрепить файл'='Да')";
-$skinlang['pageedit']['Pageid'] = "ID страницы:";
-$skinlang['pageedit']['Deletethispage'] = "!Удалить эту страницу!:";
-$skinlang['pageedit']['Update'] = "Обновить";
-$skinlang['pageedit']['Thumbs'] = "Миниатюры:"; // New v178
+$L['pageedit_category'] = "Раздел:";
+$L['pageedit_title'] = "Заголовок:";
+$L['pageedit_description'] = "Описание:";
+$L['pageedit_author'] = "Автор:";
+$L['pageedit_owner'] = "Владелец:";
+$L['pageedit_date'] = "Дата:";
+$L['pageedit_begin'] = "Начато:";
+$L['pageedit_expire'] = "Истекает:";
+$L['pageedit_pagehitcount'] = "Просмотров:";
+$L['pageedit_extrakey'] = "Дополнительное поле";
+$L['pageedit_alias'] = "Псевдоним страницы (алиас):";
+$L['pageedit_parsing'] = "Парсинг:";
+$L['pageedit_bodyofthepage'] = "Текст страницы:";
+$L['pageedit_filedownload'] = "Прикрепить файл ?";
+$L['pageedit_url'] = "Ссылка:";
+$L['pageedit_urlhint'] = "(Если 'Прикрепить файл'='Да')";
+$L['pageedit_filesize'] = "Размер файла (KB):";
+$L['pageedit_filesizehint'] = "(Если 'Прикрепить файл'='Да')";
+$L['pageedit_filehitcount'] = "Обращений:";
+$L['pageedit_filehitcounthint'] = "(Если 'Прикрепить файл'='Да')";
+$L['pageedit_pageid'] = "ID страницы:";
+$L['pageedit_deletethispage'] = "!Удалить эту страницу!:";
+$L['pageedit_update'] = "Обновить";
+$L['pageedit_thumbs'] = "Миниатюры:"; // New v178
 
-$skinlang['pageedit']['Allowcomments'] = "Разрешить комментирование?";  // New v173
-$skinlang['pageedit']['Allowratings'] = "Разрешить изменение рейтинга?"; // New v173
+$L['pageedit_allowcomments'] = "Разрешить комментирование?";  // New v173
+$L['pageedit_allowratings'] = "Разрешить изменение рейтинга?"; // New v173

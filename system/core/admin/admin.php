@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=Core
 Author=Seditio Team
 Description=Administration panel loader
@@ -26,5 +26,7 @@ require(SED_ROOT . '/system/functions.php');
 require(SED_ROOT . '/system/functions.admin.php');
 require(SED_ROOT . '/datas/config.php');
 require(SED_ROOT . '/system/common.php');
-require(SED_ROOT . "/system/lang/" . $usr['lang'] . "/admin.lang.php");
+if (empty($cfg['lang_cache_compiled'])) {
+	require(SED_ROOT . "/system/lang/" . $usr['lang'] . "/admin.lang.php");
+}
 require(SED_ROOT . "/system/core/admin/admin.inc.php");

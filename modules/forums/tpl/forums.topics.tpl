@@ -24,7 +24,7 @@
 					<a href="{FORUMS_TOPICS_NEWTOPICPOLLURL}" class="btn"><i class="ic-polls"></i> {PHP.L.polls_add}</a>
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 forums-topics-viewers">
-					{FORUMS_TOPICS_VIEWERS} {PHP.skinlang.forumstopics.Viewers} &nbsp; {FORUMS_TOPICS_JUMPBOX}
+					{FORUMS_TOPICS_VIEWERS} {PHP.L.forumstopics_viewers} &nbsp; {FORUMS_TOPICS_JUMPBOX}
 				</div>
 			</div>
 
@@ -33,10 +33,10 @@
 			<div class="table-cells forums-table forums-main-table">
 
 				<div class="table-thead">
-					<div class="table-td coltop">{PHP.skinlang.forumssections.Subforums}</div>
-					<div class="table-td coltop">{PHP.skinlang.forumssections.Lastpost}</div>
-					<div class="table-td coltop" style="width:90px;">{PHP.skinlang.forumssections.Topics}</div>
-					<div class="table-td coltop" style="width:90px;">{PHP.skinlang.forumssections.Posts}</div>
+					<div class="table-td coltop">{PHP.L.forumssections_subforums}</div>
+					<div class="table-td coltop">{PHP.L.forumssections_lastpost}</div>
+					<div class="table-td coltop" style="width:90px;">{PHP.L.forumssections_topics}</div>
+					<div class="table-td coltop" style="width:90px;">{PHP.L.forumssections_posts}</div>
 				</div>
 
 				<div class="table-tbody">
@@ -211,26 +211,26 @@
 			<div class="table">
 
 				<div class="table-tr">
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts.gif" alt="" /> : {PHP.skinlang.forumstopics.Nonewposts}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new.gif" alt="" /> :{PHP.skinlang.forumstopics.Newposts}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_sticky.gif" alt="" /> : {PHP.skinlang.forumstopics.Sticky}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts.gif" alt="" /> : {PHP.L.forumstopics_nonewposts}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new.gif" alt="" /> :{PHP.L.forumstopics_newposts}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_sticky.gif" alt="" /> : {PHP.L.forumstopics_sticky}</div>
 				</div>
 
 				<div class="table-tr">
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_hot.gif" alt="" /> : {PHP.skinlang.forumstopics.Nonewpostspopular}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_hot.gif" alt="" /> :{PHP.skinlang.forumstopics.Newpostspopular}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_sticky.gif" alt="" /> : {PHP.skinlang.forumstopics.Newpostssticky}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_hot.gif" alt="" /> : {PHP.L.forumstopics_nonewpostspopular}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_hot.gif" alt="" /> :{PHP.L.forumstopics_newpostspopular}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_sticky.gif" alt="" /> : {PHP.L.forumstopics_newpostssticky}</div>
 				</div>
 
 				<div class="table-tr">
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Locked}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Newpostslocked}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_sticky_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Announcment}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_locked.gif" alt="" /> : {PHP.L.forumstopics_locked}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_locked.gif" alt="" /> : {PHP.L.forumstopics_newpostslocked}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_sticky_locked.gif" alt="" /> : {PHP.L.forumstopics_announcment}</div>
 				</div>
 
 				<div class="table-tr">
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_moved.gif" alt="" /> : {PHP.skinlang.forumstopics.Movedoutofthissection}</div>
-					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_sticky_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Newannouncment}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_moved.gif" alt="" /> : {PHP.L.forumstopics_movedoutofthissection}</div>
+					<div class="table-td"><img src="skins/{PHP.skin}/img/system/posts_new_sticky_locked.gif" alt="" /> : {PHP.L.forumstopics_newannouncment}</div>
 					<div class="table-td"></div>
 				</div>
 

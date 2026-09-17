@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/adminqv/lang/adminqv.tr.lang.php
 Version=186
-Updated=2026-aug-13
+Updated=2026-sep-17
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -52,3 +52,11 @@ $L['plu_hits_days'] = "Günlük Gösterimler";
 $L['plu_hits_weeks'] = "Haftalık Gösterimler";
 $L['plu_hits_months'] = "Aylık Gösterimler";
 $L['plu_hits_years'] = "Yıllık Gösterimler";
+
+$L['plu_quick_addpage'] = "Yeni sayfa ekle";
+$L['plu_quick_pagemgmt'] = "Sayfa yöneticisi";
+$L['plu_quick_menumgmt'] = "Menü yöneticisi";
+$L['plu_quick_dic'] = "Dizinler ve Ek alanlar";
+$L['plu_quick_skinedit'] = "Tema düzenleyici";
+$L['plu_quick_banlist'] = "Yasaklılar listesi";
+$L['plu_quick_cache'] = "Dahili önbellek";

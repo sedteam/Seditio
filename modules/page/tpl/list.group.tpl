@@ -112,15 +112,15 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.index.Activity}</h3>
+						<h3>{PHP.L.index_activity}</h3>
 					</div>
 
 					<div class="sidebar-menu">
 						<div class="inline-menu">
 							<ul class="tabs-nav">
-								<li class="active"><a href="#tab-1">{PHP.skinlang.index.Lastcomments}</a></li>
-								<li><a href="#tab-2">{PHP.skinlang.index.Lasttopics}</a></li>
-								<li><a href="#tab-3">{PHP.skinlang.index.Lastpages}</a></li>
+								<li class="active"><a href="#tab-1">{PHP.L.index_lastcomments}</a></li>
+								<li><a href="#tab-2">{PHP.L.index_lasttopics}</a></li>
+								<li><a href="#tab-3">{PHP.L.index_lastpages}</a></li>
 							</ul>
 						</div>
 					</div>
@@ -210,7 +210,7 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.index.Polls}</h3>
+						<h3>{PHP.L.index_polls}</h3>
 					</div>
 
 					<div class="sidebar-body">
@@ -224,7 +224,7 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.index.Online}</h3>
+						<h3>{PHP.L.index_online}</h3>
 					</div>
 
 					<div class="sidebar-body">

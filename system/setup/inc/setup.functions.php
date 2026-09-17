@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/inc/setup.functions.php
 Version=186
-Updated=2026-jul-20
+Updated=2026-sep-17
 Type=Core.setup
 Author=Seditio Team
 Description=Helper functions for setup installer

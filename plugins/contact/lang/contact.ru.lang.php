@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/lang/contact.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=
 Author=Seditio Team
 Description=
@@ -41,4 +41,4 @@ $L['cfg_admincopy1'] = array("Отсылать копию сообщения н�
 $L['cfg_admincopy2'] = array("Отсылать копию сообщения на email", "");
 $L['cfg_extra1'] = array("Экстра слот #1 / {PLUGIN_CONTACT_EXTRA1} в skins/.../plugin.standalone.contact.tpl", "");
 $L['cfg_extra2'] = array("Экстра слот #2 / {PLUGIN_CONTACT_EXTRA2} в skins/.../plugin.standalone.contact.tpl", "");
-$L['cfg_extra3'] = array("Экстра слот #3 / {PLUGIN_CONTACT_EXTRA2} в skins/.../plugin.standalone.contact.tpl", "");
+$L['cfg_extra3'] = array("Экстра слот #3 / {PLUGIN_CONTACT_EXTRA3} в skins/.../plugin.standalone.contact.tpl", "");

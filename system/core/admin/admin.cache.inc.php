@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.cache.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-15
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -58,7 +58,22 @@ if ($a == 'purge') {
 } elseif ($a == 'tpl_delete') {
 	sed_check_xg();
 	sed_tplcache_clear();
-	sed_redirect(sed_url("admin", "m=cache", "", true), false, ['msg' => '917']);
+	sed_redirect(sed_url("admin", "m=cache", "", true), false, array('msg' => '917'));
+	exit;
+} elseif ($a == 'lang_delete') {
+	sed_check_xg();
+	$lang_files = glob(SED_ROOT . '/datas/cache/sed_lang.*.php');
+	if (!empty($lang_files)) {
+		foreach ($lang_files as $lf) {
+			@unlink($lf);
+		}
+	}
+	sed_redirect(sed_url("admin", "m=cache", "", true), false, array('msg' => '917'));
+	exit;
+} elseif ($a == 'lang_regenerate') {
+	sed_check_xg();
+	sed_translations_generate();
+	sed_redirect(sed_url("admin", "m=cache", "", true), false, array('msg' => '917'));
 	exit;
 }
 
@@ -134,6 +149,30 @@ $t->assign(array(
 	"TPLCACHE_DATE" => $tplcache_date,
 	"TPLCACHE_SIZE" => $tplcache_size,
 	"TPLCACHE_DELETE_URL" => sed_url("admin", "m=cache&a=tpl_delete&" . sed_xg()),
+));
+
+/* Translations / Languages cache (datas/cache/sed_lang.*.php) */
+$lang_files = glob(SED_ROOT . '/datas/cache/sed_lang.*.php');
+$langcache_count = !empty($lang_files) ? count($lang_files) : 0;
+$langcache_size = 0;
+$langcache_mtime = 0;
+if ($langcache_count > 0) {
+	foreach ($lang_files as $lf) {
+		$langcache_size += filesize($lf);
+		$m = filemtime($lf);
+		if ($m > $langcache_mtime) {
+			$langcache_mtime = $m;
+		}
+	}
+}
+$langcache_date = ($langcache_mtime > 0) ? sed_build_date(!empty($cfg['dateformat']) ? $cfg['dateformat'] : 'Y-m-d H:i', $langcache_mtime) : '-';
+
+$t->assign(array(
+	"LANGCACHE_COUNT" => $langcache_count,
+	"LANGCACHE_DATE" => $langcache_date,
+	"LANGCACHE_SIZE" => $langcache_size,
+	"LANGCACHE_DELETE_URL" => sed_url("admin", "m=cache&a=lang_delete&" . sed_xg()),
+	"LANGCACHE_REGENERATE_URL" => sed_url("admin", "m=cache&a=lang_regenerate&" . sed_xg()),
 ));
 
 $t->assign("ADMIN_CACHE_TITLE", $admintitle);

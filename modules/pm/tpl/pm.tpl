@@ -30,10 +30,10 @@
 				<div class="table-head resp-table-head">
 
 					<div class="table-row resp-table-row">
-						<div class="table-th coltop text-left" style="width:16px;">{PHP.skinlang.pm.State}</div>
-						<div class="table-th coltop text-center" style="width:10%;">{PHP.skinlang.pm.Sender}</div>
-						<div class="table-th coltop text-left">{PHP.skinlang.pm.SubjectClick}</div>
-						<div class="table-th coltop text-center" style="width:176px;">{PHP.skinlang.pm.Date}</div>
+						<div class="table-th coltop text-left" style="width:16px;">{PHP.L.pm_state}</div>
+						<div class="table-th coltop text-center" style="width:10%;">{PHP.L.pm_sender}</div>
+						<div class="table-th coltop text-left">{PHP.L.pm_subjectclick}</div>
+						<div class="table-th coltop text-center" style="width:176px;">{PHP.L.pm_date}</div>
 						<div class="table-th coltop text-center" style="width:80px;"></div>
 					</div>
 
@@ -46,10 +46,10 @@
 				<div class="table-head resp-table-head">
 
 					<div class="table-row resp-table-row">
-						<div class="table-th coltop text-left" style="width:16px;">{PHP.skinlang.pm.State}</div>
-						<div class="table-th coltop text-center" style="width:10%;">{PHP.skinlang.pm.Recipient}</div>
-						<div class="table-th coltop text-left">{PHP.skinlang.pm.SubjectClick}</div>
-						<div class="table-th coltop text-center" style="width:176px;">{PHP.skinlang.pm.Date}</div>
+						<div class="table-th coltop text-left" style="width:16px;">{PHP.L.pm_state}</div>
+						<div class="table-th coltop text-center" style="width:10%;">{PHP.L.pm_recipient}</div>
+						<div class="table-th coltop text-left">{PHP.L.pm_subjectclick}</div>
+						<div class="table-th coltop text-center" style="width:176px;">{PHP.L.pm_date}</div>
 						<div class="table-th coltop text-center" style="width:80px;"></div>
 					</div>
 
@@ -63,19 +63,19 @@
 
 					<div class="table-row resp-table-row">
 
-						<div class="table-td text-left resp-table-td" data-label="{PHP.skinlang.pm.State}">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.pm_state}">
 							{PM_ROW_ICON_STATUS}
 						</div>
-						<div class="table-td text-left resp-table-td" data-label="{PHP.skinlang.pm.Recipient}">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.pm_recipient}">
 							{PM_ROW_FROMORTOUSER}
 						</div>
-						<div class="table-td text-left resp-table-td" data-label="{PHP.skinlang.pm.SubjectClick}">
+						<div class="table-td text-left resp-table-td" data-label="{PHP.L.pm_subjectclick}">
 							<strong>{PM_ROW_TITLE}</strong>
 						</div>
-						<div class="table-td text-center resp-table-td" data-label="{PHP.skinlang.pm.Date}">
+						<div class="table-td text-center resp-table-td" data-label="{PHP.L.pm_date}">
 							{PM_ROW_DATE}
 						</div>
-						<div class="table-td text-center resp-table-td" data-label="{PHP.skinlang.pm.Date}">
+						<div class="table-td text-center resp-table-td" data-label="{PHP.L.pm_date}">
 							{PM_ROW_ICON_ACTION}
 						</div>
 
@@ -90,7 +90,7 @@
 			<!-- BEGIN: PM_ROW_EMPTY -->
 
 			<div class="pm-empty">
-				{PHP.skinlang.pm.Nomessages}
+				{PHP.L.pm_nomessages}
 			</div>
 
 			<!-- END: PM_ROW_EMPTY -->
@@ -114,23 +114,23 @@
 			<div class="table-cells table-with-border">
 
 				<div class="table-tr">
-					<div class="table-td" style="width:200px;">{PHP.skinlang.pm.Subject} </div>
+					<div class="table-td" style="width:200px;">{PHP.L.pm_subject} </div>
 					<div class="table-td"><strong>{PM_ROW_TITLE}</strong></div>
 				</div>
 				<div class="table-tr">
-					<div class="table-td">{PHP.skinlang.pm.Sender}</div>
+					<div class="table-td">{PHP.L.pm_sender}</div>
 					<div class="table-td">{PM_ROW_FROMUSER}</div>
 				</div>
 				<div class="table-tr">
-					<div class="table-td">{PHP.skinlang.pm.Recipient}</div>
+					<div class="table-td">{PHP.L.pm_recipient}</div>
 					<div class="table-td">{PM_ROW_TOUSER}</div>
 				</div>
 				<div class="table-tr">
-					<div class="table-td">{PHP.skinlang.pm.Date}</div>
+					<div class="table-td">{PHP.L.pm_date}</div>
 					<div class="table-td">{PM_ROW_DATE}</div>
 				</div>
 				<div class="table-tr">
-					<div class="table-td">{PHP.skinlang.pm.Message}</div>
+					<div class="table-td">{PHP.L.pm_message}</div>
 					<div class="table-td">
 						<div class="pm-message">
 							{PM_ROW_TEXT}
@@ -138,7 +138,7 @@
 					</div>
 				</div>
 				<div class="table-tr">
-					<div class="table-td">{PHP.skinlang.pm.Action}</div>
+					<div class="table-td">{PHP.L.pm_action}</div>
 					<div class="table-td">{PM_ROW_ICON_ACTION}</div>
 				</div>
 
@@ -150,11 +150,11 @@
 
 			<div class="centered">
 
-				<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" />: {PHP.skinlang.pm.Newmessage} &nbsp; &nbsp;
-				<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" />: {PHP.skinlang.pm.Message} &nbsp; &nbsp;
-				<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" />: {PHP.skinlang.pm.Reply} &nbsp; &nbsp;
-				<img src="skins/{PHP.skin}/img/system/icon-pm-archive.gif" alt="" />: {PHP.skinlang.pm.Sendtoarchives} &nbsp; &nbsp;
-				<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" />: {PHP.skinlang.pm.Delete}
+				<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" />: {PHP.L.pm_newmessage} &nbsp; &nbsp;
+				<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" />: {PHP.L.pm_message} &nbsp; &nbsp;
+				<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" />: {PHP.L.pm_reply} &nbsp; &nbsp;
+				<img src="skins/{PHP.skin}/img/system/icon-pm-archive.gif" alt="" />: {PHP.L.pm_sendtoarchives} &nbsp; &nbsp;
+				<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" />: {PHP.L.pm_delete}
 
 			</div>
 

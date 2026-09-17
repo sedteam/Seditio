@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/lang/contact.en.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=
 Author=Seditio Team
 Description=
@@ -34,3 +34,11 @@ $L['plu_antispam'] = "The Spambot protection key was wrong, please retype it !";
 $L['plu_notsent'] = "The message was NOT sent.";
 $L['plu_sent'] = "Message successfully sent !";
 $L['plu_notice'] = "This message was sent from " . (isset($cfg['maintitle']) ? $cfg['maintitle'] : "") . " by : ";
+
+$L['cfg_emails'] = array("List of email addresses, comma-separated", "");
+$L['cfg_recipients'] = array("Names of recipients, comma-separated, in order of email list", "");
+$L['cfg_admincopy1'] = array("Send copy of message to email", "");
+$L['cfg_admincopy2'] = array("Send copy of message to email", "");
+$L['cfg_extra1'] = array("Extra slot #1 / {PLUGIN_CONTACT_EXTRA1} in skins/.../plugin.standalone.contact.tpl", "");
+$L['cfg_extra2'] = array("Extra slot #2 / {PLUGIN_CONTACT_EXTRA2} in skins/.../plugin.standalone.contact.tpl", "");
+$L['cfg_extra3'] = array("Extra slot #3 / {PLUGIN_CONTACT_EXTRA3} in skins/.../plugin.standalone.contact.tpl", "");

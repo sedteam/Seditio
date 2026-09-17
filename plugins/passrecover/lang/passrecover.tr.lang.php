@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.tr.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=Plugin.standalone
 Author=Seditio Team
 Description=
@@ -32,3 +32,5 @@ $L['plu_email1'] = "Bu e-postayı, Seditio motoru tarafından desteklenen bir si
 $L['plu_email2'] = "Web sitemize şifre kurtarma talebinde bulundunuz.\r\nYeni bir şifre oluşturmak için aşağıdaki bağlantıyı tıklayın. Yeni bir şifre e-posta adresinize gönderilecektir.";
 $L['plu_email3'] = "Talebinizde yeni bir şifre var. En kısa sürede değiştirin ve bu e-postayı silin.\r\n\r\nYeni şifreniz: ";
 $L['plu_newpass'] = "Tamamlandı!<br /><br />Yakında siteye erişmek için yeni bir şifre alacaksınız.";
+
+$L['cfg_generate_password'] = array("Yeni şifre oluşturup e-posta ile gönderilsin mi?", "");

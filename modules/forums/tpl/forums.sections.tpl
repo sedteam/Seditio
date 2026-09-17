@@ -17,7 +17,7 @@
 
 			<nav class="inline-menu">
 				<ul>
-					<li><a href="{FORUMS_SECTIONS_SEARCH}">{PHP.skinlang.forumssections.Searchinforums}</a></li>
+					<li><a href="{FORUMS_SECTIONS_SEARCH}">{PHP.L.forumssections_searchinforums}</a></li>
 					<li>{FORUMS_SECTIONS_MARKALL}</li>
 					<li><span>{FORUMS_SECTIONS_GMTTIME}</span></li>
 				</ul>
@@ -26,12 +26,12 @@
 			<div class="table-cells forums-table forums-main-table">
 
 				<div class="table-thead forums-table-head">
-					<div class="table-td coltop">{PHP.skinlang.forumssections.Sections} &nbsp; &nbsp; <a href="{FORUMS_SECTIONS_FOLDALL}">{PHP.skinlang.forumssections.FoldAll}</a> / <a href="{FORUMS_SECTIONS_UNFOLDALL}">{PHP.skinlang.forumssections.UnfoldAll}</a></div>
-					<div class="table-td coltop" style="width:250px;">{PHP.skinlang.forumssections.Lastpost}</div>
-					<div class="table-td text-center coltop" style="width:48px;">{PHP.skinlang.forumssections.Topics}</div>
-					<div class="table-td text-center coltop" style="width:48px;">{PHP.skinlang.forumssections.Posts}</div>
-					<div class="table-td text-center coltop" style="width:48px;">{PHP.skinlang.forumssections.Views}</div>
-					<div class="table-td text-center coltop" style="width:48px;">{PHP.skinlang.forumssections.Activity}</div>
+					<div class="table-td coltop">{PHP.L.forumssections_sections} &nbsp; &nbsp; <a href="{FORUMS_SECTIONS_FOLDALL}">{PHP.L.forumssections_foldall}</a> / <a href="{FORUMS_SECTIONS_UNFOLDALL}">{PHP.L.forumssections_unfoldall}</a></div>
+					<div class="table-td coltop" style="width:250px;">{PHP.L.forumssections_lastpost}</div>
+					<div class="table-td text-center coltop" style="width:48px;">{PHP.L.forumssections_topics}</div>
+					<div class="table-td text-center coltop" style="width:48px;">{PHP.L.forumssections_posts}</div>
+					<div class="table-td text-center coltop" style="width:48px;">{PHP.L.forumssections_views}</div>
+					<div class="table-td text-center coltop" style="width:48px;">{PHP.L.forumssections_activity}</div>
 				</div>
 
 				<!-- BEGIN: FORUMS_SECTIONS_ROW -->

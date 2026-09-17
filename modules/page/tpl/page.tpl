@@ -75,7 +75,7 @@
 				<div class="page-other">
 
 					<div class="box-title">
-						<h3>{PHP.skinlang.page.Otherpages}</h3>
+						<h3>{PHP.L.page_otherpages}</h3>
 						<div class="similar-arrows"></div>
 					</div>
 
@@ -131,7 +131,7 @@
 				<div class="page-ratings">
 
 					<div class="ratings-box-title">
-						<h3>{PHP.skinlang.page.Ratings} {PAGE_RATINGS} {PAGE_RATINGS_COUNT}</h3>
+						<h3>{PHP.L.page_ratings} {PAGE_RATINGS} {PAGE_RATINGS_COUNT}</h3>
 					</div>
 
 					{PAGE_RATINGS_DISPLAY}
@@ -143,7 +143,7 @@
 				<div class="page-comments spoiler-container {PAGE_COMMENTS_ISSHOW}">
 
 					<div class="comments-box-title">
-						<h3><a href="{PAGE_COMMENTS_URL}">{PHP.skinlang.page.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({PAGE_COMMENTS_COUNT})</span>{PAGE_COMMENTS_JUMP}</a></h3>
+						<h3><a href="{PAGE_COMMENTS_URL}">{PHP.L.page_comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({PAGE_COMMENTS_COUNT})</span>{PAGE_COMMENTS_JUMP}</a></h3>
 					</div>
 
 					<div class="comments-box spoiler-body">
@@ -161,7 +161,7 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.page.Similarpages}</h3>
+						<h3>{PHP.L.page_similarpages}</h3>
 					</div>
 
 					<div class="sidebar-body">
@@ -205,15 +205,15 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.index.Activity}</h3>
+						<h3>{PHP.L.index_activity}</h3>
 					</div>
 
 					<div class="sidebar-menu">
 						<div class="inline-menu">
 							<ul class="tabs-nav">
-								<li class="active"><a href="#tab-1">{PHP.skinlang.index.Lastcomments}</a></li>
-								<li><a href="#tab-2">{PHP.skinlang.index.Lasttopics}</a></li>
-								<li><a href="#tab-3">{PHP.skinlang.index.Lastpages}</a></li>
+								<li class="active"><a href="#tab-1">{PHP.L.index_lastcomments}</a></li>
+								<li><a href="#tab-2">{PHP.L.index_lasttopics}</a></li>
+								<li><a href="#tab-3">{PHP.L.index_lastpages}</a></li>
 							</ul>
 						</div>
 					</div>
@@ -319,7 +319,7 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.index.Polls}</h3>
+						<h3>{PHP.L.index_polls}</h3>
 					</div>
 
 					<div class="sidebar-body">
@@ -333,7 +333,7 @@
 				<div class="sidebar-box">
 
 					<div class="sidebar-title">
-						<h3>{PHP.skinlang.index.Online}</h3>
+						<h3>{PHP.L.index_online}</h3>
 					</div>
 
 					<div class="sidebar-body">

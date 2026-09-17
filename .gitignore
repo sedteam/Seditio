@@ -216,6 +216,7 @@ pip-log.txt
 .mr.developer.cfg
 docs/upgrade/sed_parser.sql
 datas/config.php
+datas/cache/sed_lang.*.php
 datas/users/*
 datas/thumbs/*
 datas/avatars/*

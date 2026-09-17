@@ -37,27 +37,27 @@
 				<ul class="form responsive-form">
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Category}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_category}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_CAT}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Title}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_title}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_TITLE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Description}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_description}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_DESC}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Author}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_author}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_AUTHOR}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Alias}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_alias}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_ALIAS}</div>
 					</li>
 
@@ -70,11 +70,11 @@
 					</li>
 
 					<li class="form-row">
-						<div class="form-field-100">{PHP.skinlang.pageedit.Bodyofthepage}<br /><br />{PAGEEDIT_FORM_TEXT}</div>
+						<div class="form-field-100">{PHP.L.pageedit_bodyofthepage}<br /><br />{PAGEEDIT_FORM_TEXT}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Thumbs}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_thumbs}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_THUMB}</div>
 					</li>
 
@@ -84,12 +84,12 @@
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Pageid}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_pageid}</label></div>
 						<div class="form-field">#{PAGEEDIT_FORM_ID}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Deletethispage}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_deletethispage}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_DELETE}</div>
 					</li>
 
@@ -146,71 +146,71 @@
 				<ul class="form responsive-form">
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Date}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_date}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_DATE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Begin}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_begin}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_BEGIN}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Expire}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_expire}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_EXPIRE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Pagehitcount}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_pagehitcount}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_PAGECOUNT}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Extrakey}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_extrakey}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_KEY}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Owner}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_owner}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_OWNERID}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Allowcomments}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_allowcomments}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_ALLOWCOMMENTS}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Allowratings}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_allowratings}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_ALLOWRATINGS}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Filedownload}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_filedownload}</label></div>
 						<div class="form-field">{PAGEEDIT_FORM_FILE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.URL}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_url}</label></div>
 						<div class="form-field">
 							{PAGEEDIT_FORM_URL}
-							<div class="descr">{PHP.skinlang.pageedit.URLhint}</div>
+							<div class="descr">{PHP.L.pageedit_urlhint}</div>
 						</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Filesize}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_filesize}</label></div>
 						<div class="form-field">
 							{PAGEEDIT_FORM_SIZE}
-							<div class="descr">{PHP.skinlang.pageedit.Filesizehint}</div>
+							<div class="descr">{PHP.L.pageedit_filesizehint}</div>
 						</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pageedit.Filehitcount}</label></div>
+						<div class="form-label"><label>{PHP.L.pageedit_filehitcount}</label></div>
 						<div class="form-field">
 							{PAGEEDIT_FORM_FILECOUNT}
-							<div class="descr">{PHP.skinlang.pageedit.Filehitcounthint}</div>
+							<div class="descr">{PHP.L.pageedit_filehitcounthint}</div>
 						</div>
 					</li>
 
@@ -220,10 +220,10 @@
 
 			{PAGEEDIT_I18N_TABS_BODY}
 
-			<div class="help">{PHP.skinlang.pageedit.Formhint} </div>
+			<div class="help">{PHP.L.pageedit_formhint} </div>
 
 			<div class="centered">
-				<input type="submit" class="submit btn btn-big" value="{PHP.skinlang.pageedit.Update}">
+				<input type="submit" class="submit btn btn-big" value="{PHP.L.pageedit_update}">
 				<!-- BEGIN: PAGEEDIT_PUBLISH -->
 				<input type="submit" class="submit btn btn-big" name="rpagepublish" value="{PAGEEDIT_FORM_PUBLISH_TITLE}" onclick="this.value='{PAGEEDIT_FORM_PUBLISH_STATE}'; return true" />
 				<!-- END: PAGEEDIT_PUBLISH -->

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.edit.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-16
 Type=Module
 Author=Seditio Team
 Description=User editing
@@ -344,8 +344,8 @@ $t->assign(array(
 	"USERS_EDIT_NAME" => $user_form_username,
 	"USERS_EDIT_FIRSTNAME" => sed_textbox('ruserfirstname', $urr['user_firstname'], 32, 100),
 	"USERS_EDIT_LASTNAME" => sed_textbox('ruserlastname', $urr['user_lastname'], 32, 100),
-	"USERS_EDIT_SKIN" => sed_textbox('ruserskin', $urr['user_skin'], 16, 32),
-	"USERS_EDIT_LANG" => sed_textbox('ruserlang', $urr['user_lang'], 16, 32),
+	"USERS_EDIT_SKIN" => sed_selectbox_skin($urr['user_skin'], 'ruserskin'),
+	"USERS_EDIT_LANG" => sed_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	"USERS_EDIT_NEWPASS" => $user_form_pass,
 	"USERS_EDIT_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_EDIT_GROUPS" => sed_build_groupsms($urr['user_id'], $sys['user_istopadmin'], $urr['user_maingrp']),

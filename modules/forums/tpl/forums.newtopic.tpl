@@ -29,12 +29,12 @@
 				<ul class="form responsive-form">
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.forumsnewtopic.Title}</label></div>
+						<div class="form-label"><label>{PHP.L.forumsnewtopic_title}</label></div>
 						<div class="form-field">{FORUMS_NEWTOPIC_TITLE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.forumsnewtopic.Desc}</label></div>
+						<div class="form-label"><label>{PHP.L.forumsnewtopic_desc}</label></div>
 						<div class="form-field">{FORUMS_NEWTOPIC_DESC}</div>
 					</li>
 
@@ -49,10 +49,10 @@
 					<!-- BEGIN: PRIVATE -->
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.forumsnewtopic.privatetopic}</label></div>
+						<div class="form-label"><label>{PHP.L.forumsnewtopic_privatetopic}</label></div>
 						<div class="form-field">
 							{FORUMS_NEWTOPIC_ISPRIVATE}
-							<div class="descr">{PHP.skinlang.forumsnewtopic.privatetopic2}</div>
+							<div class="descr">{PHP.L.forumsnewtopic_privatetopic2}</div>
 						</div>
 					</li>
 
@@ -90,7 +90,7 @@
 
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn">{PHP.skinlang.forumsnewtopic.Submit}</button>
+							<button type="submit" class="submit btn">{PHP.L.forumsnewtopic_submit}</button>
 						</div>
 					</li>
 

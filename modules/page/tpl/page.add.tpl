@@ -42,27 +42,27 @@
 							<ul class="form responsive-form">
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Category}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_category}</label></div>
 									<div class="form-field">{PAGEADD_FORM_CAT}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Title}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_title}</label></div>
 									<div class="form-field">{PAGEADD_FORM_TITLE}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Description}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_description}</label></div>
 									<div class="form-field">{PAGEADD_FORM_DESC}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Author}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_author}</label></div>
 									<div class="form-field">{PAGEADD_FORM_AUTHOR}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Alias}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_alias}</label></div>
 									<div class="form-field">{PAGEADD_FORM_ALIAS}</div>
 								</li>
 
@@ -75,11 +75,11 @@
 								</li>
 
 								<li class="form-row">
-									<div class="form-field-100">{PHP.skinlang.pageadd.Bodyofthepage}<br /><br />{PAGEADD_FORM_TEXT}</div>
+									<div class="form-field-100">{PHP.L.pageadd_bodyofthepage}<br /><br />{PAGEADD_FORM_TEXT}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Thumbs}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_thumbs}</label></div>
 									<div class="form-field">{PAGEADD_FORM_THUMB}</div>
 								</li>
 
@@ -139,56 +139,56 @@
 							<ul class="form responsive-form">
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Begin}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_begin}</label></div>
 									<div class="form-field">{PAGEADD_FORM_BEGIN}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Expire}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_expire}</label></div>
 									<div class="form-field">{PAGEADD_FORM_EXPIRE}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Extrakey}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_extrakey}</label></div>
 									<div class="form-field">{PAGEADD_FORM_KEY}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Owner}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_owner}</label></div>
 									<div class="form-field">{PAGEADD_FORM_OWNER}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Allowcomments}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_allowcomments}</label></div>
 									<div class="form-field">{PAGEADD_FORM_ALLOWCOMMENTS}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Allowratings}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_allowratings}</label></div>
 									<div class="form-field">{PAGEADD_FORM_ALLOWRATINGS}</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.File}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_file}</label></div>
 									<div class="form-field">
 										{PAGEADD_FORM_FILE}
-										<div class="descr">{PHP.skinlang.pageadd.Filehint}</div>
+										<div class="descr">{PHP.L.pageadd_filehint}</div>
 									</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.URL}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_url}</label></div>
 									<div class="form-field">
 										{PAGEADD_FORM_URL}
-										<div class="descr">{PHP.skinlang.pageadd.URLhint}</div>
+										<div class="descr">{PHP.L.pageadd_urlhint}</div>
 									</div>
 								</li>
 
 								<li class="form-row">
-									<div class="form-label"><label>{PHP.skinlang.pageadd.Filesize}</label></div>
+									<div class="form-label"><label>{PHP.L.pageadd_filesize}</label></div>
 									<div class="form-field">
 										{PAGEADD_FORM_SIZE}
-										<div class="descr">{PHP.skinlang.pageadd.Filesizehint}</div>
+										<div class="descr">{PHP.L.pageadd_filesizehint}</div>
 									</div>
 								</li>
 
@@ -202,12 +202,12 @@
 
 				</div>
 
-				<div class="help">{PHP.skinlang.pageadd.Formhint}</div>
+				<div class="help">{PHP.L.pageadd_formhint}</div>
 
 				<div class="centered">
-					<button type="submit" class="submit btn btn-big">{PHP.skinlang.pageadd.Submit}</button>
+					<button type="submit" class="submit btn btn-big">{PHP.L.pageadd_submit}</button>
 					<!-- BEGIN: PAGEADD_PUBLISH -->
-					<button type="submit" class="submit btn btn-big" name="newpagepublish" onclick="this.value='OK'; return true">{PHP.skinlang.pageadd.Publish}</button>
+					<button type="submit" class="submit btn btn-big" name="newpagepublish" onclick="this.value='OK'; return true">{PHP.L.pageadd_publish}</button>
 					<!-- END: PAGEADD_PUBLISH -->
 				</div>
 

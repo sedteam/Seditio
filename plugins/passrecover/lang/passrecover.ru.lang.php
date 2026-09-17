@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=Plugin.standalone
 Author=Seditio Team
 Description=

@@ -37,7 +37,7 @@
 
 			<!-- END: USERS_PAGINATION_TP -->
 
-			<div class="text-center descr">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
+			<div class="text-center descr">{PHP.L.users_page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.L.users_usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.L.users_usersinthissection}</div>
 
 			<div class="table cells striped resp-table">
 
@@ -84,7 +84,7 @@
 
 			</div>
 
-			<div class="text-center descr">{PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
+			<div class="text-center descr">{PHP.L.users_page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.L.users_usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.L.users_usersinthissection}</div>
 
 			<!-- BEGIN: USERS_PAGINATION_BM -->
 

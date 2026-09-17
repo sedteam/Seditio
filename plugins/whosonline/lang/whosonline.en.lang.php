@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.en.lang.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-17
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -27,5 +27,6 @@ $L['plu_therescurrently'] = "There's currently ";
 $L['plu_visitors'] = " visitor(s) and ";
 $L['plu_members'] = " registered member(s) online.";
 $L['plu_lastseen1'] = "Last seen";
+$L['plu_lastseen2'] = "seconds ago";
 $L['plu_in'] = "in";
 $L['plu_visitor'] = "Visitor";

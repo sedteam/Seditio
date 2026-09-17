@@ -1369,6 +1369,7 @@ input[type="radio"] {
 /*----------------------------------------*/
 
 input[type="email"], 
+input[type="number"], 
 input[type="password"], 
 input[type="tel"], 
 input[type="text"], 
@@ -1401,6 +1402,8 @@ select {
 
 input[type="text"]:focus, 
 input[type="text"]:hover,
+input[type="number"]:focus, 
+input[type="number"]:hover,
 input[type="password"]:focus, 
 input[type="password"]:hover,
 textarea:focus,

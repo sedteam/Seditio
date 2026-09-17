@@ -61,7 +61,7 @@
 
 		<div class="poll-info">
 			<p> {POLL_INFO}<br />
-				{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}<br />
+				{POLL_VOTERS} {PHP.L.polls_voterssince} {POLL_SINCE}<br />
 			</p>
 		</div>
 
@@ -73,7 +73,7 @@
 <div class="poll-comments spoiler-container {POLL_COMMENTS_ISSHOW}">
 
 	<div class="comments-box-title">
-		<h3><a href="{POLL_COMMENTS_URL}">{PHP.skinlang.polls.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({POLL_COMMENTS_COUNT})</span>{POLL_COMMENTS_JUMP}</a></h3>
+		<h3><a href="{POLL_COMMENTS_URL}">{PHP.L.polls_comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({POLL_COMMENTS_COUNT})</span>{POLL_COMMENTS_JUMP}</a></h3>
 	</div>
 
 	<div class="comments-box spoiler-body">

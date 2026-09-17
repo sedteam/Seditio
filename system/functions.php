@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-17
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -255,6 +255,7 @@ $sed_dbnames = array(
 	'forum_topics',
 	'groups',
 	'groups_users',
+	'languages',
 	'logger',
 	'menu',
 	'pages',
@@ -272,6 +273,7 @@ $sed_dbnames = array(
 	'smilies',
 	'stats',
 	'structure',
+	'translations',
 	'trash',
 	'users'
 );
@@ -4426,7 +4428,29 @@ function sed_selectbox_groups($check, $name, $skip = array(0))
  */
 function sed_selectbox_lang($check, $name)
 {
-	global $sed_languages, $sed_countries;
+	global $sed_languages_active, $sed_languages, $db_languages;
+
+	if (empty($sed_languages_active) && !empty($db_languages)) {
+		$sed_languages_active = array();
+		$sql_langs = @sed_sql_query("SELECT * FROM $db_languages WHERE lang_active=1 ORDER BY lang_order ASC, lang_code ASC");
+		if ($sql_langs) {
+			while ($lrow = sed_sql_fetchassoc($sql_langs)) {
+				$sed_languages_active[$lrow['lang_code']] = $lrow;
+			}
+		}
+	}
+
+	if (!empty($sed_languages_active) && is_array($sed_languages_active)) {
+		$result = "<select name=\"$name\" size=\"1\">";
+		foreach ($sed_languages_active as $lcode => $ldata) {
+			$selected = ($lcode == $check) ? "selected=\"selected\"" : '';
+			$title = !empty($ldata['lang_title']) ? $ldata['lang_title'] : (isset($sed_languages[$lcode]) ? $sed_languages[$lcode] : ucfirst($lcode));
+			$native = !empty($ldata['lang_native']) ? ' (' . $ldata['lang_native'] . ')' : '';
+			$result .= "<option value=\"$lcode\" $selected>" . $title . $native . "</option>";
+		}
+		$result .= "</select>";
+		return $result;
+	}
 
 	$lang_path = (defined('SED_ROOT') ? SED_ROOT : '') . '/system/lang/';
 	if (!is_dir($lang_path)) {
@@ -4448,7 +4472,7 @@ function sed_selectbox_lang($check, $name)
 	$result = "<select name=\"$name\" size=\"1\">";
 	foreach ($langlist as $i => $x) {
 		$selected = ($x == $check) ? "selected=\"selected\"" : '';
-		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
+		$lng = !empty($sed_languages[$x]) ? $sed_languages[$x] : ucfirst($x);
 		$result .= "<option value=\"$x\" $selected>" . $lng . " (" . $x . ")</option>";
 	}
 	$result .= "</select>";
@@ -4865,6 +4889,11 @@ function sed_langfile($code, $type = 'plugin', $lang = null)
 		$lang = isset($cfg['defaultlang']) ? $cfg['defaultlang'] : 'en';
 	}
 	$lang = preg_replace('/[^a-z0-9_-]/i', '', $lang);
+
+	// If compiled language cache is loaded, bypass individual file include
+	if (!empty($cfg['lang_cache_compiled'])) {
+		return '';
+	}
 
 	if ($type === 'module') {
 		$base = SED_ROOT . '/modules/' . $code . '/lang/' . $code;
@@ -6181,6 +6210,7 @@ $sed_languages['gr'] = 'Greek';
 $sed_languages['hu'] = 'Hungarian';
 $sed_languages['jp'] = '日本語';
 $sed_languages['kr'] = '한국어';
+$sed_languages['tr'] = 'Türkçe';
 
 $sed_countries = array(
 	'00' => '---',
@@ -6623,3 +6653,333 @@ function sed_urls_generate()
 
 	return (bool)@file_put_contents($cache_file, $content);
 }
+
+/**
+ * Generates compiled single-file language cache for a given language or all active languages.
+ * Follows the pattern of sed_urls_generate().
+ *
+ * @param string|null $lang Language code (e.g. 'ru', 'en') or null for all active
+ * @return bool TRUE on success, FALSE on failure
+ */
+function sed_translations_generate($lang = null)
+{
+	global $db_languages, $db_translations, $cfg;
+
+	$cache_dir = SED_ROOT . '/datas/cache';
+	if (!is_dir($cache_dir)) {
+		@mkdir($cache_dir, 0755, true);
+		@file_put_contents($cache_dir . '/index.php', '<?php die(); ?>');
+	}
+
+	if ($lang === null) {
+		$res = true;
+		$langs = array();
+		$sql_langs = @sed_sql_query("SELECT lang_code FROM $db_languages WHERE lang_active = 1");
+		if ($sql_langs) {
+			while ($row_l = sed_sql_fetchassoc($sql_langs)) {
+				$langs[] = $row_l['lang_code'];
+			}
+		}
+		if (empty($langs)) {
+			$lang_dirs = glob(SED_ROOT . '/system/lang/*', GLOB_ONLYDIR);
+			if (!empty($lang_dirs)) {
+				foreach ($lang_dirs as $ld) {
+					$code = basename($ld);
+					if (file_exists($ld . '/main.lang.php')) {
+						$langs[] = $code;
+					}
+				}
+			}
+		}
+		foreach ($langs as $l_code) {
+			if (!sed_translations_generate($l_code)) {
+				$res = false;
+			}
+		}
+		return $res;
+	}
+
+	$lang = preg_replace('/[^a-z0-9_-]/i', '', $lang);
+	if (empty($lang)) {
+		return false;
+	}
+
+	$chk_tbl = @sed_sql_query("SHOW TABLES LIKE '$db_translations'");
+	if (!$chk_tbl || sed_sql_numrows($chk_tbl) == 0) {
+		return false;
+	}
+
+	$sql = sed_sql_query("SELECT tra_key, tra_val FROM $db_translations 
+		WHERE tra_lang = '" . sed_sql_prep($lang) . "' 
+		ORDER BY tra_order ASC, tra_id ASC");
+
+	$lines = array();
+	while ($row = sed_sql_fetchassoc($sql)) {
+		$k = $row['tra_key'];
+		$v = $row['tra_val'];
+		$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+	}
+
+	if (count($lines) === 0) {
+		sed_translations_import_all();
+		$sql = sed_sql_query("SELECT tra_key, tra_val FROM $db_translations 
+			WHERE tra_lang = '" . sed_sql_prep($lang) . "' 
+			ORDER BY tra_order ASC, tra_id ASC");
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$k = $row['tra_key'];
+			$v = $row['tra_val'];
+			$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+		}
+	}
+
+	$content = "<?php\n";
+	$content .= "/* Auto-generated language cache for [" . $lang . "]. Do not edit manually. */\n";
+	$content .= "/* Generated: " . date('Y-m-d H:i:s') . " */\n\n";
+	$content .= implode("\n", $lines) . "\n\n";
+
+	$f_main = SED_ROOT . '/system/lang/' . $lang . '/main.lang.php';
+	if (file_exists($f_main)) {
+		$sed_translit = array();
+		$sed_months_list = array();
+		$sed_daysweek_list = array();
+		$sed_countries = array();
+		@include($f_main);
+		if (!empty($sed_translit) && is_array($sed_translit)) {
+			$content .= "\$sed_translit = " . var_export($sed_translit, true) . ";\n\n";
+		}
+		if (!empty($sed_months_list) && is_array($sed_months_list)) {
+			$content .= "\$sed_months_list = " . var_export($sed_months_list, true) . ";\n\n";
+		}
+		if (!empty($sed_daysweek_list) && is_array($sed_daysweek_list)) {
+			$content .= "\$sed_daysweek_list = " . var_export($sed_daysweek_list, true) . ";\n\n";
+		}
+		if (!empty($sed_countries) && is_array($sed_countries)) {
+			$content .= "\$sed_countries = " . var_export($sed_countries, true) . ";\n\n";
+		}
+	}
+
+	$cache_file = $cache_dir . '/sed_lang.' . $lang . '.php';
+	return (bool)@file_put_contents($cache_file, $content);
+}
+
+/**
+ * Imports a .lang.php file into the sed_translations table.
+ *
+ * @param string $file Absolute path to the .lang.php file
+ * @param string $lang Language code ('ru', 'en', etc.)
+ * @param string $scope 'core' | 'module' | 'plugin'
+ * @param string $code Component code ('main', 'page', 'thanks', etc.)
+ * @param int $order Priority order
+ * @param int $type 1 = System, 0 = Custom, 2 = Locked
+ * @return int Number of imported rows
+ */
+function sed_translations_import_file($file, $lang, $scope, $code, $order = 500, $type = 1)
+{
+	global $db_translations;
+
+	if (!file_exists($file)) {
+		return 0;
+	}
+
+	$L = array();
+	include($file);
+
+	$now = time();
+	$count = 0;
+
+	if (!empty($L) && is_array($L)) {
+		foreach ($L as $k => $v) {
+			if (is_array($v)) {
+				$title = isset($v[0]) ? (string)$v[0] : '';
+				$hint  = isset($v[1]) ? (string)$v[1] : '';
+
+				sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
+					VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($k) . "', '" . sed_sql_prep($title) . "', " . (int)$type . ", " . (int)$order . ", $now)
+					ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
+				$count++;
+
+				if ($hint !== '') {
+					$hint_k = $k . '_hint';
+					sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
+						VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($hint_k) . "', '" . sed_sql_prep($hint) . "', " . (int)$type . ", " . (int)$order . ", $now)
+						ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
+					$count++;
+				}
+			} elseif (is_string($v) || is_numeric($v)) {
+				sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
+					VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($k) . "', '" . sed_sql_prep((string)$v) . "', " . (int)$type . ", " . (int)$order . ", $now)
+					ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
+				$count++;
+			}
+		}
+	}
+
+	return $count;
+}
+
+/**
+ * Imports all existing translation files from core, active modules, and active plugins into database.
+ *
+ * @return bool TRUE on success
+ */
+function sed_translations_import_all()
+{
+	global $cfg, $db_languages, $db_translations, $db_core, $db_plugins;
+
+	$langs = array();
+	$sql = @sed_sql_query("SELECT lang_code FROM $db_languages WHERE lang_active = 1");
+	if ($sql) {
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$langs[] = $row['lang_code'];
+		}
+	}
+	if (empty($langs)) {
+		$lang_dirs = glob(SED_ROOT . '/system/lang/*', GLOB_ONLYDIR);
+		if (!empty($lang_dirs)) {
+			foreach ($lang_dirs as $ld) {
+				$code = basename($ld);
+				if (file_exists($ld . '/main.lang.php')) {
+					$langs[] = $code;
+				}
+			}
+		}
+	}
+
+	foreach ($langs as $lang) {
+		// 1. Core
+		$f_main = SED_ROOT . '/system/lang/' . $lang . '/main.lang.php';
+		if (file_exists($f_main)) {
+			sed_translations_import_file($f_main, $lang, 'core', 'main', 100);
+		}
+		$f_admin = SED_ROOT . '/system/lang/' . $lang . '/admin.lang.php';
+		if (file_exists($f_admin)) {
+			sed_translations_import_file($f_admin, $lang, 'core', 'admin', 110);
+		}
+		$f_msg = SED_ROOT . '/system/lang/' . $lang . '/message.lang.php';
+		if (file_exists($f_msg)) {
+			sed_translations_import_file($f_msg, $lang, 'core', 'message', 120);
+		}
+
+		// 2. Active modules
+		$chk_core = @sed_sql_query("SHOW TABLES LIKE '$db_core'");
+		if ($chk_core && sed_sql_numrows($chk_core) > 0) {
+			$sql_mods = sed_sql_query("SELECT ct_code FROM $db_core WHERE ct_state = 1");
+			while ($mod = sed_sql_fetchassoc($sql_mods)) {
+				$m_code = $mod['ct_code'];
+				$f_mod = SED_ROOT . '/modules/' . $m_code . '/lang/' . $m_code . '.' . $lang . '.lang.php';
+				if (!file_exists($f_mod)) {
+					$f_mod = SED_ROOT . '/modules/' . $m_code . '/lang/' . $m_code . '.en.lang.php';
+				}
+				if (file_exists($f_mod)) {
+					sed_translations_import_file($f_mod, $lang, 'module', $m_code, 200);
+				}
+			}
+		}
+
+		// 3. Active plugins
+		$chk_plug = @sed_sql_query("SHOW TABLES LIKE '$db_plugins'");
+		if ($chk_plug && sed_sql_numrows($chk_plug) > 0) {
+			$sql_plugs = sed_sql_query("SELECT DISTINCT pl_code FROM $db_plugins WHERE pl_module = 0 AND pl_active = 1");
+			while ($pl = sed_sql_fetchassoc($sql_plugs)) {
+				$p_code = $pl['pl_code'];
+				$f_plug = SED_ROOT . '/plugins/' . $p_code . '/lang/' . $p_code . '.' . $lang . '.lang.php';
+				if (!file_exists($f_plug)) {
+					$f_plug = SED_ROOT . '/plugins/' . $p_code . '/lang/' . $p_code . '.en.lang.php';
+				}
+				if (file_exists($f_plug)) {
+					sed_translations_import_file($f_plug, $lang, 'plugin', $p_code, 300);
+				}
+			}
+		}
+
+		// 4. Default skin & Admin skin
+		$skin_code = !empty($cfg['defaultskin']) ? $cfg['defaultskin'] : 'sympfy';
+		$f_skin = SED_ROOT . '/skins/' . $skin_code . '/' . $skin_code . '.' . $lang . '.lang.php';
+		if (file_exists($f_skin)) {
+			sed_translations_import_file($f_skin, $lang, 'skin', $skin_code, 400);
+		}
+		$adm_skin = !empty($cfg['adminskin']) ? $cfg['adminskin'] : 'sympfy';
+		$f_admskin = SED_ROOT . '/system/adminskin/' . $adm_skin . '/' . $adm_skin . '.' . $lang . '.lang.php';
+		if (file_exists($f_admskin)) {
+			sed_translations_import_file($f_admskin, $lang, 'skin', $adm_skin, 410);
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Imports language files for a specific component (module or plugin) into database.
+ *
+ * @param string $scope 'module' | 'plugin'
+ * @param string $code Component code
+ * @return int Total imported translation rows
+ */
+function sed_translations_import_component($scope, $code)
+{
+	global $db_languages;
+
+	$langs = array();
+	$sql = @sed_sql_query("SELECT lang_code FROM $db_languages WHERE lang_active = 1");
+	if ($sql) {
+		while ($row = sed_sql_fetchassoc($sql)) {
+			$langs[] = $row['lang_code'];
+		}
+	}
+	if (empty($langs)) {
+		$lang_dirs = glob(SED_ROOT . '/system/lang/*', GLOB_ONLYDIR);
+		if (!empty($lang_dirs)) {
+			foreach ($lang_dirs as $ld) {
+				$langs[] = basename($ld);
+			}
+		}
+	}
+	if (empty($langs)) {
+		$langs = array('en', 'ru');
+	}
+
+	$order = ($scope === 'module') ? 200 : 300;
+	$count = 0;
+
+	foreach ($langs as $lang) {
+		if ($scope === 'module') {
+			$f = SED_ROOT . '/modules/' . $code . '/lang/' . $code . '.' . $lang . '.lang.php';
+			if (!file_exists($f)) {
+				$f = SED_ROOT . '/modules/' . $code . '/lang/' . $code . '.en.lang.php';
+			}
+		} else {
+			$f = SED_ROOT . '/plugins/' . $code . '/lang/' . $code . '.' . $lang . '.lang.php';
+			if (!file_exists($f)) {
+				$f = SED_ROOT . '/plugins/' . $code . '/' . $code . '.' . $lang . '.lang.php';
+			}
+			if (!file_exists($f)) {
+				$f = SED_ROOT . '/plugins/' . $code . '/lang/' . $code . '.en.lang.php';
+			}
+			if (!file_exists($f)) {
+				$f = SED_ROOT . '/plugins/' . $code . '/' . $code . '.en.lang.php';
+			}
+		}
+
+		if (file_exists($f)) {
+			$count += sed_translations_import_file($f, $lang, $scope, $code, $order);
+		}
+	}
+
+	return $count;
+}
+
+/**
+ * Deletes all translations belonging to a specific component (module or plugin) from database.
+ *
+ * @param string $scope 'module' | 'plugin'
+ * @param string $code Component code
+ * @return int Number of deleted rows
+ */
+function sed_translations_delete_component($scope, $code)
+{
+	global $db_translations;
+
+	sed_sql_query("DELETE FROM $db_translations WHERE tra_scope = '" . sed_sql_prep($scope) . "' AND tra_code = '" . sed_sql_prep($code) . "'");
+	return sed_sql_affectedrows();
+}
+

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/lang/forums.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-17
 Type=Module.lang
 Author=Seditio Team
 Description=Forums Russian language file
@@ -65,6 +65,7 @@ $L['adm_help_forums_structure'] = "Недоступно";
 /* ====== Метки конфигурации ======= */
 
 $L['core_forums'] = "Форум";
+$L['cfg_formatmonthdayhourmin'] = array("Маска даты форума", "По умолчанию: d.m H:i");
 $L['cfg_hideprivateforums'] = array("Скрывать приватные разделы форума", "");
 $L['cfg_hottopictrigger'] = array("Сообщений в теме для присвоения ей статуса 'популярная'", "");
 $L['cfg_maxtopicsperpage'] = array("Максимум тем или сообщений на странице", "");

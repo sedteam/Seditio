@@ -21,15 +21,15 @@
     <form name="login" action="{MAINTENANCE_FORM_SEND}" method="post">
       <table class="cells striped">
         <tr>
-          <td>{PHP.skinlang.maintenance.Username}</td>
+          <td>{PHP.L.maintenance_username}</td>
           <td>{MAINTENANCE_USER}</td>
         </tr>
         <tr>
-          <td>{PHP.skinlang.maintenance.Password}</td>
+          <td>{PHP.L.maintenance_password}</td>
           <td>{MAINTENANCE_PASSWORD}</td>
         </tr>
         <tr>
-          <td colspan="2"><input type="submit" class="submit btn btn-big" value="{PHP.skinlang.maintenance.Login}"></td>
+          <td colspan="2"><input type="submit" class="submit btn btn-big" value="{PHP.L.maintenance_login}"></td>
         </tr>
       </table>
     </form>

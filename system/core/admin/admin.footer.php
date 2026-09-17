@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.footer.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-17
 Type=Core
 Author=Seditio Team
 Description=Global admin footer
@@ -94,6 +94,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
 	$out['devmode'] .= "<li><a href=\"" . $sys['request_uri'] . "#tab102\" class=\"selected\">SQL queries</a></li>";
 	$out['devmode'] .= "<li><a href=\"" . $sys['request_uri'] . "#tab103\" class=\"selected\">Auth</a></li>";
 	$out['devmode'] .= "<li><a href=\"" . $sys['request_uri'] . "#tab104\" class=\"selected\">" . '$sys' . "</a></li>";
+	$out['devmode'] .= "<li><a href=\"" . $sys['request_uri'] . "#tab105\" class=\"selected\">Stats</a></li>";
 	$out['devmode'] .= "</ul>";
 	$out['devmode'] .= "<div class=\"tab-box\">";
 	$out['devmode'] .= "<div id=\"tab101\" class=\"tabs\">";
@@ -157,6 +158,120 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
 	$out['devmode'] .= "</div><div id=\"tab104\" class=\"tabs\">";
 	$out['devmode'] .= '<h4>$sys :</h4>';
 	$out['devmode'] .= sed_vardump($sys, 'print_r');
+	$out['devmode'] .= "</div><div id=\"tab105\" class=\"tabs\">";
+	$out['devmode'] .= "<h4>Stats :</h4>";
+
+	$time_php = max(0, $sys['creationtime'] - $sys['tcount']);
+	$time_php_pct = ($sys['creationtime'] > 0) ? round(($time_php / $sys['creationtime']) * 100, 1) : 0;
+	$time_sql_pct = ($sys['creationtime'] > 0) ? round(($sys['tcount'] / $sys['creationtime']) * 100, 1) : 0;
+
+	$mem_usage = memory_get_usage();
+	$mem_peak = memory_get_peak_usage();
+	$mem_limit = ini_get('memory_limit');
+
+	$included_files = get_included_files();
+	$inc_count = count($included_files);
+	$inc_total_size = 0;
+
+	$opcache_status = (extension_loaded('Zend OPcache') && ini_get('opcache.enable')) ? 'Enabled' : 'Disabled';
+
+	$groups = array(
+		'Core'            => array(),
+		'Plugins'         => array(),
+		'Languages'       => array(),
+		'Skins'           => array(),
+		'Configs & Cache' => array(),
+		'Other'           => array()
+	);
+
+	$group_sizes = array(
+		'Core'            => 0,
+		'Plugins'         => 0,
+		'Languages'       => 0,
+		'Skins'           => 0,
+		'Configs & Cache' => 0,
+		'Other'           => 0
+	);
+
+	$root_raw = defined('SED_ROOT') ? realpath(SED_ROOT) : realpath('./');
+	$root_dir = $root_raw ? str_replace('\\', '/', $root_raw) : '';
+	$root_len = strlen($root_dir);
+
+	foreach ($included_files as $idx => $inc_file) {
+		$norm_file = str_replace('\\', '/', $inc_file);
+		if (!empty($root_dir) && substr($norm_file, 0, $root_len) === $root_dir) {
+			$rel_file = ltrim(substr($norm_file, $root_len), '/');
+		} else {
+			$rel_file = $norm_file;
+		}
+		$fsize = @filesize($inc_file);
+		$fsize_val = $fsize ? $fsize : 0;
+		$inc_total_size += $fsize_val;
+
+		if (preg_match('#(^|/)lang/|\.lang\.php$#i', $rel_file)) {
+			$grp = 'Languages';
+		} elseif (strpos($rel_file, 'skins/') === 0 || strpos($rel_file, 'system/adminskin/') === 0) {
+			$grp = 'Skins';
+		} elseif (strpos($rel_file, 'plugins/') === 0) {
+			$grp = 'Plugins';
+		} elseif (strpos($rel_file, 'datas/') === 0) {
+			$grp = 'Configs & Cache';
+		} elseif (strpos($rel_file, 'system/') === 0 || strpos($rel_file, '/') === false) {
+			$grp = 'Core';
+		} else {
+			$grp = 'Other';
+		}
+
+		$groups[$grp][] = array(
+			'num'  => $idx + 1,
+			'file' => $rel_file,
+			'size' => $fsize_val
+		);
+		$group_sizes[$grp] += $fsize_val;
+	}
+
+	$breakdown_parts = array();
+	foreach ($groups as $grp_name => $files) {
+		if (count($files) > 0) {
+			$breakdown_parts[] = "[" . $grp_name . ": " . count($files) . "]";
+		}
+	}
+	$breakdown_str = implode(' ', $breakdown_parts);
+
+	$out['devmode'] .= "<table class=\"cells hovered\" style=\"margin-bottom:15px;\">";
+	$out['devmode'] .= "<tr><td class=\"coltop\" colspan=\"2\">Summary</td></tr>";
+	$out['devmode'] .= "<tr><td style=\"width:25%;\"><strong>Execution Time</strong></td>";
+	$out['devmode'] .= "<td>" . sprintf("%.3f", round($sys['creationtime'], 3)) . " s (PHP: " . sprintf("%.3f", round($time_php, 3)) . " s / " . $time_php_pct . "%, SQL: " . sprintf("%.3f", round($sys['tcount'], 3)) . " s / " . $time_sql_pct . "%)</td></tr>";
+	$out['devmode'] .= "<tr><td><strong>Memory Usage</strong></td>";
+	$out['devmode'] .= "<td>" . sed_format_size($mem_usage, array('precision' => 2)) . " (Peak: " . sed_format_size($mem_peak, array('precision' => 2)) . ", Limit: " . $mem_limit . ")</td></tr>";
+	$out['devmode'] .= "<tr><td><strong>Environment</strong></td>";
+	$out['devmode'] .= "<td>PHP " . PHP_VERSION . " (" . PHP_SAPI . ") / OPcache: " . $opcache_status . "</td></tr>";
+	$out['devmode'] .= "<tr><td><strong>Included Files</strong></td>";
+	$out['devmode'] .= "<td>" . $inc_count . " files (" . sed_format_size($inc_total_size, array('precision' => 1)) . ") &nbsp; " . $breakdown_str . "</td></tr>";
+	$out['devmode'] .= "</table>";
+
+	$out['devmode'] .= "<h4>Included files (" . $inc_count . ") :</h4>";
+	$out['devmode'] .= "<table class=\"cells hovered\">";
+	$out['devmode'] .= "<tr><td class=\"coltop\" style=\"width:5%;\">#</td>";
+	$out['devmode'] .= "<td class=\"coltop\">File</td>";
+	$out['devmode'] .= "<td class=\"coltop\" style=\"width:15%; text-align:right;\">Size</td></tr>";
+
+	foreach ($groups as $grp_name => $files) {
+		if (empty($files)) {
+			continue;
+		}
+		$out['devmode'] .= "<tr><td colspan=\"3\" style=\"font-weight:bold; background:rgba(0,0,0,0.05); padding:6px 8px;\">" . $grp_name . " (" . count($files) . ") &ndash; " . sed_format_size($group_sizes[$grp_name], array('precision' => 1)) . "</td></tr>";
+		foreach ($files as $f) {
+			$out['devmode'] .= "<tr><td>" . $f['num'] . "</td>";
+			$out['devmode'] .= "<td style=\"text-align:left;\">" . sed_cc($f['file']) . "</td>";
+			$out['devmode'] .= "<td style=\"text-align:right;\">" . ($f['size'] ? sed_format_size($f['size'], array('precision' => 1)) : '&ndash;') . "</td></tr>";
+		}
+	}
+
+	$out['devmode'] .= "<tr><td>END</td>";
+	$out['devmode'] .= "<td><strong>Tot.: " . $inc_count . " files</strong></td>";
+	$out['devmode'] .= "<td style=\"text-align:right;\"><strong>" . sed_format_size($inc_total_size, array('precision' => 1)) . "</strong></td></tr>";
+	$out['devmode'] .= "</table>";
 	$out['devmode']	.= "</div></div></div>";
 }
 

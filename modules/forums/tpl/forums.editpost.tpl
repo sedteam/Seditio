@@ -30,12 +30,12 @@
 					<!-- BEGIN: FORUMS_EDITPOST_FIRST -->
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.forumsnewtopic.Title}</label></div>
+						<div class="form-label"><label>{PHP.L.forumsnewtopic_title}</label></div>
 						<div class="form-field">{FORUMS_EDITPOST_TITLE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.forumsnewtopic.Desc}</label></div>
+						<div class="form-label"><label>{PHP.L.forumsnewtopic_desc}</label></div>
 						<div class="form-field">{FORUMS_EDITPOST_DESC}</div>
 					</li>
 
@@ -81,7 +81,7 @@
 
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn">{PHP.skinlang.forumseditpost.Update}</button>
+							<button type="submit" class="submit btn">{PHP.L.forumseditpost_update}</button>
 						</div>
 					</li>
 

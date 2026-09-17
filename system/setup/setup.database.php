@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/setup.database.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-17
 Type=Core.setup
 Author=Seditio Team
 Description=Database structure and import logic for setup installer
@@ -268,6 +268,50 @@ $sql = sed_sql_query("CREATE TABLE IF NOT EXISTS " . $sqldbprefix . "menu (
   PRIMARY KEY (menu_id),
   KEY menu_pid (menu_pid)
 ) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
+
+$sql = sed_sql_query("CREATE TABLE IF NOT EXISTS " . $sqldbprefix . "languages (
+  lang_code varchar(16) NOT NULL,
+  lang_title varchar(64) NOT NULL,
+  lang_native varchar(64) NOT NULL,
+  lang_direction enum('ltr','rtl') NOT NULL DEFAULT 'ltr',
+  lang_active tinyint(1) NOT NULL DEFAULT 1,
+  lang_is_default tinyint(1) NOT NULL DEFAULT 0,
+  lang_order smallint(5) NOT NULL DEFAULT 100,
+  PRIMARY KEY (lang_code)
+) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
+
+$sql = sed_sql_query("CREATE TABLE IF NOT EXISTS " . $sqldbprefix . "translations (
+  tra_id int(11) unsigned NOT NULL auto_increment,
+  tra_lang varchar(16) NOT NULL,
+  tra_scope enum('core','module','plugin','skin') NOT NULL DEFAULT 'core',
+  tra_code varchar(64) NOT NULL DEFAULT 'main',
+  tra_key varchar(128) NOT NULL,
+  tra_val mediumtext NOT NULL,
+  tra_type tinyint(1) NOT NULL DEFAULT 0,
+  tra_order smallint(5) NOT NULL DEFAULT 500,
+  tra_updated int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (tra_id),
+  UNIQUE KEY idx_tra_unique (tra_lang, tra_scope, tra_code, tra_key),
+  KEY idx_tra_lookup (tra_lang, tra_order),
+  KEY idx_tra_scope (tra_scope, tra_code)
+) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
+
+global $sed_languages;
+$lang_dirs = glob(SED_ROOT . '/system/lang/*', GLOB_ONLYDIR);
+if (!empty($lang_dirs)) {
+    $order = 10;
+    foreach ($lang_dirs as $ld) {
+        $code = basename($ld);
+        if (file_exists($ld . '/main.lang.php')) {
+            $info = sed_infoget($ld . '/main.lang.php');
+            $lang_title = !empty($info['Name']) ? $info['Name'] : (isset($sed_languages[$code]) ? $sed_languages[$code] : ucfirst($code));
+            $lang_native = !empty($info['Native']) ? $info['Native'] : (isset($sed_languages[$code]) ? $sed_languages[$code] : $lang_title);
+            $is_def = (isset($defaultlang) && $code === $defaultlang) ? 1 : (($code === 'en' && empty($defaultlang)) ? 1 : 0);
+            sed_sql_query("INSERT IGNORE INTO " . $sqldbprefix . "languages (lang_code, lang_title, lang_native, lang_direction, lang_active, lang_is_default, lang_order) VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($lang_title) . "', '" . sed_sql_prep($lang_native) . "', 'ltr', 1, $is_def, $order)");
+            $order += 10;
+        }
+    }
+}
 
 $sql = sed_sql_query("INSERT INTO " . $sqldbprefix . "smilies VALUES (1, ':D', 'system/smilies/icon_biggrin.gif', 'Mister grin', 5);");
 $sql = sed_sql_query("INSERT INTO " . $sqldbprefix . "smilies VALUES (2, ':blush', 'system/smilies/icon_blush.gif', 'Blush', 45);");

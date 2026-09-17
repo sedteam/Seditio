@@ -386,7 +386,7 @@ $skinlang['index']['Newinforums'] = "Новое на форумах";
 $skinlang['index']['Recentadditions'] = "Последние обновления";
 $skinlang['index']['Online'] = "Сейчас на сайте";
 ```
-In template files, localized phrases are loaded via: `{PHP.skinlang.header.Login}` or `{PHP.skinlang.index.Online}`.
+In template files, localized phrases are loaded via: `{PHP.L.header_login}` or `{PHP.L.index_online}`.
 
 ### 9.7.4. Base Layout of Theme Files
 
@@ -460,7 +460,7 @@ In template files, localized phrases are loaded via: `{PHP.skinlang.header.Login
     </section>
     
     <aside class="sidebar-box">
-        <h3>{PHP.skinlang.index.Online}</h3>
+        <h3>{PHP.L.index_online}</h3>
         <p><a href="{PHP.out.whosonline_link}">{PHP.out.whosonline}</a> : {PHP.out.whosonline_reg_list}</p>
     </aside>
 </div>

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/header.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-15
 Type=Core
 Author=Seditio Team
 Description=Global header
@@ -23,7 +23,7 @@ sed_add_javascript('system/assets/js/core.js', true, 10);
 sed_add_css('system/assets/css/core.css', true, 10);
 
 if (!empty($usr['isadmin'])) {
-	$tooltip_lang_js = "var L = L || {}; L.pageadd = \"" . sed_cc($L['admintooltip']['pageadd']) . "\"; L.pageedit = \"" . sed_cc($L['admintooltip']['pageedit']) . "\"; L.pageeditcategory = \"" . sed_cc($L['admintooltip']['pageeditcategory']) . "\"; L.pageeditoption = \"" . sed_cc($L['admintooltip']['pageeditoption']) . "\";";
+	$tooltip_lang_js = "var L = L || {}; L.pageadd = \"" . sed_cc($L['admintooltip_pageadd']) . "\"; L.pageedit = \"" . sed_cc($L['admintooltip_pageedit']) . "\"; L.pageeditcategory = \"" . sed_cc($L['admintooltip_pageeditcategory']) . "\"; L.pageeditoption = \"" . sed_cc($L['admintooltip_pageeditoption']) . "\";";
 	sed_add_javascript($tooltip_lang_js);
 	sed_add_javascript('system/assets/js/admintooltip.js', true, 20);
 }

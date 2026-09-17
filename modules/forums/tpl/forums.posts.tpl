@@ -27,7 +27,7 @@
 			<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 
 			<div class="error">
-				{PHP.skinlang.forumspost.privatetopic}
+				{PHP.L.forumspost_privatetopic}
 			</div>
 
 			<!-- END: FORUMS_POSTS_TOPICPRIVATE -->
@@ -51,8 +51,8 @@
 			<div class="table-cells forums-table forums-post-table">
 
 				<div class="table-thead">
-					<div class="table-td coltop" style="width:160px;">{PHP.skinlang.forumspost.Author}</div>
-					<div class="table-td coltop">{PHP.skinlang.forumspost.Message}</div>
+					<div class="table-td coltop" style="width:160px;">{PHP.L.forumspost_author}</div>
+					<div class="table-td coltop">{PHP.L.forumspost_message}</div>
 				</div>
 
 				<div class="table-tbody">
@@ -84,10 +84,10 @@
 									<p>
 										{FORUMS_POSTS_ROW_MAINGRP}<br />
 										{FORUMS_POSTS_ROW_COUNTRYFLAG} {FORUMS_POSTS_ROW_MAINGRPSTARS}<br />
-										<img src="skins/{PHP.skin}/img/online{FORUMS_POSTS_ROW_USERONLINE}.gif" alt="{PHP.skinlang.forumspost.Onlinestatus}">
+										<img src="skins/{PHP.skin}/img/online{FORUMS_POSTS_ROW_USERONLINE}.gif" alt="{PHP.L.forumspost_onlinestatus}">
 									</p>
 									<p>
-										{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.skinlang.forumspost.posts}<br />
+										{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.L.forumspost_posts}<br />
 										{FORUMS_POSTS_ROW_WEBSITE}
 									</p>
 									<!-- IF {FORUMS_POSTS_ROW_THANKED} -->
@@ -168,7 +168,7 @@
 					</li>
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn btn-big">{PHP.skinlang.forumspost.Reply}</button>
+							<button type="submit" class="submit btn btn-big">{PHP.L.forumspost_reply}</button>
 						</div>
 					</li>
 				</ul>

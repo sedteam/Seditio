@@ -30,29 +30,29 @@
 
 					<ul class="form responsive-form">
 						<li class="form-row">
-							<div class="form-label"><label>{PHP.skinlang.usersregister.Username} *</label></div>
+							<div class="form-label"><label>{PHP.L.usersregister_username} *</label></div>
 							<div class="form-field">{USERS_REGISTER_USER}</div>
 						</li>
 
 						<li class="form-row">
-							<div class="form-label"><label>{PHP.skinlang.usersregister.Validemail} *</label></div>
+							<div class="form-label"><label>{PHP.L.usersregister_validemail} *</label></div>
 							<div class="form-field">{USERS_REGISTER_EMAIL}<br />
-								<div class="descr">{PHP.skinlang.usersregister.Validemailhint}</div>
+								<div class="descr">{PHP.L.usersregister_validemailhint}</div>
 							</div>
 						</li>
 
 						<li class="form-row">
-							<div class="form-label"><label>{PHP.skinlang.usersregister.Password} *</label></div>
+							<div class="form-label"><label>{PHP.L.usersregister_password} *</label></div>
 							<div class="form-field">{USERS_REGISTER_PASSWORD}</div>
 						</li>
 
 						<li class="form-row">
-							<div class="form-label"><label>{PHP.skinlang.usersregister.Confirmpassword} *</label></div>
+							<div class="form-label"><label>{PHP.L.usersregister_confirmpassword} *</label></div>
 							<div class="form-field">{USERS_REGISTER_PASSWORDREPEAT}</div>
 						</li>
 
 						<li class="form-row">
-							<div class="form-label"><label>{PHP.skinlang.usersregister.Country}</label></div>
+							<div class="form-label"><label>{PHP.L.usersregister_country}</label></div>
 							<div class="form-field">{USERS_REGISTER_COUNTRY}</div>
 						</li>
 
@@ -77,13 +77,13 @@
 
 						<li class="form-row">
 							<div class="form-field-100 text-center">
-								<div class="descr">{PHP.skinlang.usersregister.Formhint}</div>
+								<div class="descr">{PHP.L.usersregister_formhint}</div>
 							</div>
 						</li>
 
 						<li class="form-row">
 							<div class="form-field-100 text-center">
-								<input type="submit" class="submit btn btn-big" value="{PHP.skinlang.usersregister.Submit}">
+								<input type="submit" class="submit btn btn-big" value="{PHP.L.usersregister_submit}">
 							</div>
 						</li>
 					</ul>

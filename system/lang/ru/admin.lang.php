@@ -12,10 +12,10 @@ Localization done by : Antar, Antony, Amro
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
 Version=186
-Updated=2026-jul-17
+Updated=2026-sep-16
 Type=Lang
 Author=Seditio Team
-Description=Admin panel
+Description=Admin Russian language file
 [END_SED]
 ==================== */
 
@@ -119,6 +119,9 @@ $L['adm_urlcache_regenerate'] = "Перегенерировать SEF URLs";
 $L['adm_urlcache_delete'] = "Удалить URL кэш";
 $L['adm_tplcache'] = "Кэш шаблонов (XTemplate)";
 $L['adm_tplcache_delete'] = "Удалить кэш шаблонов";
+$L['adm_langcache'] = "Кэш переводов";
+$L['adm_langcache_regenerate'] = "Перегенерировать кэш языков";
+$L['adm_langcache_delete'] = "Удалить кэш языков";
 
 /* ====== Configuration ====== */
 
@@ -536,3 +539,46 @@ $L['adm_modules_noavailable'] = "Нет новых модулей для уст�
 
 $L['adm_pm_totaldb'] = "Личных сообщений в базе данных";
 $L['adm_pm_totalsent'] = "Общее количество отправленных на этот момент личных сообщений";
+
+/* ====== Translations (v186) ====== */
+
+$L['adm_translations'] = "Переводы";
+$L['adm_translations_title'] = "Управление переводами и языками";
+$L['adm_translations_add'] = "Добавить перевод";
+$L['adm_translations_languages'] = "Языки";
+$L['adm_translations_tools'] = "Инструменты";
+$L['adm_translations_key'] = "Ключ переменной";
+$L['adm_translations_val'] = "Значение";
+$L['adm_translations_scope'] = "Область";
+$L['adm_translations_code'] = "Компонент";
+$L['adm_translations_type'] = "Тип";
+$L['adm_translations_custom'] = "Пользовательский";
+$L['adm_translations_system'] = "Системный";
+$L['adm_translations_locked'] = "Заблокирован";
+$L['adm_translations_all_scopes'] = "Все области";
+$L['adm_translations_regenerate'] = "Скомпилировать кэш языков";
+$L['adm_translations_import'] = "Импортировать из файлов";
+$L['adm_translations_import_confirm'] = "Импортировать недостающие переводы из файлов в базу данных? Пользовательские изменения не будут затронуты.";
+$L['adm_translations_reset'] = "Сбросить до исходного";
+$L['adm_translations_reset_confirm'] = "Сбросить значение перевода к значению из исходного файла?";
+$L['adm_translations_delete_confirm'] = "Удалить эту языковую переменную?";
+$L['adm_translations_added'] = "Перевод успешно добавлен.";
+$L['adm_translations_updated'] = "Переводы успешно сохранены.";
+$L['adm_translations_deleted'] = "Перевод удален.";
+$L['adm_translations_cache_generated'] = "Кэш переводов успешно перегенерирован.";
+$L['adm_translations_imported'] = "Импорт переводов завершен.";
+$L['adm_translations_lang_code'] = "Код языка";
+$L['adm_translations_lang_title'] = "Название (English)";
+$L['adm_translations_lang_native'] = "Название на родном языке";
+$L['adm_translations_lang_direction'] = "Направление письма";
+$L['adm_translations_lang_add'] = "Добавить язык";
+$L['adm_translations_lang_edit'] = "Редактировать язык";
+$L['adm_translations_lang_base'] = "Базовый язык (скопировать переводы из)";
+$L['adm_translations_lang_nobase'] = "-- Не копировать (пустой язык) --";
+$L['adm_translations_lang_delete_confirm'] = "Вы уверены, что хотите удалить этот язык и все его переводы?";
+$L['adm_translations_lang_deleted'] = "Язык и связанные переводы удалены.";
+$L['adm_translations_search'] = "Поиск по ключу или значению...";
+$L['adm_translations_all_types'] = "Все типы";
+$L['adm_translations_show'] = "Показывать по";
+$L['adm_translations_key_hint'] = "Только буквы латинского алфавита, цифры и подчеркивания (например: my_header_title)";
+$L['adm_langcache_regenerate_hint'] = "Перекомпилирует все переводы из базы данных в кэш-файлы PHP (datas/cache/sed_lang.*.php) для максимальной скорости работы сайта.";

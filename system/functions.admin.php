@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-15
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -788,8 +788,14 @@ function sed_plugin_install($pl)
 		$res .= "Not found.<br />";
 	}
 
+	$tra_count = sed_translations_import_component('plugin', $pl);
+	if ($tra_count > 0) {
+		$res .= "<strong>Imported translations:</strong> " . $tra_count . "<br />";
+	}
+
 	sed_auth_reorder();
 	sed_urls_generate();
+	sed_translations_generate();
 	sed_cache_clearall();
 	$res .= (isset($j) && $j > 0) ? "<strong>" . sed_link(sed_url("admin", "m=config&n=edit&o=plug&p=" . $pl), "There was configuration entries, click here to open the configuration panel") . "</strong><br />" : '';
 	return ($res);
@@ -848,6 +854,11 @@ function sed_plugin_uninstall($pl, $all = FALSE, $drop_tables = false)
 		$res .= "Resetting the auth column for all the users... ";
 		$res .= "Found:" . sed_sql_affectedrows() . "<br />";
 
+		$tra_deleted = sed_translations_delete_component('plugin', $pl);
+		if ($tra_deleted > 0) {
+			$res .= "Deleted translations: " . $tra_deleted . "<br />";
+		}
+
 		$extplugin_uninstall = SED_ROOT . "/plugins/" . $pl . "/" . $pl . ".uninstall.php";
 		$res .= "Looking for the optional PHP file : " . $extplugin_uninstall . "... ";
 		if (file_exists($extplugin_uninstall)) {
@@ -859,6 +870,7 @@ function sed_plugin_uninstall($pl, $all = FALSE, $drop_tables = false)
 		}
 	}
 	sed_urls_generate();
+	sed_translations_generate();
 	sed_cache_clearall();
 	return ($res);
 }
@@ -1034,6 +1046,13 @@ function sed_module_install($code)
 	sed_urls_generate();
 	$res .= "URL cache regenerated.<br />";
 
+	// Step 10: Import translations & regenerate translation cache
+	$tra_count = sed_translations_import_component('module', $code);
+	if ($tra_count > 0) {
+		$res .= "<strong>Imported translations:</strong> " . $tra_count . "<br />";
+	}
+	sed_translations_generate();
+
 	sed_cache_clearall();
 	$res .= "<strong>Module '" . $info['Name'] . "' installed successfully.</strong><br />";
 	return $res;
@@ -1109,6 +1128,11 @@ function sed_module_uninstall($code, $drop_tables = false)
 	$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='" . sed_sql_prep($code) . "' AND pl_module=1");
 	$res .= "Deleted from plugins registry: " . sed_sql_affectedrows() . "<br />";
 
+	$tra_deleted = sed_translations_delete_component('module', $code);
+	if ($tra_deleted > 0) {
+		$res .= "Deleted translations: " . $tra_deleted . "<br />";
+	}
+
 	$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 	$res .= "Reset user auth cache.<br />";
 
@@ -1116,6 +1140,7 @@ function sed_module_uninstall($code, $drop_tables = false)
 	sed_urls_generate();
 	$res .= "URL cache regenerated.<br />";
 
+	sed_translations_generate();
 	sed_cache_clearall();
 	$res .= "<strong>Module '" . $code . "' uninstalled.</strong><br />";
 	return $res;

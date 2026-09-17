@@ -297,7 +297,7 @@ pre {
   text-decoration: none;
   font-size: 1em;
   line-height: 1.11em;
-  padding: 9px 30px;
+  padding: 8px 30px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -2326,4 +2326,140 @@ ul.content-box-tabs li a.current {
 .card-header select:focus {
   border-color: var(--admin-primary);
   background-color: var(--admin-input-bg);
+}
+
+/* Translations Management */
+.btn-lang-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.btn-lang-group .btn-lang-item {
+  padding: 6px 14px !important;
+  border-radius: 6px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  line-height: 1.4 !important;
+}
+
+.table-filters {
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-filters .form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.table-filters-perpage {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table-footer-bar {
+  padding: 15px 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.table-footer-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.table-footer-perpage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table-footer-actions {
+  text-align: center;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.translation-key {
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.translation-key-lg {
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.translation-key-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.translation-key-prefix,
+.translation-key-suffix {
+  font-family: monospace;
+  font-size: 1.1em;
+  font-weight: 700;
+}
+
+.translation-help-block {
+  margin-top: 4px;
+}
+
+.tools-box-body {
+  padding: 20px;
+}
+
+.tools-box-action {
+  margin-top: 15px;
+}
+
+.btn-group-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Specific table column widths */
+.w-tra-key { width: 280px; }
+.w-tra-scope { width: 110px; }
+.w-tra-type { width: 120px; }
+.w-tra-action { width: 90px; }
+.w-form-label { width: 220px; }
+.w-lang-code { width: 100px; }
+.w-lang-direction { width: 170px; }
+.w-lang-active { width: 90px; }
+.w-lang-default { width: 120px; }
+.w-lang-order { width: 70px; }
+
+.lang-set-default {
+  color: var(--admin-primary);
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.lang-set-default:hover {
+  color: var(--admin-primary-hover);
 }

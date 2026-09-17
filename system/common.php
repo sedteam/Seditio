@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/common.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-17
 Type=Core
 Author=Seditio Team
 Description=Common
@@ -97,6 +97,29 @@ if (!isset($sed_plugins)) {
 		}
 	}
 	sed_cache_store('sed_plugins', $sed_plugins, 3300);
+}
+
+/* ======== Languages ======== */
+
+if (!isset($sed_languages_active) && !empty($db_languages)) {
+	$sed_languages_active = array();
+	$sql_langs = @sed_sql_query("SELECT * FROM $db_languages WHERE lang_active=1 ORDER BY lang_order ASC, lang_code ASC");
+	if ($sql_langs) {
+		while ($lrow = sed_sql_fetchassoc($sql_langs)) {
+			$sed_languages_active[$lrow['lang_code']] = $lrow;
+			if (!empty($lrow['lang_is_default'])) {
+				$cfg['defaultlang'] = $lrow['lang_code'];
+			}
+		}
+	}
+	sed_cache_store('sed_languages_active', $sed_languages_active, 3300);
+} elseif (isset($sed_languages_active) && is_array($sed_languages_active)) {
+	foreach ($sed_languages_active as $lcode => $ldata) {
+		if (!empty($ldata['lang_is_default'])) {
+			$cfg['defaultlang'] = $lcode;
+			break;
+		}
+	}
 }
 
 $sys['request_uri'] = $_SERVER['REQUEST_URI'];
@@ -297,6 +320,68 @@ $n = sed_import('n', 'G', 'ALP', 24);
 $a = sed_import('a', 'G', 'ALP', 24);
 $b = sed_import('b', 'G', 'ALP', 24);
 
+/* ======== Hook for language selection ======== */
+
+$extp = sed_getextplugins('set.lang');
+if (is_array($extp)) {
+	foreach ($extp as $k => $pl) {
+		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+
+/* ======== Language ======== */
+
+$sed_lang_cache = SED_ROOT . '/datas/cache/sed_lang.' . $usr['lang'] . '.php';
+
+if (file_exists($sed_lang_cache)) {
+	$lang = $usr['lang'];
+	require($sed_lang_cache);
+	$cfg['lang_cache_compiled'] = true;
+} else {
+	$mlang = SED_ROOT . '/system/lang/' . $usr['lang'] . '/main.lang.php';
+
+	if (!file_exists($mlang)) {
+		$usr['lang'] = $cfg['defaultlang'];
+		$sed_def_cache = SED_ROOT . '/datas/cache/sed_lang.' . $usr['lang'] . '.php';
+		if (file_exists($sed_def_cache)) {
+			$lang = $usr['lang'];
+			require($sed_def_cache);
+			$cfg['lang_cache_compiled'] = true;
+		} else {
+			$mlang = SED_ROOT . '/system/lang/' . $usr['lang'] . '/main.lang.php';
+			if (!file_exists($mlang)) {
+				sed_diefatal('Main language file not found.');
+			}
+		}
+	}
+
+	if (empty($cfg['lang_cache_compiled'])) {
+		$lang = $usr['lang'];
+		require($mlang);
+
+		/* Active modules: load their lang so $L['core_*'] etc. are available everywhere */
+		foreach ($sed_modules as $mod_code => $mod_row) {
+			$mod_path = isset($mod_row['ct_path']) ? (string)$mod_row['ct_path'] : '';
+			if ($mod_path === '' || strpos($mod_path, 'modules/') !== 0) {
+				continue;
+			}
+			if ($mod_lang_file = sed_langfile($mod_code, 'module', $lang)) {
+				include_once($mod_lang_file);
+			}
+		}
+
+		$msg_lang_file = SED_ROOT . '/system/lang/' . $usr['lang'] . '/message.lang.php';
+		if (file_exists($msg_lang_file)) {
+			include_once($msg_lang_file);
+		}
+	}
+}
+
+$yesno_arr = array(1 => $L['Yes'], 0 => $L['No']);
+$yesno_revers_arr = array(0 => $L['Yes'], 1 => $L['No']);
+
+$out['copyright'] = "<a href=\"https://seditio.org\">" . $L['foo_poweredby'] . " Seditio</a>";
+
 /* ======== Hooks for plugins (standalone) ======== */
 
 if (defined('SED_PLUG') && !empty($_GET['e'])) {
@@ -372,43 +457,6 @@ if ($cfg['shieldenabled']) {
 		$shield_hammer = sed_shield_hammer((int)$row['shield_hammer'], $shield_action, (int)$row['shield_lastseen']);
 	}
 }
-
-/* ======== Language ======== */
-
-$mlang = SED_ROOT . '/system/lang/' . $usr['lang'] . '/main.lang.php';
-
-if (!file_exists($mlang)) {
-	$usr['lang'] = $cfg['defaultlang'];
-	$mlang = SED_ROOT . '/system/lang/' . $usr['lang'] . '/main.lang.php';
-
-	if (!file_exists($mlang)) {
-		sed_diefatal('Main language file not found.');
-	}
-}
-
-$lang = $usr['lang'];
-require($mlang);
-
-/* Active modules: load their lang so $L['core_*'] etc. are available everywhere */
-foreach ($sed_modules as $mod_code => $mod_row) {
-	$mod_path = isset($mod_row['ct_path']) ? (string)$mod_row['ct_path'] : '';
-	if ($mod_path === '' || strpos($mod_path, 'modules/') !== 0) {
-		continue;
-	}
-	if ($mod_lang_file = sed_langfile($mod_code, 'module', $lang)) {
-		include_once($mod_lang_file);
-	}
-}
-
-$msg_lang_file = SED_ROOT . '/system/lang/' . $usr['lang'] . '/message.lang.php';
-if (file_exists($msg_lang_file)) {
-	include_once($msg_lang_file);
-}
-
-$yesno_arr = array(1 => $L['Yes'], 0 => $L['No']);
-$yesno_revers_arr = array(0 => $L['Yes'], 1 => $L['No']);
-
-$out['copyright'] = "<a href=\"https://seditio.org\">" . $L['foo_poweredby'] . " Seditio</a>";
 
 /* ======== Various ======== */
 
@@ -677,7 +725,7 @@ if (is_array($extp)) {
 
 /* ======== Auto-generate URL cache if missing ======== */
 
-if ($gen_sed_urls_cache === TRUE) {
+if (!empty($gen_sed_urls_cache)) {
 	sed_urls_generate();
 }
 

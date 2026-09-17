@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.tr.lang.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-17
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -27,5 +27,6 @@ $L['plu_therescurrently'] = "Şu anda ";
 $L['plu_visitors'] = " ziyaretçi ve ";
 $L['plu_members'] = " kayıtlı üye çevrimiçi.";
 $L['plu_lastseen1'] = "Son görülme";
+$L['plu_lastseen2'] = "saniye önce";
 $L['plu_in'] = "içinde";
 $L['plu_visitor'] = "Ziyaretçi";

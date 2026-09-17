@@ -10,10 +10,12 @@
 
 			<div class="table-head resp-table-head">
 				<div class="table-row resp-table-row">
-					<div class="table-th coltop text-left" style="width:20%">{PHP.L.core_lang}</div>
-					<div class="table-th coltop text-left" style="width:10%">{PHP.L.Code}</div>
-					<div class="table-th coltop text-left">{PHP.L.Description}</div>
-					<div class="table-th coltop text-center" style="width:85px;">{PHP.L.Default}</div>
+					<div class="table-th coltop text-left w-lang-code">{PHP.L.adm_translations_lang_code}</div>
+					<div class="table-th coltop text-left">{PHP.L.adm_translations_lang_title}</div>
+					<div class="table-th coltop text-left">{PHP.L.adm_translations_lang_native}</div>
+					<div class="table-th coltop text-center w-lang-direction">{PHP.L.adm_translations_lang_direction}</div>
+					<div class="table-th coltop text-center w-lang-active">{PHP.L.Active}</div>
+					<div class="table-th coltop text-center w-lang-default">{PHP.L.Default}</div>
 				</div>
 			</div>
 
@@ -22,16 +24,22 @@
 				<!-- BEGIN: LANG_LIST -->
 
 				<div class="table-row resp-table-row">
-					<div class="table-td text-left resp-table-td lang-title">
-						<strong>{LANG_LIST_NAME}</strong>
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_translations_lang_code}">
+						{LANG_LIST_FLAG} <a href="{LANG_LIST_TRANSLATIONS_URL}"><strong>{LANG_LIST_CODE}</strong></a>
 					</div>
-					<div class="table-td text-left resp-table-td lang-code">
-						{LANG_LIST_CODE}
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_translations_lang_title}">
+						<a href="{LANG_LIST_TRANSLATIONS_URL}">{LANG_LIST_TITLE}</a>
 					</div>
-					<div class="table-td text-left resp-table-td lang-desc">
-						{LANG_LIST_DESC}
+					<div class="table-td text-left resp-table-td" data-label="{PHP.L.adm_translations_lang_native}">
+						{LANG_LIST_NATIVE}
 					</div>
-					<div class="table-td text-center resp-table-td lang-default">
+					<div class="table-td text-center resp-table-td" data-label="{PHP.L.adm_translations_lang_direction}">
+						{LANG_LIST_DIRECTION}
+					</div>
+					<div class="table-td text-center resp-table-td" data-label="{PHP.L.Active}">
+						{LANG_LIST_ACTIVE}
+					</div>
+					<div class="table-td text-center resp-table-td" data-label="{PHP.L.Default}">
 						{LANG_LIST_DEFAULT}
 					</div>
 				</div>

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/setup.config.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-15
 Type=Core.setup
 Author=Seditio Team
 Description=Default system configuration generator for setup installer
@@ -108,6 +108,8 @@ $cfg_data .= "\$db_rated 			= \$cfg['sqldbprefix'].'rated';\n";
 $cfg_data .= "\$db_ratings 			= \$cfg['sqldbprefix'].'ratings';\n";
 $cfg_data .= "\$db_referers 		= \$cfg['sqldbprefix'].'referers';\n";
 $cfg_data .= "\$db_shield 			= \$cfg['sqldbprefix'].'shield';\n";
+$cfg_data .= "\$db_languages 		= \$cfg['sqldbprefix'].'languages';\n";
+$cfg_data .= "\$db_translations 	= \$cfg['sqldbprefix'].'translations';\n";
 $cfg_data .= "\$db_smilies 			= \$cfg['sqldbprefix'].'smilies';\n";
 $cfg_data .= "\$db_stats 			= \$cfg['sqldbprefix'].'stats';\n";
 $cfg_data .= "\$db_structure 		= \$cfg['sqldbprefix'].'structure';\n";

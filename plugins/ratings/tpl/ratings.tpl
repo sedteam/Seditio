@@ -1,8 +1,8 @@
 <!-- BEGIN: RATINGS -->
 <div class="block">
 
-	{PHP.skinlang.ratings.Averagemembersrating} {RATINGS_AVERAGE} &nbsp;&nbsp;{RATINGS_AVERAGEIMG}<br />
-	{PHP.skinlang.ratings.Votes} {RATINGS_VOTERS} {RATINGS_SINCE}
+	{PHP.L.ratings_averagemembersrating} {RATINGS_AVERAGE} &nbsp;&nbsp;{RATINGS_AVERAGEIMG}<br />
+	{PHP.L.ratings_votes} {RATINGS_VOTERS} {RATINGS_SINCE}
 
 </div>
 
@@ -19,7 +19,7 @@
 
 	<div class="block">
 
-		<h4>{PHP.skinlang.ratings.Rate}</h4>
+		<h4>{PHP.L.ratings_rate}</h4>
 
 		<p>
 			<div class="star-rating-widget ratings-star-widget jq-stars" data-input-id="newrate-{RATINGS_CODE}" data-labels-json='{RATINGS_LABELS_JSON}' {RATINGS_WIDGET_ATTRS}></div>
@@ -29,7 +29,7 @@
 	</div>
 
 	<!-- BEGIN: RATINGS_SUBMIT_BTN -->
-	<input type="submit" class="submit btn btn-big" value="{PHP.skinlang.ratings.Rateit}">
+	<input type="submit" class="submit btn btn-big" value="{PHP.L.ratings_rateit}">
 	<!-- END: RATINGS_SUBMIT_BTN -->
 
 </form>

@@ -65,7 +65,7 @@
 					<div class="page-comments spoiler-container {GALLERY_DETAILS_COMMENTS_ISSHOW}">
 
 						<div class="comments-box-title">
-							<h3><a href="{GALLERY_DETAILS_COMMENTS_URL}">{PHP.skinlang.page.Comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({GALLERY_DETAILS_COMMENTS_COUNT})</span>{GALLERY_DETAILS_COMMENTS_JUMP}</a></h3>
+							<h3><a href="{GALLERY_DETAILS_COMMENTS_URL}">{PHP.L.page_comments} <i class="ic-socialbtn"></i> <span class="comments-amount">({GALLERY_DETAILS_COMMENTS_COUNT})</span>{GALLERY_DETAILS_COMMENTS_JUMP}</a></h3>
 						</div>
 
 						<div class="comments-box spoiler-body">

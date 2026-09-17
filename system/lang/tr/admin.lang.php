@@ -12,10 +12,10 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/admin.lang.php
 Version=186
-Updated=2026-jul-17
+Updated=2026-sep-17
 Type=Lang
 Author=Seditio Team
-Description=Admin panel
+Description=Admin Turkish language file
 [END_SED]
 ==================== */
 
@@ -50,6 +50,7 @@ $L['core_admin'] = "Yönetim paneli";
 $L['core_log'] = "Günlük";
 $L['core_manage'] = "Yönet";
 $L['core_images'] = "Görüntüler";
+$L['adm_no_notices'] = "Yeni bildirim yok";
 
 /* ====== Upgrade ====== */
 
@@ -118,6 +119,9 @@ $L['adm_urlcache_regenerate'] = "SEF URL'lerini yeniden oluştur";
 $L['adm_urlcache_delete'] = "URL önbelleğini sil";
 $L['adm_tplcache'] = "Şablon önbelleği (XTemplate)";
 $L['adm_tplcache_delete'] = "Şablon önbelleğini sil";
+$L['adm_langcache'] = "Dil önbelleği";
+$L['adm_langcache_regenerate'] = "Dil önbelleğini yeniden oluştur";
+$L['adm_langcache_delete'] = "Dil önbelleğini sil";
 
 /* ====== Configuration ====== */
 
@@ -535,3 +539,46 @@ $L['adm_modules_noavailable'] = "Yükleme için yeni modül bulunmuyor.";
 
 $L['adm_pm_totaldb'] = "Veritabanındaki özel mesajlar";
 $L['adm_pm_totalsent'] = "Şimdiye kadar gönderilen toplam özel mesaj sayısı";
+
+/* ====== Translations (v186) ====== */
+
+$L['adm_translations'] = "Çeviriler";
+$L['adm_translations_title'] = "Çeviri ve Dil Yönetimi";
+$L['adm_translations_add'] = "Çeviri Ekle";
+$L['adm_translations_languages'] = "Diller";
+$L['adm_translations_tools'] = "Araçlar";
+$L['adm_translations_key'] = "Değişken Anahtarı";
+$L['adm_translations_val'] = "Değer";
+$L['adm_translations_scope'] = "Kapsam";
+$L['adm_translations_code'] = "Bileşen";
+$L['adm_translations_type'] = "Tip";
+$L['adm_translations_custom'] = "Özel";
+$L['adm_translations_system'] = "Sistem";
+$L['adm_translations_locked'] = "Kilitli";
+$L['adm_translations_all_scopes'] = "Tüm Kapsamlar";
+$L['adm_translations_regenerate'] = "Dil Önbelleğini Derle";
+$L['adm_translations_import'] = "Dosyalardan İçe Aktar";
+$L['adm_translations_import_confirm'] = "Eksik çeviriler dosyalardan veritabanına aktarılsın mı? Özel çevirilerin üzerine yazılmayacaktır.";
+$L['adm_translations_reset'] = "Varsayılana Sıfırla";
+$L['adm_translations_reset_confirm'] = "Çeviri değeri orijinal dosyadaki haline sıfırlansın mı?";
+$L['adm_translations_delete_confirm'] = "Bu dil değişkeni silinsin mi?";
+$L['adm_translations_added'] = "Çeviri başarıyla eklendi.";
+$L['adm_translations_updated'] = "Çeviriler başarıyla kaydedildi.";
+$L['adm_translations_deleted'] = "Çeviri silindi.";
+$L['adm_translations_cache_generated'] = "Dil önbelleği başarıyla oluşturuldu.";
+$L['adm_translations_imported'] = "Çeviri aktarımı tamamlandı.";
+$L['adm_translations_lang_code'] = "Dil kodu";
+$L['adm_translations_lang_title'] = "Başlık (İngilizce)";
+$L['adm_translations_lang_native'] = "Kendi dilinde adı";
+$L['adm_translations_lang_direction'] = "Yazı yönü";
+$L['adm_translations_lang_add'] = "Dil Ekle";
+$L['adm_translations_lang_edit'] = "Dili Düzenle";
+$L['adm_translations_lang_base'] = "Temel dil (çevirileri şuradan kopyala)";
+$L['adm_translations_lang_nobase'] = "-- Kopyalama (boş dil) --";
+$L['adm_translations_lang_delete_confirm'] = "Bu dili ve tüm çevirilerini silmek istediğinizden emin misiniz?";
+$L['adm_translations_lang_deleted'] = "Dil ve ilgili çeviriler silindi.";
+$L['adm_translations_search'] = "Anahtar veya değere göre ara...";
+$L['adm_translations_all_types'] = "Tüm türler";
+$L['adm_translations_show'] = "Sayfa başına göster";
+$L['adm_translations_key_hint'] = "Yalnızca Latin harfleri, sayılar ve alt çizgiler (örneğin: my_header_title)";
+$L['adm_langcache_regenerate_hint'] = "Tüm veritabanı çevirilerini yüksek performans için PHP önbellek dosyalarına (datas/cache/sed_lang.*.php) derler.";

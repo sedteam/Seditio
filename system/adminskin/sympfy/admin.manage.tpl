@@ -65,6 +65,14 @@
 						</div>
 						<!-- END: MODULES_LIST_CACHE -->
 
+						<!-- BEGIN: MODULES_LIST_TRANSLATIONS -->
+						<div class="table-row">
+							<div class="table-td text-left"><a href="{MODULES_LIST_TRANSLATIONS_URL}"><span class="icon"><i class="ic-flag"></i></span> {PHP.L.adm_translations}</a></div>
+							<div class="table-td text-center"></div>
+							<div class="table-td text-center"></div>
+						</div>
+						<!-- END: MODULES_LIST_TRANSLATIONS -->
+
 						<!-- BEGIN: MODULES_LIST_SMILIES -->
 						<div class="table-row">
 							<div class="table-td text-left"><a href="{MODULES_LIST_SMILIES_URL}"><span class="icon"><i class="ic-smilies"></i></span> {PHP.L.Smilies}</a></div>

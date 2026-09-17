@@ -58,7 +58,7 @@
 						<div class="table-td text-left resp-table-td dic-actions">
 
 							<!-- BEGIN: ADMIN_DELETE -->
-							<a href="{DIC_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return confirmDelete();" class="btn btn-small"><i class="ic-trash"></i></a>
+							<a href="{DIC_LIST_DELETE_URL}" title="{PHP.L.Delete}" onclick="return sedjs.confirmact('{PHP.L.adm_confirm_delete}');" class="btn btn-small"><i class="ic-trash"></i></a>
 							<!-- END: ADMIN_DELETE -->
 
 							<!-- BEGIN: ADMIN_ACTIONS -->

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=skins/sympfy/sympfy.en.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-16
 Type=Skin
 Name=Sympfy
 Author=Amro
@@ -18,333 +18,327 @@ Description=Official skin
 ==================== */
 
 //admin.tpl
-$skinlang['admin']['Help'] = "Help:";
+$L['admin_help'] = "Help:";
 
 //comments.tpl
-$skinlang['comments']['Comment'] = "Comment:";
-$skinlang['comments']['Send'] = "Send";
-$skinlang['comments']['Postedby'] = "Posted by";
-$skinlang['comments']['Commentedit'] = "Edit comment";   //New v173
-$skinlang['comments']['Update'] = "Update";  //New v173
-$skinlang['comments']['Newcomment'] = "New comment";  //New v178
+$L['comments_comment'] = "Comment:";
+$L['comments_send'] = "Send";
+$L['comments_postedby'] = "Posted by";
+$L['comments_commentedit'] = "Edit comment";   //New v173
+$L['comments_update'] = "Update";  //New v173
+$L['comments_newcomment'] = "New comment";  //New v178
 
 //forums.editpost.tpl
-$skinlang['forumseditpost']['Update'] = "Update";
+$L['forumseditpost_update'] = "Update";
 
 //forums.newtopic.tpl
-$skinlang['forumsnewtopic']['Title'] = "Title:";
-$skinlang['forumsnewtopic']['Desc'] = "Short description (optional):";
-$skinlang['forumsnewtopic']['privatetopic'] = "Check this box to mark this topic as \"private\":";
-$skinlang['forumsnewtopic']['privatetopic2'] = "Only forums moderators and the starter of the topic (so you) will be allowed to read and reply.";
-$skinlang['forumsnewtopic']['Submit'] = "Submit";
+$L['forumsnewtopic_title'] = "Title:";
+$L['forumsnewtopic_desc'] = "Short description (optional):";
+$L['forumsnewtopic_privatetopic'] = "Check this box to mark this topic as \"private\":";
+$L['forumsnewtopic_privatetopic2'] = "Only forums moderators and the starter of the topic (so you) will be allowed to read and reply.";
+$L['forumsnewtopic_submit'] = "Submit";
 
 //forums.post.tpl
-$skinlang['forumspost']['privatetopic'] = "This topic is private, only moderators and the starter of the topic can read and reply here.";
-$skinlang['forumspost']['Author'] = "Author";
-$skinlang['forumspost']['Message'] = "Message";
-$skinlang['forumspost']['Onlinestatus'] = "Online status";
-$skinlang['forumspost']['posts'] = "posts";
-$skinlang['forumspost']['Location'] = "Location:";
-$skinlang['forumspost']['Occupation'] = "Occupation:";
-$skinlang['forumspost']['Age'] = "Age:";
-$skinlang['forumspost']['Reply'] = "Reply";
+$L['forumspost_privatetopic'] = "This topic is private, only moderators and the starter of the topic can read and reply here.";
+$L['forumspost_author'] = "Author";
+$L['forumspost_message'] = "Message";
+$L['forumspost_onlinestatus'] = "Online status";
+$L['forumspost_posts'] = "posts";
+$L['forumspost_location'] = "Location:";
+$L['forumspost_occupation'] = "Occupation:";
+$L['forumspost_age'] = "Age:";
+$L['forumspost_reply'] = "Reply";
 
 //forums.sections.tpl
-$skinlang['forumssections']['Options'] = "Options...";
-$skinlang['forumssections']['Searchinforums'] = "Search in forums";
-$skinlang['forumssections']['Statistics'] = "Statistics";
-$skinlang['forumssections']['Moderators'] = "Moderators";
-$skinlang['forumssections']['Markasread'] = "Mark all posts as read";
-$skinlang['forumssections']['Sections'] = "Sections";
-$skinlang['forumssections']['Subforums'] = "Subforums"; //New in Sed 172
-$skinlang['forumssections']['Lastpost'] = "Last post";
-$skinlang['forumssections']['Topics'] = "Topics";
-$skinlang['forumssections']['Posts'] = "Posts";
-$skinlang['forumssections']['Views'] = "Views";
-$skinlang['forumssections']['Activity'] = "Activity";
-$skinlang['forumssections']['FoldAll'] = "Fold all";
-$skinlang['forumssections']['UnfoldAll'] = "Unfold all";
+$L['forumssections_options'] = "Options...";
+$L['forumssections_searchinforums'] = "Search in forums";
+$L['forumssections_statistics'] = "Statistics";
+$L['forumssections_moderators'] = "Moderators";
+$L['forumssections_markasread'] = "Mark all posts as read";
+$L['forumssections_sections'] = "Sections";
+$L['forumssections_subforums'] = "Subforums"; //New in Sed 172
+$L['forumssections_lastpost'] = "Last post";
+$L['forumssections_topics'] = "Topics";
+$L['forumssections_posts'] = "Posts";
+$L['forumssections_views'] = "Views";
+$L['forumssections_activity'] = "Activity";
+$L['forumssections_foldall'] = "Fold all";
+$L['forumssections_unfoldall'] = "Unfold all";
 
 //forums.topics.tpl
-$skinlang['forumstopics']['Nonewposts'] = "No new posts";
-$skinlang['forumstopics']['Newposts'] = "New posts";
-$skinlang['forumstopics']['Sticky'] = "Sticky";
-$skinlang['forumstopics']['Nonewpostspopular'] = "No new posts (popular)";
-$skinlang['forumstopics']['Newpostspopular'] = "New posts (popular)";
-$skinlang['forumstopics']['Newpostssticky'] = "New posts (sticky)";
-$skinlang['forumstopics']['Locked'] = "Locked";
-$skinlang['forumstopics']['Newpostslocked'] = "New posts (locked)";
-$skinlang['forumstopics']['Announcment'] = "Announcement";
-$skinlang['forumstopics']['Movedoutofthissection'] = "Moved out of this section";
-$skinlang['forumstopics']['Newannouncment'] = "New announcement";
-$skinlang['forumstopics']['Viewers'] = "Viewers";    // New in v120
+$L['forumstopics_nonewposts'] = "No new posts";
+$L['forumstopics_newposts'] = "New posts";
+$L['forumstopics_sticky'] = "Sticky";
+$L['forumstopics_nonewpostspopular'] = "No new posts (popular)";
+$L['forumstopics_newpostspopular'] = "New posts (popular)";
+$L['forumstopics_newpostssticky'] = "New posts (sticky)";
+$L['forumstopics_locked'] = "Locked";
+$L['forumstopics_newpostslocked'] = "New posts (locked)";
+$L['forumstopics_announcment'] = "Announcement";
+$L['forumstopics_movedoutofthissection'] = "Moved out of this section";
+$L['forumstopics_newannouncment'] = "New announcement";
+$L['forumstopics_viewers'] = "Viewers";    // New in v120
 
 //header.tpl
-$skinlang['header']['Login'] = "Login here";
-$skinlang['header']['Register'] = "Register";
-$skinlang['header']['Lostyourpassword'] = "Lost your password?";
+$L['header_login'] = "Login here";
+$L['header_register'] = "Register";
+$L['header_lostyourpassword'] = "Lost your password?";
 
 //index.tpl
-$skinlang['index']['Newinforums'] = "From our forums...";
-$skinlang['index']['Recentadditions'] = "What's new ?";
-$skinlang['index']['Polls'] = "Polls";
-$skinlang['index']['Online'] = "Who's online ?";
-$skinlang['index']['Recentcomments'] = "Recent comments";  // New in 175
-$skinlang['index']['Lasttopics'] = "Forums"; // New in 178
-$skinlang['index']['Lastcomments'] = "Comments"; // New in 178
-$skinlang['index']['Lastpages'] = "Pages"; // New in 178
-$skinlang['index']['Activity'] = "Activity"; // New in 178
+$L['index_newinforums'] = "From our forums...";
+$L['index_recentadditions'] = "What's new ?";
+$L['index_polls'] = "Polls";
+$L['index_online'] = "Who's online ?";
+$L['index_recentcomments'] = "Recent comments";  // New in 175
+$L['index_lasttopics'] = "Forums"; // New in 178
+$L['index_lastcomments'] = "Comments"; // New in 178
+$L['index_lastpages'] = "Pages"; // New in 178
+$L['index_activity'] = "Activity"; // New in 178
 
 //list.tpl
-$skinlang['list']['Page'] = "Page";
-$skinlang['list']['linesperpage'] = "lines per page";
-$skinlang['list']['linesinthissection'] = "lines in this section";
-$skinlang['list']['Comments'] = "Comments";
-$skinlang['list']['Ratings'] = "Ratings";
-$skinlang['list']['hits'] = "hits";
+$L['list_page'] = "Page";
+$L['list_linesperpage'] = "lines per page";
+$L['list_linesinthissection'] = "lines in this section";
+$L['list_comments'] = "Comments";
+$L['list_ratings'] = "Ratings";
+$L['list_hits'] = "hits";
 
 //news.tpl
-$skinlang['news']['by'] = "by";
-$skinlang['news']['title'] = "News";
+$L['news_by'] = "by";
+$L['news_title'] = "News";
 
 //page.add.tpl
-$skinlang['pageadd']['Category'] = "Category:";
-$skinlang['pageadd']['Title'] = "Title:";
-$skinlang['pageadd']['Description'] = "Description:";
-$skinlang['pageadd']['Author'] = "Author:";
-$skinlang['pageadd']['Extrakey'] = "Extra key (optional):";
-$skinlang['pageadd']['Alias'] = "Alias:";
-$skinlang['pageadd']['Owner'] = "Owner:";
-$skinlang['pageadd']['Begin'] = "Begin:";
-$skinlang['pageadd']['Expire'] = "Expire:";
-$skinlang['pageadd']['Bodyofthepage'] = "Body of the page:";
-$skinlang['pageadd']['File'] = "File download?";
-$skinlang['pageadd']['Filehint'] = "(Set 'yes' to enable the download module at bottom of the page, and fill up the 2 fields below)";
-$skinlang['pageadd']['URL'] = "URL:";
-$skinlang['pageadd']['URLhint'] = "(If File download=Yes, else leave empty)";
-$skinlang['pageadd']['Filesize'] = "Filesize (KB):";
-$skinlang['pageadd']['Filesizehint'] = "(If File download=Yes, else leave empty)";
-$skinlang['pageadd']['Formhint'] = "Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section.<br />Check all fields carefully, you won't be able to change it later.<br />If you really need to change something, ask a moderator or an administrator.";
-$skinlang['pageadd']['Submit'] = "Submit";
-$skinlang['pageadd']['Publish'] = "Publish"; // New v173
-$skinlang['pageadd']['Parsing'] = "Parsing:"; // New v173
-$skinlang['pageadd']['Thumbs'] = "Thumbnails:"; // New v178
+$L['pageadd_category'] = "Category:";
+$L['pageadd_title'] = "Title:";
+$L['pageadd_description'] = "Description:";
+$L['pageadd_author'] = "Author:";
+$L['pageadd_extrakey'] = "Extra key (optional):";
+$L['pageadd_alias'] = "Alias:";
+$L['pageadd_owner'] = "Owner:";
+$L['pageadd_begin'] = "Begin:";
+$L['pageadd_expire'] = "Expire:";
+$L['pageadd_bodyofthepage'] = "Body of the page:";
+$L['pageadd_file'] = "File download?";
+$L['pageadd_filehint'] = "(Set 'yes' to enable the download module at bottom of the page, and fill up the 2 fields below)";
+$L['pageadd_url'] = "URL:";
+$L['pageadd_urlhint'] = "(If File download=Yes, else leave empty)";
+$L['pageadd_filesize'] = "Filesize (KB):";
+$L['pageadd_filesizehint'] = "(If File download=Yes, else leave empty)";
+$L['pageadd_formhint'] = "Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section.<br />Check all fields carefully, you won't be able to change it later.<br />If you really need to change something, ask a moderator or an administrator.";
+$L['pageadd_submit'] = "Submit";
+$L['pageadd_publish'] = "Publish"; // New v173
+$L['pageadd_parsing'] = "Parsing:"; // New v173
+$L['pageadd_thumbs'] = "Thumbnails:"; // New v178
 
-$skinlang['pageadd']['Allowcomments'] = "Allow comments?"; // New v173
-$skinlang['pageadd']['Allowratings'] = "Allow rating change?"; // New v173
+$L['pageadd_allowcomments'] = "Allow comments?"; // New v173
+$L['pageadd_allowratings'] = "Allow rating change?"; // New v173
 
 //page.edit.tpl
-$skinlang['pageedit']['Category'] = "Category:";
-$skinlang['pageedit']['Title'] = "Title:";
-$skinlang['pageedit']['Description'] = "Description:";
-$skinlang['pageedit']['Author'] = "Author:";
-$skinlang['pageedit']['Owner'] = "Owner:";
-$skinlang['pageedit']['Date'] = "Date:";
-$skinlang['pageedit']['Begin'] = "Begin:";
-$skinlang['pageedit']['Expire'] = "Expire:";
-$skinlang['pageedit']['Pagehitcount'] = "Pagehitcount:";
-$skinlang['pageedit']['Extrakey'] = "Extra key";
-$skinlang['pageedit']['Alias'] = "Alias:";
-$skinlang['pageedit']['Parsing'] = "Parsing:";
-$skinlang['pageedit']['Bodyofthepage'] = "Body of the page:";
-$skinlang['pageedit']['Filedownload'] = "File download?";
-$skinlang['pageedit']['URL'] = "URL:";
-$skinlang['pageedit']['URLhint'] = "(If File download=Yes)";
-$skinlang['pageedit']['Filesize'] = "Filesize (KB):";
-$skinlang['pageedit']['Filesizehint'] = "(If File download=Yes)";
-$skinlang['pageedit']['Filehitcount'] = "File hit count:";
-$skinlang['pageedit']['Filehitcounthint'] = "(If File download=Yes)";
-$skinlang['pageedit']['Pageid'] = "Page ID:";
-$skinlang['pageedit']['Deletethispage'] = "!Delete this page!:";
-$skinlang['pageedit']['Update'] = "Update";
-$skinlang['pageedit']['Thumbs'] = "Thumbnails:"; // New v178
+$L['pageedit_category'] = "Category:";
+$L['pageedit_title'] = "Title:";
+$L['pageedit_description'] = "Description:";
+$L['pageedit_author'] = "Author:";
+$L['pageedit_owner'] = "Owner:";
+$L['pageedit_date'] = "Date:";
+$L['pageedit_begin'] = "Begin:";
+$L['pageedit_expire'] = "Expire:";
+$L['pageedit_pagehitcount'] = "Pagehitcount:";
+$L['pageedit_extrakey'] = "Extra key";
+$L['pageedit_alias'] = "Alias:";
+$L['pageedit_parsing'] = "Parsing:";
+$L['pageedit_bodyofthepage'] = "Body of the page:";
+$L['pageedit_filedownload'] = "File download?";
+$L['pageedit_url'] = "URL:";
+$L['pageedit_urlhint'] = "(If File download=Yes)";
+$L['pageedit_filesize'] = "Filesize (KB):";
+$L['pageedit_filesizehint'] = "(If File download=Yes)";
+$L['pageedit_filehitcount'] = "File hit count:";
+$L['pageedit_filehitcounthint'] = "(If File download=Yes)";
+$L['pageedit_pageid'] = "Page ID:";
+$L['pageedit_deletethispage'] = "!Delete this page!:";
+$L['pageedit_update'] = "Update";
+$L['pageedit_thumbs'] = "Thumbnails:"; // New v178
 
-$skinlang['pageedit']['Allowcomments'] = "Allow comments?"; // New v173
-$skinlang['pageedit']['Allowratings'] = "Allow rating change?"; // New v173
+$L['pageedit_allowcomments'] = "Allow comments?"; // New v173
+$L['pageedit_allowratings'] = "Allow rating change?"; // New v173
 
 //page.tpl
-$skinlang['page']['Author'] = "Author:";
-$skinlang['page']['Submittedby'] = "Submitted by:";
-$skinlang['page']['Date'] = "Date:";
-$skinlang['page']['Comments'] = "Comments:";
-$skinlang['page']['Ratings'] = "Ratings:";
-$skinlang['page']['Summary'] = "Summary:";
-$skinlang['page']['FilesizeKB'] = "KB";
-$skinlang['page']['Filesize'] = "Filesize:";
-$skinlang['page']['Membersrating'] = "Members rating:";
-$skinlang['page']['Download'] = "Download:";
-$skinlang['page']['Hits'] = "Hits:";
-$skinlang['page']['Otherpages'] = "Other pages";
-$skinlang['page']['Similarpages'] = "Similar почитать";
+$L['page_author'] = "Author:";
+$L['page_submittedby'] = "Submitted by:";
+$L['page_date'] = "Date:";
+$L['page_comments'] = "Comments:";
+$L['page_ratings'] = "Ratings:";
+$L['page_summary'] = "Summary:";
+$L['page_filesizekb'] = "KB";
+$L['page_filesize'] = "Filesize:";
+$L['page_membersrating'] = "Members rating:";
+$L['page_download'] = "Download:";
+$L['page_hits'] = "Hits:";
+$L['page_otherpages'] = "Other pages";
+$L['page_similarpages'] = "Similar почитать";
 
 //pfs.tpl
-$skinlang['pfs']['Insertasthumbnail'] = "Insert as thumbnail";
-$skinlang['pfs']['Insertasimage'] = "Insert as full size image";
-$skinlang['pfs']['Insertaslink'] = "Insert as a link to the file";
+$L['pfs_insertasthumbnail'] = "Insert as thumbnail";
+$L['pfs_insertasimage'] = "Insert as full size image";
+$L['pfs_insertaslink'] = "Insert as a link to the file";
 
 //pm.send.tpl
-$skinlang['pmsend']['Sendmessageto'] = "Send the message to:";
-$skinlang['pmsend']['Sendmessagetohint'] = "(Send up to 10 recipients, separated by commas.)";
-$skinlang['pmsend']['Subject'] = "Subject:";
-$skinlang['pmsend']['Message'] = "Message:";
-$skinlang['pmsend']['Sendmessage'] = "Send the message now !";
+$L['pmsend_sendmessageto'] = "Send the message to:";
+$L['pmsend_sendmessagetohint'] = "(Send up to 10 recipients, separated by commas.)";
+$L['pmsend_subject'] = "Subject:";
+$L['pmsend_message'] = "Message:";
+$L['pmsend_sendmessage'] = "Send the message now !";
 
 //pm.tpl
-$skinlang['pm']['State'] = "State";
-$skinlang['pm']['Sender'] = "Sender";
-$skinlang['pm']['SubjectClick'] = "Subject (click to read)";        // New in v125
-$skinlang['pm']['Date'] = "Date";
-$skinlang['pm']['Action'] = "Action";
-$skinlang['pm']['Recipient'] = "Recipient";
-$skinlang['pm']['Nomessages'] = "No messages.";
-$skinlang['pm']['Page'] = "Page";
-$skinlang['pm']['Subject'] = "Subject";
-$skinlang['pm']['Sender'] = "Sender";
-$skinlang['pm']['Recipient'] = "Recipient";
-$skinlang['pm']['Date'] = "Date";
-$skinlang['pm']['Newmessage'] = "New message";
-$skinlang['pm']['Message'] = "Message";
-$skinlang['pm']['Reply'] = "Reply";
-$skinlang['pm']['Sendtoarchives'] = "Send to archives";
-$skinlang['pm']['Delete'] = "Delete";
+$L['pm_state'] = "State";
+$L['pm_sender'] = "Sender";
+$L['pm_subjectclick'] = "Subject (click to read)";        // New in v125
+$L['pm_date'] = "Date";
+$L['pm_action'] = "Action";
+$L['pm_recipient'] = "Recipient";
+$L['pm_nomessages'] = "No messages.";
+$L['pm_page'] = "Page";
+$L['pm_subject'] = "Subject";
+$L['pm_sender'] = "Sender";
+$L['pm_recipient'] = "Recipient";
+$L['pm_date'] = "Date";
+$L['pm_newmessage'] = "New message";
+$L['pm_message'] = "Message";
+$L['pm_reply'] = "Reply";
+$L['pm_sendtoarchives'] = "Send to archives";
+$L['pm_delete'] = "Delete";
 
 //polls.tpl
-$skinlang['polls']['voterssince'] = "voters since";
-$skinlang['polls']['Comments'] = "Comments:";
-$skinlang['polls']['Allpolls'] = "All polls (current and archived)";
+$L['polls_voterssince'] = "voters since";
+$L['polls_comments'] = "Comments:";
+$L['polls_allpolls'] = "All polls (current and archived)";
 
 //ratings.tpl
-$skinlang['ratings']['Averagemembersrating'] = "Average members rating (out of 10) :";
-$skinlang['ratings']['Votes'] = "Votes:";
-$skinlang['ratings']['Rate'] = "Rate:";
-$skinlang['ratings']['Rateit'] = "Rate it !";
+$L['ratings_averagemembersrating'] = "Average members rating (out of 10) :";
+$L['ratings_votes'] = "Votes:";
+$L['ratings_rate'] = "Rate:";
+$L['ratings_rateit'] = "Rate it !";
 
 //user.auth.tpl
-$skinlang['usersauth']['Username'] = "Login:";
-$skinlang['usersauth']['Password'] = "Password:";
-$skinlang['usersauth']['Rememberme'] = "Remember me ?";
-$skinlang['usersauth']['Login'] = "Login";
-$skinlang['usersauth']['Register'] = "Click here to register";
-$skinlang['usersauth']['Lostpassword'] = "Lost your password ?";
+$L['usersauth_username'] = "Login:";
+$L['usersauth_password'] = "Password:";
+$L['usersauth_rememberme'] = "Remember me ?";
+$L['usersauth_login'] = "Login";
+$L['usersauth_register'] = "Click here to register";
+$L['usersauth_lostpassword'] = "Lost your password ?";
 
 //users.details.tpl
-$skinlang['usersdetails']['Sendprivatemessage'] = "Send a private message:";
-$skinlang['usersdetails']['Userfirstname'] = "User first name:";
-$skinlang['usersdetails']['Userlastname'] = "User last name:";
-$skinlang['usersdetails']['Maingroup'] = "Main group:";
-$skinlang['usersdetails']['Memberof'] = "Member of:";
-$skinlang['usersdetails']['Country'] = "Country:";
-$skinlang['usersdetails']['Location'] = "Location:";
-$skinlang['usersdetails']['Timezone'] = "Timezone:";
-$skinlang['usersdetails']['Weblog'] = "Weblog:";
-$skinlang['usersdetails']['Website'] = "Website:";
-$skinlang['usersdetails']['IRC'] = "IRC:";
-$skinlang['usersdetails']['ICQ'] = "ICQ:";
-$skinlang['usersdetails']['MSN'] = "MSN messenger:";
-$skinlang['usersdetails']['Birthdate'] = "Birthdate:";
-$skinlang['usersdetails']['Age'] = "Age:";
-$skinlang['usersdetails']['Occupation'] = "Occupation:";
-$skinlang['usersdetails']['Gender'] = "Gender:";
-$skinlang['usersdetails']['Signature'] = "Signature:";
-$skinlang['usersdetails']['Registrationdate'] = "Registration date:";
-$skinlang['usersdetails']['Avatar'] = "Avatar:";
-$skinlang['usersdetails']['Photo'] = "Photo:";
+$L['usersdetails_sendprivatemessage'] = "Send a private message:";
+$L['usersdetails_userfirstname'] = "User first name:";
+$L['usersdetails_userlastname'] = "User last name:";
+$L['usersdetails_maingroup'] = "Main group:";
+$L['usersdetails_memberof'] = "Member of:";
+$L['usersdetails_country'] = "Country:";
+$L['usersdetails_location'] = "Location:";
+$L['usersdetails_timezone'] = "Timezone:";
+$L['usersdetails_weblog'] = "Weblog:";
+$L['usersdetails_website'] = "Website:";
+$L['usersdetails_irc'] = "IRC:";
+$L['usersdetails_icq'] = "ICQ:";
+$L['usersdetails_msn'] = "MSN messenger:";
+$L['usersdetails_birthdate'] = "Birthdate:";
+$L['usersdetails_age'] = "Age:";
+$L['usersdetails_occupation'] = "Occupation:";
+$L['usersdetails_gender'] = "Gender:";
+$L['usersdetails_signature'] = "Signature:";
+$L['usersdetails_registrationdate'] = "Registration date:";
+$L['usersdetails_avatar'] = "Avatar:";
+$L['usersdetails_photo'] = "Photo:";
 
 //users.edit.tpl
-$skinlang['usersedit']['UserID'] = "User ID:";
-$skinlang['usersedit']['Username'] = "Login:";
-$skinlang['usersedit']['Userfirstname'] = "User first name:";
-$skinlang['usersedit']['Userlastname'] = "User last name:";
-$skinlang['usersedit']['Groupsmembership'] = "Groups membership:";
-$skinlang['usersedit']['Maingroup'] = "Main group:";
-$skinlang['usersedit']['Memberof'] = "Member of:";
-$skinlang['usersedit']['Country'] = "Country:";
-$skinlang['usersedit']['Location'] = "Location:";
-$skinlang['usersedit']['Timezone'] = "Timezone:";
-$skinlang['usersedit']['Skin'] = "Skin:";
-$skinlang['usersedit']['Language'] = "Language:";
-$skinlang['usersedit']['Avatar'] = "Avatar:";
-$skinlang['usersedit']['Signature'] = "Signature:";
-$skinlang['usersedit']['Photo'] = "Photo:";
-$skinlang['usersedit']['Newpassword'] = "Set a new password:";
-$skinlang['usersedit']['Newpasswordhint'] = "(Leave empty to keep<br />the current password)";
-$skinlang['usersedit']['Email'] = "Email:";
-$skinlang['usersedit']['Hidetheemail'] = "Always hide the email:";
-$skinlang['usersedit']['PMnotify'] = "PM notify:";
-$skinlang['usersedit']['PMnotifyhint'] = "(Notify by email when there's a new private message)";
-$skinlang['usersedit']['Website'] = "Website:";
-$skinlang['usersedit']['IRC'] = "IRC:";
-$skinlang['usersedit']['ICQ'] = "ICQ:";
-$skinlang['usersedit']['MSN'] = "MSN messenger:";
-$skinlang['usersedit']['Birthdate'] = "Birthdate:";
-$skinlang['usersedit']['Occupation'] = "Occupation:";
-$skinlang['usersedit']['Gender'] = "Gender:";
-$skinlang['usersedit']['Registeredsince'] = "Registered since:";
-$skinlang['usersedit']['Lastlogged'] = "Last logged:";
-$skinlang['usersedit']['LastIP'] = "Last known IP:";
-$skinlang['usersedit']['Logcounter'] = "Log counter:";
-$skinlang['usersedit']['Deletethisuser'] = "! Delete this user !:";
-$skinlang['usersedit']['Update'] = "Update";
+$L['usersedit_userid'] = "User ID:";
+$L['usersedit_username'] = "Login:";
+$L['usersedit_userfirstname'] = "User first name:";
+$L['usersedit_userlastname'] = "User last name:";
+$L['usersedit_groupsmembership'] = "Groups membership:";
+$L['usersedit_maingroup'] = "Main group:";
+$L['usersedit_memberof'] = "Member of:";
+$L['usersedit_country'] = "Country:";
+$L['usersedit_location'] = "Location:";
+$L['usersedit_timezone'] = "Timezone:";
+$L['usersedit_skin'] = "Skin:";
+$L['usersedit_language'] = "Language:";
+$L['usersedit_avatar'] = "Avatar:";
+$L['usersedit_signature'] = "Signature:";
+$L['usersedit_photo'] = "Photo:";
+$L['usersedit_newpassword'] = "Set a new password:";
+$L['usersedit_newpasswordhint'] = "(Leave empty to keep<br />the current password)";
+$L['usersedit_email'] = "Email:";
+$L['usersedit_hidetheemail'] = "Always hide the email:";
+$L['usersedit_pmnotify'] = "PM notify:";
+$L['usersedit_pmnotifyhint'] = "(Notify by email when there's a new private message)";
+$L['usersedit_website'] = "Website:";
+$L['usersedit_irc'] = "IRC:";
+$L['usersedit_icq'] = "ICQ:";
+$L['usersedit_msn'] = "MSN messenger:";
+$L['usersedit_birthdate'] = "Birthdate:";
+$L['usersedit_occupation'] = "Occupation:";
+$L['usersedit_gender'] = "Gender:";
+$L['usersedit_registeredsince'] = "Registered since:";
+$L['usersedit_lastlogged'] = "Last logged:";
+$L['usersedit_lastip'] = "Last known IP:";
+$L['usersedit_logcounter'] = "Log counter:";
+$L['usersedit_deletethisuser'] = "! Delete this user !:";
+$L['usersedit_update'] = "Update";
 
 //users.profile.tpl
-$skinlang['usersprofile']['Username'] = "Login:";
-$skinlang['usersprofile']['Userfirstname'] = "User first name:";
-$skinlang['usersprofile']['Userlastname'] = "User last name:";
-$skinlang['usersprofile']['Groupsmembership'] = "Groups membership:";
-$skinlang['usersprofile']['Maingroup'] = "Main group:";
-$skinlang['usersprofile']['Registeredsince'] = "Registered since:";
-$skinlang['usersprofile']['Email'] = "Email:";
-$skinlang['usersprofile']['Hidetheemail'] = "Always hide the email:";
-$skinlang['usersprofile']['PMnotify'] = "PM notify:";
-$skinlang['usersprofile']['PMnotifyhint'] = "(Notify by email when there's a new private message)";
-$skinlang['usersprofile']['Skin'] = "Skin:";
-$skinlang['usersprofile']['Language'] = "Language:";
-$skinlang['usersprofile']['Country'] = "Country:";
-$skinlang['usersprofile']['Location'] = "Location:";
-$skinlang['usersprofile']['Timezone'] = "Timezone:";
-$skinlang['usersprofile']['Website'] = "Website:";
-$skinlang['usersprofile']['IRC'] = "IRC:";
-$skinlang['usersprofile']['ICQ'] = "ICQ:";
-$skinlang['usersprofile']['MSN'] = "MSN messenger:";
-$skinlang['usersprofile']['Birthdate'] = "Birthdate:";
-$skinlang['usersprofile']['Occupation'] = "Occupation:";
-$skinlang['usersprofile']['Gender'] = "Gender:";
-$skinlang['usersprofile']['Avatar'] = "Avatar:";
-$skinlang['usersprofile']['Photo'] = "Photo:";
-$skinlang['usersprofile']['Signature'] = "Signature:";
-$skinlang['usersprofile']['Oldpassword'] = "Current password:";
-$skinlang['usersprofile']['Oldpasswordhint'] = "(Enter your current password to set a new one)";
-$skinlang['usersprofile']['Newpassword'] = "Set a new password:";
-$skinlang['usersprofile']['Newpasswordhint'] = "(Leave empty to keep<br />the current password)";
-$skinlang['usersprofile']['Update'] = "Update";
+$L['usersprofile_username'] = "Login:";
+$L['usersprofile_userfirstname'] = "User first name:";
+$L['usersprofile_userlastname'] = "User last name:";
+$L['usersprofile_groupsmembership'] = "Groups membership:";
+$L['usersprofile_maingroup'] = "Main group:";
+$L['usersprofile_registeredsince'] = "Registered since:";
+$L['usersprofile_email'] = "Email:";
+$L['usersprofile_hidetheemail'] = "Always hide the email:";
+$L['usersprofile_pmnotify'] = "PM notify:";
+$L['usersprofile_pmnotifyhint'] = "(Notify by email when there's a new private message)";
+$L['usersprofile_skin'] = "Skin:";
+$L['usersprofile_language'] = "Language:";
+$L['usersprofile_country'] = "Country:";
+$L['usersprofile_location'] = "Location:";
+$L['usersprofile_timezone'] = "Timezone:";
+$L['usersprofile_website'] = "Website:";
+$L['usersprofile_irc'] = "IRC:";
+$L['usersprofile_icq'] = "ICQ:";
+$L['usersprofile_msn'] = "MSN messenger:";
+$L['usersprofile_birthdate'] = "Birthdate:";
+$L['usersprofile_occupation'] = "Occupation:";
+$L['usersprofile_gender'] = "Gender:";
+$L['usersprofile_avatar'] = "Avatar:";
+$L['usersprofile_photo'] = "Photo:";
+$L['usersprofile_signature'] = "Signature:";
+$L['usersprofile_oldpassword'] = "Current password:";
+$L['usersprofile_oldpasswordhint'] = "(Enter your current password to set a new one)";
+$L['usersprofile_newpassword'] = "Set a new password:";
+$L['usersprofile_newpasswordhint'] = "(Leave empty to keep<br />the current password)";
+$L['usersprofile_update'] = "Update";
 
 //users.register.tpl
-$skinlang['usersregister']['Username'] = "Login:";
-$skinlang['usersregister']['Userfirstname'] = "User first name:";
-$skinlang['usersregister']['Userlastname'] = "User last name:";
-$skinlang['usersregister']['Validemail'] = "Valid email:";
-$skinlang['usersregister']['Validemailhint'] = "A valid email is required to complete the registration process !";
-$skinlang['usersregister']['Password'] = "Password:";
-$skinlang['usersregister']['Confirmpassword'] = "Confirm password:";
-$skinlang['usersregister']['Country'] = "Country:";
-$skinlang['usersregister']['Formhint'] = "Once you're registered and logged in, you can have a look in your profile to set more infos about you.";
-$skinlang['usersregister']['Submit'] = "Submit";
+$L['usersregister_username'] = "Login:";
+$L['usersregister_userfirstname'] = "User first name:";
+$L['usersregister_userlastname'] = "User last name:";
+$L['usersregister_validemail'] = "Valid email:";
+$L['usersregister_validemailhint'] = "A valid email is required to complete the registration process !";
+$L['usersregister_password'] = "Password:";
+$L['usersregister_confirmpassword'] = "Confirm password:";
+$L['usersregister_country'] = "Country:";
+$L['usersregister_formhint'] = "Once you're registered and logged in, you can have a look in your profile to set more infos about you.";
+$L['usersregister_submit'] = "Submit";
 
 //users.tpl
-$skinlang['users']['Page'] = "Page";
-$skinlang['users']['usersperpage'] = "users per page";
-$skinlang['users']['usersinthissection'] = "users in this section";
+$L['users_page'] = "Page";
+$L['users_usersperpage'] = "users per page";
+$L['users_usersinthissection'] = "users in this section";
 
 //maintenance.tpl
-$skinlang['maintenance']['Username'] = "User name:";
-$skinlang['maintenance']['Password'] = "Password:";
-$skinlang['maintenance']['Login'] = "Login";
-
-//admintooltip.js
-$skinlang['admintooltip']['pageadd'] = "Add page";
-$skinlang['admintooltip']['pageedit'] = "Edit page";
-$skinlang['admintooltip']['pageeditcategory'] = "Edit category";
-$skinlang['admintooltip']['pageeditoption'] = "Edit config option";
+$L['maintenance_username'] = "User name:";
+$L['maintenance_password'] = "Password:";
+$L['maintenance_login'] = "Login";
 
 //service.message.tpl
-$skinlang['message']['gohome'] = "Go home";
+$L['message_gohome'] = "Go home";

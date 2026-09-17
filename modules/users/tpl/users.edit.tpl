@@ -32,110 +32,110 @@
 
 				<ul class="form responsive-form">
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.UserID}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_userid}</label></div>
 						<div class="form-field">#{USERS_EDIT_ID}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Username}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_username}</label></div>
 						<div class="form-field">{USERS_EDIT_NAME}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Userfirstname}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_userfirstname}</label></div>
 						<div class="form-field">{USERS_EDIT_FIRSTNAME}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Userlastname}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_userlastname}</label></div>
 						<div class="form-field">{USERS_EDIT_LASTNAME}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Groupsmembership}</label></div>
-						<div class="form-field user-groups">{PHP.skinlang.usersedit.Maingroup}<br />&nbsp;{PHP.out.img_down}<br />{USERS_EDIT_GROUPS}</div>
+						<div class="form-label"><label>{PHP.L.usersedit_groupsmembership}</label></div>
+						<div class="form-field user-groups">{PHP.L.usersedit_maingroup}<br />&nbsp;{PHP.out.img_down}<br />{USERS_EDIT_GROUPS}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Country}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_country}</label></div>
 						<div class="form-field">{USERS_EDIT_COUNTRY}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Location}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_location}</label></div>
 						<div class="form-field">{USERS_EDIT_LOCATION}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Timezone}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_timezone}</label></div>
 						<div class="form-field">{USERS_EDIT_TIMEZONE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Skin}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_skin}</label></div>
 						<div class="form-field">{USERS_EDIT_SKIN}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Language}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_language}</label></div>
 						<div class="form-field">{USERS_EDIT_LANG}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Avatar}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_avatar}</label></div>
 						<div class="form-field">{USERS_EDIT_AVATAR}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Photo}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_photo}</label></div>
 						<div class="form-field">{USERS_EDIT_PHOTO}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Signature}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_signature}</label></div>
 						<div class="form-field">{USERS_EDIT_SIGNATURE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Newpassword}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_newpassword}</label></div>
 						<div class="form-field">
 							{USERS_EDIT_NEWPASS}
-							<div class="descr">{PHP.skinlang.usersedit.Newpasswordhint}</div>
+							<div class="descr">{PHP.L.usersedit_newpasswordhint}</div>
 						</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Email}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_email}</label></div>
 						<div class="form-field">{USERS_EDIT_EMAIL}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Hidetheemail}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_hidetheemail}</label></div>
 						<div class="form-field">{USERS_EDIT_HIDEEMAIL}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.PMnotify}</label></div>
-						<div class="form-field">{USERS_EDIT_PMNOTIFY} {PHP.skinlang.usersedit.PMnotifyhint}</div>
+						<div class="form-label"><label>{PHP.L.usersedit_pmnotify}</label></div>
+						<div class="form-field">{USERS_EDIT_PMNOTIFY} {PHP.L.usersedit_pmnotifyhint}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Website}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_website}</label></div>
 						<div class="form-field">{USERS_EDIT_WEBSITE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Birthdate}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_birthdate}</label></div>
 						<div class="form-field">{USERS_EDIT_BIRTHDATE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Occupation}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_occupation}</label></div>
 						<div class="form-field">{USERS_EDIT_OCCUPATION}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Gender}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_gender}</label></div>
 						<div class="form-field">{USERS_EDIT_GENDER}</div>
 					</li>
 
@@ -145,38 +145,38 @@
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Signature}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_signature}</label></div>
 						<div class="form-field">{USERS_EDIT_TEXT}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Registeredsince}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_registeredsince}</label></div>
 						<div class="form-field">{USERS_EDIT_REGDATE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Lastlogged}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_lastlogged}</label></div>
 						<div class="form-field">{USERS_EDIT_LASTLOG}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.LastIP}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_lastip}</label></div>
 						<div class="form-field">{USERS_EDIT_LASTIP}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Logcounter}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_logcounter}</label></div>
 						<div class="form-field">{USERS_EDIT_LOGCOUNT}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.usersedit.Deletethisuser}</label></div>
+						<div class="form-label"><label>{PHP.L.usersedit_deletethisuser}</label></div>
 						<div class="form-field">{USERS_EDIT_DELETE}</div>
 					</li>
 
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn">{PHP.skinlang.usersedit.Update}</button>
+							<button type="submit" class="submit btn">{PHP.L.usersedit_update}</button>
 						</div>
 					</li>
 

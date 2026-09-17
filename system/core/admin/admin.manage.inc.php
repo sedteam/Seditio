@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.manage.inc.php
 Version=186
-Updated=2026-aug-11
+Updated=2026-sep-15
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -136,6 +136,12 @@ if (!empty($p)) {
 	));
 
 	$t->parse("ADMIN_MANAGE.MODULES_LIST_CACHE");
+
+	$t->assign(array(
+		"MODULES_LIST_TRANSLATIONS_URL" => sed_url("admin", "m=translations")
+	));
+
+	$t->parse("ADMIN_MANAGE.MODULES_LIST_TRANSLATIONS");
 
 	$t->assign(array(
 		"MODULES_LIST_SMILIES_URL" => sed_url("admin", "m=smilies")

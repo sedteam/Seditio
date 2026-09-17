@@ -31,17 +31,17 @@
 					<ul class="form responsive-form">
 
 						<li class="form-row">
-							<div class="form-label">{PHP.skinlang.usersauth.Username}</div>
+							<div class="form-label">{PHP.L.usersauth_username}</div>
 							<div class="form-field">{USERS_AUTH_USER}<span class="require"></span></div>
 						</li>
 
 						<li class="form-row">
-							<div class="form-label">{PHP.skinlang.usersauth.Password}</div>
+							<div class="form-label">{PHP.L.usersauth_password}</div>
 							<div class="form-field">{USERS_AUTH_PASSWORD}<span class="require"></span></div>
 						</li>
 
 						<li class="form-row">
-							<div class="form-label">{PHP.skinlang.usersauth.Rememberme}</div>
+							<div class="form-label">{PHP.L.usersauth_rememberme}</div>
 							<div class="form-field">{PHP.out.guest_cookiettl}<span class="require"></span></div>
 						</li>
 
@@ -57,7 +57,7 @@
 
 						<li class="form-row">
 							<div class="form-field-100 text-center">
-								<input type="submit" class="submit btn btn-big" value="{PHP.skinlang.usersauth.Login}">
+								<input type="submit" class="submit btn btn-big" value="{PHP.L.usersauth_login}">
 							</div>
 						</li>
 
@@ -71,8 +71,8 @@
 
 				<div class="auth-links">
 					<ul class="systemlist">
-						<li><a href="{USERS_AUTH_REGISTER}">{PHP.skinlang.usersauth.Register}</a></li>
-						<li><a href="{USERS_AUTH_LOSTPASSWORD}">{PHP.skinlang.usersauth.Lostpassword}</a></li>
+						<li><a href="{USERS_AUTH_REGISTER}">{PHP.L.usersauth_register}</a></li>
+						<li><a href="{USERS_AUTH_LOSTPASSWORD}">{PHP.L.usersauth_lostpassword}</a></li>
 					</ul>
 				</div>
 

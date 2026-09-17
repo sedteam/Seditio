@@ -29,26 +29,26 @@
 				<ul class="form responsive-form">
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pmsend.Sendmessageto}</label></div>
+						<div class="form-label"><label>{PHP.L.pmsend_sendmessageto}</label></div>
 						<div class="form-field">
 							{PMSEND_FORM_TOUSER}
-							<div class="descr">{PHP.skinlang.pmsend.Sendmessagetohint}</div>
+							<div class="descr">{PHP.L.pmsend_sendmessagetohint}</div>
 						</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pmsend.Subject}</label></div>
+						<div class="form-label"><label>{PHP.L.pmsend_subject}</label></div>
 						<div class="form-field">{PMSEND_FORM_TITLE}</div>
 					</li>
 
 					<li class="form-row">
-						<div class="form-label"><label>{PHP.skinlang.pmsend.Message}</label></div>
+						<div class="form-label"><label>{PHP.L.pmsend_message}</label></div>
 						<div class="form-field">{PMSEND_FORM_TEXT}</div>
 					</li>
 
 					<li class="form-row">
 						<div class="form-field-100 text-center">
-							<button type="submit" class="submit btn">{PHP.skinlang.pmsend.Sendmessage}</button>
+							<button type="submit" class="submit btn">{PHP.L.pmsend_sendmessage}</button>
 						</div>
 					</li>
 

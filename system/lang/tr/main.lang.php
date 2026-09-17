@@ -12,8 +12,10 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/main.lang.php
 Version=186
-Updated=2026-aug-13
+Updated=2026-sep-17
 Type=Lang
+Name=Turkish
+Native=Türkçe
 Author=Seditio Team
 Description=Language main
 [END_SED]
@@ -27,10 +29,6 @@ $L['Active'] = "Aktif";
 $L['Add'] = "Ekle";
 $L['Administration'] = "Yönetim";
 $L['Adminpanel'] = "Yönetim Paneli";
-$L['admintooltip']['pageadd'] = "Sayfa ekle";
-$L['admintooltip']['pageedit'] = "Sayfa düzenle";
-$L['admintooltip']['pageeditcategory'] = "Kategori düzenle";
-$L['admintooltip']['pageeditoption'] = "Konfigürasyon seçeneğini düzenle";
 $L['Age'] = "Yaş";
 $L['Ago'] = "önce";
 $L['AIM'] = "AIM Adresi";
@@ -579,6 +577,12 @@ $L['sed_image_upload_add'] = 'Resim ekle';
 $L['sed_image_upload_select'] = 'Seçmek için tıklayın';
 $L['sed_image_upload_add_url'] = 'internetten yükle';
 $L['sed_image_upload_sort_hint'] = 'Sırayı değiştirmek için küçük resimleri sürükleyin';
+
+/* Admin tooltips */
+$L['admintooltip_pageadd'] = "Sayfa ekle";
+$L['admintooltip_pageedit'] = "Sayfa düzenle";
+$L['admintooltip_pageeditcategory'] = "Kategori düzenle";
+$L['admintooltip_pageeditoption'] = "Konfigürasyon seçeneğini düzenle";
 
 $sed_months_list = array(
 	1 => 'ocak',

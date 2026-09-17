@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.config.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-15
 Type=Core.admin
 Author=Seditio Team
 Description=Configuration
@@ -179,12 +179,24 @@ switch ($n) {
 			}
 			$config_variants = (!empty($row['config_variants'])) ? explode(",", $row['config_variants']) : '';
 			$config_type = $row['config_type'];
-			$config_title = isset($L['cfg_' . $row['config_name']][0]) ? $L['cfg_' . $row['config_name']][0] : '';
+			$cfg_key = 'cfg_' . $row['config_name'];
+			$config_title = '';
+			$config_more = '';
+			if (isset($L[$cfg_key])) {
+				if (is_array($L[$cfg_key])) {
+					$config_title = isset($L[$cfg_key][0]) ? $L[$cfg_key][0] : '';
+					$config_more = isset($L[$cfg_key][1]) ? $L[$cfg_key][1] : '';
+				} else {
+					$config_title = $L[$cfg_key];
+				}
+			}
+			if (empty($config_more) && isset($L[$cfg_key . '_hint'])) {
+				$config_more = $L[$cfg_key . '_hint'];
+			}
 			$check_config_title = empty($config_title);  //fix Sed v173      
 			$config_title = (empty($config_title)) ? $row['config_name'] : $config_title;
 			$config_text = sed_cc($row['config_text']);
-			$config_more = isset($L['cfg_' . $row['config_name']][1]) ? $L['cfg_' . $row['config_name']][1] : '';
-			$config_more = (!empty($config_more)) ? '(' . $config_more . ')' : $config_more;
+			$config_more = (!empty($config_more)) ? '(' . $config_more . ')' : '';
 			$config_title = (!empty($config_text) && $check_config_title) ? $config_text : $config_title; //fix Sed v173 
 
 			if ($config_type == 7) {

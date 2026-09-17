@@ -38,7 +38,7 @@
 		<div id="subtitle">
 			{PAGE_DESC}
 			<div class="clear">
-				{PHP.skinlang.page.Submittedby} {PAGE_OWNER} &nbsp; {PHP.skinlang.page.Date} {PAGE_DATE}<br />
+				{PHP.L.page_submittedby} {PAGE_OWNER} &nbsp; {PHP.L.page_date} {PAGE_DATE}<br />
 
 				<!-- BEGIN: PAGE_ADMIN -->
 
@@ -64,7 +64,7 @@
 			</div>
 
 			<div class="block">
-				<h5>{PHP.skinlang.page.Summary}</h5>
+				<h5>{PHP.L.page_summary}</h5>
 				{PAGE_MULTI_TABTITLES}
 			</div>
 

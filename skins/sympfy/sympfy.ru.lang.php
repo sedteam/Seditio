@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=skins/sympfy/sympfy.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-16
 Type=Skin
 Name=Sympfy
 Author=Amro
@@ -18,333 +18,327 @@ Description=Official skin
 ==================== */
 
 //admin.tpl
-$skinlang['admin']['Help'] = "Помощь:";
+$L['admin_help'] = "Помощь:";
 
 //comments.tpl
-$skinlang['comments']['Comment'] = "Комментарии:";
-$skinlang['comments']['Send'] = "Отправить";
-$skinlang['comments']['Postedby'] = "Разместил";
-$skinlang['comments']['Commentedit'] = "Редактирование комментария";   //New v173
-$skinlang['comments']['Update'] = "Обновить";  //New v173
-$skinlang['comments']['Newcomment'] = "Написать комментарий";  //New v178
+$L['comments_comment'] = "Комментарии:";
+$L['comments_send'] = "Отправить";
+$L['comments_postedby'] = "Разместил";
+$L['comments_commentedit'] = "Редактирование комментария";   //New v173
+$L['comments_update'] = "Обновить";  //New v173
+$L['comments_newcomment'] = "Написать комментарий";  //New v178
 
 //forums.editpost.tpl
-$skinlang['forumseditpost']['Update'] = "Обновить";
+$L['forumseditpost_update'] = "Обновить";
 
 //forums.newtopic.tpl
-$skinlang['forumsnewtopic']['Title'] = "Заголовок:";
-$skinlang['forumsnewtopic']['Desc'] = "Описание:";
-$skinlang['forumsnewtopic']['privatetopic'] = "Сделать \"приватную\" тему:";
-$skinlang['forumsnewtopic']['privatetopic2'] = "(тема будет доступна для просмотра и ответов только тебе и модераторам форума)";
-$skinlang['forumsnewtopic']['Submit'] = "Отправить";
+$L['forumsnewtopic_title'] = "Заголовок:";
+$L['forumsnewtopic_desc'] = "Описание:";
+$L['forumsnewtopic_privatetopic'] = "Сделать \"приватную\" тему:";
+$L['forumsnewtopic_privatetopic2'] = "(тема будет доступна для просмотра и ответов только тебе и модераторам форума)";
+$L['forumsnewtopic_submit'] = "Отправить";
 
 //forums.post.tpl
-$skinlang['forumspost']['privatetopic'] = "Это приватная тема, с доступом только для автора и модераторов форума.";
-$skinlang['forumspost']['Author'] = "Автор";
-$skinlang['forumspost']['Message'] = "Сообщение";
-$skinlang['forumspost']['Onlinestatus'] = "Статус";
-$skinlang['forumspost']['posts'] = "сообщений";
-$skinlang['forumspost']['Location'] = "Где:";
-$skinlang['forumspost']['Occupation'] = "Профессия:";
-$skinlang['forumspost']['Age'] = "Возраст:";
-$skinlang['forumspost']['Reply'] = "Ответить";
+$L['forumspost_privatetopic'] = "Это приватная тема, с доступом только для автора и модераторов форума.";
+$L['forumspost_author'] = "Автор";
+$L['forumspost_message'] = "Сообщение";
+$L['forumspost_onlinestatus'] = "Статус";
+$L['forumspost_posts'] = "сообщений";
+$L['forumspost_location'] = "Где:";
+$L['forumspost_occupation'] = "Профессия:";
+$L['forumspost_age'] = "Возраст:";
+$L['forumspost_reply'] = "Ответить";
 
 //forums.sections.tpl
-$skinlang['forumssections']['Options'] = "Опции...";
-$skinlang['forumssections']['Searchinforums'] = "Искать в форумах";
-$skinlang['forumssections']['Statistics'] = "Статистика";
-$skinlang['forumssections']['Moderators'] = "Модераторы";
-$skinlang['forumssections']['Markasread'] = "Отметить всё как прочитанное";
-$skinlang['forumssections']['Sections'] = "Разделы";
-$skinlang['forumssections']['Subforums'] = "Подфорумы"; //New in Sed 172
-$skinlang['forumssections']['Lastpost'] = "Последнее";
-$skinlang['forumssections']['Topics'] = "Тем";
-$skinlang['forumssections']['Posts'] = "Сообщений";
-$skinlang['forumssections']['Views'] = "Просмотров";
-$skinlang['forumssections']['Activity'] = "Активность";
-$skinlang['forumssections']['FoldAll'] = "Свернуть всё";
-$skinlang['forumssections']['UnfoldAll'] = "Развернуть всё";
+$L['forumssections_options'] = "Опции...";
+$L['forumssections_searchinforums'] = "Искать в форумах";
+$L['forumssections_statistics'] = "Статистика";
+$L['forumssections_moderators'] = "Модераторы";
+$L['forumssections_markasread'] = "Отметить всё как прочитанное";
+$L['forumssections_sections'] = "Разделы";
+$L['forumssections_subforums'] = "Подфорумы"; //New in Sed 172
+$L['forumssections_lastpost'] = "Последнее";
+$L['forumssections_topics'] = "Тем";
+$L['forumssections_posts'] = "Сообщений";
+$L['forumssections_views'] = "Просмотров";
+$L['forumssections_activity'] = "Активность";
+$L['forumssections_foldall'] = "Свернуть всё";
+$L['forumssections_unfoldall'] = "Развернуть всё";
 
 //forums.topics.tpl
-$skinlang['forumstopics']['Nonewposts'] = "Нет новых сообщений";
-$skinlang['forumstopics']['Newposts'] = "Есть новые сообщения";
-$skinlang['forumstopics']['Sticky'] = "Прикреплено";
-$skinlang['forumstopics']['Nonewpostspopular'] = "Нет новых сообщений (популярная)";
-$skinlang['forumstopics']['Newpostspopular'] = "Новые сообщения (популярная)";
-$skinlang['forumstopics']['Newpostssticky'] = "Новые ответы (прикреплено)";
-$skinlang['forumstopics']['Locked'] = "Обсуждение закрыто";
-$skinlang['forumstopics']['Newpostslocked'] = "Новые сообщения (тема закрыта)";
-$skinlang['forumstopics']['Announcment'] = "Обьявление";
-$skinlang['forumstopics']['Movedoutofthissection'] = "Перенесена в другой раздел";
-$skinlang['forumstopics']['Newannouncment'] = "Новое обьявление";
-$skinlang['forumstopics']['Viewers'] = "Просматривают";    // New in v120
+$L['forumstopics_nonewposts'] = "Нет новых сообщений";
+$L['forumstopics_newposts'] = "Есть новые сообщения";
+$L['forumstopics_sticky'] = "Прикреплено";
+$L['forumstopics_nonewpostspopular'] = "Нет новых сообщений (популярная)";
+$L['forumstopics_newpostspopular'] = "Новые сообщения (популярная)";
+$L['forumstopics_newpostssticky'] = "Новые ответы (прикреплено)";
+$L['forumstopics_locked'] = "Обсуждение закрыто";
+$L['forumstopics_newpostslocked'] = "Новые сообщения (тема закрыта)";
+$L['forumstopics_announcment'] = "Обьявление";
+$L['forumstopics_movedoutofthissection'] = "Перенесена в другой раздел";
+$L['forumstopics_newannouncment'] = "Новое обьявление";
+$L['forumstopics_viewers'] = "Просматривают";    // New in v120
 
 //header.tpl
-$skinlang['header']['Login'] = "Вход";
-$skinlang['header']['Register'] = "Регистрация";
-$skinlang['header']['Lostyourpassword'] = "Напомнить пароль";
+$L['header_login'] = "Вход";
+$L['header_register'] = "Регистрация";
+$L['header_lostyourpassword'] = "Напомнить пароль";
 
 //index.tpl
-$skinlang['index']['Newinforums'] = "Обсуждения в форумах...";
-$skinlang['index']['Recentadditions'] = "Что нового?";
-$skinlang['index']['Polls'] = "Опросы";
-$skinlang['index']['Online'] = "Кто здесь?";
-$skinlang['index']['Recentcomments'] = "Последние комментарии"; // New in 175
-$skinlang['index']['Lasttopics'] = "Форумы"; // New in 178
-$skinlang['index']['Lastcomments'] = "Комментарии"; // New in 178
-$skinlang['index']['Lastpages'] = "Страницы"; // New in 178
-$skinlang['index']['Activity'] = "Активность"; // New in 178
+$L['index_newinforums'] = "Обсуждения в форумах...";
+$L['index_recentadditions'] = "Что нового?";
+$L['index_polls'] = "Опросы";
+$L['index_online'] = "Кто здесь?";
+$L['index_recentcomments'] = "Последние комментарии"; // New in 175
+$L['index_lasttopics'] = "Форумы"; // New in 178
+$L['index_lastcomments'] = "Комментарии"; // New in 178
+$L['index_lastpages'] = "Страницы"; // New in 178
+$L['index_activity'] = "Активность"; // New in 178
 
 //list.tpl
-$skinlang['list']['Page'] = "Страница";
-$skinlang['list']['linesperpage'] = "на странице";
-$skinlang['list']['linesinthissection'] = "в этом разделе";
-$skinlang['list']['Comments'] = "Комментарии";
-$skinlang['list']['Ratings'] = "Оценки";
-$skinlang['list']['hits'] = "просмотров";
+$L['list_page'] = "Страница";
+$L['list_linesperpage'] = "на странице";
+$L['list_linesinthissection'] = "в этом разделе";
+$L['list_comments'] = "Комментарии";
+$L['list_ratings'] = "Оценки";
+$L['list_hits'] = "просмотров";
 
 //news.tpl
-$skinlang['news']['by'] = "от";
-$skinlang['news']['title'] = "Новости";
+$L['news_by'] = "от";
+$L['news_title'] = "Новости";
 
 //page.add.tpl
-$skinlang['pageadd']['Category'] = "Раздел:";
-$skinlang['pageadd']['Title'] = "Заголовок:";
-$skinlang['pageadd']['Description'] = "Описание:";
-$skinlang['pageadd']['Author'] = "Автор:";
-$skinlang['pageadd']['Extrakey'] = "Дополнительное поле (опционально):";
-$skinlang['pageadd']['Alias'] = "URL для страницы:";
-$skinlang['pageadd']['Owner'] = "Владелец:";
-$skinlang['pageadd']['Begin'] = "Начата:";
-$skinlang['pageadd']['Expire'] = "Истекает:";
-$skinlang['pageadd']['Bodyofthepage'] = "Текст страницы:";
-$skinlang['pageadd']['File'] = "Прикрепить файл?";
-$skinlang['pageadd']['Filehint'] = "(Если выбрать 'да', это активирует блок для скачки файла на странице)";
-$skinlang['pageadd']['URL'] = "Ссылка на файл:";
-$skinlang['pageadd']['URLhint'] = "(Указать если \"Прикрепить файл\" = Да)";
-$skinlang['pageadd']['Filesize'] = "Размер файла (KB):";
-$skinlang['pageadd']['Filesizehint'] = "(Указать если \"Прикрепить файл\" = Да)";
-$skinlang['pageadd']['Formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"" . sed_url("plug", "e=contact") . "\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
-$skinlang['pageadd']['Submit'] = "Отправить";
-$skinlang['pageadd']['Publish'] = "Опубликовать"; // New v173
-$skinlang['pageadd']['Parsing'] = "Парсинг:"; // New v173
-$skinlang['pageadd']['Thumbs'] = "Миниатюры:"; // New v178
+$L['pageadd_category'] = "Раздел:";
+$L['pageadd_title'] = "Заголовок:";
+$L['pageadd_description'] = "Описание:";
+$L['pageadd_author'] = "Автор:";
+$L['pageadd_extrakey'] = "Дополнительное поле (опционально):";
+$L['pageadd_alias'] = "URL для страницы:";
+$L['pageadd_owner'] = "Владелец:";
+$L['pageadd_begin'] = "Начата:";
+$L['pageadd_expire'] = "Истекает:";
+$L['pageadd_bodyofthepage'] = "Текст страницы:";
+$L['pageadd_file'] = "Прикрепить файл?";
+$L['pageadd_filehint'] = "(Если выбрать 'да', это активирует блок для скачки файла на странице)";
+$L['pageadd_url'] = "Ссылка на файл:";
+$L['pageadd_urlhint'] = "(Указать если \"Прикрепить файл\" = Да)";
+$L['pageadd_filesize'] = "Размер файла (KB):";
+$L['pageadd_filesizehint'] = "(Указать если \"Прикрепить файл\" = Да)";
+$L['pageadd_formhint'] = "Проверьте правильность внесения всех полей, вы не сможете исправить их позже.<br />Если вам все же необходимо что-либо исправить, <a href=\"" . sed_url("plug", "e=contact") . "\">свяжитесь с нами</a>.<br />Страница станет общедоступной, только после того как администрация ее проверит и опубликует.<br />";
+$L['pageadd_submit'] = "Отправить";
+$L['pageadd_publish'] = "Опубликовать"; // New v173
+$L['pageadd_parsing'] = "Парсинг:"; // New v173
+$L['pageadd_thumbs'] = "Миниатюры:"; // New v178
 
-$skinlang['pageadd']['Allowcomments'] = "Разрешить комментирование?"; // New v173
-$skinlang['pageadd']['Allowratings'] = "Разрешить изменение рейтинга?"; // New v173
+$L['pageadd_allowcomments'] = "Разрешить комментирование?"; // New v173
+$L['pageadd_allowratings'] = "Разрешить изменение рейтинга?"; // New v173
 
 //page.edit.tpl
-$skinlang['pageedit']['Category'] = "Раздел:";
-$skinlang['pageedit']['Title'] = "Заголовок:";
-$skinlang['pageedit']['Description'] = "Описание:";
-$skinlang['pageedit']['Author'] = "Автор:";
-$skinlang['pageedit']['Owner'] = "Владелец:";
-$skinlang['pageedit']['Date'] = "Дата:";
-$skinlang['pageedit']['Begin'] = "Начато:";
-$skinlang['pageedit']['Expire'] = "Истекает:";
-$skinlang['pageedit']['Pagehitcount'] = "Просмотров:";
-$skinlang['pageedit']['Extrakey'] = "Дополнительное поле";
-$skinlang['pageedit']['Alias'] = "Псевдоним страницы (алиас):";
-$skinlang['pageedit']['Parsing'] = "Парсинг:";
-$skinlang['pageedit']['Bodyofthepage'] = "Текст страницы:";
-$skinlang['pageedit']['Filedownload'] = "Прикрепить файл ?";
-$skinlang['pageedit']['URL'] = "Ссылка:";
-$skinlang['pageedit']['URLhint'] = "(Если 'Прикрепить файл'='Да')";
-$skinlang['pageedit']['Filesize'] = "Размер файла (KB):";
-$skinlang['pageedit']['Filesizehint'] = "(Если 'Прикрепить файл'='Да')";
-$skinlang['pageedit']['Filehitcount'] = "Обращений:";
-$skinlang['pageedit']['Filehitcounthint'] = "(Если 'Прикрепить файл'='Да')";
-$skinlang['pageedit']['Pageid'] = "ID страницы:";
-$skinlang['pageedit']['Deletethispage'] = "!Удалить эту страницу!:";
-$skinlang['pageedit']['Update'] = "Обновить";
-$skinlang['pageedit']['Thumbs'] = "Миниатюры:"; // New v178
+$L['pageedit_category'] = "Раздел:";
+$L['pageedit_title'] = "Заголовок:";
+$L['pageedit_description'] = "Описание:";
+$L['pageedit_author'] = "Автор:";
+$L['pageedit_owner'] = "Владелец:";
+$L['pageedit_date'] = "Дата:";
+$L['pageedit_begin'] = "Начато:";
+$L['pageedit_expire'] = "Истекает:";
+$L['pageedit_pagehitcount'] = "Просмотров:";
+$L['pageedit_extrakey'] = "Дополнительное поле";
+$L['pageedit_alias'] = "Псевдоним страницы (алиас):";
+$L['pageedit_parsing'] = "Парсинг:";
+$L['pageedit_bodyofthepage'] = "Текст страницы:";
+$L['pageedit_filedownload'] = "Прикрепить файл ?";
+$L['pageedit_url'] = "Ссылка:";
+$L['pageedit_urlhint'] = "(Если 'Прикрепить файл'='Да')";
+$L['pageedit_filesize'] = "Размер файла (KB):";
+$L['pageedit_filesizehint'] = "(Если 'Прикрепить файл'='Да')";
+$L['pageedit_filehitcount'] = "Обращений:";
+$L['pageedit_filehitcounthint'] = "(Если 'Прикрепить файл'='Да')";
+$L['pageedit_pageid'] = "ID страницы:";
+$L['pageedit_deletethispage'] = "!Удалить эту страницу!:";
+$L['pageedit_update'] = "Обновить";
+$L['pageedit_thumbs'] = "Миниатюры:"; // New v178
 
-$skinlang['pageedit']['Allowcomments'] = "Разрешить комментирование?";  // New v173
-$skinlang['pageedit']['Allowratings'] = "Разрешить изменение рейтинга?"; // New v173
+$L['pageedit_allowcomments'] = "Разрешить комментирование?";  // New v173
+$L['pageedit_allowratings'] = "Разрешить изменение рейтинга?"; // New v173
 
 //page.tpl
-$skinlang['page']['Author'] = "Автор:";
-$skinlang['page']['Submittedby'] = "Добавил:";
-$skinlang['page']['Date'] = "Дата:";
-$skinlang['page']['Comments'] = "Комментарии:";
-$skinlang['page']['Ratings'] = "Оценка:";
-$skinlang['page']['Summary'] = "Сводка:";
-$skinlang['page']['FilesizeKB'] = "KB";
-$skinlang['page']['Filesize'] = "Размер:";
-$skinlang['page']['Membersrating'] = "Рейтинг:";
-$skinlang['page']['Download'] = "Загрузить:";
-$skinlang['page']['Hits'] = "Просмотров:";
-$skinlang['page']['Otherpages'] = "Ещё в разделе";
-$skinlang['page']['Similarpages'] = "Ещё почитать";
+$L['page_author'] = "Автор:";
+$L['page_submittedby'] = "Добавил:";
+$L['page_date'] = "Дата:";
+$L['page_comments'] = "Комментарии:";
+$L['page_ratings'] = "Оценка:";
+$L['page_summary'] = "Сводка:";
+$L['page_filesizekb'] = "KB";
+$L['page_filesize'] = "Размер:";
+$L['page_membersrating'] = "Рейтинг:";
+$L['page_download'] = "Загрузить:";
+$L['page_hits'] = "Просмотров:";
+$L['page_otherpages'] = "Ещё в разделе";
+$L['page_similarpages'] = "Ещё почитать";
 
 //pfs.tpl
-$skinlang['pfs']['Insertasthumbnail'] = "Вставить как эскиз";
-$skinlang['pfs']['Insertasimage'] = "Вставить изображение";
-$skinlang['pfs']['Insertaslink'] = "Вставить ссылку на файл";
+$L['pfs_insertasthumbnail'] = "Вставить как эскиз";
+$L['pfs_insertasimage'] = "Вставить изображение";
+$L['pfs_insertaslink'] = "Вставить ссылку на файл";
 
 //pm.send.tpl
-$skinlang['pmsend']['Sendmessageto'] = "Отправить сообщение для:";
-$skinlang['pmsend']['Sendmessagetohint'] = "(Можно отправить до 10 адресатов, для этого перечисли их имена через запятую)";
-$skinlang['pmsend']['Subject'] = "Тема сообщения:";
-$skinlang['pmsend']['Message'] = "Текст сообщения:";
-$skinlang['pmsend']['Sendmessage'] = "Отправить сообщение";
+$L['pmsend_sendmessageto'] = "Отправить сообщение для:";
+$L['pmsend_sendmessagetohint'] = "(Можно отправить до 10 адресатов, для этого перечисли их имена через запятую)";
+$L['pmsend_subject'] = "Тема сообщения:";
+$L['pmsend_message'] = "Текст сообщения:";
+$L['pmsend_sendmessage'] = "Отправить сообщение";
 
 //pm.tpl
-$skinlang['pm']['State'] = "Статус";
-$skinlang['pm']['Sender'] = "Отправитель";
-$skinlang['pm']['SubjectClick'] = "Тема";
-$skinlang['pm']['Date'] = "Дата";
-$skinlang['pm']['Action'] = "Действие";
-$skinlang['pm']['Recipient'] = "Получатель";
-$skinlang['pm']['Nomessages'] = "Сообщений нет.";
-$skinlang['pm']['Page'] = "Страница";
-$skinlang['pm']['Subject'] = "Тема";
-$skinlang['pm']['Sender'] = "Отправитель";
-$skinlang['pm']['Recipient'] = "Получатель";
-$skinlang['pm']['Date'] = "Дата";
-$skinlang['pm']['Newmessage'] = "Новое сообщение";
-$skinlang['pm']['Message'] = "Сообщение";
-$skinlang['pm']['Reply'] = "Ответить";
-$skinlang['pm']['Sendtoarchives'] = "Переместить в архив";
-$skinlang['pm']['Delete'] = "Удалить";
+$L['pm_state'] = "Статус";
+$L['pm_sender'] = "Отправитель";
+$L['pm_subjectclick'] = "Тема";
+$L['pm_date'] = "Дата";
+$L['pm_action'] = "Действие";
+$L['pm_recipient'] = "Получатель";
+$L['pm_nomessages'] = "Сообщений нет.";
+$L['pm_page'] = "Страница";
+$L['pm_subject'] = "Тема";
+$L['pm_sender'] = "Отправитель";
+$L['pm_recipient'] = "Получатель";
+$L['pm_date'] = "Дата";
+$L['pm_newmessage'] = "Новое сообщение";
+$L['pm_message'] = "Сообщение";
+$L['pm_reply'] = "Ответить";
+$L['pm_sendtoarchives'] = "Переместить в архив";
+$L['pm_delete'] = "Удалить";
 
 //polls.tpl
-$skinlang['polls']['voterssince'] = "проголосовавших с";
-$skinlang['polls']['Comments'] = "Комментарии:";
-$skinlang['polls']['Allpolls'] = "Все опросы";
+$L['polls_voterssince'] = "проголосовавших с";
+$L['polls_comments'] = "Комментарии:";
+$L['polls_allpolls'] = "Все опросы";
 
 //ratings.tpl
-$skinlang['ratings']['Averagemembersrating'] = "Средняя оценка (от 1 до 10):";
-$skinlang['ratings']['Votes'] = "Опрошено:";
-$skinlang['ratings']['Rate'] = "Оценка:";
-$skinlang['ratings']['Rateit'] = "Оценить !";
+$L['ratings_averagemembersrating'] = "Средняя оценка (от 1 до 10):";
+$L['ratings_votes'] = "Опрошено:";
+$L['ratings_rate'] = "Оценка:";
+$L['ratings_rateit'] = "Оценить !";
 
 //user.auth.tpl
-$skinlang['usersauth']['Username'] = "Логин:";
-$skinlang['usersauth']['Password'] = "Пароль:";
-$skinlang['usersauth']['Rememberme'] = "Запомнить?";
-$skinlang['usersauth']['Login'] = "Вход";
-$skinlang['usersauth']['Register'] = "Регистрация";
-$skinlang['usersauth']['Lostpassword'] = "Вспомнить пароль?";
+$L['usersauth_username'] = "Логин:";
+$L['usersauth_password'] = "Пароль:";
+$L['usersauth_rememberme'] = "Запомнить?";
+$L['usersauth_login'] = "Вход";
+$L['usersauth_register'] = "Регистрация";
+$L['usersauth_lostpassword'] = "Вспомнить пароль?";
 
 //users.details.tpl
-$skinlang['usersdetails']['Sendprivatemessage'] = "Послать личное сообщение:";
-$skinlang['usersdetails']['Maingroup'] = "Основная группа:";
-$skinlang['usersdetails']['Userfirstname'] = "Имя:";
-$skinlang['usersdetails']['Userlastname'] = "Фамилия:";
-$skinlang['usersdetails']['Memberof'] = "Состоит в группах:";
-$skinlang['usersdetails']['Country'] = "Страна:";
-$skinlang['usersdetails']['Location'] = "Местоположение:";
-$skinlang['usersdetails']['Timezone'] = "Часовой пояс:";
-$skinlang['usersdetails']['Weblog'] = "Журнал:";
-$skinlang['usersdetails']['Website'] = "Сайт:";
-$skinlang['usersdetails']['IRC'] = "IRC:";
-$skinlang['usersdetails']['ICQ'] = "ICQ:";
-$skinlang['usersdetails']['MSN'] = "MSN messenger:";
-$skinlang['usersdetails']['Birthdate'] = "День рождения:";
-$skinlang['usersdetails']['Age'] = "Возраст:";
-$skinlang['usersdetails']['Occupation'] = "Род занятий:";
-$skinlang['usersdetails']['Gender'] = "Пол:";
-$skinlang['usersdetails']['Signature'] = "Подпись:";
-$skinlang['usersdetails']['Registrationdate'] = "Дата регистрации:";
-$skinlang['usersdetails']['Avatar'] = "Аватар:";
-$skinlang['usersdetails']['Photo'] = "Фотография:";
+$L['usersdetails_sendprivatemessage'] = "Послать личное сообщение:";
+$L['usersdetails_maingroup'] = "Основная группа:";
+$L['usersdetails_userfirstname'] = "Имя:";
+$L['usersdetails_userlastname'] = "Фамилия:";
+$L['usersdetails_memberof'] = "Состоит в группах:";
+$L['usersdetails_country'] = "Страна:";
+$L['usersdetails_location'] = "Местоположение:";
+$L['usersdetails_timezone'] = "Часовой пояс:";
+$L['usersdetails_weblog'] = "Журнал:";
+$L['usersdetails_website'] = "Сайт:";
+$L['usersdetails_irc'] = "IRC:";
+$L['usersdetails_icq'] = "ICQ:";
+$L['usersdetails_msn'] = "MSN messenger:";
+$L['usersdetails_birthdate'] = "День рождения:";
+$L['usersdetails_age'] = "Возраст:";
+$L['usersdetails_occupation'] = "Род занятий:";
+$L['usersdetails_gender'] = "Пол:";
+$L['usersdetails_signature'] = "Подпись:";
+$L['usersdetails_registrationdate'] = "Дата регистрации:";
+$L['usersdetails_avatar'] = "Аватар:";
+$L['usersdetails_photo'] = "Фотография:";
 
 //users.edit.tpl
-$skinlang['usersedit']['UserID'] = "ID пользователя:";
-$skinlang['usersedit']['Username'] = "Логин:";
-$skinlang['usersedit']['Userfirstname'] = "Имя:";
-$skinlang['usersedit']['Userlastname'] = "Фамилия:";
-$skinlang['usersedit']['Groupsmembership'] = "Группы:";
-$skinlang['usersedit']['Maingroup'] = "(основная)";
-$skinlang['usersedit']['Memberof'] = "В группе:";
-$skinlang['usersedit']['Country'] = "Страна:";
-$skinlang['usersedit']['Location'] = "Местоположение:";
-$skinlang['usersedit']['Timezone'] = "Часовй пояс:";
-$skinlang['usersedit']['Skin'] = "Оформление сайта (скин):";
-$skinlang['usersedit']['Language'] = "Язык:";
-$skinlang['usersedit']['Avatar'] = "Аватар:";
-$skinlang['usersedit']['Signature'] = "Подпись:";
-$skinlang['usersedit']['Photo'] = "Фотография:";
-$skinlang['usersedit']['Newpassword'] = "Установить новый пароль:";
-$skinlang['usersedit']['Newpasswordhint'] = "(Оставьте пустым, чтобы сохранить текущий пароль)";
-$skinlang['usersedit']['Email'] = "E-mail:";
-$skinlang['usersedit']['Hidetheemail'] = "Прятать e-mail адрес ?";
-$skinlang['usersedit']['PMnotify'] = "Сообщать о новых ЛС:";
-$skinlang['usersedit']['PMnotifyhint'] = "(Уведомлять на e-mail о приходе новых личных сообщений)";
-$skinlang['usersedit']['Website'] = "Сайт:";
-$skinlang['usersedit']['IRC'] = "IRC:";
-$skinlang['usersedit']['ICQ'] = "ICQ:";
-$skinlang['usersedit']['MSN'] = "MSN messenger:";
-$skinlang['usersedit']['Birthdate'] = "День рождения:";
-$skinlang['usersedit']['Occupation'] = "Род занятий:";
-$skinlang['usersedit']['Gender'] = "Пол:";
-$skinlang['usersedit']['Registeredsince'] = "Зарегистрирован с:";
-$skinlang['usersedit']['Lastlogged'] = "Последний раз входил:";
-$skinlang['usersedit']['LastIP'] = "Последний известный IP:";
-$skinlang['usersedit']['Logcounter'] = "Счетчик действий:";
-$skinlang['usersedit']['Deletethisuser'] = "! Удалить этого пользователя !:";
-$skinlang['usersedit']['Update'] = "Обновить";
+$L['usersedit_userid'] = "ID пользователя:";
+$L['usersedit_username'] = "Логин:";
+$L['usersedit_userfirstname'] = "Имя:";
+$L['usersedit_userlastname'] = "Фамилия:";
+$L['usersedit_groupsmembership'] = "Группы:";
+$L['usersedit_maingroup'] = "(основная)";
+$L['usersedit_memberof'] = "В группе:";
+$L['usersedit_country'] = "Страна:";
+$L['usersedit_location'] = "Местоположение:";
+$L['usersedit_timezone'] = "Часовй пояс:";
+$L['usersedit_skin'] = "Оформление сайта (скин):";
+$L['usersedit_language'] = "Язык:";
+$L['usersedit_avatar'] = "Аватар:";
+$L['usersedit_signature'] = "Подпись:";
+$L['usersedit_photo'] = "Фотография:";
+$L['usersedit_newpassword'] = "Установить новый пароль:";
+$L['usersedit_newpasswordhint'] = "(Оставьте пустым, чтобы сохранить текущий пароль)";
+$L['usersedit_email'] = "E-mail:";
+$L['usersedit_hidetheemail'] = "Прятать e-mail адрес ?";
+$L['usersedit_pmnotify'] = "Сообщать о новых ЛС:";
+$L['usersedit_pmnotifyhint'] = "(Уведомлять на e-mail о приходе новых личных сообщений)";
+$L['usersedit_website'] = "Сайт:";
+$L['usersedit_irc'] = "IRC:";
+$L['usersedit_icq'] = "ICQ:";
+$L['usersedit_msn'] = "MSN messenger:";
+$L['usersedit_birthdate'] = "День рождения:";
+$L['usersedit_occupation'] = "Род занятий:";
+$L['usersedit_gender'] = "Пол:";
+$L['usersedit_registeredsince'] = "Зарегистрирован с:";
+$L['usersedit_lastlogged'] = "Последний раз входил:";
+$L['usersedit_lastip'] = "Последний известный IP:";
+$L['usersedit_logcounter'] = "Счетчик действий:";
+$L['usersedit_deletethisuser'] = "! Удалить этого пользователя !:";
+$L['usersedit_update'] = "Обновить";
 
 //users.profile.tpl
-$skinlang['usersprofile']['Username'] = "Логин:";
-$skinlang['usersprofile']['Userfirstname'] = "Имя:";
-$skinlang['usersprofile']['Userlastname'] = "Фамилия:";
-$skinlang['usersprofile']['Groupsmembership'] = "Состоит в группах:";
-$skinlang['usersprofile']['Maingroup'] = "Основная группа:";
-$skinlang['usersprofile']['Registeredsince'] = "Зарегистрирован с:";
-$skinlang['usersprofile']['Email'] = "E-mail:";
-$skinlang['usersprofile']['Hidetheemail'] = "Прятать e-mail адрес?";
-$skinlang['usersprofile']['PMnotify'] = "Сообщать о новых ЛС:";
-$skinlang['usersprofile']['PMnotifyhint'] = "(Уведомлять на e-mail о приходе новых личных сообщений)";
-$skinlang['usersprofile']['Skin'] = "Оформление сайта (скин):";
-$skinlang['usersprofile']['Language'] = "Язык системы:";
-$skinlang['usersprofile']['Country'] = "Страна:";
-$skinlang['usersprofile']['Location'] = "Местоположение:";
-$skinlang['usersprofile']['Timezone'] = "Часовой пояс:";
-$skinlang['usersprofile']['Website'] = "Сайт:";
-$skinlang['usersprofile']['IRC'] = "IRC:";
-$skinlang['usersprofile']['ICQ'] = "ICQ:";
-$skinlang['usersprofile']['MSN'] = "MSN messenger:";
-$skinlang['usersprofile']['Birthdate'] = "День рождения:";
-$skinlang['usersprofile']['Occupation'] = "Род занятий:";
-$skinlang['usersprofile']['Gender'] = "Пол:";
-$skinlang['usersprofile']['Avatar'] = "Аватар:";
-$skinlang['usersprofile']['Photo'] = "Фотография:";
-$skinlang['usersprofile']['Signature'] = "Подпись:";
-$skinlang['usersprofile']['Oldpassword'] = "Текущий пароль:";
-$skinlang['usersprofile']['Oldpasswordhint'] = "(Введите текущий пароль, чтобы задать новый)";
-$skinlang['usersprofile']['Newpassword'] = "Установить новый пароль:";
-$skinlang['usersprofile']['Newpasswordhint'] = "(Оставьте пустым, чтобы сохранить текущий пароль)";
-$skinlang['usersprofile']['Update'] = "Обновить";
+$L['usersprofile_username'] = "Логин:";
+$L['usersprofile_userfirstname'] = "Имя:";
+$L['usersprofile_userlastname'] = "Фамилия:";
+$L['usersprofile_groupsmembership'] = "Состоит в группах:";
+$L['usersprofile_maingroup'] = "Основная группа:";
+$L['usersprofile_registeredsince'] = "Зарегистрирован с:";
+$L['usersprofile_email'] = "E-mail:";
+$L['usersprofile_hidetheemail'] = "Прятать e-mail адрес?";
+$L['usersprofile_pmnotify'] = "Сообщать о новых ЛС:";
+$L['usersprofile_pmnotifyhint'] = "(Уведомлять на e-mail о приходе новых личных сообщений)";
+$L['usersprofile_skin'] = "Оформление сайта (скин):";
+$L['usersprofile_language'] = "Язык системы:";
+$L['usersprofile_country'] = "Страна:";
+$L['usersprofile_location'] = "Местоположение:";
+$L['usersprofile_timezone'] = "Часовой пояс:";
+$L['usersprofile_website'] = "Сайт:";
+$L['usersprofile_irc'] = "IRC:";
+$L['usersprofile_icq'] = "ICQ:";
+$L['usersprofile_msn'] = "MSN messenger:";
+$L['usersprofile_birthdate'] = "День рождения:";
+$L['usersprofile_occupation'] = "Род занятий:";
+$L['usersprofile_gender'] = "Пол:";
+$L['usersprofile_avatar'] = "Аватар:";
+$L['usersprofile_photo'] = "Фотография:";
+$L['usersprofile_signature'] = "Подпись:";
+$L['usersprofile_oldpassword'] = "Текущий пароль:";
+$L['usersprofile_oldpasswordhint'] = "(Введите текущий пароль, чтобы задать новый)";
+$L['usersprofile_newpassword'] = "Установить новый пароль:";
+$L['usersprofile_newpasswordhint'] = "(Оставьте пустым, чтобы сохранить текущий пароль)";
+$L['usersprofile_update'] = "Обновить";
 
 //users.register.tpl
-$skinlang['usersregister']['Username'] = "Логин :";
-$skinlang['usersregister']['Userfirstname'] = "Имя :";
-$skinlang['usersregister']['Userlastname'] = "Фамилия :";
-$skinlang['usersregister']['Validemail'] = "Ваш e-mail :";
-$skinlang['usersregister']['Validemailhint'] = "Для завершения процесса регистрации необходим действующий e-mail !";
-$skinlang['usersregister']['Password'] = "Пароль :";
-$skinlang['usersregister']['Confirmpassword'] = "Повтор пароля :";
-$skinlang['usersregister']['Country'] = "Страна :";
-$skinlang['usersregister']['Formhint'] = "Более детально настроить свой аккаунт вы сможете после регистрации на сайте, в профиле.";
-$skinlang['usersregister']['Submit'] = "Зарегистрироваться";
+$L['usersregister_username'] = "Логин :";
+$L['usersregister_userfirstname'] = "Имя :";
+$L['usersregister_userlastname'] = "Фамилия :";
+$L['usersregister_validemail'] = "Ваш e-mail :";
+$L['usersregister_validemailhint'] = "Для завершения процесса регистрации необходим действующий e-mail !";
+$L['usersregister_password'] = "Пароль :";
+$L['usersregister_confirmpassword'] = "Повтор пароля :";
+$L['usersregister_country'] = "Страна :";
+$L['usersregister_formhint'] = "Более детально настроить свой аккаунт вы сможете после регистрации на сайте, в профиле.";
+$L['usersregister_submit'] = "Зарегистрироваться";
 
 //users.tpl
-$skinlang['users']['Page'] = "Страница";
-$skinlang['users']['usersperpage'] = "пользователей на страницу";
-$skinlang['users']['usersinthissection'] = "пользователей в этом разделе";
+$L['users_page'] = "Страница";
+$L['users_usersperpage'] = "пользователей на страницу";
+$L['users_usersinthissection'] = "пользователей в этом разделе";
 
 //maintenance.tpl
-$skinlang['maintenance']['Username'] = "Имя:";
-$skinlang['maintenance']['Password'] = "Пароль:";
-$skinlang['maintenance']['Login'] = "Вход";
-
-//admintooltip.js
-$skinlang['admintooltip']['pageadd'] = "Добавить страницу";
-$skinlang['admintooltip']['pageedit'] = "Редактировать страницу";
-$skinlang['admintooltip']['pageeditcategory'] = "Редактировать категорию";
-$skinlang['admintooltip']['pageeditoption'] = "Редактировать свойство";
+$L['maintenance_username'] = "Имя:";
+$L['maintenance_password'] = "Пароль:";
+$L['maintenance_login'] = "Вход";
 
 //service.message.tpl
-$skinlang['message']['gohome'] = "Вернуться на главную";
+$L['message_gohome'] = "Вернуться на главную";

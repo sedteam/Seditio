@@ -391,7 +391,7 @@ $skinlang['index']['Recentadditions'] = "Последние обновления
 $skinlang['index']['Online'] = "Сейчас на сайте";
 ```
 
-В шаблонах темы локализованные фразы выводятся через теги глобального массива: `{PHP.skinlang.header.Login}` или `{PHP.skinlang.index.Online}`.
+В шаблонах темы локализованные фразы выводятся через теги глобального массива: `{PHP.L.header_login}` или `{PHP.L.index_online}`.
 
 ### 9.7.4. Базовая верстка файлов темы
 
@@ -465,7 +465,7 @@ $skinlang['index']['Online'] = "Сейчас на сайте";
     </section>
     
     <aside class="sidebar-box">
-        <h3>{PHP.skinlang.index.Online}</h3>
+        <h3>{PHP.L.index_online}</h3>
         <p><a href="{PHP.out.whosonline_link}">{PHP.out.whosonline}</a> : {PHP.out.whosonline_reg_list}</p>
     </aside>
 </div>

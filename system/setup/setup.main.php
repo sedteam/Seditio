@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/setup.main.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-17
 Type=Core.setup
 Author=Seditio Team
 Description=Main controller and API for modern setup installer
@@ -327,7 +327,7 @@ if (!empty($_POST['ajax_action'])) {
                    $db_forum_posts, $db_forum_sections, $db_forum_structure, $db_forum_topics, $db_groups,
                    $db_groups_users, $db_logger, $db_menu, $db_pages, $db_pfs, $db_pfs_folders, $db_plugins,
                    $db_pm, $db_polls, $db_polls_options, $db_polls_voters, $db_rated, $db_ratings, $db_referers,
-                   $db_shield, $db_smilies, $db_structure, $db_stats, $db_trash, $db_users;
+                   $db_shield, $db_languages, $db_translations, $db_smilies, $db_structure, $db_stats, $db_trash, $db_users;
 
             $db_auth            = $sqldbprefix . 'auth';
             $db_banlist         = $sqldbprefix . 'banlist';
@@ -357,6 +357,8 @@ if (!empty($_POST['ajax_action'])) {
             $db_ratings         = $sqldbprefix . 'ratings';
             $db_referers        = $sqldbprefix . 'referers';
             $db_shield          = $sqldbprefix . 'shield';
+            $db_languages       = $sqldbprefix . 'languages';
+            $db_translations    = $sqldbprefix . 'translations';
             $db_smilies         = $sqldbprefix . 'smilies';
             $db_structure       = $sqldbprefix . 'structure';
             $db_stats           = $sqldbprefix . 'stats';
@@ -559,6 +561,8 @@ if (!empty($_POST['ajax_action'])) {
             }
             
             // 9. Finalization
+            sed_translations_import_all();
+            sed_translations_generate();
             sed_urls_generate();
             sed_stat_create('installed', 1);
             $log[] = ['ok' => true, 'msg' => $L['setup_complete']];

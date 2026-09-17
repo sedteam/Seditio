@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.inc.php
 Version=186
-Updated=2026-aug-11
+Updated=2026-sep-15
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -84,9 +84,12 @@ if (!empty($m)) {
 
 // Fallback to legacy system admin files
 if (empty($sys['inc'])) {
-	$sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
-	$sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'] . ".$s";
-	$sys['inc'] = SED_ROOT . '/system/core/admin/' . $sys['inc'] . '.inc.php';
+	$base_inc = (empty($m)) ? 'admin.home' : "admin.$m";
+	if (!empty($s) && file_exists(SED_ROOT . '/system/core/admin/' . $base_inc . '.' . $s . '.inc.php')) {
+		$sys['inc'] = SED_ROOT . '/system/core/admin/' . $base_inc . '.' . $s . '.inc.php';
+	} else {
+		$sys['inc'] = SED_ROOT . '/system/core/admin/' . $base_inc . '.inc.php';
+	}
 }
 
 if (!file_exists($sys['inc'])) {
