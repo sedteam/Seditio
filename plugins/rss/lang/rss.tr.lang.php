@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/rss/lang/rss.tr.lang.php
 Version=186
-Updated=2026-mar-31
+Updated=2026-sep-18
 Type=Plugin.lang
 Author=Seditio Team
 Description=RSS plugin Turkish
+Translations=1
 [END_SED]
 ==================== */
 
@@ -24,7 +25,7 @@ $L['core_rss'] = "RSS beslemeleri";
 $L['cfg_disable_rss'] = array("RSS beslemelerini devre dışı bırak", "");
 $L['cfg_disable_rsspages'] = array("Sayfalar için RSS beslemesini devre dışı bırak", "");
 $L['cfg_disable_rsscomments'] = array("Yorumlar için RSS beslemesini devre dışı bırak", "");
-$L['cfg_disable_rssforums'] = array("Forumlar için RSS beslemesini devre dışı bırak", "");
+$L['cfg_rss_disable_rssforums'] = array("Forumlar için RSS beslemesini devre dışı bırak", "");
 $L['cfg_rss_timetolive'] = array("RSS önbellek süresi", "saniye cinsinden");
 $L['cfg_rss_defaultcode'] = array("Varsayılan RSS", "kategori kodu");
 $L['cfg_rss_maxitems'] = array("RSS beslemesindeki maksimum kayıt sayısı", "");

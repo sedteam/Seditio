@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -33,7 +33,7 @@ $a = sed_import('a', 'G', 'TXT');
 $v = sed_import('v', 'G', 'TXT');
 $email = sed_import('email', 'P', 'TXT');
 
-$plugin_title = $L['plu_title'];
+$plugin_title = $L['passrecover_title'];
 
 $generate_password = $cfg['plugin']['passrecover']['generate_password'];
 
@@ -53,7 +53,7 @@ if ($a == 'request' && $email != '') {
 
 		sed_shield_update(60, "Password recovery email sent");
 
-		$rsubject = $cfg['maintitle'] . " - " . $L['plu_title'];
+		$rsubject = $cfg['maintitle'] . " - " . $plugin_title;
 
 		if ($generate_password == "no") {
 			$ractivate = $cfg['mainurl'] . "/" . sed_url("plug", "e=passrecover&a=auth&v=" . $validationkey, "", false, false);
@@ -107,7 +107,7 @@ if ($a == 'request' && $email != '') {
 
 			$sql = sed_sql_query("UPDATE $db_users SET user_password='$mdpass', user_salt='$mdsalt', user_passtype=1 WHERE user_id='$ruserid'");
 
-			$rsubject = $cfg['maintitle'] . " - " . $L['plu_title'];
+			$rsubject = $cfg['maintitle'] . " - " . $plugin_title;
 
 			$rbody = $L['Hi'] . " " . $rusername . ",\n\n" . $L['plu_email3'] . $newpassword . "\n\n" . $L['aut_contactadmin'];
 			sed_mail($remail, $rsubject, $rbody);
@@ -145,9 +145,9 @@ if ($a == 'request' && $email != '') {
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("plug", "e=passrecover")] = $L['plu_title'];
+$urlpaths[sed_url("plug", "e=passrecover")] = $plugin_title;
 
 $t->assign(array(
-	"PLUGIN_PASSRECOVER_TITLE" => $L['plu_title'],
+	"PLUGIN_PASSRECOVER_TITLE" => $plugin_title,
 	"PLUGIN_PASSRECOVER_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 ));

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-18
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -811,7 +811,7 @@ function sed_plugin_install($pl)
  */
 function sed_plugin_uninstall($pl, $all = FALSE, $drop_tables = false)
 {
-	global $db_plugins, $db_config, $db_auth, $db_users;
+	global $cfg, $db_plugins, $db_config, $db_auth, $db_users;
 
 	// New v173 Delete all plugins for upgrade mode
 	$where = ($all && $pl == "all") ? "" : " WHERE pl_code='$pl' LIMIT 1";
@@ -1067,7 +1067,7 @@ function sed_module_install($code)
  */
 function sed_module_uninstall($code, $drop_tables = false)
 {
-	global $db_core, $db_plugins, $db_config, $db_auth, $db_users;
+	global $cfg, $db_core, $db_plugins, $db_config, $db_auth, $db_users;
 
 	$code = preg_replace('/[^a-zA-Z0-9_]/', '', $code);
 	$res = "<h3>Uninstalling module: " . $code . "</h3>";

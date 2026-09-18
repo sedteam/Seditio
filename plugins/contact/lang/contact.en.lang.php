@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/lang/contact.en.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Contact";
+$L['contact_title'] = "Contact";
 
 $L['plu_explain'] = "Fill this form to send us an email, we'll reply as soon as possible !";
 $L['plu_recipients_title'] = "Recipient";

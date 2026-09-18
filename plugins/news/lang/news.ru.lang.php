@@ -8,12 +8,13 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/news/lang/news.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
 $L['cfg_category'] = array("Код родительской категории", "");
-$L['cfg_maxpages'] = array("Количество отображаемых страниц", "");
+$L['cfg_news_maxpages'] = array("Количество отображаемых страниц", "");

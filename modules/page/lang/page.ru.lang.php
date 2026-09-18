@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/lang/page.ru.lang.php
 Version=186
-Updated=2026-feb-16
+Updated=2026-sep-18
 Type=Module.lang
 Author=Seditio Team
 Description=Page module Russian language file
+Translations=1
 [END_SED]
 ==================== */
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plug.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Core
 Author=Seditio Team
 Description=Plugin loader
@@ -86,7 +86,8 @@ if (!empty($e)) {
 		}
 	}
 
-	$out['subtitle'] = (empty($L['plu_title'])) ? $out['subtitle'] : $L['plu_title'];
+	$plug_scoped_title = !empty($L[$e . '_title']) ? $L[$e . '_title'] : (!empty($L['plu_title']) ? $L['plu_title'] : '');
+	$out['subtitle'] = (empty($plug_scoped_title)) ? $out['subtitle'] : $plug_scoped_title;
 	$sys['sublocation'] = $out['subtitle'];
 	$title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');
 	$title_tags[] = array('%1$s', '%2$s', '%3$s');
@@ -121,7 +122,7 @@ if (!empty($e)) {
 	}
 
 	if ($autoassigntags) {
-		$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
+		$plugin_title = (empty($plugin_title)) ? (!empty($L[$e . '_title']) ? $L[$e . '_title'] : (!empty($L['plu_title']) ? $L['plu_title'] : '')) : $plugin_title;
 
 		// ---------- Breadcrumbs
 		$urlpaths = array();

@@ -4,14 +4,15 @@
 [BEGIN_SED]
 File=plugins/search/lang/search.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Поиск";
+$L['search_title'] = "Поиск";
 
 $L['plu_searchin'] = "<strong>Ключевое слово (а)</strong>";
 

@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/sitemap/lang/sitemap.ru.lang.php
 Version=186
-Updated=2026-mar-31
+Updated=2026-sep-18
 Type=Plugin.lang
 Author=Seditio Team
 Description=Sitemap Russian language file
+Translations=1
 [END_SED]
 ==================== */
 

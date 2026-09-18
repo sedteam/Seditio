@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.config.inc.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-18
 Type=Core.admin
 Author=Seditio Team
 Description=Configuration
@@ -179,7 +179,8 @@ switch ($n) {
 			}
 			$config_variants = (!empty($row['config_variants'])) ? explode(",", $row['config_variants']) : '';
 			$config_type = $row['config_type'];
-			$cfg_key = 'cfg_' . $row['config_name'];
+			$cfg_key_scoped = 'cfg_' . $p . '_' . $row['config_name'];
+			$cfg_key = (isset($L[$cfg_key_scoped])) ? $cfg_key_scoped : 'cfg_' . $row['config_name'];
 			$config_title = '';
 			$config_more = '';
 			if (isset($L[$cfg_key])) {

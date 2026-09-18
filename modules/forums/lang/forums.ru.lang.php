@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/lang/forums.ru.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Module.lang
 Author=Seditio Team
 Description=Forums Russian language file
+Translations=1
 [END_SED]
 ==================== */
 

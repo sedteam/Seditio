@@ -19,6 +19,10 @@
 		<i class="ic-flag ic-3x"></i><br />
 		{PHP.L.adm_translations_languages}
 	</span></a></li>
+	<li><a class="shortcut-button {SUBNAV_IO_SELECTED}" href="{SUBNAV_IO_URL}"><span>
+		<i class="ic-repeat ic-3x"></i><br />
+		{PHP.L.adm_translations_io}
+	</span></a></li>
 	<li><a class="shortcut-button {SUBNAV_TOOLS_SELECTED}" href="{SUBNAV_TOOLS_URL}"><span>
 		<i class="ic-settings ic-3x"></i><br />
 		{PHP.L.adm_translations_tools}
@@ -237,6 +241,15 @@
 	</div>
 
 	<div class="content-box-content content-table">
+
+		<!-- IF {ADD_KEY_EXISTS_WARNING} -->
+		<div class="notification attention notification-flex">
+			<div>
+				<span><i class="ic-alert-triangle"></i> {ADD_KEY_EXISTS_MESSAGE}</span>
+				<a href="{ADD_KEY_EXISTS_EDIT_URL}" class="btn btn-sm btn-primary"><i class="ic-edit"></i> {PHP.L.Edit}</a>
+			</div>
+		</div>
+		<!-- ENDIF -->
 
 		<form action="{TRANSLATIONS_ADD_URL}" method="post">
 
@@ -563,11 +576,115 @@
 </div>
 <!-- END: EDIT_LANGUAGE -->
 
+<!-- BEGIN: IO -->
+
+<div class="row row-flex">
+
+	<!-- Export Card -->
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<div class="content-box flex-box-card">
+			<div class="content-box-header">
+				<h3><i class="ic-upload"></i> {PHP.L.adm_translations_export}</h3>
+				<div class="clear"></div>
+			</div>
+			<div class="content-box-content content-table">
+				<form action="{IO_EXPORT_ACTION_URL}" method="post">
+					<div class="table cells striped resp-table">
+						<div class="table-body resp-table-body">
+
+							<div class="table-row resp-table-row">
+								<div class="table-td text-left resp-table-td" style="width: 35%;">
+									<strong>{PHP.L.adm_translations_language}:</strong>
+								</div>
+								<div class="table-td text-left resp-table-td">
+									{IO_EXPORT_LANG_SELECT}
+								</div>
+							</div>
+
+							<div class="table-row resp-table-row">
+								<div class="table-td text-left resp-table-td" style="width: 35%;">
+									<strong>{PHP.L.adm_translations_scope}:</strong>
+								</div>
+								<div class="table-td text-left resp-table-td">
+									{IO_EXPORT_SCOPE_SELECT}
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="io-box-footer">
+						<p class="help-block"><small>{PHP.L.adm_translations_export_hint}</small></p>
+						<button type="submit" class="btn btn-primary">
+							<i class="ic-download"></i> {PHP.L.adm_translations_export_btn}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Import Card -->
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<div class="content-box flex-box-card">
+			<div class="content-box-header">
+				<h3><i class="ic-download"></i> {PHP.L.adm_translations_import_file_title}</h3>
+				<div class="clear"></div>
+			</div>
+			<div class="content-box-content content-table">
+				<form action="{IO_IMPORT_ACTION_URL}" method="post" enctype="multipart/form-data">
+					<div class="table cells striped resp-table">
+						<div class="table-body resp-table-body">
+
+							<div class="table-row resp-table-row">
+								<div class="table-td text-left resp-table-td" style="width: 35%;">
+									<strong>{PHP.L.adm_translations_import_select_file}:</strong>
+								</div>
+								<div class="table-td text-left resp-table-td">
+									<input type="file" name="import_file" accept=".json,application/json" class="form-control" required="required" />
+								</div>
+							</div>
+
+							<div class="table-row resp-table-row">
+								<div class="table-td text-left resp-table-td" style="width: 35%;">
+									<strong>{PHP.L.adm_translations_target_lang}:</strong>
+								</div>
+								<div class="table-td text-left resp-table-td">
+									{IO_IMPORT_LANG_SELECT}
+								</div>
+							</div>
+
+							<div class="table-row resp-table-row">
+								<div class="table-td text-left resp-table-td" style="width: 35%;">
+									<strong>{PHP.L.adm_translations_strategy}:</strong>
+								</div>
+								<div class="table-td text-left resp-table-td">
+									{IO_IMPORT_STRATEGY_SELECT}
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="io-box-footer">
+						<p class="help-block"><small>{PHP.L.adm_translations_import_hint}</small></p>
+						<button type="submit" class="btn btn-primary">
+							<i class="ic-upload"></i> {PHP.L.adm_translations_import_btn}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+<!-- END: IO -->
+
 <!-- BEGIN: TOOLS -->
 <div class="row row-flex">
 
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<div class="content-box">
+		<div class="content-box flex-box-card">
 			<div class="content-box-header">
 				<h3><i class="ic-refresh"></i> {PHP.L.adm_translations_regenerate}</h3>
 				<div class="clear"></div>
@@ -584,16 +701,17 @@
 	</div>
 
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<div class="content-box">
+		<div class="content-box flex-box-card">
 			<div class="content-box-header">
 				<h3><i class="ic-download"></i> {PHP.L.adm_translations_import}</h3>
 				<div class="clear"></div>
 			</div>
 			<div class="content-box-content content-table">
 				<div class="tools-box-body">
-					<p>{PHP.L.adm_translations_import_confirm}</p>
+					<p>{PHP.L.adm_translations_import_desc}</p>
 					<div class="tools-box-action">
-						<a href="{TRANSLATIONS_IMPORT_URL}" class="btn"><i class="ic-download"></i> {PHP.L.adm_translations_import}</a>
+						<a href="{TRANSLATIONS_IMPORT_URL}" class="btn"><i class="ic-download"></i> {PHP.L.adm_translations_import_missing}</a>
+						<a href="{TRANSLATIONS_REIMPORT_URL}" class="btn btn-warning" onclick="return sedjs.confirmact('{PHP.L.adm_translations_reimport_confirm}');"><i class="ic-refresh"></i> {PHP.L.adm_translations_reimport}</a>
 					</div>
 				</div>
 			</div>

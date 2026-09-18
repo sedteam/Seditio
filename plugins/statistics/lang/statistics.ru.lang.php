@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/lang/statistics.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Статистика";
+$L['statistics_title'] = "Статистика";
 $L['plu_totalpagessince'] = "Всего показанных страниц с";
 $L['plu_maxwasreached'] = "Максимум просмотров было достигнуто";
 $L['plu_pagesdisplayedthisday'] = "страниц было показано в этот день.";

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/search/search.php
 Version=186
-Updated=2026-aug-24
+Updated=2026-sep-18
 Date=2022-jul-28
 Type=Plugin
 Author=Amro
@@ -52,9 +52,11 @@ if ($a == 'search') {
 	$sq = $sqg;
 }
 
+$search_title = $L['search_title'];
+
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("plug", "e=search")] = $L['plu_title'];
+$urlpaths[sed_url("plug", "e=search")] = $search_title;
 
 if ($do_search) {
 	if (empty($sq) || mb_strlen($sq) < 3) {
@@ -237,8 +239,8 @@ if (!empty($error_string)) {
 }
 
 $t->assign(array(
-	"PLUGIN_SEARCH_TITLE" => "<a href=\"" . sed_url("plug", "e=search") . "\">" . $L['plu_title'] . "</a>",
-	"PLUGIN_SEARCH_SHORTTITLE" => $L['plu_title'],
+	"PLUGIN_SEARCH_TITLE" => "<a href=\"" . sed_url("plug", "e=search") . "\">" . $search_title . "</a>",
+	"PLUGIN_SEARCH_SHORTTITLE" => $search_title,
 	"PLUGIN_SEARCH_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PLUGIN_SEARCH_URL" => sed_url("plug", "e=search")
 ));

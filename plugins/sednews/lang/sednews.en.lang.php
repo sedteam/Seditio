@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/sednews/lang/sednews.en.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 

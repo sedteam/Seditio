@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/admin.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Lang
 Author=Seditio Team
 Description=Admin Turkish language file
@@ -162,26 +162,10 @@ $L['cfg_sefurls301'] = array("SEF URL'lere 301 yönlendirmesi", "Eski URL'den SE
 $L['cfg_dateformat'] = array("Ana tarih maskesi", "Varsayılan: d.m.Y H:i");
 $L['cfg_formatmonthday'] = array("Kısa tarih maskesi", "Varsayılan: d.m");
 $L['cfg_formatyearmonthday'] = array("Orta tarih maskesi", "Varsayılan: d.m.Y");
-$L['cfg_formatmonthdayhourmin'] = array("Forum tarih maskesi", "Varsayılan: m-d H:i");
 $L['cfg_servertimezone'] = array("Sunucu zaman dilimi", "Sunucunun GMT+00'a göre farkı");
 $L['cfg_defaulttimezone'] = array("Varsayılan zaman dilimi", "Misafirler ve yeni üyeler için, -12 ile +12 arasında");
 $L['cfg_timedout'] = array("Boşta bekleme süresi, saniye cinsinden", "Bu süre sonrasında kullanıcı 'uzak' olarak kabul edilir");
-$L['cfg_maxusersperpage'] = array("Kullanıcı listesinde maksimum satır", "");
-$L['cfg_regrequireadmin'] = array("Yöneticiler yeni hesapları onaylamalı", "");
-$L['cfg_regnoactivation'] = array("Yeni kullanıcılar için e-posta kontrolünü atla", "\"Hayır\" önerilir, güvenlik nedeniyle");
-$L['cfg_useremailchange'] = array("Kullanıcıların e-posta adreslerini değiştirmelerine izin ver", "\"Hayır\" önerilir, güvenlik nedeniyle");
-$L['cfg_usertextimg'] = array("Kullanıcı imzasında resim ve HTML'ye izin ver", "\"Hayır\" önerilir, güvenlik nedeniyle");
-$L['cfg_av_maxsize'] = array("Avatar, maksimum dosya boyutu", "Varsayılan: 128 KB (131072 bayt)");
-$L['cfg_av_maxx'] = array("Avatar, maksimum genişlik", "Varsayılan: 128 piksel");
-$L['cfg_av_maxy'] = array("Avatar, maksimum yükseklik", "Varsayılan: 128 piksel");
-$L['cfg_usertextmax'] = array("Kullanıcı imzası için maksimum uzunluk", "Varsayılan: 300 karakter");
-$L['cfg_sig_maxsize'] = array("İmza, maksimum dosya boyutu", "Varsayılan: 512 KB (524288 bayt)");
-$L['cfg_sig_maxx'] = array("İmza, maksimum genişlik", "Varsayılan: 640 piksel");
-$L['cfg_sig_maxy'] = array("İmza, maksimum yükseklik", "Varsayılan: 100 piksel");
-$L['cfg_ph_maxsize'] = array("Fotoğraf, maksimum dosya boyutu", "Varsayılan: 1 MB (1048576 bayt)");
-$L['cfg_ph_maxx'] = array("Fotoğraf, maksimum genişlik", "Varsayılan: 512 piksel");
-$L['cfg_ph_maxy'] = array("Fotoğraf, maksimum yükseklik", "Varsayılan: 512 piksel");
-$L['cfg_strictpasschange'] = array("Profilde katı şifre değişimi", "\"Evet\" ise yeni şifre için önce mevcut şifre gerekir. Varsayılan: Evet");
+/* Users config (cfg_*) moved to modules/users/lang/ */
 $L['cfg_maxrowsperpage'] = array("Listelerdeki maksimum satır", "");
 $L['cfg_showpagesubcatgroup'] = array("Alt kategorilerden sayfaları gruplar halinde göster", "");   //Yeni Sed171
 $L['cfg_genseourls'] = array("SEO URL'si oluştur (otomatik oluştur* sayfa takma adı)?", "");   //Yeni Sed178
@@ -194,10 +178,7 @@ $L['cfg_maxcommentlenght'] = array("Bir yorumun maksimum uzunluğu", "Varsayıla
 $L['cfg_countcomments'] = array("Yorum sayısını say", "Yorum simgesinin yanında yorum sayısını göster");
 $L['cfg_commaxlevel'] = array("Maksimum iç içe geçme seviyesi", "1-10, yanıt ağacı derinliği");
 $L['cfg_commaxtree'] = array("Ağaç başına maksimum yorum", "Kök ipliği başına gösterilecek yorum sınırı");
-/* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
-$L['cfg_hottopictrigger'] = array("Bir konu 'sıcak' hale gelmesi için gönderiler", "");
-$L['cfg_maxtopicsperpage'] = array("Sayfa başına maksimum konu veya gönderi", "");
-/* $L['cfg_antibumpforums'] moved to modules/forums/lang/ */
+/* Forums config (cfg_*) moved to modules/forums/lang/ */
 $L['cfg_pfsuserfolder'] = array("Klasör depolama modu", "Etkinleştirilirse, kullanıcı dosyalarını /datas/users/USERID/... alt klasörlerinde depolar, dosya adının önüne USERID eklemek yerine. Sadece siteyi ilk kurarken ayarlanabilir. Bir dosya PFS'ye yüklendiğinde, bu değiştirilemez.");
 $L['cfg_th_amode'] = array("Küçük resim oluşturma", "");
 $L['cfg_th_x'] = array("Küçük resimler, genişlik", "Varsayılan: 112 piksel");
@@ -223,9 +204,6 @@ $L['cfg_th_logojpegqual'] = array("Logo eklendikten sonra final görüntünün k
 
 /* cfg_pm_* moved to modules/pm/lang/ */
 $L['cfg_disablehitstats'] = array("Hit istatistiklerini devre dışı bırak", "Referanslar ve günlük hitler");
-$L['cfg_disablereg'] = array("Kayıt işlemini devre dışı bırak", "Kullanıcıların yeni hesaplar kaydetmesini engeller");
-$L['cfg_disablewhosonline'] = array("Kimler çevrimiçi kısmını devre dışı bırak", "Shield'ı etkinleştirirseniz otomatik olarak etkinleştirilir");
-$L['cfg_defaultcountry'] = array("Yeni kullanıcılar için varsayılan ülke", "2 harfli ülke kodu");    // Yeni v130
 $L['cfg_forcedefaultskin'] = array("Tüm kullanıcılar için varsayılan temayı zorla", "");
 $L['cfg_forcedefaultlang'] = array("Tüm kullanıcılar için varsayılan dili zorla", "");
 $L['cfg_separator'] = array("Genel ayırıcı", "Varsayılan:>");
@@ -287,8 +265,6 @@ $L['cfg_disable_ratings'] = array("Değerlendirmeleri devre dışı bırak", "")
 $L['cfg_disable_page'] = array("Sayfaları devre dışı bırak", "");
 $L['cfg_disable_plug'] = array("Eklentileri devre dışı bırak", "");
 /* Çöp kutusu eklentisi: plugins/trashcan/lang/trashcan.*.lang.php */
-
-$L['cfg_color_group'] = array("Kullanıcı gruplarını renkli yap", "Varsayılan: Hayır, daha iyi performans için");  // Yeni v175
 
 $L['cfg_ajax'] = array("AJAX'ı etkinleştir", "");  // Yeni v175
 $L['cfg_enablemodal'] = array("Modal pencereleri etkinleştir", "");  // Yeni v175
@@ -469,11 +445,7 @@ $L['adm_byyear'] = "Yıla göre";
 $L['adm_bymonth'] = "Aya göre";
 $L['adm_byweek'] = "Haftaya göre";
 
-/* ====== Ratings ====== */
-
-$L['adm_ratings_totalitems'] = "Toplam puanlanan sayfalar";
-$L['adm_ratings_totalvotes'] = "Toplam oylar";
-$L['adm_help_ratings'] = "Bir oyu sıfırlamak için, onu basitçe silin. İlk yeni oy ile yeniden oluşturulacaktır.";
+/* ====== Ratings (adm_ratings_*) moved to plugins/ratings/lang/ ====== */
 
 /* ====== Users ====== */
 
@@ -558,6 +530,10 @@ $L['adm_translations_locked'] = "Kilitli";
 $L['adm_translations_all_scopes'] = "Tüm Kapsamlar";
 $L['adm_translations_regenerate'] = "Dil Önbelleğini Derle";
 $L['adm_translations_import'] = "Dosyalardan İçe Aktar";
+$L['adm_translations_import_desc'] = "Dağıtım dosyalarından sistem dil dizelerini veritabanına aktarın. Normal içe aktarma, mevcut olanları değiştirmeden eksik değişkenleri ekler. Tam yeniden içe aktarma, tüm sistem çevirilerini dosyalardan varsayılan değerlere sıfırlar (özel değişkenler korunur).";
+$L['adm_translations_import_missing'] = "Eksikleri içe aktar";
+$L['adm_translations_reimport'] = "Dosyalardan tam yeniden içe aktarma";
+$L['adm_translations_reimport_confirm'] = "Tam bir yeniden içe aktarma gerçekleştirmek istediğinizden emin misiniz? Tüm sistem çevirileri dosyalardaki varsayılan değerlerine sıfırlanacaktır. Özel eklenen değişkenler korunacaktır.";
 $L['adm_translations_import_confirm'] = "Eksik çeviriler dosyalardan veritabanına aktarılsın mı? Özel çevirilerin üzerine yazılmayacaktır.";
 $L['adm_translations_reset'] = "Varsayılana Sıfırla";
 $L['adm_translations_reset_confirm'] = "Çeviri değeri orijinal dosyadaki haline sıfırlansın mı?";
@@ -582,3 +558,25 @@ $L['adm_translations_all_types'] = "Tüm türler";
 $L['adm_translations_show'] = "Sayfa başına göster";
 $L['adm_translations_key_hint'] = "Yalnızca Latin harfleri, sayılar ve alt çizgiler (örneğin: my_header_title)";
 $L['adm_langcache_regenerate_hint'] = "Tüm veritabanı çevirilerini yüksek performans için PHP önbellek dosyalarına (datas/cache/sed_lang.*.php) derler.";
+$L['adm_translations_io'] = "İçe / Dışa Aktar";
+$L['adm_translations_export'] = "Çevirileri Dışa Aktar";
+$L['adm_translations_export_btn'] = "Çeviri Dosyasını İndir (JSON)";
+$L['adm_translations_export_hint'] = "Çeviri veya düzenleme için bir dil paketini yapılandırılmış JSON formatında dışa aktarır.";
+$L['adm_translations_import_file_title'] = "Çevirileri İçe Aktar";
+$L['adm_translations_import_btn'] = "Dosyayı İçe Aktar (JSON)";
+$L['adm_translations_import_hint'] = "Dil değişkenlerini eklemek veya güncellemek için JSON formatında bir çeviri dosyası yükleyin.";
+$L['adm_translations_import_select_file'] = "JSON dosyasını seçin";
+$L['adm_translations_target_lang'] = "Hedef Dil";
+$L['adm_translations_lang_auto'] = "-- Dosyadan otomatik algıla --";
+$L['adm_translations_strategy'] = "Güncelleme Modu";
+$L['adm_translations_strategy_update'] = "Mevcut olanları güncelle ve yenileri ekle (Önerilen)";
+$L['adm_translations_strategy_insert'] = "Yalnızca eksik olanları ekle (Üzerine yazma)";
+$L['adm_translations_strategy_replace'] = "Tamamen değiştir (Dili yeniden yaz)";
+$L['adm_translations_language'] = "Dil";
+$L['adm_translations_import_success'] = "İçe aktarma başarıyla tamamlandı. Eklenen: %1\$s, güncellenen: %2\$s, atlanan: %3\$s.";
+$L['adm_translations_import_err_file'] = "Hata: Dosya yüklenemedi veya bozuk.";
+$L['adm_translations_import_err_json'] = "Hata: Geçersiz JSON dosya formatı.";
+$L['adm_translations_import_err_lang'] = "Hata: Hedef dil belirlenemedi.";
+$L['adm_translations_import_err_empty'] = "Yüklenen dosyada çeviri verisi bulunamadı.";
+$L['adm_translations_key_exists'] = "\$L['%1\$s'] anahtarına sahip değişken zaten %2\$s / %3\$s bölümünde mevcut.";
+$L['adm_translations_key_exists_js'] = "Uyarı: %s anahtarı zaten %scope bölümünde mevcut.";

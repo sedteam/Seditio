@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -4890,28 +4890,36 @@ function sed_langfile($code, $type = 'plugin', $lang = null)
 	}
 	$lang = preg_replace('/[^a-z0-9_-]/i', '', $lang);
 
-	// If compiled language cache is loaded, bypass individual file include
-	if (!empty($cfg['lang_cache_compiled'])) {
-		return '';
-	}
-
 	if ($type === 'module') {
 		$base = SED_ROOT . '/modules/' . $code . '/lang/' . $code;
 	} else {
 		$base = SED_ROOT . '/plugins/' . $code . '/lang/' . $code;
 	}
 
+	$target_file = '';
 	$path = $base . '.' . $lang . '.lang.php';
 	if (file_exists($path)) {
-		return $path;
+		$target_file = $path;
+	} else {
+		$path_en = $base . '.en.lang.php';
+		if (file_exists($path_en)) {
+			$target_file = $path_en;
+		}
 	}
 
-	$path_en = $base . '.en.lang.php';
-	if (file_exists($path_en)) {
-		return $path_en;
+	if ($target_file === '') {
+		return '';
 	}
 
-	return '';
+	// If compiled language cache is loaded, check if the file participates in translations DB/cache
+	if (!empty($cfg['lang_cache_compiled'])) {
+		$info = sed_infoget($target_file, 'SED');
+		if (!empty($info['Translations']) && ($info['Translations'] == '1' || strtolower($info['Translations']) === 'true')) {
+			return '';
+		}
+	}
+
+	return $target_file;
 }
 
 /** 
@@ -6190,274 +6198,6 @@ function sed_build_extrafields_data($rowname, $tpl_tag, $extrafields, $data, $ge
 	return $return_arr;
 }
 
-
-/* ============== FLAGS AND COUNTRIES =============== */
-
-$sed_languages['de'] = 'Deutsch';
-$sed_languages['dk'] = 'Dansk';
-$sed_languages['es'] = 'Español';
-$sed_languages['fi'] = 'Suomi';
-$sed_languages['fr'] = 'Français';
-$sed_languages['it'] = 'Italiano';
-$sed_languages['nl'] = 'Nederlands';
-$sed_languages['ru'] = 'Русский';
-$sed_languages['se'] = 'Svenska';
-$sed_languages['en'] = 'English';
-$sed_languages['pl'] = 'Polski';
-$sed_languages['pt'] = 'Portugese';
-$sed_languages['cn'] = '中文';
-$sed_languages['gr'] = 'Greek';
-$sed_languages['hu'] = 'Hungarian';
-$sed_languages['jp'] = '日本語';
-$sed_languages['kr'] = '한국어';
-$sed_languages['tr'] = 'Türkçe';
-
-$sed_countries = array(
-	'00' => '---',
-	'af' => 'Afghanistan',
-	'al' => 'Albania',
-	'dz' => 'Algeria',
-	'as' => 'American Samoa',
-	'ad' => 'Andorra',
-	'ao' => 'Angola',
-	'ai' => 'Anguilla',
-	'aq' => 'Antarctica',
-	'ag' => 'Antigua And Barbuda',
-	'ar' => 'Argentina',
-	'am' => 'Armenia',
-	'aw' => 'Aruba',
-	'au' => 'Australia',
-	'at' => 'Austria',
-	'az' => 'Azerbaijan',
-	'bs' => 'Bahamas',
-	'bh' => 'Bahrain',
-	'bd' => 'Bangladesh',
-	'bb' => 'Barbados',
-	'by' => 'Belarus',
-	'be' => 'Belgium',
-	'bz' => 'Belize',
-	'bj' => 'Benin',
-	'bm' => 'Bermuda',
-	'bt' => 'Bhutan',
-	'bo' => 'Bolivia',
-	'ba' => 'Bosnia And Herzegovina',
-	'bw' => 'Botswana',
-	'bv' => 'Bouvet Island',
-	'br' => 'Brazil',
-	'io' => 'British Indian Ocean Territory',
-	'bn' => 'Brunei Darussalam',
-	'bg' => 'Bulgaria',
-	'bf' => 'Burkina Faso',
-	'bi' => 'Burundi',
-	'kh' => 'Cambodia',
-	'cm' => 'Cameroon',
-	'ca' => 'Canada',
-	'cv' => 'Cape Verde',
-	'ky' => 'Cayman Islands',
-	'cf' => 'Central African Republic',
-	'td' => 'Chad',
-	'cl' => 'Chile',
-	'cn' => 'China',
-	'cx' => 'Christmas Island',
-	'cc' => 'Cocos Islands',
-	'co' => 'Colombia',
-	'km' => 'Comoros',
-	'cg' => 'Congo',
-	'ck' => 'Cook Islands',
-	'cr' => 'Costa Rica',
-	'ci' => 'Cote D\'ivoire',
-	'hr' => 'Croatia',
-	'cu' => 'Cuba',
-	'cy' => 'Cyprus',
-	'cz' => 'Czech Republic',
-	'dk' => 'Denmark',
-	'dj' => 'Djibouti',
-	'dm' => 'Dominica',
-	'do' => 'Dominican Republic',
-	'tp' => 'East Timor',
-	'ec' => 'Ecuador',
-	'eg' => 'Egypt',
-	'sv' => 'El Salvador',
-	'en' => 'England',
-	'gq' => 'Equatorial Guinea',
-	'er' => 'Eritrea',
-	'ee' => 'Estonia',
-	'et' => 'Ethiopia',
-	'eu' => 'Europe',
-	'fk' => 'Falkland Islands',
-	'fo' => 'Faeroe Islands',
-	'fj' => 'Fiji',
-	'fi' => 'Finland',
-	'fr' => 'France',
-	'gf' => 'French Guiana',
-	'pf' => 'French Polynesia',
-	'tf' => 'French Southern Territories',
-	'ga' => 'Gabon',
-	'gm' => 'Gambia',
-	'ge' => 'Georgia',
-	'de' => 'Germany',
-	'gh' => 'Ghana',
-	'gi' => 'Gibraltar',
-	'gr' => 'Greece',
-	'gl' => 'Greenland',
-	'gd' => 'Grenada',
-	'gp' => 'Guadeloupe',
-	'gu' => 'Guam',
-	'gt' => 'Guatemala',
-	'gn' => 'Guinea',
-	'gw' => 'Guinea-bissau',
-	'gy' => 'Guyana',
-	'ht' => 'Haiti',
-	'hm' => 'Heard And Mc Donald Islands',
-	'hn' => 'Honduras',
-	'hk' => 'Hong Kong',
-	'hu' => 'Hungary',
-	'is' => 'Iceland',
-	'in' => 'India',
-	'id' => 'Indonesia',
-	'ir' => 'Iran',
-	'iq' => 'Iraq',
-	'ie' => 'Ireland',
-	'il' => 'Israel',
-	'it' => 'Italy',
-	'jm' => 'Jamaica',
-	'jp' => 'Japan',
-	'jo' => 'Jordan',
-	'kz' => 'Kazakhstan',
-	'ke' => 'Kenya',
-	'ki' => 'Kiribati',
-	'kp' => 'North Korea',
-	'kr' => 'South Korea',
-	'kw' => 'Kuwait',
-	'kg' => 'Kyrgyzstan',
-	'la' => 'Laos',
-	'lv' => 'Latvia',
-	'lb' => 'Lebanon',
-	'ls' => 'Lesotho',
-	'lr' => 'Liberia',
-	'ly' => 'Libya',
-	'li' => 'Liechtenstein',
-	'lt' => 'Lithuania',
-	'lu' => 'Luxembourg',
-	'mo' => 'Macau',
-	'mk' => 'Macedonia',
-	'mg' => 'Madagascar',
-	'mw' => 'Malawi',
-	'my' => 'Malaysia',
-	'mv' => 'Maldives',
-	'ml' => 'Mali',
-	'mt' => 'Malta',
-	'mh' => 'Marshall Islands',
-	'mq' => 'Martinique',
-	'mr' => 'Mauritania',
-	'mu' => 'Mauritius',
-	'yt' => 'Mayotte',
-	'mx' => 'Mexico',
-	'fm' => 'Micronesia',
-	'md' => 'Moldavia',
-	'mc' => 'Monaco',
-	'mn' => 'Mongolia',
-	'ms' => 'Montserrat',
-	'ma' => 'Morocco',
-	'mz' => 'Mozambique',
-	'mm' => 'Myanmar',
-	'na' => 'Namibia',
-	'nr' => 'Nauru',
-	'np' => 'Nepal',
-	'nl' => 'Netherlands',
-	'an' => 'Netherlands Antilles',
-	'nc' => 'New Caledonia',
-	'nz' => 'New Zealand',
-	'ni' => 'Nicaragua',
-	'ne' => 'Niger',
-	'ng' => 'Nigeria',
-	'nu' => 'Niue',
-	'nf' => 'Norfolk Island',
-	'mp' => 'Northern Mariana Islands',
-	'no' => 'Norway',
-	'om' => 'Oman',
-	'pk' => 'Pakistan',
-	'pw' => 'Palau',
-	'ps' => 'Palestine',
-	'pa' => 'Panama',
-	'pg' => 'Papua New Guinea',
-	'py' => 'Paraguay',
-	'pe' => 'Peru',
-	'ph' => 'Philippines',
-	'pn' => 'Pitcairn',
-	'pl' => 'Poland',
-	'pt' => 'Portugal',
-	'pr' => 'Puerto Rico',
-	'qa' => 'Qatar',
-	're' => 'Reunion',
-	'ro' => 'Romania',
-	'ru' => 'Russia',
-	'rw' => 'Rwanda',
-	'kn' => 'Saint Kitts And Nevis',
-	'lc' => 'Saint Lucia',
-	'vc' => 'Saint Vincent',
-	'ws' => 'Samoa',
-	'sm' => 'San Marino',
-	'st' => 'Sao Tome And Principe',
-	'sa' => 'Saudi Arabia',
-	'sx' => 'Scotland',
-	'sn' => 'Senegal',
-	'sc' => 'Seychelles',
-	'sl' => 'Sierra Leone',
-	'sg' => 'Singapore',
-	'sk' => 'Slovakia',
-	'si' => 'Slovenia',
-	'sb' => 'Solomon Islands',
-	'so' => 'Somalia',
-	'za' => 'South Africa',
-	'gs' => 'South Georgia',
-	'es' => 'Spain',
-	'lk' => 'Sri Lanka',
-	'sh' => 'St. Helena',
-	'pm' => 'St. Pierre And Miquelon',
-	'sd' => 'Sudan',
-	'sr' => 'Suriname',
-	'sj' => 'Svalbard And Jan Mayen Islands',
-	'sz' => 'Swaziland',
-	'se' => 'Sweden',
-	'ch' => 'Switzerland',
-	'sy' => 'Syria',
-	'tw' => 'Taiwan',
-	'tj' => 'Tajikistan',
-	'tz' => 'Tanzania',
-	'th' => 'Thailand',
-	'tg' => 'Togo',
-	'tk' => 'Tokelau',
-	'to' => 'Tonga',
-	'tt' => 'Trinidad And Tobago',
-	'tn' => 'Tunisia',
-	'tr' => 'Turkiye',
-	'tm' => 'Turkmenistan',
-	'tc' => 'Turks And Caicos Islands',
-	'tv' => 'Tuvalu',
-	'ug' => 'Uganda',
-	'ua' => 'Ukraine',
-	'ae' => 'United Arab Emirates',
-	'uk' => 'United Kingdom',
-	'us' => 'United States',
-	'uy' => 'Uruguay',
-	'uz' => 'Uzbekistan',
-	'vu' => 'Vanuatu',
-	'va' => 'Vatican',
-	've' => 'Venezuela',
-	'vn' => 'Vietnam',
-	'vg' => 'Virgin Islands (british)',
-	'vi' => 'Virgin Islands (u.s.)',
-	'wa' => 'Wales',
-	'wf' => 'Wallis And Futuna Islands',
-	'eh' => 'Western Sahara',
-	'ye' => 'Yemen',
-	'yu' => 'Yugoslavia',
-	'zr' => 'Zaire',
-	'zm' => 'Zambia',
-	'zw' => 'Zimbabwe'
-);
-
 /**
  * Universal CURL function for HTTP requests and file downloads
  *
@@ -6781,6 +6521,14 @@ function sed_translations_import_file($file, $lang, $scope, $code, $order = 500,
 		return 0;
 	}
 
+	// For modules and plugins, require Translations=1 flag in file header
+	if ($scope === 'plugin' || $scope === 'module') {
+		$info = sed_infoget($file, 'SED');
+		if (empty($info['Translations']) || ($info['Translations'] != '1' && strtolower($info['Translations']) !== 'true')) {
+			return 0;
+		}
+	}
+
 	$L = array();
 	include($file);
 
@@ -6846,6 +6594,11 @@ function sed_translations_import_all()
 	}
 
 	foreach ($langs as $lang) {
+		// Only import from disk if the language folder exists in system/lang/
+		if (!file_exists(SED_ROOT . '/system/lang/' . $lang . '/main.lang.php')) {
+			continue;
+		}
+
 		// 1. Core
 		$f_main = SED_ROOT . '/system/lang/' . $lang . '/main.lang.php';
 		if (file_exists($f_main)) {
@@ -6904,6 +6657,49 @@ function sed_translations_import_all()
 			sed_translations_import_file($f_admskin, $lang, 'skin', $adm_skin, 410);
 		}
 	}
+
+	return true;
+}
+
+/**
+ * Fully re-imports translations from files for all disk-based languages into database.
+ * Deletes only system translations (tra_type = 1) for languages having files on disk (system/lang/{lang}),
+ * preserving custom added/edited translations (tra_type = 0) and unmanaged/remote languages.
+ *
+ * @return bool
+ */
+function sed_translations_reimport_all()
+{
+	global $cfg, $db_languages, $db_translations;
+
+	$file_langs = array();
+	$lang_dirs = glob(SED_ROOT . '/system/lang/*', GLOB_ONLYDIR);
+	if (!empty($lang_dirs)) {
+		foreach ($lang_dirs as $ld) {
+			$code = basename($ld);
+			if (file_exists($ld . '/main.lang.php')) {
+				$file_langs[] = $code;
+			}
+		}
+	}
+
+	if (empty($file_langs)) {
+		return false;
+	}
+
+	$in_langs = array();
+	foreach ($file_langs as $fl) {
+		$in_langs[] = "'" . sed_sql_prep($fl) . "'";
+	}
+
+	// Remove only system translations (tra_type = 1) for languages present on disk
+	sed_sql_query("DELETE FROM $db_translations WHERE tra_type = 1 AND tra_lang IN (" . implode(',', $in_langs) . ")");
+
+	// Re-import from disk files
+	sed_translations_import_all();
+
+	// Regenerate compiled cache
+	sed_translations_generate();
 
 	return true;
 }
@@ -6982,4 +6778,295 @@ function sed_translations_delete_component($scope, $code)
 	sed_sql_query("DELETE FROM $db_translations WHERE tra_scope = '" . sed_sql_prep($scope) . "' AND tra_code = '" . sed_sql_prep($code) . "'");
 	return sed_sql_affectedrows();
 }
+
+/* ============== FLAGS AND COUNTRIES =============== */
+
+$sed_languages['de'] = 'Deutsch';
+$sed_languages['dk'] = 'Dansk';
+$sed_languages['es'] = 'Español';
+$sed_languages['fi'] = 'Suomi';
+$sed_languages['fr'] = 'Français';
+$sed_languages['it'] = 'Italiano';
+$sed_languages['nl'] = 'Nederlands';
+$sed_languages['ru'] = 'Русский';
+$sed_languages['se'] = 'Svenska';
+$sed_languages['en'] = 'English';
+$sed_languages['pl'] = 'Polski';
+$sed_languages['pt'] = 'Portugese';
+$sed_languages['cn'] = '中文';
+$sed_languages['gr'] = 'Greek';
+$sed_languages['hu'] = 'Hungarian';
+$sed_languages['jp'] = '日本語';
+$sed_languages['kr'] = '한국어';
+$sed_languages['tr'] = 'Türkçe';
+$sed_languages['kz'] = 'Қазақша';
+
+$sed_languages_titles = array(
+	'en' => 'English',
+	'ru' => 'Russian',
+	'tr' => 'Turkish',
+	'de' => 'German',
+	'fr' => 'French',
+	'es' => 'Spanish',
+	'it' => 'Italian',
+	'nl' => 'Dutch',
+	'pl' => 'Polish',
+	'pt' => 'Portuguese',
+	'se' => 'Swedish',
+	'dk' => 'Danish',
+	'fi' => 'Finnish',
+	'cn' => 'Chinese',
+	'gr' => 'Greek',
+	'hu' => 'Hungarian',
+	'jp' => 'Japanese',
+	'kr' => 'Korean',
+	'kz' => 'Kazakh'
+);
+
+$sed_countries = array(
+	'00' => '---',
+	'af' => 'Afghanistan',
+	'al' => 'Albania',
+	'dz' => 'Algeria',
+	'as' => 'American Samoa',
+	'ad' => 'Andorra',
+	'ao' => 'Angola',
+	'ai' => 'Anguilla',
+	'aq' => 'Antarctica',
+	'ag' => 'Antigua And Barbuda',
+	'ar' => 'Argentina',
+	'am' => 'Armenia',
+	'aw' => 'Aruba',
+	'au' => 'Australia',
+	'at' => 'Austria',
+	'az' => 'Azerbaijan',
+	'bs' => 'Bahamas',
+	'bh' => 'Bahrain',
+	'bd' => 'Bangladesh',
+	'bb' => 'Barbados',
+	'by' => 'Belarus',
+	'be' => 'Belgium',
+	'bz' => 'Belize',
+	'bj' => 'Benin',
+	'bm' => 'Bermuda',
+	'bt' => 'Bhutan',
+	'bo' => 'Bolivia',
+	'ba' => 'Bosnia And Herzegovina',
+	'bw' => 'Botswana',
+	'bv' => 'Bouvet Island',
+	'br' => 'Brazil',
+	'io' => 'British Indian Ocean Territory',
+	'bn' => 'Brunei Darussalam',
+	'bg' => 'Bulgaria',
+	'bf' => 'Burkina Faso',
+	'bi' => 'Burundi',
+	'kh' => 'Cambodia',
+	'cm' => 'Cameroon',
+	'ca' => 'Canada',
+	'cv' => 'Cape Verde',
+	'ky' => 'Cayman Islands',
+	'cf' => 'Central African Republic',
+	'td' => 'Chad',
+	'cl' => 'Chile',
+	'cn' => 'China',
+	'cx' => 'Christmas Island',
+	'cc' => 'Cocos Islands',
+	'co' => 'Colombia',
+	'km' => 'Comoros',
+	'cg' => 'Congo',
+	'ck' => 'Cook Islands',
+	'cr' => 'Costa Rica',
+	'ci' => 'Cote D\'ivoire',
+	'hr' => 'Croatia',
+	'cu' => 'Cuba',
+	'cy' => 'Cyprus',
+	'cz' => 'Czech Republic',
+	'dk' => 'Denmark',
+	'dj' => 'Djibouti',
+	'dm' => 'Dominica',
+	'do' => 'Dominican Republic',
+	'tp' => 'East Timor',
+	'ec' => 'Ecuador',
+	'eg' => 'Egypt',
+	'sv' => 'El Salvador',
+	'en' => 'England',
+	'gq' => 'Equatorial Guinea',
+	'er' => 'Eritrea',
+	'ee' => 'Estonia',
+	'et' => 'Ethiopia',
+	'eu' => 'Europe',
+	'fk' => 'Falkland Islands',
+	'fo' => 'Faeroe Islands',
+	'fj' => 'Fiji',
+	'fi' => 'Finland',
+	'fr' => 'France',
+	'gf' => 'French Guiana',
+	'pf' => 'French Polynesia',
+	'tf' => 'French Southern Territories',
+	'ga' => 'Gabon',
+	'gm' => 'Gambia',
+	'ge' => 'Georgia',
+	'de' => 'Germany',
+	'gh' => 'Ghana',
+	'gi' => 'Gibraltar',
+	'gr' => 'Greece',
+	'gl' => 'Greenland',
+	'gd' => 'Grenada',
+	'gp' => 'Guadeloupe',
+	'gu' => 'Guam',
+	'gt' => 'Guatemala',
+	'gn' => 'Guinea',
+	'gw' => 'Guinea-bissau',
+	'gy' => 'Guyana',
+	'ht' => 'Haiti',
+	'hm' => 'Heard And Mc Donald Islands',
+	'hn' => 'Honduras',
+	'hk' => 'Hong Kong',
+	'hu' => 'Hungary',
+	'is' => 'Iceland',
+	'in' => 'India',
+	'id' => 'Indonesia',
+	'ir' => 'Iran',
+	'iq' => 'Iraq',
+	'ie' => 'Ireland',
+	'il' => 'Israel',
+	'it' => 'Italy',
+	'jm' => 'Jamaica',
+	'jp' => 'Japan',
+	'jo' => 'Jordan',
+	'kz' => 'Kazakhstan',
+	'ke' => 'Kenya',
+	'ki' => 'Kiribati',
+	'kp' => 'North Korea',
+	'kr' => 'South Korea',
+	'kw' => 'Kuwait',
+	'kg' => 'Kyrgyzstan',
+	'la' => 'Laos',
+	'lv' => 'Latvia',
+	'lb' => 'Lebanon',
+	'ls' => 'Lesotho',
+	'lr' => 'Liberia',
+	'ly' => 'Libya',
+	'li' => 'Liechtenstein',
+	'lt' => 'Lithuania',
+	'lu' => 'Luxembourg',
+	'mo' => 'Macau',
+	'mk' => 'Macedonia',
+	'mg' => 'Madagascar',
+	'mw' => 'Malawi',
+	'my' => 'Malaysia',
+	'mv' => 'Maldives',
+	'ml' => 'Mali',
+	'mt' => 'Malta',
+	'mh' => 'Marshall Islands',
+	'mq' => 'Martinique',
+	'mr' => 'Mauritania',
+	'mu' => 'Mauritius',
+	'yt' => 'Mayotte',
+	'mx' => 'Mexico',
+	'fm' => 'Micronesia',
+	'md' => 'Moldavia',
+	'mc' => 'Monaco',
+	'mn' => 'Mongolia',
+	'ms' => 'Montserrat',
+	'ma' => 'Morocco',
+	'mz' => 'Mozambique',
+	'mm' => 'Myanmar',
+	'na' => 'Namibia',
+	'nr' => 'Nauru',
+	'np' => 'Nepal',
+	'nl' => 'Netherlands',
+	'an' => 'Netherlands Antilles',
+	'nc' => 'New Caledonia',
+	'nz' => 'New Zealand',
+	'ni' => 'Nicaragua',
+	'ne' => 'Niger',
+	'ng' => 'Nigeria',
+	'nu' => 'Niue',
+	'nf' => 'Norfolk Island',
+	'mp' => 'Northern Mariana Islands',
+	'no' => 'Norway',
+	'om' => 'Oman',
+	'pk' => 'Pakistan',
+	'pw' => 'Palau',
+	'ps' => 'Palestine',
+	'pa' => 'Panama',
+	'pg' => 'Papua New Guinea',
+	'py' => 'Paraguay',
+	'pe' => 'Peru',
+	'ph' => 'Philippines',
+	'pn' => 'Pitcairn',
+	'pl' => 'Poland',
+	'pt' => 'Portugal',
+	'pr' => 'Puerto Rico',
+	'qa' => 'Qatar',
+	're' => 'Reunion',
+	'ro' => 'Romania',
+	'ru' => 'Russia',
+	'rw' => 'Rwanda',
+	'kn' => 'Saint Kitts And Nevis',
+	'lc' => 'Saint Lucia',
+	'vc' => 'Saint Vincent',
+	'ws' => 'Samoa',
+	'sm' => 'San Marino',
+	'st' => 'Sao Tome And Principe',
+	'sa' => 'Saudi Arabia',
+	'sx' => 'Scotland',
+	'sn' => 'Senegal',
+	'sc' => 'Seychelles',
+	'sl' => 'Sierra Leone',
+	'sg' => 'Singapore',
+	'sk' => 'Slovakia',
+	'si' => 'Slovenia',
+	'sb' => 'Solomon Islands',
+	'so' => 'Somalia',
+	'za' => 'South Africa',
+	'gs' => 'South Georgia',
+	'es' => 'Spain',
+	'lk' => 'Sri Lanka',
+	'sh' => 'St. Helena',
+	'pm' => 'St. Pierre And Miquelon',
+	'sd' => 'Sudan',
+	'sr' => 'Suriname',
+	'sj' => 'Svalbard And Jan Mayen Islands',
+	'sz' => 'Swaziland',
+	'se' => 'Sweden',
+	'ch' => 'Switzerland',
+	'sy' => 'Syria',
+	'tw' => 'Taiwan',
+	'tj' => 'Tajikistan',
+	'tz' => 'Tanzania',
+	'th' => 'Thailand',
+	'tg' => 'Togo',
+	'tk' => 'Tokelau',
+	'to' => 'Tonga',
+	'tt' => 'Trinidad And Tobago',
+	'tn' => 'Tunisia',
+	'tr' => 'Turkiye',
+	'tm' => 'Turkmenistan',
+	'tc' => 'Turks And Caicos Islands',
+	'tv' => 'Tuvalu',
+	'ug' => 'Uganda',
+	'ua' => 'Ukraine',
+	'ae' => 'United Arab Emirates',
+	'uk' => 'United Kingdom',
+	'us' => 'United States',
+	'uy' => 'Uruguay',
+	'uz' => 'Uzbekistan',
+	'vu' => 'Vanuatu',
+	'va' => 'Vatican',
+	've' => 'Venezuela',
+	'vn' => 'Vietnam',
+	'vg' => 'Virgin Islands (british)',
+	'vi' => 'Virgin Islands (u.s.)',
+	'wa' => 'Wales',
+	'wf' => 'Wallis And Futuna Islands',
+	'eh' => 'Western Sahara',
+	'ye' => 'Yemen',
+	'yu' => 'Yugoslavia',
+	'zr' => 'Zaire',
+	'zm' => 'Zambia',
+	'zw' => 'Zimbabwe'
+);
+
 

@@ -1,8 +1,19 @@
 <?php
 
 /* ====================
-Seditio - Ratings plugin
-Language: Turkish
+Seditio - Website engine
+Copyright (c) Seditio Team
+https://seditio.org
+
+[BEGIN_SED]
+File=plugins/ratings/lang/ratings.tr.lang.php
+Version=186
+Updated=2026-sep-18
+Type=
+Author=Seditio Team
+Description=
+Translations=1
+[END_SED]
 ==================== */
 
 if (!defined('SED_CODE')) {

@@ -8,8 +8,9 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/lang/thanks.en.lang.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-18
 Type=Plugin
+Translations=1
 [END_SED]
 
 ==================== */

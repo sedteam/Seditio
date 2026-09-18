@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/main.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Lang
 Name=Turkish
 Native=Türkçe
@@ -380,24 +380,7 @@ $L['foo_sqlaverage'] = "Ortalama SQL süresi";
 
 // See the file : admin.lang.php
 
-/* ====== Auth ====== */
-
-$L['aut_usernametooshort'] = "Kullanıcı adı en az 2 karakter uzunluğunda olmalıdır";
-$L['aut_passwordtooshort'] = "Şifre en az 4 karakter uzunluğunda olmalı ve yalnızca alfanümerik karakterler ve alt çizgi içermelidir.";
-$L['aut_emailtooshort'] = "E-posta geçerli değil.";
-$L['aut_usernamealreadyindb'] = "Girdiğiniz kullanıcı adı zaten veritabanında mevcut";
-$L['aut_emailalreadyindb'] = "Girdiğiniz e-posta zaten veritabanında mevcut";
-$L['aut_passwordmismatch'] = "Şifre alanları eşleşmiyor!";
-$L['aut_emailbanned'] = "Bu e-posta (veya bu host) yasaklanmış, sebep: ";
-$L['aut_contactadmin'] = "Herhangi bir zorluk yaşarsanız lütfen site yöneticisi ile iletişime geçin";
-$L['aut_regrequesttitle'] = "Kayıt talebi";
-$L['aut_regrequest'] = "Merhaba %1\$s,\n\nBu e-postayı alıyorsunuz çünkü siz (veya sizin gibi birisi) web sitemizde yeni bir hesap oluşturmuşsunuz. Eğer bu e-postayı istemediyseniz, lütfen göz ardı edin. Eğer sürekli alıyorsanız, lütfen site yöneticisi ile iletişime geçin. \n\nHesabınız şu anda aktif değil, giriş yapabilmeniz için bir yönetici hesabınızı aktif hale getirmelidir. Bu işlem yapıldığında başka bir e-posta alacaksınız. O zaman giriş yapabileceksiniz: \n\nKullanıcı adı = %1\$s \nŞifre = %2\$s";
-$L['aut_regreqnoticetitle'] = "Yeni hesap talebi";
-$L['aut_regreqnotice'] = "Merhaba,\n\nBu e-postayı alıyorsunuz çünkü %1\$s yeni bir hesap talep etti.\nBu kullanıcı, hesabı 'aktif' olarak ayarlanana kadar giriş yapamayacak. Bunu burada manuel olarak yapabilirsiniz:\n\n %2\$s";
-$L['aut_emailreg'] = "Merhaba %1\$s,\n\nBu e-postayı alıyorsunuz çünkü siz (veya sizin gibi birisi) web sitemizde yeni bir hesap oluşturmuşsunuz. Eğer bu e-postayı istemediyseniz, lütfen göz ardı edin. Eğer sürekli alıyorsanız, lütfen site yöneticisi ile iletişime geçin.\n\nHesabınızı kullanabilmek için şu bağlantıyı tıklayarak aktif etmeniz gerekiyor:\n\n %3\$s \n\nO zaman giriş yapabileceksiniz: \n\nKullanıcı adı = %1\$s \nŞifre = %2\$s";
-$L['aut_registertitle'] = "Yeni bir üye hesabı kaydedin";
-$L['aut_registersubtitle'] = "";
-$L['aut_logintitle'] = "Giriş formu";
+/* ====== Auth, Users & Profile strings moved to modules/users/lang/ ======= */
 
 /* ====== Forums strings moved to modules/forums/lang/ ======= */
 
@@ -417,33 +400,6 @@ $L['spoiler_locked_level'] = "Gizli içerik, en az {minlevel} erişim seviyesine
 
 /* ====== Pm ====== */
 /* $L['pm_*'], $L['pmsend_*'] moved to modules/pm/lang/ */
-
-/* ====== Users ====== */
-
-$L['use_title'] = "Kullanıcılar";
-$L['use_subtitle'] = "Kayıtlı üyeler";
-$L['useed_accountactivated'] = "Hesap aktifleştirildi";
-$L['useed_email'] = "Bu e-postayı alıyorsunuz çünkü bir yönetici hesabınızı aktifleştirdi.\nArtık daha önce aldığınız kullanıcı adı ve şifreyle giriş yapabilirsiniz.\n\n";
-$L['useed_title'] = "Düzenle";
-$L['useed_subtitle'] = "&nbsp;";
-$L['use_byfirstletter'] = "Adı ile başlayan";
-$L['use_allusers'] = "Tüm kullanıcılar";
-$L['use_allbannedusers'] = "Yasaklı kullanıcılar";
-$L['use_allinactiveusers'] = "Pasif kullanıcılar";
-
-$L['pro_title'] = "Profil";
-$L['pro_subtitle'] = "Kişisel hesabınız";
-$L['pro_passtoshort'] = "Şifre en az 4 karakter uzunluğunda olmalı ve yalnızca alfanümerik karakterler ve alt çizgi içermelidir.";
-$L['pro_passdiffer'] = "İki şifre alanı eşleşmiyor";
-$L['pro_oldpassrequired'] = "Yeni şifre belirlemek için mevcut şifrenizi girin";
-$L['pro_oldpasswrong'] = "Mevcut şifre yanlış";
-$L['pro_wrongpass'] = "Mevcut şifrenizi girmediniz veya yanlış girdiniz";
-$L['pro_avatarsupload'] = "Bir avatar yükleyin";
-$L['pro_sigupload'] = "Bir imza yükleyin";
-$L['pro_photoupload'] = "Bir fotoğraf yükleyin";
-$L['pro_avatarspreset'] = "...veya buraya tıklayarak önceden yüklenmiş avatarlar galerisini görüntüleyebilirsiniz";
-$L['pro_avatarschoose'] = "Kendi avatarınızı ayarlamak için aşağıdaki resme tıklayın";
-$L['pro_avataruploadfailed'] = "Yükleme başarısız oldu, eski avatarı silerek slotu boşaltın!";
 
 /* ====== Metadata information ====== */
 

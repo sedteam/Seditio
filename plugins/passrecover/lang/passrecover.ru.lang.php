@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.ru.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin.standalone
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Восстановление пароля";
+$L['passrecover_title'] = "Восстановление пароля";
 
 $L['plu_explain1'] = "1. Введите свой e-mail и нажмите кнопку \"Запрос\".";
 $L['plu_explain2'] = "2. Проверьте свой почтовый ящик, туда должно прийти письмо с ссылкой для входа на сайт.";

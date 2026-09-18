@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/adminqv/lang/adminqv.ru.lang.php
 Version=186
-Updated=2026-aug-13
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
@@ -19,7 +20,7 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-$L['plu_title'] = "Краткая статистика";
+$L['adminqv_title'] = "Краткая статистика";
 
 $L['plu_pastdays'] = "Активность за последние 7 дней";
 $L['plu_in_last_7_days'] = "за последние 7 дней";

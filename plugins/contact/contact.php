@@ -152,7 +152,7 @@ $antispam .= sed_textbox_hidden('sender_fak', $antispam_fak);
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("plug", "e=contact")] = $L['plu_title'];
+$urlpaths[sed_url("plug", "e=contact")] = $L['contact_title'];
 
 if (!empty($error_string)) {
 	$t->assign("PLUGIN_CONTACT_ERROR_BODY", sed_alert($error_string, 'e'));
@@ -174,8 +174,8 @@ if (is_array($extp)) {
 /* ===== */
 
 $t->assign(array(
-	"PLUGIN_CONTACT_TITLE" => "<a href=\"" . sed_url("plug", "e=contact") . "\">" . $L['plu_title'] . "</a>",
-	"PLUGIN_CONTACT_SHORTTITLE" => $L['plu_title'],
+	"PLUGIN_CONTACT_TITLE" => "<a href=\"" . sed_url("plug", "e=contact") . "\">" . $L['contact_title'] . "</a>",
+	"PLUGIN_CONTACT_SHORTTITLE" => $L['contact_title'],
 	"PLUGIN_CONTACT_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PLUGIN_CONTACT_URL" => sed_url("plug", "e=contact"),
 	"PLUGIN_CONTACT_EXPLAIN" => $L['plu_explain'],

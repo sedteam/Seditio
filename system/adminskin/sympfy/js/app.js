@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Initializes menu behaviors
+    sedadminjs.initMenu();
+
     // Creates sidebar instance
     const sidebar = sedadminjs.sedSidebar('#sidebar', '.nav-trigger', 'right', '240px', 300);
 
@@ -9,9 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         color: '#cccccc',
         allowPageScroll: true
     });
-
-    // Initializes menu behaviors
-    sedadminjs.initMenu();
 
     // Initializes content behaviors
     sedadminjs.initContent();

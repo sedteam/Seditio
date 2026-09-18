@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.tr.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
@@ -21,7 +22,7 @@ $L['cfg_showavatars'] = array("Kullanıcıların avatarları gösterilsin mi?", 
 $L['cfg_miniavatar_x'] = array("Mini avatarların X eksenindeki boyutu (piksel)", "");
 $L['cfg_miniavatar_y'] = array("Mini avatarların Y eksenindeki boyutu (piksel)", "");
 
-$L['plu_title'] = "Kimler çevrimiçi?";
+$L['whosonline_title'] = "Kimler çevrimiçi?";
 $L['plu_mostonline'] = "Şimdiye kadar en çok çevrimiçi olan kullanıcı sayısı ";
 $L['plu_therescurrently'] = "Şu anda ";
 $L['plu_visitors'] = " ziyaretçi ve ";

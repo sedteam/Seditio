@@ -8,8 +8,9 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/tags/lang/tags.en.lang.php
 Version=186
-Updated=2026-mar-18
+Updated=2026-sep-18
 Type=Plugin
+Translations=1
 [END_SED]
 
 ==================== */
@@ -65,7 +66,7 @@ $L['cfg_noindex'] = array("Add meta noindex to standalone tag search", "");
 $L['cfg_sort'] = array("Search results sort", "");
 $L['cfg_css'] = array("Include plugin CSS", "");
 $L['cfg_autocomplete_minlen'] = array("Minimum characters for autocomplete", "");
-$L['cfg_maxrowsperpage'] = array("Maximum lines in tags", "");
+$L['cfg_tags_maxrowsperpage'] = array("Maximum lines in tags", "");
 $L['cfg_cloud_index_on'] = array("Show tag cloud on index page", "");
 $L['cfg_cloud_list_on'] = array("Show tag cloud in page listings", "");
 $L['cfg_cloud_page_on'] = array("Show tag cloud on page view", "");

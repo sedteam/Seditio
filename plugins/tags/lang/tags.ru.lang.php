@@ -8,8 +8,9 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/tags/lang/tags.ru.lang.php
 Version=186
-Updated=2026-mar-18
+Updated=2026-sep-18
 Type=Plugin
+Translations=1
 [END_SED]
 
 ==================== */
@@ -65,7 +66,7 @@ $L['cfg_noindex'] = array("Добавлять meta noindex в поиск по т
 $L['cfg_sort'] = array("Сортировка результатов поиска", "");
 $L['cfg_css'] = array("Подключать CSS плагина", "");
 $L['cfg_autocomplete_minlen'] = array("Минимум символов для автодополнения", "");
-$L['cfg_maxrowsperpage'] = array("Макс. строк в списке тегов", "");
+$L['cfg_tags_maxrowsperpage'] = array("Макс. строк в списке тегов", "");
 $L['cfg_cloud_index_on'] = array("Показывать облако тегов на главной", "");
 $L['cfg_cloud_list_on'] = array("Показывать облако тегов в листингах", "");
 $L['cfg_cloud_page_on'] = array("Показывать облако тегов на странице", "");

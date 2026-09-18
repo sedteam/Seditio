@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/statistics.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -57,7 +57,7 @@ if ($m == 'share') {
 	die($output);
 }
 
-$plugin_title = $L['plu_title'];
+$plugin_title = $L['statistics_title'];
 
 $totaldbpages = sed_module_active('page') ? sed_sql_rowcount($db_pages) : 0;
 $totaldbcomments = sed_plug_active('comments') ? sed_sql_rowcount($db_com) : 0;
@@ -171,10 +171,10 @@ while ($row = sed_sql_fetchassoc($sql)) {
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("plug", "e=statistics")] = $L['plu_title'];
+$urlpaths[sed_url("plug", "e=statistics")] = $plugin_title;
 
 $t->assign(array(
-	"PLUGIN_STATISTICS_TITLE" => $L['plu_title'],
+	"PLUGIN_STATISTICS_TITLE" => $plugin_title,
 	"PLUGIN_STATISTICS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"PLUGIN_STATISTICS_PLU_URL" => sed_url('plug', 'e=statistics'),
 	"PLUGIN_STATISTICS_SORT_BY_USERCOUNT" => sed_url('plug', 'e=statistics&s=usercount'),

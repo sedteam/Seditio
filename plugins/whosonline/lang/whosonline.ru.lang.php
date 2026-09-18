@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.ru.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
@@ -21,7 +22,7 @@ $L['cfg_showavatars'] = array("Отображать аватары пользо�
 $L['cfg_miniavatar_x'] = array("Размер мини-аватаров по оси X (пиксели)", "");
 $L['cfg_miniavatar_y'] = array("Размер мини-аватаров по оси Y (пиксели)", "");
 
-$L['plu_title'] = "Кто онлайн ?";
+$L['whosonline_title'] = "Кто онлайн ?";
 $L['plu_mostonline'] = "Максимальное число пользователей на сайте: ";
 $L['plu_therescurrently'] = "Сейчас на сайте ";
 $L['plu_visitors'] = " гостей и ";

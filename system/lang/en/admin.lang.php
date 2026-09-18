@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/admin.lang.php
 Version=186
-Updated=2026-sep-16
+Updated=2026-sep-18
 Type=Lang
 Author=Seditio Team
 Description=Admin English language file
@@ -162,26 +162,10 @@ $L['cfg_sefurls301'] = array("301 redirect to the SEF URLs", "Enable 301 redirec
 $L['cfg_dateformat'] = array("Main date mask", "Default: d.m.Y H:i");
 $L['cfg_formatmonthday'] = array("Short date mask", "Default: d.m");
 $L['cfg_formatyearmonthday'] = array("Medium date mask", "Default: d.m.Y");
-$L['cfg_formatmonthdayhourmin'] = array("Forum date mask", "Default: m-d H:i");
 $L['cfg_servertimezone'] = array("Server time zone", "Offset of the server from the GMT+00");
 $L['cfg_defaulttimezone'] = array("Default time zone", "For guests and new members, from -12 to +12");
 $L['cfg_timedout'] = array("Idle delay, in seconds", "After this delay, user is away");
-$L['cfg_maxusersperpage'] = array("Maximum lines in userlist", "");
-$L['cfg_regrequireadmin'] = array("Administrators must validate new accounts", "");
-$L['cfg_regnoactivation'] = array("Skip email check for new users", "\"No\"recommended, for security reasons");
-$L['cfg_useremailchange'] = array("Allow users to change their email address", "\"No\" recommended, for security reasons");
-$L['cfg_usertextimg'] = array("Allow images and HTML in user signature", "\"No\" recommended, for security reasons");
-$L['cfg_av_maxsize'] = array("Avatar, maximum file size", "Default: 128 KB (131072 bytes)");
-$L['cfg_av_maxx'] = array("Avatar, maximum width", "Default: 128 pixels");
-$L['cfg_av_maxy'] = array("Avatar, maximum height", "Default: 128 pixels");
-$L['cfg_usertextmax'] = array("Maximum length for user signature", "Default: 300 chars");
-$L['cfg_sig_maxsize'] = array("Signature, maximum file size", "Default: 512 KB (524288 bytes)");
-$L['cfg_sig_maxx'] = array("Signature, maximum width", "Default: 640 pixels");
-$L['cfg_sig_maxy'] = array("Signature, maximum height", "Default: 100 pixels");
-$L['cfg_ph_maxsize'] = array("Photo, maximum file size", "Default: 1 MB (1048576 bytes)");
-$L['cfg_ph_maxx'] = array("Photo, maximum width", "Default: 512 pixels");
-$L['cfg_ph_maxy'] = array("Photo, maximum height", "Default: 512 pixels");
-$L['cfg_strictpasschange'] = array("Strict password change in profile", "If Yes, users must enter their current password before setting a new one. Default: Yes");
+/* Users config (cfg_*) moved to modules/users/lang/ */
 $L['cfg_maxrowsperpage'] = array("Maximum lines in lists", "");
 $L['cfg_showpagesubcatgroup'] = array("Show in groups pages from the subsections", "");   //New Sed171
 $L['cfg_genseourls'] = array("Generate SEO url (auto gen* page alias)? ", "");   //New Sed178
@@ -194,10 +178,7 @@ $L['cfg_maxcommentlenght'] = array("The maximum length of a comment", "Default: 
 $L['cfg_countcomments'] = array("Count comments", "Display the count of comments near the icon");
 $L['cfg_commaxlevel'] = array("Max nesting level", "1-10, depth of reply tree");
 $L['cfg_commaxtree'] = array("Max comments per tree", "Limit comments shown per root thread");
-/* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
-$L['cfg_hottopictrigger'] = array("Posts for a topic to be 'hot'", "");
-$L['cfg_maxtopicsperpage'] = array("Maximum topics or posts per page", "");
-/* $L['cfg_antibumpforums'] moved to modules/forums/lang/ */
+/* Forums config (cfg_*) moved to modules/forums/lang/ */
 $L['cfg_pfsuserfolder'] = array("Folder storage mode", "If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to a PFS, it's too late to change this.");
 $L['cfg_th_amode'] = array("Thumbnails generation", "");
 $L['cfg_th_x'] = array("Thumbnails, width", "Default: 112 pixels");
@@ -223,9 +204,6 @@ $L['cfg_th_logojpegqual'] = array("Quality of the final image after the logo is 
 
 /* cfg_pm_* moved to modules/pm/lang/ */
 $L['cfg_disablehitstats'] = array("Disable hit statistics", "Referers and hits per day");
-$L['cfg_disablereg'] = array("Disable registration process", "Prevent users from registering new accounts");
-$L['cfg_disablewhosonline'] = array("Disable who's online", "Automatically enabled if you turn on the Shield");
-$L['cfg_defaultcountry'] = array("Default country for the new users", "2 letters country code");    // New in v130
 $L['cfg_forcedefaultskin'] = array("Force the default skin for all users", "");
 $L['cfg_forcedefaultlang'] = array("Force the default language for all users", "");
 $L['cfg_separator'] = array("Generic separator", "Default:>");
@@ -288,7 +266,6 @@ $L['cfg_disable_page'] = array("Disable the pages", "");
 $L['cfg_disable_plug'] = array("Disable the plugins", "");
 /* Trash can plugin strings: plugins/trashcan/lang/trashcan.*.lang.php */
 
-$L['cfg_color_group'] = array("Colorize group of users", "Default: No, for better performance");  // New in v175
 
 $L['cfg_ajax'] = array("Enable AJAX", "");  // New in v175
 $L['cfg_enablemodal'] = array("Enable modal windows", "");  // New in v175
@@ -469,11 +446,7 @@ $L['adm_byyear'] = "By year";
 $L['adm_bymonth'] = "By month";
 $L['adm_byweek'] = "By week";
 
-/* ====== Ratings ====== */
-
-$L['adm_ratings_totalitems'] = "Total pages rated";
-$L['adm_ratings_totalvotes'] = "Total votes";
-$L['adm_help_ratings'] = "To reset a rating, simply delete it. It will be re-created with the first new vote.";
+/* ====== Ratings (adm_ratings_*) moved to plugins/ratings/lang/ ====== */
 
 /* ====== Users ====== */
 
@@ -558,6 +531,10 @@ $L['adm_translations_locked'] = "Locked";
 $L['adm_translations_all_scopes'] = "All Scopes";
 $L['adm_translations_regenerate'] = "Compile Language Cache";
 $L['adm_translations_import'] = "Import from Files";
+$L['adm_translations_import_desc'] = "Import system language strings from distribution files into the database. Regular import adds missing variables without modifying existing ones. Full re-import resets all system translations to default values from files (custom variables are preserved).";
+$L['adm_translations_import_missing'] = "Import missing";
+$L['adm_translations_reimport'] = "Full re-import from files";
+$L['adm_translations_reimport_confirm'] = "Are you sure you want to perform a full re-import? All system translations will be reset to default values from files. Custom added variables will be preserved.";
 $L['adm_translations_import_confirm'] = "Import missing translations from files into database? Custom translations will not be overwritten.";
 $L['adm_translations_reset'] = "Reset to Default";
 $L['adm_translations_reset_confirm'] = "Reset translation value to the original file default?";
@@ -582,3 +559,25 @@ $L['adm_translations_all_types'] = "All types";
 $L['adm_translations_show'] = "Show per page";
 $L['adm_translations_key_hint'] = "Latin letters, digits and underscores only (e.g., my_header_title)";
 $L['adm_langcache_regenerate_hint'] = "Recompiles all database translations into compiled PHP cache files (datas/cache/sed_lang.*.php) for instant high-speed execution.";
+$L['adm_translations_io'] = "Import / Export";
+$L['adm_translations_export'] = "Export Translations";
+$L['adm_translations_export_btn'] = "Download Translation File (JSON)";
+$L['adm_translations_export_hint'] = "Exports a language pack into a structured JSON file for translation or editing.";
+$L['adm_translations_import_file_title'] = "Import Translations";
+$L['adm_translations_import_btn'] = "Import File (JSON)";
+$L['adm_translations_import_hint'] = "Upload a translation file in JSON format to update or add language strings.";
+$L['adm_translations_import_select_file'] = "Select JSON file";
+$L['adm_translations_target_lang'] = "Target Language";
+$L['adm_translations_lang_auto'] = "-- Auto-detect from file --";
+$L['adm_translations_strategy'] = "Update Mode";
+$L['adm_translations_strategy_update'] = "Update existing and add new (Recommended)";
+$L['adm_translations_strategy_insert'] = "Only add missing keys (Do not overwrite)";
+$L['adm_translations_strategy_replace'] = "Full replace (Overwrite language)";
+$L['adm_translations_language'] = "Language";
+$L['adm_translations_import_success'] = "Import completed successfully. Added: %1\$s, updated: %2\$s, skipped: %3\$s.";
+$L['adm_translations_import_err_file'] = "Error: File was not uploaded or is corrupted.";
+$L['adm_translations_import_err_json'] = "Error: Invalid JSON file format.";
+$L['adm_translations_import_err_lang'] = "Error: Unable to determine target language.";
+$L['adm_translations_import_err_empty'] = "No translation data found in the uploaded file.";
+$L['adm_translations_key_exists'] = "Variable with key \$L['%1\$s'] already exists in %2\$s / %3\$s.";
+$L['adm_translations_key_exists_js'] = "Warning: key %s already exists in %scope.";

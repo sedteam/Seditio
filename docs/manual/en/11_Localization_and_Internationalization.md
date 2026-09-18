@@ -236,3 +236,56 @@ $t->out("MAIN");
 <!-- END: MAIN -->
 ```
 When the page is opened by a visitor with Russian selected, Seditio renders *"Добро пожаловать на наш сайт!"*, and for an English visitor — *"Welcome to our website!"*, reading values directly from the global `$L` array.
+
+---
+
+## 11.7. Unified Dynamic Translation System & Compiled Cache (Seditio 186)
+
+Seditio 186 introduces a centralized translation management architecture that combines language strings from the core, active modules, plugins, and skins into a unified, database-backed repository with a lightning-fast compiled PHP cache.
+
+### 11.7.1. Database Storage Architecture
+The translation engine relies on two core database tables:
+1. **`sed_languages`** — registry of installed and active site languages:
+   * `lang_code` (varchar 16, PK) — ISO code (e.g., `en`, `ru`, `tr`, `kz`).
+   * `lang_title` / `lang_native` — English and native language titles (e.g., `English` / `English`, `Russian` / `Русский`).
+   * `lang_direction` — text direction (`ltr` left-to-right, or `rtl` right-to-left).
+   * `lang_active` — activation status (`1` — active, `0` — disabled).
+   * `lang_order` — display sequence in language switchers.
+2. **`sed_translations`** — centralized bank of all localized strings:
+   * `tra_lang` — target language code (`en`, `ru`, etc.).
+   * `tra_scope` — origin scope (`core`, `module`, `plugin`, `skin`).
+   * `tra_code` — component identifier (`main`, `admin`, `page`, `comments`, `sympfy`).
+   * `tra_key` — variable key in the `$L` array (e.g., `Home`, `statistics_title`, `cfg_maxstars`).
+   * `tra_val` — translated text string.
+   * `tra_type` — record type: `1` = system default (imported from files), `0` = custom override (created or edited by administrator).
+   * `tra_order` — layer priority weight during dictionary compilation (100 = core, 200 = modules, 300 = plugins, 400 = skins).
+   * `tra_updated` — UNIX timestamp of the last modification.
+   * *Unique key `tra_unique (tra_lang, tra_key, tra_scope, tra_code)`* prevents duplicates within each component scope.
+
+### 11.7.2. High-Performance Compiled PHP Cache (`datas/cache/sed_lang.*.php`)
+To ensure maximum speed, the system never queries the `sed_translations` table on live frontend page views:
+* All active translations are compiled by `sed_translations_generate()` into unified flat PHP files: `datas/cache/sed_lang.{lang_code}.php`.
+* The compiled file produces a single optimized `$L` array loaded via a single `require` statement in `system/common.php`.
+* Access to any core, module, or plugin phrase operates at O(1) in-memory array speed with zero database overhead.
+
+### 11.7.3. The `Translations=1` Manifest Flag & Extension Isolation
+To prevent legacy or third-party extensions from cluttering the central database or overriding core variables, a header flag is used in the `[BEGIN_SED]` block of `.lang.php` files:
+```text
+Translations=1
+```
+* **Built-in Seditio Modules & Plugins** include this flag: their translations are imported into the database and compiled into the unified cache upon installation or upgrade.
+* **Third-party / Legacy Extensions (without `Translations=1`)** are cleanly isolated: they bypass the DB table entirely, and `sed_langfile()` automatically returns the path to their local `.lang.php` file for local runtime inclusion via `require_once`. This prevents namespace collisions (such as legacy `$L['plu_title']`).
+
+### 11.7.4. Control Panel Administration (`admin.php?m=translations`)
+A dedicated administration interface provides comprehensive localization tools:
+* **Browser & Search:** Full-text search across keys and values, with filtering by language, scope (`core`, `module`, `plugin`, `skin`), and type (system vs custom).
+* **Real-time In-Browser Editing:** Modify any site text on the fly without editing PHP files. Editing a system string automatically transitions it to a custom record (`tra_type = 0`), protecting it from being overwritten during future CMS updates.
+* **Language Registry Manager:** Add new languages, clone existing dictionaries, toggle active status, and configure LTR/RTL text direction.
+* **JSON Import & Export:** Export complete or filtered language packs to structured JSON files for external translators, and import them back with configurable merge modes:
+  * *Update existing and add new* (recommended).
+  * *Insert missing only*.
+  * *Full language replacement*.
+* **Maintenance Toolkit (`s=tools`):**
+  * *Compile Language Cache:* rebuilds all `sed_lang.*.php` cache files from the database.
+  * *Import Missing from Files:* soft incremental scan that adds newly introduced system variables from disk files without touching existing texts.
+  * *Full Re-import from Files:* restores all system strings (`tra_type = 1`) for file-backed languages to distribution defaults while strictly preserving custom administrator variables (`tra_type = 0`) and virtual/non-file languages.

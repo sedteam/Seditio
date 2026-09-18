@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/sedcaptcha/lang/sedcaptcha.en.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Amro
 Description=
+Translations=1
 [END_SED]
 ==================== */
 

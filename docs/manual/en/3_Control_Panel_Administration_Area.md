@@ -211,14 +211,47 @@ Using this flexible matrix, you can create any user role — from a simple edito
 
 ---
 
-## 3.5. Interface Localization (Language Packs)
+## 3.5. Translation and Language Management
 
-Seditio CMS implements a flexible multilingual localization architecture. All text constants, system messages, input labels, and template translations are not hardcoded but moved to language files:
-* **Global language files:** Located in the `/system/lang/` folder (e.g., `/system/lang/ru/main.ru.lang.php` — the main translation file for the Russian language). They localize the core, base constants, and titles.
-* **Local module files:** Located inside the module folders (e.g., `/modules/page/lang/page.ru.lang.php` contains translations for the page module).
-* **Local plugin files:** Stored in the plugin folders (e.g., `/plugins/contact/lang/contact.ru.lang.php` translates the feedback form).
+Seditio CMS implements a modern hybrid multilingual translation system, combining the convenience of centralized database-driven string editing with maximum execution speed via precompiled PHP cache.
 
-The global default language of the site is configured directly in the `datas/config.php` file via the `$cfg['defaultlang']` parameter. In the admin panel (Configuration → Languages), only the status of installed language packs and the current default language (marked with `✓` in the Default column) are displayed, and an option is available to force the default language for all visitors (`forcedefaultlang`). If this option is disabled (`No`), Seditio automatically determines the language of an authorized user based on their profile settings (the `user_lang` field). For guests, the global default language is always used.
+### 3.5.1. Language Data Sources and Compilation
+All text constants, system messages, input labels, and template translations are segregated by scope:
+* **Global Core Phrases (`main`, `admin`):** Base system constants, service notifications, and administration panel elements.
+* **Module and Plugin Phrases (`module`, `plugin`):** Text strings tied to specific extensions (`page`, `forums`, `comments`, etc.).
+
+Disk localization files (`.lang.php`) serve as the authoritative default distribution format. In Seditio 186, translations are centrally maintained in the `sed_translations` database table and compiled upon changes into static cache files `datas/cache/sed_lang.{lang}.php`. This completely eliminates translation SQL queries at runtime.
+
+### 3.5.2. Translations Control Center (`admin.php?m=translations`)
+The section is accessible at `/admin/translations` (or `index.php?module=admin&m=translations` without SEF URLs) and provides a comprehensive localization toolset:
+
+1. **Viewing, Filtering, and Searching Strings:**
+   * **Target Language Selector (`tlang`):** Switch between active site languages.
+   * **Scope Filter (`scope`):** Filter strings by core scopes (`main`, `admin`), specific modules, or plugins.
+   * **Type Filter (`type`):** Separate strings into **System** (`tra_type = 1`, shipped with core and extensions) and **Custom** (`tra_type = 0`, created by the administrator).
+   * **Full-text Search (`q`):** Instant search across translation keys and text values.
+   * **Pagination:** Flexible pagination options from 50 to 1000 strings per page or all at once.
+
+2. **Editing and Adding Strings:**
+   * **Inline Editing:** Direct table-based editing of translation values without touching server files.
+   * **Custom String Creation:** Ability to add custom language keys (`tra_type = 0`) that persist safely across core and extension updates.
+
+3. **Maintenance and Synchronization Actions:**
+   * **Compile Translation Cache (Generate compiled cache):** Forces regeneration of static `datas/cache/sed_lang.{lang}.php` cache files.
+   * **Import Missing Strings (Import missing):** Scans disk `.lang.php` files across components and safely adds newly introduced keys to the database without overwriting administrator custom edits.
+   * **Full Re-import (Re-import all):** Re-imports system translations from physical `.lang.php` files from scratch for languages with local disk files (protected by a modal confirmation dialog). Custom variables (`tra_type = 0`) and languages without local disk files remain intact.
+
+### 3.5.3. Batch JSON Export and Import (`admin.php?m=translations&s=io`)
+The batch translation exchange suite (`s=io`) enables:
+* **Exporting to JSON:** Export dictionaries for a single language or all active languages into a structured JSON file for offline translation, backup, or deployment.
+* **Importing from JSON:** Upload dictionaries with three flexible merge modes:
+  * *Update existing*.
+  * *Insert missing*.
+  * *Replace all*.
+
+### 3.5.4. Languages Registry and Configuration (`sed_languages` / `m=config&o=core&p=languages`)
+* **Language Registry:** The system maintains an active registry of supported languages (in the `sed_languages` table), specifying locale codes, international and native titles, and active flags.
+* **Default Language and Enforcing:** The global default language is configured in `datas/config.php` (`$cfg['defaultlang']`). Under Configuration → Languages (`admin.php?m=config&n=edit&o=core&p=languages`), the `forcedefaultlang` setting can enforce the default language for all visitors. When disabled, authenticated users browse the site in the language chosen in their user profile (`user_lang`).
 
 ---
 

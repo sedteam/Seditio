@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/cookienotice/lang/cookienotice.en.lang.php
 Version=1.0.0
-Updated=2026-jul-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=English language file for cookienotice plugin
+Translations=1
 [END_SED]
 ==================== */
 

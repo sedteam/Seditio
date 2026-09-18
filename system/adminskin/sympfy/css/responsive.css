@@ -1,11 +1,8 @@
-@media (max-width: 1600px) {
-}
+@media (max-width: 1600px) {}
 
-@media (max-width: 1300px) {
-}
+@media (max-width: 1300px) {}
 
-@media (max-width: 1200px) {
-}
+@media (max-width: 1200px) {}
 
 @media (max-width: 1000px) {
   #sidebar {
@@ -113,13 +110,25 @@
     top: 0;
     right: 0;
   }
+
+  .tools-box-action a:first-child {
+    margin-bottom: 12px;
+  }
 }
 
 @media (max-width: 768px) {
   #main {
     padding: 12px;
   }
+
   .content-box {
+    margin-bottom: 12px;
+  }
+
+  .flex-box-card {
+    display: block;
+    flex-direction: column;
+    height: auto;
     margin-bottom: 12px;
   }
 
@@ -421,9 +430,11 @@
     float: left;
     clear: both;
   }
+
   ul.content-box-tabs li a {
     padding: 10px 12px;
   }
+
   .content-box-header-right .btn {
     padding: 9px 18px;
   }

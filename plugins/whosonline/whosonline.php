@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/whosonline.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -33,11 +33,11 @@ $cfg_showavatars = $cfg['plugin']['whosonline']['showavatars'];
 $cfg_miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];
 $cfg_miniavatar_y = $cfg['plugin']['whosonline']['miniavatar_y'];
 
-$plugin_title = $L['plu_title'];
+$plugin_title = $L['whosonline_title'];
 
 // ---------- Breadcrumbs
 $urlpaths = array();
-$urlpaths[sed_url("plug", "e=whosonline")] = $L['plu_title'];
+$urlpaths[sed_url("plug", "e=whosonline")] = $plugin_title;
 
 $sql1 = sed_sql_query("SELECT DISTINCT u.user_id, u.user_name, u.user_country, u.user_avatar, u.user_maingrp, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id = o.online_userid WHERE online_name != 'v' ORDER BY u.user_name ASC");
 $sql2 = sed_sql_query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name LIKE 'v' ORDER BY online_lastseen DESC");
@@ -115,7 +115,7 @@ while ($row = sed_sql_fetchassoc($sql2)) {
 }
 
 $t->assign(array(
-	"PLUGIN_WHOSONLINE_TITLE" => $L['plu_title'],
+	"PLUGIN_WHOSONLINE_TITLE" => $plugin_title,
 	"PLUGIN_WHOSONLINE_URL" => sed_url("plug", "e=whosonline"),
 	"PLUGIN_WHOSONLINE_BREADCRUMBS" => sed_breadcrumbs($urlpaths)
 ));

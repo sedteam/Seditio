@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Lang
 Name=English
 Native=English
@@ -380,24 +380,7 @@ $L['foo_sqlaverage'] = "Average SQL time";
 
 // See the file : admin.lang.php
 
-/* ====== Auth ====== */
-
-$L['aut_usernametooshort'] = "The user name must be at least 2 chars long";
-$L['aut_passwordtooshort'] = "The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.";
-$L['aut_emailtooshort'] = "The email is not valid.";
-$L['aut_usernamealreadyindb'] = "The user name you provided is already in the database";
-$L['aut_emailalreadyindb'] = "The email you provided is already in the database";
-$L['aut_passwordmismatch'] = "The password fields do not match !";
-$L['aut_emailbanned'] = "This email (or this host) is banned, reason is : ";
-$L['aut_contactadmin'] = "If you have any difficulties please contact the board administrator";
-$L['aut_regrequesttitle'] = "Registration request";
-$L['aut_regrequest'] = "Hi %1\$s,\n\nYou are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator. \n\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. Then you will be able to login with : \n\nUsername = %1\$s \nPassword = %2\$s";
-$L['aut_regreqnoticetitle'] = "New account request";
-$L['aut_regreqnotice'] = "Hi,\n\nYou are receiving this email because %1\$s requested a new account.\nThis user won't be able to login until you manually set the account as 'active', here :\n\n %2\$s";
-$L['aut_emailreg'] = "Hi %1\$s,\n\nYou are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.\n\nTo use your account you need to activate it with this link :\n\n %3\$s \n\n Then you'll be able to login with : \n\nUsername = %1\$s \nPassword = %2\$s";
-$L['aut_registertitle'] = "Register a new member account";
-$L['aut_registersubtitle'] = "";
-$L['aut_logintitle'] = "Login form";
+/* ====== Auth, Users & Profile strings moved to modules/users/lang/ ======= */
 
 /* ====== Forums strings moved to modules/forums/lang/ ======= */
 
@@ -417,33 +400,6 @@ $L['spoiler_locked_level'] = "Hidden content available for users with a minimum 
 
 /* ====== Pm ====== */
 /* $L['pm_*'], $L['pmsend_*'] moved to modules/pm/lang/ */
-
-/* ====== Users ====== */
-
-$L['use_title'] = "Users";
-$L['use_subtitle'] = "Registered members";
-$L['useed_accountactivated'] = "Account activated";
-$L['useed_email'] = "You are receiving this email because an administrator activated your account.\nYou may now login using the username and password you received in a previous email.\n\n";
-$L['useed_title'] = "Edit";
-$L['useed_subtitle'] = "&nbsp;";
-$L['use_byfirstletter'] = "Name starting by";
-$L['use_allusers'] = "All users";
-$L['use_allbannedusers'] = "Users banned";
-$L['use_allinactiveusers'] = "Users inactive";
-
-$L['pro_title'] = "Profile";
-$L['pro_subtitle'] = "Your personal account";
-$L['pro_passtoshort'] = "The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.";
-$L['pro_passdiffer'] = "The 2 password fields do not match";
-$L['pro_oldpassrequired'] = "Enter your current password to set a new one";
-$L['pro_oldpasswrong'] = "The current password is incorrect";
-$L['pro_wrongpass'] = "You didn't enter your present password, or it's wrong";
-$L['pro_avatarsupload'] = "Upload an avatar";
-$L['pro_sigupload'] = "Upload a signature";
-$L['pro_photoupload'] = "Upload a photography";
-$L['pro_avatarspreset'] = "...or click here to display a gallery of pre-loaded avatars";
-$L['pro_avatarschoose'] = "Click an image below to set it as your own avatar";
-$L['pro_avataruploadfailed'] = "The upload failed, delete the old avatar before to free the slot !";
 
 /* ====== Metadata information ====== */
 

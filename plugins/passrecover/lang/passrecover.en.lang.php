@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.en.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin.standalone
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Password recovery";
+$L['passrecover_title'] = "Password recovery";
 
 $L['plu_explain1'] = "1 : Enter your email address and the verification code, and we will email instructions to you on how to reset your password.";
 $L['plu_explain2'] = "2 : You will receive a message with an emergency link, click it to log in.";

@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/statistics/lang/statistics.tr.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "İstatistikler";
+$L['statistics_title'] = "İstatistikler";
 $L['plu_totalpagessince'] = "Görüntülenen toplam sayfa sayısı (başlangıç)";
 $L['plu_maxwasreached'] = "Maksimum hit sayısına ulaşıldı";
 $L['plu_pagesdisplayedthisday'] = "sayfa bu gün görüntülendi.";

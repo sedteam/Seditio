@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.translations.inc.php
 Version=186
-Updated=2026-sep-16
+Updated=2026-sep-18
 Type=Core.admin
 Author=Seditio Team
 Description=Translations and Languages administration
@@ -22,19 +22,22 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-// ---------- Breadcrumbs
-$urlpaths = array();
-$urlpaths[sed_url("admin", "m=manage")] = $L['adm_manage'];
-$urlpaths[sed_url("admin", "m=translations")] = $L['adm_translations'];
-
-$admintitle = $L['adm_translations_title'];
-
 $s = sed_import('s', 'G', 'ALP', 16);
 $part = sed_import('part', 'G', 'ALP', 16);
 if (empty($s) && !empty($part)) {
 	$s = $part;
 }
 $s = empty($s) ? 'list' : $s;
+
+// ---------- Breadcrumbs
+$urlpaths = array();
+$urlpaths[sed_url("admin", "m=manage")] = $L['adm_manage'];
+$urlpaths[sed_url("admin", "m=translations")] = $L['adm_translations'];
+if ($s === 'io') {
+	$urlpaths[sed_url("admin", "m=translations&s=io")] = $L['adm_translations_io'];
+}
+
+$admintitle = $L['adm_translations_title'];
 
 $a = sed_import('a', 'G', 'ALP', 24);
 $tlang = sed_import('tlang', 'G', 'ALP', 16);
@@ -149,6 +152,14 @@ if ($a == 'update') {
 	$new_key = preg_replace('/[^a-zA-Z0-9_]/', '', $new_key);
 
 	if (!empty($new_key) && is_array($new_vals)) {
+		// Check if key already exists
+		$chk_existing = sed_sql_query("SELECT tra_scope, tra_code FROM $db_translations WHERE tra_key = '" . sed_sql_prep($new_key) . "' LIMIT 1");
+		if ($chk_existing && sed_sql_numrows($chk_existing) > 0) {
+			$row_ex = sed_sql_fetchassoc($chk_existing);
+			sed_redirect(sed_url("admin", "m=translations&s=add&err=key_exists&exist_key=" . $new_key . "&exist_scope=" . $row_ex['tra_scope'] . "&exist_code=" . $row_ex['tra_code'], "", true));
+			exit;
+		}
+
 		$now = time();
 		foreach ($languages as $l_code => $l_data) {
 			$val = isset($new_vals[$l_code]) ? (string)$new_vals[$l_code] : '';
@@ -246,11 +257,192 @@ if ($a == 'update') {
 	sed_redirect(sed_url("admin", "m=translations&s=tools&msg=917", "", true));
 	exit;
 
-} elseif ($a == 'import') {
+} elseif ($a == 'import' || $a == 'import_files') {
 	sed_check_xg();
 	sed_translations_import_all();
 	sed_translations_generate();
 	sed_redirect(sed_url("admin", "m=translations&s=tools&msg=917", "", true));
+	exit;
+
+} elseif ($a == 'reimport_files') {
+	sed_check_xg();
+	sed_translations_reimport_all();
+	sed_redirect(sed_url("admin", "m=translations&s=tools&msg=917", "", true));
+	exit;
+
+} elseif ($a == 'export') {
+	$export_lang = sed_import('export_lang', 'P', 'ALP', 16);
+	if (empty($export_lang)) {
+		$export_lang = sed_import('export_lang', 'G', 'ALP', 16);
+	}
+	if (empty($export_lang)) {
+		$export_lang = $tlang;
+	}
+	$export_scope = sed_import('export_scope', 'P', 'TXT', 64);
+	if (empty($export_scope)) {
+		$export_scope = sed_import('export_scope', 'G', 'TXT', 64);
+	}
+
+	$where = array();
+	$where[] = "tra_lang = '" . sed_sql_prep($export_lang) . "'";
+	if (!empty($export_scope) && $export_scope !== 'all') {
+		if (strpos($export_scope, ':') !== false) {
+			list($s_scope, $s_code) = explode(':', $export_scope, 2);
+			$where[] = "tra_scope = '" . sed_sql_prep($s_scope) . "' AND tra_code = '" . sed_sql_prep($s_code) . "'";
+		} else {
+			$where[] = "tra_scope = '" . sed_sql_prep($export_scope) . "'";
+		}
+	}
+	$where_str = implode(" AND ", $where);
+	$sql = sed_sql_query("SELECT * FROM $db_translations WHERE $where_str ORDER BY tra_order ASC, tra_id ASC");
+	$items = array();
+	while ($row = sed_sql_fetchassoc($sql)) {
+		$item = array(
+			'scope' => $row['tra_scope'],
+			'code'  => $row['tra_code'],
+			'key'   => $row['tra_key'],
+			'val'   => $row['tra_val']
+		);
+		if ((int)$row['tra_type'] === 2) {
+			$item['locked'] = true;
+		}
+		$items[] = $item;
+	}
+
+	$lang_meta_title = isset($languages[$export_lang]['lang_title']) ? $languages[$export_lang]['lang_title'] : (isset($sed_languages_titles[$export_lang]) ? $sed_languages_titles[$export_lang] : ucfirst($export_lang));
+	$lang_meta_native = isset($languages[$export_lang]['lang_native']) ? $languages[$export_lang]['lang_native'] : (isset($sed_languages[$export_lang]) ? $sed_languages[$export_lang] : $lang_meta_title);
+	$lang_meta_dir = isset($languages[$export_lang]['lang_direction']) ? $languages[$export_lang]['lang_direction'] : 'ltr';
+
+	$payload = array(
+		'meta' => array(
+			'version'   => (isset($cfg['version']) ? $cfg['version'] : '186'),
+			'lang'      => $export_lang,
+			'title'     => $lang_meta_title,
+			'native'    => $lang_meta_native,
+			'direction' => $lang_meta_dir,
+			'exported'  => date('Y-m-d H:i:s'),
+			'total'     => count($items)
+		),
+		'translations' => $items
+	);
+
+	$filename = 'sed_translations_' . $export_lang . '_' . date('Y-m-d') . '.json';
+	$json_content = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/json; charset=utf-8');
+	header('Content-Disposition: attachment; filename="' . $filename . '"');
+	header('Content-Transfer-Encoding: binary');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	header('Pragma: public');
+	header('Content-Length: ' . strlen($json_content));
+	echo $json_content;
+	exit;
+
+} elseif ($a == 'import_json') {
+	sed_check_xg();
+
+	if (!isset($_FILES['import_file']) || $_FILES['import_file']['error'] != UPLOAD_ERR_OK || !is_uploaded_file($_FILES['import_file']['tmp_name'])) {
+		sed_redirect(sed_url("admin", "m=translations&s=io&tlang=" . $tlang, "", true), false, array('msg' => '915'));
+		exit;
+	}
+
+	$raw_content = file_get_contents($_FILES['import_file']['tmp_name']);
+	$data = json_decode($raw_content, true);
+
+	if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+		sed_redirect(sed_url("admin", "m=translations&s=io&tlang=" . $tlang, "", true), false, array('msg' => '950'));
+		exit;
+	}
+
+	$import_lang = sed_import('import_lang', 'P', 'ALP', 16);
+	if (empty($import_lang) || $import_lang === 'auto') {
+		$import_lang = isset($data['meta']['lang']) ? preg_replace('/[^a-z0-9_-]/i', '', (string)$data['meta']['lang']) : '';
+	}
+	if (empty($import_lang)) {
+		sed_redirect(sed_url("admin", "m=translations&s=io&tlang=" . $tlang, "", true), false, array('msg' => '950'));
+		exit;
+	}
+
+	$chk_l = sed_sql_query("SELECT lang_code FROM $db_languages WHERE lang_code = '" . sed_sql_prep($import_lang) . "'");
+	if (!$chk_l || sed_sql_numrows($chk_l) == 0) {
+		global $sed_languages_titles, $sed_languages;
+		$l_title = !empty($data['meta']['title']) ? preg_replace('/[^\p{L}\p{N}\s\-_()]/u', '', (string)$data['meta']['title']) : (isset($sed_languages_titles[$import_lang]) ? $sed_languages_titles[$import_lang] : ucfirst($import_lang));
+		$l_native = !empty($data['meta']['native']) ? preg_replace('/[^\p{L}\p{N}\s\-_()]/u', '', (string)$data['meta']['native']) : (isset($sed_languages[$import_lang]) ? $sed_languages[$import_lang] : $l_title);
+		$l_dir = (!empty($data['meta']['direction']) && strtolower($data['meta']['direction']) === 'rtl') ? 'rtl' : 'ltr';
+		sed_sql_query("INSERT INTO $db_languages (lang_code, lang_title, lang_native, lang_direction, lang_active, lang_order)
+			VALUES ('" . sed_sql_prep($import_lang) . "', '" . sed_sql_prep($l_title) . "', '" . sed_sql_prep($l_native) . "', '" . sed_sql_prep($l_dir) . "', 1, 100)");
+		sed_cache_clear('sed_languages_active');
+	}
+
+	$strategy = sed_import('import_strategy', 'P', 'ALP', 16);
+	if (!in_array($strategy, array('update', 'insert', 'replace'))) {
+		$strategy = 'update';
+	}
+
+	$items = array();
+	if (!empty($data['translations']) && is_array($data['translations'])) {
+		$items = $data['translations'];
+	} elseif (!empty($data) && is_array($data) && !isset($data['meta'])) {
+		foreach ($data as $k => $v) {
+			$items[] = array('scope' => 'core', 'code' => 'main', 'key' => $k, 'val' => $v);
+		}
+	}
+
+	if (empty($items)) {
+		sed_redirect(sed_url("admin", "m=translations&s=io&tlang=" . $tlang, "", true), false, array('msg' => '915'));
+		exit;
+	}
+
+	if ($strategy === 'replace') {
+		sed_sql_query("DELETE FROM $db_translations WHERE tra_lang = '" . sed_sql_prep($import_lang) . "'");
+	}
+
+	$added = 0;
+	$updated = 0;
+	$skipped = 0;
+	$now = time();
+
+	foreach ($items as $item) {
+		if (!is_array($item) || empty($item['key'])) {
+			$skipped++;
+			continue;
+		}
+		$scope = !empty($item['scope']) ? preg_replace('/[^a-z0-9_-]/i', '', $item['scope']) : 'core';
+		$code  = !empty($item['code']) ? preg_replace('/[^a-z0-9_-]/i', '', $item['code']) : 'main';
+		$key   = (string)$item['key'];
+		$val   = isset($item['val']) ? (string)$item['val'] : (isset($item['value']) ? (string)$item['value'] : '');
+		$is_locked = !empty($item['locked']) || (isset($item['type']) && ($item['type'] === 2 || $item['type'] === 'locked'));
+		$type = $is_locked ? 2 : 1;
+		$order = isset($item['order']) ? (int)$item['order'] : ($scope === 'core' ? 100 : ($scope === 'module' ? 200 : 300));
+
+		$chk_existing = sed_sql_query("SELECT tra_id, tra_val, tra_type FROM $db_translations 
+			WHERE tra_lang = '" . sed_sql_prep($import_lang) . "' AND tra_scope = '" . sed_sql_prep($scope) . "' AND tra_code = '" . sed_sql_prep($code) . "' AND tra_key = '" . sed_sql_prep($key) . "'");
+
+		if ($chk_existing && sed_sql_numrows($chk_existing) > 0) {
+			$existing_row = sed_sql_fetchassoc($chk_existing);
+			if ($strategy === 'insert') {
+				$skipped++;
+				continue;
+			}
+			if ((int)$existing_row['tra_type'] === 2 && !$is_locked) {
+				$skipped++;
+				continue;
+			}
+			sed_sql_query("UPDATE $db_translations SET tra_val = '" . sed_sql_prep($val) . "', tra_type = $type, tra_order = $order, tra_updated = $now 
+				WHERE tra_id = " . (int)$existing_row['tra_id']);
+			$updated++;
+		} else {
+			sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated) 
+				VALUES ('" . sed_sql_prep($import_lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($key) . "', '" . sed_sql_prep($val) . "', $type, $order, $now)");
+			$added++;
+		}
+	}
+
+	sed_translations_generate($import_lang);
+
+	sed_redirect(sed_url("admin", "m=translations&s=io&tlang=" . $import_lang, "", true), false, array('msg' => '917', 'num' => ($added + $updated)));
 	exit;
 
 } elseif ($a == 'lang_save') {
@@ -332,15 +524,18 @@ $t->assign(array(
 	"TRANSLATIONS_SUBMIT_URL" => sed_url("admin", "a=update&" . $base_filter_params . ($d > 0 ? "&d=" . $d : "") . "&" . sed_xg()),
 	"TRANSLATIONS_ADD_URL" => sed_url("admin", "m=translations&a=add&" . sed_xg()),
 	"TRANSLATIONS_REGENERATE_URL" => sed_url("admin", "m=translations&a=regenerate&" . sed_xg()),
-	"TRANSLATIONS_IMPORT_URL" => sed_url("admin", "m=translations&a=import&" . sed_xg()),
+	"TRANSLATIONS_IMPORT_URL" => sed_url("admin", "m=translations&a=import_files&" . sed_xg()),
+	"TRANSLATIONS_REIMPORT_URL" => sed_url("admin", "m=translations&a=reimport_files&" . sed_xg()),
 	"TRANSLATIONS_LANG_SAVE_URL" => sed_url("admin", "m=translations&a=lang_save&" . sed_xg()),
 	"SUBNAV_LIST_URL" => sed_url("admin", "m=translations&s=list&tlang=" . $tlang),
 	"SUBNAV_ADD_URL" => sed_url("admin", "m=translations&s=add&tlang=" . $tlang),
 	"SUBNAV_LANGUAGES_URL" => sed_url("admin", "m=translations&s=languages"),
+	"SUBNAV_IO_URL" => sed_url("admin", "m=translations&s=io&tlang=" . $tlang),
 	"SUBNAV_TOOLS_URL" => sed_url("admin", "m=translations&s=tools"),
 	"SUBNAV_LIST_SELECTED" => ($s === 'list') ? 'current' : '',
 	"SUBNAV_ADD_SELECTED" => ($s === 'add') ? 'current' : '',
 	"SUBNAV_LANGUAGES_SELECTED" => ($s === 'languages' || $s === 'lang_edit') ? 'current' : '',
+	"SUBNAV_IO_SELECTED" => ($s === 'io') ? 'current' : '',
 	"SUBNAV_TOOLS_SELECTED" => ($s === 'tools') ? 'current' : '',
 	"SEARCH_ACTION_URL" => sed_url("admin", "m=translations&s=list"),
 	"SEARCH_RESET_URL" => sed_url("admin", "m=translations&s=list&tlang=" . $tlang)
@@ -447,14 +642,86 @@ if ($s == 'languages') {
 	// ---------- Tools tab
 	$t->parse("ADMIN_TRANSLATIONS.TOOLS");
 
+} elseif ($s == 'io') {
+	// ---------- Import / Export tab
+	// Export options
+	$export_lang_options = array();
+	foreach ($languages as $l_code => $l_data) {
+		$export_lang_options[$l_code] = $l_data['lang_title'] . ' (' . $l_data['lang_native'] . ') [' . $l_code . ']';
+	}
+
+	$tree_scopes = array(
+		'core' => array('title' => 'Core', 'items' => array()),
+		'module' => array('title' => 'Modules', 'items' => array()),
+		'plugin' => array('title' => 'Plugins', 'items' => array()),
+		'skin' => array('title' => 'Skins', 'items' => array())
+	);
+	$sql_codes = sed_sql_query("SELECT DISTINCT tra_scope, tra_code FROM $db_translations WHERE tra_lang = '" . sed_sql_prep($tlang) . "' ORDER BY tra_scope ASC, tra_code ASC");
+	while ($rc = sed_sql_fetchassoc($sql_codes)) {
+		$sc = $rc['tra_scope'];
+		$cd = $rc['tra_code'];
+		if (isset($tree_scopes[$sc]) && !in_array($cd, $tree_scopes[$sc]['items'], true)) {
+			$tree_scopes[$sc]['items'][] = $cd;
+		}
+	}
+	$export_scope_options = array('all' => $L['adm_translations_all_scopes']);
+	foreach ($tree_scopes as $sc_key => $sc_data) {
+		if (empty($sc_data['items'])) continue;
+		$export_scope_options[$sc_key] = $sc_data['title'];
+		foreach ($sc_data['items'] as $item_code) {
+			$export_scope_options[$sc_key . ':' . $item_code] = '-- ' . $item_code;
+		}
+	}
+
+	// Import target language options
+	$import_lang_options = array('auto' => $L['adm_translations_lang_auto']);
+	foreach ($languages as $l_code => $l_data) {
+		$import_lang_options[$l_code] = $l_data['lang_title'] . ' (' . $l_data['lang_native'] . ') [' . $l_code . ']';
+	}
+
+	$import_strategies = array(
+		'update'  => $L['adm_translations_strategy_update'],
+		'insert'  => $L['adm_translations_strategy_insert'],
+		'replace' => $L['adm_translations_strategy_replace']
+	);
+
+	$t->assign(array(
+		"IO_EXPORT_ACTION_URL" => sed_url("admin", "m=translations&a=export"),
+		"IO_EXPORT_LANG_SELECT" => sed_selectbox($tlang, 'export_lang', $export_lang_options, false),
+		"IO_EXPORT_SCOPE_SELECT" => sed_selectbox('all', 'export_scope', $export_scope_options, false),
+		"IO_IMPORT_ACTION_URL" => sed_url("admin", "m=translations&a=import_json&" . sed_xg()),
+		"IO_IMPORT_LANG_SELECT" => sed_selectbox('auto', 'import_lang', $import_lang_options, false),
+		"IO_IMPORT_STRATEGY_SELECT" => sed_selectbox('update', 'import_strategy', $import_strategies, false)
+	));
+
+	$t->parse("ADMIN_TRANSLATIONS.IO");
+
 } elseif ($s == 'add') {
 	// ---------- Add custom variable tab
 	$scopes_add = array('core' => 'Core', 'module' => 'Module', 'plugin' => 'Plugin', 'skin' => 'Skin');
 
+	$err = sed_import('err', 'G', 'ALP', 16);
+	$exist_key = sed_import('exist_key', 'G', 'TXT', 128);
+	$exist_scope = sed_import('exist_scope', 'G', 'ALP', 16);
+	$exist_code = sed_import('exist_code', 'G', 'TXT', 64);
+
+	$key_exists_warning = false;
+	$key_exists_msg = '';
+	$key_exists_edit_url = '';
+
+	if ($err === 'key_exists' && !empty($exist_key)) {
+		$key_exists_warning = true;
+		$key_exists_msg = sprintf($L['adm_translations_key_exists'], sed_cc($exist_key), sed_cc($exist_scope), sed_cc($exist_code));
+		$key_exists_edit_url = sed_url("admin", "m=translations&s=edit&key=" . $exist_key . "&scope=" . $exist_scope . "&code=" . $exist_code);
+	}
+
 	$t->assign(array(
-		"ADD_KEY_INPUT" => sed_textbox('new_key', '', 40, 128, 'form-control', false, 'text', array('placeholder' => 'my_custom_string', 'required' => 'required')),
+		"ADD_KEY_INPUT" => sed_textbox('new_key', ($key_exists_warning ? $exist_key : ''), 40, 128, 'form-control', false, 'text', array('placeholder' => 'my_custom_string', 'required' => 'required', 'id' => 'new_key')),
 		"ADD_SCOPE_SELECT" => sed_selectbox('core', 'new_scope', $scopes_add, false),
-		"ADD_CODE_INPUT" => sed_textbox('new_code', 'custom', 30, 64, 'form-control')
+		"ADD_CODE_INPUT" => sed_textbox('new_code', 'custom', 30, 64, 'form-control'),
+		"ADD_KEY_EXISTS_WARNING" => $key_exists_warning,
+		"ADD_KEY_EXISTS_MESSAGE" => $key_exists_msg,
+		"ADD_KEY_EXISTS_EDIT_URL" => $key_exists_edit_url
 	));
 
 	foreach ($languages as $l_code => $l_data) {

@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/lang/passrecover.tr.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin.standalone
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Şifre kurtarma";
+$L['passrecover_title'] = "Şifre kurtarma";
 
 $L['plu_explain1'] = "1 : E-posta adresinizi ve doğrulama kodunu girin, şifrenizi nasıl sıfırlayacağınıza dair talimatları size e-postayla göndereceğiz.";
 $L['plu_explain2'] = "2 : Acil durum bağlantısı içeren bir mesaj alacaksınız, giriş yapmak için tıklayın.";

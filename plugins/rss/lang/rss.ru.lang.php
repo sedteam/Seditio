@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/rss/lang/rss.ru.lang.php
 Version=186
-Updated=2026-mar-31
+Updated=2026-sep-18
 Type=Plugin.lang
 Author=Seditio Team
 Description=RSS plugin Russian
+Translations=1
 [END_SED]
 ==================== */
 
@@ -24,7 +25,7 @@ $L['core_rss'] = "RSS-ленты";
 $L['cfg_disable_rss'] = array("Отключить RSS-ленты", "");
 $L['cfg_disable_rsspages'] = array("Отключить RSS для страниц", "");
 $L['cfg_disable_rsscomments'] = array("Отключить RSS для комментариев", "");
-$L['cfg_disable_rssforums'] = array("Отключить RSS для форумов", "");
+$L['cfg_rss_disable_rssforums'] = array("Отключить RSS для форумов", "");
 $L['cfg_rss_timetolive'] = array("Время кэширования RSS", "в секундах");
 $L['cfg_rss_defaultcode'] = array("RSS по умолчанию", "код категории");
 $L['cfg_rss_maxitems'] = array("Максимум записей в RSS-ленте", "");

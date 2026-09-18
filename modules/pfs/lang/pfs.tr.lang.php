@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/lang/pfs.tr.lang.php
 Version=186
-Updated=2026-jun-18
+Updated=2026-sep-18
 Type=Module.lang
 Author=Seditio Team
 Description=PFS module Turkish language file
+Translations=1
 [END_SED]
 ==================== */
 

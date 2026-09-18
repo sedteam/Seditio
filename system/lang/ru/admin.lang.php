@@ -12,7 +12,7 @@ Localization done by : Antar, Antony, Amro
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
 Version=186
-Updated=2026-sep-16
+Updated=2026-sep-18
 Type=Lang
 Author=Seditio Team
 Description=Admin Russian language file
@@ -162,26 +162,10 @@ $L['cfg_sefurls301'] = array("301 редирект на SEF URLs", "Включа
 $L['cfg_dateformat'] = array("Основная маска даты", "По умолчанию: d.m.Y H:i");
 $L['cfg_formatmonthday'] = array("Краткая маска даты", "По умолчанию: d.m");
 $L['cfg_formatyearmonthday'] = array("Средняя маска даты", "По умолчанию: d.m.Y");
-$L['cfg_formatmonthdayhourmin'] = array("Маска даты в форуме", "По умолчанию: m-d H:i");
 $L['cfg_servertimezone'] = array("Часовой пояс сервера", "Смещение времени на сервере от GMT+00");
 $L['cfg_defaulttimezone'] = array("Часовой пояс по умолчанию", "Для гостей и новых пользователей, от -12 до +12");
 $L['cfg_timedout'] = array("Время бездействия, в секундах", "Время бездействия, после которого пользователь считается отсутствующим");
-$L['cfg_maxusersperpage'] = array("Максимальное количество строк в списке пользователей", "");
-$L['cfg_regrequireadmin'] = array("Администраторы должны утверждать регистрацию новых пользовательских счетов", "");
-$L['cfg_regnoactivation'] = array("Отключить проверку e-mail для новых пользователей", "Рекомендуется \"Нет\", в целях безопасности");
-$L['cfg_useremailchange'] = array("Разрешить пользователям менять свой e-mail адрес", "Рекомендуется \"Нет\", в целях безопасности");
-$L['cfg_usertextimg'] = array("Разрешить изображения и HTML в подписях", "Рекомендуется \"Нет\", в целях безопасности");
-$L['cfg_av_maxsize'] = array("Аватар, макс. размер файла", "По умолчанию: 128 КБ (131072 байт)");
-$L['cfg_av_maxx'] = array("Аватар, макс. ширина", "По умолчанию: 128 пикселей");
-$L['cfg_av_maxy'] = array("Аватар, макс. высота", "По умолчанию: 128 пикселей");
-$L['cfg_usertextmax'] = array("Макс. длина подписи пользователя", "По умолчанию: 300 знаков");
-$L['cfg_sig_maxsize'] = array("Подпись, макс. размер файла", "По умолчанию: 512 КБ (524288 байт)");
-$L['cfg_sig_maxx'] = array("Подпись, макс. ширина", "По умолчанию: 640 пикселей");
-$L['cfg_sig_maxy'] = array("Подпись, макс. высота", "По умолчанию: 100 пикселей");
-$L['cfg_ph_maxsize'] = array("Фото, макс. размер файла", "По умолчанию: 1 МБ (1048576 байт)");
-$L['cfg_ph_maxx'] = array("Фото, макс. ширина", "По умолчанию: 512 пикселей");
-$L['cfg_ph_maxy'] = array("Фото, макс. высота", "По умолчанию: 512 пикселей");
-$L['cfg_strictpasschange'] = array("Строгая смена пароля в профиле", "Если «Да», перед новым паролем нужно ввести текущий. По умолчанию: включено");
+/* Users config (cfg_*) moved to modules/users/lang/ */
 $L['cfg_maxrowsperpage'] = array("Максимальное кол-во строк в списках", "");
 $L['cfg_showpagesubcatgroup'] = array("Отображать в группах страницы из подразделов", "");   //New Sed171
 $L['cfg_genseourls'] = array("Генерировать SEO url (авто page alias)? ", "");   //New Sed178
@@ -194,10 +178,7 @@ $L['cfg_maxcommentlenght'] = array("Максимальная длина комм
 $L['cfg_countcomments'] = array("Считать комментарии", "Показывать общее число комментариев рядом с иконкой");
 $L['cfg_commaxlevel'] = array("Макс. уровень вложенности", "1-10, глубина дерева ответов");
 $L['cfg_commaxtree'] = array("Макс. комментариев в ветке", "Ограничить число комментариев на ветку от корня");
-/* $L['cfg_hideprivateforums'] moved to modules/forums/lang/ */
-$L['cfg_hottopictrigger'] = array("Сообщений в теме для присвоения ей статуса 'популярная'", "");
-$L['cfg_maxtopicsperpage'] = array("Максимум тем или сообщений на страницу", "");
-/* $L['cfg_antibumpforums'] moved to modules/forums/lang/ */
+/* Forums config (cfg_*) moved to modules/forums/lang/ */
 $L['cfg_pfsuserfolder'] = array("Метод хранения в папках", "Если включено, файлы пользователя будут сохраняться в подпапках /datas/users/USERID/... вместо добавления USERID к имени файла. Должна быть установлена ТОЛЬКО при ПЕРВОЙ установке сайта. Как только файл закачан в Персональный Файловый Архив, уже поздно изменять эту опцию. Не рекомендуется менять первоначально установленную опцию.");
 $L['cfg_th_amode'] = array("Генератор эскизов", "");
 $L['cfg_th_x'] = array("Ширина эскиза", "По умолчанию: 112 пикселей");
@@ -223,9 +204,6 @@ $L['cfg_th_logojpegqual'] = array("Качество JPEG после вставк
 
 /* cfg_pm_* moved to modules/pm/lang/ */
 $L['cfg_disablehitstats'] = array("Отключить статистику просмотров", "Переходов с других сайтов и просмотров в день");
-$L['cfg_disablereg'] = array("Отключить регистрацию", "Запрещает регистрацию новых пользователей");
-$L['cfg_disablewhosonline'] = array("Отключить 'кто онлайн?'", "Автоматически включается, если вы активизировали Щит");
-$L['cfg_defaultcountry'] = array("Страна по умолчанию для новых пользователей", "код страны из двух букв");    // New in v130
 $L['cfg_forcedefaultskin'] = array("Использовать установленный по умолчанию скин для всех пользователей", "");
 $L['cfg_forcedefaultlang'] = array("Использовать установленный по умолчанию язык для всех пользователей", "");
 $L['cfg_separator'] = array("Разделитель", "По умолчанию:>");
@@ -287,8 +265,6 @@ $L['cfg_disable_ratings'] = array("Отключить рейтинги", "");
 $L['cfg_disable_page'] = array("Отключить страницы", "");
 $L['cfg_disable_plug'] = array("Отключить плагины", "");
 /* Корзина: plugins/trashcan/lang/trashcan.*.lang.php */
-
-$L['cfg_color_group'] = array("Раскрашивать пользователей по группам", "По-умолчанию: Нет, для лучшей производительности");    // New in v175
 
 $L['cfg_ajax'] = array("Включить AJAX", "");  // New in v175
 $L['cfg_enablemodal'] = array("Включить модальные окна", "");  // New in v175
@@ -469,11 +445,7 @@ $L['adm_byyear'] = "По годам";
 $L['adm_bymonth'] = "По месяцам";
 $L['adm_byweek'] = "По неделям";
 
-/* ====== Ratings ====== */
-
-$L['adm_ratings_totalitems'] = "Всего оценённых страниц";
-$L['adm_ratings_totalvotes'] = "Всего голосов";
-$L['adm_help_ratings'] = "Чтобы обнулить рейтинг, просто удалите его. Он будет воссоздан с первым новым голосом.";
+/* ====== Ratings (adm_ratings_*) moved to plugins/ratings/lang/ ====== */
 
 /* ====== Users ====== */
 
@@ -558,6 +530,10 @@ $L['adm_translations_locked'] = "Заблокирован";
 $L['adm_translations_all_scopes'] = "Все области";
 $L['adm_translations_regenerate'] = "Скомпилировать кэш языков";
 $L['adm_translations_import'] = "Импортировать из файлов";
+$L['adm_translations_import_desc'] = "Импорт системных языковых строк из файлов дистрибутива в базу данных. Обычный импорт добавляет недостающие переменные без изменения существующих. Полный реимпорт сбрасывает все системные переводы к значениям по умолчанию из файлов (пользовательские переменные сохраняются).";
+$L['adm_translations_import_missing'] = "Импортировать недостающие";
+$L['adm_translations_reimport'] = "Полный реимпорт из файлов";
+$L['adm_translations_reimport_confirm'] = "Вы уверены, что хотите выполнить полный реимпорт? Все системные переводы будут сброшены к значениям по умолчанию из файлов. Пользовательские добавленные переменные будут сохранены.";
 $L['adm_translations_import_confirm'] = "Импортировать недостающие переводы из файлов в базу данных? Пользовательские изменения не будут затронуты.";
 $L['adm_translations_reset'] = "Сбросить до исходного";
 $L['adm_translations_reset_confirm'] = "Сбросить значение перевода к значению из исходного файла?";
@@ -582,3 +558,25 @@ $L['adm_translations_all_types'] = "Все типы";
 $L['adm_translations_show'] = "Показывать по";
 $L['adm_translations_key_hint'] = "Только буквы латинского алфавита, цифры и подчеркивания (например: my_header_title)";
 $L['adm_langcache_regenerate_hint'] = "Перекомпилирует все переводы из базы данных в кэш-файлы PHP (datas/cache/sed_lang.*.php) для максимальной скорости работы сайта.";
+$L['adm_translations_io'] = "Импорт / Экспорт";
+$L['adm_translations_export'] = "Экспорт переводов";
+$L['adm_translations_export_btn'] = "Скачать файл перевода (JSON)";
+$L['adm_translations_export_hint'] = "Экспортирует языковой пакет в структурированный файл JSON для редактирования или передачи переводчикам.";
+$L['adm_translations_import_file_title'] = "Импорт переводов";
+$L['adm_translations_import_btn'] = "Импортировать файл (JSON)";
+$L['adm_translations_import_hint'] = "Загрузите файл перевода в формате JSON для добавления или обновления языковых переменных.";
+$L['adm_translations_import_select_file'] = "Выберите JSON файл";
+$L['adm_translations_target_lang'] = "Язык назначения";
+$L['adm_translations_lang_auto'] = "-- Определить автоматически из файла --";
+$L['adm_translations_strategy'] = "Режим обновления";
+$L['adm_translations_strategy_update'] = "Обновить существующие и добавить новые (рекомендуется)";
+$L['adm_translations_strategy_insert'] = "Только добавить отсутствующие (не перезаписывать)";
+$L['adm_translations_strategy_replace'] = "Полная замена (перезаписать язык)";
+$L['adm_translations_language'] = "Язык";
+$L['adm_translations_import_success'] = "Импорт успешно завершен. Добавлено: %1\$s, обновлено: %2\$s, пропущено: %3\$s.";
+$L['adm_translations_import_err_file'] = "Ошибка: файл не был загружен или поврежден.";
+$L['adm_translations_import_err_json'] = "Ошибка: неверный формат JSON файла.";
+$L['adm_translations_import_err_lang'] = "Ошибка: не удалось определить целевой язык.";
+$L['adm_translations_import_err_empty'] = "В файле отсутствуют данные для импорта.";
+$L['adm_translations_key_exists'] = "Переменная с ключом \$L['%1\$s'] уже существует в разделе %2\$s / %3\$s.";
+$L['adm_translations_key_exists_js'] = "Внимание: ключ %s уже существует в разделе %scope.";

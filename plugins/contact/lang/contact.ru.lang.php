@@ -8,14 +8,15 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/lang/contact.ru.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
-$L['plu_title'] = "Контакт";
+$L['contact_title'] = "Контакт";
 
 $L['plu_explain'] = "Заполните эту форму чтобы отправить письмо : ";
 $L['plu_recipients_title'] = "Получатель";

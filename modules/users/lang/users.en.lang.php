@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/lang/users.en.lang.php
 Version=186
-Updated=2026-aug-11
+Updated=2026-sep-18
 Type=Module.lang
 Author=Seditio Team
 Description=Users English language file
+Translations=1
 [END_SED]
 ==================== */
 

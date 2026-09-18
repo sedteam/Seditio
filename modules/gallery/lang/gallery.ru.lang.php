@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/gallery/lang/gallery.ru.lang.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Module.lang
 Author=Seditio Team
 Description=Gallery Russian language file
+Translations=1
 [END_SED]
 ==================== */
 

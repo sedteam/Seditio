@@ -318,6 +318,22 @@ const sedadminjs = (() => {
             this.attachEvents();
             this.updateBarHeight();
             this.setInitialPosition();
+
+            if (typeof ResizeObserver !== 'undefined') {
+                this.resizeObserver = new ResizeObserver(() => {
+                    this.updateBarHeight();
+                });
+                this.resizeObserver.observe(this.element);
+                Array.from(this.element.children).forEach((child) => {
+                    this.resizeObserver.observe(child);
+                });
+                const mainNav = this.element.querySelector('#main-nav');
+                if (mainNav) {
+                    this.resizeObserver.observe(mainNav);
+                    const subMenus = mainNav.querySelectorAll('ul');
+                    subMenus.forEach((sm) => this.resizeObserver.observe(sm));
+                }
+            }
         }
 
         attachEvents() {
@@ -377,12 +393,30 @@ const sedadminjs = (() => {
         }
 
         updateBarHeight() {
+            if (!this.element || !this.bar) return;
+            const maxScroll = this.element.scrollHeight - this.element.offsetHeight;
+            const hasScroll = maxScroll > 1;
+            if (!hasScroll) {
+                this.bar.style.display = 'none';
+                if (this.rail) this.rail.style.display = 'none';
+                this.bar.style.top = '0px';
+                this.element.scrollTop = 0;
+                return;
+            }
             this.barHeight = Math.max(
                 (this.element.offsetHeight / this.element.scrollHeight) * this.element.offsetHeight,
                 30
             );
             this.bar.style.height = `${this.barHeight}px`;
-            this.bar.style.display = this.barHeight === this.element.offsetHeight ? 'none' : 'block';
+            this.bar.style.display = 'block';
+            if (this.rail && this.settings.alwaysVisible && this.settings.railVisible) {
+                this.rail.style.display = 'block';
+            }
+
+            const maxTop = this.element.offsetHeight - this.barHeight;
+            const currentRatio = maxScroll > 0 ? (this.element.scrollTop / maxScroll) : 0;
+            const newTop = Math.min(Math.max(currentRatio * maxTop, 0), maxTop);
+            this.bar.style.top = `${newTop}px`;
         }
 
         setInitialPosition() {
@@ -456,7 +490,7 @@ const sedadminjs = (() => {
         if (currentItem) {
             const currentSubMenu = currentItem.parentNode.querySelector('ul');
             if (currentSubMenu) {
-                slideToggle(currentSubMenu, 600);
+                currentSubMenu.style.display = 'block';
             }
         }
 

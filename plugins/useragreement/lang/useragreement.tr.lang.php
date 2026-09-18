@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/useragreement/lang/useragreement.tr.lang.php
 Version=1.0.0
-Updated=2026-jul-13
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=Turkish language file for useragreement plugin
+Translations=1
 [END_SED]
 ==================== */
 

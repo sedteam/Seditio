@@ -8,8 +8,9 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/i18n/lang/i18n.en.lang.php
 Version=186
-Updated=2026-jul-09
+Updated=2026-sep-18
 Type=Plugin
+Translations=1
 [END_SED]
 ==================== */
 

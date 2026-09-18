@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/view/lang/view.en.lang.php
 Version=186
-Updated=2026-mar-31
+Updated=2026-sep-18
 Type=Plugin.lang
 Author=Seditio Team
 Description=View English language file
+Translations=1
 [END_SED]
 ==================== */
 

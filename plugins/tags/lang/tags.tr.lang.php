@@ -8,8 +8,9 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/tags/lang/tags.tr.lang.php
 Version=186
-Updated=2026-mar-18
+Updated=2026-sep-18
 Type=Plugin
+Translations=1
 [END_SED]
 
 ==================== */
@@ -65,7 +66,7 @@ $L['cfg_noindex'] = array("Etiket aramasına meta noindex ekle", "");
 $L['cfg_sort'] = array("Arama sonuçları sıralaması", "");
 $L['cfg_css'] = array("Eklenti CSS'sini dahil et", "");
 $L['cfg_autocomplete_minlen'] = array("Otomatik tamamlama için minimum karakter", "");
-$L['cfg_maxrowsperpage'] = array("Maximum lines in tags", "");
+$L['cfg_tags_maxrowsperpage'] = array("Maximum lines in tags", "");
 $L['cfg_cloud_index_on'] = array("Show tags cloud on index", "");
 $L['cfg_cloud_list_on'] = array("Show tags cloud in page list", "");
 $L['cfg_cloud_page_on'] = array("Show tags cloud on page view", "");

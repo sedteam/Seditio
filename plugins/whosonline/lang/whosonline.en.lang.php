@@ -8,10 +8,11 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/lang/whosonline.en.lang.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
 Description=
+Translations=1
 [END_SED]
 ==================== */
 
@@ -21,7 +22,7 @@ $L['cfg_showavatars'] = array("Display avatars of users?", "");
 $L['cfg_miniavatar_x'] = array("The size of a mini-avatars on the axis x, in pixels", "");
 $L['cfg_miniavatar_y'] = array("The size of a mini-avatars on the axis y, in pixels", "");
 
-$L['plu_title'] = "Who's online ?";
+$L['whosonline_title'] = "Who's online ?";
 $L['plu_mostonline'] = "Most users ever online was ";
 $L['plu_therescurrently'] = "There's currently ";
 $L['plu_visitors'] = " visitor(s) and ";
