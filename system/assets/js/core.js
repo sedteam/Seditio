@@ -1761,31 +1761,56 @@ const sedjs = {
 
     /**
      * Toggles the visibility of spoiler content.
+     * @param {Object} [options] - Configuration options for spoiler.
      */
-    spoiler() {
+    spoiler(options) {
+        const config = sedjs.extend({
+            container: 'spoiler',
+            title: 'spoiler-title',
+            content: 'spoiler-content',
+            toggle: 'spoiler-toggle',
+            activeClass: 'active',
+            showIconClass: 'show-icon',
+            hideIconClass: 'hide-icon'
+        }, options);
+
+        const containerSelector = config.container.charAt(0) === '.' ? config.container : `.${config.container}`;
+        const titleSelector = config.title.split(',').map(s => s.trim().charAt(0) === '.' ? s.trim() : `.${s.trim()}`).join(', ');
+        const contentSelector = config.content.charAt(0) === '.' ? config.content : `.${config.content}`;
+        const toggleSelector = config.toggle.charAt(0) === '.' ? config.toggle : `.${config.toggle}`;
+
         document.addEventListener('click', (e) => {
-            const title = e.target.closest('.spoiler .spoiler-title');
+            const title = e.target.closest(titleSelector);
             if (!title) return;
 
+            const spoiler = title.closest(containerSelector);
+            if (!spoiler) return;
+
             e.preventDefault();
-            const spoiler = title.closest('.spoiler');
-            const content = spoiler.querySelector('.spoiler-content');
+            e.stopPropagation();
+
+            const content = spoiler.querySelector(contentSelector);
             if (content) {
-                const isHidden = window.getComputedStyle(content).display === 'none';
-                const toggle = title.querySelector('.spoiler-toggle');
+                const isHidden = content.style.display === 'none' || (content.style.display === '' && window.getComputedStyle(content).display === 'none');
+                
                 if (isHidden) {
                     content.style.display = 'block';
-                    title.classList.add('active');
-                    if (toggle) {
-                        toggle.classList.remove('show-icon');
-                        toggle.classList.add('hide-icon');
-                    }
+                    spoiler.classList.add(config.activeClass);
+                    title.classList.add(config.activeClass);
                 } else {
                     content.style.display = 'none';
-                    title.classList.remove('active');
-                    if (toggle) {
-                        toggle.classList.remove('hide-icon');
-                        toggle.classList.add('show-icon');
+                    spoiler.classList.remove(config.activeClass);
+                    title.classList.remove(config.activeClass);
+                }
+
+                const toggleEl = title.querySelector(toggleSelector);
+                if (toggleEl) {
+                    if (isHidden) {
+                        toggleEl.classList.remove(config.showIconClass);
+                        toggleEl.classList.add(config.hideIconClass);
+                    } else {
+                        toggleEl.classList.remove(config.hideIconClass);
+                        toggleEl.classList.add(config.showIconClass);
                     }
                 }
             }
@@ -1794,30 +1819,44 @@ const sedjs = {
 
     /**
      * Toggles the visibility of accordion items (closing sibling items, clicking active closes it).
+     * @param {Object} [options] - Configuration options for accordion.
      */
-    accordion() {
+    accordion(options) {
+        const config = sedjs.extend({
+            container: 'sedaccordion',
+            item: 'accordion-item',
+            header: 'accordion-header',
+            content: 'accordion-content',
+            activeClass: 'active'
+        }, options);
+
+        const containerSelector = config.container.charAt(0) === '.' ? config.container : `.${config.container}`;
+        const itemSelector = config.item.charAt(0) === '.' ? config.item : `.${config.item}`;
+        const headerSelector = config.header.split(',').map(s => s.trim().charAt(0) === '.' ? s.trim() : `.${s.trim()}`).join(', ');
+        const contentSelector = config.content.charAt(0) === '.' ? config.content : `.${config.content}`;
+
         document.addEventListener('click', (e) => {
-            const header = e.target.closest('.sedaccordion .accordion-header');
+            const header = e.target.closest(headerSelector);
             if (!header) return;
 
-            e.preventDefault();
-            const item = header.closest('.accordion-item');
-            const accordion = header.closest('.sedaccordion');
+            const accordion = header.closest(containerSelector);
+            const item = header.closest(itemSelector);
 
             if (item && accordion) {
-                const isAlreadyActive = item.classList.contains('active');
-                const allItems = accordion.querySelectorAll('.accordion-item');
+                e.preventDefault();
+                const isAlreadyActive = item.classList.contains(config.activeClass);
+                const allItems = accordion.querySelectorAll(itemSelector);
                 allItems.forEach((el) => {
-                    el.classList.remove('active');
-                    const content = el.querySelector('.accordion-content');
+                    el.classList.remove(config.activeClass);
+                    const content = el.querySelector(contentSelector);
                     if (content) {
                         content.style.display = 'none';
                     }
                 });
 
                 if (!isAlreadyActive) {
-                    item.classList.add('active');
-                    const content = item.querySelector('.accordion-content');
+                    item.classList.add(config.activeClass);
+                    const content = item.querySelector(contentSelector);
                     if (content) {
                         content.style.display = 'block';
                     }

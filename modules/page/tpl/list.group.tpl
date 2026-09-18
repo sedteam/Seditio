@@ -117,8 +117,8 @@
 
 					<div class="sidebar-menu">
 						<div class="inline-menu">
-							<ul class="tabs-nav">
-								<li class="active"><a href="#tab-1">{PHP.L.index_lastcomments}</a></li>
+							<ul class="tabs-nav sedtabs">
+								<li><a href="#tab-1">{PHP.L.index_lastcomments}</a></li>
 								<li><a href="#tab-2">{PHP.L.index_lasttopics}</a></li>
 								<li><a href="#tab-3">{PHP.L.index_lastpages}</a></li>
 							</ul>

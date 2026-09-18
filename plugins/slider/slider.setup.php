@@ -8,10 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/slider/slider.setup.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
-Description=
+Description=Native responsive slider displayed on the home page
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]

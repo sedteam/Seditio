@@ -1,0 +1,291 @@
+/**
+ * Seditio Native Slider CSS
+ * Clean, lightweight Flexbox slider styles for SedSlider.
+ */
+
+:root {
+  --slider-arrow-color: #010101;
+  --slider-arrow-bg: transparent;
+  --slider-dot-bg: rgba(68, 81, 92, 0.30);
+  --slider-dot-active: #f99302;
+}
+
+/* Base Slider Container */
+.sed-slider {
+  position: relative;
+  display: block !important;
+  box-sizing: border-box;
+  width: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-touch-action: pan-y;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Viewport / List */
+.sed-slider-list {
+  position: relative;
+  display: block !important;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.sed-slider-list:focus {
+  outline: none;
+}
+
+.sed-slider-list.dragging {
+  cursor: grab;
+}
+
+.sed-slider-list.dragging * {
+  cursor: grab;
+  user-select: none;
+}
+
+/* Slider Track */
+.sed-slider-track {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: flex !important;
+  flex-direction: row;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  will-change: transform;
+  transition-property: transform;
+}
+
+.sed-slider-loading .sed-slider-track {
+  visibility: hidden;
+}
+
+/* Individual Slides */
+.sed-slider-slide {
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 1px;
+  flex: 0 0 auto !important;
+  max-width: none !important;
+  align-items: stretch;
+  background-size: cover;
+  outline: none;
+}
+
+[dir='rtl'] .sed-slider-slide {
+  direction: rtl;
+}
+
+.sed-slider-slide img {
+  display: block;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  height: auto;
+}
+
+.sed-slider-slide.dragging img {
+  pointer-events: none;
+}
+
+/* Fade mode */
+.sed-slider-fade .sed-slider-track {
+  display: block !important;
+  position: relative;
+}
+
+.sed-slider-fade .sed-slider-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.sed-slider-fade .sed-slider-slide.sed-slider-active {
+  position: relative;
+  opacity: 1;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+/* Arrows */
+.sed-slider-arrow {
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: block;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: transparent;
+  border: none;
+  outline: none;
+  background: transparent;
+  transition: opacity 0.2s ease;
+}
+
+.sed-slider-prev {
+  left: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.sed-slider-next {
+  right: 0;
+  width: 50px;
+  height: 50px;
+}
+
+[dir='rtl'] .sed-slider-prev {
+  right: 0;
+  left: auto;
+}
+
+[dir='rtl'] .sed-slider-next {
+  right: auto;
+  left: 0;
+}
+
+.sed-slider-down {
+  display: block;
+  position: relative;
+  margin: 0 auto;
+  font-size: 0;
+  line-height: 0;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: transparent;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.sed-slider-prev:hover,
+.sed-slider-prev:focus,
+.sed-slider-next:hover,
+.sed-slider-next:focus,
+.sed-slider-down:hover,
+.sed-slider-down:focus {
+  opacity: 0.8;
+}
+
+.sed-slider-prev:before,
+[dir='rtl'] .sed-slider-prev:before {
+  font-family: 'Seditio' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  content: "\e91c";
+  font-size: 40px;
+  color: var(--slider-arrow-color, #010101);
+}
+
+.sed-slider-next:before,
+[dir='rtl'] .sed-slider-next:before {
+  font-family: 'Seditio' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  content: "\e91d";
+  font-size: 40px;
+  color: var(--slider-arrow-color, #010101);
+}
+
+.sed-slider-down:before,
+[dir='rtl'] .sed-slider-down:before {
+  font-family: 'Seditio' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  content: "\e91b";
+  font-size: 40px;
+  color: var(--slider-arrow-color, #010101);
+}
+
+.sed-slider-arrow.sed-slider-disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+.sed-slider-arrow.sed-slider-hidden {
+  display: none !important;
+}
+
+/* Dots */
+.sed-slider-dots {
+  position: absolute;
+  bottom: 40px;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  z-index: 100;
+  list-style: none;
+  text-align: center;
+}
+
+.sed-slider-dots li {
+  position: relative;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sed-slider-dots li button {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 5px;
+  height: 5px;
+  padding: 6px;
+  cursor: pointer;
+  color: transparent;
+  border: none;
+  border-radius: 100%;
+  outline: none;
+  background: var(--slider-dot-bg, rgba(68, 81, 92, 0.30));
+  transition: background-color 0.3s ease;
+}
+
+.sed-slider-dots li button:hover,
+.sed-slider-dots li button:focus {
+  outline: none;
+}
+
+.sed-slider-dots li.sed-slider-active button {
+  background: var(--slider-dot-active, #f99302);
+}

@@ -334,7 +334,6 @@ ul {
 }
 
 .menu-col .menu-wrapper .menu > ul > li > ul {
-  display: none;
   position: absolute;
   top: 100%;
   width: 200px;
@@ -342,23 +341,44 @@ ul {
   padding: 60px 0px 10px 0px;
   background-color: #fff;
   z-index: 100;
-  /*visibility: hidden;
-    opacity: 0;*/
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px);
+  -webkit-transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  -moz-transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+.menu-col .menu-wrapper .menu > ul > li:hover > ul {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .menu-col .menu-wrapper .menu > ul > li > ul > li > ul {
-  display: none;
   position: absolute;
-  padding-top: 0px;
-  margin-top: 0px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
   padding: 10px 0px 10px 0px;
   background-color: #fff;
   left: 200px;
   width: 200px;
   top: -10px;
   font-size: 1.1em;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(10px);
+  -webkit-transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  -moz-transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+.menu-col .menu-wrapper .menu > ul > li > ul > li:hover > ul {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .menu-col .menu-wrapper .menu ul > li ul li.has-children::before {
@@ -684,7 +704,7 @@ ul {
   display: block;
 }
 
-.slinky-menu {
+.sed-menu {
   overflow: hidden;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
@@ -765,7 +785,7 @@ ul {
 	opacity: 0;	*/
 }
 
-#slider .slick-active .slide-body {
+#slider .sed-slider-active .slide-body {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -800,8 +820,8 @@ ul {
   width: 100%;
 }
 
-#slider-section .slick-list,
-#slider-section .slick-track {
+#slider-section .sed-slider-list,
+#slider-section .sed-slider-track {
   height: 100%;
 }
 
@@ -812,17 +832,17 @@ ul {
   margin-top: -50px;
 }
 
-#slider-section .slick-prev:before,
-#slider-section [dir='rtl'] .slick-prev:before,
-#slider-section .slick-down:before,
-#slider-section [dir='rtl'] .slick-down:before,
-#slider-section .slick-next:before,
-#slider-section [dir='rtl'] .slick-next:before {
+#slider-section .sed-slider-prev:before,
+#slider-section [dir='rtl'] .sed-slider-prev:before,
+#slider-section .sed-slider-down:before,
+#slider-section [dir='rtl'] .sed-slider-down:before,
+#slider-section .sed-slider-next:before,
+#slider-section [dir='rtl'] .sed-slider-next:before {
   color: #ffffff;
 }
 
-#slider-section .slick-prev,
-#slider-section .slick-next {
+#slider-section .sed-slider-prev,
+#slider-section .sed-slider-next {
   top: 0;
   opacity: 0;
   -webkit-transition: all 0.5s;
@@ -831,15 +851,15 @@ ul {
   transition: all 0.5s;
 }
 
-#slider-section:hover .slick-prev,
-#slider-section:hover .slick-next {
+#slider-section:hover .sed-slider-prev,
+#slider-section:hover .sed-slider-next {
   opacity: 1;
 }
 
-#slider-section:hover .slick-prev:hover,
-#slider-section:hover .slick-prev:focus,
-#slider-section:hover .slick-next:hover,
-#slider-section:hover .slick-next:focus {
+#slider-section:hover .sed-slider-prev:hover,
+#slider-section:hover .sed-slider-prev:focus,
+#slider-section:hover .sed-slider-next:hover,
+#slider-section:hover .sed-slider-next:focus {
   opacity: 0.8;
 }
 
@@ -1064,7 +1084,8 @@ ul {
   margin-left: 0px;
 }
 
-.inline-menu ul li.active a {
+.inline-menu ul li.active a,
+.inline-menu ul li a.selected {
   color: var(--theme-badge-text);
   border: 1px solid #c1c9d8;
   background: var(--theme-badge-bg);
@@ -1826,22 +1847,22 @@ a.alfabeta:hover {
   margin-top: 20px;
 }
 
-.similar-arrows .slick-prev,
-.similar-arrows .slick-next {
+.similar-arrows .sed-slider-prev,
+.similar-arrows .sed-slider-next {
   width: 20px;
   height: 20px;
   border: 1px solid #cccccc;
   border-radius: 4px;
 }
 
-.similar-arrows .slick-next:before,
-.similar-arrows [dir='rtl'] .slick-next:before {
+.similar-arrows .sed-slider-next:before,
+.similar-arrows [dir='rtl'] .sed-slider-next:before {
   content: '\ea61';
   font-size: 16px;
 }
 
-.similar-arrows .slick-prev:before,
-.similar-arrows [dir='rtl'] .slick-prev:before {
+.similar-arrows .sed-slider-prev:before,
+.similar-arrows [dir='rtl'] .sed-slider-prev:before {
   content: '\ea60';
   font-size: 16px;
 }

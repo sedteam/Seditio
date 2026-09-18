@@ -94,6 +94,16 @@ This document provides a comprehensive technical overview of the new features, a
 * Form state retention prevents file selection loss during validation failures; previews and deletion markers (`{prefix}_keep`) are handled cleanly.
 * File sizes are formatted consistently throughout the UI using `sed_format_size()`.
 
+### Complete Removal of jQuery & Frontend Vanilla JS (ES6+) Architecture
+* **Legacy Dependency Purge:** Completely removed `jquery.min.js`, `jquery.plugins.min.js`, and third-party libraries (`Fancybox 3`, `Slick Slider`, `Slinky Menu`).
+* **Native Sympfy Skin Scripts (`app.js`):** Public theme scripts were entirely rewritten in clean Vanilla JavaScript (ES6+). Includes native smooth scrolling (`window.scrollTo({ behavior: 'smooth' })`), passive scroll event listeners for the Sticky Header, and dynamic body scroll locking when the mobile drawer is open.
+* **Standalone Mobile Navigation Component `SedMenu` (`skins/sympfy/js/sedmenu.js`):** Built a standalone, zero-dependency sliding drill-down navigation component supporting infinite submenu nesting, back buttons, dynamic title breadcrumbs, and standardized `.sed-menu*` classes.
+* **Native Carousel `SedSlider` (`plugins/slider/`):** The primary homepage carousel and similar-pages slider were migrated to the in-house `SedSlider` (`slider.js` & `slider.css`) featuring pointer/touch swipe gestures, dots/arrow controls, infinite looping, responsive breakpoints, and autoplay.
+* **Centralized `sedjs` UI Widgets:**
+  * Sidebar and content tab switching standardized on core `sedjs.sedtabs()`.
+  * Core spoilers and accordions (`sedjs.spoiler`, `sedjs.accordion`) extended with custom container/title/content class configuration.
+  * Desktop navigation dropdowns upgraded to 60 FPS hardware-accelerated CSS3 transitions (Fade & Slide).
+
 ---
 
 ## 4. Control Panel (Admin Area)

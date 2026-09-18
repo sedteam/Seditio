@@ -8,10 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/slider/slider.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-18
 Type=Plugin
 Author=Seditio Team
-Description=
+Description=Native responsive slider displayed on the home page
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -30,6 +30,9 @@ Lock=0
 if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
+
+sed_add_css('plugins/slider/css/slider.css', true);
+sed_add_javascript('plugins/slider/js/slider.js', true);
 
 $sliderlimit = (int)$cfg['plugin']['slider']['maxslides'];
 
