@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.profile.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=User profile
@@ -31,12 +31,9 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['auth_write']);
 
 /* === Hook === */
-$extp = sed_getextplugins('profile.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('profile.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -112,12 +109,9 @@ switch ($a) {
 		sed_check_xg();
 
 		/* === Hook === */
-		$extp = sed_getextplugins('profile.update.first');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('profile.update.first') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		$profile_images = sed_users_profile_images_process($usr['id']);
@@ -250,12 +244,9 @@ switch ($a) {
 			WHERE user_id='" . $usr['id'] . "'");
 
 			/* === Hook === */
-			$extp = sed_getextplugins('profile.update.done');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('profile.update.done') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			sed_redirect(sed_url("message", "msg=113", "", true));
@@ -317,12 +308,9 @@ $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 
 /* === Hook === */
-$extp = sed_getextplugins('profile.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('profile.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -392,12 +380,9 @@ if (count($extrafields) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('profile.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('profile.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

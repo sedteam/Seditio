@@ -96,18 +96,40 @@ The `search` plugin provides a form and logic for full-text search across pages 
 
 ---
 
-## 7.7. trashcan (Recycle Bin)
+## 7.7. trashcan (Recycle Bin & Universal Trashcan API)
 
-The `trashcan` plugin provides temporary storage for deleted pages, comments, and forum posts for quick recovery.
+The `trashcan` plugin provides temporary storage (soft-delete) for deleted site entities with the capability of later restoring or permanently wiping them via the administration area.
+
+Starting with version 186, the plugin features an extensible **Trashcan API** architecture based on the `trashcan.api` system hook and the global `$sed_trashcan_types` registry. Processing of specific entity types is completely decoupled from the plugin core and moved to the respective modules and plugins.
 
 * **Database Table (`sed_trash`):**
-  * `tr_id` (INT, Primary Key) — ID of the record in the trashcan.
-  * `tr_type` (VARCHAR) — object type (`page`, `comment`, `forum_topic`, `forum_post`).
-  * `tr_title` (VARCHAR) — object title at the time of deletion.
-  * `tr_info` (TEXT) — metadata (deletion author ID, operation date).
-  * `tr_datas` (LONGTEXT) — serialized array of object data retrieved from the DB prior to physical deletion.
+  * `tr_id` (INT, Primary Key) — Unique ID of the record in the trashcan.
+  * `tr_date` (INT) — UNIX timestamp of when the item was trashed.
+  * `tr_type` (VARCHAR) — Entity type code (`page`, `pm`, `user`, `forumtopic`, `forumpost`, `poll`, `comment`, or custom third-party module types).
+  * `tr_title` (VARCHAR) — Title/name of the object at the time of deletion.
+  * `tr_itemid` (VARCHAR) — Primary identifier (ID) of the item in its source table.
+  * `tr_trashed_by` (INT) — User ID of the administrator/user who deleted the item.
+  * `tr_datas` (LONGTEXT) — Serialized array of row data captured prior to deletion.
+  * `tr_parentid` (INT) — ID of the parent item (for hierarchical entities).
+  * `tr_info` (TEXT) — Additional metadata.
+
+* **Built-in Entity Handlers:**
+  * **Pages (`page`):** Handler located at `modules/page/page.trashcan.php`. Restores records in `sed_pages`, checks structure category existence (creates `restored` category if missing), and logs the event to the admin audit trail.
+  * **Private Messages (`pm`):** Handler located at `modules/pm/pm.trashcan.php`. Restores message rows in `sed_pm`.
+  * **Users (`user`):** Handler located at `modules/users/users.trashcan.php`. Restores accounts in `sed_users`.
+  * **Forums (`forumpost`, `forumtopic`):** Handler located at `modules/forums/forums.trashcan.php`. Restores posts and topics with automatic forum section counter resynchronization (`sed_forum_resynctopic`, `sed_forum_resync`).
+  * **Polls (`poll`):** Handler located at `modules/polls/polls.trashcan.php`. Restores polls and options in `sed_polls` and `sed_polls_options`.
+  * **Comments (`comment`):** Handler located at `plugins/comments/comments.trashcan.php`. Restores comment hierarchy, recalculates `page_comcount`, and performs cascading child cleanup via the `wipe` callback.
+
+* **Core Trashcan API Functions:**
+  * `sed_trash_put($type, $title, $itemid, $datas, $parentid = 0)` — Soft-deletes an entity into the trashcan prior to physical row deletion.
+  * `sed_trash_restore($id)` — Restores an item by trash record ID by executing the registered `restore` callback.
+  * `sed_trash_wipe($id)` — Permanently deletes an item: executes the registered `wipe` callback (if defined) for asset cleanup and removes the row from `sed_trash`.
+  * `sed_trash_get($id)` — Retrieves a trashcan record by ID.
+  * `sed_trash_insert($data, $table)` — Helper function that inserts restored data back into the specified database table.
+
 * **SEF URLs:**
-  * Trashcan viewing and data recovery in the admin area: `/admin/trashcan` or `index.php?module=admin&m=trashcan`.
+  * Trashcan inspection, filtering by type, restoration, and wiping in the admin panel: `/admin/trashcan` or `index.php?module=admin&m=trashcan`.
 
 ---
 

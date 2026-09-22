@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=message.php
+File=system/core/message/message.inc.php
 Version=186
-Updated=2026-aug-11
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Messages
@@ -274,11 +274,8 @@ if ($rc != '') {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('message.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('message.main') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -299,11 +296,8 @@ $t->assign("MESSAGE_TITLE", $message);
 $t->assign("MESSAGE_BODY", $body);
 
 /* === Hook === */
-$extp = sed_getextplugins('message.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('message.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 

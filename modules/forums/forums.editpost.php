@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.editpost.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -32,12 +32,9 @@ $poll = sed_import('poll', 'G', 'INT');
 $vote = sed_import('vote', 'G', 'INT');
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.editpost.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.editpost.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require_once(SED_ROOT . '/modules/polls/inc/polls.functions.php');
@@ -96,11 +93,8 @@ if ($row = sed_sql_fetchassoc($sql)) {
 
 if ($a == 'update') {
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.editpost.update.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('forums.editpost.update.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -135,12 +129,9 @@ if ($a == 'update') {
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('forums.editpost.update.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('forums.editpost.update.done') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		sed_forum_sectionsetlast($fp_sectionid);
@@ -180,12 +171,9 @@ $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 /**/
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.editpost.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.editpost.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -216,12 +204,9 @@ $t->assign(array(
 ));
 
 /* === Hook (before parse FORUMS_EDITPOST_FIRST so tags are assigned) === */
-$extp = sed_getextplugins('forums.editpost.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.editpost.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($firstpost) {

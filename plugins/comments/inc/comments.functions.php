@@ -8,10 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/inc/comments.functions.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
-Description=Comments API
+Description=Comments functions
 [END_SED]
 ==================== */
 
@@ -82,7 +82,7 @@ function _sed_comments_render_node($com_id, $level, $maxlevel, $tree, $rows_by_i
 	}
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			include $pl;
 		}
 	}
 	$t->parse("COMMENTS_ITEM");
@@ -202,7 +202,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$extp = sed_getextplugins('comments.send.first');
 			if (is_array($extp)) {
 				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					include $pl;
 				}
 			}
 
@@ -276,7 +276,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				$extp = sed_getextplugins('comments.send.new');
 				if (is_array($extp)) {
 					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+						include $pl;
 					}
 				}
 
@@ -356,12 +356,21 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 						}
 					}
 
-					/* === Hook === */
-					$extp = sed_getextplugins('comments.delete.first');
-					if (is_array($extp)) {
-						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_comment']) && is_array($rows_by_id) && is_array($path)) {
+						$com_label = isset($L['Comment']) ? $L['Comment'] : 'Comment';
+						foreach ($order as $cid) {
+							if (!isset($rows_by_id[$cid], $path[$cid])) {
+								continue;
+							}
+							$r = $rows_by_id[$cid];
+							$author = isset($r['com_author']) ? $r['com_author'] : '';
+							sed_trash_put('comment', $com_label . " #" . $cid . " (" . $author . ")", $path[$cid], $r);
 						}
+					}
+
+					/* === Hook === */
+					foreach (sed_getextplugins('comments.delete.first') as $pl) {
+						include $pl;
 					}
 					/* ===== */
 
@@ -377,7 +386,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$extp = sed_getextplugins('comments.delete.done');
 					if (is_array($extp)) {
 						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+							include $pl;
 						}
 					}
 					/* ===== */
@@ -415,7 +424,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				$extp = sed_getextplugins('comments.edit.update.first');
 				if (is_array($extp)) {
 					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+						include $pl;
 					}
 				}
 
@@ -440,7 +449,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$extp = sed_getextplugins('comments.edit.update.done');
 					if (is_array($extp)) {
 						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+							include $pl;
 						}
 					}
 
@@ -458,7 +467,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$extp = sed_getextplugins('comments.main');
 			if (is_array($extp)) {
 				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					include $pl;
 				}
 			}
 
@@ -496,7 +505,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 					$extp = sed_getextplugins('comments.editcomment.tags');
 					if (is_array($extp)) {
 						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+							include $pl;
 						}
 					}
 					$t->parse("COMMENTS.COMMENTS_EDITCOMMENT");
@@ -510,7 +519,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 			$extp = sed_getextplugins('comments.main');
 			if (is_array($extp)) {
 				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					include $pl;
 				}
 			}
 
@@ -577,7 +586,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 				$extp = sed_getextplugins('comments.newcomment.tags');
 				if (is_array($extp)) {
 					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+						include $pl;
 					}
 				}
 				
@@ -683,7 +692,7 @@ function sed_build_comments($code, $url, $display, $allow = TRUE)
 		$extp = sed_getextplugins('comments.tags');
 		if (is_array($extp)) {
 			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+				include $pl;
 			}
 		}
 

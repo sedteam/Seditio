@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=index.inc.php
+File=system/core/index/index.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Home page
@@ -20,11 +20,8 @@ if (!defined('SED_CODE')) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('index.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('index.first') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -40,11 +37,8 @@ $title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
 $out['subtitle'] = sed_title('indextitle', $title_tags, $title_data);
 
 /* === Hook === */
-$extp = sed_getextplugins('index.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('index.main') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -54,11 +48,8 @@ $mskin = sed_skinfile('index');
 $t = new XTemplate($mskin);
 
 /* === Hook === */
-$extp = sed_getextplugins('index.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('index.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 

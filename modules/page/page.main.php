@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.main.php
 Version=186
-Updated=2026-jul-29
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Page view
@@ -29,12 +29,9 @@ $r = sed_import('r', 'G', 'ALP');
 $c = sed_import('c', 'G', 'TXT');
 
 /* === Hook === */
-$extp = sed_getextplugins('page.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if (!empty($al)) {
@@ -58,12 +55,9 @@ if (sed_sql_numrows($sql) == 0) {
 $pag = sed_sql_fetchassoc($sql);
 
 /* === Hook === */
-$extp = sed_getextplugins('page.fetch');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.fetch') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $sys['catcode'] = $pag['page_cat']; //new in v175
@@ -161,12 +155,9 @@ if (count($page_thumbs_array) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($m == 'print') {
@@ -265,12 +256,9 @@ if ($pag['page_file']) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

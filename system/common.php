@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/common.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Common
@@ -322,11 +322,8 @@ $b = sed_import('b', 'G', 'ALP', 24);
 
 /* ======== Hook for language selection ======== */
 
-$extp = sed_getextplugins('set.lang');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('set.lang') as $pl) {
+	include $pl;
 }
 
 /* ======== Language ======== */
@@ -385,22 +382,16 @@ $out['copyright'] = "<a href=\"https://seditio.org\">" . $L['foo_poweredby'] . "
 /* ======== Hooks for plugins (standalone) ======== */
 
 if (defined('SED_PLUG') && !empty($_GET['e'])) {
-	$extp = sed_getextplugins('common.plug.' . $_GET['e']);
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('common.plug.' . $_GET['e']) as $pl) {
+		include $pl;
 	}
 }
 
 /* ======== Hooks for plugins (admin tools) ======== */
 
 if (defined('SED_ADMIN') && $m == 'manage' && !empty($_GET['p'])) {
-	$extp = sed_getextplugins('common.tool.' . $_GET['p']);
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('common.tool.' . $_GET['p']) as $pl) {
+		include $pl;
 	}
 }
 
@@ -411,11 +402,8 @@ $xp = sed_import('x', 'P', 'ALP');
 
 $xk = sed_check_xp();
 
-$extp = sed_getextplugins('common');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('common') as $pl) {
+	include $pl;
 }
 
 /* ======== Gzip and output filtering ======== */
@@ -716,11 +704,8 @@ if ($cfg['maintenance'] && $usr['level'] < $cfg['maintenancelevel'] && !defined(
 
 /* ======== Global hook ======== */
 
-$extp = sed_getextplugins('global');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('global') as $pl) {
+	include $pl;
 }
 
 /* ======== Auto-generate URL cache if missing ======== */

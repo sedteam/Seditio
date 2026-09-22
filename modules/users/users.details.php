@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.details.php
 Version=186
-Updated=2026-feb-21
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=User details
@@ -31,12 +31,9 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['auth_read']);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.details.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.details.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if (empty($id) && $usr['id'] > 0) {
@@ -65,12 +62,9 @@ $urlpaths[sed_url("users")] = $L['Users'];
 $urlpaths[sed_url("users", "m=details&id=" . $urr['user_id'])] = sed_cc($urr['user_name']);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.details.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.details.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -130,12 +124,9 @@ if (count($extrafields) > 0) {
 // ----------------------
 
 /* === Hook === */
-$extp = sed_getextplugins('users.details.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.details.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($usr['isadmin']) {

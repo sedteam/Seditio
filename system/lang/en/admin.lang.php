@@ -507,6 +507,10 @@ $L['adm_modules_installed'] = "Installed Modules";
 $L['adm_modules_available'] = "Available Modules";
 $L['adm_modules_none'] = "No modules installed.";
 $L['adm_modules_noavailable'] = "No new modules available for installation.";
+$L['adm_part_controller'] = "Controller";
+$L['adm_part_hook_listener'] = "Hook handler";
+$L['adm_part_slots_for_plugins'] = "Slots for plugins";
+$L['adm_part_listens_hook'] = "Listens to hook";
 
 /* ====== Private messages ====== */
 

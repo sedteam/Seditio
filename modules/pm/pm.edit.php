@@ -8,11 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pm/pm.edit.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Private messages
-Lock=0
 [END_SED]
 ==================== */
 
@@ -40,11 +39,8 @@ $touser_names = array();
 sed_check_xg();
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.edit.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('pm.edit.first') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -86,23 +82,24 @@ if ($a == 'archive') {
 	$sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id='$id' LIMIT 1");
 
 	if ($row = sed_sql_fetchassoc($sql)) {
+		if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_pm'])) {
+			$fromuser = isset($row['pm_fromuser']) ? $row['pm_fromuser'] : '';
+			$title = isset($row['pm_title']) ? $row['pm_title'] : '';
+			$pm_label = isset($L['Private_Messages']) ? $L['Private_Messages'] : 'Private Messages';
+			sed_trash_put('pm', $pm_label . " #" . $id . " " . $title . " (" . $fromuser . ")", $id, $row);
+		}
+
 		/* === Hook === */
-		$extp = sed_getextplugins('pm.delete.first');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		foreach (sed_getextplugins('pm.delete.first') as $pl) {
+			include $pl;
 		}
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='$id'");
 
 		/* === Hook === */
-		$extp = sed_getextplugins('pm.delete.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		foreach (sed_getextplugins('pm.delete.done') as $pl) {
+			include $pl;
 		}
 		/* ===== */
 	}

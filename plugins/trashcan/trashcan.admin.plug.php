@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/trashcan/trashcan.admin.plug.php
 Version=186
-Updated=2026-mar-26
+Updated=2026-sep-21
 Type=Plugin
 [END_SED]
 
@@ -30,6 +30,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', 'trashcan');
 sed_block($usr['isadmin']);
 
+sed_trash_load_types();
+
 // ---------- Breadcrumbs
 $urlpaths = array();
 $urlpaths[sed_url("admin", "m=manage")] = $L['adm_manage'];
@@ -43,12 +45,16 @@ $id = sed_import('id', 'G', 'INT');
 
 if ($a == 'wipe') {
 	sed_check_xg();
-	$row = sed_sql_fetchassoc(sed_sql_query("SELECT tr_type, tr_itemid FROM $db_trash WHERE tr_id='$id' LIMIT 1"));
-	if ($row && $row['tr_type'] == 'comment') {
-		$path = $row['tr_itemid'];
-		sed_sql_query("DELETE FROM $db_trash WHERE tr_type='comment' AND (tr_itemid='" . sed_sql_prep($path) . "' OR tr_itemid LIKE '" . sed_sql_prep($path) . "-%')");
-	} else {
-		sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	$row = sed_sql_fetchassoc(sed_sql_query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1"));
+	if ($row) {
+		$type = $row['tr_type'];
+		if (!empty($sed_trashcan_types[$type]['wipe']) && function_exists($sed_trashcan_types[$type]['wipe'])) {
+			$wipe_callback = $sed_trashcan_types[$type]['wipe'];
+			$datas = unserialize($row['tr_datas']);
+			$wipe_callback($datas, $row['tr_itemid']);
+		} else {
+			sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+		}
 	}
 	sed_redirect(sed_url("admin", "m=trashcan", "", true), false, ['msg' => '302']);
 	exit;
@@ -75,46 +81,17 @@ $t = new XTemplate(sed_skinfile('admin.trashcan', false, true));
 $ii = 0;
 
 while ($row = sed_sql_fetchassoc($sql)) {
-	switch ($row['tr_type']) {
-		case 'comment':
-			$icon = "comments.png";
-			$typestr = $L['Comment'];
-			break;
+	$type = $row['tr_type'];
+	$typestr = isset($sed_trashcan_types[$type]['title']) ? $sed_trashcan_types[$type]['title'] : $type;
+	$icon = isset($sed_trashcan_types[$type]['icon']) ? $sed_trashcan_types[$type]['icon'] : 'system/img/admin/tools.png';
 
-		case 'forumpost':
-			$icon = "forums.png";
-			$typestr = $L['Post'];
-			break;
-
-		case 'forumtopic':
-			$icon = "forums.png";
-			$typestr = $L['Topic'];
-			break;
-
-		case 'page':
-			$icon = "page.png";
-			$typestr = $L['Page'];
-			break;
-
-		case 'pm':
-			$icon = "pm.png";
-			$typestr = $L['Private_Messages'];
-			break;
-
-		case 'user':
-			$icon = "user.png";
-			$typestr = $L['User'];
-			break;
-
-		default:
-			$icon = "tools.png";
-			$typestr = $row['tr_type'];
-			break;
+	if (strpos($icon, '/') === false) {
+		$icon = 'system/img/admin/' . $icon;
 	}
 
 	$t->assign(array(
 		"TRASHCAN_LIST_DATE" => sed_build_date($cfg['dateformat'], $row['tr_date']),
-		"TRASHCAN_LIST_TYPE" => "<img src=\"system/img/admin/" . $icon . "\" alt=\"" . $typestr . "\" /> " . $typestr,
+		"TRASHCAN_LIST_TYPE" => "<img src=\"" . $icon . "\" alt=\"" . $typestr . "\" /> " . $typestr,
 		"TRASHCAN_LIST_TITLE" => sed_cc($row['tr_title']),
 		"TRASHCAN_LIST_TRASHEDBY" => ($row['tr_trashedby'] == 0) ? $L['System'] : sed_build_user($row['tr_trashedby'], sed_cc($row['user_name'])),
 		"TRASHCAN_LIST_WIPE_URL" => sed_url("admin", "m=trashcan&a=wipe&id=" . $row['tr_id'] . "&" . sed_xg()),

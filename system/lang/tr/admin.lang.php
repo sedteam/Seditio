@@ -506,6 +506,10 @@ $L['adm_modules_installed'] = "Yüklü modüller";
 $L['adm_modules_available'] = "Kullanılabilir modüller";
 $L['adm_modules_none'] = "Yüklü modül yok.";
 $L['adm_modules_noavailable'] = "Yükleme için yeni modül bulunmuyor.";
+$L['adm_part_controller'] = "Denetleyici";
+$L['adm_part_hook_listener'] = "Kanca işleyici";
+$L['adm_part_slots_for_plugins'] = "Eklenti yuvaları";
+$L['adm_part_listens_hook'] = "Kancayı dinliyor";
 
 /* ====== Private messages ====== */
 

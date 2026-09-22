@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.modules.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core.admin
 Author=Seditio Team
 Description=Module management
@@ -234,47 +234,112 @@ if ($a == 'details' && !empty($mod_code)) {
 		$part_name = mb_substr($x, 0, -4);
 		$pl_part = ($part_name === $mod_code) ? 'main' : $part_name;
 		$part_file = $module_dir . $x;
+		$part_info = sed_infoget($part_file, 'SED_EXTPLUGIN');
+		if (empty($part_info) || !empty($part_info['Error'])) {
+			$part_info = sed_infoget($part_file, 'SED');
+		}
+
+		// Scan file for internal hook slots (sed_getextplugins calls)
 		$content = file_exists($part_file) ? file_get_contents($part_file) : '';
-		$hooks = array();
-		if ($content !== '' && preg_match_all("/sed_getextplugins\s*\(\s*([^)]+)\s*\)/", $content, $m) && !empty($m[1])) {
+		$internal_hooks = array();
+		if ($content !== '' && preg_match_all("/sed_getextplugins\s*\(\s*([^,\)]+)/", $content, $m) && !empty($m[1])) {
 			foreach ($m[1] as $arg) {
 				$hook = trim(trim($arg), "'\"");
 				if ($hook !== '') {
-					$hooks[] = $hook;
+					$internal_hooks[] = $hook;
 				}
 			}
-			$hooks = array_unique($hooks);
+			$internal_hooks = array_unique($internal_hooks);
 		}
-		$hooks_display = !empty($hooks) ? implode('<br />', $hooks) : 'module';
-		$sql_pl = sed_sql_query("SELECT pl_id, pl_part, pl_file, pl_hook, pl_active, pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_part='" . sed_sql_prep($pl_part) . "' AND pl_module=1 LIMIT 1");
-		$row_pl = sed_sql_fetchassoc($sql_pl);
-		if ($row_pl) {
-			$part_status = $status_mod[(int) $row_pl['pl_active']];
-		if ((int)$row_pl['pl_lock'] === 1) {
-			$pl_action = isset($L['adm_lockpart']) ? $L['adm_lockpart'] : 'Lock part';
-		} elseif ($pl_part === 'main') {
-			$pl_action = '-';
+
+		$sql_pl = sed_sql_query("SELECT pl_id, pl_part, pl_file, pl_hook, pl_active, pl_lock FROM $db_plugins WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND (pl_file='" . sed_sql_prep($part_name) . "' OR pl_part='" . sed_sql_prep($pl_part) . "') AND pl_module=1");
+		$rows_pl = array();
+		while ($r_pl = sed_sql_fetchassoc($sql_pl)) {
+			$rows_pl[] = $r_pl;
+		}
+
+		$is_hook_listener = false;
+		$hooks_arr = array();
+
+		if (!empty($rows_pl)) {
+			foreach ($rows_pl as $r) {
+				if ($r['pl_hook'] !== 'module') {
+					$hooks_arr[] = $r['pl_hook'];
+					$is_hook_listener = true;
+				}
+			}
+		} elseif (!empty($part_info['Hooks']) && $x !== $mod_code . '.php') {
+			$hooks_arr = explode(',', $part_info['Hooks']);
+			$is_hook_listener = true;
+		}
+
+		$txt_hook_listener = !empty($L['adm_part_hook_listener']) ? $L['adm_part_hook_listener'] : ($usr['lang'] == 'ru' ? 'Хук-обработчик' : 'Hook handler');
+		$txt_controller = !empty($L['adm_part_controller']) ? $L['adm_part_controller'] : ($usr['lang'] == 'ru' ? 'Контроллер' : 'Controller');
+		$txt_listens_hook = !empty($L['adm_part_listens_hook']) ? $L['adm_part_listens_hook'] : ($usr['lang'] == 'ru' ? 'Слушает хук' : 'Listens to hook');
+		$txt_slots_for_plugins = !empty($L['adm_part_slots_for_plugins']) ? $L['adm_part_slots_for_plugins'] : ($usr['lang'] == 'ru' ? 'Слоты для плагинов' : 'Slots for plugins');
+
+		if ($is_hook_listener) {
+			$t->assign(array(
+				"PART_BADGE_HOOK" => $txt_hook_listener,
+				"HOOKS_LISTENS_LABEL" => $txt_listens_hook
+			));
+			$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW.PART_IS_HOOK");
+			foreach (array_unique($hooks_arr) as $hk) {
+				$hk = trim($hk);
+				if ($hk !== '') {
+					$t->assign("HOOK_NAME", htmlspecialchars($hk));
+					$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW.HOOKS_LISTENS.HOOK_ITEM");
+				}
+			}
+			$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW.HOOKS_LISTENS");
 		} else {
-			$pl_action = ($row_pl['pl_active'] == 1)
-				? sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_pause']) ? $L['adm_opt_pause'] : 'Pause', array('class' => 'btn btn-adm'))
-				: sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=unpausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_unpause']) ? $L['adm_opt_unpause'] : 'Un-pause', array('class' => 'btn btn-adm'));
+			$t->assign(array(
+				"PART_BADGE_CONTROLLER" => $txt_controller,
+				"HOOKS_SLOTS_LABEL" => $txt_slots_for_plugins
+			));
+			$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW.PART_IS_CONTROLLER");
+			if (!empty($internal_hooks)) {
+				$t->assign(array(
+					"SLOTS_COUNT" => count($internal_hooks),
+					"SLOTS_LIST"  => implode(', ', $internal_hooks)
+				));
+				$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW.HOOKS_SLOTS");
+			} else {
+				$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW.HOOKS_MODULE");
+			}
 		}
+
+		if (!empty($rows_pl)) {
+			$row_pl = $rows_pl[0];
+			$part_status = $status_mod[(int) $row_pl['pl_active']];
+
+			if ((int)$row_pl['pl_lock'] === 1) {
+				$pl_action = isset($L['adm_lockpart']) ? $L['adm_lockpart'] : 'Lock part';
+			} elseif ($pl_part === 'main') {
+				$pl_action = '-';
+			} else {
+				$pl_action = ($row_pl['pl_active'] == 1)
+					? sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=pausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_pause']) ? $L['adm_opt_pause'] : 'Pause', array('class' => 'btn btn-adm'))
+					: sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=unpausepart&part=" . $row_pl['pl_id'] . "&" . sed_xg()), isset($L['adm_opt_unpause']) ? $L['adm_opt_unpause'] : 'Un-pause', array('class' => 'btn btn-adm'));
+			}
 			$t->assign(array(
 				"MODULE_PARTS_NUMBER" => $row_pl['pl_id'],
 				"MODULE_PARTS_PART" => $row_pl['pl_part'],
 				"MODULE_PARTS_FILE" => $row_pl['pl_file'],
-				"MODULE_PARTS_HOOKS" => $hooks_display,
 				"MODULE_PARTS_STATUS" => $part_status,
 				"MODULE_PARTS_ACTION" => $pl_action
 			));
 		} else {
+			$pl_action = ($is_installed)
+				? sed_link(sed_url("admin", "m=modules&a=edit&mod=" . $mod_code . "&b=installpart&partfile=" . urlencode($part_name) . "&" . sed_xg()), isset($L['adm_opt_installpart']) ? $L['adm_opt_installpart'] : 'Install part', array('class' => 'btn btn-adm'))
+				: '-';
+
 			$t->assign(array(
 				"MODULE_PARTS_NUMBER" => '-',
 				"MODULE_PARTS_PART" => $pl_part,
 				"MODULE_PARTS_FILE" => $part_name,
-				"MODULE_PARTS_HOOKS" => $hooks_display,
 				"MODULE_PARTS_STATUS" => $status_mod[3],
-				"MODULE_PARTS_ACTION" => '-'
+				"MODULE_PARTS_ACTION" => $pl_action
 			));
 		}
 		$t->parse("ADMIN_MODULES.MODULE_DETAILS.MODULE_PARTS_ROW");
@@ -382,6 +447,40 @@ if ($a == 'details' && !empty($mod_code)) {
 			$part = sed_import('part', 'G', 'INT');
 			sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='" . sed_sql_prep($mod_code) . "' AND pl_id='" . (int)$part . "' AND pl_module=1");
 			sed_cache_clearall();
+			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => '917']);
+			exit;
+
+		case 'installpart':
+			$partfile = sed_import('partfile', 'G', 'TXT');
+			$partfile = basename($partfile);
+			$part_path = SED_ROOT . '/modules/' . $mod_code . '/' . $partfile . '.php';
+			if (file_exists($part_path)) {
+				$part_info = sed_infoget($part_path, 'SED_EXTPLUGIN');
+				if (empty($part_info) || !empty($part_info['Error'])) {
+					$part_info = sed_infoget($part_path, 'SED');
+				}
+				$pl_lock = (isset($part_info['Lock']) && (int)$part_info['Lock'] === 1) ? 1 : 0;
+				$pl_order = (isset($part_info['Order']) && is_numeric($part_info['Order'])) ? (int)$part_info['Order'] : 10;
+				$pl_part = ($partfile === $mod_code) ? 'main' : $partfile;
+
+				$setup_file = SED_ROOT . '/modules/' . $mod_code . '/' . $mod_code . '.setup.php';
+				$info = sed_infoget($setup_file, 'SED_MODULE');
+				$dependencies_json = '';
+				if (!empty($info['Requires'])) {
+					$dependencies_json = json_encode(array('requires' => array_map('trim', explode(',', $info['Requires']))));
+				}
+
+				if (!empty($part_info['Hooks']) && $partfile !== $mod_code) {
+					$hooks = array_map('trim', explode(',', $part_info['Hooks']));
+					foreach ($hooks as $hook) {
+						if (empty($hook)) continue;
+						sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock, pl_module) VALUES ('" . sed_sql_prep($hook) . "', '" . sed_sql_prep($mod_code) . "', '" . sed_sql_prep($partfile) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($partfile) . "', " . (int)$pl_order . ", 1, " . (int)$pl_lock . ", 1)");
+					}
+				} else {
+					sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock, pl_module) VALUES ('module', '" . sed_sql_prep($mod_code) . "', '" . sed_sql_prep($pl_part) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($partfile) . "', " . (int)$pl_order . ", 1, " . (int)$pl_lock . ", 1)");
+				}
+				sed_cache_clearall();
+			}
 			sed_redirect(sed_url("admin", "m=modules&a=details&mod=" . $mod_code, "", true), false, ['msg' => '917']);
 			exit;
 

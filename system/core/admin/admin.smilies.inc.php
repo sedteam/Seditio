@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.smilies.inc.php
+File=system/core/admin/admin.smilies.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -23,12 +23,8 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin',
 sed_block($usr['isadmin']);
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.smilies.first');
-
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('admin.smilies.first') as $pl) {
+	include $pl;
 }
 
 // ---------- Breadcrumbs
@@ -59,11 +55,8 @@ if ($a == 'update') {
 	$sql = sed_sql_query("INSERT INTO $db_smilies (smilie_code, smilie_image, smilie_text, smilie_order) VALUES ('$nsmiliecode', '$nsmilieimage', '$nsmilietext', " . (int)$nsmilieorder . ")");
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('admin.smilies.added');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('admin.smilies.added') as $pl) {
+		include $pl;
 	}
 
 	sed_cache_clear('sed_smilies');
@@ -75,11 +68,8 @@ if ($a == 'update') {
 	$sql = sed_sql_query("DELETE FROM $db_smilies WHERE smilie_id='$id'");
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('admin.smilies.deleted');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('admin.smilies.deleted') as $pl) {
+		include $pl;
 	}
 
 	sed_cache_clear('sed_smilies');

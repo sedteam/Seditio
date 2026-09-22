@@ -8,10 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/news/news.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
-Description=
+Description=News
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -115,21 +115,16 @@ if (sed_module_active('page') && $cfg['plugin']['news']['maxpages'] > 0 && !empt
 	}
 
 	/* === Hook - news.list === */
-	$extp_list = sed_getextplugins('news.list');
-	if (is_array($extp_list)) {
-		foreach ($extp_list as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('news.list') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
 	foreach ($news_items as $pag) {
 
 		/* === Hook - Part2 : Include === */
-		if (is_array($extpf)) {
-			foreach ($extpf as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		foreach ($extpf as $pl) {
+			include $pl;
 		}
 		/* ===== */
 
@@ -201,10 +196,8 @@ if (sed_module_active('page') && $cfg['plugin']['news']['maxpages'] > 0 && !empt
 		$news->assign("PAGE_ROW_TEXT", $pag['page_text']);
 
 		/* === Hook - Part2 : Include === */
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		foreach ($extp as $pl) {
+			include $pl;
 		}
 		/* ===== */
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.register.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=User registration
@@ -40,12 +40,9 @@ if ($usr['id'] > 0 && !$usr['isadmin']) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.register.first');
-if (is_array($extp)) {
-	foreach ($extp as $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.register.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -59,11 +56,8 @@ if ($a == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 	sed_shield_protect();
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('users.register.add.first');
-	if (is_array($extp)) {
-		foreach ($extp as $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('users.register.add.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -220,12 +214,9 @@ if ($a == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 		$sql = sed_sql_query("INSERT INTO $db_groups_users (gru_userid, gru_groupid) VALUES (" . (int)$userid . ", " . (int)$defgroup . ")");
 
 		/* === Hook for the plugins === */
-		$extp = sed_getextplugins('users.register.add.done');
-		if (is_array($extp)) {
-			foreach ($extp as $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('users.register.add.done') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		if ($cfg['regnoactivation'] || $defgroup == 5) {
@@ -295,12 +286,9 @@ $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.register.main');
-if (is_array($extp)) {
-	foreach ($extp as $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.register.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -342,12 +330,9 @@ if (count($extrafields) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.register.tags');
-if (is_array($extp)) {
-	foreach ($extp as $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.register.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

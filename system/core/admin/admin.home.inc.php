@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.home.inc.php
 Version=186
-Updated=2026-mar-26
+Updated=2026-sep-21
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -20,11 +20,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) {
 }
 
 /* === Hook: early tasks on admin home (before breadcrumbs / template) === */
-$extp = sed_getextplugins('admin.home.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('admin.home.first') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -136,11 +133,8 @@ $t->parse("ADMIN_HOME.ADMIN_INFOS_TABBODY");
 $t->assign("ADMIN_HOME_TITLE", $admintitle);
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.home');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('admin.home') as $pl) {
+	include $pl;
 }
 /* ===== */
 

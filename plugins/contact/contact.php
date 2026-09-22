@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -59,11 +59,8 @@ $cfg_names = explode(",", $cfg['plugin']['contact']['recipients']);
 if ($a == 'send') {
 
 	/* === Hook === */
-	$extp = sed_getextplugins('contact.send.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('contact.send.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -165,12 +162,9 @@ if (!empty($message)) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('contact.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('contact.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->assign(array(

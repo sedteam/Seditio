@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.main.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Forums sections (main page)
@@ -39,12 +39,9 @@ $filter_cats = FALSE;
 $sys['sublocation'] = $L['Home'];
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.sections.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($n == 'markall' && $usr['id'] > 0) {
@@ -116,12 +113,9 @@ $out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums") : $sys['abs_url'] 
 /* ===== */
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.sections.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -328,7 +322,7 @@ foreach ($sect_arr as $fsec_key => $fsec) {
 			/* === Hook - Part2 : Include === */
 			if (is_array($extp)) {
 				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+					include $pl;
 				}
 			}
 			/* ===== */
@@ -342,12 +336,9 @@ foreach ($sect_arr as $fsec_key => $fsec) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.sections.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

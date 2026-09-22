@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=plug.php
+File=system/core/plug/plug.inc.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Plugin loader
@@ -49,7 +49,8 @@ if (!empty($e)) {
 		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', $e);
 		sed_block($usr['auth_read']);
 		foreach ($extp_direct as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			$dir = !empty($pl['pl_module']) ? 'modules' : 'plugins';
+			include(SED_ROOT . '/' . $dir . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 		}
 	} else {
 
@@ -117,7 +118,8 @@ if (!empty($e)) {
 
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			$dir = !empty($pl['pl_module']) ? 'modules' : 'plugins';
+			include(SED_ROOT . '/' . $dir . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 		}
 	}
 
@@ -176,7 +178,8 @@ if (!empty($e)) {
 
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			$dir = !empty($pl['pl_module']) ? 'modules' : 'plugins';
+			include(SED_ROOT . '/' . $dir . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 		}
 	}
 
@@ -246,7 +249,8 @@ if (!empty($e)) {
 
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			$dir = !empty($pl['pl_module']) ? 'modules' : 'plugins';
+			include(SED_ROOT . '/' . $dir . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 		}
 	}
 } else {

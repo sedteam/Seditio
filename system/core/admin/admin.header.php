@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.header.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Admin header
@@ -22,11 +22,8 @@ if (!defined('SED_CODE')) {
 sed_add_javascript('system/assets/js/core.js', true, 10);
 
 /* === Hook === */
-$extp = sed_getextplugins('header.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('header.first') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -71,11 +68,8 @@ if (sed_module_active('page') && sed_auth('page', 'any', 'A')) {
 sed_sendheaders();
 
 /* === Hook === */
-$extp = sed_getextplugins('header.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('header.main') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -242,7 +236,7 @@ if ($usr['id'] > 0) {
 
 		// Plugin menu items: collect from admin.plug plugins, sort by order, then output (title, order, sections with optional auth/param)
 		$plug_menu_items = array();
-		$extp_admin_plug = sed_getextplugins('admin.plug');
+		$extp_admin_plug = sed_getextplugins('admin.plug', 'R', 'full');
 		if (is_array($extp_admin_plug)) {
 			foreach ($extp_admin_plug as $pl) {
 				$plug_code = $pl['pl_code'];
@@ -427,11 +421,8 @@ if ($usr['id'] > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('header.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('header.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 

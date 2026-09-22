@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.posts.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -40,12 +40,9 @@ unset($notlastpage);
 $maxtopicsperpage = (int)(isset($cfg['maxtopicsperpage']) ? $cfg['maxtopicsperpage'] : 30);
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.posts.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.posts.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require_once(SED_ROOT . '/modules/polls/inc/polls.functions.php');
@@ -142,11 +139,8 @@ if ($a == 'newpost' && $usr['auth_write']) {
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.newpost.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('forums.posts.newpost.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -188,13 +182,9 @@ if ($a == 'newpost' && $usr['auth_write']) {
 		if ($fs_countposts) {
 			$sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='" . $usr['id'] . "'");
 		}
-
-		/* === Hook === */
-		$extp = sed_getextplugins('forums.posts.newpost.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		/* === Hook === */
+		foreach (sed_getextplugins('forums.posts.newpost.done') as $pl) {
+			include $pl;
 		}
 		/* ===== */
 
@@ -212,12 +202,14 @@ if ($a == 'newpost' && $usr['auth_write']) {
 	$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_sectionid='$s'");
 
 	if ($row = sed_sql_fetchassoc($sql)) {
+		if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_forum'])) {
+			$post_label = isset($L['Post']) ? $L['Post'] : 'Post';
+			sed_trash_put('forumpost', $post_label . " #" . $p . " from topic #" . $q, "p" . $p . "-q" . $q, $row);
+		}
+
 		/* === Hook === */
-		$extp = sed_getextplugins('forums.posts.delete.first');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		foreach (sed_getextplugins('forums.posts.delete.first') as $pl) {
+			include $pl;
 		}
 		/* ===== */
 
@@ -234,11 +226,8 @@ if ($a == 'newpost' && $usr['auth_write']) {
 	sed_log("Deleted post #" . $p, 'for');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.delete.done');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('forums.posts.delete.done') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -249,12 +238,14 @@ if ($a == 'newpost' && $usr['auth_write']) {
 		$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 
 		if ($row = sed_sql_fetchassoc($sql)) {
+			if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_forum'])) {
+				$topic_label = isset($L['Topic']) ? $L['Topic'] : 'Topic';
+				sed_trash_put('forumtopic', $topic_label . " #" . $q . " (no post left)", "q" . $q, $row);
+			}
+
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.posts.topic.delete.first');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
+			foreach (sed_getextplugins('forums.posts.topic.delete.first') as $pl) {
+				include $pl;
 			}
 			/* ===== */
 
@@ -270,21 +261,15 @@ if ($a == 'newpost' && $usr['auth_write']) {
 				WHERE fs_id='$s'");
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.posts.topic.delete.done');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('forums.posts.topic.delete.done') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.posts.emptytopicdel');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('forums.posts.emptytopicdel') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			sed_log("Delete topic #" . $q . " (no post left)", 'for');
@@ -451,12 +436,9 @@ $out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums", "m=posts&q=" . $q 
 /* ===== */
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.posts.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.posts.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -648,7 +630,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			include $pl;
 		}
 	}
 	/* ===== */
@@ -684,11 +666,8 @@ if (!$notlastpage && !$ft_state && $usr['id'] > 0 && $allowreplybox && $usr['aut
 	));
 
 	/* === Hook  === */
-	$extp = sed_getextplugins('forums.posts.newpost.tags');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('forums.posts.newpost.tags') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -706,12 +685,9 @@ if ($ft_mode == 1) {
 }
 
 /* === Hook  === */
-$extp = sed_getextplugins('forums.posts.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.posts.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

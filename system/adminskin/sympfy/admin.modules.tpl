@@ -170,9 +170,33 @@
 				<!-- BEGIN: MODULE_PARTS_ROW -->
 				<div class="table-row resp-table-row">
 					<div class="table-td text-left resp-table-td plug-part" data-label="#">#{MODULE_PARTS_NUMBER}</div>
-					<div class="table-td text-left resp-table-td plug-part" data-label="{PHP.L.Part}">{MODULE_PARTS_PART}</div>
+					<div class="table-td text-left resp-table-td plug-part" data-label="{PHP.L.Part}">
+						<div class="module-part-title">
+							<span>{MODULE_PARTS_PART}</span>
+							<!-- BEGIN: PART_IS_HOOK -->
+							<span class="badge badge-hook">{PART_BADGE_HOOK}</span>
+							<!-- END: PART_IS_HOOK -->
+							<!-- BEGIN: PART_IS_CONTROLLER -->
+							<span class="badge badge-controller">{PART_BADGE_CONTROLLER}</span>
+							<!-- END: PART_IS_CONTROLLER -->
+						</div>
+					</div>
 					<div class="table-td text-left resp-table-td plug-file" data-label="{PHP.L.File}">{MODULE_PARTS_FILE}</div>
-					<div class="table-td text-left resp-table-td plug-hooks" data-label="{PHP.L.Hooks}">{MODULE_PARTS_HOOKS}</div>
+					<div class="table-td text-left resp-table-td plug-hooks" data-label="{PHP.L.Hooks}">
+						<!-- BEGIN: HOOKS_LISTENS -->
+						<strong>{HOOKS_LISTENS_LABEL}:</strong>
+						<!-- BEGIN: HOOK_ITEM -->
+						<span class="badge badge-hook-name">{HOOK_NAME}</span>
+						<!-- END: HOOK_ITEM -->
+						<!-- END: HOOKS_LISTENS -->
+						<!-- BEGIN: HOOKS_SLOTS -->
+						<strong>{HOOKS_SLOTS_LABEL} ({SLOTS_COUNT}):</strong><br />
+						<span class="module-hook-slots">{SLOTS_LIST}</span>
+						<!-- END: HOOKS_SLOTS -->
+						<!-- BEGIN: HOOKS_MODULE -->
+						<span class="module-hook-slots">module</span>
+						<!-- END: HOOKS_MODULE -->
+					</div>
 					<div class="table-td text-left resp-table-td plug-status" data-label="{PHP.L.Status}">{MODULE_PARTS_STATUS}</div>
 					<div class="table-td text-left resp-table-td plug-action">{MODULE_PARTS_ACTION}</div>
 				</div>

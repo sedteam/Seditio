@@ -506,6 +506,10 @@ $L['adm_modules_installed'] = "Установленные модули";
 $L['adm_modules_available'] = "Доступные модули";
 $L['adm_modules_none'] = "Нет установленных модулей.";
 $L['adm_modules_noavailable'] = "Нет новых модулей для установки.";
+$L['adm_part_controller'] = "Контроллер";
+$L['adm_part_hook_listener'] = "Хук-обработчик";
+$L['adm_part_slots_for_plugins'] = "Слоты для плагинов";
+$L['adm_part_listens_hook'] = "Слушает хук";
 
 /* ====== Private messages ====== */
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.list.php
 Version=186
-Updated=2026-jul-29
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=List (categories)
@@ -89,12 +89,9 @@ if ($c == 'all' || $c == 'system') {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('list.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('list.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 // Validate sort column and direction
@@ -192,11 +189,8 @@ if ($c != 'all') {
 	$row2 = sed_sql_fetchassoc($sql2);
 
 	/* === Hook === */
-	$extp = sed_getextplugins('list.fetch');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('list.fetch') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -258,12 +252,9 @@ if (count($list_thumbs_array) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('list.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('list.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -398,7 +389,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 $extp_list = sed_getextplugins('list.list');
 if (is_array($extp_list)) {
 	foreach ($extp_list as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		include $pl;
 	}
 }
 /* ===== */
@@ -408,7 +399,7 @@ foreach ($list_items as $pag) {
 	/* === Hook - Part2 : Include === */
 	if (is_array($extpf)) {
 		foreach ($extpf as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			include $pl;
 		}
 	}
 	/* ===== */
@@ -491,7 +482,7 @@ foreach ($list_items as $pag) {
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			include $pl;
 		}
 	}
 	/* ===== */
@@ -501,12 +492,9 @@ foreach ($list_items as $pag) {
 
 
 /* === Hook === */
-$extp = sed_getextplugins('list.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('list.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

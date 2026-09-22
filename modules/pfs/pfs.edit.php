@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.edit.php
 Version=186
-Updated=2026-sep-08
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=PFS edit file
@@ -135,11 +135,8 @@ if ($standalone) {
 	$pfs_footer = "</body>\n</html>";
 
 	/* === Hook === */
-	$extp = sed_getextplugins('pfs.stndl');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('pfs.stndl') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -178,12 +175,9 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.editfolder.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pfs.editfolder.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

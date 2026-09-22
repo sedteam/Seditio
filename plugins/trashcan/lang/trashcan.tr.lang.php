@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/trashcan/lang/trashcan.tr.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-21
 Type=Plugin
 Translations=1
 [END_SED]
@@ -27,5 +27,6 @@ $L['cfg_trash_forum'] = array("Forumlar için çöp kutusu kullan", "");
 $L['cfg_trash_page'] = array("Sayfalar için çöp kutusunu kullan", "");
 $L['cfg_trash_pm'] = array("Özel mesajlar için çöp kutusunu kullan", "");
 $L['cfg_trash_user'] = array("Kullanıcılar için çöp kutusunu kullan", "");
+$L['cfg_trash_poll'] = array("Anketler için çöp kutusunu kullanın", "");
 
 $L['adm_help_trashcan'] = "Burada kullanıcılar ve moderatörler tarafından yeni silinen öğeler listelenmiştir.<br />Bir forum konusunu geri yüklemek, konuya ait tüm gönderileri de geri yükleyecektir.<br />Ve silinmiş bir konudaki bir gönderiyi geri yüklemek, tüm konuyu (mevcutsa) ve tüm alt gönderileri geri yükleyecektir.<br />&nbsp;<br />Sil : Öğeyi sonsuza kadar sil.<br />Geri Yükle : Öğeyi canlı veritabanına geri koy.";

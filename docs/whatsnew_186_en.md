@@ -44,6 +44,12 @@ This document provides a comprehensive technical overview of the new features, a
 * Introduced `Translations=1` flag in the `[BEGIN_SED]` block of `.lang.php` files to govern participation in the centralized DB translation repository.
 * Intelligent isolation in `sed_langfile()`: extensions with `Translations=1` leverage the precompiled memory cache, while legacy/third-party extensions without the flag load their local `.lang.php` files dynamically at runtime, preventing namespace pollution and variable collisions (e.g. legacy `$L['plu_title']`).
 
+### Modular Hooks Subsystem (Module Hooks)
+* Modules (`modules/`) now enjoy first-class support for subscribing to system events and plugin hooks via internal modular hook parts (`modules/{code}/{code}.{part}.php`).
+* Automatic discovery and registration of module hook parts in `sed_module_install()` with the `pl_module = 1` flag in `sed_plugins`.
+* The `sed_getextplugins()` core hook execution function transparently resolves both plugins (`pl_module = 0`, checking `sed_auth('plug', $code)`) and modules (`pl_module = 1`, checking `sed_auth($code, 'any')`).
+* The extension manager in the admin area (`admin/plug` or `index.php?module=admin&m=plug`) displays module hook parts with individual pause/unpause controls.
+
 ### Automatic URL Cache Regeneration
 * In `system/common.php`, missing or corrupted `datas/cache/sed_urls.php` cache files are now detected and rebuilt automatically on the fly, preventing routing failures after cache flushes.
 
@@ -163,6 +169,12 @@ This document provides a comprehensive technical overview of the new features, a
 
 ### Captcha (`sedcaptcha`)
 * Added request method validation and improved captcha image generation and lifecycle management.
+
+### Universal Trashcan API 2.0
+* The `trashcan` plugin has been re-architected around an extensible API based on the `trashcan.api` system hook and `$sed_trashcan_types` global type registry.
+* Removed hard-coded entity `switch` logic from the trashcan plugin core.
+* Soft-delete and restoration handlers for all standard entities were moved into their respective modules and plugins: `modules/page/page.trashcan.php`, `modules/pm/pm.trashcan.php`, `modules/users/users.trashcan.php`, `modules/forums/forums.trashcan.php`, `modules/polls/polls.trashcan.php`, `plugins/comments/comments.trashcan.php`.
+* Third-party modules (catalogues, shops, galleries, etc.) can now cleanly register custom item types with custom `restore` and `wipe` callbacks.
 
 ---
 

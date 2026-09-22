@@ -8,17 +8,17 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/trashcan/trashcan.setup.php
 Version=186
-Updated=2026-mar-26
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
-Description=Trash can: soft-delete storage and restore (moved from core)
+Description=Trash can: soft-delete storage and restore (extensible via trashcan.api)
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
 Code=trashcan
 Name=Trash can
 Description=Stores deleted items for restore; configuration for per-area trash and prune delay
-Version=1.0
+Version=2.0
 Date=2026-mar-26
 Author=Seditio Team
 Copyright=
@@ -37,6 +37,7 @@ trash_page=03:radio:0,1:1:Use trash for pages
 trash_pm=04:radio:0,1:1:Use trash for private messages
 trash_user=05:radio:0,1:1:Use trash for users
 trash_forum=06:radio:0,1:1:Use trash for forums
+trash_poll=07:radio:0,1:1:Use trash for polls
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */

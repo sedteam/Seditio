@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.logout.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=User logout
@@ -23,12 +23,9 @@ if (!defined('SED_CODE')) {
 sed_check_xg();
 
 /* === Hook === */
-$extp = sed_getextplugins('users.logout');
-if (is_array($extp)) {
-	foreach ($extp as $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.logout') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($cfg['authmode'] == 1 || $cfg['authmode'] == 3) {

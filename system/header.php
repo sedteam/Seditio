@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/header.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Global header
@@ -29,11 +29,8 @@ if (!empty($usr['isadmin'])) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('header.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('header.first') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -85,11 +82,8 @@ if (!empty($msg) && isset($cfg['msg_status'][$msg])) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('header.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('header.main') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -175,11 +169,8 @@ if ($usr['id'] > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('header.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('header.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.topics.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -95,12 +95,9 @@ if ($fs_state) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.topics.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($usr['isadmin'] && !empty($q) && !empty($a)) {
@@ -311,12 +308,9 @@ $out['canonical_url'] = ($cfg['absurls']) ? sed_url("forums", "m=topics&s=" . $s
 /* ===== */
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.topics.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -548,7 +542,7 @@ while ($row = sed_sql_fetchassoc($sql)) {
 $extp_list = sed_getextplugins('forums.topics.list');
 if (is_array($extp_list)) {
 	foreach ($extp_list as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		include $pl;
 	}
 }
 /* ===== */
@@ -645,7 +639,7 @@ foreach ($topics_items as $row) {
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			include $pl;
 		}
 	}
 	/* ===== */
@@ -654,12 +648,9 @@ foreach ($topics_items as $row) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.topics.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

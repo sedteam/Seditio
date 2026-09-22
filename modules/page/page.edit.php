@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.edit.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Edit page
@@ -43,11 +43,8 @@ if ($a == 'update') {
 	sed_block($usr['isadmin']);
 
 	/* === Hook === */
-	$extp = sed_getextplugins('page.edit.update.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('page.edit.update.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -115,12 +112,13 @@ if ($a == 'update') {
 			$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 
 			if ($row = sed_sql_fetchassoc($sql)) {
+				if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_page'])) {
+					sed_trash_put('page', (isset($L['Page']) ? $L['Page'] : 'Page') . " #" . $id . " " . $row['page_title'], $id, $row);
+				}
+
 				/* === Hook === */
-				$extp = sed_getextplugins('page.delete.first');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
+				foreach (sed_getextplugins('page.delete.first') as $pl) {
+					include $pl;
 				}
 				/* ===== */
 
@@ -128,12 +126,9 @@ if ($a == 'update') {
 				$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 
 				/* === Hook === */
-				$extp = sed_getextplugins('page.delete.done');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
-				}
+				foreach (sed_getextplugins('page.delete.done') as $pl) {
+		include $pl;
+	}
 				/* ===== */
 
 				sed_log("Deleted page #" . $id, 'adm');
@@ -210,12 +205,9 @@ if ($a == 'update') {
 				WHERE page_id='$id'");
 
 			/* === Hook === */
-			$extp = sed_getextplugins('page.edit.update.done');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('page.edit.update.done') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			$sys['catcode'] = $rpagecat; //new in v175
@@ -249,12 +241,9 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 sed_block($usr['isadmin']);
 
 /* === Hook === */
-$extp = sed_getextplugins('page.edit.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.edit.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $page_form_delete =  sed_radiobox("rpagedelete", $yesno_arr, 0);
@@ -284,12 +273,9 @@ $urlpaths = array();
 $urlpaths[sed_url("page", "m=edit&id=" . $pag['page_id'] . "&r=list")] = $L['Edit'];
 
 /* === Hook === */
-$extp = sed_getextplugins('page.edit.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.edit.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if (defined('SED_ADMIN')) {
@@ -363,13 +349,9 @@ if (count($extrafields) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.edit.tags');
-
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.edit.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if (defined('SED_ADMIN')) {

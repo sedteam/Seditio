@@ -117,7 +117,7 @@ Modules are large, functionally complete sections of the site that can work inde
 * `forums` — a full-featured forum.
 * `pfs` — personal file system (file uploading, media manager).
 
-Each module is located in its own directory inside `/modules/` and is connected via the entry point `index.php?module=module_name`.
+Each module is located in its own directory inside `/modules/` and is connected via the entry point `index.php?module=module_name`. In addition, modules can contain **modular hook parts**, enabling them to subscribe directly to any core or extension system events on equal footing with plugins.
 
 For a detailed description of built-in modules and their development process, see [Chapter 5. Built-in Modules](5_Core_Modules.md) and [Chapter 6. Module Architecture and Development](6_Module_Architecture_and_Development.md).
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/admin/page.admin.structure.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module.admin
 Author=Seditio Team
 Description=Page structure and queue
@@ -54,12 +54,9 @@ switch ($mn) {
 			if ($a == 'update') {
 
 				/* === Hook === */
-				$extp = sed_getextplugins('admin.page.structure.edit.first');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
-				}
+				foreach (sed_getextplugins('admin.page.structure.edit.first') as $pl) {
+		include $pl;
+	}
 				/* ===== */
 
 				$rpath = sed_import('rpath', 'P', 'TXT');
@@ -207,12 +204,9 @@ switch ($mn) {
 			));
 
 			/* === Hook === */
-			$extp = sed_getextplugins('admin.page.structure.edit.tags');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('admin.page.structure.edit.tags') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			$t->parse("ADMIN_PAGE.STRUCTURE_UPDATE");

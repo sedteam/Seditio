@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/gallery/gallery.details.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Gallery details
@@ -30,12 +30,9 @@ foreach ($sed_extensions as $k => $line) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('gallery.details.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('gallery.details.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $sql_pfs = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_id='$id' LIMIT 1");
@@ -122,12 +119,9 @@ $urlpaths[sed_url("gallery", "f=" . $pff['pff_id'])] = $pff['pff_title'];
 $urlpaths[sed_url("gallery", "id=" . $id)] = $pfs['pfs_title'];
 
 /* === Hook === */
-$extp = sed_getextplugins('gallery.details.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('gallery.details.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -174,12 +168,9 @@ $t->assign(array(
 if (!empty($pfs['pfs_desc'])) $t->parse("MAIN.GALLERY_DETAILS_DESC");
 
 /* === Hook === */
-$extp = sed_getextplugins('gallery.details.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('gallery.details.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

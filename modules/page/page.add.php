@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.add.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Add page
@@ -31,12 +31,9 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 sed_block($usr['auth_write']);
 
 /* === Hook === */
-$extp = sed_getextplugins('page.add.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.add.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -49,11 +46,8 @@ if ($a == 'add') {
 	sed_shield_protect();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('page.add.add.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('page.add.add.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -191,12 +185,9 @@ if ($a == 'add') {
 			'" . sed_sql_prep($newpagethumb) . "'" . $ssql_extra_values . ")");
 
 		/* === Hook === */
-		$extp = sed_getextplugins('page.add.add.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('page.add.add.done') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		sed_page_clear_menu_cache();
@@ -222,11 +213,8 @@ if (($a == 'clone') && ($id > 0)) {
 	sed_block($usr['isadmin']);
 
 	/* === Hook === */
-	$extp = sed_getextplugins('page.add.clone');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('page.add.clone') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -292,12 +280,9 @@ $urlpaths = array();
 $urlpaths[sed_url("page", "m=add&c=" . $c)] = $L['Add'];
 
 /* === Hook === */
-$extp = sed_getextplugins('page.add.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.add.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $newpage_tpl = (isset($newpagecat) && isset($sed_cat[$newpagecat]['tpl'])) ? $sed_cat[$newpagecat]['tpl'] : '';
@@ -363,12 +348,9 @@ if (count($extrafields) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.add.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('page.add.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if (defined('SED_ADMIN')) {

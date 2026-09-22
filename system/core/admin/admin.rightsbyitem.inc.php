@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.rightsbyitem.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core.admin
 Author=Seditio Team
 Description=Rights
@@ -89,11 +89,8 @@ sed_die(sed_sql_numrows($sql) == 0);
 }
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.rightsbyitem.case');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('admin.rightsbyitem.case') as $pl) {
+	include $pl;
 }
 /* ===== */
 

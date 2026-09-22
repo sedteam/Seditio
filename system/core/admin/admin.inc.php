@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.inc.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -52,11 +52,8 @@ $adminmain = '';
 $adminwarnings = '';
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('admin.main') as $pl) {
+	include $pl;
 }
 
 $sys['inc'] = '';
@@ -136,11 +133,8 @@ if (!empty($msg) || !empty($adminwarnings)) {
 }
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('admin.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 

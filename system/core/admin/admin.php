@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Administration panel loader

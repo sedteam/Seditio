@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -87,15 +87,12 @@ function sed_auth_sync_orphaned()
 	}
 
 	/* === Hook: admin.auth.sync.valid === */
-	$extp = sed_getextplugins('admin.auth.sync.valid');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			$pl_valid = include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			if (is_array($pl_valid)) {
-				foreach ($pl_valid as $pv) {
-					if (isset($pv['code'], $pv['opt'])) {
-						$valid_pairs[(sed_sql_prep($pv['code']) . "\t" . sed_sql_prep($pv['opt']))] = true;
-					}
+	foreach (sed_getextplugins('admin.auth.sync.valid') as $pl) {
+		$pl_valid = include $pl;
+		if (is_array($pl_valid)) {
+			foreach ($pl_valid as $pv) {
+				if (isset($pv['code'], $pv['opt'])) {
+					$valid_pairs[(sed_sql_prep($pv['code']) . "\t" . sed_sql_prep($pv['opt']))] = true;
 				}
 			}
 		}
@@ -951,7 +948,7 @@ function sed_module_install($code)
 	$sql = sed_sql_query("INSERT INTO $db_core (ct_code, ct_title, ct_version, ct_state, ct_lock, ct_path, ct_admin) VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', 1, " . (int)$ct_lock . ", '" . sed_sql_prep($ct_path) . "', " . (int)$info['Admin'] . ")");
 	$res .= "Registered in core registry.<br />";
 
-	// Step 6: Register all module parts in sed_plugins (like plugin parts)
+	// Step 6: Register module parts and hooks in sed_plugins
 	$dependencies_json = '';
 	if (!empty($info['Requires'])) {
 		$dependencies_json = json_encode(array('requires' => array_map('trim', explode(',', $info['Requires']))));
@@ -980,16 +977,32 @@ function sed_module_install($code)
 	}
 	$parts_ordered = array_merge($parts_ordered, $module_parts);
 	$order = 10;
+	$reg_count = 0;
 	foreach ($parts_ordered as $x) {
 		$part_name = mb_substr($x, 0, -4);
-		$pl_part = ($part_name === $code) ? 'main' : $part_name;
-		$pl_file = $part_name;
-		$part_info = sed_infoget($module_dir . $x, 'SED');
+		$part_file = $module_dir . $x;
+		$part_info = sed_infoget($part_file, 'SED_EXTPLUGIN');
+		if (empty($part_info) || !empty($part_info['Error'])) {
+			$part_info = sed_infoget($part_file, 'SED');
+		}
 		$pl_lock = (isset($part_info['Lock']) && (int)$part_info['Lock'] === 1) ? 1 : 0;
-		$sql = sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock, pl_module) VALUES ('module', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($pl_part) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($pl_file) . "', " . (int)$order . ", 1, " . (int)$pl_lock . ", 1)");
+		$pl_order = (isset($part_info['Order']) && is_numeric($part_info['Order'])) ? (int)$part_info['Order'] : $order;
+
+		if (!empty($part_info['Hooks']) && $x !== $code . '.php') {
+			$hooks = array_map('trim', explode(',', $part_info['Hooks']));
+			foreach ($hooks as $hook) {
+				if (empty($hook)) continue;
+				sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock, pl_module) VALUES ('" . sed_sql_prep($hook) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($part_name) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($part_name) . "', " . (int)$pl_order . ", 1, " . (int)$pl_lock . ", 1)");
+				$reg_count++;
+			}
+		} else {
+			$pl_part = ($part_name === $code) ? 'main' : $part_name;
+			sed_sql_query("INSERT INTO $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_version, pl_dependencies, pl_file, pl_order, pl_active, pl_lock, pl_module) VALUES ('module', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($pl_part) . "', '" . sed_sql_prep($info['Name']) . "', '" . sed_sql_prep($info['Version']) . "', '" . sed_sql_prep($dependencies_json) . "', '" . sed_sql_prep($part_name) . "', " . (int)$pl_order . ", 1, " . (int)$pl_lock . ", 1)");
+			$reg_count++;
+		}
 		$order += 10;
 	}
-	$res .= "Registered " . count($parts_ordered) . " part(s) in plugins registry (pl_module=1).<br />";
+	$res .= "Registered " . $reg_count . " part(s)/hook(s) in plugins registry (pl_module=1).<br />";
 
 	// Step 7: Install configuration entries
 	$info_cfg = sed_infoget($setup_file, 'SED_MODULE_CONFIG');

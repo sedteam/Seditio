@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/footer.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Global footer
@@ -20,11 +20,8 @@ if (!defined('SED_CODE')) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('footer.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('footer.first') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -40,11 +37,8 @@ if ($cfg['shieldenabled']) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('footer.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('footer.main') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -66,11 +60,8 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('footer.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('footer.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 
@@ -116,12 +107,13 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A')) {
 
 		foreach ($sys['devmode']['hooks'] as $k => $pl) {
 			$deps_str = sed_parse_pl_dependencies(isset($pl['pl_dependencies']) ? $pl['pl_dependencies'] : null);
+			$dir = !empty($pl['pl_module']) ? 'modules' : 'plugins';
 			$out['devmode'] .= "<tr><td>" . $pl['pl_id'] . "</td>";
 			$out['devmode'] .= "<td>" . sed_cc($pl['pl_hook']) . "</td>";
 			$out['devmode'] .= "<td>" . sed_cc($pl['pl_code']) . "</td>";
 			$out['devmode'] .= "<td>" . sed_cc($pl['pl_part']) . "</td>";
 			$out['devmode'] .= "<td>" . sed_cc($pl['pl_title']) . "</td>";
-			$out['devmode'] .= "<td>plugins/" . $pl['pl_code'] . "/" . $pl['pl_file'] . ".php</td>";
+			$out['devmode'] .= "<td>" . $dir . "/" . $pl['pl_code'] . "/" . $pl['pl_file'] . ".php</td>";
 			$out['devmode'] .= "<td>" . $pl['pl_order'] . "</td>";
 			$out['devmode'] .= "<td>" . sed_cc($deps_str) . "</td>";
 			$out['devmode'] .= "</tr>";

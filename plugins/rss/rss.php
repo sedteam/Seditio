@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/rss/rss.php
 Version=186
-Updated=2026-sep-02
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
 Description=RSS feeds (direct)
@@ -75,12 +75,9 @@ $rss_title = $cfg['maintitle'];
 $rss_link = $cfg['mainurl'];
 $rss_description = $cfg['subtitle'];
 
-$extp = sed_getextplugins('rss.create');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('rss.create') as $pl) {
+		include $pl;
 	}
-}
 
 switch ($m) {
 	case "comments":
@@ -234,12 +231,9 @@ if (count($items) > 0) {
 $out .= "</channel>\n";
 $out .= "</rss>";
 
-$extp = sed_getextplugins('rss.output');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('rss.output') as $pl) {
+		include $pl;
 	}
-}
 
 if ($usr['id'] == 0 && $i > 0) {
 	$name = mb_substr(md5($m . $c . $id . $q . $s), 0, 10);

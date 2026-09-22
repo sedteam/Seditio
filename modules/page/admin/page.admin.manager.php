@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/admin/page.admin.manager.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module.admin
 Author=Seditio Team
 Description=Page manager
@@ -45,25 +45,23 @@ if ($a == 'delete') {
 			exit;
 		}
 
-		/* === Hook === */
-		$extp = sed_getextplugins('admin.page.delete.first');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_page'])) {
+			sed_trash_put('page', (isset($L['Page']) ? $L['Page'] : 'Page') . " #" . $id . " " . $row['page_title'], $id, $row);
 		}
+
+		/* === Hook === */
+		foreach (sed_getextplugins('admin.page.delete.first') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		$id2 = "p" . $id;
 		$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.page.delete.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('admin.page.delete.done') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		sed_log("Deleted page #" . $id, 'adm');

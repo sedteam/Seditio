@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/inc/forums.functions.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Forums API functions
@@ -169,12 +169,14 @@ function sed_forum_prunetopics($mode, $section, $param)
 			$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
 
 			while ($row = sed_sql_fetchassoc($sql)) {
+				if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_forum'])) {
+					$post_label = isset($L['Post']) ? $L['Post'] : 'Post';
+					sed_trash_put('forumpost', $post_label . " #" . $row['fp_id'] . " from topic #" . $q, "p" . $row['fp_id'] . "-q" . $q, $row);
+				}
+
 				/* === Hook === */
-				$extp = sed_getextplugins('forums.prune.post.delete.first');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
+				foreach (sed_getextplugins('forums.prune.post.delete.first') as $pl) {
+					include $pl;
 				}
 				/* ===== */
 
@@ -184,23 +186,22 @@ function sed_forum_prunetopics($mode, $section, $param)
 			$num += sed_sql_affectedrows();
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.prune.post.delete.done');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('forums.prune.post.delete.done') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 
 			while ($row = sed_sql_fetchassoc($sql)) {
+				if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_forum'])) {
+					$topic_label = isset($L['Topic']) ? $L['Topic'] : 'Topic';
+					sed_trash_put('forumtopic', $topic_label . " #" . $q . " (no post left)", "q" . $q, $row);
+				}
+
 				/* === Hook === */
-				$extp = sed_getextplugins('forums.prune.topic.delete.first');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
+				foreach (sed_getextplugins('forums.prune.topic.delete.first') as $pl) {
+					include $pl;
 				}
 				/* ===== */
 
@@ -210,11 +211,8 @@ function sed_forum_prunetopics($mode, $section, $param)
 			$num1 += sed_sql_affectedrows();
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.prune.topic.delete.done');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
+			foreach (sed_getextplugins('forums.prune.topic.delete.done') as $pl) {
+				include $pl;
 			}
 			/* ===== */
 		}

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/polls/inc/polls.functions.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Polls functions
@@ -193,22 +193,41 @@ function sed_poll_check()
 
 function sed_poll_delete($id)
 {
-	global $db_polls, $db_polls_options, $db_polls_voters;
+	global $db_polls, $db_polls_options, $db_polls_voters, $db_forum_topics, $cfg;
 	$id = (int) $id;
 	$num = 0;
 	if ($id != 0) {
-		$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_code = '" . $id . "' LIMIT 1");
-		if (sed_sql_numrows($sql) > 0) {
-			$row = sed_sql_fetchassoc($sql);
+		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id = " . $id . " LIMIT 1");
+		if ($row = sed_sql_fetchassoc($sql)) {
+			if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_poll'])) {
+				$options = array();
+				$sql_o = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid = " . $id);
+				while ($row_o = sed_sql_fetchassoc($sql_o)) {
+					$options[] = $row_o;
+				}
+				$voters = array();
+				$sql_v = sed_sql_query("SELECT * FROM $db_polls_voters WHERE pv_pollid = " . $id);
+				while ($row_v = sed_sql_fetchassoc($sql_v)) {
+					$voters[] = $row_v;
+				}
+				$trash_data = array(
+					'poll' => $row,
+					'options' => $options,
+					'voters' => $voters
+				);
+				$poll_label = isset($L['Poll']) ? $L['Poll'] : 'Poll';
+				sed_trash_put('poll', $poll_label . " #" . $id . " " . $row['poll_text'], $id, $trash_data);
+			}
+
 			if ($row['poll_type'] == 1 && !empty($row['poll_code'])) // forum poll type
 			{
-				//deattach poll from topic
-				global $db_forum_topics;
+				// deattach poll from topic
 				if (isset($db_forum_topics)) {
-					$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_poll = 0 WHERE ft_id = " . (int)$row['poll_code']);
+					sed_sql_query("UPDATE $db_forum_topics SET ft_poll = 0 WHERE ft_id = " . (int)$row['poll_code']);
 				}
 			}
 		}
+
 		$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=" . $id);
 		$num = sed_sql_affectedrows();
 		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=" . $id);
@@ -218,11 +237,8 @@ function sed_poll_delete($id)
 		$id2 = "v" . $id;
 
 		/* === Hook === */
-		$extp = sed_getextplugins('polls.delete.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
+		foreach (sed_getextplugins('polls.delete.done') as $pl) {
+			include $pl;
 		}
 		/* ===== */
 	}

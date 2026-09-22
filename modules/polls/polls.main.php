@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/polls/polls.main.php
 Version=186
-Updated=2026-jul-17
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Polls
@@ -21,12 +21,9 @@ if (!defined('SED_CODE')) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('polls.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('polls.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
@@ -127,11 +124,8 @@ if ($standalone) {
 	sed_add_css($morecss);
 
 	/* === Hook === */
-	$extp = sed_getextplugins('polls.stndl');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('polls.stndl') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -158,11 +152,8 @@ if ($standalone) {
 	require(SED_ROOT . "/system/header.php");
 
 	/* === Hook === */
-	$extp = sed_getextplugins('polls.main');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('polls.main') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -241,11 +232,8 @@ if (empty($id) || $id == 'viewall') {
 	$url_poll = array('part' => 'polls', 'params' => "id=" . $id . $standalone_url . "&comments=1");
 
 	/* === Hook === */
-	$extp = sed_getextplugins('polls.view');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('polls.view') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -271,12 +259,9 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('polls.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('polls.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

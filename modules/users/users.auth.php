@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.auth.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=User authentication
@@ -29,23 +29,17 @@ if ($usr['id'] > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.auth.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.auth.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ($a == 'check') {
 	sed_shield_protect();
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('users.auth.check');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('users.auth.check') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -108,12 +102,9 @@ if ($a == 'check') {
 					}
 
 					/* === Hook === */
-					$extp = sed_getextplugins('users.auth.check.done');
-					if (is_array($extp)) {
-						foreach ($extp as $k => $pl) {
-							include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-						}
-					}
+					foreach (sed_getextplugins('users.auth.check.done') as $pl) {
+		include $pl;
+	}
 
 					sed_redirect(sed_url("message", "msg=104&redirect=" . $redirect, "", true));
 					exit;
@@ -137,12 +128,9 @@ $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 $urlpaths[sed_url("users", "m=auth")] = $L['Auth'];
 
 /* === Hook === */
-$extp = sed_getextplugins('users.auth.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.auth.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -164,12 +152,9 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('users.auth.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.auth.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

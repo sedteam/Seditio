@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/recentitems/inc/recentitems.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -45,11 +45,8 @@ function sed_get_latestpages($limit, $mask)
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('recentitems.pages.main');
-	if (is_array($extp)) {
-		foreach ($extp as $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('recentitems.pages.main') as $pl) {
+		include $pl;
 	}
 	/* ============ */
 
@@ -143,12 +140,9 @@ function sed_get_latestcomments($limit, $mask)
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('recentitems.comments.pages');
-		if (is_array($extp)) {
-			foreach ($extp as $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('recentitems.comments.pages') as $pl) {
+		include $pl;
+	}
 		/* ============ */
 	}
 

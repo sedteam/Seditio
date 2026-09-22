@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.main.php
 Version=186
-Updated=2026-sep-08
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=PFS main
@@ -104,12 +104,9 @@ if ($userid != $usr['id']) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.first');
-if (is_array($extp)) {
-    foreach ($extp as $k => $pl) {
-        include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-    }
-}
+foreach (sed_getextplugins('pfs.first') as $pl) {
+		include $pl;
+	}
 /* ===== */
 
 $u_totalsize = 0;
@@ -126,12 +123,9 @@ if ($a == 'upload') {
     $nresize = ($nresize) ? 1 : 0;
 
     /* === Hook === */
-    $extp = sed_getextplugins('pfs.upload.first');
-    if (is_array($extp)) {
-        foreach ($extp as $k => $pl) {
-            include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-        }
-    }
+    foreach (sed_getextplugins('pfs.upload.first') as $pl) {
+		include $pl;
+	}
     /* ===== */
 
     if ($folderid != 0) {
@@ -179,12 +173,9 @@ if ($a == 'upload') {
                 @chmod($cfg['pfs_dir'] . $u_name, 0766);
 
                 /* === Hook === */
-                $extp = sed_getextplugins('pfs.upload.moved');
-                if (is_array($extp)) {
-                    foreach ($extp as $k => $pl) {
-                        include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-                    }
-                }
+                foreach (sed_getextplugins('pfs.upload.moved') as $pl) {
+		include $pl;
+	}
                 /* ===== */
 
                 // Combined resize and watermark processing
@@ -234,12 +225,9 @@ if ($a == 'upload') {
                 $pfs_totalsize += $u_size;
 
                 /* === Hook === */
-                $extp = sed_getextplugins('pfs.upload.done');
-                if (is_array($extp)) {
-                    foreach ($extp as $k => $pl) {
-                        include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-                    }
-                }
+                foreach (sed_getextplugins('pfs.upload.done') as $pl) {
+		include $pl;
+	}
                 /* ===== */
 
                 // Thumbnail creation
@@ -369,12 +357,9 @@ if ($standalone) {
     sed_add_css($morecss);
 
     /* === Hook === */
-    $extp = sed_getextplugins('pfs.stndl');
-    if (is_array($extp)) {
-        foreach ($extp as $k => $pl) {
-            include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-        }
-    }
+    foreach (sed_getextplugins('pfs.stndl') as $pl) {
+		include $pl;
+	}
     /* ===== */
 
     $pfs_header1 = $cfg['doctype'] . "\n<html>\n<head>
@@ -581,12 +566,9 @@ while ($row = sed_sql_fetchassoc($sql)) {
     $stndl_icons_disp = "";
 
     /* === Hook === */
-    $extp = sed_getextplugins('pfs.stndl.icons');
-    if (is_array($extp)) {
-        foreach ($extp as $k => $pl) {
-            include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-        }
-    }
+    foreach (sed_getextplugins('pfs.stndl.icons') as $pl) {
+		include $pl;
+	}
     /* ===== */
 
     if (!empty($pfs_icon)) {
@@ -760,12 +742,9 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.tags');
-if (is_array($extp)) {
-    foreach ($extp as $k => $pl) {
-        include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-    }
-}
+foreach (sed_getextplugins('pfs.tags') as $pl) {
+		include $pl;
+	}
 /* ===== */
 
 $t->parse("MAIN");

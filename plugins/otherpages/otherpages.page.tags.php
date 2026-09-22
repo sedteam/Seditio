@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/otherpages/otherpages.page.tags.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -63,12 +63,9 @@ function sed_get_otherpages($pid, $cat, $limit)
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('otherpages.pages.main');
-		if (is_array($extp)) {
-			foreach ($extp as $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('otherpages.pages.main') as $pl) {
+		include $pl;
+	}
 		/* ============ */
 
 		foreach ($otherpages_rows as $row) {

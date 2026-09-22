@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -2158,13 +2158,14 @@ function sed_filebox($name, $class = 'file', $multiple = false, $accept = '', $d
 /* sed_forum_info, sed_forum_prunetopics, sed_forum_sectionsetlast moved to modules/forums/inc/forums.functions.php */
 
 /** 
- * Returns a list of plugins registered for a hook 
+ * Returns a list of plugins/modules registered for a hook 
  * 
  * @param string $hook Hook name 
- * @param string $cond Permissions 
+ * @param string $cond Permissions (default 'R')
+ * @param string $ret_type Return type: 'path' for array of file paths, 'full' for array of hook records
  * @return array 
  */
-function sed_getextplugins($hook, $cond = 'R')
+function sed_getextplugins($hook, $cond = 'R', $ret_type = 'path')
 {
 	global $sed_plugins, $cfg, $sys;
 
@@ -2172,10 +2173,24 @@ function sed_getextplugins($hook, $cond = 'R')
 
 	if (isset($sed_plugins[$hook]) && is_array($sed_plugins[$hook])) {
 		foreach ($sed_plugins[$hook] as $i => $k) {
-			if ($k['pl_hook'] == $hook && sed_auth('plug', $k['pl_code'], $cond)) {
-				$extplugins[] = $k;
-				if ($cfg['devmode']) {
-					$sys['devmode']['hooks'][] = $k;
+			$is_module = !empty($k['pl_module']);
+
+			$auth_valid = $is_module
+				? sed_auth($k['pl_code'], 'any', $cond)
+				: sed_auth('plug', $k['pl_code'], $cond);
+
+			if ($k['pl_hook'] == $hook && $auth_valid) {
+				$dir = $is_module ? 'modules' : 'plugins';
+				$file_path = SED_ROOT . '/' . $dir . '/' . $k['pl_code'] . '/' . $k['pl_file'] . '.php';
+
+				if (file_exists($file_path)) {
+					$k['pl_file_path'] = $file_path;
+
+					$extplugins[] = ($ret_type === 'path') ? $file_path : $k;
+
+					if ($cfg['devmode']) {
+						$sys['devmode']['hooks'][] = $k;
+					}
 				}
 			}
 		}
@@ -2604,11 +2619,8 @@ function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror = false)
 		case 'HTM': // HTML with plugin filtering
 			$v = trim($v);
 			/* == Hook for plugins == */
-			$extp = sed_getextplugins('import.filter');
-			if (is_array($extp)) {
-				foreach ($extp as $pl) {
-					include SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php';
-				}
+			foreach (sed_getextplugins('import.filter') as $pl) {
+				include $pl;
 			}
 			/* ===== */
 			$pass = true;
@@ -3336,11 +3348,8 @@ function sed_mail($fmail, $subject, $body, $headers = '', $param = '', $content 
 	$c_param = $param;
 	$c_content = $content;
 
-	$extp = sed_getextplugins('mail.connector');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('mail.connector') as $pl) {
+		include $pl;
 	}
 
 	/* ===== */
@@ -3986,11 +3995,8 @@ function sed_outputfilters($output)
 	chdir($_SERVER['DOCUMENT_ROOT']); //fix v173
 
 	/* === Hook === */
-	$extp = sed_getextplugins('output');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('output') as $pl) {
+		include $pl;
 	}
 	/* ==== */
 
@@ -4243,7 +4249,7 @@ function sed_flash_get()
  */
 function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalue = TRUE, $isMultiple = FALSE, $additionalAttributes = array(), $disableSedCc = FALSE)
 {
-	$check = is_array($check) ? array_map('trim', $check) : trim($check);
+	$check = is_array($check) ? array_map(function($v) { return trim((string)$v); }, $check) : trim((string)$check);
 
 	$isArray = is_array($values);
 	if (!$isArray) {
@@ -4251,7 +4257,7 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
 	}
 
 	$selected = 'selected="selected"';
-	$first_option = ($empty_option) ? '<option value="" ' . (($check == '') ? $selected : '') . '>---</option>' : '';
+	$first_option = ($empty_option) ? '<option value="" ' . (($check === '') ? $selected : '') . '>---</option>' : '';
 
 	$attributes = array('name' => $name);
 	if ($isMultiple) {
@@ -4264,9 +4270,9 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
 	$result .= $first_option;
 
 	foreach ($values as $k => $x) {
-		$x = trim($x);
+		$x = trim((string)$x);
 		$v = ($isArray && $key_isvalue) ? $k : $x;
-		$selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ($v == $check ? 'selected="selected"' : '');
+		$selected = ($isMultiple && in_array($v, (array)$check)) ? 'selected="selected"' : ((string)$v === (string)$check ? 'selected="selected"' : '');
 		$optionValue = ($disableSedCc) ? $x : sed_cc($x);
 		$result .= '<option value="' . $v . '" ' . $selected . '>' . $optionValue . '</option>';
 	}

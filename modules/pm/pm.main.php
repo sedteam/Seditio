@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pm/pm.main.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Private messages
@@ -37,12 +37,9 @@ $touser_ids = array();
 $touser_names = array();
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pm.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='" . $usr['id'] . "' AND pm_state=2");
@@ -171,12 +168,9 @@ $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('pmtitle', $title_tags, $title_data);
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pm.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $pm_sendlink = ($usr['auth_write']) ? sed_link(sed_url("pm", "m=send"), $L['pm_sendnew']) : '';
@@ -268,7 +262,7 @@ while ($row = sed_sql_fetchassoc($sql) and ($jj < $pm_perpage)) {
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			include $pl;
 		}
 	}
 	/* ===== */
@@ -295,12 +289,9 @@ if (empty($id)) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pm.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

@@ -30,7 +30,7 @@ For bulk content management, administrators have access to the **Page Manager** 
   * Approve publications: link `/admin/page?a=validate&id=X` (or `index.php?module=admin&m=page&a=validate&id=X` without SEF URLs).
   * Temporarily unvalidate pages: link `/admin/page?a=unvalidate&id=X` (or `index.php?module=admin&m=page&a=unvalidate&id=X` without SEF URLs).
   * Clone existing materials: link `/admin/page?s=add&id=X&a=clone` (or `index.php?module=admin&m=page&s=add&id=X&a=clone` without SEF URLs), handled by the controller `modules/page/page.add.php` when `$a == 'clone'`.
-  * Permanently delete pages: link `/admin/page?s=manager&a=delete&id=X` (or `index.php?module=admin&m=page&s=manager&a=delete&id=X` without SEF URLs).
+  * Delete pages: link `/admin/page?s=manager&a=delete&id=X` (or `index.php?module=admin&m=page&s=manager&a=delete&id=X` without SEF URLs). If the Trashcan plugin is active, the deleted page is automatically placed into the trashcan via the `modules/page/page.trashcan.php` modular hook part, allowing administrators to restore it.
 
 ### 5.1.3. Page Sorting in Categories
 Seditio supports flexible sorting configuration individually for each category of the structure. Default sorting parameters are defined in category settings (`sed_structure` table):
@@ -81,7 +81,7 @@ The core recursively scans the sections table when building the forum tree, whic
 
 ### 5.2.2. Moderation and Topic Management
 Moderators and administrators with moderating rights (Admin bit = 128 in ACL for the corresponding forum category) have a set of tools to control discussions:
-* **Deleting Topics and Posts:** A moderator can completely delete a topic (`a=delete`) or an individual post (`a=delete`).
+* **Deleting Topics and Posts:** A moderator can delete a topic (`a=delete`) or an individual post (`a=delete`). With the Trashcan plugin enabled, deleted entities are safely preserved via the `modules/forums/forums.trashcan.php` modular handler with full restoration capabilities for topics and posts.
 * **Pinning Topics (`sticky`):** Pinning a topic at the top of the list with an "Important" flag (the topic is always displayed first in the section).
 * **Locking Topics (`lock`):** Locking a topic to prevent regular users from posting new messages.
 * **Creating Announcements (`announcement`):** Changing the status of a topic to an announcement.
@@ -122,7 +122,7 @@ The module is divided into several controller files, each responsible for its ow
 * **User List (`users.main.php`):**
   Outputs the general table of registered users with pagination. It supports filtering by the first letter of the name, sorting by database columns (name, ID, group, registration date), and searching. Rendered via the `users.tpl` template.
 * **Admin Editing (`users.edit.php`):**
-  An interface for moderators and administrators (with rights to edit users). It allows changing the user's group (including the main group `user_maingrp`), activating inactive accounts, modifying profile data, or completely deleting a user from the site. Template `users.edit.tpl`.
+  An interface for moderators and administrators (with rights to edit users). It allows changing the user's group (including the main group `user_maingrp`), activating inactive accounts, modifying profile data, or deleting a user from the site (when Trashcan is active, the account is moved to the recycle bin via `modules/users/users.trashcan.php`). Template `users.edit.tpl`.
 
 **Ability to Pause Parts of the Module:**
 The Seditio core allows temporarily disabling (pausing) individual functional controller files of the `users` module using the built-in `sed_dieifdisabled_part()` function. Through the administrative control panel, you can disable registration (`register`), profiles (`profile`), detail cards (`details`), user lists (`main`), and even logouts (`logout`). The only non-disableable part is authorization (`auth`) — checks for its status are absent in the code to guarantee that administrators can always log in.
@@ -160,7 +160,7 @@ The `pm` module provides secure internal correspondence between registered users
   * `0` — New (unread) message. It is highlighted for the recipient.
   * `1` — Read message.
   * `2` — Message moved to archive.
-* The engine splits correspondence into three virtual folders: Inbox, Sentbox, and Archive.
+* The engine splits correspondence into three virtual folders: Inbox, Sentbox, and Archive. When deleted, messages can be preserved in the recycle bin via `modules/pm/pm.trashcan.php`.
 
 ### 5.5.2. Notifications of New Messages
 * In the site header (template `header.tpl`), the count of new (unread) messages is output via the global `{HEADER_USER_PMREMINDER}` tag. This counter is updated on every page reload.
@@ -169,7 +169,7 @@ The `pm` module provides secure internal correspondence between registered users
 
 ## 5.6. Polls Module (polls)
 
-The polls module is designed to conduct surveys and votes among site visitors. The module code is located in the `modules/polls` directory.
+The polls module is designed to conduct surveys and votes among site visitors. The module code is located in the `modules/polls` directory. On deletion, polls and their options are preserved in the trashcan via `modules/polls/polls.trashcan.php`.
 
 ### 5.6.1. Poll Management
 * All polls are stored in the `sed_polls` table (poll title, poll type, active status, creation date, poll owner ID).

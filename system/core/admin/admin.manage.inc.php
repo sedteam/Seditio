@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.manage.inc.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-21
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -72,7 +72,8 @@ if (!empty($p)) {
 
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+			$dir = !empty($pl['pl_module']) ? 'modules' : 'plugins';
+			include(SED_ROOT . '/' . $dir . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
 
 			$t->assign(array(
 				"TOOL_BODY" => $plugin_body
@@ -161,7 +162,7 @@ if (!empty($p)) {
 
 	$t->parse("ADMIN_MANAGE.MODULES_LIST_REFERERS");
 
-	$extp = sed_getextplugins('admin.plug');
+	$extp = sed_getextplugins('admin.plug', 'R', 'full');
 	if (is_array($extp)) {
 		foreach ($extp as $k => $pl) {
 			if ($path_lang = sed_langfile($pl['pl_code'], 'plugin', $lang)) {
@@ -197,7 +198,7 @@ if (!empty($p)) {
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('tools');
+	$extp = sed_getextplugins('tools', 'R', 'full');
 
 	if (is_array($extp)) {
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner='plug' GROUP BY config_cat");

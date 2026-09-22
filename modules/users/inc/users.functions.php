@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/inc/users.functions.php
 Version=186
-Updated=2026-feb-21
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Users API functions
@@ -377,11 +377,8 @@ function sed_users_profile_image_apply($user_id, $kind, $saved)
 	$db_field = $limits['db_field'];
 
 	/* === Hook === */
-	$extp = sed_getextplugins($limits['hook']);
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins($limits['hook']) as $pl) {
+		include $pl;
 	}
 	/* ===== */
 

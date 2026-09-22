@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.newtopic.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -35,12 +35,9 @@ sed_blockguests();
 sed_die(empty($s));
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.newtopic.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.newtopic.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require_once(SED_ROOT . '/modules/polls/inc/polls.functions.php');
@@ -71,11 +68,8 @@ if ($a == 'newtopic') {
 	sed_shield_protect();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.newtopic.newtopic.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('forums.newtopic.newtopic.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -175,12 +169,9 @@ if ($a == 'newtopic') {
 			}
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.newtopic.newtopic.done');
-			if (is_array($extp)) {
-				foreach ($extp as $k => $pl) {
-					include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
+			foreach (sed_getextplugins('forums.newtopic.newtopic.done') as $pl) {
+		include $pl;
+	}
 			/* ===== */
 
 			sed_shield_update(45, "New topic");
@@ -213,12 +204,9 @@ $out['subtitle'] = sed_title('forumstitle', $title_tags, $title_data);
 /**/
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.newtopic.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.newtopic.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -260,12 +248,9 @@ if ($poll && sed_module_active('polls')) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.newtopic.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('forums.newtopic.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

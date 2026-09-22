@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/inc/page.functions.php
 Version=186
-Updated=2026-jun-23
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Page structure, list API, list filters
@@ -254,11 +254,8 @@ function sed_structure_delcat($id, $c)
 	sed_page_clear_menu_cache();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.page.structure.delete.done');
-	if (is_array($extp)) {
-		foreach ($extp as $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('admin.page.structure.delete.done') as $pl) {
+		include $pl;
 	}
 	/* ============ */
 }

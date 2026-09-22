@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ratings/inc/ratings.functions.php
 Version=186
-Updated=2026-feb-26
+Updated=2026-sep-21
 Type=Plugin
 Description=Ratings API
 [END_SED]
@@ -89,11 +89,8 @@ function sed_ratings_vote($code, $newrate, $maxRating)
 		$rating_average = 0;
 	}
 
-	$extp = sed_getextplugins('ratings.send.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('ratings.send.first') as $pl) {
+		include $pl;
 	}
 
 	if (!$yetrated) {
@@ -111,11 +108,8 @@ function sed_ratings_vote($code, $newrate, $maxRating)
 		sed_sql_query("UPDATE $db_pages SET page_rating='" . sed_sql_prep($ratingnewaverage) . "' WHERE page_id=" . $page_id);
 	}
 
-	$extp = sed_getextplugins('ratings.send.done');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('ratings.send.done') as $pl) {
+		include $pl;
 	}
 
 	return true;
@@ -298,11 +292,8 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		$t = new XTemplate(sed_skinfile('ratings'));
 	}
 
-	$extp = sed_getextplugins('ratings.main');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('ratings.main') as $pl) {
+		include $pl;
 	}
 
 	if (!empty($error_string)) {
@@ -380,11 +371,8 @@ function sed_build_ratings($code, $url, $display, $allow = true)
 		$t->parse("RATINGS.RATINGS_DISABLE");
 	}
 
-	$extp = sed_getextplugins('ratings.tags');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('ratings.tags') as $pl) {
+		include $pl;
 	}
 
 	$t->parse("RATINGS");

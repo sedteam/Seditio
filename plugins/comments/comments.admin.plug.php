@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.admin.plug.php
 Version=186
-Updated=2026-feb-18
+Updated=2026-sep-21
 Type=Plugin
 Author=Seditio Team
 Description=Comments administration
@@ -101,12 +101,21 @@ if ($a == 'delete') {
 		}
 	}
 
-	/* === Hook === */
-	$extp = sed_getextplugins('admin.comments.delete.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_comment']) && is_array($rows_by_id) && is_array($path)) {
+		$com_label = isset($L['Comment']) ? $L['Comment'] : 'Comment';
+		foreach ($order as $cid) {
+			if (!isset($rows_by_id[$cid], $path[$cid])) {
+				continue;
+			}
+			$r = $rows_by_id[$cid];
+			$author = isset($r['com_author']) ? $r['com_author'] : '';
+			sed_trash_put('comment', $com_label . " #" . $cid . " (" . $author . ")", $path[$cid], $r);
 		}
+	}
+
+	/* === Hook === */
+	foreach (sed_getextplugins('admin.comments.delete.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -119,11 +128,8 @@ if ($a == 'delete') {
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.comments.delete.done');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('admin.comments.delete.done') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 

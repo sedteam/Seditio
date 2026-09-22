@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.main.php
 Version=186
-Updated=2026-feb-21
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Users list
@@ -61,12 +61,9 @@ $sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
 // ----------------------
 
 /* === Hook === */
-$extp = sed_getextplugins('users.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 if ((!empty($s) && !in_array($s, $available_sort)) || empty($s)) {
@@ -203,12 +200,9 @@ $out['subtitle'] = sed_title('userstitle', $title_tags, $title_data);
 $urlpaths[sed_url("users")] = $L['Users'];
 
 /* === Hook === */
-$extp = sed_getextplugins('users.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -321,10 +315,8 @@ while ($urr = sed_sql_fetchassoc($sql) and $jj < $cfg['maxusersperpage']) {
 	// ----------------------		
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach ($extp as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -332,11 +324,8 @@ while ($urr = sed_sql_fetchassoc($sql) and $jj < $cfg['maxusersperpage']) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+foreach (sed_getextplugins('users.tags') as $pl) {
+	include $pl;
 }
 /* ===== */
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pm/pm.send.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=Private messages
@@ -37,12 +37,9 @@ $touser_ids = array();
 $touser_names = array();
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.send.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pm.send.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='" . $usr['id'] . "' AND pm_state=2");
@@ -55,11 +52,8 @@ $totalinbox = sed_sql_result($sql, 0, "COUNT(*)");
 if ($a == 'send') {
 
 	/* === Hook === */
-	$extp = sed_getextplugins('pm.send.send.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('pm.send.send.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -134,12 +128,9 @@ if ($a == 'send') {
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('pm.send.send.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('pm.send.send.done') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		sed_stat_inc('totalpms');
@@ -209,12 +200,9 @@ $urlpaths[sed_url("pm")] = $L['Private_Messages'];
 $urlpaths[sed_url("pm", "m=send")] = $L['pmsend_title'];
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.send.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pm.send.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -243,12 +231,9 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.send.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('pm.send.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 $t->parse("MAIN");

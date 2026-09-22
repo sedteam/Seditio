@@ -163,7 +163,8 @@ When an administrator goes to `/admin/plug` (or `index.php?module=admin&m=plug` 
    * `pl_order` — execution priority (`10`).
    * `pl_active` — part active status (`1` or `0`).
    * `pl_lock` — lock flag (`0` or `1`).
-4. When the core executes the `admin.home.first` hook, an SQL query selects all active plugins for this hook sorted by `pl_order` and includes their files.
+   * `pl_module` — module flag: `0` for plugins, `1` for modules.
+4. When the core or an extension triggers an event (e.g. `/* === Hook: some.hook === */`), the `sed_getextplugins($hook)` function retrieves active handlers from the `$sed_plugins` cache, validates access permissions (`sed_auth('plug', $code)` for plugins and `sed_auth($code, 'any')` for modules), and returns the file paths for execution via `include $pl;`.
 
 ---
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/similarpages/similarpages.page.tags.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-21
 Type=Plugin
 Author=Amro
 Description=The plugin displays a list of similar pages
@@ -90,12 +90,9 @@ function sed_get_similarpages($sim_relevance, $sim_maxcount, $sim_category, $mas
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('similarpages.pages.main');
-		if (is_array($extp)) {
-			foreach ($extp as $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('similarpages.pages.main') as $pl) {
+		include $pl;
+	}
 		/* ============ */
 
 		foreach ($similarpages_rows as $row) {

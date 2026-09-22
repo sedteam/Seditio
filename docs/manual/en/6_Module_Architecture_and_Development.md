@@ -18,6 +18,8 @@ modules/mymodule/
 ├── mymodule.install.php        # Script executed on module installation (optional)
 ├── mymodule.uninstall.php      # Script executed on module uninstallation (optional)
 ├── mymodule.urls.php           # Module SEF URL rewrite/translation rules
+├── mymodule.trashcan.php       # Modular hook part: trashcan registration (optional)
+├── mymodule.header.tags.php    # Modular hook part: header tag injection (optional)
 ├── admin/
 │   ├── mymodule.admin.php      # Module control panel in the administration area (optional)
 │   └── mymodule.admin.menu.php # Menu item button in the admin sidebar (optional)
@@ -254,3 +256,142 @@ if ($usr['isadmin']) {
 }
 ```
 Thanks to this scheme, the module integrates fully into Seditio's security system, allowing administrators to configure permissions via user group management.
+
+---
+
+## 6.6. Modular Hook Parts and Event Subscriptions
+
+Starting with version 186, Seditio modules have full parity with plugins in subscribing to system events of the core and third-party extensions. A module can contain its own hook handler files directly inside its `modules/{module_code}/` directory.
+
+### 6.6.1. Architectural Concept
+In legacy versions of CMS Seditio, subscribing to system hooks (such as injecting meta tags into the header, intercepting authorization, or clearing caches) required creating a separate external plugin in the `plugins/` directory.
+
+In the modern architecture, modules can contain any number of modular hook parts:
+* Module hook files follow the naming convention: `modules/{module_code}/{module_code}.{part_name}.php` (for example, `modules/mymodule/mymodule.trashcan.php`, `modules/mymodule/mymodule.header.tags.php`).
+* In the database (`sed_plugins` table), these records are registered with the `pl_module = 1` flag.
+* The hook execution function `sed_getextplugins($hook)` automatically determines whether the handler is a plugin part (`plugins/`) or a module part (`modules/`), checks access permissions for the module (`sed_auth($code, 'any', 'R')`), and includes the file.
+
+### 6.6.2. Modular Part Manifest
+Each module part file contains a standard manifest block `[BEGIN_SED_EXTPLUGIN]`:
+
+```php
+<?php
+/* ====================
+[BEGIN_SED]
+File=modules/mymodule/mymodule.trashcan.php
+Version=186
+Updated=2026-sep-22
+Type=Module
+Author=Developer
+Description=Trashcan integration for MyModule
+[END_SED]
+
+[BEGIN_SED_EXTPLUGIN]
+Code=mymodule
+Part=trashcan
+Hooks=trashcan.api,mymodule.delete.first
+File=mymodule.trashcan
+Order=10
+Lock=0
+[END_SED_EXTPLUGIN]
+==================== */
+
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}
+```
+
+* `Code` — system code of the parent module (`mymodule`).
+* `Part` — identifier/name of the module part (e.g., `trashcan`, `header.tags`, `index.tags`).
+* `Hooks` — one or more comma-separated system hook names (e.g., `trashcan.api,mymodule.delete.first`).
+* `File` — name of the PHP file without `.php` extension (`mymodule.trashcan`).
+* `Order` — execution order priority (default `10`).
+* `Lock` — protection flag: `1` — part cannot be individually paused in the control panel, `0` — can be paused.
+
+### 6.6.3. Automatic Registration on Install (`sed_module_install`)
+When installing or upgrading a module, `sed_module_install($code)`:
+1. Scans all `.php` files in `modules/{module_code}/`.
+2. Reads the `[BEGIN_SED_EXTPLUGIN]` block.
+3. If the file contains a `Hooks` field and is not the main module controller (`$code.php`), it is registered in `sed_plugins` for each specified hook with `pl_module = 1`.
+4. The main module file (`$code.php`) is registered as the module entry point (`pl_hook = 'module'`, `pl_module = 1`).
+
+### 6.6.4. Managing Module Parts in the Control Panel
+In the administration area under extensions management at `/admin/plug` (or `index.php?module=admin&m=plug` without SEF URLs), when viewing detailed information for a module, the administrator sees a complete list of registered hook parts. Each part (unless `Lock=1`) can be individually paused (`Pause`) or unpaused (`Unpause`).
+
+### 6.6.5. Practical Example: Trashcan Integration (`trashcan.api`)
+Below is an example of implementing soft-delete and item restoration for a custom module using the `trashcan.api` hook and the `$sed_trashcan_types` registry:
+
+File: `modules/mymodule/mymodule.trashcan.php`
+```php
+<?php
+/* ====================
+[BEGIN_SED]
+File=modules/mymodule/mymodule.trashcan.php
+Version=186
+Updated=2026-sep-22
+Type=Module
+Author=Developer
+Description=Trashcan support for custom items
+[END_SED]
+
+[BEGIN_SED_EXTPLUGIN]
+Code=mymodule
+Part=trashcan
+Hooks=trashcan.api,mymodule.delete.first
+File=mymodule.trashcan
+Order=10
+Lock=0
+[END_SED_EXTPLUGIN]
+==================== */
+
+if (!defined('SED_CODE')) {
+    die('Wrong URL.');
+}
+
+global $sed_trashcan_types, $L;
+
+// 1. Register entity type in the Trashcan registry
+$sed_trashcan_types['mymodule_item'] = array(
+    'title'   => !empty($L['MyModule_Item']) ? $L['MyModule_Item'] : 'Module Item',
+    'icon'    => 'system/img/admin/page.png',
+    'restore' => 'sed_trash_mymodule_restore',
+    'wipe'    => 'sed_trash_mymodule_wipe'
+);
+
+/**
+ * Restore callback for soft-deleted item
+ *
+ * @param array $data Deserialized row data from sed_trash table
+ * @param int $itemid Primary ID of the restored item
+ * @return bool
+ */
+function sed_trash_mymodule_restore($data, $itemid)
+{
+    global $db_my_table;
+    sed_trash_insert($data, $db_my_table);
+    sed_log("MyModule item #" . $itemid . " restored from the trashcan", 'adm');
+    return true;
+}
+
+/**
+ * Permanent wipe callback
+ *
+ * @param array $data Item data
+ * @param int $itemid Item ID
+ * @return bool
+ */
+function sed_trash_mymodule_wipe($data, $itemid)
+{
+    // Remove associated physical files from disk if present
+    if (!empty($data['item_image']) && file_exists($data['item_image'])) {
+        unlink($data['item_image']);
+    }
+    return true;
+}
+
+// 2. Handle mymodule.delete.first hook (soft-delete into trashcan)
+if (isset($row) && is_array($row) && !empty($id) && sed_plug_active('trashcan')) {
+    sed_trash_put('mymodule_item', $row['item_title'], $id, $row);
+}
+```
+

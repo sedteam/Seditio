@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.edit.php
 Version=186
-Updated=2026-sep-16
+Updated=2026-sep-21
 Type=Module
 Author=Seditio Team
 Description=User editing
@@ -32,12 +32,9 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['isadmin']);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.edit.first');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.edit.first') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 // ---------- Extra fields - getting
@@ -64,11 +61,8 @@ if ($a == 'update') {
 	sed_check_xg();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('users.edit.update.first');
-	if (is_array($extp)) {
-		foreach ($extp as $k => $pl) {
-			include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+	foreach (sed_getextplugins('users.edit.update.first') as $pl) {
+		include $pl;
 	}
 	/* ===== */
 
@@ -130,12 +124,15 @@ if ($a == 'update') {
 			$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id'");
 
 			if ($row = sed_sql_fetchassoc($sql)) {
+				if (sed_plug_active('trashcan') && !empty($cfg['plugin']['trashcan']['trash_user'])) {
+					$username = isset($row['user_name']) ? $row['user_name'] : '';
+					$user_label = isset($L['User']) ? $L['User'] : 'User';
+					sed_trash_put('user', $user_label . " #" . $id . " " . $username, $id, $row);
+				}
+
 				/* === Hook === */
-				$extp = sed_getextplugins('users.delete.first');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
+				foreach (sed_getextplugins('users.delete.first') as $pl) {
+					include $pl;
 				}
 				/* ===== */
 
@@ -146,11 +143,8 @@ if ($a == 'update') {
 				}
 
 				/* === Hook === */
-				$extp = sed_getextplugins('users.delete.done');
-				if (is_array($extp)) {
-					foreach ($extp as $k => $pl) {
-						include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-					}
+				foreach (sed_getextplugins('users.delete.done') as $pl) {
+					include $pl;
 				}
 				/* ===== */
 
@@ -272,12 +266,9 @@ if ($a == 'update') {
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('users.edit.update.done');
-		if (is_array($extp)) {
-			foreach ($extp as $k => $pl) {
-				include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-			}
-		}
+		foreach (sed_getextplugins('users.edit.update.done') as $pl) {
+		include $pl;
+	}
 		/* ===== */
 
 		sed_auth_clear($id);
@@ -316,12 +307,9 @@ $urlpaths[sed_url("users", "m=details&id=" . $urr['user_id'])] = sed_cc($urr['us
 $urlpaths[sed_url("users", "m=edit&id=" . $urr['user_id'])] = $L['Edit'];
 
 /* === Hook === */
-$extp = sed_getextplugins('users.edit.main');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.edit.main') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
@@ -378,12 +366,9 @@ if (count($extrafields) > 0) {
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.edit.tags');
-if (is_array($extp)) {
-	foreach ($extp as $k => $pl) {
-		include(SED_ROOT . '/plugins/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+foreach (sed_getextplugins('users.edit.tags') as $pl) {
+		include $pl;
 	}
-}
 /* ===== */
 
 
