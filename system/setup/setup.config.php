@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/setup.config.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-sep-22
 Type=Core.setup
 Author=Seditio Team
 Description=Default system configuration generator for setup installer
@@ -68,7 +68,7 @@ $cfg_data .= "\$cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot
 $cfg_data .= "\$cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed\n";
 
 $cfg_data .= "\$cfg['multihost'] = TRUE;            // Allow multiple host names for this site\n";
-$cfg_data .= "\$cfg['patchmode'] = FALSE;           // TRUE = enable automatic schema patches (for upgrades)\n";
+$cfg_data .= "\$cfg['patchmode'] = TRUE;           // TRUE = enable automatic schema patches (for upgrades)\n";
 
 $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// Name of MySQL tables\n";

@@ -8,10 +8,10 @@ https://seditio.org
 [BEGIN_SED]
 File=system/upgrade/upgrade_185_186.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-sep-22
 Type=Core.upgrade
 Author=Seditio Team
-Description=Database upgrade: PFS nested folders; menu category auto-children; separate shield table; whosonline plugin hooks; dynamic translations & compiled cache
+Description=Database upgrade: PFS nested folders; menu category auto-children; whosonline plugin hooks; dynamic translations & compiled cache
 [END_SED]
 ==================== */
 
@@ -51,22 +51,6 @@ if ($chk_menu && sed_sql_numrows($chk_menu) > 0) {
 	}
 }
 
-/* ======== Shield table: separate flood protection table ======== */
-$adminmain .= "Checking shield table...<br />";
-$chk_shield = @sed_sql_query("SHOW TABLES LIKE '$db_shield'");
-if (!$chk_shield || sed_sql_numrows($chk_shield) == 0) {
-	sed_sql_query("CREATE TABLE IF NOT EXISTS $db_shield (
-	  shield_ip varchar(45) NOT NULL DEFAULT '',
-	  shield_lastseen int(11) NOT NULL DEFAULT '0',
-	  shield_hammer tinyint(4) NOT NULL DEFAULT '0',
-	  shield_limit int(11) NOT NULL DEFAULT '0',
-	  shield_action varchar(32) NOT NULL DEFAULT '',
-	  PRIMARY KEY (shield_ip),
-	  KEY shield_lastseen (shield_lastseen)
-	) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
-	$adminmain .= "shield table created.<br />";
-}
-
 /* ======== Whosonline plugin: reinstall using core functions ======== */
 $adminmain .= "Reinstalling whosonline plugin...<br />";
 $chk_plug = @sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code = 'whosonline'");
@@ -82,40 +66,8 @@ $db_online_legacy = $cfg['sqldbprefix'] . 'online';
 $adminmain .= "Installing whosonline plugin (v3.0)...<br />";
 $adminmain .= sed_plugin_install('whosonline');
 
-/* ======== Translations & Languages Tables (v186) ======== */
-$adminmain .= "Checking translations and languages tables...<br />";
-
-$chk_lang = @sed_sql_query("SHOW TABLES LIKE '$db_languages'");
-if (!$chk_lang || sed_sql_numrows($chk_lang) == 0) {
-	sed_sql_query("CREATE TABLE IF NOT EXISTS `$db_languages` (
-	  `lang_code` varchar(16) NOT NULL,
-	  `lang_title` varchar(64) NOT NULL,
-	  `lang_native` varchar(64) NOT NULL,
-	  `lang_direction` enum('ltr','rtl') NOT NULL DEFAULT 'ltr',
-	  `lang_active` tinyint(1) NOT NULL DEFAULT 1,
-	  `lang_is_default` tinyint(1) NOT NULL DEFAULT 0,
-	  `lang_order` smallint(5) NOT NULL DEFAULT 100,
-	  PRIMARY KEY (`lang_code`)
-	) ENGINE={$cfg['mysqlengine']} DEFAULT CHARSET={$cfg['mysqlcharset']} COLLATE={$cfg['mysqlcollate']};");
-
-	global $sed_languages;
-	$lang_dirs = glob(SED_ROOT . '/system/lang/*', GLOB_ONLYDIR);
-	if (!empty($lang_dirs)) {
-		$order = 10;
-		foreach ($lang_dirs as $ld) {
-			$code = basename($ld);
-			if (file_exists($ld . '/main.lang.php')) {
-				$info = sed_infoget($ld . '/main.lang.php');
-				$lang_title = !empty($info['Name']) ? $info['Name'] : (isset($sed_languages[$code]) ? $sed_languages[$code] : ucfirst($code));
-				$lang_native = !empty($info['Native']) ? $info['Native'] : (isset($sed_languages[$code]) ? $sed_languages[$code] : $lang_title);
-				$is_def = ($code === $cfg['defaultlang']) ? 1 : (($code === 'en' && empty($cfg['defaultlang'])) ? 1 : 0);
-				sed_sql_query("INSERT IGNORE INTO `$db_languages` (`lang_code`, `lang_title`, `lang_native`, `lang_direction`, `lang_active`, `lang_is_default`, `lang_order`) VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($lang_title) . "', '" . sed_sql_prep($lang_native) . "', 'ltr', 1, $is_def, $order)");
-				$order += 10;
-			}
-		}
-	}
-	$adminmain .= "languages table created and seeded from installed language packs.<br />";
-}
+/* ======== Translations Table (v186) ======== */
+$adminmain .= "Checking translations table...<br />";
 
 $chk_tra = @sed_sql_query("SHOW TABLES LIKE '$db_translations'");
 if (!$chk_tra || sed_sql_numrows($chk_tra) == 0) {

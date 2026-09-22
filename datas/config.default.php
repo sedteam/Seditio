@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=datas/config.default.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-sep-22
 Type=Config
 Author=Seditio Team
 Description=Configuration
@@ -49,7 +49,7 @@ $cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) defaul
 $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
 $cfg['multihost'] = TRUE;			// Allow multiple host names for this site
-$cfg['patchmode'] = FALSE;           // TRUE = enable automatic schema patches (for upgrades)
+$cfg['patchmode'] = TRUE;           // TRUE = enable automatic schema patches (for upgrades)
 
 // ========================
 // Name of MySQL tables
@@ -74,6 +74,7 @@ $db_forum_structure = $cfg['sqldbprefix'] . 'forum_structure';
 $db_forum_topics 	= $cfg['sqldbprefix'] . 'forum_topics';
 $db_groups 			= $cfg['sqldbprefix'] . 'groups';
 $db_groups_users 	= $cfg['sqldbprefix'] . 'groups_users';
+$db_languages 		= $cfg['sqldbprefix'] . 'languages';
 $db_logger 			= $cfg['sqldbprefix'] . 'logger';
 $db_menu 			= $cfg['sqldbprefix'] . 'menu';
 $db_pages 			= $cfg['sqldbprefix'] . 'pages';
@@ -91,5 +92,6 @@ $db_shield 			= $cfg['sqldbprefix'] . 'shield';
 $db_smilies 		= $cfg['sqldbprefix'] . 'smilies';
 $db_stats 			= $cfg['sqldbprefix'] . 'stats';
 $db_structure 		= $cfg['sqldbprefix'] . 'structure';
+$db_translations 	= $cfg['sqldbprefix'] . 'translations';
 $db_trash 			= $cfg['sqldbprefix'] . 'trash';
 $db_users 			= $cfg['sqldbprefix'] . 'users';
