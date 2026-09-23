@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.image.php
 Version=186
-Updated=2026-sep-02
+Updated=2026-sep-23
 Type=Core
 Author=Amro
 Description=Image Functions
@@ -26,129 +26,80 @@ $cfg['images_sharpen'] = 0;
 $cfg['quality'] = 85;
 
 /**
- * Registered resize namespaces: cache key => relative source directory under SED_ROOT.
- *
- * @var array
- */
-$sed_image_resize_namespaces = array();
-
-/**
- * Sanitize namespace key (alphanumeric, underscore, hyphen).
- *
- * @param string $namespace
- * @return string
- */
-function sed_image_resize_namespace_sanitize($namespace)
-{
-    return preg_replace('/[^a-z0-9_\-]/i', '', (string)$namespace);
-}
-
-/**
- * Register a source directory for a resize namespace.
- *
- * Cache files are stored as datas/resized/{namespace}/{basename}.resizeWxH.ext
- * while originals live in the registered relative directory.
- *
- * @param string $namespace Cache folder name (e.g. products, brands)
- * @param string $source_dir Relative path under SED_ROOT (e.g. datas/shop/products/)
- * @return bool
- */
-function sed_image_resize_namespace_register($namespace, $source_dir)
-{
-    global $sed_image_resize_namespaces;
-
-    if (!is_array($sed_image_resize_namespaces)) {
-        $sed_image_resize_namespaces = array();
-    }
-
-    $namespace = sed_image_resize_namespace_sanitize($namespace);
-    $source_dir = str_replace('\\', '/', trim((string)$source_dir));
-    $source_dir = ltrim($source_dir, '/');
-
-    if ($namespace === '' || $source_dir === '' || strpos($source_dir, '..') !== false) {
-        return false;
-    }
-
-    $sed_image_resize_namespaces[$namespace] = rtrim($source_dir, '/') . '/';
-    return true;
-}
-
-/**
- * Whether a resize namespace is registered.
- *
- * @param string $namespace
- * @return bool
- */
-function sed_image_resize_namespace_registered($namespace)
-{
-    global $sed_image_resize_namespaces;
-
-    $namespace = sed_image_resize_namespace_sanitize($namespace);
-    return is_array($sed_image_resize_namespaces) && isset($sed_image_resize_namespaces[$namespace]);
-}
-
-/**
  * Resolve absolute path to an original image file.
  *
- * @param string $filename Basename or legacy PFS filename
- * @param string $namespace Registered namespace or empty for legacy PFS
+ * @param string $filename Basename or relative path
  * @return string|false Absolute path or false if not found
  */
-function sed_image_resolve_original_path($filename, $namespace = '')
+function sed_image_resolve_original_path($filename)
 {
-    global $cfg, $sed_image_resize_namespaces;
+    global $cfg;
 
-    $filename = basename(str_replace('\\', '/', trim((string)$filename)));
+    $filename = str_replace('\\', '/', trim((string)$filename));
+    $filename = ltrim($filename, './');
+
     if ($filename === '' || strpos($filename, '..') !== false) {
         return false;
     }
 
-    $namespace = sed_image_resize_namespace_sanitize($namespace);
-
-    if ($namespace !== '' && sed_image_resize_namespace_registered($namespace)) {
-        $rel = $sed_image_resize_namespaces[$namespace] . $filename;
-        $path = SED_ROOT . '/' . $rel;
-        if (!is_file($path)) {
-            return false;
-        }
-        $real = realpath($path);
-        $root = realpath(SED_ROOT);
-        if ($real !== false && $root !== false && strpos($real, $root) === 0) {
-            return $real;
-        }
+    $root = realpath(SED_ROOT);
+    if ($root === false) {
         return false;
     }
 
-    $path = SED_ROOT . '/' . $cfg['pfs_dir'] . $filename;
+    // 1. If path contains directory structure
+    if (strpos($filename, '/') !== false) {
+        // Direct relative path from SED_ROOT (e.g. img/cars/car-3.jpg or datas/users/photo.jpg)
+        $candidates = array(
+            SED_ROOT . '/' . $filename,
+            SED_ROOT . '/datas/' . $filename
+        );
+        foreach ($candidates as $cand) {
+            if (is_file($cand)) {
+                $real = realpath($cand);
+                if ($real !== false && strpos($real, $root) === 0) {
+                    return $real;
+                }
+            }
+        }
+    }
+
+    // 2. If bare filename (PFS standard): check datas/users/
+    $pfs_dir = !empty($cfg['pfs_dir']) ? $cfg['pfs_dir'] : 'datas/users/';
+    $path = SED_ROOT . '/' . rtrim($pfs_dir, '/') . '/' . basename($filename);
     if (is_file($path)) {
         $real = realpath($path);
-        return ($real !== false) ? $real : false;
+        if ($real !== false && strpos($real, $root) === 0) {
+            return $real;
+        }
     }
 
     return false;
 }
 
 /**
- * Delete generated resize/crop cache files for a basename.
+ * Delete generated resize/crop cache files for a basename or path.
  *
- * @param string $filename Original basename
- * @param string $namespace Registered namespace or empty for legacy PFS cache root
+ * @param string $filename Original basename or relative path
  */
-function sed_image_delete_resized_cache($filename, $namespace = '')
+function sed_image_delete_resized_cache($filename)
 {
     global $cfg;
 
-    $filename = basename(str_replace('\\', '/', trim((string)$filename)));
-    if ($filename === '') {
+    $filename = str_replace('\\', '/', trim((string)$filename));
+    $filename = ltrim($filename, './');
+    if ($filename === '' || strpos($filename, '..') !== false) {
         return;
     }
 
-    $base = pathinfo($filename, PATHINFO_FILENAME);
-    $namespace = sed_image_resize_namespace_sanitize($namespace);
-    $prefix = SED_ROOT . '/' . $cfg['res_dir'];
-    if ($namespace !== '') {
-        $prefix .= $namespace . '/';
+    if (strpos($filename, 'datas/') === 0) {
+        $filename = substr($filename, 6);
     }
+
+    $dir = dirname($filename);
+    $dir = ($dir === '.' || $dir === '/' || $dir === '') ? '' : $dir . '/';
+    $base = pathinfo($filename, PATHINFO_FILENAME);
+    $prefix = SED_ROOT . '/' . $cfg['res_dir'] . $dir;
 
     $patterns = array(
         $prefix . $base . '.resize*',
@@ -168,57 +119,25 @@ function sed_image_delete_resized_cache($filename, $namespace = '')
     }
 }
 
-function resize_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
+function resize_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
 {
     global $cfg;
 
-    $resized_filename = sed_add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp, $namespace);
+    $resized_filename = sed_add_resize_params($filename, 'resize', $width, $height, $set_watermark, $use_webp);
     return $cfg['res_dir'] . $resized_filename;
 }
 
-function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
+function crop_image($filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
 {
     global $cfg;
 
-    $resized_filename = sed_add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp, $namespace);
+    $resized_filename = sed_add_resize_params($filename, 'crop', $width, $height, $set_watermark, $use_webp);
     return $cfg['res_dir'] . $resized_filename;
-}
-
-/**
- * Build resized image URL for a registered namespace (XTemplate-friendly wrapper).
- *
- * @param string $namespace
- * @param string $filename
- * @param int $width
- * @param int $height
- * @param bool $set_watermark
- * @param bool $use_webp
- * @return string
- */
-function resize_image_ns($namespace, $filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
-{
-    return resize_image($filename, $width, $height, $set_watermark, $use_webp, $namespace);
-}
-
-/**
- * Build cropped image URL for a registered namespace (XTemplate-friendly wrapper).
- *
- * @param string $namespace
- * @param string $filename
- * @param int $width
- * @param int $height
- * @param bool $set_watermark
- * @param bool $use_webp
- * @return string
- */
-function crop_image_ns($namespace, $filename, $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
-{
-    return crop_image($filename, $width, $height, $set_watermark, $use_webp, $namespace);
 }
 
 /**
  * Create preview images
- * @param $ filename image file (without file path)
+ * @param string $filename image file (without path)
  * @return string preview file name
  */
 function sed_resize($filename)
@@ -233,14 +152,14 @@ function sed_resize($filename)
         exit;
     }
 
-    list($original_file, $type, $width, $height, $set_watermark, $use_webp, $namespace) = $parsed;
+    list($original_file, $type, $width, $height, $set_watermark, $use_webp) = $parsed;
 
     if (empty($original_file)) {
         sed_sendheaders('text/html', 404);
         exit;
     }
 
-    $src_path = sed_image_resolve_original_path($original_file, $namespace);
+    $src_path = sed_image_resolve_original_path($original_file);
     if ($src_path === false) {
         sed_sendheaders('text/html', 404);
         exit;
@@ -263,23 +182,23 @@ function sed_resize($filename)
         exit;
     }
 
-    $resized_file = sed_add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp, $namespace);
+    $resized_file = sed_add_resize_params($original_file, $type, $width, $height, $set_watermark, $use_webp);
 
-    $watermark_offset_x = $cfg['watermark_offset_x'];
-    $watermark_offset_y = $cfg['watermark_offset_y'];
-    $watermark_position = $cfg['th_logopos'];
+    $watermark_offset_x = isset($cfg['watermark_offset_x']) ? $cfg['watermark_offset_x'] : 8;
+    $watermark_offset_y = isset($cfg['watermark_offset_y']) ? $cfg['watermark_offset_y'] : 8;
+    $watermark_position = isset($cfg['th_logopos']) ? $cfg['th_logopos'] : '';
 
-    $sharpen = min(100, $cfg['images_sharpen']) / 100;
-    $watermark_transparency = min(100, $cfg['th_logotrsp']);
+    $sharpen = min(100, isset($cfg['images_sharpen']) ? $cfg['images_sharpen'] : 0) / 100;
+    $watermark_transparency = min(100, isset($cfg['th_logotrsp']) ? $cfg['th_logotrsp'] : 100);
 
     if (!empty($cfg['th_logofile']) && $set_watermark) {
         $watermark = (strpos($cfg['th_logofile'], "/") == 0) ? SED_ROOT . $cfg['th_logofile'] : SED_ROOT . '/' . $cfg['th_logofile'];
     }
 
     // Use configured JPEG quality or fallback to default
-    $quality = (!empty($cfg['th_jpeg_quality'])) ? $cfg['th_jpeg_quality'] : $cfg['quality'];
+    $quality = (!empty($cfg['th_jpeg_quality'])) ? $cfg['th_jpeg_quality'] : (isset($cfg['quality']) ? $cfg['quality'] : 85);
     $dim_priority = (!empty($cfg['th_dimpriority'])) ? $cfg['th_dimpriority'] : 'Width';
-    $keepratio = $cfg['th_keepratio'];
+    $keepratio = isset($cfg['th_keepratio']) ? $cfg['th_keepratio'] : false;
 
     $watermark  = (!empty($watermark) && $set_watermark && is_file($watermark)) ? $watermark : null;
 
@@ -324,37 +243,38 @@ function sed_resize($filename)
 }
 
 /**
- * @param $filename
+ * @param string $filename
  * @param string $type
  * @param int $width
  * @param int $height
  * @param bool $set_watermark
+ * @param bool $use_webp
  * @return string
  */
-function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false, $namespace = '')
+function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $set_watermark = false, $use_webp = false)
 {
     $resized_filename = '';
     if (!empty($filename)) {
-        $filename = basename(str_replace('\\', '/', $filename));
+        $filename = str_replace('\\', '/', trim((string)$filename));
+        $filename = ltrim($filename, './');
+
         if ($filename === '' || strpos($filename, '..') !== false) {
             return '';
         }
 
-        $namespace = sed_image_resize_namespace_sanitize($namespace);
+        // Strip leading datas/ so we don't end up with datas/resized/datas/...
+        if (strpos($filename, 'datas/') === 0) {
+            $filename = substr($filename, 6);
+        }
+
+        $dir = dirname($filename);
+        $dir = ($dir === '.' || $dir === '/' || $dir === '') ? '' : $dir . '/';
         $base = pathinfo($filename, PATHINFO_FILENAME);
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-        if ($namespace !== '') {
-            $file = $namespace . '/' . $base;
-        } else {
-            $file = $base;
-        }
-
         if ($width > 0 || $height > 0) {
-            $resized_filename = $file . '.' . $type . $width . 'x' . $height . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
+            $resized_filename = $dir . $base . '.' . $type . $width . 'x' . $height . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
         } else {
-            // TODO fix this option does not work now
-            //$resized_filename = $file . '.' . $type . ($set_watermark ? 'w' : '') . '.' . $ext . ($use_webp ? '.webp' : '');
             sed_sendheaders('text/html', 404);
             exit;
         }
@@ -368,32 +288,26 @@ function sed_add_resize_params($filename, $type = '', $width = 0, $height = 0, $
  */
 function sed_get_resize_params($filename)
 {
-    // Determining the resize parameters
-    if (!preg_match('/(.+)\.(resize|crop)([0-9]+)x([0-9]+)(w)?\.([^\.]+)(\.webp)?$/', $filename, $matches)) {
+    $filename = str_replace('\\', '/', trim((string)$filename));
+    $filename = ltrim($filename, './');
+
+    // Determining the resize parameters with optional directory prefix
+    if (!preg_match('/^(?:(.+)\/)?([^\/]+)\.(resize|crop)([0-9]+)x([0-9]+)(w)?\.([^\.\/]+)(\.webp)?$/i', $filename, $matches)) {
         return false;
     }
 
-    $file = $matches[1];                    // the name of the requested file
-    $type = $matches[2];                    // resize or crop
-    $width = $matches[3];                   // width of the future image
-    $height = $matches[4];                  // height of the future image
-    $set_watermark = $matches[5] == 'w';    // whether to put a watermark
-    $ext = $matches[6];                     // file extension
-    $use_webp = !empty($matches[7]) ? true : false;
+    $dir = $matches[1];                     // directory prefix if any (e.g. museum/cars or users)
+    $file = $matches[2];                    // basename without extension
+    $type = $matches[3];                    // resize or crop
+    $width = $matches[4];                   // width of the future image
+    $height = $matches[5];                  // height of the future image
+    $set_watermark = ($matches[6] === 'w'); // whether to put a watermark
+    $ext = $matches[7];                     // file extension
+    $use_webp = !empty($matches[8]);
 
-    $namespace = '';
-    $original_file = $file . '.' . $ext;
+    $original_file = (!empty($dir) ? $dir . '/' : '') . $file . '.' . $ext;
 
-    if (strpos($file, '/') !== false) {
-        $slash = strpos($file, '/');
-        $ns = substr($file, 0, $slash);
-        if (sed_image_resize_namespace_registered($ns)) {
-            $namespace = $ns;
-            $original_file = substr($file, $slash + 1) . '.' . $ext;
-        }
-    }
-
-    return array($original_file, $type, $width, $height, $set_watermark, $use_webp, $namespace);
+    return array($original_file, $type, $width, $height, $set_watermark, $use_webp);
 }
 
 /**

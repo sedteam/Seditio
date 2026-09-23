@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/templates.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-23
 Type=Core
 Author=Seditio Team
 Description=Xtemplate SE class
@@ -90,7 +90,7 @@ class XTemplate
         'urlencode', 'urldecode',
         'date', 'idate', 'strtotime', 'strftime', 'getdate', 'gettimeofday',
         'number_format', 'money_format',
-        'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image', 'crop_image_ns', 'resize_image_ns', 'sed_onlydigits'
+        'var_dump', 'print_r', 'crop', 'resize', 'crop_image', 'resize_image', 'sed_onlydigits'
     ];
 
     /**
