@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/jevix/jevix.import.filter.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-sep-22
 Type=Plugin
 Author=Amro
 Description=
@@ -35,15 +35,15 @@ require_once('plugins/jevix/inc/jevix.class.php');
 
 $jevix_filter_settings = array(
   'Pages' => 'full',
+  'Administration' => 'full',
+  'Plugins' => 'full',
+  'Forums' => 'medium',
   'Private_Messages' => 'medium',
+  'Comments' => 'micro',
+  'Users' => 'micro',
   'Polls' => 'micro',
   'Gallery' => 'micro',
-  'PFS' => 'micro',
-  'Users' => 'micro',
-  'Plugins' => 'full',
-  'Forums' => 'full',
-  'Comments' => 'medium',
-  'Administration' => 'full'
+  'PFS' => 'micro'
 );
 
 $flocation = (empty($flocation)) ? $location : $flocation;

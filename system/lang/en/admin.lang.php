@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/admin.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Lang
 Author=Seditio Team
 Description=Admin English language file
@@ -561,7 +561,7 @@ $L['adm_translations_lang_deleted'] = "Language and related translations were de
 $L['adm_translations_search'] = "Search by key or value...";
 $L['adm_translations_all_types'] = "All types";
 $L['adm_translations_show'] = "Show per page";
-$L['adm_translations_key_hint'] = "Latin letters, digits and underscores only (e.g., my_header_title)";
+$L['adm_translations_key_hint'] = "Specify a key name (e.g. <code>my_header_title</code> — becomes part of <code>\$L</code>) or an array variable with a key (e.g. <code>sed_museum_countries[kz]</code>).";
 $L['adm_langcache_regenerate_hint'] = "Recompiles all database translations into compiled PHP cache files (datas/cache/sed_lang.*.php) for instant high-speed execution.";
 $L['adm_translations_io'] = "Import / Export";
 $L['adm_translations_export'] = "Export Translations";
@@ -582,6 +582,11 @@ $L['adm_translations_import_success'] = "Import completed successfully. Added: %
 $L['adm_translations_import_err_file'] = "Error: File was not uploaded or is corrupted.";
 $L['adm_translations_import_err_json'] = "Error: Invalid JSON file format.";
 $L['adm_translations_import_err_lang'] = "Error: Unable to determine target language.";
-$L['adm_translations_import_err_empty'] = "No translation data found in the uploaded file.";
 $L['adm_translations_key_exists'] = "Variable with key \$L['%1\$s'] already exists in %2\$s / %3\$s.";
+$L['adm_translations_add_help'] = "<p><strong>Rules for language variable and array naming:</strong></p>
+<ul class=\"help-list\" style=\"line-height:1.7;\">
+	<li><strong>1. Standard text keys (<code>\$L</code> array):</strong><br />Enter a simple key name, e.g. <code>my_custom_title</code> or <code>promo_badge_text</code>.<br /><small class=\"text-muted\">In PHP: accessible as <code>\$L['my_custom_title']</code>, in templates: <code>{PHP.L.my_custom_title}</code>.</small></li>
+	<li style=\"margin-top:10px;\"><strong>2. Custom global array elements (<code>sed_</code> prefix):</strong><br />To create an element of a global array, the name <u>must</u> begin with <code>sed_</code> with the array key in brackets, e.g. <code>sed_museum_countries[kz]</code> or <code>sed_ticket_types[vip]</code>.<br /><small class=\"text-muted\">In PHP: accessible directly as <code>\$sed_museum_countries['kz']</code> (and also via <code>\$L['sed_museum_countries[kz]']</code>).</small></li>
+	<li style=\"margin-top:10px;\"><strong>3. Core variables protection:</strong><br />Any bracketed variable names without the <code>sed_</code> prefix (such as <code>sql[x]</code>, <code>cfg[x]</code>, <code>usr[x]</code>) are safely stored as standard strings inside <code>\$L</code> to prevent damaging Seditio engine internals.</li>
+</ul>";
 $L['adm_translations_key_exists_js'] = "Warning: key %s already exists in %scope.";

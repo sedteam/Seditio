@@ -12,7 +12,7 @@ Localization done by : Antar, Antony, Amro
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Lang
 Author=Seditio Team
 Description=Admin Russian language file
@@ -560,7 +560,7 @@ $L['adm_translations_lang_deleted'] = "Язык и связанные перев
 $L['adm_translations_search'] = "Поиск по ключу или значению...";
 $L['adm_translations_all_types'] = "Все типы";
 $L['adm_translations_show'] = "Показывать по";
-$L['adm_translations_key_hint'] = "Только буквы латинского алфавита, цифры и подчеркивания (например: my_header_title)";
+$L['adm_translations_key_hint'] = "Укажите имя ключа (например, <code>my_header_title</code> — станет частью массива <code>\$L</code>) или переменную с ключом массива (например, <code>sed_museum_countries[kz]</code>).";
 $L['adm_langcache_regenerate_hint'] = "Перекомпилирует все переводы из базы данных в кэш-файлы PHP (datas/cache/sed_lang.*.php) для максимальной скорости работы сайта.";
 $L['adm_translations_io'] = "Импорт / Экспорт";
 $L['adm_translations_export'] = "Экспорт переводов";
@@ -581,6 +581,11 @@ $L['adm_translations_import_success'] = "Импорт успешно завер�
 $L['adm_translations_import_err_file'] = "Ошибка: файл не был загружен или поврежден.";
 $L['adm_translations_import_err_json'] = "Ошибка: неверный формат JSON файла.";
 $L['adm_translations_import_err_lang'] = "Ошибка: не удалось определить целевой язык.";
-$L['adm_translations_import_err_empty'] = "В файле отсутствуют данные для импорта.";
 $L['adm_translations_key_exists'] = "Переменная с ключом \$L['%1\$s'] уже существует в разделе %2\$s / %3\$s.";
+$L['adm_translations_add_help'] = "<p><strong>Правила именования языковых переменных и массивов:</strong></p>
+<ul class=\"help-list\" style=\"line-height:1.7;\">
+	<li><strong>1. Обычные текстовые ключи (массив <code>\$L</code>):</strong><br />Введите просто имя ключа, например <code>my_custom_title</code> или <code>promo_badge_text</code>.<br /><small class=\"text-muted\">В PHP-коде строка доступна как <code>\$L['my_custom_title']</code>, в шаблонах: <code>{PHP.L.my_custom_title}</code>.</small></li>
+	<li style=\"margin-top:10px;\"><strong>2. Элементы вспомогательных массивов (префикс <code>sed_</code>):</strong><br />Если требуется создать элемент глобального массива, его имя <u>обязательно</u> должно начинаться с <code>sed_</code> с указанием ключа в скобках, например <code>sed_museum_countries[kz]</code> или <code>sed_ticket_types[vip]</code>.<br /><small class=\"text-muted\">В PHP-коде элемент доступен напрямую: <code>\$sed_museum_countries['kz']</code> (а также через <code>\$L['sed_museum_countries[kz]']</code>).</small></li>
+	<li style=\"margin-top:10px;\"><strong>3. Защита системных переменных ядра:</strong><br />Любые имена со скобками без префикса <code>sed_</code> (например <code>sql[x]</code>, <code>cfg[x]</code>, <code>usr[x]</code>) автоматически сохраняются как безопасные текстовые строки внутри <code>\$L</code> во избежание повреждения служебных переменных движка Seditio.</li>
+</ul>";
 $L['adm_translations_key_exists_js'] = "Внимание: ключ %s уже существует в разделе %scope.";

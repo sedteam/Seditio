@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/main.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Lang
 Name=Turkish
 Native=Türkçe
@@ -539,6 +539,7 @@ $L['admintooltip_pageadd'] = "Sayfa ekle";
 $L['admintooltip_pageedit'] = "Sayfa düzenle";
 $L['admintooltip_pageeditcategory'] = "Kategori düzenle";
 $L['admintooltip_pageeditoption'] = "Konfigürasyon seçeneğini düzenle";
+$L['admintooltip_translateedit'] = "Çeviriyi düzenle";
 
 $sed_months_list = array(
 	1 => 'ocak',

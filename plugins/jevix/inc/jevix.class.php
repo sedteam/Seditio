@@ -26,128 +26,88 @@ function sed_external_link_encode($tag, $params, $content)
 	return $tag_string;
 }
 
-function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true, $ext_link_enc = false)
+function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true, $ext_link_enc = false, $format = true)
 {
 	if ($use_admin == false) return $text; //Disable Jevix for Admin	
 
 	$jevix = new Jevix();
+	$jevix->cfgSetFormatMode($format);
 
 	switch ($filter) {
-		/* -- Full settings -- */
+		/* -- Full settings (pages, plugins, administration) -- */
 		case 'full':
 
 			$jevix->cfgAllowTags(array(
-				'p',
-				'a',
-				'img',
-				'i',
-				'b',
-				'u',
-				's',
-				'em',
-				'strong',
-				'strike',
-				'small',
-				'nobr',
-				'li',
-				'ol',
-				'ul',
-				'sup',
-				'abbr',
-				'sub',
-				'acronym',
-				'h1',
-				'h2',
-				'button',
-				'h3',
-				'h4',
-				'h5',
-				'h6',
-				'br',
-				'hr',
-				'pre',
-				'code',
-				'object',
-				'param',
-				'embed',
-				'adabracut',
-				'blockquote',
-				'iframe',
-				'span',
-				'div',
-				'table',
-				'tbody',
-				'thead',
-				'tfoot',
-				'tr',
-				'td',
-				'th',
-				'video',
-				'audio',
-				'source'
+				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 'nobr',
+				'li', 'ol', 'ul', 'sup', 'abbr', 'sub', 'acronym', 'cite', 'mark', 'q', 'time',
+				'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'kbd', 'samp',
+				'blockquote', 'iframe', 'span', 'div', 'section', 'article', 'aside', 'header', 'footer',
+				'figure', 'figcaption', 'details', 'summary',
+				'table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col',
+				'video', 'audio', 'source', 'picture', 'button',
+				'object', 'param', 'embed', 'adabracut'
 			));
-			// Establish short tags. (Not having closing tag)
-			$jevix->cfgSetTagShort(array('br', 'img', 'hr', 'source'));
-			// Establish preformatted tags. (In all of them will be will be replaced on HTML essence)
-			$jevix->cfgSetTagPreformatted(array('pre', 'code'));
-			// Establish tags which are necessary for cutting out from the text together with a content.
-			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));
-			// Establish the resolved parametres tags. Also it is possible to establish admissible values of these parametres.
-			$jevix->cfgAllowTagParams('p', array('style'));
-			$jevix->cfgAllowTagParams('i', array('class'));
-			$jevix->cfgAllowTagParams('span', array('style'));
-			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
-			$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));
-			$jevix->cfgAllowTagParams('object', array('width' => '#int', 'height' => '#int', 'data' => array('#domain' => array('youtube.com', 'rutube.ru', 'vimeo.com', 'player.vimeo.com')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
+
+			// Establish short tags (not having closing tag)
+			$jevix->cfgSetTagShort(array('br', 'img', 'hr', 'source', 'col'));
+
+			// Establish preformatted tags
+			$jevix->cfgSetTagPreformatted(array('code'));
+
+			// Establish tags which are cut with content (prevent XSS / scripts)
+			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta', 'applet'));
+
+			// Common attributes for block & inline tags
+			$common_attrs = array('class', 'id', 'style', 'title', 'data-*');
+
+			$tags_with_common = array(
+				'p', 'div', 'span', 'blockquote', 'cite', 'mark', 'q', 'time',
+				'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'pre', 'code', 'kbd', 'samp',
+				'ul', 'ol', 'li', 'section', 'article', 'aside', 'header', 'footer',
+				'figure', 'figcaption', 'details', 'summary',
+				'button', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 'nobr', 'sup', 'sub', 'abbr', 'acronym'
+			);
+
+			foreach ($tags_with_common as $tag_name) {
+				$jevix->cfgAllowTagParams($tag_name, $common_attrs);
+			}
+
+			// Div extra attributes (for Seditio BB-codes hide / level / group)
+			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style', 'title', 'data-*', 'data-minlevel', 'data-mingroup'));
+
+			// Links
+			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank', '_self', '_parent', '_top'), 'class', 'id', 'style', 'download', 'data-*'));
+
+			// Images
+			$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'class', 'id', 'loading', 'decoding', 'data-*'));
+
+			// Iframes (video/embeds)
+			$jevix->cfgAllowTagParams('iframe', array('width' => '#int', 'height' => '#int', 'src' => array('#domain' => array('youtube.com', 'youtu.be', 'rutube.ru', 'vimeo.com', 'player.vimeo.com', 'vk.com', 'vkvideo.ru')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text', 'style', 'allow', 'allowfullscreen', 'data-*'));
+
+			// Tables
+			$jevix->cfgAllowTagParams('table', array('border', 'class', 'width', 'align', 'valign', 'style', 'id', 'cellpadding', 'cellspacing', 'data-*'));
+			$jevix->cfgAllowTagParams('tbody', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('thead', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('tfoot', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('tr', array('height', 'class', 'id', 'style', 'align', 'valign', 'data-*'));
+			$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'id', 'width', 'height', 'align', 'valign', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'id', 'width', 'height', 'align', 'valign', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('caption', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('colgroup', array('class', 'id', 'style', 'span', 'data-*'));
+			$jevix->cfgAllowTagParams('col', array('class', 'id', 'style', 'span', 'width', 'data-*'));
+
+			// Video / Audio / Media
+			$jevix->cfgAllowTagParams('video', array('controls', 'style', 'class', 'id', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'poster' => '#link', 'preload' => '#text', 'playsinline', 'data-*'));
+			$jevix->cfgAllowTagParams('audio', array('controls', 'style', 'class', 'id', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'preload' => '#text', 'data-*'));
+			$jevix->cfgAllowTagParams('source', array('src' => '#link', 'type' => '#text', 'media' => '#text', 'srcset' => '#text', 'data-*'));
+			$jevix->cfgAllowTagParams('picture', array('class', 'id', 'style', 'data-*'));
+
+			// Legacy media / Flash
+			$jevix->cfgAllowTagParams('object', array('width' => '#int', 'height' => '#int', 'data' => array('#domain' => array('youtube.com', 'rutube.ru', 'vimeo.com', 'player.vimeo.com', 'vk.com', 'vkvideo.ru')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
 			$jevix->cfgAllowTagParams('param', array('name' => '#text', 'value' => '#text'));
 			$jevix->cfgAllowTagParams('embed', array('src' => '#image', 'type' => '#text', 'allowscriptaccess' => '#text', 'allowfullscreen' => '#text', 'width' => '#int', 'height' => '#int', 'flashvars' => '#text', 'wmode' => '#text'));
-			$jevix->cfgAllowTagParams('iframe', array('width' => '#int', 'height' => '#int', 'src' => array('#domain' => array('youtube.com', 'rutube.ru', 'vimeo.com', 'player.vimeo.com')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text'));
-			$jevix->cfgAllowTagParams('pre',	array('class'));
-			$jevix->cfgAllowTagParams('acronym', array('title'));
-			$jevix->cfgAllowTagParams('abbr',	array('title'));
-			$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));
-			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style', 'data-minlevel', 'data-mingroup'));
-			$jevix->cfgAllowTagParams('button', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('h1', array('style'));
-			$jevix->cfgAllowTagParams('h2', array('style'));
-			$jevix->cfgAllowTagParams('h3', array('style'));
-			$jevix->cfgAllowTagParams('h4', array('style'));
-			$jevix->cfgAllowTagParams('h5', array('style'));
-			$jevix->cfgAllowTagParams('h6', array('style'));
-			$jevix->cfgAllowTagParams('ul', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('ol', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('li', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('span', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('table', array('border', 'class', 'width', 'align', 'valign', 'style'));
-			$jevix->cfgAllowTagParams('tr', array('height', 'class'));
-			$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
-			$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'width', 'height', 'align', 'valign'));
-			$jevix->cfgAllowTagParams('video', array('controls', 'style', 'class', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'poster' => '#link', 'preload' => '#text'));
-			$jevix->cfgAllowTagParams('audio', array('controls', 'style', 'class', 'src' => '#link', 'type' => '#text', 'width' => '#text', 'height' => '#text', 'autoplay', 'loop', 'muted', 'preload' => '#text'));
-			$jevix->cfgAllowTagParams('source', array('src' => '#link', 'type' => '#text'));
-			// Establish the resolved parametres css styles for tags
-			$jevix->cfgSetTagStyleParams(
-				array('span'),
-				array(
-					'text-decoration'   =>  array('none', 'line-through', 'underline'),
-					'font-style'        =>  array('normal', 'italic'),
-					'font-family',
-					'font-weight'       =>  array('normal', 'bold'),
-					'font-size'         =>  '#regexp:%^(8|10|12|14|16|18|20)px$%i',
-					'color'             =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i',
-					'background-color'  =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i'
-				)
-			);
-			// Allowed style for tags		
-			$jevix->cfgSetTagStyleParams(
-				array('p'),
-				array(
-					'padding-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
-					'margin-left'       =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
-					'text-align'        =>  array('left', 'center', 'right', 'justify')
-				)
-			);
-			// Establish parametres tags being the obligatory. Without them cuts out tag leaving contents.
+
+			// Required params
 			$jevix->cfgSetTagParamsRequired('img', 'src');
 			$jevix->cfgSetTagParamsRequired('a', 'href');
 
@@ -155,110 +115,142 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 				$jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode');
 			}
 
-			// Establish tags which can contain tag the container
+			// Tag hierarchies
 			$jevix->cfgSetTagChilds('ul', array('li'), false, true);
 			$jevix->cfgSetTagChilds('ol', array('li'), false, true);
-			$jevix->cfgSetTagChilds('object', 'param', false, true);
-			$jevix->cfgSetTagChilds('object', 'embed', false, false);
+			$jevix->cfgSetTagChilds('table', array('thead', 'tbody', 'tfoot', 'tr', 'caption', 'colgroup'), false, false);
+			$jevix->cfgSetTagChilds('tbody', array('tr'), false, true);
+			$jevix->cfgSetTagChilds('thead', array('tr'), false, true);
+			$jevix->cfgSetTagChilds('tfoot', array('tr'), false, true);
+			$jevix->cfgSetTagChilds('tr', array('td', 'th'), false, true);
 			$jevix->cfgSetTagChilds('video', 'source', false, true);
 			$jevix->cfgSetTagChilds('audio', 'source', false, true);
-			// Establish tags which can be empty
-			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'iframe', 'source', 'video', 'audio'));
-			// Establish attributes tags which will be automatically added
-			$jevix->cfgSetTagParamDefault('embed', 'wmode',	'opaque',	true);
-			// Establish autoreplacement
+			$jevix->cfgSetTagChilds('picture', array('source', 'img'), false, false);
+			$jevix->cfgSetTagChilds('figure', array('figcaption', 'img', 'video', 'audio', 'picture', 'blockquote', 'div', 'p'), false, false);
+			$jevix->cfgSetTagChilds('object', 'param', false, true);
+			$jevix->cfgSetTagChilds('object', 'embed', false, false);
+			$jevix->cfgSetTagChilds('pre', array('code'), false, false);
+
+			// Empty tags permitted
+			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'span', 'div', 'iframe', 'source', 'video', 'audio', 'col', 'hr', 'br', 'img'));
+
+			// Default attributes
+			$jevix->cfgSetTagParamDefault('embed', 'wmode', 'opaque', true);
+
+			// Autoreplace typographics
 			$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));
-			// Disconnect typografy in defined tag	
-			$jevix->cfgSetTagNoTypography('code', 'video', 'audio', 'object');
+
+			// Disconnect typography in code/media
+			$jevix->cfgSetTagNoTypography('code', 'pre', 'video', 'audio', 'iframe', 'object');
 
 			break;
 		/* ---- */
 
-		/* -- Medium settings -- */
+		/* -- Medium settings (forums, private messages) -- */
 		case 'medium':
 
 			$jevix->cfgAllowTags(array(
-				'p',
-				'a',
-				'img',
-				'i',
-				'b',
-				'u',
-				's',
-				'em',
-				'strong',
-				'strike',
-				'small',
-				'nobr',
-				'li',
-				'ol',
-				'ul',
-				'sup',
-				'abbr',
-				'sub',
-				'acronym',
-				'h1',
-				'h2',
-				'h3',
-				'h4',
-				'h5',
-				'h6',
-				'br',
-				'hr',
-				'pre',
-				'code',
-				'blockquote',
-				'span',
-				'div'
+				'p', 'a', 'img', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 'nobr',
+				'li', 'ol', 'ul', 'sup', 'abbr', 'sub', 'acronym', 'cite', 'mark', 'q', 'time',
+				'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'pre', 'code', 'kbd', 'samp',
+				'blockquote', 'iframe', 'span', 'div', 'details', 'summary', 'figure', 'figcaption',
+				'table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th'
 			));
+
 			$jevix->cfgSetTagShort(array('br', 'img', 'hr'));
-			$jevix->cfgSetTagPreformatted(array('pre', 'code'));
-			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta'));
-			$jevix->cfgAllowTagParams('p', array('style'));
-			$jevix->cfgAllowTagParams('i', array('class'));
-			$jevix->cfgAllowTagParams('span', array('style', 'class', 'id'));
-			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style', 'data-minlevel', 'data-mingroup'));
-			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
-			$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'hspace' => '#int', 'vspace' => '#int'));
-			$jevix->cfgAllowTagParams('pre',	array('class'));
-			$jevix->cfgAllowTagParams('acronym', array('title'));
-			$jevix->cfgAllowTagParams('abbr',	array('title'));
-			$jevix->cfgAllowTagParams('hr',	array('id' => '#text', 'class'));
-			$jevix->cfgAllowTagParams('h1', array('style'));
-			$jevix->cfgAllowTagParams('h2', array('style'));
-			$jevix->cfgAllowTagParams('h3', array('style'));
-			$jevix->cfgAllowTagParams('h4', array('style'));
-			$jevix->cfgAllowTagParams('h5', array('style'));
-			$jevix->cfgAllowTagParams('h6', array('style'));
-			$jevix->cfgAllowTagParams('ul', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('ol', array('class', 'id', 'style'));
-			$jevix->cfgAllowTagParams('li', array('class', 'id', 'style'));
-			$jevix->cfgSetTagStyleParams(
-				array('span'),
-				array(
-					'text-decoration'   =>  array('none', 'line-through', 'underline'),
-					'font-style'        =>  array('normal', 'italic'),
-					'font-family',
-					'font-weight'       =>  array('normal', 'bold'),
-					'font-size'         =>  '#regexp:%^(8|10|12|14|16|18|20)px$%i',
-					'color'             =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i',
-					'background-color'  =>  '#regexp:%^(#([a-f0-9]{6}|[a-f0-9]{3}))|(rgb\\((\\d{1,3}),\\s*(\\d{1,3}),\\s*(\\d{1,3})\\))$%i'
-				)
-			);
-			$jevix->cfgSetTagStyleParams(
-				array('p'),
-				array(
-					'padding-left'      =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
-					'margin-left'       =>  '#regexp:%^(10|20|30|40|50|60|70|80|90|100|120|140|150|160|180)px$%i',
-					'text-align'        =>  array('left', 'center', 'right', 'justify')
-				)
+			$jevix->cfgSetTagPreformatted(array('code'));
+			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta', 'applet'));
+
+			// Common attributes for block & inline tags
+			$common_attrs = array('class', 'id', 'style', 'title', 'data-*');
+
+			$tags_with_common = array(
+				'p', 'div', 'span', 'blockquote', 'cite', 'mark', 'q', 'time',
+				'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'pre', 'code', 'kbd', 'samp',
+				'ul', 'ol', 'li', 'details', 'summary', 'figure', 'figcaption',
+				'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 'nobr', 'sup', 'sub', 'abbr', 'acronym'
 			);
 
-			// Establish tags which can be empty
-			$jevix->cfgSetTagIsEmpty(array('a', 'i'));
+			foreach ($tags_with_common as $tag_name) {
+				$jevix->cfgAllowTagParams($tag_name, $common_attrs);
+			}
 
+			// Div extra attributes (for Seditio BB-codes hide / level / group / spoilers)
+			$jevix->cfgAllowTagParams('div', array('class', 'id', 'style', 'title', 'data-*', 'data-minlevel', 'data-mingroup'));
+
+			// Links
+			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank', '_self'), 'class', 'id', 'style', 'data-*'));
+
+			// Images
+			$jevix->cfgAllowTagParams('img', array('src' => '#image', 'style' => '#text', 'alt' => '#text', 'title', 'align' => array('right', 'left', 'center'), 'width' => '#int', 'height' => '#int', 'class', 'id', 'loading', 'data-*'));
+
+			// Iframes (video/embeds for forums)
+			$jevix->cfgAllowTagParams('iframe', array('width' => '#int', 'height' => '#int', 'src' => array('#domain' => array('youtube.com', 'youtu.be', 'rutube.ru', 'vimeo.com', 'player.vimeo.com', 'vk.com', 'vkvideo.ru')), 'type' => '#text', 'class' => '#text', 'frameborder' => '#int', 'title' => '#text', 'style', 'allow', 'allowfullscreen', 'data-*'));
+
+			// Tables
+			$jevix->cfgAllowTagParams('table', array('border', 'class', 'width', 'align', 'valign', 'style', 'id', 'cellpadding', 'cellspacing', 'data-*'));
+			$jevix->cfgAllowTagParams('tbody', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('thead', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('tfoot', array('class', 'id', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('tr', array('height', 'class', 'id', 'style', 'align', 'valign', 'data-*'));
+			$jevix->cfgAllowTagParams('td', array('colspan', 'rowspan', 'class', 'id', 'width', 'height', 'align', 'valign', 'style', 'data-*'));
+			$jevix->cfgAllowTagParams('th', array('colspan', 'rowspan', 'class', 'id', 'width', 'height', 'align', 'valign', 'style', 'data-*'));
+
+			// Required params
 			$jevix->cfgSetTagParamsRequired('img', 'src');
 			$jevix->cfgSetTagParamsRequired('a', 'href');
+
+			if ($ext_link_enc) {
+				$jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode');
+			}
+
+			// Tag hierarchies
+			$jevix->cfgSetTagChilds('ul', array('li'), false, true);
+			$jevix->cfgSetTagChilds('ol', array('li'), false, true);
+			$jevix->cfgSetTagChilds('table', array('thead', 'tbody', 'tfoot', 'tr'), false, false);
+			$jevix->cfgSetTagChilds('tbody', array('tr'), false, true);
+			$jevix->cfgSetTagChilds('thead', array('tr'), false, true);
+			$jevix->cfgSetTagChilds('tfoot', array('tr'), false, true);
+			$jevix->cfgSetTagChilds('tr', array('td', 'th'), false, true);
+			$jevix->cfgSetTagChilds('figure', array('figcaption', 'img', 'blockquote', 'div', 'p'), false, false);
+			$jevix->cfgSetTagChilds('pre', array('code'), false, false);
+
+			// Empty tags permitted
+			$jevix->cfgSetTagIsEmpty(array('a', 'i', 'span', 'div', 'iframe', 'hr', 'br', 'img'));
+
+			// Autoreplace typographics
+			$jevix->cfgSetAutoReplace(array('+/-', '(c)', '(с)', '(r)', '(C)', '(С)', '(R)'), array('±', '©', '©', '®', '©', '©', '®'));
+
+			// Disconnect typography in code/media
+			$jevix->cfgSetTagNoTypography('code', 'pre', 'iframe');
+
+			break;
+		/* ---- */
+
+		/* -- Micro settings - default (comments, user profiles, polls) -- */
+		case 'micro':
+		default:
+
+			$jevix->cfgAllowTags(array(
+				'p', 'br', 'hr', 'a', 'i', 'b', 'u', 's', 'em', 'strong', 'strike',
+				'small', 'sup', 'sub', 'nobr', 'span', 'blockquote', 'code', 'kbd',
+				'mark', 'q', 'time', 'ul', 'ol', 'li'
+			));
+
+			$jevix->cfgSetTagShort(array('br', 'hr'));
+			$jevix->cfgSetTagPreformatted(array('code'));
+			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta', 'applet'));
+
+			$common_attrs = array('class', 'title', 'data-*');
+			$tags_with_common = array('p', 'span', 'i', 'b', 'u', 's', 'em', 'strong', 'strike', 'small', 'sup', 'sub', 'nobr', 'blockquote', 'code', 'kbd', 'mark', 'q', 'time', 'ul', 'ol', 'li');
+			foreach ($tags_with_common as $tag_name) {
+				$jevix->cfgAllowTagParams($tag_name, $common_attrs);
+			}
+
+			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank'), 'class', 'data-*'));
+
+			$jevix->cfgSetTagParamsRequired('a', 'href');
+			$jevix->cfgSetTagIsEmpty(array('a', 'i', 'span'));
 
 			if ($ext_link_enc) {
 				$jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode');
@@ -271,23 +263,6 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 
 			break;
 		/* ---- */
-
-		/* -- Micro settings - default -- */
-		default:
-
-			$jevix->cfgAllowTags(array('p', 'a', 'i', 'b', 'u', 's', 'em', 'strong', 'br', 'strike'));
-			$jevix->cfgSetTagShort(array('br'));
-			$jevix->cfgAllowTagParams('i', array('class'));
-			$jevix->cfgAllowTagParams('a', array('title', 'href' => '#link', 'rel' => '#text', 'name' => '#text', 'target' => array('_blank')));
-			$jevix->cfgSetTagParamsRequired('a', 'href');
-			$jevix->cfgSetTagIsEmpty(array('a', 'i'));
-
-			if ($ext_link_enc) {
-				$jevix->cfgSetTagCallbackFull('a', 'sed_external_link_encode');
-			}
-
-			break;
-			/* ---- */
 	}
 
 	// Include or switch off mode XHTML. It (is by default included)
@@ -347,6 +322,9 @@ class Jevix
 		'font-family',
 		'font-size',
 		'font-weight',
+		'font-style',
+		'letter-spacing',
+		'text-transform',
 		'text-align',
 		'text-indent',
 		'text-decoration',
@@ -354,6 +332,10 @@ class Jevix
 		'color',
 		'background-color',
 		'background-image',
+		'background',
+		'background-size',
+		'background-position',
+		'background-repeat',
 		'margin-left',
 		'margin-right',
 		'margin-top',
@@ -365,10 +347,30 @@ class Jevix
 		'border-width',
 		'border-style',
 		'border-color',
+		'border-radius',
+		'border',
 		'padding',
 		'margin',
 		'width',
-		'height'
+		'height',
+		'max-width',
+		'max-height',
+		'min-width',
+		'min-height',
+		'display',
+		'flex',
+		'flex-direction',
+		'flex-wrap',
+		'justify-content',
+		'align-items',
+		'gap',
+		'grid',
+		'opacity',
+		'box-shadow',
+		'vertical-align',
+		'white-space',
+		'overflow',
+		'cursor'
 	);
 
 	public $entities1 = array('"' => '&quot;', "'" => '&#39;', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
@@ -398,6 +400,7 @@ class Jevix
 	protected $isXHTMLMode  = true; // <br/>, <img/>
 	protected $isAutoBrMode = true; // \n = <br/>
 	protected $isAutoLinkMode = true;
+	protected $isFormatMode = true;
 	protected $br = "<br />";
 
 	protected $noTypoMode = false;
@@ -586,6 +589,125 @@ class Jevix
 		$this->isAutoLinkMode = $isAutoLinkMode;
 	}
 
+	function cfgSetFormatMode($isFormatMode)
+	{
+		$this->isFormatMode = (bool)$isFormatMode;
+	}
+
+	function formatHtml($html, $indent = "  ")
+	{
+		if (empty($html) || !is_string($html)) return $html;
+
+		$voidTags = array('img', 'br', 'hr', 'source', 'col', 'param', 'input', 'meta', 'link');
+
+		$blockTags = array(
+			'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+			'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col',
+			'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+			'section', 'article', 'aside', 'header', 'footer', 'nav', 'main',
+			'figure', 'figcaption', 'details', 'summary', 'blockquote', 'address',
+			'video', 'audio', 'picture', 'source', 'iframe', 'object', 'embed',
+			'form', 'fieldset', 'legend', 'button', 'hr'
+		);
+
+		$containerTags = array(
+			'div', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'colgroup',
+			'ul', 'ol', 'dl', 'section', 'article', 'aside', 'header', 'footer',
+			'nav', 'main', 'figure', 'details', 'blockquote', 'video', 'audio', 'picture', 'form', 'fieldset'
+		);
+
+		try {
+			// 1. Preserve pre, code (if inside pre or standalone block), textarea
+			$rawBlocks = array();
+			$rawIndex = 0;
+			$html = preg_replace_callback('/<(pre|textarea)[^>]*>.*?<\/\\1>/si', function ($m) use (&$rawBlocks, &$rawIndex) {
+				$placeholder = '___JEVIX_RAW_BLOCK_' . ($rawIndex++) . '___';
+				$rawBlocks[$placeholder] = $m[0];
+				return $placeholder;
+			}, $html);
+
+			// 2. Tokenize by HTML comments and tags
+			$tokens = preg_split('/(<!--.*?-->|<[^>]+>)/su', $html, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+			if (!$tokens) return $html;
+
+			$out = '';
+			$level = 0;
+
+			foreach ($tokens as $token) {
+				if (strpos($token, '<!--') === 0) {
+					// HTML comment
+					if ($out !== '' && substr($out, -1) !== "\n") {
+						$out .= "\n";
+					}
+					$out .= str_repeat($indent, $level) . $token . "\n";
+				} elseif (preg_match('/^<([a-z0-9_\-]+)(?:\s+[^>]*)?>$/ui', $token, $m)) {
+					// Opening tag
+					$tag = mb_strtolower($m[1], 'UTF-8');
+					$isVoid = in_array($tag, $voidTags) || (substr($token, -2) === '/>');
+					$isBlock = in_array($tag, $blockTags);
+
+					if ($isBlock) {
+						if ($out !== '' && substr($out, -1) !== "\n") {
+							$out .= "\n";
+						}
+						$out .= str_repeat($indent, $level) . $token;
+						if (!$isVoid) {
+							$level++;
+						} else {
+							$out .= "\n";
+						}
+					} else {
+						if (substr($out, -1) === "\n") {
+							$out .= str_repeat($indent, $level);
+						}
+						$out .= $token;
+					}
+				} elseif (preg_match('/^<\/([a-z0-9_\-]+)>$/ui', $token, $m)) {
+					// Closing tag
+					$tag = mb_strtolower($m[1], 'UTF-8');
+					$isBlock = in_array($tag, $blockTags);
+					$isContainer = in_array($tag, $containerTags);
+
+					if ($isBlock) {
+						$level = max(0, $level - 1);
+						if ($isContainer || (substr($out, -1) === "\n")) {
+							if (substr($out, -1) !== "\n") {
+								$out .= "\n";
+							}
+							$out .= str_repeat($indent, $level);
+						}
+						$out .= $token . "\n";
+					} else {
+						$out .= $token;
+					}
+				} else {
+					// Text or placeholder
+					$text = $token;
+					if (trim($text) === '') {
+						continue;
+					}
+
+					if (substr($out, -1) === "\n") {
+						$out .= str_repeat($indent, $level);
+					}
+					$out .= $text;
+				}
+			}
+
+			// 3. Restore preserved raw blocks with proper indentation
+			foreach ($rawBlocks as $ph => $rawContent) {
+				$out = str_replace($ph, "\n" . $rawContent . "\n", $out);
+			}
+
+			// 4. Clean extra empty lines and trailing spaces
+			$out = preg_replace("/\n[ \t]*\n+/u", "\n", $out);
+			$out = preg_replace("/[ \t]+\n/u", "\n", $out);
+			return trim($out);
+		} catch (Exception $e) {
+			return $html;
+		}
+	}
+
 	// ------- Set Tag Style params --------------- // 
 
 	function cfgSetTagStyleParams($tag, $params)
@@ -654,6 +776,9 @@ class Jevix
 		$this->skipSpaces();
 		$this->anyThing($content);
 		$errors = $this->errors;
+		if ($this->isFormatMode) {
+			$content = $this->formatHtml($content);
+		}
 		return $content;
 	}
 
@@ -1108,6 +1233,9 @@ class Jevix
 			$value = trim((string) $value);
 			if ($value == '') continue;
 			$paramAllowedValues = isset($tagRules[self::TR_PARAM_ALLOWED][$param]) ? $tagRules[self::TR_PARAM_ALLOWED][$param] : false;
+			if (empty($paramAllowedValues) && !empty($tagRules[self::TR_PARAM_ALLOWED]['data-*']) && preg_match('/^data-[a-z0-9_\-]+$/ui', $param)) {
+				$paramAllowedValues = '#text';
+			}
 			if (empty($paramAllowedValues)) continue;
 
 			if (is_array($paramAllowedValues)) {

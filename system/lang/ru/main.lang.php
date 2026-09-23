@@ -12,7 +12,7 @@ Localization done by : Antar, Antony & Amro
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Lang
 Name=Russian
 Native=Русский
@@ -786,6 +786,7 @@ $L['admintooltip_pageadd'] = "Добавить страницу";
 $L['admintooltip_pageedit'] = "Редактировать страницу";
 $L['admintooltip_pageeditcategory'] = "Редактировать категорию";
 $L['admintooltip_pageeditoption'] = "Редактировать свойство";
+$L['admintooltip_translateedit'] = "Редактировать перевод";
 
 $sed_months_list = array(
 	1 => 'января',

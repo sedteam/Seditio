@@ -2210,6 +2210,11 @@ a.alfabeta:hover {
   border: 1px solid var(--theme-forum-border);
 }
 
+.forums-post-table {
+  table-layout: fixed !important;
+  width: 100% !important;
+}
+
 .forums-table h4 {
   margin: 0 0 10px 0;
   font-weight: 500;
@@ -2246,6 +2251,12 @@ a.alfabeta:hover {
   overflow-y: visible;
   margin-bottom: 8px;
   flex-grow: 1;
+  max-width: 100%;
+}
+
+.forums-post-message pre {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .forums-thanked {

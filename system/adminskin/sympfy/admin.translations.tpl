@@ -261,11 +261,7 @@
 							<strong>{PHP.L.adm_translations_key}:</strong>
 						</div>
 						<div class="table-td text-left resp-table-td">
-							<div class="translation-key-input-wrapper">
-								<span class="translation-key-prefix">$L['</span>
-								{ADD_KEY_INPUT}
-								<span class="translation-key-suffix">']</span>
-							</div>
+							{ADD_KEY_INPUT}
 							<div class="translation-help-block"><small>{PHP.L.adm_translations_key_hint}</small></div>
 						</div>
 					</div>
@@ -313,6 +309,16 @@
 
 	</div>
 
+</div>
+
+<div class="content-box">
+	<div class="content-box-header">
+		<h3><i class="ic-alert-circle"></i> {PHP.L.Help}: {PHP.L.adm_translations_key}</h3>
+		<div class="clear"></div>
+	</div>
+	<div class="content-box-content" style="padding: 20px;">
+		{PHP.L.adm_translations_add_help}
+	</div>
 </div>
 <!-- END: ADD_VARIABLE -->
 

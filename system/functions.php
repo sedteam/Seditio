@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-sep-23
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -6401,6 +6401,27 @@ function sed_urls_generate()
 }
 
 /**
+ * Formats a translation key for readable display (e.g. $L['key'] or $sed_museum_countries['es']).
+ *
+ * @param string $key
+ * @return string
+ */
+function sed_translations_format_display_key($key)
+{
+	if (preg_match('/^(sed_[a-zA-Z0-9_]*)((?:\[[^\]]+\])+)$/i', $key, $m)) {
+		$var_name = $m[1];
+		$brackets = $m[2];
+		preg_match_all('/\[([^\]]+)\]/', $brackets, $matches);
+		$accessor = '';
+		foreach ($matches[1] as $part) {
+			$accessor .= "['" . sed_cc($part) . "']";
+		}
+		return '$' . sed_cc($var_name) . $accessor;
+	}
+	return '$L[\'' . sed_cc($key) . '\']';
+}
+
+/**
  * Generates compiled single-file language cache for a given language or all active languages.
  * Follows the pattern of sed_urls_generate().
  *
@@ -6463,7 +6484,21 @@ function sed_translations_generate($lang = null)
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$k = $row['tra_key'];
 		$v = $row['tra_val'];
-		$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+
+		if (preg_match('/^(sed_[a-zA-Z0-9_]*)((?:\[[^\]]+\])+)$/i', $k, $m)) {
+			$var_name = $m[1];
+			$brackets = $m[2];
+			preg_match_all('/\[([^\]]+)\]/', $brackets, $matches);
+			$accessor = '';
+			foreach ($matches[1] as $part) {
+				$accessor .= '[' . var_export($part, true) . ']';
+			}
+
+			$lines[] = '$' . $var_name . $accessor . ' = ' . var_export($v, true) . ';';
+			$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+		} else {
+			$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+		}
 	}
 
 	if (count($lines) === 0) {
@@ -6474,7 +6509,21 @@ function sed_translations_generate($lang = null)
 		while ($row = sed_sql_fetchassoc($sql)) {
 			$k = $row['tra_key'];
 			$v = $row['tra_val'];
-			$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+
+			if (preg_match('/^(sed_[a-zA-Z0-9_]*)((?:\[[^\]]+\])+)$/i', $k, $m)) {
+				$var_name = $m[1];
+				$brackets = $m[2];
+				preg_match_all('/\[([^\]]+)\]/', $brackets, $matches);
+				$accessor = '';
+				foreach ($matches[1] as $part) {
+					$accessor .= '[' . var_export($part, true) . ']';
+				}
+
+				$lines[] = '$' . $var_name . $accessor . ' = ' . var_export($v, true) . ';';
+				$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+			} else {
+				$lines[] = '$L[\'' . addcslashes($k, "'\\") . '\'] = ' . var_export($v, true) . ';';
+			}
 		}
 	}
 
@@ -6535,35 +6584,65 @@ function sed_translations_import_file($file, $lang, $scope, $code, $order = 500,
 		}
 	}
 
+	$before_vars = get_defined_vars();
 	$L = array();
 	include($file);
+	$after_vars = get_defined_vars();
 
 	$now = time();
 	$count = 0;
 
+	// 1. Process $L
 	if (!empty($L) && is_array($L)) {
 		foreach ($L as $k => $v) {
 			if (is_array($v)) {
-				$title = isset($v[0]) ? (string)$v[0] : '';
-				$hint  = isset($v[1]) ? (string)$v[1] : '';
+				if (isset($v[0]) || isset($v[1]) || empty($v)) {
+					$title = isset($v[0]) ? (string)$v[0] : '';
+					$hint  = isset($v[1]) ? (string)$v[1] : '';
 
-				sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
-					VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($k) . "', '" . sed_sql_prep($title) . "', " . (int)$type . ", " . (int)$order . ", $now)
-					ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
-				$count++;
-
-				if ($hint !== '') {
-					$hint_k = $k . '_hint';
 					sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
-						VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($hint_k) . "', '" . sed_sql_prep($hint) . "', " . (int)$type . ", " . (int)$order . ", $now)
+						VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($k) . "', '" . sed_sql_prep($title) . "', " . (int)$type . ", " . (int)$order . ", $now)
 						ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
 					$count++;
+
+					if ($hint !== '') {
+						$hint_k = $k . '_hint';
+						sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
+							VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($hint_k) . "', '" . sed_sql_prep($hint) . "', " . (int)$type . ", " . (int)$order . ", $now)
+							ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
+						$count++;
+					}
+				} else {
+					foreach ($v as $sub_k => $sub_v) {
+						if (is_string($sub_v) || is_numeric($sub_v)) {
+							$tra_k = $k . '[' . $sub_k . ']';
+							sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
+								VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($tra_k) . "', '" . sed_sql_prep((string)$sub_v) . "', " . (int)$type . ", " . (int)$order . ", $now)
+								ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
+							$count++;
+						}
+					}
 				}
 			} elseif (is_string($v) || is_numeric($v)) {
 				sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
 					VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($k) . "', '" . sed_sql_prep((string)$v) . "', " . (int)$type . ", " . (int)$order . ", $now)
 					ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
 				$count++;
+			}
+		}
+	}
+
+	// 2. Process additional auxiliary arrays (strictly only variables starting with sed_)
+	foreach ($after_vars as $var_name => $var_val) {
+		if (strpos($var_name, 'sed_') === 0 && is_array($var_val)) {
+			foreach ($var_val as $ak => $av) {
+				if (is_string($av) || is_numeric($av)) {
+					$tra_k = $var_name . '[' . $ak . ']';
+					sed_sql_query("INSERT INTO $db_translations (tra_lang, tra_scope, tra_code, tra_key, tra_val, tra_type, tra_order, tra_updated)
+						VALUES ('" . sed_sql_prep($lang) . "', '" . sed_sql_prep($scope) . "', '" . sed_sql_prep($code) . "', '" . sed_sql_prep($tra_k) . "', '" . sed_sql_prep((string)$av) . "', " . (int)$type . ", " . (int)$order . ", $now)
+						ON DUPLICATE KEY UPDATE tra_val = IF(tra_type = 0, tra_val, VALUES(tra_val))");
+					$count++;
+				}
 			}
 		}
 	}

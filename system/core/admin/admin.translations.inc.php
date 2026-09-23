@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.translations.inc.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Core.admin
 Author=Seditio Team
 Description=Translations and Languages administration
@@ -149,7 +149,14 @@ if ($a == 'update') {
 	$new_code = empty($new_code) ? 'custom' : preg_replace('/[^a-zA-Z0-9_-]/', '', $new_code);
 	$new_vals = sed_import('new_val', 'P', 'ARR');
 
-	$new_key = preg_replace('/[^a-zA-Z0-9_]/', '', $new_key);
+	$new_key = trim($new_key);
+	if (preg_match('/^\$L\[(.*)\]$/i', $new_key, $lm)) {
+		$new_key = $lm[1];
+	} elseif (strpos($new_key, '$') === 0) {
+		$new_key = substr($new_key, 1);
+	}
+	$new_key = str_replace(array("'", '"'), '', $new_key);
+	$new_key = preg_replace('/[^a-zA-Z0-9_\[\]-]/', '', $new_key);
 
 	if (!empty($new_key) && is_array($new_vals)) {
 		// Check if key already exists
@@ -177,11 +184,15 @@ if ($a == 'update') {
 	$id = sed_import('id', 'G', 'INT');
 
 	if ($id > 0) {
-		$sql_del = sed_sql_query("SELECT tra_lang, tra_key, tra_type FROM $db_translations WHERE tra_id = $id LIMIT 1");
+		$sql_del = sed_sql_query("SELECT tra_key, tra_scope, tra_code, tra_type FROM $db_translations WHERE tra_id = $id LIMIT 1");
 		if ($row_del = sed_sql_fetchassoc($sql_del)) {
 			if ($row_del['tra_type'] == 0) {
-				sed_sql_query("DELETE FROM $db_translations WHERE tra_id = $id");
-				sed_translations_generate($row_del['tra_lang']);
+				sed_sql_query("DELETE FROM $db_translations 
+					WHERE tra_key = '" . sed_sql_prep($row_del['tra_key']) . "' 
+					AND tra_scope = '" . sed_sql_prep($row_del['tra_scope']) . "' 
+					AND tra_code = '" . sed_sql_prep($row_del['tra_code']) . "' 
+					AND tra_type = 0");
+				sed_translations_generate();
 			}
 		}
 	}
@@ -716,7 +727,7 @@ if ($s == 'languages') {
 	}
 
 	$t->assign(array(
-		"ADD_KEY_INPUT" => sed_textbox('new_key', ($key_exists_warning ? $exist_key : ''), 40, 128, 'form-control', false, 'text', array('placeholder' => 'my_custom_string', 'required' => 'required', 'id' => 'new_key')),
+		"ADD_KEY_INPUT" => sed_textbox('new_key', ($key_exists_warning ? $exist_key : ''), 40, 128, 'form-control', false, 'text', array('placeholder' => 'my_custom_string / array_name[key]', 'required' => 'required', 'id' => 'new_key')),
 		"ADD_SCOPE_SELECT" => sed_selectbox('core', 'new_scope', $scopes_add, false),
 		"ADD_CODE_INPUT" => sed_textbox('new_code', 'custom', 30, 64, 'form-control'),
 		"ADD_KEY_EXISTS_WARNING" => $key_exists_warning,
@@ -743,7 +754,7 @@ if ($s == 'languages') {
 	$edit_scope = sed_import('scope', 'G', 'ALP', 16);
 	$edit_code = sed_import('code', 'G', 'TXT', 64);
 
-	$urlpaths[sed_url("admin", "m=translations&s=edit&key=" . $edit_key . "&scope=" . $edit_scope . "&code=" . $edit_code)] = '$L[\'' . $edit_key . '\']';
+	$urlpaths[sed_url("admin", "m=translations&s=edit&key=" . $edit_key . "&scope=" . $edit_scope . "&code=" . $edit_code)] = sed_translations_format_display_key($edit_key);
 
 	$sql_ext = sed_sql_query("SELECT tra_lang, tra_val FROM $db_translations 
 		WHERE tra_key = '" . sed_sql_prep($edit_key) . "' 
@@ -757,7 +768,7 @@ if ($s == 'languages') {
 
 	$t->assign(array(
 		"EDIT_KEY" => $edit_key,
-		"EDIT_DISPLAY_KEY" => '$L[\'' . sed_cc($edit_key) . '\']',
+		"EDIT_DISPLAY_KEY" => sed_translations_format_display_key($edit_key),
 		"EDIT_SCOPE" => sed_cc($edit_scope),
 		"EDIT_CODE" => sed_cc($edit_code),
 		"EDIT_ACTION_URL" => sed_url("admin", "m=translations&a=edit_save&key=" . $edit_key . "&scope=" . $edit_scope . "&code=" . $edit_code . "&tlang=" . $tlang . (!empty($q) ? "&q=" . $q : "") . "&" . sed_xg()),
@@ -830,8 +841,18 @@ if ($s == 'languages') {
 	}
 
 	if (!empty($q)) {
-		$q_sql = sed_sql_prep($q);
-		$where[] = "(tra_key LIKE '%" . $q_sql . "%' OR tra_val LIKE '%" . $q_sql . "%')";
+		$q_clean = trim($q);
+		$q_key = preg_replace('/^\$L\[[\'"]?|^\$|[\'"]\]?$/', '', $q_clean);
+		$q_key = str_replace(array("['", "']", '["', '"]'), array('[', ']', '[', ']'), $q_key);
+
+		$q_sql = sed_sql_prep($q_clean);
+		$q_key_sql = sed_sql_prep($q_key);
+
+		if ($q_key_sql !== $q_sql && !empty($q_key_sql)) {
+			$where[] = "(tra_key LIKE '%" . $q_sql . "%' OR tra_key LIKE '%" . $q_key_sql . "%' OR tra_val LIKE '%" . $q_sql . "%')";
+		} else {
+			$where[] = "(tra_key LIKE '%" . $q_sql . "%' OR tra_val LIKE '%" . $q_sql . "%')";
+		}
 	}
 
 	$where_str = implode(" AND ", $where);
@@ -862,10 +883,16 @@ if ($s == 'languages') {
 		$is_system = ($row['tra_type'] == 1);
 		$is_custom = ($row['tra_type'] == 0);
 
+		$is_multiline_or_html = (mb_strlen($row['tra_val']) > 80 || strpos($row['tra_val'], "\n") !== false || strip_tags($row['tra_val']) !== $row['tra_val']);
+
 		if ($is_locked) {
-			$val_input = sed_textbox("tra_val[" . $row['tra_id'] . "]", $row['tra_val'], 56, 255, "form-control", true);
+			if ($is_multiline_or_html) {
+				$val_input = sed_textarea("tra_val[" . $row['tra_id'] . "]", $row['tra_val'], 2, 60, "noeditor", true, "form-control");
+			} else {
+				$val_input = sed_textbox("tra_val[" . $row['tra_id'] . "]", $row['tra_val'], 56, 255, "form-control", true);
+			}
 		} else {
-			if (mb_strlen($row['tra_val']) > 80 || strpos($row['tra_val'], "\n") !== false) {
+			if ($is_multiline_or_html) {
 				$val_input = sed_textarea("tra_val[" . $row['tra_id'] . "]", $row['tra_val'], 2, 60, "noeditor", false, "form-control");
 			} else {
 				$val_input = sed_textbox("tra_val[" . $row['tra_id'] . "]", $row['tra_val'], 56, 255, "form-control");
@@ -874,7 +901,7 @@ if ($s == 'languages') {
 
 		$t->assign(array(
 			"TRA_ROW_ID" => $row['tra_id'],
-			"TRA_ROW_KEY" => '$L[\'' . sed_cc($row['tra_key']) . '\']',
+			"TRA_ROW_KEY" => sed_translations_format_display_key($row['tra_key']),
 			"TRA_ROW_RAW_KEY" => sed_cc($row['tra_key']),
 			"TRA_ROW_SCOPE" => sed_cc($row['tra_scope']),
 			"TRA_ROW_CODE" => sed_cc($row['tra_code']),

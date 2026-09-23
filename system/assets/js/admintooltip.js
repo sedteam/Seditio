@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var tooltipTimeout;
 
+    tooltip.addEventListener('mouseenter', function() {
+        clearTimeout(tooltipTimeout);
+    });
+
+    tooltip.addEventListener('mouseleave', function() {
+        tooltipTimeout = setTimeout(closeTooltip, 300);
+    });
+
     document.addEventListener('mouseout', function(event) {
         var to = event.relatedTarget || event.toElement;
         if (!tooltip.contains(to)) {
@@ -22,12 +30,19 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         'data-config': function (id) {
             return "<a href='admin/config?n=edit&o=core&p=" + id + "&return=" + encodeURIComponent(window.location) + "' class=\"admin_tooltip_edit\">" + L.pageeditoption + "</a>";
+        },
+        'data-translate': function (id) {
+            return "<a href='admin/translations?s=list&q=" + encodeURIComponent(id) + "&return=" + encodeURIComponent(window.location) + "' class=\"admin_tooltip_edit\">" + L.translateedit + "</a>";
         }
     };
 
     function findTooltipHost(el) {
         while (el && el.nodeType === 1) {
-            if (el.getAttribute('data-page') || el.getAttribute('data-category') || el.getAttribute('data-config')) {
+            var val = el.getAttribute('data-page') || 
+                      el.getAttribute('data-category') || 
+                      el.getAttribute('data-config') || 
+                      el.getAttribute('data-translate');
+            if (val && String(val).trim() !== '') {
                 return el;
             }
             el = el.parentNode;
@@ -56,19 +71,25 @@ document.addEventListener('DOMContentLoaded', function() {
         var id = element.getAttribute('data-page');
         var category = element.getAttribute('data-category');
         var config = element.getAttribute('data-config');
+        var translate = element.getAttribute('data-translate');
+
         if (id) {
             showTooltip(tooltipLinks['data-page'], id, element, tooltip);
         } else if (category) {
             showTooltip(tooltipLinks['data-category'], category, element, tooltip);
         } else if (config) {
             showTooltip(tooltipLinks['data-config'], config, element, tooltip);
+        } else if (translate) {
+            showTooltip(tooltipLinks['data-translate'], translate, element, tooltip);
         }
     });
 });
 
 function closeTooltip() {
     var tooltip = document.querySelector('.adm-tooltip');
-    tooltip.style.display = 'none';
+    if (tooltip) {
+        tooltip.style.display = 'none';
+    }
 }
 
 function showTooltip(tooltipLink, id, element, tooltip) {
@@ -76,17 +97,20 @@ function showTooltip(tooltipLink, id, element, tooltip) {
 
     if (tooltipcontent !== '') {
         tooltip.innerHTML = tooltipcontent;
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.display = 'block';
 
-        var flip = !(element.getBoundingClientRect().left + tooltip.offsetWidth + 25 < document.body.offsetWidth);
         var scrollY = window.scrollY || window.pageYOffset;
         var scrollX = window.scrollX || window.pageXOffset;
-        var top = element.getBoundingClientRect().top + scrollY;
-        var left = element.getBoundingClientRect().left + scrollX;
+        var rect = element.getBoundingClientRect();
+        var top = rect.top + scrollY;
+        var left = rect.left + scrollX;
         
-        tooltip.style.top = top + element.offsetHeight / 2 + 5 + 'px';
-        tooltip.style.left = left + element.offsetWidth * 0.5 - (flip ? tooltip.offsetWidth - 40 : 0) + 'px';
-
-        tooltip.style.display = 'block';
+        var flip = !(rect.left + tooltip.offsetWidth + 25 < document.body.offsetWidth);
+        
+        tooltip.style.top = (top + rect.height / 2 + 5) + 'px';
+        tooltip.style.left = (left + rect.width * 0.5 - (flip ? tooltip.offsetWidth - 40 : 0)) + 'px';
+        tooltip.style.visibility = 'visible';
     } else {
         tooltip.style.display = 'none';
     }

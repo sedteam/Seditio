@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/admin.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Lang
 Author=Seditio Team
 Description=Admin Turkish language file
@@ -560,7 +560,7 @@ $L['adm_translations_lang_deleted'] = "Dil ve ilgili çeviriler silindi.";
 $L['adm_translations_search'] = "Anahtar veya değere göre ara...";
 $L['adm_translations_all_types'] = "Tüm türler";
 $L['adm_translations_show'] = "Sayfa başına göster";
-$L['adm_translations_key_hint'] = "Yalnızca Latin harfleri, sayılar ve alt çizgiler (örneğin: my_header_title)";
+$L['adm_translations_key_hint'] = "Anahtar adını (örn. <code>my_header_title</code> — <code>\$L</code> dizisinin parçası olur) veya dizi anahtarıyla değişkeni belirtin (örn. <code>sed_museum_countries[kz]</code>).";
 $L['adm_langcache_regenerate_hint'] = "Tüm veritabanı çevirilerini yüksek performans için PHP önbellek dosyalarına (datas/cache/sed_lang.*.php) derler.";
 $L['adm_translations_io'] = "İçe / Dışa Aktar";
 $L['adm_translations_export'] = "Çevirileri Dışa Aktar";
@@ -581,6 +581,11 @@ $L['adm_translations_import_success'] = "İçe aktarma başarıyla tamamlandı. 
 $L['adm_translations_import_err_file'] = "Hata: Dosya yüklenemedi veya bozuk.";
 $L['adm_translations_import_err_json'] = "Hata: Geçersiz JSON dosya formatı.";
 $L['adm_translations_import_err_lang'] = "Hata: Hedef dil belirlenemedi.";
-$L['adm_translations_import_err_empty'] = "Yüklenen dosyada çeviri verisi bulunamadı.";
 $L['adm_translations_key_exists'] = "\$L['%1\$s'] anahtarına sahip değişken zaten %2\$s / %3\$s bölümünde mevcut.";
+$L['adm_translations_add_help'] = "<p><strong>Dil değişkeni ve dizi adlandırma kuralları:</strong></p>
+<ul class=\"help-list\" style=\"line-height:1.7;\">
+	<li><strong>1. Standart metin anahtarları (<code>\$L</code> dizisi):</strong><br />Basit bir anahtar adı girin, örn. <code>my_custom_title</code> veya <code>promo_badge_text</code>.<br /><small class=\"text-muted\">PHP'de erişim: <code>\$L['my_custom_title']</code>, şablonlarda: <code>{PHP.L.my_custom_title}</code>.</small></li>
+	<li style=\"margin-top:10px;\"><strong>2. Özel genel dizi öğeleri (<code>sed_</code> öneki):</strong><br />Genel bir dizi öğesi oluşturmak için ad <u>mutlaka</u> parantez içinde anahtar ile <code>sed_</code> ile başlamalıdır, örn. <code>sed_museum_countries[kz]</code> veya <code>sed_ticket_types[vip]</code>.<br /><small class=\"text-muted\">PHP'de doğrudan erişim: <code>\$sed_museum_countries['kz']</code> (ve <code>\$L['sed_museum_countries[kz]']</code>).</small></li>
+	<li style=\"margin-top:10px;\"><strong>3. Çekirdek değişken koruması:</strong><br /><code>sed_</code> öneki olmayan parantezli adlar (örn. <code>sql[x]</code>, <code>cfg[x]</code>, <code>usr[x]</code>), Seditio çekirdek değişkenlerini korumak için güvenli bir şekilde <code>\$L</code> içinde saklanır.</li>
+</ul>";
 $L['adm_translations_key_exists_js'] = "Uyarı: %s anahtarı zaten %scope bölümünde mevcut.";

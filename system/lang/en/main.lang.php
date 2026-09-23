@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-sep-23
 Type=Lang
 Name=English
 Native=English
@@ -539,6 +539,7 @@ $L['admintooltip_pageadd'] = "Add page";
 $L['admintooltip_pageedit'] = "Edit page";
 $L['admintooltip_pageeditcategory'] = "Edit category";
 $L['admintooltip_pageeditoption'] = "Edit config option";
+$L['admintooltip_translateedit'] = "Edit translation";
 
 $sed_months_list = array(
 	1 => 'january',
