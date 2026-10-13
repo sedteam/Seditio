@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.menu.inc.php
 Version=186
-Updated=2026-jun-23
+Updated=2026-oct-09
 Type=Core.admin
 Author=Amro
 Description=Menu build module
@@ -195,7 +195,7 @@ switch ($mn) {
 			"MENU_UPDATE_TITLE" => sed_textbox('mtitle', $row['menu_title']),
 			"MENU_UPDATE_URL" => sed_textbox('murl', $row['menu_url']),
 			"MENU_UPDATE_POSITION" => sed_textbox('mposition', $row['menu_position'], 3, 5),
-			"MENU_UPDATE_VISIBLE" => sed_checkbox('mvisible', "", $row['menu_visible']),
+			"MENU_UPDATE_VISIBLE" => sed_checkbox('mvisible', "", $row['menu_visible'], '', false, array('class' => 'sed-switch')),
 			"MENU_UPDATE_TARGET" => sed_selectbox($row['menu_target'], 'mtarget', $target_arr),
 			"MENU_UPDATE_CSSCLASS" => sed_textbox('mclass', isset($row['menu_cssclass']) ? $row['menu_cssclass'] : '')
 		));
@@ -224,7 +224,7 @@ switch ($mn) {
 			"MENU_ADD_TITLE" => sed_textbox('mtitle', isset($mtitle) ? $mtitle : ''),
 			"MENU_ADD_URL" => sed_textbox('murl', isset($murl) ? $murl : ''),
 			"MENU_ADD_POSITION" => sed_textbox('mposition', isset($mposition) ? $mposition : '', 3, 5),
-			"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', isset($mvisible) ? $mvisible : '', 1),
+			"MENU_ADD_VISIBLE" => sed_checkbox('mvisible', isset($mvisible) ? $mvisible : '', 1, '', false, array('class' => 'sed-switch')),
 			"MENU_ADD_TARGET" => sed_selectbox(isset($mtarget) ? $mtarget : '', 'mtarget', $target_arr),
 			"MENU_ADD_CSSCLASS" => sed_textbox('mclass', isset($mclass) ? $mclass : '')
 		));

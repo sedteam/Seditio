@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/contact/contact.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-09
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -122,7 +122,7 @@ if ($a == 'send') {
 
 $error_string .= (!empty($error_string)) ? $L['plu_notsent'] : '';
 
-$recipients = "<select name=\"sender_recip\">\n";
+$recipients = "<select name=\"sender_recip\" class=\"sed-select\">\n";
 foreach (array_keys($cfg_emails) as $k) {
 	$selected = ($k == $id) ? "selected=\"selected\"" : "";
 	$recipients .= "<option value=\"" . $k . "\" $selected >" . trim($cfg_names[$k]) . "</option>\n";

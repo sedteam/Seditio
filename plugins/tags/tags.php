@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/tags/tags.php
 Version=186
-Updated=2026-mar-18
+Updated=2026-oct-09
 Type=Plugin
 [END_SED]
 
@@ -88,7 +88,7 @@ $t->assign(array(
 	"TAGS_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
 	"TAGS_FORM_ACTION" => sed_url('plug', 'e=tags'),
 	"TAGS_FORM_INPUT" => sed_textbox('t', sed_cc($tag_query), 40, 255, 'autotags'),
-	"TAGS_FORM_AREA" => '<select name="a">' . $area_options . '</select>',
+	"TAGS_FORM_AREA" => '<select name="a" class="sed-select">' . $area_options . '</select>',
 	"TAGS_FORM_HINT" => $L['tags_search_hint']
 ));
 

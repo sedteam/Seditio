@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.add.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=Add page
@@ -253,9 +253,9 @@ if (empty($newpagecat) && !empty($c)) {
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
 }
 
-$pageadd_form_file = sed_radiobox("newpagefile", $yesno_arr, isset($newpagefile) ? $newpagefile : 0);
-$pageadd_form_allowcomments = sed_radiobox("newpageallowcomments", $yesno_arr, $newpageallowcomments);
-$pageadd_form_allowratings = sed_radiobox("newpageallowratings", $yesno_arr, $newpageallowratings);
+$pageadd_form_file = sed_yesno("newpagefile", !empty($newpagefile));
+$pageadd_form_allowcomments = sed_yesno("newpageallowcomments", (!isset($newpageallowcomments) || $newpageallowcomments == 1));
+$pageadd_form_allowratings = sed_yesno("newpageallowratings", (!isset($newpageallowratings) || $newpageallowratings == 1));
 
 $pageadd_form_categories = sed_selectbox_categories(isset($newpagecat) ? $newpagecat : '', 'newpagecat');
 $newpage_form_begin = sed_selectbox_date($sys['now_offset'] + $usr['timezone'] * 3600, 'long', '_beg');
@@ -323,8 +323,8 @@ $t->assign(array(
 	"PAGEADD_FORM_SEODESC" => sed_textbox('newpageseodesc', isset($newpageseodesc) ? $newpageseodesc : ''),
 	"PAGEADD_FORM_SEOKEYWORDS" => sed_textbox('newpageseokeywords', isset($newpageseokeywords) ? $newpageseokeywords : ''),
 	"PAGEADD_FORM_SEOH1" => sed_textbox('newpageseoh1', isset($newpageseoh1) ? $newpageseoh1 : ''),
-	"PAGEADD_FORM_SEOINDEX" => sed_checkbox("newpageseoindex", "", isset($newpageseoindex) ? $newpageseoindex : 1),
-	"PAGEADD_FORM_SEOFOLLOW" => sed_checkbox("newpageseofollow", "", isset($newpageseofollow) ? $newpageseofollow : 1),
+	"PAGEADD_FORM_SEOINDEX" => sed_checkbox("newpageseoindex", "", isset($newpageseoindex) ? $newpageseoindex : 1, '', false, array('class' => 'sed-switch')),
+	"PAGEADD_FORM_SEOFOLLOW" => sed_checkbox("newpageseofollow", "", isset($newpageseofollow) ? $newpageseofollow : 1, '', false, array('class' => 'sed-switch')),
 	"PAGEADD_FORM_THUMB" => sed_textbox('newpagethumb', isset($newpagethumb) ? $newpagethumb : ''),
 	"PAGEADD_FORM_AUTHOR" => sed_textbox('newpageauthor', isset($newpageauthor) ? $newpageauthor : '', 16, 24),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),

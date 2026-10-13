@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.edit.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=User editing
@@ -278,9 +278,9 @@ if ($a == 'update') {
 	}
 }
 
-$user_form_pmnotify =  sed_radiobox("ruserpmnotify", $yesno_arr, $urr['user_pmnotify']);
-$user_form_hideemail =  sed_radiobox("ruserhideemail", $yesno_arr, $urr['user_hideemail']);
-$user_form_delete =  ($sys['user_istopadmin']) ? sed_radiobox("ruserdelete", $yesno_arr, 0) . (sed_module_active('pfs') ? "<br />+ " . $L['PFS'] . ":" . sed_checkbox('ruserdelpfs') : '') : $L['na'];
+$user_form_pmnotify = sed_yesno("ruserpmnotify", $urr['user_pmnotify']);
+$user_form_hideemail = sed_yesno("ruserhideemail", $urr['user_hideemail']);
+$user_form_delete = ($sys['user_istopadmin']) ? sed_yesno("ruserdelete", 0) . (sed_module_active('pfs') ? "<br />+ " . $L['PFS'] . ":" . sed_checkbox('ruserdelpfs', '', false, '', false, array('class' => 'sed-switch sed-switch-sm')) : '') : $L['na'];
 
 $user_form_pass = $sys['protecttopadmin'] ? sed_textbox("rusernewpass", "", 16, 32, "password", true, "password") : sed_textbox("rusernewpass", "", 16, 32, "password", false, "password");
 $user_form_username = $sys['protecttopadmin'] ? sed_textbox("rusername", $urr['user_name'], 24, 100, "text", true) : sed_textbox("rusername", $urr['user_name'], 24, 100);

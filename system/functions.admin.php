@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-10
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -487,6 +487,12 @@ function sed_loadconfigmap()
 	$result[] = array('skin', '15', 'keepcrbottom', 3, '1', '');
 	$result[] = array('skin', '15', 'showsqlstats', 3, '0', '');
 	$result[] = array('skin', '16', 'defskin', 7, '', '');
+	$result[] = array('skin', '20', 'yesno_type', 2, 'switch', array('switch', 'radio', 'checkbox'));
+	$result[] = array('skin', '21', 'enable_sed_switch', 3, '1', '');
+	$result[] = array('skin', '22', 'enable_sed_select', 3, '1', '');
+	$result[] = array('skin', '23', 'enable_sed_input', 3, '1', '');
+	$result[] = array('skin', '24', 'enable_sed_datepicker', 3, '1', '');
+	$result[] = array('skin', '25', 'enable_sed_file', 3, '1', '');
 	$result[] = array('lang', '10', 'forcedefaultlang', 3, '0',  '');
 	$result[] = array('menus', '10', 'topline', 0, '', '');
 	$result[] = array('menus', '10', 'banner', 0, '', '');
@@ -1302,8 +1308,8 @@ function sed_menu_assign_category_form($t, $block, $mcat, $mcat_subcats, $mcat_p
 
 	$t->assign(array(
 		'MENU_CAT_SELECT' => $cat_select,
-		'MENU_CAT_SUBCATS' => sed_checkbox('mcat_subcats', '', (int)$mcat_subcats),
-		'MENU_CAT_PAGES' => sed_checkbox('mcat_pages', '', (int)$mcat_pages),
+		'MENU_CAT_SUBCATS' => sed_checkbox('mcat_subcats', '', (int)$mcat_subcats, '', false, array('class' => 'sed-switch')),
+		'MENU_CAT_PAGES' => sed_checkbox('mcat_pages', '', (int)$mcat_pages, '', false, array('class' => 'sed-switch')),
 	));
 
 	$t->parse($block);

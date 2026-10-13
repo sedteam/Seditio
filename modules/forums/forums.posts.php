@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.posts.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-12
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -375,8 +375,8 @@ list($pages_prev, $pages_next) = sed_pagination_pn(sed_url("forums", "m=posts&q=
 /* ============ For Subforums ================ */
 
 $jumpbox_tree = sed_forum_get_tree();
-$movebox = "<input type=\"submit\" class=\"submit btn\" value=\"" . $L['Move'] . "\" /><select name=\"ns\" size=\"1\">";
-$jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
+$movebox = "<input type=\"submit\" class=\"submit btn\" value=\"" . $L['Move'] . "\" /> <select name=\"ns\" class=\"sed-select\" size=\"1\">";
+$jumpbox = "<select name=\"jumpbox\" class=\"sed-select\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 $jumpbox .= "<option value=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</option>";
 
 foreach ($jumpbox_tree as $jb_item) {

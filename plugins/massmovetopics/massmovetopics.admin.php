@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/massmovetopics/massmovetopics.admin.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-09
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -56,8 +56,8 @@ if ($a == 'move') {
 		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
     	ORDER by fn_path ASC, fs_order ASC");
 
-	$select_source = "<select name=\"sourceid\">";
-	$select_target = "<select name=\"targetid\">";
+	$select_source = "<select name=\"sourceid\" class=\"sed-select\">";
+	$select_target = "<select name=\"targetid\" class=\"sed-select\">";
 
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$select_option = "<option value=\"" . $row['fs_id'] . "\">" . sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']) . "</option>";

@@ -1,0 +1,827 @@
+/**
+ * Seditio CMS - Admin Skin Sympfy
+ * UI Components Styles (SedJS UI modules for Admin)
+ */
+
+/* ==========================================================================
+   1. SED-SELECT (Custom Selectbox)
+   ========================================================================== */
+
+.sed-select-wrapper {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  user-select: none;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.table-td .sed-select-wrapper,
+.resp-table-td .sed-select-wrapper,
+.form-row .sed-select-wrapper {
+  max-width: 100%;
+}
+
+.sed-select-wrapper.sed-select-block {
+  display: block;
+  width: 100%;
+}
+
+.sed-select-wrapper.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.sed-select-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 34px;
+  background: var(--fw-input-bg, #ffffff);
+  border: 1px solid var(--fw-input-border, #cbd5e0);
+  border-radius: 2px;
+  padding: 8px 10px;
+  font-size: 1em;
+  line-height: 1em;
+  color: var(--fw-input-text, #2d3748);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+  outline: 0;
+}
+
+.sed-select-wrapper.sed-select-sm .sed-select-toggle {
+  min-height: 28px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.sed-select-toggle:hover,
+.sed-select-toggle:focus {
+  border-color: var(--admin-primary, #57a000);
+}
+
+.sed-select-wrapper.open .sed-select-toggle {
+  border-color: var(--admin-primary, #57a000);
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(87, 160, 0, 0.18));
+}
+
+.sed-select-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 6px;
+  text-align: left;
+}
+
+.sed-select-placeholder {
+  color: var(--fw-input-placeholder, #a0aec0);
+}
+
+.sed-select-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #718096;
+  transition: transform 0.2s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sed-select-wrapper.open .sed-select-arrow {
+  transform: rotate(180deg);
+}
+
+.sed-select-dropdown {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: 480px;
+  z-index: 1050;
+  background: var(--admin-card-bg, #ffffff);
+  border: 1px solid var(--fw-input-border, #cbd5e0);
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  display: none !important;
+  flex-direction: column;
+  max-height: 280px;
+  box-sizing: border-box;
+}
+
+.sed-select-wrapper.sed-select-dropup .sed-select-dropdown {
+  top: auto;
+  bottom: calc(100% + 2px);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.sed-select-wrapper.open .sed-select-dropdown {
+  display: flex !important;
+}
+
+.sed-select-search {
+  padding: 6px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+.sed-select-search input[type="text"] {
+  width: 100%;
+  height: 28px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--fw-input-border, #cbd5e0);
+  border-radius: 2px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.sed-select-search input[type="text"]:focus {
+  border-color: var(--admin-primary, #57a000);
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(87, 160, 0, 0.15));
+}
+
+.sed-select-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.sed-select-actions a {
+  color: var(--admin-primary, #57a000);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sed-select-actions a:hover {
+  text-decoration: underline;
+}
+
+.sed-select-list {
+  overflow-y: auto;
+  max-height: 220px;
+  padding: 3px 0;
+}
+
+.sed-select-group-label {
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-top: 1px solid #f1f5f9;
+  background: #fafbfc;
+}
+
+.sed-select-group:first-child .sed-select-group-label {
+  border-top: none;
+}
+
+.sed-select-item {
+  display: flex !important;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--fw-input-text, #2d3748);
+  cursor: pointer;
+  transition: background 0.1s ease;
+  white-space: nowrap;
+}
+
+.sed-select-wrapper.sed-select-sm .sed-select-item {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.sed-select-item:hover,
+.sed-select-item.highlighted {
+  background: #f0fdf4;
+  color: #1a202c;
+}
+
+.sed-select-item.selected {
+  background: #eef8df;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.sed-select-item.selected:hover,
+.sed-select-item.selected.highlighted {
+  background: #e2f2c8;
+}
+
+.sed-select-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sed-select-item input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.sed-select-item .item-badge {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+.sed-select-empty {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+/* ==========================================================================
+   2. SED-SWITCH (Toggle Switches)
+   ========================================================================== */
+
+.sed-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.sed-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.sed-switch-slider {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  background-color: #cbd5e1;
+  border-radius: 20px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sed-switch-slider::before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  top: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.sed-switch input:checked + .sed-switch-slider {
+  background-color: var(--admin-primary, #57a000);
+}
+
+.sed-switch input:checked + .sed-switch-slider::before {
+  transform: translateX(16px);
+}
+
+.sed-switch input:focus-visible + .sed-switch-slider {
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(87, 160, 0, 0.2));
+}
+
+.sed-switch.disabled,
+.sed-switch input:disabled + .sed-switch-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sed-switch-sm .sed-switch-slider {
+  width: 28px;
+  height: 16px;
+}
+
+.sed-switch-sm .sed-switch-slider::before {
+  height: 10px;
+  width: 10px;
+  top: 3px;
+  left: 3px;
+}
+
+.sed-switch-sm input:checked + .sed-switch-slider::before {
+  transform: translateX(12px);
+}
+
+.sed-switch-label {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   3. SED-INPUT (Password Toggle & Clear Button)
+   ========================================================================== */
+
+.sed-input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.sed-input-wrapper.sed-input-block {
+  display: flex;
+  width: 100%;
+}
+
+.sed-input-action-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px;
+  margin: 0 !important;
+  cursor: pointer;
+  color: #718096;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none !important;
+  line-height: 1;
+  border-radius: 3px;
+  transition: color 0.15s ease;
+  z-index: 2;
+  min-height: auto !important;
+  min-width: auto !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+.sed-input-action-btn:hover,
+.sed-input-action-btn:focus,
+.sed-input-action-btn:active {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #2d3748;
+}
+
+.sed-input-action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==========================================================================
+   4. SED-DATEPICKER
+   ========================================================================== */
+
+.sed-date-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sed-date-selects {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sed-date-group-enhanced > .sed-date-selects,
+.sed-date-group-enhanced > select,
+.sed-date-group-enhanced > .sed-select-wrapper,
+.sed-date-group-enhanced > .sed-date-separator {
+  display: none !important;
+}
+
+.sed-datepicker-wrapper {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: 100%;
+}
+
+.sed-datepicker-input,
+input.sed-datepicker {
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.sed-datepicker-dropdown {
+  position: absolute;
+  z-index: 1060;
+  background: #ffffff;
+  border: 1px solid var(--fw-input-border, #cbd5e0);
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 10px;
+  width: 260px;
+  font-size: 13px;
+  display: none;
+  box-sizing: border-box;
+}
+
+.sed-datepicker-dropdown.open {
+  display: block;
+}
+
+.sed-dp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sed-dp-title {
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.sed-dp-nav-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 2px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2d3748;
+}
+
+.sed-dp-nav-btn:hover {
+  background: #e2e8f0;
+}
+
+.sed-dp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #718096;
+  margin-bottom: 4px;
+}
+
+.sed-dp-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.sed-dp-day {
+  text-align: center;
+  padding: 4px 0;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.sed-dp-day:hover {
+  background: #f0fdf4;
+}
+
+.sed-dp-day.today {
+  border: 1px solid var(--admin-primary, #57a000);
+}
+
+.sed-dp-day.selected {
+  background: var(--admin-primary, #57a000);
+  color: #ffffff;
+}
+
+.sed-dp-day.other-month {
+  color: #cbd5e1;
+}
+
+.sed-dp-time-box {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.sed-dp-time-box input {
+  width: 44px;
+  height: 24px;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+.sed-dp-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 12px;
+}
+
+.sed-dp-footer a {
+  color: var(--admin-primary, #57a000);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sed-dp-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   5. SED-TAGS
+   ========================================================================== */
+
+.sed-tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+  background: var(--fw-input-bg, #ffffff);
+  border: 1px solid var(--fw-input-border, #cbd5e0);
+  border-radius: 2px;
+  padding: 3px 6px;
+  box-sizing: border-box;
+  cursor: text;
+}
+
+.sed-tags-wrapper.focus {
+  border-color: var(--admin-primary, #57a000);
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(87, 160, 0, 0.18));
+}
+
+.sed-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eef8df;
+  border: 1px solid #cbe99c;
+  color: #2d3748;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.sed-tag-remove {
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: #718096;
+}
+
+.sed-tag-remove:hover {
+  color: #e53e3e;
+}
+
+.sed-tags-input {
+  border: none;
+  outline: none;
+  padding: 2px 4px;
+  font-size: 13px;
+  flex: 1;
+  min-width: 60px;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   6. SED-SEGMENTED & STEPPER & FILE
+   ========================================================================== */
+
+.sed-segmented {
+  display: inline-flex;
+  background: #e2e8f0;
+  padding: 2px;
+  border-radius: 2px;
+  user-select: none;
+}
+
+.sed-segmented input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.sed-segmented label {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #718096;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+  margin: 0;
+}
+
+.sed-segmented input[type="radio"]:checked + label {
+  background: var(--admin-primary, #57a000);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.sed-stepper {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.sed-stepper input[type="number"] {
+  border-radius: 0;
+  text-align: center;
+  width: 60px;
+  -moz-appearance: textfield;
+}
+
+.sed-stepper input[type="number"]::-webkit-outer-spin-button,
+.sed-stepper input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.sed-step-btn {
+  background: #f1f5f9;
+  border: 1px solid var(--fw-input-border, #cbd5e0);
+  padding: 0 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sed-step-btn:first-child {
+  border-right: none;
+  border-radius: 2px 0 0 2px;
+}
+
+.sed-step-btn:last-child {
+  border-left: none;
+  border-radius: 0 2px 2px 0;
+}
+
+.sed-step-btn:hover {
+  background: #e2e8f0;
+}
+
+.sed-file-drop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px dashed var(--fw-input-border, #cbd5e0);
+  border-radius: 2px;
+  padding: 6px 12px;
+  background: #fafbfc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 34px;
+  min-width: 280px;
+  max-width: 100%;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.sed-file-drop.sed-file-block {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.sed-file-drop.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.sed-file-drop:hover,
+.sed-file-drop.dragover {
+  border-color: var(--admin-primary, #57a000);
+  background: #f0fdf4;
+}
+
+.sed-file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #718096;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.sed-file-name {
+  color: #2d3748;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sed-file-size {
+  color: #a0aec0;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.sed-file-placeholder {
+  color: #a0aec0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sed-file-btn {
+  font-size: 12px;
+  padding: 3px 8px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 2px;
+  color: #2d3748;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Badges (Status Indicators)
+   ========================================================================== */
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  border-radius: 4px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.badge-success {
+  background-color: #ebfbee;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-secondary,
+.badge-muted {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.badge-danger {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-warning {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.badge-info {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}

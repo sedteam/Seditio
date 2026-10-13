@@ -1956,44 +1956,84 @@ a.alfabeta:hover {
 }
 
 .add-poll-options {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 12px;
-  border: 1px dotted #e4e2e2;
+  border: 1px dashed var(--theme-border-dark, #cbd5e1);
+  border-radius: 6px;
+  background: var(--theme-border-light, #f8fafc);
 }
 
 .add-poll-option {
-  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 2px 0;
 }
 
 .add-poll-option > span {
   color: var(--theme-poll-meta);
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .poll-addoption {
-  overflow: hidden;
-  border: none;
-  background: none;
-  border-bottom: 1px dotted var(--theme-text-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: #ffffff;
+  color: var(--theme-text-main, #313139);
+  border: 1px dashed var(--theme-border-dark, #cbd5e1);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  box-shadow: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.poll-addoption:hover,
+.poll-addoption:focus {
+  background: #f8fafc;
+  color: var(--theme-primary, #04394a);
+  border-color: var(--theme-primary, #04394a);
+  border-style: solid;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .poll-option-delete {
-  overflow: hidden;
-  border: none;
-  background: none;
-  border: 1px solid #e4e2e2;
-  width: 26px;
-  line-height: 0.8em;
-  margin-left: 10px;
-  color: #ff0000;
-  border-radius: 2px;
-  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin-left: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  color: #ef4444;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: none;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
-.poll-option-delete:hover {
-  color: var(--theme-poll-btn-text);
-  border: 1px solid var(--theme-poll-btn-bg);
-  background: var(--theme-poll-btn-bg);
+.poll-option-delete:hover,
+.poll-option-delete:focus {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.25);
 }
 
 /*-------------------------*/

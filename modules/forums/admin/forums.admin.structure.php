@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/admin/forums.admin.structure.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-09
 Type=Module.admin
 Author=Seditio Team
 Description=Forums structure (categories)
@@ -100,7 +100,7 @@ if ($n == 'options') {
 
 	$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 	$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
-	$fn_defstate = "<select name=\"rdefstate\" size=\"1\">";
+	$fn_defstate = "<select name=\"rdefstate\" class=\"sed-select\" size=\"1\">";
 	$fn_defstate .= "<option value=\"1\" $selected1>" . $L['adm_defstate_1'];
 	$fn_defstate .= "<option value=\"0\" $selected0>" . $L['adm_defstate_0'];
 	$fn_defstate .= "</select>";
@@ -195,7 +195,7 @@ if ($n == 'options') {
 
 		$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 		$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
-		$fn_defstate = "<select name=\"s[$fn_id][rdefstate]\" size=\"1\">";
+		$fn_defstate = "<select name=\"s[$fn_id][rdefstate]\" class=\"sed-select\" size=\"1\">";
 		$fn_defstate .= "<option value=\"1\" $selected1>" . $L['adm_defstate_1'];
 		$fn_defstate .= "<option value=\"0\" $selected0>" . $L['adm_defstate_0'];
 		$fn_defstate .= "</select>";

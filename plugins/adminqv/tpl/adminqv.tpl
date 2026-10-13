@@ -64,7 +64,7 @@
 			<h3><i class="ic-hits"></i> <span id="hitsChartTitle">{PHP.L.plu_hits_days}</span></h3>
 			<div class="card-header-right">
 				<a href="{QV_HITS_URL}" class="card-header-btn" title="{PHP.L.Hits}"><i class="ic-external-link"></i></a>
-				<select id="hitsPeriodSelect" class="card-header-select">
+				<select id="hitsPeriodSelect" class="card-header-select sed-select sed-select-sm">
 					<option value="days" selected>{PHP.L.plu_period_days}</option>
 					<option value="weeks">{PHP.L.plu_period_weeks}</option>
 					<option value="months">{PHP.L.plu_period_months}</option>

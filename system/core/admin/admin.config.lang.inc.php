@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.config.lang.inc.php
 Version=186
-Updated=2026-sep-17
+Updated=2026-oct-13
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel - Language configuration
@@ -71,7 +71,6 @@ foreach ($languages as $x => $ldata) {
 	$flag_img = file_exists(SED_ROOT . '/' . $flag_file) ? '<img src="' . $flag_file . '" alt="' . $x . '" /> ' : '';
 
 	$is_default = (!empty($ldata['lang_is_default']) || $x == $cfg['defaultlang']);
-	$lang_default = $is_default ? '<i class="ic-check"></i>' : '<a href="' . sed_url("admin", "m=config&n=edit&o=core&p=lang&setlang=update&lang_name=" . $x . "&" . sed_xg()) . '" class="lang-set-default" title="' . $L['Default'] . '"><i class="ic-wand"></i></a>';
 
 	$t->assign(array(
 		"LANG_LIST_FLAG" => $flag_img,
@@ -79,9 +78,11 @@ foreach ($languages as $x => $ldata) {
 		"LANG_LIST_TITLE" => $ldata['lang_title'],
 		"LANG_LIST_NATIVE" => !empty($ldata['lang_native']) ? $ldata['lang_native'] : '-',
 		"LANG_LIST_DIRECTION" => !empty($ldata['lang_direction']) ? strtoupper($ldata['lang_direction']) : 'LTR',
-		"LANG_LIST_ACTIVE" => !empty($ldata['lang_active']) ? $L['Yes'] : $L['No'],
+		"LANG_LIST_ACTIVE" => !empty($ldata['lang_active']) ? 1 : 0,
+		"LANG_LIST_IS_DEFAULT" => $is_default ? 1 : 0,
+		"LANG_LIST_SET_DEFAULT_URL" => sed_url("admin", "m=config&n=edit&o=core&p=lang&setlang=update&lang_name=" . $x . "&" . sed_xg()),
+		"LANG_LIST_DEFAULT_URL" => sed_url("admin", "m=config&n=edit&o=core&p=lang&setlang=update&lang_name=" . $x . "&" . sed_xg()),
 		"LANG_LIST_ORDER" => isset($ldata['lang_order']) ? $ldata['lang_order'] : 100,
-		"LANG_LIST_DEFAULT" => $lang_default,
 		"LANG_LIST_TRANSLATIONS_URL" => sed_url("admin", "m=translations&s=list&tlang=" . $x)
 	));
 

@@ -1050,15 +1050,8 @@ class Jevix
 		$name = mb_strtolower($name, 'UTF-8');
 		if ($this->curCh != '>' && $this->curCh != '/') $this->tagParams($params);
 
-		$short = !empty($this->tagsRules[$name][self::TR_TAG_SHORT]);
-
-		// Short && XHTML && !Slash || Short && !XHTML && !Slash = ERROR
 		$slash = $this->matchCh('/');
-		//if(($short && $this->isXHTMLMode && !$slash) || (!$short && !$this->isXHTMLMode && $slash)){
-		if (!$short && $slash) {
-			$this->restoreState();
-			return false;
-		}
+		$short = !empty($this->tagsRules[$name][self::TR_TAG_SHORT]) || $slash;
 
 		$this->skipSpaces();
 

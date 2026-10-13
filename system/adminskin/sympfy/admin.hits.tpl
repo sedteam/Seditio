@@ -13,7 +13,7 @@
 				<input type="hidden" name="m" value="hits" />
 
 				<!-- Year Selectbox -->
-				<select name="y" id="hitsYearSelect" class="card-header-select">
+				<select name="y" id="hitsYearSelect" class="card-header-select sed-select sed-select-sm">
 					<option value="0">{PHP.L.adm_byyear}</option>
 					<!-- BEGIN: HITS_YEAR_OPTION -->
 					<option value="{YEAR_VAL}" {YEAR_SELECTED}>{YEAR_VAL}</option>
@@ -21,7 +21,7 @@
 				</select>
 
 				<!-- Month Selectbox -->
-				<select name="m_code" id="hitsMonthSelect" class="card-header-select">
+				<select name="m_code" id="hitsMonthSelect" class="card-header-select sed-select sed-select-sm">
 					<option value="0">{PHP.L.adm_bymonth}</option>
 					<!-- BEGIN: HITS_MONTH_OPTION -->
 					<option value="{MONTH_VAL}" {MONTH_SELECTED}>{MONTH_TITLE}</option>
@@ -29,7 +29,7 @@
 				</select>
 
 				<!-- Week Selectbox -->
-				<select name="w_code" id="hitsWeekSelect" class="card-header-select">
+				<select name="w_code" id="hitsWeekSelect" class="card-header-select sed-select sed-select-sm">
 					<option value="0">{PHP.L.adm_byweek}</option>
 					<!-- BEGIN: HITS_WEEK_OPTION -->
 					<option value="{WEEK_VAL}" {WEEK_SELECTED}>W{WEEK_VAL}</option>

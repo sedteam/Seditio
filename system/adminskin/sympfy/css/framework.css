@@ -1387,7 +1387,8 @@ textarea {
     max-width: 100%;
 }
 
-select {
+select,
+.sed-select-toggle {
     background: var(--fw-input-bg);
 	border: 1px solid var(--fw-input-border);
     border-radius: 2px;
@@ -1459,7 +1460,7 @@ blockquote cite:before {
     width: 100%;
     border: 1px solid var(--fw-table-border);
     border-radius: 5px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .table-row {
@@ -1557,7 +1558,7 @@ blockquote cite:before {
 	padding:0!important;
 	border: 1px solid var(--fw-form-border);
 	border-radius: 5px;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .form img { margin:0; }

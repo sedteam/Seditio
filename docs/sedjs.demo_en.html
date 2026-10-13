@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Seditio CMS — Full Showcase of sedjs & core.css Capabilities</title>
+	
+	<!-- Seditio Core System Styles -->
+	<link rel="stylesheet" href="../system/assets/css/core.css">
+	<link rel="stylesheet" href="../system/assets/css/imageupload.css">
+
+	<!-- Sympfy Frontend Skin Styles -->
+	<link rel="stylesheet" href="../skins/sympfy/css/framework.css">
+
+	<!-- Admin Skin Styles (dynamically toggled) -->
+	<link id="admin_theme_css" rel="stylesheet" href="../system/adminskin/sympfy/css/sympfy.css" disabled>
+
+	<style>
+		body {
+			background: #f1f5f9;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			padding: 20px 24px 80px 24px;
+			color: #1e293b;
+			margin: 0;
+			line-height: 1.5;
+			transition: background 0.2s ease;
+		}
+
+		body.admin-mode {
+			background: #ecedf0;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		.demo-wrapper {
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.demo-layout {
+			display: flex;
+			gap: 24px;
+			align-items: flex-start;
+		}
+
+		/* Left column: navigation & TOC */
+		.demo-sidebar {
+			flex: 0 0 280px;
+			width: 280px;
+			position: sticky;
+			top: 20px;
+			max-height: calc(100vh - 40px);
+			overflow-y: auto;
+		}
+
+		.demo-toc {
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 8px;
+			padding: 16px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+		}
+
+		body.admin-mode .demo-toc {
+			background: #ffffff;
+			border-color: #cbd5e1;
+		}
+
+		.demo-toc-title {
+			font-size: 13px;
+			font-weight: 700;
+			color: #0f172a;
+			margin-bottom: 12px;
+			padding-bottom: 8px;
+			border-bottom: 1px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.demo-toc-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.demo-toc-item {
+			margin-bottom: 4px;
+		}
+
+		.demo-toc-link {
+			display: block;
+			padding: 6px 8px;
+			font-size: 13px;
+			color: #1e293b;
+			text-decoration: none;
+			border-radius: 4px;
+			transition: all 0.15s ease;
+			font-weight: 600;
+		}
+
+		.demo-toc-link:hover {
+			background: #f1f5f9;
+			color: #0284c7;
+		}
+
+		body.admin-mode .demo-toc-link:hover {
+			color: #57a000;
+		}
+
+		.demo-toc-sublist {
+			list-style: none;
+			padding: 2px 0 6px 10px;
+			margin: 0;
+		}
+
+		.demo-toc-sublink {
+			display: block;
+			padding: 4px 6px;
+			font-size: 12px;
+			color: #64748b;
+			text-decoration: none;
+			border-radius: 4px;
+			transition: all 0.15s ease;
+		}
+
+		.demo-toc-sublink:hover {
+			background: #f8fafc;
+			color: #0f172a;
+		}
+
+		/* Right column: main content */
+		.demo-main {
+			flex: 1;
+			min-width: 0;
+			max-width: 1200px;
+		}
+
+		.section-title, .demo-card {
+			scroll-margin-top: 24px;
+		}
+
+		@media (max-width: 960px) {
+			.demo-layout {
+				flex-direction: column;
+			}
+			.demo-sidebar {
+				flex: 1 1 100%;
+				width: 100%;
+				position: static;
+				max-height: none;
+			}
+			.demo-main {
+				max-width: 100%;
+				width: 100%;
+			}
+		}
+
+		.demo-header {
+			margin-bottom: 25px;
+			padding-bottom: 18px;
+			border-bottom: 2px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 15px;
+		}
+
+		.demo-header-info h1 {
+			font-size: 24px;
+			font-weight: 700;
+			margin: 0 0 6px 0;
+			color: #0f172a;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.demo-header-info p {
+			font-size: 14px;
+			color: #64748b;
+			margin: 0;
+		}
+
+		.theme-switch-box {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			background: #ffffff;
+			padding: 6px 14px;
+			border: 1px solid #cbd5e1;
+			border-radius: 30px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		.theme-btn {
+			padding: 5px 12px;
+			border-radius: 20px;
+			border: 1px solid transparent;
+			background: #f1f5f9;
+			color: #475569;
+			cursor: pointer;
+			font-size: 12px;
+			font-weight: 600;
+			transition: all 0.15s ease;
+		}
+
+		.theme-btn.active.theme-front {
+			background: #0284c7;
+			color: #ffffff;
+			border-color: #0284c7;
+		}
+
+		.theme-btn.active.theme-admin {
+			background: #57a000;
+			color: #ffffff;
+			border-color: #57a000;
+		}
+
+		.demo-badge {
+			display: inline-block;
+			font-size: 11px;
+			font-weight: 600;
+			padding: 2px 8px;
+			border-radius: 12px;
+			background: #e2e8f0;
+			color: #475569;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+		.demo-badge.badge-core { background: #dbeafe; color: #1e40af; }
+		.demo-badge.badge-admin { background: #dcfce7; color: #166534; }
+
+		.section-title {
+			font-size: 18px;
+			font-weight: 700;
+			margin: 30px 0 14px 0;
+			color: #0f172a;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			border-bottom: 2px solid #cbd5e1;
+			padding-bottom: 8px;
+		}
+
+		.demo-card {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 6px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+			padding: 22px;
+			margin-bottom: 22px;
+			overflow: visible !important;
+		}
+
+		.demo-card h3 {
+			font-size: 16px;
+			font-weight: 600;
+			margin: 0 0 8px 0;
+			color: #0f172a;
+			display: block;
+		}
+
+		.demo-card h3 code {
+			font-size: 13px;
+			background: #f1f5f9;
+			padding: 2px 6px;
+			border-radius: 4px;
+			color: #0369a1;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-weight: 600;
+		}
+
+		body.admin-mode .demo-card h3 code {
+			background: #f0fdf4;
+			color: #15803d;
+		}
+
+		.demo-card p.desc {
+			font-size: 13px;
+			color: #64748b;
+			margin: 0 0 16px 0;
+		}
+
+		.demo-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.demo-table td {
+			padding: 14px 10px;
+			border-bottom: 1px solid #f1f5f9;
+			vertical-align: top;
+		}
+
+		.demo-table tr:last-child td {
+			border-bottom: none;
+		}
+
+		.demo-table td.td-label {
+			width: 260px;
+			font-weight: 600;
+			font-size: 13px;
+			color: #334155;
+			padding-top: 18px;
+		}
+
+		.demo-field-wrap {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		/* Light code block on gray background */
+		.demo-code-box {
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-left: 3px solid #0284c7;
+			border-radius: 4px;
+			padding: 8px 12px;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-size: 12px;
+			line-height: 1.5;
+			color: #334155;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+			overflow-x: auto;
+			transition: border-left-color 0.2s ease;
+		}
+
+		body.admin-mode .demo-code-box {
+			border-left-color: #57a000;
+		}
+
+		.demo-code-box .code-line {
+			display: block;
+			white-space: pre;
+		}
+
+		.demo-code-box .code-lbl {
+			color: #64748b;
+			font-weight: 700;
+			display: inline-block;
+			min-width: 48px;
+			user-select: none;
+		}
+
+		.demo-code-box .code-html {
+			color: #0369a1;
+			font-weight: 500;
+		}
+
+		body.admin-mode .demo-code-box .code-html {
+			color: #15803d;
+		}
+
+		.demo-code-box .code-php {
+			color: #7c3aed;
+			font-weight: 500;
+		}
+
+		.demo-code-box .code-js {
+			color: #d97706;
+			font-weight: 500;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 6px 14px;
+			font-size: 13px;
+			font-weight: 500;
+			border: 1px solid #cbd5e1;
+			border-radius: 3px;
+			background: #ffffff;
+			color: #334155;
+			cursor: pointer;
+			transition: all 0.15s ease;
+		}
+		.btn:hover { background: #f8fafc; border-color: #94a3b8; }
+		.btn-primary { background: #0284c7; border-color: #0284c7; color: #fff; }
+		.btn-primary:hover { background: #0369a1; border-color: #0369a1; color: #fff; }
+		body.admin-mode .btn-primary { background: #57a000; border-color: #57a000; }
+		body.admin-mode .btn-primary:hover { background: #4d8f00; border-color: #4d8f00; }
+
+		/* Sortable styles */
+		.sortable-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			min-height: 48px;
+		}
+
+		.kanban-sortable {
+			min-height: 100px;
+		}
+
+		.kanban-sortable:empty::after {
+			content: 'Drop card here';
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 60px;
+			border: 2px dashed #cbd5e1;
+			border-radius: 4px;
+			color: #94a3b8;
+			font-size: 12px;
+		}
+
+		.sortable-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+			padding: 8px 12px;
+			font-size: 13px;
+			color: #1e293b;
+			user-select: none;
+			box-sizing: border-box;
+		}
+
+		.drag-handle {
+			cursor: grab;
+			color: #94a3b8;
+			margin-right: 10px;
+			font-size: 16px;
+			line-height: 1;
+		}
+		.drag-handle:active { cursor: grabbing; }
+
+		.sortable-placeholder {
+			border: 2px dashed #94a3b8 !important;
+			background: #f1f5f9 !important;
+			border-radius: 4px;
+			min-height: 38px;
+			box-sizing: border-box;
+		}
+
+		.sortable-helper {
+			background: #ffffff !important;
+			border: 1px solid #0284c7 !important;
+			box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+			border-radius: 4px;
+		}
+		body.admin-mode .sortable-helper {
+			border-color: #57a000 !important;
+		}
+
+		.kanban-grid {
+			display: flex;
+			gap: 16px;
+			flex-wrap: wrap;
+		}
+
+		.kanban-col {
+			flex: 1;
+			min-width: 280px;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 6px;
+			padding: 12px;
+		}
+
+		.kanban-col-title {
+			font-size: 13px;
+			font-weight: 700;
+			color: #475569;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		/* Alerts */
+		.alert {
+			padding: 12px 16px;
+			border-radius: 4px;
+			font-size: 13px;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border: 1px solid transparent;
+		}
+		.alert .close {
+			background: transparent;
+			border: none;
+			font-size: 18px;
+			line-height: 1;
+			color: inherit;
+			cursor: pointer;
+			opacity: 0.6;
+		}
+		.alert .close:hover { opacity: 1; }
+		.alert-success { background: #dcfce7; border-color: #86efac; color: #166534; }
+		.alert-warning { background: #fef9c3; border-color: #fde047; color: #854d0e; }
+		.alert-danger { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+
+		/* Tabs */
+		.tabs-container {
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+			background: #ffffff;
+			overflow: hidden;
+		}
+		.tabs-nav {
+			display: flex;
+			background: #f8fafc;
+			border-bottom: 1px solid #cbd5e1;
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		.tabs-nav li a {
+			display: block;
+			padding: 10px 18px;
+			font-size: 13px;
+			font-weight: 600;
+			color: #64748b;
+			text-decoration: none;
+			border-right: 1px solid #e2e8f0;
+			transition: all 0.15s ease;
+		}
+		.tabs-nav li a:hover {
+			color: #0f172a;
+			background: #f1f5f9;
+		}
+		.tabs-nav li a.selected {
+			color: #0284c7;
+			background: #ffffff;
+			border-bottom: 2px solid #0284c7;
+			margin-bottom: -1px;
+		}
+		body.admin-mode .tabs-nav li a.selected {
+			color: #57a000;
+			border-bottom-color: #57a000;
+		}
+		.tab-pane {
+			padding: 16px;
+			font-size: 13px;
+			color: #334155;
+		}
+
+		/* Charts (SedChart) */
+		.chart-container {
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 6px;
+			padding: 16px;
+			position: relative;
+			height: 320px;
+			margin-top: 10px;
+		}
+
+		/* Autocomplete */
+		.autocomplete-suggestions {
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			cursor: default;
+			overflow: auto;
+			box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+			border-radius: 6px;
+			z-index: 9999;
+			max-height: 240px;
+			box-sizing: border-box;
+		}
+		.autocomplete-suggestion {
+			padding: 8px 12px;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: 13px;
+			color: #1e293b;
+			cursor: pointer;
+			transition: background 0.1s ease;
+		}
+		.autocomplete-selected {
+			background: #f1f5f9;
+			color: #0284c7;
+		}
+		body.admin-mode .autocomplete-selected {
+			color: #57a000;
+		}
+		.autocomplete-suggestions strong {
+			font-weight: 700;
+			color: #0284c7;
+		}
+		body.admin-mode .autocomplete-suggestions strong {
+			color: #57a000;
+		}
+
+		/* Event Log */
+		.demo-log-box {
+			background: #0f172a;
+			color: #f8fafc;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-size: 12px;
+			padding: 14px;
+			border-radius: 6px;
+			max-height: 180px;
+			overflow-y: auto;
+			margin-top: 10px;
+		}
+		.demo-log-box .log-item { margin-bottom: 4px; line-height: 1.4; }
+		.demo-log-box .log-time { color: #64748b; margin-right: 6px; }
+		.demo-log-box .log-val { color: #38bdf8; font-weight: 600; }
+		body.admin-mode .demo-log-box .log-val { color: #86efac; }
+	</style>
+</head>
+<body>
+
+<div class="demo-wrapper">
+
+	<!-- Two-column layout (Flexbox) -->
+	<div class="demo-layout">
+
+		<!-- Left column: Table of Contents / Navigation -->
+		<aside class="demo-sidebar">
+			<div class="demo-toc">
+				<div class="demo-toc-title">
+					<span>Table of Contents</span>
+					<span class="demo-badge" style="font-size:10px;">8 sections</span>
+				</div>
+				<nav>
+					<ul class="demo-toc-list">
+						<li class="demo-toc-item">
+							<a href="#sec_1" class="demo-toc-link">1. Form Elements</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_1_1" class="demo-toc-sublink">1.1. SedSelect</a></li>
+								<li><a href="#sec_1_2" class="demo-toc-sublink">1.2. Switches</a></li>
+								<li><a href="#sec_1_3" class="demo-toc-sublink">1.3. Password & Search</a></li>
+								<li><a href="#sec_1_4" class="demo-toc-sublink">1.4. Date Picker (DatePicker)</a></li>
+								<li><a href="#sec_1_5" class="demo-toc-sublink">1.5. Tags Input</a></li>
+								<li><a href="#sec_1_6" class="demo-toc-sublink">1.6. Segmented Control</a></li>
+								<li><a href="#sec_1_7" class="demo-toc-sublink">1.7. File Input (SedFile)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_2" class="demo-toc-link">2. Drag & Drop Sorting</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_2_1" class="demo-toc-sublink">2.1. Single List</a></li>
+								<li><a href="#sec_2_2" class="demo-toc-sublink">2.2. Kanban (connectWith)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_3" class="demo-toc-link">3. Tabs & Spoilers</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_3_1" class="demo-toc-sublink">3.1. Tabs (SedTabs)</a></li>
+								<li><a href="#sec_3_2" class="demo-toc-sublink">3.2. Accordion</a></li>
+								<li><a href="#sec_3_3" class="demo-toc-sublink">3.3. Spoiler</a></li>
+								<li><a href="#sec_3_4" class="demo-toc-sublink">3.4. Alerts (CloseAlert)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_4" class="demo-toc-link">4. Modal Windows</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_4_1" class="demo-toc-sublink">4.1. SedModal</a></li>
+								<li><a href="#sec_4_2" class="demo-toc-sublink">4.2. Popovers</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_5" class="demo-toc-link">5. Core Utilities</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_5_1" class="demo-toc-sublink">5.1. SEF URL Generator</a></li>
+								<li><a href="#sec_5_2" class="demo-toc-sublink">5.2. Copy URL Link</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_6" class="demo-toc-link">6. Charts (SedChart)</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_6_1" class="demo-toc-sublink">6.1. Canvas Line Chart</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_7" class="demo-toc-link">7. Image Upload</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_7_1" class="demo-toc-sublink">7.1. Tile Uploader</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_8" class="demo-toc-link">8. Autocomplete</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_8_1" class="demo-toc-sublink">8.1. Live Search</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item" style="margin-top:8px; padding-top:8px; border-top:1px solid #e2e8f0;">
+							<a href="#sec_log" class="demo-toc-link" style="color:#0284c7;">Event Log</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+
+		<!-- Right column: Main Content (up to 1200px) -->
+		<main class="demo-main">
+
+			<!-- Header and theme switcher (in right column) -->
+			<div class="demo-header">
+				<div class="demo-header-info">
+					<h1>
+						Seditio Core JS Showcase
+						<span class="demo-badge badge-core">sedjs API</span>
+					</h1>
+					<p>Comprehensive interactive showcase of core components: forms, Drag & Drop sorting, tabs, modal windows, popovers, charts, image uploading, and utilities.</p>
+				</div>
+
+				<!-- Visual theme switcher -->
+				<div class="theme-switch-box">
+					<span>Visual Theme:</span>
+					<button type="button" id="btn_theme_front" class="theme-btn theme-front active" onclick="setTheme('front')">Frontend (Blue)</button>
+					<button type="button" id="btn_theme_admin" class="theme-btn theme-admin" onclick="setTheme('admin')">Admin (Green)</button>
+				</div>
+			</div>
+
+			<!-- ==========================================
+			     SECTION 1: FORM ELEMENTS & WIDGETS
+			     ========================================== -->
+			<div class="section-title" id="sec_1">
+				<span>1. Form Elements & Widgets</span>
+				<span class="demo-badge">Forms & Inputs</span>
+			</div>
+
+			<!-- 1.1 Custom SelectBox (SedSelect) -->
+			<div class="demo-card" id="sec_1_1">
+		<h3>1.1. Custom SelectBox (<code>sedjs.select</code>)</h3>
+		<p class="desc">3 width modes (auto fit by content, fixed width, 100% block expansion), optgroup support, and searchable Multi-Select.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Auto width (by content):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="status_auto" class="sed-select" onchange="logEvent('select:status_auto', this.value)">
+								<option value="draft">Draft entry</option>
+								<option value="published" selected>Published on site</option>
+								<option value="moderation">Pending admin review</option>
+								<option value="archived">Archive</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="status" class="sed-select"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'status', $options_array, false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Fixed width (260px):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="cat_fixed" class="sed-select" style="width: 260px;" data-search="true" onchange="logEvent('select:cat_fixed', this.value)">
+								<optgroup label="Main Sections">
+									<option value="news">News</option>
+									<option value="articles" selected>Articles</option>
+								</optgroup>
+								<optgroup label="Media & Files">
+									<option value="gallery">Photo Gallery</option>
+									<option value="pfs">File Archive</option>
+								</optgroup>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="cat" class="sed-select" style="width: 260px;" data-search="true"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'cat', $options, false, false, '', '', '', array('style' =&gt; 'width: 260px;'))</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">100% container width (Block):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="status_block" class="sed-select sed-select-block" onchange="logEvent('select:status_block', this.value)">
+								<option value="1">Active status (occupies 100% width of parent container)</option>
+								<option value="0">Disabled</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="status_block" class="sed-select sed-select-block"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'status_block', $options, false, false, '', '', 'sed-select-block')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Multiple selection (Multi-Select):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="groups[]" class="sed-select" multiple data-search="true" data-width="340px" data-placeholder="Choose groups..." onchange="logEvent('select:groups', Array.from(this.selectedOptions).map(o => o.value).join(', '))">
+								<option value="1">1. Administrators</option>
+								<option value="2">2. Editors</option>
+								<option value="3" selected>3. Moderators</option>
+								<option value="4" selected>4. Users</option>
+								<option value="5">5. Guests</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="groups[]" class="sed-select" multiple data-search="true" data-width="340px"&gt;...&lt;/select&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.2 Switches / Toggles -->
+	<div class="demo-card" id="sec_1_2">
+		<h3>1.2. Switches / Toggles (<code>.sed-switch</code>)</h3>
+		<p class="desc">Smooth toggles replacing standard checkboxes.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Standard toggle:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch">
+								<input type="checkbox" name="allow_comments" checked onchange="logEvent('switch:comments', this.checked)">
+								<span class="sed-switch-slider"></span>
+								<span>Allow comments on page</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch"&gt;&lt;input type="checkbox" name="allow_comments" checked&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;span&gt;Text&lt;/span&gt;&lt;/label&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_checkbox('allow_comments', 1, 'yes') // with $cfg['yesno_type'] = 'switch'</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Compact toggle (sm):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch sed-switch-sm">
+								<input type="checkbox" name="debug_mode" onchange="logEvent('switch:debug', this.checked)">
+								<span class="sed-switch-slider"></span>
+								<span>Enable Debug Mode</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch sed-switch-sm"&gt;&lt;input type="checkbox"&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;/label&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Disabled toggle:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch">
+								<input type="checkbox" name="locked_feature" disabled checked>
+								<span class="sed-switch-slider"></span>
+								<span>Core system service (cannot be modified)</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch"&gt;&lt;input type="checkbox" disabled checked&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;/label&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.3 Password Visibility & Quick Clear -->
+	<div class="demo-card" id="sec_1_3">
+		<h3>1.3. Password Visibility & Quick Clear (<code>sedjs.input</code>)</h3>
+		<p class="desc">Show/hide password on icon click and instant text clearing button.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Password (Show / Hide Password):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="password" class="sed-password" value="secret_pass_123" style="width: 260px;" placeholder="Enter password...">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="password" class="sed-password" value="..." style="width: 260px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('rpassword', '', 32, 64, false, 'password')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Search with clear button (Clear):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-clearable" value="Search query" style="width: 260px;" placeholder="Search website..." oninput="logEvent('input:search', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-clearable" value="..." style="width: 260px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('sq', $sq, 32, 64, false, 'text', 'sed-clearable')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.4 Date & Time Picker -->
+	<div class="demo-card" id="sec_1_4">
+		<h3>1.4. Popup Date & Time Picker (<code>sedjs.datepicker</code>)</h3>
+		<p class="desc">Calendar with localized months/days from <code>window.L</code>, quick "Today" / "Clear" buttons, and optional time selector.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Date selection (Date only):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-datepicker" value="2026-10-12" style="width: 180px;" placeholder="YYYY-MM-DD" onchange="logEvent('date:begin', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-datepicker" value="2026-10-12"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox_date($timestamp, 'short') // with $cfg['enable_sed_datepicker'] = 1</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Date and time selection (Date + Time):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-datepicker" data-time="true" value="2026-10-12 14:30" style="width: 220px;" placeholder="YYYY-MM-DD HH:MM" onchange="logEvent('date:expire', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-datepicker" data-time="true" value="2026-10-12 14:30"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox_date($timestamp, 'long') // with $cfg['enable_sed_datepicker'] = 1</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.5 Tags / Chips Input -->
+	<div class="demo-card" id="sec_1_5">
+		<h3>1.5. Tags & Keyword Input (<code>sedjs.tags</code>)</h3>
+		<p class="desc">Interactive chip input. Add tags with <kbd>Enter</kbd> or <kbd>,</kbd>, remove with <kbd>&times;</kbd> or <kbd>Backspace</kbd>.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Page keywords:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-tags" value="seditio, cms, javascript, widgets" placeholder="Type tag and press Enter..." onchange="logEvent('tags:keywords', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-tags" value="seditio, cms, widgets"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('page_keywords', $keywords, 40, 255, false, 'text', 'sed-tags')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.6 Segmented Control -->
+	<div class="demo-card" id="sec_1_6">
+		<h3>1.6. Segmented Control (<code>.sed-segmented</code>)</h3>
+		<p class="desc">Sleek single-row replacement for native radio buttons with smooth active pill animation.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Catalog display mode:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<div class="sed-segmented">
+								<input type="radio" name="view_mode" id="vm_grid" value="grid" checked onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_grid">Grid</label>
+
+								<input type="radio" name="view_mode" id="vm_list" value="list" onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_list">List</label>
+
+								<input type="radio" name="view_mode" id="vm_table" value="table" onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_table">Table</label>
+							</div>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-segmented"&gt;&lt;input type="radio" name="view_mode" id="vm_1" checked&gt;&lt;label for="vm_1"&gt;Grid&lt;/label&gt;...&lt;/div&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_radiobox('view_mode', array('grid' =&gt; 'Grid', 'list' =&gt; 'List'), 'grid')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Text editor format (sm):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<div class="sed-segmented sed-segmented-sm">
+								<input type="radio" name="editor_mode" id="ed_html" value="html" checked onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_html">HTML</label>
+
+								<input type="radio" name="editor_mode" id="ed_bbcode" value="bbcode" onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_bbcode">BBCode</label>
+
+								<input type="radio" name="editor_mode" id="ed_plain" value="plain" onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_plain">Text</label>
+							</div>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-segmented sed-segmented-sm"&gt;...&lt;/div&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.7 Custom File Input (SedFile) -->
+	<div class="demo-card" id="sec_1_7">
+		<h3>1.7. Custom File Input (<code>sedjs.file</code>)</h3>
+		<p class="desc">3 width modes (auto width, fixed 350px, 100% block expansion), single/multiple selection, and Drag & Drop file dropping.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Auto width (inline-flex):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file" data-file="true" onchange="logEvent('file:auto', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file" data-file="true"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file', false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Fixed width (350px):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file" data-file="true" style="width: 350px;" onchange="logEvent('file:fixed', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file" data-file="true" style="width: 350px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file', false, '', false, array('style' =&gt; 'width: 350px;'))</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">100% container width (Block):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file sed-file-block" data-file="true" onchange="logEvent('file:block', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file sed-file-block" data-file="true"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file sed-file-block', false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Multiple file upload (Multiple):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file sed-file-block" data-file="true" multiple onchange="logEvent('file:multiple', this.files.length + ' files')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file sed-file-block" data-file="true" multiple&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile[]', 'file sed-file-block', true)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.8 Number Stepper (SedStepper) -->
+	<div class="demo-card" id="sec_1_8">
+		<h3>1.8. Number Stepper (<code>sedjs.stepper</code>)</h3>
+		<p class="desc">Integrated increment and decrement controls strictly respecting <code>min</code>, <code>max</code>, and <code>step</code> attributes.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Items per page:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="number" class="sed-stepper" value="25" min="5" max="100" step="5" onchange="logEvent('stepper:count', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="number" class="sed-stepper" value="25" min="5" max="100" step="5"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('maxrows', 25, 6, 4, false, 'number', 'sed-stepper')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 2: DRAG & DROP SORTING
+	     ========================================== -->
+	<div class="section-title" id="sec_2">
+		<span>2. Drag & Drop Sorting of Lists and Tables</span>
+		<span class="demo-badge">sedjs.sortable</span>
+	</div>
+
+	<!-- 2.1 Sortable list with handle -->
+	<div class="demo-card" id="sec_2_1">
+		<h3>2.1. Sortable List with Y-Axis Locking (<code>sedjs.sortable</code>)</h3>
+		<p class="desc">Drag items with mouse using the handle <span class="drag-handle" style="display:inline;">⠿</span>. Order updates on the fly with <code>update()</code> callback.</p>
+
+		<ul id="sortable_single" class="sortable-list">
+			<li class="sortable-item" data-id="item-1">
+				<div><span class="drag-handle">⠿</span><strong>Item 1:</strong> Homepage & header banner</div>
+				<span class="demo-badge">Order: 1</span>
+			</li>
+			<li class="sortable-item" data-id="item-2">
+				<div><span class="drag-handle">⠿</span><strong>Item 2:</strong> Product catalog</div>
+				<span class="demo-badge">Order: 2</span>
+			</li>
+			<li class="sortable-item" data-id="item-3">
+				<div><span class="drag-handle">⠿</span><strong>Item 3:</strong> Customer reviews</div>
+				<span class="demo-badge">Order: 3</span>
+			</li>
+			<li class="sortable-item" data-id="item-4">
+				<div><span class="drag-handle">⠿</span><strong>Item 4:</strong> Contact information</div>
+				<span class="demo-badge">Order: 4</span>
+			</li>
+		</ul>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(document.querySelector('#sortable_single'), {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    handle: '.drag-handle', axis: 'y',</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    update(e, ui) { /* Save updated order via AJAX */ }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+		</div>
+	</div>
+
+	<!-- 2.2 Connected Lists (Kanban / connectWith) -->
+	<div class="demo-card" id="sec_2_2">
+		<h3>2.2. Connected Lists (Kanban / <code>connectWith</code>)</h3>
+		<p class="desc">Drag and drop cards across two independent columns.</p>
+
+		<div class="kanban-grid">
+			<div class="kanban-col">
+				<div class="kanban-col-title">
+					<span>In Progress (ToDo)</span>
+					<span class="demo-badge">Column 1</span>
+				</div>
+				<ul id="kanban_todo" class="sortable-list kanban-sortable">
+					<li class="sortable-item" data-id="task-1">
+						<div><span class="drag-handle">⠿</span>Update website skins</div>
+					</li>
+					<li class="sortable-item" data-id="task-2">
+						<div><span class="drag-handle">⠿</span>Configure DB caching</div>
+					</li>
+					<li class="sortable-item" data-id="task-3">
+						<div><span class="drag-handle">⠿</span>Verify PFS permissions</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="kanban-col">
+				<div class="kanban-col-title">
+					<span>Completed (Done)</span>
+					<span class="demo-badge" style="background:#dcfce7;color:#166534;">Column 2</span>
+				</div>
+				<ul id="kanban_done" class="sortable-list kanban-sortable">
+					<li class="sortable-item" data-id="task-4">
+						<div><span class="drag-handle">⠿</span>Develop SedFile module</div>
+					</li>
+					<li class="sortable-item" data-id="task-5">
+						<div><span class="drag-handle">⠿</span>Refine SedSelect widget</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(container1, { connectWith: '.kanban-sortable', handle: '.drag-handle' });</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(container2, { connectWith: '.kanban-sortable', handle: '.drag-handle' });</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 3: STRUCTURAL COMPONENTS
+	     ========================================== -->
+	<div class="section-title" id="sec_3">
+		<span>3. Tabs, Spoilers & Accordions</span>
+		<span class="demo-badge">Navigation & Disclosure</span>
+	</div>
+
+	<!-- 3.1 Tabs (SedTabs) -->
+	<div class="demo-card" id="sec_3_1">
+		<h3>3.1. Interactive Tabs (<code>sedjs.sedtabs</code>)</h3>
+		<p class="desc">Switch between content sections without page reloads.</p>
+
+		<div class="tabs-container sedtabs">
+			<ul class="tabs-nav">
+				<li><a href="#tab_info" class="selected">General Info</a></li>
+				<li><a href="#tab_seo">SEO & Meta Tags</a></li>
+				<li><a href="#tab_extra">Advanced</a></li>
+			</ul>
+			<div id="tab_info" class="tab-pane">
+				<strong>Tab 1:</strong> Main fields for article editing or system configuration.
+			</div>
+			<div id="tab_seo" class="tab-pane" style="display:none;">
+				<strong>Tab 2:</strong> Fields for Meta Title, Meta Description, and canonical page URLs.
+			</div>
+			<div id="tab_extra" class="tab-pane" style="display:none;">
+				<strong>Tab 3:</strong> User group permissions and advanced display settings.
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sedtabs"&gt;&lt;ul class="tabs"&gt;&lt;li&gt;&lt;a href="#tab1" class="selected"&gt;Tab 1&lt;/a&gt;&lt;/li&gt;...&lt;/ul&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sedtabs({ containerClass: 'sedtabs', eventType: 'click', selectedClass: 'selected' });</span></span>
+		</div>
+	</div>
+
+	<!-- 3.2 Accordion (SedAccordion) -->
+	<div class="demo-card" id="sec_3_2">
+		<h3>3.2. Auto-collapsing Accordion (<code>sedjs.accordion</code>)</h3>
+		<p class="desc">Accordion panels. Opening a new panel automatically collapses the previously opened one.</p>
+
+		<div class="sedaccordion">
+			<div class="accordion-item active">
+				<div class="accordion-header">Section 1: Sympfy Theme Settings</div>
+				<div class="accordion-content">
+					Color palette, typography, and main layout width settings of the website skin.
+				</div>
+			</div>
+			<div class="accordion-item">
+				<div class="accordion-header">Section 2: Core Modules & Security</div>
+				<div class="accordion-content" style="display:none;">
+					Two-factor authentication management, user password hashing, and anti-spam protection.
+				</div>
+			</div>
+			<div class="accordion-item">
+				<div class="accordion-header">Section 3: Caching & Performance</div>
+				<div class="accordion-content" style="display:none;">
+					Internal page caching configuration, static CSS/JS resource compression, and autoloading options.
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sedaccordion"&gt;&lt;div class="accordion-item"&gt;&lt;div class="accordion-header"&gt;...&lt;/div&gt;...&lt;/div&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.accordion();</span></span>
+		</div>
+	</div>
+
+	<!-- 3.3 Spoiler -->
+	<div class="demo-card" id="sec_3_3">
+		<h3>3.3. Spoiler (<code>sedjs.spoiler</code>)</h3>
+		<p class="desc">Expand hidden content block by clicking title or button.</p>
+
+		<div class="spoiler">
+			<div class="spoiler-title">
+				<span style="font-weight:600; font-size:13px; color:#334155;">Server and PHP Technical Details</span>
+				<button type="button" class="btn spoiler-toggle" style="margin-left: 10px;">Show Details</button>
+			</div>
+			<div class="spoiler-content" style="display:none; margin-top:10px;">
+				<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:4px; padding:12px; font-size:13px;">
+					<strong>PHP Version:</strong> 8.4.x | <strong>MySQL Engine:</strong> InnoDB | <strong>CMS Seditio:</strong> v186
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="spoiler"&gt;&lt;div class="spoiler-title"&gt;...&lt;/div&gt;&lt;div class="spoiler-content"&gt;...&lt;/div&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.spoiler();</span></span>
+		</div>
+	</div>
+
+	<!-- 3.4 Dismissible Alerts (CloseAlert) -->
+	<div class="demo-card" id="sec_3_4">
+		<h3>3.4. System Alerts & Notifications (<code>sedjs.closealert</code>)</h3>
+		<p class="desc">Dismissible alerts with smooth closing animation on close button click.</p>
+
+		<div class="alert alert-success">
+			<span><strong>Success:</strong> Section structure modifications saved to database successfully!</span>
+			<button type="button" class="close" title="Close" onclick="logEvent('alert:close', 'Success alert')">&times;</button>
+		</div>
+
+		<div class="alert alert-warning">
+			<span><strong>Warning:</strong> Creating a database backup is recommended before proceeding with update.</span>
+			<button type="button" class="close" title="Close" onclick="logEvent('alert:close', 'Warning alert')">&times;</button>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="alert alert-success"&gt;&lt;span&gt;Text&lt;/span&gt;&lt;button class="close"&gt;&amp;times;&lt;/button&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.closealert();</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 4: MODALS & PANELS
+	     ========================================== -->
+	<div class="section-title" id="sec_4">
+		<span>4. Modal Windows & Popovers</span>
+		<span class="demo-badge">Modal & Popover</span>
+	</div>
+
+	<!-- 4.1 Floating Window (SedModal) -->
+	<div class="demo-card" id="sec_4_1">
+		<h3>4.1. Seditio Floating Window (<code>sedjs.modal.open</code>)</h3>
+		<p class="desc">Full-featured window with title dragging, resizing, docking into bottom tray, and fullscreen toggle.</p>
+
+		<button type="button" class="btn btn-primary" onclick="openDemoModal()">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+			Open SedModal Floating Window
+		</button>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.modal.open('my_win', 'inline', '&lt;div&gt;Content...&lt;/div&gt;', 'Title', 'width=560px,height=340px,resize=1,center=1');</span></span>
+		</div>
+	</div>
+
+	<!-- 4.2 Popover (SedPopover) -->
+	<div class="demo-card" id="sec_4_2">
+		<h3>4.2. Popover Panel (<code>sedjs.popover</code>)</h3>
+		<p class="desc">Information panel opened on trigger click with outside-click auto-dismiss.</p>
+
+		<div style="position:relative; display:inline-block;">
+			<button type="button" class="btn" data-sed-popover-trigger data-sed-popover-target="demo_popover_box">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+				Show Popover Panel
+			</button>
+
+			<div id="demo_popover_box" style="display:none;">
+				<h4 style="margin:0 0 6px 0; font-size:14px; font-weight:700;">XTemplate SE Tags Reference</h4>
+				<p style="margin:0; font-size:12px; color:#475569;">
+					Seditio template engine supports <code>&lt;!-- BEGIN: BLOCK --&gt;</code> blocks, loops, filters, and <code>IF / ELSE</code> condition directives.
+				</p>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;button data-sed-popover-trigger data-sed-popover-target="my_pop"&gt;Open&lt;/button&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.popover.init(document);</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 5: CONTENT & SEO UTILITIES
+	     ========================================== -->
+	<div class="section-title" id="sec_5">
+		<span>5. Content & SEO Utilities</span>
+		<span class="demo-badge">Content Utilities</span>
+	</div>
+
+	<!-- 5.1 Live SEF URL Generator (genSEF) -->
+	<div class="demo-card" id="sec_5_1">
+		<h3>5.1. Live SEF URL / Page Alias Generator (<code>sedjs.genSEF</code>)</h3>
+		<p class="desc">Type an article title — the SEF alias input field is populated with transliteration in real time.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Article Title (EN):</td>
+				<td>
+					<input type="text" id="sef_from" class="text" style="width: 100%; max-width: 460px;" value="New Features of Seditio CMS 186 Core" placeholder="Enter title...">
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Page Alias (SEF):</td>
+				<td>
+					<input type="text" id="sef_to" class="text" style="width: 100%; max-width: 460px;" readonly style="background:#f8fafc;" placeholder="Transliterated alias...">
+				</td>
+			</tr>
+		</table>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.genSEF(document.querySelector('#sef_from'), document.querySelector('#sef_to'), false);</span></span>
+		</div>
+	</div>
+
+	<!-- 5.2 Copy URL to Clipboard (copyurl) -->
+	<div class="demo-card" id="sec_5_2">
+		<h3>5.2. Copy URL to Clipboard (<code>sedjs.copyurl</code>)</h3>
+		<p class="desc">Copies link from the <code>href</code> attribute directly into system clipboard.</p>
+
+		<a href="https://seditio.org/demo/page?id=186" class="btn" onclick="sedjs.copyurl(this); logEvent('copyurl', this.href); alert('Link copied to clipboard: ' + this.href);">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+			Copy Permalink (URL)
+		</a>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;a href="https://seditio.org/..." onclick="sedjs.copyurl(this)"&gt;Copy&lt;/a&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.copyurl(element);</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 6: INTERACTIVE CHARTS (SEDCHART)
+	     ========================================== -->
+	<div class="section-title" id="sec_6">
+		<span>6. Interactive Charts & Statistics</span>
+		<span class="demo-badge">SedChart.js</span>
+	</div>
+
+	<!-- 6.1 Line Dynamics Chart -->
+	<div class="demo-card" id="sec_6_1">
+		<h3>6.1. Canvas Line Dynamics Chart (<code>SedChart</code>)</h3>
+		<p class="desc">Lightweight (~2.5 KB) HTML5 Canvas charting component with zero dependencies. Supports dynamic scale adjustments, hover tooltips, and auto-resize.</p>
+
+		<div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+			<button type="button" class="btn" id="btn_chart_week">Weekly</button>
+			<button type="button" class="btn" id="btn_chart_month">Monthly</button>
+			<button type="button" class="btn btn-primary" id="btn_chart_random">Random Data</button>
+		</div>
+
+		<div id="chart_demo_wrapper" class="chart-container">
+			<div id="chart_demo_canvas_container" style="width:100%; height:100%;"></div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div id="my_chart" class="chart-container"&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">const chart = new SedChart('my_chart', {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    values: [1250, 1890, 2430, 2120, 2800, 3450, 4100]</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">chart.setData(newLabels, newValues); // Dynamic data update</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 7: IMAGE UPLOAD (IMAGEUPLOAD)
+	     ========================================== -->
+	<div class="section-title" id="sec_7">
+		<span>7. Image Uploader & Manager</span>
+		<span class="demo-badge">sedjs.imageUpload</span>
+	</div>
+
+	<!-- 7.1 Tile Uploader with Dropzone & Sorting -->
+	<div class="demo-card" id="sec_7_1">
+		<h3>7.1. Tile Uploader with Dropzone & Drag & Drop Sorting (<code>sedjs.imageUpload</code>)</h3>
+		<p class="desc">Deferred image upload component for PFS, galleries, and product showcases. Supports desktop Drag & Drop, local client preview generation, thumbnail reordering (integrated with <code>sedjs.sortable</code>), and adding images via remote URL.</p>
+
+		<div class="sed-image-upload sed-image-upload-mode-dropzone" id="demo_image_uploader" data-sed-image-upload='{"prefix":"gallery","maxFiles":8,"sortable":true,"dropzone":true,"urlUpload":true,"labels":{"drop":"Drop images here","or":"or","select":"Choose files","url":"Add via link (URL)","delete":"Delete"}}'>
+			<p class="sed-image-upload-sort-hint">Drag thumbnails with mouse to change their order</p>
+			<ul class="sed-image-upload-list">
+				<li>
+					<a href="#" class="delete" title="Delete"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%230284c7'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Photo 1</text></svg>" alt="Photo 1">
+					<input type="hidden" name="gallery[]" value="1">
+				</li>
+				<li>
+					<a href="#" class="delete" title="Delete"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%2310b981'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Photo 2</text></svg>" alt="Photo 2">
+					<input type="hidden" name="gallery[]" value="2">
+				</li>
+				<li>
+					<a href="#" class="delete" title="Delete"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%23f59e0b'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Photo 3</text></svg>" alt="Photo 3">
+					<input type="hidden" name="gallery[]" value="3">
+				</li>
+			</ul>
+			<div class="sed-image-upload-dropzone">
+				<div class="sed-image-upload-dropicon"></div>
+				<div class="sed-image-upload-dropmessage">Drop images here</div>
+				<div class="sed-image-upload-dropor">or</div>
+				<button type="button" class="sed-image-upload-select-btn">Choose files</button>
+				<input type="file" name="gallery_drop[]" multiple="multiple" class="sed-image-upload-dropinput" accept="image/*">
+			</div>
+			<div class="sed-image-upload-add-box"></div>
+			<div class="sed-image-upload-url-link"><i class="dash_link">Add via link (URL)</i></div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-image-upload" data-sed-image-upload='{"prefix":"gallery","sortable":true}'&gt;...&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.imageUpload.init(document.querySelector('.sed-image-upload'));</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     SECTION 8: AUTOCOMPLETE & SEARCH (AUTOCOMPLETE)
+	     ========================================== -->
+	<div class="section-title" id="sec_8">
+		<span>8. Smart Autocomplete & Live Search</span>
+		<span class="demo-badge">Autocomplete.js</span>
+	</div>
+
+	<!-- 8.1 Live Search with Autocomplete -->
+	<div class="demo-card" id="sec_8_1">
+		<h3>8.1. Live Search with Highlighted Results (<code>Autocomplete</code>)</h3>
+		<p class="desc">Vanilla JS autocomplete for inputs (tags, authors, categories, countries). Supports local array or AJAX, keyboard arrow navigation, and substring match highlighting.</p>
+
+		<div style="max-width: 420px; position: relative;">
+			<label style="display:block; font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Start typing a Seditio section (e.g. "News", "Pages", "Forums", "Gallery"):</label>
+			<input type="text" id="demo_autocomplete_input" class="sed-select" style="width:100%; box-sizing:border-box;" placeholder="Search site sections..." autocomplete="off">
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" id="site_search" placeholder="Search..."&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">new Autocomplete(document.getElementById('site_search'), {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    lookup: [</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'News', data: 'news' },</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Pages & Articles', data: 'pages' },</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Forums', data: 'forums' }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    ],</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    minChars: 1,</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    onSelect(suggestion) { logEvent('autocomplete:select', suggestion.value); }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+		</div>
+	</div>
+
+	<!-- Event Log -->
+	<div class="demo-card" id="sec_log">
+		<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+			<h3 style="margin:0;">Core Event Log</h3>
+			<button type="button" class="btn" style="padding:3px 8px; font-size:11px;" onclick="document.getElementById('event_log').innerHTML = '';">Clear log</button>
+		</div>
+		<div id="event_log" class="demo-log-box">
+			<div class="log-item"><span class="log-time">[ready]</span> The sedjs library is fully initialized. Interact with any component above...</div>
+		</div>
+	</div>
+
+		</main>
+	</div>
+</div>
+
+<!-- Seditio Core System JavaScript -->
+<script src="../system/assets/js/core.js"></script>
+<script src="../system/assets/js/sedchart.js"></script>
+<script src="../system/assets/js/imageupload.js"></script>
+<script src="../system/assets/js/autocomplete.js"></script>
+
+<!-- Showcase Demo Logic -->
+<script>
+function logEvent(name, val) {
+	const log = document.getElementById('event_log');
+	if (!log) return;
+	const time = new Date().toLocaleTimeString();
+	const item = document.createElement('div');
+	item.className = 'log-item';
+	item.innerHTML = `<span class="log-time">[${time}]</span> <strong>${name}</strong>: <span class="log-val">${val}</span>`;
+	log.appendChild(item);
+	log.scrollTop = log.scrollHeight;
+}
+
+function setTheme(theme) {
+	const adminCss = document.getElementById('admin_theme_css');
+	const btnFront = document.getElementById('btn_theme_front');
+	const btnAdmin = document.getElementById('btn_theme_admin');
+
+	if (theme === 'admin') {
+		adminCss.disabled = false;
+		document.body.classList.add('admin-mode');
+		btnAdmin.classList.add('active');
+		btnFront.classList.remove('active');
+	} else {
+		adminCss.disabled = true;
+		document.body.classList.remove('admin-mode');
+		btnFront.classList.add('active');
+		btnAdmin.classList.remove('active');
+	}
+}
+
+// Open demo SedModal floating window
+function openDemoModal() {
+	const content = '<div style="padding:22px; font-size:13px; line-height:1.6; color:#334155;">' +
+		'<h3 style="margin-top:0; color:#0f172a;">Seditio Core Floating Window</h3>' +
+		'<p>This is a full-featured core modal window. Try to:</p>' +
+		'<ul>' +
+		'<li><strong>Drag window:</strong> hold header with left mouse button.</li>' +
+		'<li><strong>Resize:</strong> pull the bottom-right corner.</li>' +
+		'<li><strong>Minimize:</strong> click "−" in top-right corner (window docks to bottom-left).</li>' +
+		'<li><strong>Maximize:</strong> click "▢" button.</li>' +
+		'</ul>' +
+		'<div style="margin-top:16px;"><button type="button" class="btn btn-primary" onclick="window.demoModal.close();">Close Window</button></div>' +
+		'</div>';
+
+	window.demoModal = sedjs.modal.open(
+		'demo_floating_window',
+		'inline',
+		content,
+		'SedModal Floating Window',
+		'width=540px,height=340px,resize=1,scrolling=1,center=1',
+		'load'
+	);
+	logEvent('modal:open', 'demo_floating_window');
+}
+
+// Initialize additional modules when DOM is ready
+sedjs.ready(() => {
+	// 1. Initialize single sortable list (sedjs.sortable)
+	const singleSortableEl = document.querySelector('#sortable_single');
+	if (singleSortableEl && typeof sedjs.sortable === 'function') {
+		sedjs.sortable(singleSortableEl, {
+			handle: '.drag-handle',
+			axis: 'y',
+			update(e, ui) {
+				const items = Array.from(singleSortableEl.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder'));
+				items.forEach((li, idx) => {
+					const badge = li.querySelector('.demo-badge');
+					if (badge) badge.textContent = 'Order: ' + (idx + 1);
+				});
+				const order = items.map(li => li.dataset.id);
+				logEvent('sortable:single:update', order.join(' → '));
+			}
+		});
+	}
+
+	// 2. Initialize connected lists (Kanban connectWith)
+	const kanbanTodo = document.querySelector('#kanban_todo');
+	const kanbanDone = document.querySelector('#kanban_done');
+	if (kanbanTodo && kanbanDone && typeof sedjs.sortable === 'function') {
+		sedjs.sortable(kanbanTodo, {
+			connectWith: '.kanban-sortable',
+			handle: '.drag-handle',
+			update(e, ui) {
+				const items = Array.from(kanbanTodo.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder')).map(li => li.dataset.id);
+				logEvent('kanban:todo:update', items.join(', ') || '(empty)');
+			}
+		});
+
+		sedjs.sortable(kanbanDone, {
+			connectWith: '.kanban-sortable',
+			handle: '.drag-handle',
+			update(e, ui) {
+				const items = Array.from(kanbanDone.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder')).map(li => li.dataset.id);
+				logEvent('kanban:done:update', items.join(', ') || '(empty)');
+			}
+		});
+	}
+
+	// 3. Initialize live SEF URL generation (sedjs.genSEF)
+	const sefFrom = document.getElementById('sef_from');
+	const sefTo = document.getElementById('sef_to');
+	if (sefFrom && sefTo && typeof sedjs.genSEF === 'function') {
+		const updateSEF = () => {
+			sedjs.genSEF(sefFrom, sefTo, false);
+		};
+		sefFrom.addEventListener('input', updateSEF);
+		updateSEF(); // Initial transliteration
+	}
+
+	// 4. Initialize chart (SedChart)
+	const chartContainer = document.getElementById('chart_demo_canvas_container');
+	if (chartContainer && typeof SedChart === 'function') {
+		const weekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+		const weekValues = [1250, 1890, 2430, 2120, 2800, 3450, 4100];
+		const demoChart = new SedChart(chartContainer, {
+			labels: weekLabels,
+			values: weekValues
+		});
+
+		const btnWeek = document.getElementById('btn_chart_week');
+		const btnMonth = document.getElementById('btn_chart_month');
+		const btnRandom = document.getElementById('btn_chart_random');
+
+		if (btnWeek) {
+			btnWeek.addEventListener('click', () => {
+				demoChart.setData(weekLabels, [1250, 1890, 2430, 2120, 2800, 3450, 4100]);
+				logEvent('sedchart', 'Loaded weekly data');
+			});
+		}
+
+		if (btnMonth) {
+			btnMonth.addEventListener('click', () => {
+				const monthLabels = ['1', '5', '10', '15', '20', '25', '30'];
+				const monthValues = [450, 920, 1340, 2100, 1950, 3100, 4800];
+				demoChart.setData(monthLabels, monthValues);
+				logEvent('sedchart', 'Loaded monthly data');
+			});
+		}
+
+		if (btnRandom) {
+			btnRandom.addEventListener('click', () => {
+				const randVals = weekLabels.map(() => Math.floor(Math.random() * 4000) + 500);
+				demoChart.setData(weekLabels, randVals);
+				logEvent('sedchart', 'Random values: ' + randVals.join(', '));
+			});
+		}
+	}
+
+	// 5. Initialize Autocomplete
+	const acInput = document.getElementById('demo_autocomplete_input');
+	if (acInput && typeof Autocomplete === 'function') {
+		new Autocomplete(acInput, {
+			lookup: [
+				{ value: 'News', data: 'news' },
+				{ value: 'Pages & Articles', data: 'pages' },
+				{ value: 'Forums', data: 'forums' },
+				{ value: 'Gallery & Media', data: 'gallery' },
+				{ value: 'Personal Files (PFS)', data: 'pfs' },
+				{ value: 'Users', data: 'users' },
+				{ value: 'Plugins', data: 'plugins' },
+				{ value: 'Core Configuration', data: 'config' }
+			],
+			minChars: 1,
+			onSelect(suggestion) {
+				logEvent('autocomplete:select', suggestion.value + ' [data=' + suggestion.data + ']');
+			}
+		});
+	}
+});
+</script>
+
+</body>
+</html>

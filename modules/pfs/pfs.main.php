@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.main.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=PFS main
@@ -657,7 +657,7 @@ if ($usr['auth_write']) {
 
     if (!empty($cfg['th_logofile'])) {
         $t->assign(array(
-            "PFS_UPLOAD_ADD_LOGO" => sed_checkbox('naddlogo'),
+            "PFS_UPLOAD_ADD_LOGO" => sed_checkbox('naddlogo', '', false, '', false, array('class' => 'sed-switch')),
             "PFS_UPLOAD_LOGO_FILE" => "<img src=\"" . $cfg['th_logofile'] . "\" alt=\"\" />"
         ));
         $t->parse("MAIN.PFS_UPLOAD.PFS_UPLOAD_ADD_LOGO");
@@ -666,7 +666,7 @@ if ($usr['auth_write']) {
     if ($cfg['th_imgmaxwidth'] > 0) {
         $t->assign(array(
             "PFS_UPLOAD_IMG_RESIZE_SIZE" => sprintf($L['pfs_resize'], $cfg['th_imgmaxwidth']),
-            "PFS_UPLOAD_IMG_RESIZE" => sed_checkbox('nresize')
+            "PFS_UPLOAD_IMG_RESIZE" => sed_checkbox('nresize', '', false, '', false, array('class' => 'sed-switch'))
         ));
         $t->parse("MAIN.PFS_UPLOAD.PFS_UPLOAD_IMG_RESIZE");
     }

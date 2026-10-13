@@ -1620,7 +1620,8 @@ ul.admin-buttons li {
   margin-bottom: 15px;
 }
 
-.filters .filters-form div {
+.filters .filters-form > form > div,
+.filters .filters-form > div {
   display: inline-block;
   padding: 5px;
   vertical-align: middle;
@@ -1790,6 +1791,864 @@ ul.admin-buttons li {
 
 .sed-popover-body {
   padding: 0;
+}
+
+/*-------------------------*/
+
+/***** SEDSELECT (CUSTOM SELECTBOX) *****/
+
+/*-------------------------*/
+
+.sed-select-wrapper {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  user-select: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  font-family: inherit;
+}
+
+.table-td .sed-select-wrapper,
+.resp-table-td .sed-select-wrapper,
+.form-row .sed-select-wrapper {
+  max-width: 100%;
+}
+
+.sed-select-wrapper.sed-select-block {
+  display: block;
+  width: 100%;
+}
+
+.sed-select-wrapper.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.sed-select-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
+  outline: none;
+}
+
+.sed-select-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 6px;
+  text-align: left;
+}
+
+.sed-select-placeholder {
+  color: var(--admin-text-muted, var(--fw-input-placeholder, #9ca3af));
+}
+
+.sed-select-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid var(--admin-text-muted, #6b7280);
+  transition: transform 0.2s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sed-select-wrapper.open .sed-select-arrow {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Popup */
+.sed-select-dropdown {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: 480px;
+  z-index: 1050;
+  background: var(--admin-card-bg, #ffffff);
+  border: 1px solid var(--admin-border, var(--fw-input-border, #cbd5e1));
+  border-radius: var(--admin-radius, 3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  display: none !important;
+  flex-direction: column;
+  max-height: 320px;
+  box-sizing: border-box;
+}
+
+/* Dropup */
+.sed-select-wrapper.sed-select-dropup .sed-select-dropdown {
+  top: auto;
+  bottom: calc(100% + 3px);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.sed-select-wrapper.open .sed-select-dropdown {
+  display: flex !important;
+}
+
+.sed-select-search {
+  padding: 6px;
+  border-bottom: 1px solid var(--admin-border-light, #e2e8f0);
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+.sed-select-search input[type="text"] {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 12px;
+  border: 1px solid var(--admin-input-border, var(--fw-input-border, #cbd5e1));
+  border-radius: var(--admin-radius, 3px);
+  background: #ffffff;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.sed-select-search input[type="text"]:focus {
+  border-color: var(--admin-primary, var(--fw-input-border-focus, #296eb0));
+}
+
+.sed-select-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--admin-border-light, #e2e8f0);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.sed-select-actions a {
+  color: var(--admin-primary, var(--fw-link, #296eb0));
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sed-select-actions a:hover {
+  text-decoration: underline;
+}
+
+.sed-select-list {
+  overflow-y: auto;
+  padding: 3px 0;
+  max-height: 220px;
+}
+
+/* Optgroup */
+.sed-select-group-label {
+  padding: 6px 10px 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--admin-text-muted, #64748b);
+  letter-spacing: 0.5px;
+  background: #f8fafc;
+  border-top: 1px solid var(--admin-border-light, #f1f5f9);
+  user-select: none;
+}
+
+.sed-select-group:first-child .sed-select-group-label {
+  border-top: none;
+}
+
+.sed-select-group .sed-select-item {
+  padding-left: 18px;
+}
+
+/* Items */
+.sed-select-item {
+  display: flex !important;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--admin-input-text, #334155);
+  cursor: pointer;
+  transition: background 0.1s ease;
+  border-bottom: 1px solid #f8fafc;
+  white-space: nowrap;
+}
+
+.sed-select-wrapper.sed-select-sm .sed-select-item {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.sed-select-item:hover,
+.sed-select-item.highlighted {
+  background: var(--admin-select-hover, #f0f7ff);
+  color: #0f172a;
+}
+
+.sed-select-item.selected {
+  background: var(--admin-select-selected, #e0effe);
+  color: var(--admin-select-selected-text, #0369a1);
+  font-weight: 500;
+}
+
+.sed-select-item.selected.highlighted {
+  background: var(--admin-select-selected-hover, #bae0fd);
+}
+
+.sed-select-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: none !important;
+}
+
+.sed-select-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  margin: 0 8px 0 0;
+  cursor: pointer;
+  accent-color: var(--admin-primary, var(--fw-check-active-bg, #296eb0));
+}
+
+.sed-select-item .item-badge {
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 11px;
+  color: var(--admin-text-muted, #94a3b8);
+  font-family: monospace;
+}
+
+.sed-select-empty {
+  padding: 10px;
+  color: var(--admin-text-muted, #94a3b8);
+  font-size: 12px;
+  text-align: center;
+}
+
+/*-------------------------*/
+
+/***** 1. SED-SWITCH (TOGGLE SWITCH) *****/
+
+/*-------------------------*/
+
+.sed-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.sed-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.sed-switch-slider {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+  background-color: var(--admin-border, #cbd5e1);
+  border-radius: 22px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sed-switch-slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  top: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.sed-switch input:checked + .sed-switch-slider {
+  background-color: var(--admin-primary, var(--fw-check-active-bg, #296eb0));
+}
+
+.sed-switch input:checked + .sed-switch-slider::before {
+  transform: translateX(16px);
+}
+
+.sed-switch input:focus-visible + .sed-switch-slider {
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(41, 110, 176, 0.2));
+}
+
+.sed-switch.disabled,
+.sed-switch input:disabled + .sed-switch-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sed-switch-sm .sed-switch-slider {
+  width: 30px;
+  height: 18px;
+}
+
+.sed-switch-sm .sed-switch-slider::before {
+  height: 12px;
+  width: 12px;
+  top: 3px;
+  left: 3px;
+}
+
+.sed-switch-sm input:checked + .sed-switch-slider::before {
+  transform: translateX(12px);
+}
+
+.sed-switch-label {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+/*-------------------------*/
+
+/***** 2. SED-INPUT HELPERS (PASSWORD TOGGLE & CLEAR BUTTON) *****/
+
+/*-------------------------*/
+
+.sed-input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.sed-input-wrapper.sed-input-block {
+  display: flex;
+  width: 100%;
+}
+
+.sed-input-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sed-input-action-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px;
+  margin: 0 !important;
+  cursor: pointer;
+  color: var(--admin-text-muted, #94a3b8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border-radius: 3px;
+  transition: color 0.15s ease;
+  z-index: 2;
+  outline: none !important;
+  min-height: auto !important;
+  min-width: auto !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+.sed-input-action-btn:hover,
+.sed-input-action-btn:focus,
+.sed-input-action-btn:active {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: var(--admin-input-text, #1e293b);
+}
+
+.sed-input-action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/*-------------------------*/
+
+/***** 3. SED-DATEPICKER (DATE & TIME PICKER) *****/
+
+/*-------------------------*/
+
+.sed-date-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sed-date-selects {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sed-date-group-enhanced > .sed-date-selects,
+.sed-date-group-enhanced > select,
+.sed-date-group-enhanced > .sed-select-wrapper,
+.sed-date-group-enhanced > .sed-date-separator {
+  display: none !important;
+}
+
+.sed-datepicker-wrapper {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: 100%;
+}
+
+.sed-datepicker-input,
+input.sed-datepicker {
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.sed-datepicker-dropdown {
+  position: absolute;
+  z-index: 1060;
+  background: var(--admin-card-bg, #ffffff);
+  border: 1px solid var(--admin-border, #cbd5e1);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  font-size: 13px;
+  user-select: none;
+  display: none;
+  flex-direction: column;
+  min-width: 260px;
+  box-sizing: border-box;
+}
+
+.sed-datepicker-dropdown.open {
+  display: flex;
+}
+
+.sed-dp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--admin-border-light, #e2e8f0);
+}
+
+.sed-dp-title {
+  font-weight: 600;
+  color: var(--admin-input-text, #1e293b);
+  font-size: 13px;
+}
+
+.sed-dp-nav-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 3px;
+  color: var(--admin-text-muted, #64748b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, color 0.1s;
+}
+
+.sed-dp-nav-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.sed-dp-weekdays {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.sed-dp-weekday {
+  width: 32px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--admin-text-muted, #94a3b8);
+  text-transform: uppercase;
+}
+
+.sed-dp-days {
+  display: flex;
+  flex-wrap: wrap;
+  width: 224px;
+  margin: 0 auto;
+}
+
+.sed-dp-day {
+  width: 32px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  color: var(--admin-input-text, #334155);
+  transition: background 0.1s, color 0.1s;
+  box-sizing: border-box;
+}
+
+.sed-dp-day:hover {
+  background: var(--admin-select-hover, #f0f7ff);
+  color: #0369a1;
+}
+
+.sed-dp-day.today {
+  font-weight: 700;
+  color: var(--admin-primary, var(--fw-link, #296eb0));
+  text-decoration: underline;
+}
+
+.sed-dp-day.selected {
+  background: var(--admin-primary, var(--fw-check-active-bg, #296eb0)) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.sed-dp-day.other-month {
+  color: #cbd5e1;
+  opacity: 0.6;
+}
+
+.sed-dp-time-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0;
+  margin-top: 8px;
+  border-top: 1px solid var(--admin-border-light, #e2e8f0);
+}
+
+.sed-dp-time-box input {
+  width: 44px;
+  padding: 3px 4px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid var(--admin-input-border, #cbd5e1);
+  border-radius: 3px;
+}
+
+.sed-dp-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--admin-border-light, #e2e8f0);
+}
+
+.sed-dp-footer a {
+  font-size: 11px;
+  color: var(--admin-primary, var(--fw-link, #296eb0));
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.sed-dp-footer a:hover {
+  text-decoration: underline;
+}
+
+/*-------------------------*/
+
+/***** 4. SED-TAGS (CHIPS / TAGS INPUT) *****/
+
+/*-------------------------*/
+
+.sed-tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 4px 6px;
+  background: var(--admin-input-bg, var(--fw-input-bg, #ffffff));
+  border: 1px solid var(--admin-input-border, var(--fw-input-border, #d1d5db));
+  border-radius: var(--admin-radius, 3px);
+  box-sizing: border-box;
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.sed-tags-wrapper.focus {
+  border-color: var(--admin-primary, var(--fw-input-border-focus, #296eb0));
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(41, 110, 176, 0.18));
+}
+
+.sed-tags-wrapper.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+.sed-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  font-size: 12px;
+  background: var(--admin-select-selected, #e0effe);
+  color: var(--admin-select-selected-text, #0369a1);
+  border-radius: 12px;
+  line-height: 1.3;
+  user-select: none;
+}
+
+.sed-tag-remove {
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  opacity: 0.6;
+  transition: opacity 0.1s;
+}
+
+.sed-tag-remove:hover {
+  opacity: 1;
+}
+
+.sed-tags-input {
+  border: none !important;
+  outline: none !important;
+  padding: 2px 4px !important;
+  font-size: 13px !important;
+  background: transparent !important;
+  flex: 1;
+  min-width: 80px;
+  box-shadow: none !important;
+  color: var(--admin-input-text, #1f2937);
+}
+
+/*-------------------------*/
+
+/***** 5. SED-SEGMENTED (SEGMENTED CONTROL / RADIO PILL) *****/
+
+/*-------------------------*/
+
+.sed-segmented {
+  display: inline-flex;
+  align-items: center;
+  background: #e2e8f0;
+  padding: 3px;
+  border-radius: 5px;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.sed-segmented input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.sed-segmented label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.sed-segmented label:hover {
+  color: #0f172a;
+}
+
+.sed-segmented input[type="radio"]:checked + label {
+  background: #ffffff;
+  color: var(--admin-primary, var(--fw-input-border-focus, #296eb0));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+.sed-segmented-sm label {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+/*-------------------------*/
+
+/***** 6. SED-STEPPER (NUMERIC COUNTER) *****/
+
+/*-------------------------*/
+
+.sed-stepper {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--admin-input-border, var(--fw-input-border, #d1d5db));
+  border-radius: var(--admin-radius, 3px);
+  background: var(--admin-input-bg, #ffffff);
+  box-sizing: border-box;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.sed-stepper:focus-within {
+  border-color: var(--admin-primary, var(--fw-input-border-focus, #296eb0));
+  box-shadow: 0 0 0 2px var(--admin-primary-focus-ring, rgba(41, 110, 176, 0.18));
+}
+
+.sed-step-btn {
+  background: #f8fafc;
+  border: none;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+}
+
+.sed-step-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.sed-step-btn:active {
+  background: #cbd5e1;
+}
+
+.sed-stepper input[type="number"] {
+  border: none !important;
+  outline: none !important;
+  text-align: center;
+  width: 60px;
+  padding: 5px 4px;
+  font-size: 13px;
+  background: transparent;
+  box-shadow: none !important;
+  -moz-appearance: textfield;
+}
+
+.sed-stepper input[type="number"]::-webkit-outer-spin-button,
+.sed-stepper input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/*-------------------------*/
+
+/***** 7. SED-FILE (STYLED SINGLE FILE DROP / INPUT) *****/
+
+/*-------------------------*/
+
+.sed-file-drop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 12px;
+  border: 1px dashed var(--admin-border, #cbd5e1);
+  border-radius: var(--admin-radius, 3px);
+  background: var(--admin-input-bg, #ffffff);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 36px;
+  min-width: 280px;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.sed-file-drop.sed-file-block {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.sed-file-drop.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.sed-file-drop:hover,
+.sed-file-drop.dragover {
+  border-color: var(--admin-primary, var(--fw-input-border-focus, #296eb0));
+  background: var(--admin-select-hover, #f0f7ff);
+}
+
+.sed-file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.sed-file-name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sed-file-size {
+  font-size: 11px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.sed-file-placeholder {
+  color: var(--admin-text-muted, #9ca3af);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sed-file-btn {
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  background: #f8fafc;
+  color: #334155;
+  flex-shrink: 0;
 }
 
 /*-------------------------*/

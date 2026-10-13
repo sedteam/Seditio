@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.log.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-09
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -57,7 +57,7 @@ $n = (empty($n)) ? 'all' : $n;
 
 $clear_all = ($usr['isadmin']) ? "&nbsp;" . sed_link(sed_url("admin", "m=log&a=purge&" . sed_xg()), $L['adm_purgeall'] . " (" . $totaldblog . ")", array('class' => 'btn')) : '';
 
-$group_select = $L['Group'] . " : <select name=\"groups\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
+$group_select = $L['Group'] . " : <select name=\"groups\" class=\"sed-select\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 
 foreach ($log_groups as $grp_code => $grp_name) {
 	$selected = ($grp_code == $n) ? "selected=\"selected\"" : "";

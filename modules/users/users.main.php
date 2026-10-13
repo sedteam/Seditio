@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.main.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=Users list
@@ -30,8 +30,33 @@ $d = sed_import('d', 'G', 'INT');
 $f = sed_import('f', 'G', 'ALP', 16);
 $g = sed_import('g', 'G', 'INT');
 $gm = sed_import('gm', 'G', 'INT');
+$country = sed_import('country', 'G', 'ALP', 2);
 $y = sed_import('y', 'P', 'TXT', 32);
 $sq = sed_import('sq', 'G', 'TXT', 32);
+
+// POST filters from user search form
+$bycountry = sed_import('bycountry', 'P', 'ALP', 2);
+if ($bycountry !== null && $bycountry !== '') {
+	$country = $bycountry;
+} elseif (empty($country) && !empty($f) && mb_substr($f, 0, 8) == 'country_') {
+	$country = mb_strtolower(mb_substr($f, 8, 2));
+}
+
+$bymaingroup = sed_import('bymaingroup', 'P', 'INT');
+if ($bymaingroup > 0) {
+	$g = $bymaingroup;
+}
+
+$bygroupms = sed_import('bygroupms', 'P', 'INT');
+if ($bygroupms > 0) {
+	$gm = $bygroupms;
+}
+
+if (!empty($y)) {
+	$sq = $y;
+} elseif (!empty($sq)) {
+	$y = $sq;
+}
 
 unset($localskin, $grpms);
 
@@ -45,25 +70,24 @@ $number_of_extrafields = count($extrafields);
 
 $filter_vars = array();
 $filter_sql = array();
-$sql_where = "";
 
 if (count($extrafields) > 0) {
 	foreach ($extrafields as $key => $val) {
 		if (in_array($val['vartype'], array('INT', 'BOL'))) {
 			$filter_vars['filter_' . $key] = sed_import('filter_' . $key, 'G', $val['vartype']);
-			if (!empty($filter_vars['filter_' . $key])) $filter_sql[] = " AND user_" . $key . " = '" . $filter_vars['filter_' . $key] . "'";
+			if (!empty($filter_vars['filter_' . $key])) {
+				$filter_sql[] = "user_" . $key . " = '" . $filter_vars['filter_' . $key] . "'";
+			}
 		}
 	}
 }
-
-$sql_where = (count($filter_sql) > 0) ? implode(',', $filter_sql) : " ";
 
 // ----------------------
 
 /* === Hook === */
 foreach (sed_getextplugins('users.first') as $pl) {
-		include $pl;
-	}
+	include $pl;
+}
 /* ===== */
 
 if ((!empty($s) && !in_array($s, $available_sort)) || empty($s)) {
@@ -82,104 +106,128 @@ if (empty($d)) {
 }
 
 $title = sed_link(sed_url("users"), $L['Users']) . " ";
-
 $localskin = sed_skinfile('users');
 
-if (!empty($sq)) {
-	$y = $sq;
+$where = array();
+$title_parts = array();
+
+// 1. Text search by username
+if (!empty($y) && mb_strlen($y) > 0) {
+	$where[] = "u.user_name LIKE '%" . sed_sql_prep($y) . "%'";
+	$title_parts[] = $L['Search'] . " '" . sed_cc($y) . "'";
 }
 
-if ($f == 'search' && mb_strlen($y) > 1) {
-	$sq = $y;
-	$title .= $cfg['separator'] . " " . $L['Search'] . " '" . sed_cc($y) . "'";
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name LIKE '%" . sed_sql_prep($y) . "%' $sql_where");
-	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_name LIKE '%" . sed_sql_prep($y) . "%' $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
-} elseif ($g > 1) {
-	$title .= $cfg['separator'] . " " . $L['Maingroup'] . " = " . sed_build_group($g);
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_maingrp='$g' $sql_where");
-	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp='$g' $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
-} elseif ($gm > 1) {
-	$title .= $cfg['separator'] . " " . $L['Group'] . " = " . sed_build_group($gm);
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users as u
-		LEFT JOIN $db_groups_users as g ON g.gru_userid=u.user_id
-		WHERE g.gru_groupid='$gm'");
-	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT u.* FROM $db_users as u
-		LEFT JOIN $db_groups_users as g ON g.gru_userid=u.user_id
-		WHERE g.gru_groupid='$gm'
-		ORDER BY user_$s $w
-		LIMIT $d," . $cfg['maxusersperpage']);
-} elseif (mb_strlen($f) == 1) {
+// 2. Filter by first letter
+if (mb_strlen($f) == 1) {
 	if ($f == "_") {
-		$title .= $cfg['separator'] . " " . $L['use_byfirstletter'] . " '%'";
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name NOT REGEXP(\"^[a-zA-Z]\")");
-		$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_name NOT REGEXP(\"^[a-zA-Z]\") $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
+		$where[] = "u.user_name NOT REGEXP('^[a-zA-Z]')";
+		$title_parts[] = $L['use_byfirstletter'] . " '%'";
 	} else {
 		$f = mb_strtoupper($f);
-		$title .= $cfg['separator'] . " " . $L['use_byfirstletter'] . " '" . $f . "'";
-		$i = $f . "%";
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name LIKE '$i' $sql_where");
-		$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_name LIKE '$i' $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
+		$where[] = "u.user_name LIKE '" . sed_sql_prep($f) . "%'";
+		$title_parts[] = $L['use_byfirstletter'] . " '" . $f . "'";
 	}
-} elseif (mb_substr($f, 0, 8) == 'country_') {
-	$cn = mb_strtolower(mb_substr($f, 8, 2));
-	$cn = isset($sed_countries[$cn]) ? $cn : '00';
-	$title .= $cfg['separator'] . " " . $L['Country'] . " '";
-	$title .= ($cn == '00') ? $L['None'] . "'" : $sed_countries[$cn] . "'";
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_country='$cn' $sql_where");
-	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_country='$cn' $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
-} elseif ($f == 'all') {
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
-	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-	if ($s == 'maingrp') {
-		$sql = sed_sql_query("SELECT u.* FROM $db_users as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE 1 $sql_where ORDER BY grp_level $w LIMIT $d," . $cfg['maxusersperpage']);
-	} else {
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE 1 $sql_where ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
+}
+
+// 3. Filter by country
+if (!empty($country)) {
+	if ($country == '00') {
+		$where[] = "(u.user_country = '' OR u.user_country = '00' OR u.user_country IS NULL)";
+		$title_parts[] = $L['Country'] . " '" . $L['None'] . "'";
+	} elseif (isset($sed_countries[$country])) {
+		$where[] = "u.user_country = '" . sed_sql_prep($country) . "'";
+		$title_parts[] = $L['Country'] . " '" . $sed_countries[$country] . "'";
 	}
+}
+
+// 4. Filter by main group
+if ($g > 1) {
+	$where[] = "u.user_maingrp = " . (int)$g;
+	$title_parts[] = $L['Maingroup'] . " = " . sed_build_group($g);
+}
+
+// 5. Filter by secondary group
+$join_groups = "";
+if ($gm > 1) {
+	$join_groups = " LEFT JOIN $db_groups_users as gu ON gu.gru_userid=u.user_id ";
+	$where[] = "gu.gru_groupid = " . (int)$gm;
+	$title_parts[] = $L['Group'] . " = " . sed_build_group($gm);
+}
+
+// 6. Extra fields filter
+if (!empty($filter_sql)) {
+	foreach ($filter_sql as $fsql) {
+		$where[] = "u." . $fsql;
+	}
+}
+
+$sql_where = !empty($where) ? "WHERE " . implode(' AND ', $where) : "";
+
+if (!empty($title_parts)) {
+	$title .= $cfg['separator'] . " " . implode(', ', $title_parts);
+}
+
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users as u " . $join_groups . $sql_where);
+$totalusers = (int)sed_sql_result($sql, 0, "COUNT(*)");
+
+if ($s == 'maingrp') {
+	$sql = sed_sql_query("SELECT u.* FROM $db_users as u " . $join_groups . " LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp " . $sql_where . " ORDER BY grp_level $w LIMIT $d," . $cfg['maxusersperpage']);
+} else {
+	$sql = sed_sql_query("SELECT u.* FROM $db_users as u " . $join_groups . $sql_where . " ORDER BY user_$s $w LIMIT $d," . $cfg['maxusersperpage']);
 }
 
 $totalusers = isset($totalusers) ? $totalusers : 0;
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
 
-$allfilters = "<form action=\"" . sed_url("users", "f=search") . "\" method=\"post\">";
+// Build search & filter form
+$allfilters = "<form action=\"" . sed_url("users") . "\" method=\"post\">";
 $allfilters .= "<div>" . $L['Filters'] . ": " . sed_link(sed_url("users"), $L['All']) . "</div>";
-$allfilters .= "<div><select name=\"bycountry\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
+if (mb_strlen($f) == 1) {
+	$allfilters .= sed_textbox_hidden('f', $f);
+}
+if (!empty($s)) {
+	$allfilters .= sed_textbox_hidden('s', $s);
+}
+if (!empty($w)) {
+	$allfilters .= sed_textbox_hidden('w', $w);
+}
+
+// Country select
+$allfilters .= "<div><select name=\"bycountry\" class=\"sed-select\" size=\"1\" onchange=\"this.form.submit()\">";
+$allfilters .= "<option value=\"\">" . $L['Country'] . "...</option>";
+$selected = ($country === '00') ? 'selected="selected"' : '';
+$allfilters .= "<option value=\"00\" " . $selected . ">" . $L['None'] . "</option>";
 
 foreach ($sed_countries as $i => $x) {
-	if ($i == '00') {
-		$allfilters .= "<option value=\"" . sed_url("users") . "\">" . $L['Country'] . "...</option>";
-		$selected = ("country_00" == $f) ? "selected=\"selected\"" : '';
-		$allfilters .= "<option value=\"" . sed_url("users", "f=country_00") . "\" " . $selected . ">" . $L['None'] . "</option>";
-	} else {
-		$selected = ("country_" . $i == $f) ? "selected=\"selected\"" : '';
-		$allfilters .= "<option value=\"" . sed_url("users", "f=country_" . $i) . "\" " . $selected . ">" . sed_cutstring($x, 23) . "</option>";
+	if ($i != '00') {
+		$selected = ($i === $country) ? 'selected="selected"' : '';
+		$allfilters .= "<option value=\"" . $i . "\" " . $selected . ">" . sed_cutstring($x, 23) . "</option>";
 	}
 }
-
 $allfilters .= "</select></div>";
-$allfilters .= "<div><select name=\"bymaingroup\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"" . sed_url("users") . "\">" . $L['Maingroup'] . "...";
-$grpms = '';
+
+// Main group select
+$allfilters .= "<div><select name=\"bymaingroup\" class=\"sed-select\" size=\"1\" onchange=\"this.form.submit()\"><option value=\"\">" . $L['Maingroup'] . "...</option>";
 foreach ($sed_groups as $k => $i) {
-	$selected = ($k == $g) ? "selected=\"selected\"" : '';
-	$selected1 = ($k == $gm) ? "selected=\"selected\"" : '';
+	$selected = ($k == $g) ? 'selected="selected"' : '';
 	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A'))) {
-		$allfilters .= ($k > 1) ? "<option value=\"" . sed_url("users", "g=" . $k) . "\" $selected> " . $sed_groups[$k]['title'] : '';
-		$allfilters .= ($k > 1 && $sed_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
-		$grpms .= ($k > 1) ? "<option value=\"" . sed_url("users", "gm=" . $k) . "\" $selected1> " . $sed_groups[$k]['title'] : '';
-		$grpms .= ($k > 1 && $sed_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
+		$allfilters .= ($k > 1) ? "<option value=\"" . $k . "\" $selected>" . $sed_groups[$k]['title'] . ($sed_groups[$k]['hidden'] ? ' (' . $L['Hidden'] . ')' : '') . "</option>" : '';
 	}
 }
 $allfilters .= "</select></div>";
-$allfilters .= "<div><select name=\"bygroupms\" size=\"1\" onchange=\"sedjs.redirect(this)\"><option value=\"" . sed_url("users") . "\">" . $L['Group'] . "...";
-$allfilters .= $grpms . "</select></div>";
 
-$allfilters .= "<div>" . sed_textbox('y', $y, 16, 32) . sed_button($L['Search'], 'submit', '', 'submit btn') . "</div></form>";
+// Secondary group select
+$allfilters .= "<div><select name=\"bygroupms\" class=\"sed-select\" size=\"1\" onchange=\"this.form.submit()\"><option value=\"\">" . $L['Group'] . "...</option>";
+foreach ($sed_groups as $k => $i) {
+	$selected1 = ($k == $gm) ? 'selected="selected"' : '';
+	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A'))) {
+		$allfilters .= ($k > 1) ? "<option value=\"" . $k . "\" $selected1>" . $sed_groups[$k]['title'] . ($sed_groups[$k]['hidden'] ? ' (' . $L['Hidden'] . ')' : '') . "</option>" : '';
+	}
+}
+$allfilters .= "</select></div>";
+
+$allfilters .= "<div>" . sed_textbox('y', $y, 16, 32) . " " . sed_button($L['Search'], 'submit', '', 'submit btn') . "</div></form>";
 
 $alpafilters = "\n" . $L['Byfirstletter'] . ":";
 
@@ -201,16 +249,26 @@ $urlpaths[sed_url("users")] = $L['Users'];
 
 /* === Hook === */
 foreach (sed_getextplugins('users.main') as $pl) {
-		include $pl;
-	}
+	include $pl;
+}
 /* ===== */
 
 require(SED_ROOT . "/system/header.php");
 
 $t = new XTemplate($localskin);
 
-$pagination = sed_pagination(sed_url("users", "f=" . $f . "&g=" . $g . "&gm=" . $gm . "&s=" . $s . "&w=" . $w . "&sq=" . $sq), $d, $totalusers, $cfg['maxusersperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn(sed_url("users", "f=" . $f . "&g=" . $g . "&gm=" . $gm . "&s=" . $s . "&w=" . $w . "&sq=" . $sq), $d, $totalusers, $cfg['maxusersperpage'], TRUE);
+$filter_query_params = array();
+if (!empty($country)) $filter_query_params[] = "country=" . $country;
+if ($g > 1) $filter_query_params[] = "g=" . $g;
+if ($gm > 1) $filter_query_params[] = "gm=" . $gm;
+if (!empty($sq)) $filter_query_params[] = "sq=" . urlencode($sq);
+if (mb_strlen($f) == 1) $filter_query_params[] = "f=" . $f;
+$base_filter_query = !empty($filter_query_params) ? implode('&', $filter_query_params) : "";
+$base_url_sort = !empty($base_filter_query) ? $base_filter_query . "&" : "";
+
+$pagination_url = !empty($base_filter_query) ? $base_filter_query . "&s=" . $s . "&w=" . $w : "s=" . $s . "&w=" . $w;
+$pagination = sed_pagination(sed_url("users", $pagination_url), $d, $totalusers, $cfg['maxusersperpage']);
+list($pageprev, $pagenext) = sed_pagination_pn(sed_url("users", $pagination_url), $d, $totalusers, $cfg['maxusersperpage'], TRUE);
 
 if (!empty($pagination)) {
 	$t->assign(array(
@@ -236,27 +294,27 @@ $t->assign(array(
 	"USERS_TOP_FILTERS" => $allfilters,
 	"USERS_TOP_ALPHAFILTERS" => $alpafilters,
 	"USERS_TOP_PM" => $L['Message'],
-	"USERS_TOP_USERID" => sed_link(sed_url("users", "f=" . $f . "&s=id&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=id&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Userid'],
-	"USERS_TOP_NAME" => sed_link(sed_url("users", "f=" . $f . "&s=name&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=name&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Username'],
-	"USERS_TOP_MAINGRP" => sed_link(sed_url("users", "f=" . $f . "&s=maingrp&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=maingrp&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Maingroup'],
-	"USERS_TOP_COUNTRY" => sed_link(sed_url("users", "f=" . $f . "&s=country&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=country&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Country'],
-	"USERS_TOP_TIMEZONE" => sed_link(sed_url("users", "f=" . $f . "&s=timezone&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=timezone&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Timezone'],
-	"USERS_TOP_EMAIL" => sed_link(sed_url("users", "f=" . $f . "&s=email&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=email&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Email'],
-	"USERS_TOP_REGDATE" => sed_link(sed_url("users", "f=" . $f . "&s=regdate&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=regdate&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Registered'],
-	"USERS_TOP_LASTLOGGED" => sed_link(sed_url("users", "f=" . $f . "&s=lastlog&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=lastlog&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Lastlogged'],
-	"USERS_TOP_LOGCOUNT" => sed_link(sed_url("users", "f=" . $f . "&s=logcount&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=logcount&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Count'],
-	"USERS_TOP_LOCATION" => sed_link(sed_url("users", "f=" . $f . "&s=location&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=location&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Location'],
-	"USERS_TOP_OCCUPATION" => sed_link(sed_url("users", "f=" . $f . "&s=occupation&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=occupation&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Occupation'],
-	"USERS_TOP_BIRTHDATE" => sed_link(sed_url("users", "f=" . $f . "&s=birthdate&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=birthdate&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Birthdate'],
-	"USERS_TOP_GENDER" => sed_link(sed_url("users", "f=" . $f . "&s=gender&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=gender&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Gender'],
-	"USERS_TOP_TIMEZONE" => sed_link(sed_url("users", "f=" . $f . "&s=timezone&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url("users", "f=" . $f . "&s=timezone&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $L['Timezone']
+	"USERS_TOP_USERID" => sed_link(sed_url("users", $base_url_sort . "s=id&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=id&w=desc"), $out['ic_arrow_up']) . " " . $L['Userid'],
+	"USERS_TOP_NAME" => sed_link(sed_url("users", $base_url_sort . "s=name&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=name&w=desc"), $out['ic_arrow_up']) . " " . $L['Username'],
+	"USERS_TOP_MAINGRP" => sed_link(sed_url("users", $base_url_sort . "s=maingrp&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=maingrp&w=desc"), $out['ic_arrow_up']) . " " . $L['Maingroup'],
+	"USERS_TOP_COUNTRY" => sed_link(sed_url("users", $base_url_sort . "s=country&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=country&w=desc"), $out['ic_arrow_up']) . " " . $L['Country'],
+	"USERS_TOP_TIMEZONE" => sed_link(sed_url("users", $base_url_sort . "s=timezone&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=timezone&w=desc"), $out['ic_arrow_up']) . " " . $L['Timezone'],
+	"USERS_TOP_EMAIL" => sed_link(sed_url("users", $base_url_sort . "s=email&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=email&w=desc"), $out['ic_arrow_up']) . " " . $L['Email'],
+	"USERS_TOP_REGDATE" => sed_link(sed_url("users", $base_url_sort . "s=regdate&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=regdate&w=desc"), $out['ic_arrow_up']) . " " . $L['Registered'],
+	"USERS_TOP_LASTLOGGED" => sed_link(sed_url("users", $base_url_sort . "s=lastlog&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=lastlog&w=desc"), $out['ic_arrow_up']) . " " . $L['Lastlogged'],
+	"USERS_TOP_LOGCOUNT" => sed_link(sed_url("users", $base_url_sort . "s=logcount&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=logcount&w=desc"), $out['ic_arrow_up']) . " " . $L['Count'],
+	"USERS_TOP_LOCATION" => sed_link(sed_url("users", $base_url_sort . "s=location&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=location&w=desc"), $out['ic_arrow_up']) . " " . $L['Location'],
+	"USERS_TOP_OCCUPATION" => sed_link(sed_url("users", $base_url_sort . "s=occupation&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=occupation&w=desc"), $out['ic_arrow_up']) . " " . $L['Occupation'],
+	"USERS_TOP_BIRTHDATE" => sed_link(sed_url("users", $base_url_sort . "s=birthdate&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=birthdate&w=desc"), $out['ic_arrow_up']) . " " . $L['Birthdate'],
+	"USERS_TOP_GENDER" => sed_link(sed_url("users", $base_url_sort . "s=gender&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=gender&w=desc"), $out['ic_arrow_up']) . " " . $L['Gender'],
+	"USERS_TOP_TIMEZONE" => sed_link(sed_url("users", $base_url_sort . "s=timezone&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url("users", $base_url_sort . "s=timezone&w=desc"), $out['ic_arrow_up']) . " " . $L['Timezone']
 ));
 
 // ----- Extra fields 
 if ($number_of_extrafields > 0) {
 	foreach ($extrafields as $row) {
 		$extratitle = isset($L['user_' . $row['code'] . '_title']) ? $L['user_' . $row['code'] . '_title'] : $row['title'];
-		$t->assign('USERS_TOP_' . strtoupper($row['code']), sed_link(sed_url('users', "f=" . $f . "&s=" . $row['code'] . "&w=asc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_down']) . sed_link(sed_url('users', "f=" . $f . "&s=" . $row['code'] . "&w=desc&g=" . $g . "&gm=" . $gm . "&sq=" . $sq), $out['ic_arrow_up']) . " " . $extratitle);
+		$t->assign('USERS_TOP_' . strtoupper($row['code']), sed_link(sed_url('users', $base_url_sort . "s=" . $row['code'] . "&w=asc"), $out['ic_arrow_down']) . sed_link(sed_url('users', $base_url_sort . "s=" . $row['code'] . "&w=desc"), $out['ic_arrow_up']) . " " . $extratitle);
 	}
 }
 //--------------- 

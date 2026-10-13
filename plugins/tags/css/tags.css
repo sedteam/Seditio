@@ -113,7 +113,8 @@
   margin-bottom: 15px;
 }
 
-.filters-tags .filters-tags-form div {
+.filters-tags .filters-tags-form > form > div,
+.filters-tags .filters-tags-form > div {
   display: inline-block;
   padding: 5px;
   vertical-align: top;

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.profile.php
 Version=186
-Updated=2026-sep-28
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=User profile
@@ -273,7 +273,7 @@ $profile_form_langs = sed_selectbox_lang($urr['user_lang'], 'ruserlang');
 
 $timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
-$profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
+$profile_form_timezone = "<select name=\"rusertimezone\" class=\"sed-select\" size=\"1\">";
 
 foreach ($timezonelist as $i => $x) {
 	$selected = ($x == $urr['user_timezone']) ? "selected=\"selected\"" : '';
@@ -305,8 +305,8 @@ if ($a == 'avatarchoose') {
 	$profile_form_avatar .= sed_link(sed_url("users", "m=profile&a=avatarchoose&" . sed_xg(), "#list"), $L['pro_avatarspreset']);
 }
 
-$profile_form_pmnotify = sed_radiobox("ruserpmnotify", $yesno_arr, $urr['user_pmnotify']);
-$profile_form_hideemail = sed_radiobox("ruserhideemail", $yesno_arr, $urr['user_hideemail']);
+$profile_form_pmnotify = sed_yesno("ruserpmnotify", $urr['user_pmnotify']);
+$profile_form_hideemail = sed_yesno("ruserhideemail", $urr['user_hideemail']);
 
 $out['subtitle'] = $L['Profile'];
 $title_tags[] = array('{MAINTITLE}', '{TITLE}', '{SUBTITLE}');

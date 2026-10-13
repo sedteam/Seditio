@@ -6,9 +6,9 @@ Copyright (c) Seditio Team
 https://seditio.org
 
 [BEGIN_SED]
-File=admin.config.skin.inc.php
+File=system/core/admin/admin.config.skin.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-09
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel

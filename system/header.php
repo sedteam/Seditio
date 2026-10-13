@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/header.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-13
 Type=Core
 Author=Seditio Team
 Description=Global header
@@ -22,9 +22,9 @@ if (!defined('SED_CODE')) {
 sed_add_javascript('system/assets/js/core.js', true, 10);
 sed_add_css('system/assets/css/core.css', true, 10);
 
+sed_export_js_lang();
+
 if (!empty($usr['isadmin'])) {
-	$tooltip_lang_js = "var L = L || {}; L.pageadd = \"" . sed_cc($L['admintooltip_pageadd']) . "\"; L.pageedit = \"" . sed_cc($L['admintooltip_pageedit']) . "\"; L.pageeditcategory = \"" . sed_cc($L['admintooltip_pageeditcategory']) . "\"; L.pageeditoption = \"" . sed_cc($L['admintooltip_pageeditoption']) . "\"; L.translateedit = \"" . sed_cc($L['admintooltip_translateedit']) . "\";";
-	sed_add_javascript($tooltip_lang_js);
 	sed_add_javascript('system/assets/js/admintooltip.js', true, 20);
 }
 

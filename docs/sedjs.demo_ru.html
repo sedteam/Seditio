@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Seditio CMS — Полная витрина возможностей sedjs & core.css</title>
+	
+	<!-- Системные стили ядра Seditio -->
+	<link rel="stylesheet" href="../system/assets/css/core.css">
+	<link rel="stylesheet" href="../system/assets/css/imageupload.css">
+
+	<!-- Стили фронтенд-скина Sympfy -->
+	<link rel="stylesheet" href="../skins/sympfy/css/framework.css">
+
+	<!-- Стили админки (динамически подключаются при смене темы) -->
+	<link id="admin_theme_css" rel="stylesheet" href="../system/adminskin/sympfy/css/sympfy.css" disabled>
+
+	<style>
+		body {
+			background: #f1f5f9;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			padding: 20px 24px 80px 24px;
+			color: #1e293b;
+			margin: 0;
+			line-height: 1.5;
+			transition: background 0.2s ease;
+		}
+
+		body.admin-mode {
+			background: #ecedf0;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		.demo-wrapper {
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.demo-layout {
+			display: flex;
+			gap: 24px;
+			align-items: flex-start;
+		}
+
+		/* Левая колонка: навигация и оглавление */
+		.demo-sidebar {
+			flex: 0 0 280px;
+			width: 280px;
+			position: sticky;
+			top: 20px;
+			max-height: calc(100vh - 40px);
+			overflow-y: auto;
+		}
+
+		.demo-toc {
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 8px;
+			padding: 16px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+		}
+
+		body.admin-mode .demo-toc {
+			background: #ffffff;
+			border-color: #cbd5e1;
+		}
+
+		.demo-toc-title {
+			font-size: 13px;
+			font-weight: 700;
+			color: #0f172a;
+			margin-bottom: 12px;
+			padding-bottom: 8px;
+			border-bottom: 1px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.demo-toc-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.demo-toc-item {
+			margin-bottom: 4px;
+		}
+
+		.demo-toc-link {
+			display: block;
+			padding: 6px 8px;
+			font-size: 13px;
+			color: #1e293b;
+			text-decoration: none;
+			border-radius: 4px;
+			transition: all 0.15s ease;
+			font-weight: 600;
+		}
+
+		.demo-toc-link:hover {
+			background: #f1f5f9;
+			color: #0284c7;
+		}
+
+		body.admin-mode .demo-toc-link:hover {
+			color: #57a000;
+		}
+
+		.demo-toc-sublist {
+			list-style: none;
+			padding: 2px 0 6px 10px;
+			margin: 0;
+		}
+
+		.demo-toc-sublink {
+			display: block;
+			padding: 4px 6px;
+			font-size: 12px;
+			color: #64748b;
+			text-decoration: none;
+			border-radius: 4px;
+			transition: all 0.15s ease;
+		}
+
+		.demo-toc-sublink:hover {
+			background: #f8fafc;
+			color: #0f172a;
+		}
+
+		/* Правая колонка: основной контент */
+		.demo-main {
+			flex: 1;
+			min-width: 0;
+			max-width: 1200px;
+		}
+
+		.section-title, .demo-card {
+			scroll-margin-top: 24px;
+		}
+
+		@media (max-width: 960px) {
+			.demo-layout {
+				flex-direction: column;
+			}
+			.demo-sidebar {
+				flex: 1 1 100%;
+				width: 100%;
+				position: static;
+				max-height: none;
+			}
+			.demo-main {
+				max-width: 100%;
+				width: 100%;
+			}
+		}
+
+		.demo-header {
+			margin-bottom: 25px;
+			padding-bottom: 18px;
+			border-bottom: 2px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 15px;
+		}
+
+		.demo-header-info h1 {
+			font-size: 24px;
+			font-weight: 700;
+			margin: 0 0 6px 0;
+			color: #0f172a;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.demo-header-info p {
+			font-size: 14px;
+			color: #64748b;
+			margin: 0;
+		}
+
+		.theme-switch-box {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			background: #ffffff;
+			padding: 6px 14px;
+			border: 1px solid #cbd5e1;
+			border-radius: 30px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		.theme-btn {
+			padding: 5px 12px;
+			border-radius: 20px;
+			border: 1px solid transparent;
+			background: #f1f5f9;
+			color: #475569;
+			cursor: pointer;
+			font-size: 12px;
+			font-weight: 600;
+			transition: all 0.15s ease;
+		}
+
+		.theme-btn.active.theme-front {
+			background: #0284c7;
+			color: #ffffff;
+			border-color: #0284c7;
+		}
+
+		.theme-btn.active.theme-admin {
+			background: #57a000;
+			color: #ffffff;
+			border-color: #57a000;
+		}
+
+		.demo-badge {
+			display: inline-block;
+			font-size: 11px;
+			font-weight: 600;
+			padding: 2px 8px;
+			border-radius: 12px;
+			background: #e2e8f0;
+			color: #475569;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+		.demo-badge.badge-core { background: #dbeafe; color: #1e40af; }
+		.demo-badge.badge-admin { background: #dcfce7; color: #166534; }
+
+		.section-title {
+			font-size: 18px;
+			font-weight: 700;
+			margin: 30px 0 14px 0;
+			color: #0f172a;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			border-bottom: 2px solid #cbd5e1;
+			padding-bottom: 8px;
+		}
+
+		.demo-card {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 6px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+			padding: 22px;
+			margin-bottom: 22px;
+			overflow: visible !important;
+		}
+
+		.demo-card h3 {
+			font-size: 16px;
+			font-weight: 600;
+			margin: 0 0 8px 0;
+			color: #0f172a;
+			display: block;
+		}
+
+		.demo-card h3 code {
+			font-size: 13px;
+			background: #f1f5f9;
+			padding: 2px 6px;
+			border-radius: 4px;
+			color: #0369a1;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-weight: 600;
+		}
+
+		body.admin-mode .demo-card h3 code {
+			background: #f0fdf4;
+			color: #15803d;
+		}
+
+		.demo-card p.desc {
+			font-size: 13px;
+			color: #64748b;
+			margin: 0 0 16px 0;
+		}
+
+		.demo-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.demo-table td {
+			padding: 14px 10px;
+			border-bottom: 1px solid #f1f5f9;
+			vertical-align: top;
+		}
+
+		.demo-table tr:last-child td {
+			border-bottom: none;
+		}
+
+		.demo-table td.td-label {
+			width: 260px;
+			font-weight: 600;
+			font-size: 13px;
+			color: #334155;
+			padding-top: 18px;
+		}
+
+		.demo-field-wrap {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		/* Светлый блок кода на сером фоне */
+		.demo-code-box {
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-left: 3px solid #0284c7;
+			border-radius: 4px;
+			padding: 8px 12px;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-size: 12px;
+			line-height: 1.5;
+			color: #334155;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+			overflow-x: auto;
+			transition: border-left-color 0.2s ease;
+		}
+
+		body.admin-mode .demo-code-box {
+			border-left-color: #57a000;
+		}
+
+		.demo-code-box .code-line {
+			display: block;
+			white-space: pre;
+		}
+
+		.demo-code-box .code-lbl {
+			color: #64748b;
+			font-weight: 700;
+			display: inline-block;
+			min-width: 48px;
+			user-select: none;
+		}
+
+		.demo-code-box .code-html {
+			color: #0369a1;
+			font-weight: 500;
+		}
+
+		body.admin-mode .demo-code-box .code-html {
+			color: #15803d;
+		}
+
+		.demo-code-box .code-php {
+			color: #7c3aed;
+			font-weight: 500;
+		}
+
+		.demo-code-box .code-js {
+			color: #d97706;
+			font-weight: 500;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 6px 14px;
+			font-size: 13px;
+			font-weight: 500;
+			border: 1px solid #cbd5e1;
+			border-radius: 3px;
+			background: #ffffff;
+			color: #334155;
+			cursor: pointer;
+			transition: all 0.15s ease;
+		}
+		.btn:hover { background: #f8fafc; border-color: #94a3b8; }
+		.btn-primary { background: #0284c7; border-color: #0284c7; color: #fff; }
+		.btn-primary:hover { background: #0369a1; border-color: #0369a1; color: #fff; }
+		body.admin-mode .btn-primary { background: #57a000; border-color: #57a000; }
+		body.admin-mode .btn-primary:hover { background: #4d8f00; border-color: #4d8f00; }
+
+		/* Стили для Sortable */
+		.sortable-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			min-height: 48px;
+		}
+
+		.kanban-sortable {
+			min-height: 100px;
+		}
+
+		.kanban-sortable:empty::after {
+			content: 'Перетащите карточку сюда';
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 60px;
+			border: 2px dashed #cbd5e1;
+			border-radius: 4px;
+			color: #94a3b8;
+			font-size: 12px;
+		}
+
+		.sortable-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+			padding: 8px 12px;
+			font-size: 13px;
+			color: #1e293b;
+			user-select: none;
+			box-sizing: border-box;
+		}
+
+		.drag-handle {
+			cursor: grab;
+			color: #94a3b8;
+			margin-right: 10px;
+			font-size: 16px;
+			line-height: 1;
+		}
+		.drag-handle:active { cursor: grabbing; }
+
+		.sortable-placeholder {
+			border: 2px dashed #94a3b8 !important;
+			background: #f1f5f9 !important;
+			border-radius: 4px;
+			min-height: 38px;
+			box-sizing: border-box;
+		}
+
+		.sortable-helper {
+			background: #ffffff !important;
+			border: 1px solid #0284c7 !important;
+			box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+			border-radius: 4px;
+		}
+		body.admin-mode .sortable-helper {
+			border-color: #57a000 !important;
+		}
+
+		.kanban-grid {
+			display: flex;
+			gap: 16px;
+			flex-wrap: wrap;
+		}
+
+		.kanban-col {
+			flex: 1;
+			min-width: 280px;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 6px;
+			padding: 12px;
+		}
+
+		.kanban-col-title {
+			font-size: 13px;
+			font-weight: 700;
+			color: #475569;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		/* Алерты */
+		.alert {
+			padding: 12px 16px;
+			border-radius: 4px;
+			font-size: 13px;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border: 1px solid transparent;
+		}
+		.alert .close {
+			background: transparent;
+			border: none;
+			font-size: 18px;
+			line-height: 1;
+			color: inherit;
+			cursor: pointer;
+			opacity: 0.6;
+		}
+		.alert .close:hover { opacity: 1; }
+		.alert-success { background: #dcfce7; border-color: #86efac; color: #166534; }
+		.alert-warning { background: #fef9c3; border-color: #fde047; color: #854d0e; }
+		.alert-danger { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+
+		/* Вкладки */
+		.tabs-container {
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+			background: #ffffff;
+			overflow: hidden;
+		}
+		.tabs-nav {
+			display: flex;
+			background: #f8fafc;
+			border-bottom: 1px solid #cbd5e1;
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		.tabs-nav li a {
+			display: block;
+			padding: 10px 18px;
+			font-size: 13px;
+			font-weight: 600;
+			color: #64748b;
+			text-decoration: none;
+			border-right: 1px solid #e2e8f0;
+			transition: all 0.15s ease;
+		}
+		.tabs-nav li a:hover {
+			color: #0f172a;
+			background: #f1f5f9;
+		}
+		.tabs-nav li a.selected {
+			color: #0284c7;
+			background: #ffffff;
+			border-bottom: 2px solid #0284c7;
+			margin-bottom: -1px;
+		}
+		body.admin-mode .tabs-nav li a.selected {
+			color: #57a000;
+			border-bottom-color: #57a000;
+		}
+		.tab-pane {
+			padding: 16px;
+			font-size: 13px;
+			color: #334155;
+		}
+
+		/* Графики (SedChart) */
+		.chart-container {
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 6px;
+			padding: 16px;
+			position: relative;
+			height: 320px;
+			margin-top: 10px;
+		}
+
+		/* Автокомплит (Autocomplete) */
+		.autocomplete-suggestions {
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			cursor: default;
+			overflow: auto;
+			box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+			border-radius: 6px;
+			z-index: 9999;
+			max-height: 240px;
+			box-sizing: border-box;
+		}
+		.autocomplete-suggestion {
+			padding: 8px 12px;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: 13px;
+			color: #1e293b;
+			cursor: pointer;
+			transition: background 0.1s ease;
+		}
+		.autocomplete-selected {
+			background: #f1f5f9;
+			color: #0284c7;
+		}
+		body.admin-mode .autocomplete-selected {
+			color: #57a000;
+		}
+		.autocomplete-suggestions strong {
+			font-weight: 700;
+			color: #0284c7;
+		}
+		body.admin-mode .autocomplete-suggestions strong {
+			color: #57a000;
+		}
+
+		/* Журнал событий */
+		.demo-log-box {
+			background: #0f172a;
+			color: #f8fafc;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-size: 12px;
+			padding: 14px;
+			border-radius: 6px;
+			max-height: 180px;
+			overflow-y: auto;
+			margin-top: 10px;
+		}
+		.demo-log-box .log-item { margin-bottom: 4px; line-height: 1.4; }
+		.demo-log-box .log-time { color: #64748b; margin-right: 6px; }
+		.demo-log-box .log-val { color: #38bdf8; font-weight: 600; }
+		body.admin-mode .demo-log-box .log-val { color: #86efac; }
+	</style>
+</head>
+<body>
+
+<div class="demo-wrapper">
+
+	<!-- Двухколоночный макет (Flexbox) -->
+	<div class="demo-layout">
+
+		<!-- Левая колонка: Содержание / Навигация -->
+		<aside class="demo-sidebar">
+			<div class="demo-toc">
+				<div class="demo-toc-title">
+					<span>Содержание</span>
+					<span class="demo-badge" style="font-size:10px;">8 разделов</span>
+				</div>
+				<nav>
+					<ul class="demo-toc-list">
+						<li class="demo-toc-item">
+							<a href="#sec_1" class="demo-toc-link">1. Элементы форм</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_1_1" class="demo-toc-sublink">1.1. SedSelect</a></li>
+								<li><a href="#sec_1_2" class="demo-toc-sublink">1.2. Переключатели (Switch)</a></li>
+								<li><a href="#sec_1_3" class="demo-toc-sublink">1.3. Пароль и поиск</a></li>
+								<li><a href="#sec_1_4" class="demo-toc-sublink">1.4. Календарь (DatePicker)</a></li>
+								<li><a href="#sec_1_5" class="demo-toc-sublink">1.5. Ввод тегов (Tags)</a></li>
+								<li><a href="#sec_1_6" class="demo-toc-sublink">1.6. Сегментированный</a></li>
+								<li><a href="#sec_1_7" class="demo-toc-sublink">1.7. Выбор файлов (SedFile)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_2" class="demo-toc-link">2. Drag & Drop сортировка</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_2_1" class="demo-toc-sublink">2.1. Одиночный список</a></li>
+								<li><a href="#sec_2_2" class="demo-toc-sublink">2.2. Kanban (connectWith)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_3" class="demo-toc-link">3. Вкладки и спойлеры</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_3_1" class="demo-toc-sublink">3.1. Вкладки (SedTabs)</a></li>
+								<li><a href="#sec_3_2" class="demo-toc-sublink">3.2. Аккордеон</a></li>
+								<li><a href="#sec_3_3" class="demo-toc-sublink">3.3. Спойлер</a></li>
+								<li><a href="#sec_3_4" class="demo-toc-sublink">3.4. Алерты (CloseAlert)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_4" class="demo-toc-link">4. Модальные окна</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_4_1" class="demo-toc-sublink">4.1. SedModal</a></li>
+								<li><a href="#sec_4_2" class="demo-toc-sublink">4.2. Подсказки (Popover)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_5" class="demo-toc-link">5. Утилиты ядра</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_5_1" class="demo-toc-sublink">5.1. Генерация ЧПУ</a></li>
+								<li><a href="#sec_5_2" class="demo-toc-sublink">5.2. Копирование ссылки</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_6" class="demo-toc-link">6. Графики (SedChart)</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_6_1" class="demo-toc-sublink">6.1. Canvas-график</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_7" class="demo-toc-link">7. Загрузка картинок</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_7_1" class="demo-toc-sublink">7.1. Плиточный загрузчик</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_8" class="demo-toc-link">8. Автокомплит</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_8_1" class="demo-toc-sublink">8.1. Живой поиск</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item" style="margin-top:8px; padding-top:8px; border-top:1px solid #e2e8f0;">
+							<a href="#sec_log" class="demo-toc-link" style="color:#0284c7;">Журнал событий (Log)</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+
+		<!-- Правая колонка: Основной контент (до 1200px) -->
+		<main class="demo-main">
+
+			<!-- Шапка и переключатель тем (в правой колонке) -->
+			<div class="demo-header">
+				<div class="demo-header-info">
+					<h1>
+						Seditio Core JS Showcase
+						<span class="demo-badge badge-core">sedjs API</span>
+					</h1>
+					<p>Полная интерактивная витрина компонентов ядра: формы, Drag & Drop сортировка, вкладки, модальные окна, поповеры, графики, загрузка файлов и утилиты.</p>
+				</div>
+
+				<!-- Переключатель тем оформления -->
+				<div class="theme-switch-box">
+					<span>Тема оформления:</span>
+					<button type="button" id="btn_theme_front" class="theme-btn theme-front active" onclick="setTheme('front')">Фронтенд (Синий)</button>
+					<button type="button" id="btn_theme_admin" class="theme-btn theme-admin" onclick="setTheme('admin')">Админка (Зеленый)</button>
+				</div>
+			</div>
+
+			<!-- ==========================================
+			     РАЗДЕЛ 1: ЭЛЕМЕНТЫ И ВИДЖЕТЫ ФОРМ
+			     ========================================== -->
+			<div class="section-title" id="sec_1">
+				<span>1. Элементы и виджеты форм</span>
+				<span class="demo-badge">Forms & Inputs</span>
+			</div>
+
+			<!-- 1.1 Кастомный SelectBox (SedSelect) -->
+			<div class="demo-card" id="sec_1_1">
+		<h3>1.1. Кастомный SelectBox (<code>sedjs.select</code>)</h3>
+		<p class="desc">3 варианта управления шириной (авторасчёт по содержимому, фиксированная ширина, 100% растяжение), а также группировка и Multi-Select.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Автоширина (по контенту):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="status_auto" class="sed-select" onchange="logEvent('select:status_auto', this.value)">
+								<option value="draft">Черновик записи</option>
+								<option value="published" selected>Опубликовано на сайте</option>
+								<option value="moderation">На проверке администратором</option>
+								<option value="archived">Архив</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="status" class="sed-select"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'status', $options_array, false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Фиксированная ширина (260px):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="cat_fixed" class="sed-select" style="width: 260px;" data-search="true" onchange="logEvent('select:cat_fixed', this.value)">
+								<optgroup label="Основные разделы">
+									<option value="news">Новости</option>
+									<option value="articles" selected>Статьи</option>
+								</optgroup>
+								<optgroup label="Медиа & Файлы">
+									<option value="gallery">Фотогалерея</option>
+									<option value="pfs">Файловый архив</option>
+								</optgroup>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="cat" class="sed-select" style="width: 260px;" data-search="true"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'cat', $options, false, false, '', '', '', array('style' =&gt; 'width: 260px;'))</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">100% ширина контейнера (Block):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="status_block" class="sed-select sed-select-block" onchange="logEvent('select:status_block', this.value)">
+								<option value="1">Активный статус (занимает 100% ширины родительской колонки)</option>
+								<option value="0">Отключено</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="status_block" class="sed-select sed-select-block"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'status_block', $options, false, false, '', '', 'sed-select-block')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Множественный выбор (Multi-Select):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="groups[]" class="sed-select" multiple data-search="true" data-width="340px" data-placeholder="Выберите группы..." onchange="logEvent('select:groups', Array.from(this.selectedOptions).map(o => o.value).join(', '))">
+								<option value="1">1. Администраторы</option>
+								<option value="2">2. Редакторы</option>
+								<option value="3" selected>3. Модераторы</option>
+								<option value="4" selected>4. Пользователи</option>
+								<option value="5">5. Гости</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="groups[]" class="sed-select" multiple data-search="true" data-width="340px"&gt;...&lt;/select&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.2 Переключатели Switch / Toggle -->
+	<div class="demo-card" id="sec_1_2">
+		<h3>1.2. Переключатели Switch / Toggle (<code>.sed-switch</code>)</h3>
+		<p class="desc">Плавные тоглы вместо стандартных чекбоксов.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Стандартный тогл:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch">
+								<input type="checkbox" name="allow_comments" checked onchange="logEvent('switch:comments', this.checked)">
+								<span class="sed-switch-slider"></span>
+								<span>Разрешить комментарии к странице</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch"&gt;&lt;input type="checkbox" name="allow_comments" checked&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;span&gt;Текст&lt;/span&gt;&lt;/label&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_checkbox('allow_comments', 1, 'yes') // при $cfg['yesno_type'] = 'switch'</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Компактный тогл (sm):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch sed-switch-sm">
+								<input type="checkbox" name="debug_mode" onchange="logEvent('switch:debug', this.checked)">
+								<span class="sed-switch-slider"></span>
+								<span>Включить режим отладки (Debug Mode)</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch sed-switch-sm"&gt;&lt;input type="checkbox"&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;/label&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Отключенный (Disabled):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch">
+								<input type="checkbox" name="locked_feature" disabled checked>
+								<span class="sed-switch-slider"></span>
+								<span>Системная служба ядра (недоступно для изменения)</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch"&gt;&lt;input type="checkbox" disabled checked&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;/label&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.3 Глазок пароля и кнопка быстрой очистки -->
+	<div class="demo-card" id="sec_1_3">
+		<h3>1.3. Глазок для паролей и быстрая очистка (<code>sedjs.input</code>)</h3>
+		<p class="desc">Показ/скрытие пароля по клику на иконку и кнопка мгновенного стирания текста.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Пароль (Show / Hide Password):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="password" class="sed-password" value="secret_pass_123" style="width: 260px;" placeholder="Введите пароль...">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="password" class="sed-password" value="..." style="width: 260px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('rpassword', '', 32, 64, false, 'password')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Поиск с кнопкой очистки (Clear):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-clearable" value="Поисковый запрос" style="width: 260px;" placeholder="Поиск по сайту..." oninput="logEvent('input:search', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-clearable" value="..." style="width: 260px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('sq', $sq, 32, 64, false, 'text', 'sed-clearable')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.4 Date & Time Picker -->
+	<div class="demo-card" id="sec_1_4">
+		<h3>1.4. Всплывающий Date & Time Picker (<code>sedjs.datepicker</code>)</h3>
+		<p class="desc">Календарь с локализацией месяцев/дней из <code>window.L</code>, быстрыми кнопками «Сегодня» / «Очистить» и временем.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Выбор даты (Date only):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-datepicker" value="2026-10-12" style="width: 180px;" placeholder="ГГГГ-ММ-ДД" onchange="logEvent('date:begin', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-datepicker" value="2026-10-12"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox_date($timestamp, 'short') // при $cfg['enable_sed_datepicker'] = 1</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Выбор даты и времени (Date + Time):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-datepicker" data-time="true" value="2026-10-12 14:30" style="width: 220px;" placeholder="ГГГГ-ММ-ДД ЧЧ:ММ" onchange="logEvent('date:expire', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-datepicker" data-time="true" value="2026-10-12 14:30"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox_date($timestamp, 'long') // при $cfg['enable_sed_datepicker'] = 1</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.5 Ввод тегов / Чипов -->
+	<div class="demo-card" id="sec_1_5">
+		<h3>1.5. Ввод тегов и ключевых слов (<code>sedjs.tags</code>)</h3>
+		<p class="desc">Интерактивный ввод чипов. Ввод по <kbd>Enter</kbd> или <kbd>,</kbd>, удаление по <kbd>&times;</kbd> или <kbd>Backspace</kbd>.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Ключевые слова страницы:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-tags" value="seditio, cms, javascript, widgets" placeholder="Введите тег и нажмите Enter..." onchange="logEvent('tags:keywords', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-tags" value="seditio, cms, widgets"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('page_keywords', $keywords, 40, 255, false, 'text', 'sed-tags')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.6 Сегментированный переключатель -->
+	<div class="demo-card" id="sec_1_6">
+		<h3>1.6. Сегментированный переключатель (<code>.sed-segmented</code>)</h3>
+		<p class="desc">Стильная замена нативным радиокнопкам в одну строку с анимацией активного сегмента.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Режим отображения каталога:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<div class="sed-segmented">
+								<input type="radio" name="view_mode" id="vm_grid" value="grid" checked onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_grid">Сетка</label>
+
+								<input type="radio" name="view_mode" id="vm_list" value="list" onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_list">Список</label>
+
+								<input type="radio" name="view_mode" id="vm_table" value="table" onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_table">Таблица</label>
+							</div>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-segmented"&gt;&lt;input type="radio" name="view_mode" id="vm_1" checked&gt;&lt;label for="vm_1"&gt;Сетка&lt;/label&gt;...&lt;/div&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_radiobox('view_mode', array('grid' =&gt; 'Сетка', 'list' =&gt; 'Список'), 'grid')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Формат редактора текста (sm):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<div class="sed-segmented sed-segmented-sm">
+								<input type="radio" name="editor_mode" id="ed_html" value="html" checked onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_html">HTML</label>
+
+								<input type="radio" name="editor_mode" id="ed_bbcode" value="bbcode" onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_bbcode">BBCode</label>
+
+								<input type="radio" name="editor_mode" id="ed_plain" value="plain" onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_plain">Текст</label>
+							</div>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-segmented sed-segmented-sm"&gt;...&lt;/div&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.7 Кастомный выбор файлов (SedFile) -->
+	<div class="demo-card" id="sec_1_7">
+		<h3>1.7. Кастомный выбор файлов (<code>sedjs.file</code>)</h3>
+		<p class="desc">3 варианта ширины (автоширина, фиксированная 350px, 100% растяжение), а также одиночный и множественный выбор с поддержкой Drag & Drop.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Автоширина (inline-flex):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file" data-file="true" onchange="logEvent('file:auto', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file" data-file="true"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file', false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Фиксированная ширина (350px):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file" data-file="true" style="width: 350px;" onchange="logEvent('file:fixed', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file" data-file="true" style="width: 350px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file', false, '', false, array('style' =&gt; 'width: 350px;'))</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">100% ширина контейнера (Block):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file sed-file-block" data-file="true" onchange="logEvent('file:block', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file sed-file-block" data-file="true"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file sed-file-block', false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Мультизагрузка файлов (Multiple):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file sed-file-block" data-file="true" multiple onchange="logEvent('file:multiple', this.files.length + ' файлов')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file sed-file-block" data-file="true" multiple&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile[]', 'file sed-file-block', true)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.8 Числовой счетчик (SedStepper) -->
+	<div class="demo-card" id="sec_1_8">
+		<h3>1.8. Числовой счетчик (<code>sedjs.stepper</code>)</h3>
+		<p class="desc">Интегрированные кнопки инкремента и декремента со строгим соблюдением атрибутов <code>min</code>, <code>max</code>, <code>step</code>.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Количество записей на страницу:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="number" class="sed-stepper" value="25" min="5" max="100" step="5" onchange="logEvent('stepper:count', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="number" class="sed-stepper" value="25" min="5" max="100" step="5"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('maxrows', 25, 6, 4, false, 'number', 'sed-stepper')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 2: DRAG & DROP СОРТИРОВКА
+	     ========================================== -->
+	<div class="section-title" id="sec_2">
+		<span>2. Drag & Drop сортировка списков и таблиц</span>
+		<span class="demo-badge">sedjs.sortable</span>
+	</div>
+
+	<!-- 2.1 Сортируемый список строк с ручкой -->
+	<div class="demo-card" id="sec_2_1">
+		<h3>2.1. Сортируемый список с фиксацией по оси Y (<code>sedjs.sortable</code>)</h3>
+		<p class="desc">Перетаскивайте элементы мышью за ручку <span class="drag-handle" style="display:inline;">⠿</span>. Порядок обновляется на лету с коллбэком <code>update()</code>.</p>
+
+		<ul id="sortable_single" class="sortable-list">
+			<li class="sortable-item" data-id="item-1">
+				<div><span class="drag-handle">⠿</span><strong>Пункт 1:</strong> Главная страница и баннер</div>
+				<span class="demo-badge">Порядок: 1</span>
+			</li>
+			<li class="sortable-item" data-id="item-2">
+				<div><span class="drag-handle">⠿</span><strong>Пункт 2:</strong> Каталог продукции</div>
+				<span class="demo-badge">Порядок: 2</span>
+			</li>
+			<li class="sortable-item" data-id="item-3">
+				<div><span class="drag-handle">⠿</span><strong>Пункт 3:</strong> Отзывы клиентов</div>
+				<span class="demo-badge">Порядок: 3</span>
+			</li>
+			<li class="sortable-item" data-id="item-4">
+				<div><span class="drag-handle">⠿</span><strong>Пункт 4:</strong> Контактная информация</div>
+				<span class="demo-badge">Порядок: 4</span>
+			</li>
+		</ul>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(document.querySelector('#sortable_single'), {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    handle: '.drag-handle', axis: 'y',</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    update(e, ui) { /* Сохранение нового порядка через AJAX */ }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+		</div>
+	</div>
+
+	<!-- 2.2 Связанные списки (Kanban / connectWith) -->
+	<div class="demo-card" id="sec_2_2">
+		<h3>2.2. Связанные списки (Kanban / <code>connectWith</code>)</h3>
+		<p class="desc">Перетаскивание карточек между двумя независимыми колонками.</p>
+
+		<div class="kanban-grid">
+			<div class="kanban-col">
+				<div class="kanban-col-title">
+					<span>В работе (ToDo)</span>
+					<span class="demo-badge">Колонка 1</span>
+				</div>
+				<ul id="kanban_todo" class="sortable-list kanban-sortable">
+					<li class="sortable-item" data-id="task-1">
+						<div><span class="drag-handle">⠿</span>Обновить скины сайта</div>
+					</li>
+					<li class="sortable-item" data-id="task-2">
+						<div><span class="drag-handle">⠿</span>Настроить кеширование БД</div>
+					</li>
+					<li class="sortable-item" data-id="task-3">
+						<div><span class="drag-handle">⠿</span>Проверить права доступа PFS</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="kanban-col">
+				<div class="kanban-col-title">
+					<span>Выполнено (Done)</span>
+					<span class="demo-badge" style="background:#dcfce7;color:#166534;">Колонка 2</span>
+				</div>
+				<ul id="kanban_done" class="sortable-list kanban-sortable">
+					<li class="sortable-item" data-id="task-4">
+						<div><span class="drag-handle">⠿</span>Разработка модуля SedFile</div>
+					</li>
+					<li class="sortable-item" data-id="task-5">
+						<div><span class="drag-handle">⠿</span>Доработка виджета SedSelect</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(container1, { connectWith: '.kanban-sortable', handle: '.drag-handle' });</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(container2, { connectWith: '.kanban-sortable', handle: '.drag-handle' });</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 3: СТРУКТУРНЫЕ КОМПОНЕНТЫ
+	     ========================================== -->
+	<div class="section-title" id="sec_3">
+		<span>3. Вкладки, Спойлеры и Аккордеоны</span>
+		<span class="demo-badge">Navigation & Disclosure</span>
+	</div>
+
+	<!-- 3.1 Вкладки (SedTabs) -->
+	<div class="demo-card" id="sec_3_1">
+		<h3>3.1. Интерактивные вкладки (<code>sedjs.sedtabs</code>)</h3>
+		<p class="desc">Переключение разделов контента без перезагрузки.</p>
+
+		<div class="tabs-container sedtabs">
+			<ul class="tabs-nav">
+				<li><a href="#tab_info" class="selected">Основная информация</a></li>
+				<li><a href="#tab_seo">SEO & Метатеги</a></li>
+				<li><a href="#tab_extra">Дополнительно</a></li>
+			</ul>
+			<div id="tab_info" class="tab-pane">
+				<strong>Вкладка 1:</strong> Здесь размещаются основные поля формы редактирования статьи или конфигурации.
+			</div>
+			<div id="tab_seo" class="tab-pane" style="display:none;">
+				<strong>Вкладка 2:</strong> Поля для Meta Title, Meta Description и канонических URL адресов страницы.
+			</div>
+			<div id="tab_extra" class="tab-pane" style="display:none;">
+				<strong>Вкладка 3:</strong> Настройки прав доступа групп пользователей и расширенные опции отображения.
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sedtabs"&gt;&lt;ul class="tabs"&gt;&lt;li&gt;&lt;a href="#tab1" class="selected"&gt;Таб 1&lt;/a&gt;&lt;/li&gt;...&lt;/ul&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sedtabs({ containerClass: 'sedtabs', eventType: 'click', selectedClass: 'selected' });</span></span>
+		</div>
+	</div>
+
+	<!-- 3.2 Аккордеон (SedAccordion) -->
+	<div class="demo-card" id="sec_3_2">
+		<h3>3.2. Аккордеон с авто-сворачиванием (<code>sedjs.accordion</code>)</h3>
+		<p class="desc">Секции аккордеона. При открытии новой секции предыдущая автоматически сворачивается.</p>
+
+		<div class="sedaccordion">
+			<div class="accordion-item active">
+				<div class="accordion-header">Секция 1: Настройки темы Sympfy</div>
+				<div class="accordion-content">
+					Параметры цветовой гаммы, шрифтов и ширины основного макета скина сайта.
+				</div>
+			</div>
+			<div class="accordion-item">
+				<div class="accordion-header">Секция 2: Модули ядра и безопасность</div>
+				<div class="accordion-content" style="display:none;">
+					Управление двухфакторной аутентификацией, шифрованием паролей пользователей и защитой от спама.
+				</div>
+			</div>
+			<div class="accordion-item">
+				<div class="accordion-header">Секция 3: Кэширование и производительность</div>
+				<div class="accordion-content" style="display:none;">
+					Конфигурация внутреннего кэша страниц, сжатия статических ресурсов CSS/JS и автозагрузки опций.
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sedaccordion"&gt;&lt;div class="accordion-item"&gt;&lt;div class="accordion-header"&gt;...&lt;/div&gt;...&lt;/div&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.accordion();</span></span>
+		</div>
+	</div>
+
+	<!-- 3.3 Спойлер (Spoiler) -->
+	<div class="demo-card" id="sec_3_3">
+		<h3>3.3. Спойлер (<code>sedjs.spoiler</code>)</h3>
+		<p class="desc">Раскрытие скрытого блока по клику на кнопку/заголовок.</p>
+
+		<div class="spoiler">
+			<div class="spoiler-title">
+				<span style="font-weight:600; font-size:13px; color:#334155;">Технические сведения о сервере и PHP</span>
+				<button type="button" class="btn spoiler-toggle" style="margin-left: 10px;">Показать детали</button>
+			</div>
+			<div class="spoiler-content" style="display:none; margin-top:10px;">
+				<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:4px; padding:12px; font-size:13px;">
+					<strong>PHP Version:</strong> 8.4.x | <strong>MySQL Engine:</strong> InnoDB | <strong>CMS Seditio:</strong> v186
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="spoiler"&gt;&lt;div class="spoiler-title"&gt;...&lt;/div&gt;&lt;div class="spoiler-content"&gt;...&lt;/div&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.spoiler();</span></span>
+		</div>
+	</div>
+
+	<!-- 3.4 Закрытие алертов (CloseAlert) -->
+	<div class="demo-card" id="sec_3_4">
+		<h3>3.4. Системные уведомления и алерты (<code>sedjs.closealert</code>)</h3>
+		<p class="desc">Уведомления с плавным закрытием по клику на крестик.</p>
+
+		<div class="alert alert-success">
+			<span><strong>Успех:</strong> Изменения в структуре разделов успешно сохранены в базе данных!</span>
+			<button type="button" class="close" title="Закрыть" onclick="logEvent('alert:close', 'Success alert')">&times;</button>
+		</div>
+
+		<div class="alert alert-warning">
+			<span><strong>Внимание:</strong> Рекомендуется создать резервную копию базы данных перед обновлением.</span>
+			<button type="button" class="close" title="Закрыть" onclick="logEvent('alert:close', 'Warning alert')">&times;</button>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="alert alert-success"&gt;&lt;span&gt;Текст&lt;/span&gt;&lt;button class="close"&gt;&amp;times;&lt;/button&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.closealert();</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 4: ОКНА И ПАНОРАМЫ
+	     ========================================== -->
+	<div class="section-title" id="sec_4">
+		<span>4. Модальные окна и всплывающие панели</span>
+		<span class="demo-badge">Modal & Popover</span>
+	</div>
+
+	<!-- 4.1 Плавающее окно (SedModal) -->
+	<div class="demo-card" id="sec_4_1">
+		<h3>4.1. Плавающее окно Seditio (<code>sedjs.modal.open</code>)</h3>
+		<p class="desc">Полнофункциональное окно с перетаскиванием за шапку, ресайзом, сворачиванием в нижний трей и разворачиванием на весь экран.</p>
+
+		<button type="button" class="btn btn-primary" onclick="openDemoModal()">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+			Открыть плавающее окно SedModal
+		</button>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.modal.open('my_win', 'inline', '&lt;div&gt;Контент...&lt;/div&gt;', 'Заголовок', 'width=560px,height=340px,resize=1,center=1');</span></span>
+		</div>
+	</div>
+
+	<!-- 4.2 Поповер (SedPopover) -->
+	<div class="demo-card" id="sec_4_2">
+		<h3>4.2. Всплывающий поповер (<code>sedjs.popover</code>)</h3>
+		<p class="desc">Информационная панель по клику на триггер с авто-закрытием при клике вне панели.</p>
+
+		<div style="position:relative; display:inline-block;">
+			<button type="button" class="btn" data-sed-popover-trigger data-sed-popover-target="demo_popover_box">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+				Показать всплывающий поповер
+			</button>
+
+			<div id="demo_popover_box" style="display:none;">
+				<h4 style="margin:0 0 6px 0; font-size:14px; font-weight:700;">Справка по тегам XTemplate SE</h4>
+				<p style="margin:0; font-size:12px; color:#475569;">
+					Шаблонизатор Seditio поддерживает директивы <code>&lt;!-- BEGIN: BLOCK --&gt;</code>, циклы, фильтры и условные операторы <code>IF / ELSE</code>.
+				</p>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;button data-sed-popover-trigger data-sed-popover-target="my_pop"&gt;Открыть&lt;/button&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.popover.init(document);</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 5: УТИЛИТЫ ДЛЯ КОНТЕНТА И SEO
+	     ========================================== -->
+	<div class="section-title" id="sec_5">
+		<span>5. Утилиты для контента и SEO</span>
+		<span class="demo-badge">Content Utilities</span>
+	</div>
+
+	<!-- 5.1 Генерация ЧПУ на лету (genSEF) -->
+	<div class="demo-card" id="sec_5_1">
+		<h3>5.1. Живая генерация ЧПУ / Алиаса страницы (<code>sedjs.genSEF</code>)</h3>
+		<p class="desc">Вводите русский заголовок — поле алиаса ЧПУ заполняется транслитерацией в реальном времени.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Заголовок статьи (RU):</td>
+				<td>
+					<input type="text" id="sef_from" class="text" style="width: 100%; max-width: 460px;" value="Новые возможности ядра Seditio CMS 186" placeholder="Введите заголовок...">
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Алиас страницы (ЧПУ):</td>
+				<td>
+					<input type="text" id="sef_to" class="text" style="width: 100%; max-width: 460px;" readonly style="background:#f8fafc;" placeholder="Транслитерированный алиас...">
+				</td>
+			</tr>
+		</table>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.genSEF(document.querySelector('#sef_from'), document.querySelector('#sef_to'), false);</span></span>
+		</div>
+	</div>
+
+	<!-- 5.2 Копирование ссылки (copyurl) -->
+	<div class="demo-card" id="sec_5_2">
+		<h3>5.2. Копирование URL в буфер обмена (<code>sedjs.copyurl</code>)</h3>
+		<p class="desc">Копирует ссылку из атрибута <code>href</code> в буфер обмена операционной системы.</p>
+
+		<a href="https://seditio.org/demo/page?id=186" class="btn" onclick="sedjs.copyurl(this); logEvent('copyurl', this.href); alert('Ссылка скопирована в буфер: ' + this.href);">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+			Скопировать постоянную ссылку (URL)
+		</a>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;a href="https://seditio.org/..." onclick="sedjs.copyurl(this)"&gt;Копировать&lt;/a&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.copyurl(element);</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 6: ИНТЕРАКТИВНЫЕ ГРАФИКИ (SEDCHART)
+	     ========================================== -->
+	<div class="section-title" id="sec_6">
+		<span>6. Интерактивные графики и статистика</span>
+		<span class="demo-badge">SedChart.js</span>
+	</div>
+
+	<!-- 6.1 График динамики -->
+	<div class="demo-card" id="sec_6_1">
+		<h3>6.1. Линейный Canvas-график динамики (<code>SedChart</code>)</h3>
+		<p class="desc">Легковесный (~2.5 KB) графический компонент на HTML5 Canvas без сторонних зависимостей. Поддерживает динамическое изменение масштаба, hover-тултипы и авто-ресайз.</p>
+
+		<div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+			<button type="button" class="btn" id="btn_chart_week">За неделю</button>
+			<button type="button" class="btn" id="btn_chart_month">За месяц</button>
+			<button type="button" class="btn btn-primary" id="btn_chart_random">Случайные данные</button>
+		</div>
+
+		<div id="chart_demo_wrapper" class="chart-container">
+			<div id="chart_demo_canvas_container" style="width:100%; height:100%;"></div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div id="my_chart" class="chart-container"&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">const chart = new SedChart('my_chart', {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    values: [1250, 1890, 2430, 2120, 2800, 3450, 4100]</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">chart.setData(newLabels, newValues); // Динамическое обновление данных</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 7: ЗАГРУЗКА ИЗОБРАЖЕНИЙ (IMAGEUPLOAD)
+	     ========================================== -->
+	<div class="section-title" id="sec_7">
+		<span>7. Загрузчик и менеджер изображений</span>
+		<span class="demo-badge">sedjs.imageUpload</span>
+	</div>
+
+	<!-- 7.1 Виджет загрузки с плитками и сортировкой -->
+	<div class="demo-card" id="sec_7_1">
+		<h3>7.1. Плиточный загрузчик с Dropzone и Drag & Drop сортировкой (<code>sedjs.imageUpload</code>)</h3>
+		<p class="desc">Компонент для отложенной загрузки картинок (PFS, галереи, витрины). Поддерживает Drag & Drop файлов с рабочего стола, генерацию локальных превью, сортировку миниатюр перетаскиванием (интегрирован с <code>sedjs.sortable</code>) и добавление по ссылке.</p>
+
+		<div class="sed-image-upload sed-image-upload-mode-dropzone" id="demo_image_uploader" data-sed-image-upload='{"prefix":"gallery","maxFiles":8,"sortable":true,"dropzone":true,"urlUpload":true,"labels":{"drop":"Перетащите изображения сюда","or":"или","select":"Выберите файлы","url":"Добавить по ссылке (URL)","delete":"Удалить"}}'>
+			<p class="sed-image-upload-sort-hint">Перетаскивайте миниатюры мышью для изменения порядка следования</p>
+			<ul class="sed-image-upload-list">
+				<li>
+					<a href="#" class="delete" title="Удалить"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%230284c7'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Фото 1</text></svg>" alt="Фото 1">
+					<input type="hidden" name="gallery[]" value="1">
+				</li>
+				<li>
+					<a href="#" class="delete" title="Удалить"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%2310b981'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Фото 2</text></svg>" alt="Фото 2">
+					<input type="hidden" name="gallery[]" value="2">
+				</li>
+				<li>
+					<a href="#" class="delete" title="Удалить"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%23f59e0b'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Фото 3</text></svg>" alt="Фото 3">
+					<input type="hidden" name="gallery[]" value="3">
+				</li>
+			</ul>
+			<div class="sed-image-upload-dropzone">
+				<div class="sed-image-upload-dropicon"></div>
+				<div class="sed-image-upload-dropmessage">Перетащите изображения сюда</div>
+				<div class="sed-image-upload-dropor">или</div>
+				<button type="button" class="sed-image-upload-select-btn">Выберите файлы</button>
+				<input type="file" name="gallery_drop[]" multiple="multiple" class="sed-image-upload-dropinput" accept="image/*">
+			</div>
+			<div class="sed-image-upload-add-box"></div>
+			<div class="sed-image-upload-url-link"><i class="dash_link">Добавить по ссылке (URL)</i></div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-image-upload" data-sed-image-upload='{"prefix":"gallery","sortable":true}'&gt;...&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.imageUpload.init(document.querySelector('.sed-image-upload'));</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     РАЗДЕЛ 8: АВТОКОМПЛИТ И ПОИСК (AUTOCOMPLETE)
+	     ========================================== -->
+	<div class="section-title" id="sec_8">
+		<span>8. Умный автокомплит и живой поиск</span>
+		<span class="demo-badge">Autocomplete.js</span>
+	</div>
+
+	<!-- 8.1 Живой поиск с автодополнением -->
+	<div class="demo-card" id="sec_8_1">
+		<h3>8.1. Живой поиск с подсветкой результатов (<code>Autocomplete</code>)</h3>
+		<p class="desc">Vanilla JS автодополнение для полей ввода (теги, авторы, разделы, страны). Поддерживает локальный массив значений или AJAX, навигацию стрелками клавиатуры и подсветку найденных букв.</p>
+
+		<div style="max-width: 420px; position: relative;">
+			<label style="display:block; font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Начните вводить раздел Seditio (например, «Нов», «Стр», «Фор», «Галерея»):</label>
+			<input type="text" id="demo_autocomplete_input" class="sed-select" style="width:100%; box-sizing:border-box;" placeholder="Поиск по разделам сайта..." autocomplete="off">
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" id="site_search" placeholder="Поиск..."&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">new Autocomplete(document.getElementById('site_search'), {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    lookup: [</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Новости (News)', data: 'news' },</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Страницы и статьи (Pages)', data: 'pages' },</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Форум (Forums)', data: 'forums' }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    ],</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    minChars: 1,</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    onSelect(suggestion) { logEvent('autocomplete:select', suggestion.value); }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+		</div>
+	</div>
+
+	<!-- Журнал событий -->
+	<div class="demo-card" id="sec_log">
+		<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+			<h3 style="margin:0;">Журнал событий ядра (Event Log)</h3>
+			<button type="button" class="btn" style="padding:3px 8px; font-size:11px;" onclick="document.getElementById('event_log').innerHTML = '';">Очистить лог</button>
+		</div>
+		<div id="event_log" class="demo-log-box">
+			<div class="log-item"><span class="log-time">[готов]</span> Библиотека sedjs полностью инициализирована. Взаимодействуйте с любым компонентом выше...</div>
+		</div>
+	</div>
+
+		</main>
+	</div>
+</div>
+
+<!-- Системный JavaScript ядра Seditio -->
+<script src="../system/assets/js/core.js"></script>
+<script src="../system/assets/js/sedchart.js"></script>
+<script src="../system/assets/js/imageupload.js"></script>
+<script src="../system/assets/js/autocomplete.js"></script>
+
+<!-- Логика демонстрационной страницы -->
+<script>
+function logEvent(name, val) {
+	const log = document.getElementById('event_log');
+	if (!log) return;
+	const time = new Date().toLocaleTimeString();
+	const item = document.createElement('div');
+	item.className = 'log-item';
+	item.innerHTML = `<span class="log-time">[${time}]</span> <strong>${name}</strong>: <span class="log-val">${val}</span>`;
+	log.appendChild(item);
+	log.scrollTop = log.scrollHeight;
+}
+
+function setTheme(theme) {
+	const adminCss = document.getElementById('admin_theme_css');
+	const btnFront = document.getElementById('btn_theme_front');
+	const btnAdmin = document.getElementById('btn_theme_admin');
+
+	if (theme === 'admin') {
+		adminCss.disabled = false;
+		document.body.classList.add('admin-mode');
+		btnAdmin.classList.add('active');
+		btnFront.classList.remove('active');
+	} else {
+		adminCss.disabled = true;
+		document.body.classList.remove('admin-mode');
+		btnFront.classList.add('active');
+		btnAdmin.classList.remove('active');
+	}
+}
+
+// Открытие демонстрационного модального окна SedModal
+function openDemoModal() {
+	const content = '<div style="padding:22px; font-size:13px; line-height:1.6; color:#334155;">' +
+		'<h3 style="margin-top:0; color:#0f172a;">Плавающее окно Seditio Core</h3>' +
+		'<p>Это полноценное модальное окно ядра. Попробуйте:</p>' +
+		'<ul>' +
+		'<li><strong>Перетащить окно:</strong> зажмите шапку окна левой кнопкой мыши.</li>' +
+		'<li><strong>Изменить размер:</strong> потяните за правый нижний угол.</li>' +
+		'<li><strong>Свернуть окно:</strong> нажмите кнопку «−» в правом верхнем углу (окно свернется в нижний левый угол экрана).</li>' +
+		'<li><strong>Развернуть на весь экран:</strong> нажмите кнопку «▢».</li>' +
+		'</ul>' +
+		'<div style="margin-top:16px;"><button type="button" class="btn btn-primary" onclick="window.demoModal.close();">Закрыть окно</button></div>' +
+		'</div>';
+
+	window.demoModal = sedjs.modal.open(
+		'demo_floating_window',
+		'inline',
+		content,
+		'Плавающее окно SedModal',
+		'width=540px,height=340px,resize=1,scrolling=1,center=1',
+		'load'
+	);
+	logEvent('modal:open', 'demo_floating_window');
+}
+
+// Инициализация дополнительных модулей после готовности DOM
+sedjs.ready(() => {
+	// 1. Инициализация одиночного сортируемого списка (sedjs.sortable)
+	const singleSortableEl = document.querySelector('#sortable_single');
+	if (singleSortableEl && typeof sedjs.sortable === 'function') {
+		sedjs.sortable(singleSortableEl, {
+			handle: '.drag-handle',
+			axis: 'y',
+			update(e, ui) {
+				const items = Array.from(singleSortableEl.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder'));
+				items.forEach((li, idx) => {
+					const badge = li.querySelector('.demo-badge');
+					if (badge) badge.textContent = 'Порядок: ' + (idx + 1);
+				});
+				const order = items.map(li => li.dataset.id);
+				logEvent('sortable:single:update', order.join(' → '));
+			}
+		});
+	}
+
+	// 2. Инициализация связанных списков (Kanban connectWith)
+	const kanbanTodo = document.querySelector('#kanban_todo');
+	const kanbanDone = document.querySelector('#kanban_done');
+	if (kanbanTodo && kanbanDone && typeof sedjs.sortable === 'function') {
+		sedjs.sortable(kanbanTodo, {
+			connectWith: '.kanban-sortable',
+			handle: '.drag-handle',
+			update(e, ui) {
+				const items = Array.from(kanbanTodo.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder')).map(li => li.dataset.id);
+				logEvent('kanban:todo:update', items.join(', ') || '(пусто)');
+			}
+		});
+
+		sedjs.sortable(kanbanDone, {
+			connectWith: '.kanban-sortable',
+			handle: '.drag-handle',
+			update(e, ui) {
+				const items = Array.from(kanbanDone.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder')).map(li => li.dataset.id);
+				logEvent('kanban:done:update', items.join(', ') || '(пусто)');
+			}
+		});
+	}
+
+	// 3. Инициализация живой генерации ЧПУ (sedjs.genSEF)
+	const sefFrom = document.getElementById('sef_from');
+	const sefTo = document.getElementById('sef_to');
+	if (sefFrom && sefTo && typeof sedjs.genSEF === 'function') {
+		const updateSEF = () => {
+			sedjs.genSEF(sefFrom, sefTo, false);
+		};
+		sefFrom.addEventListener('input', updateSEF);
+		updateSEF(); // Начальная транслитерация
+	}
+
+	// 4. Инициализация графика (SedChart)
+	const chartContainer = document.getElementById('chart_demo_canvas_container');
+	if (chartContainer && typeof SedChart === 'function') {
+		const weekLabels = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+		const weekValues = [1250, 1890, 2430, 2120, 2800, 3450, 4100];
+		const demoChart = new SedChart(chartContainer, {
+			labels: weekLabels,
+			values: weekValues
+		});
+
+		const btnWeek = document.getElementById('btn_chart_week');
+		const btnMonth = document.getElementById('btn_chart_month');
+		const btnRandom = document.getElementById('btn_chart_random');
+
+		if (btnWeek) {
+			btnWeek.addEventListener('click', () => {
+				demoChart.setData(weekLabels, [1250, 1890, 2430, 2120, 2800, 3450, 4100]);
+				logEvent('sedchart', 'Загружены данные за неделю');
+			});
+		}
+
+		if (btnMonth) {
+			btnMonth.addEventListener('click', () => {
+				const monthLabels = ['1', '5', '10', '15', '20', '25', '30'];
+				const monthValues = [450, 920, 1340, 2100, 1950, 3100, 4800];
+				demoChart.setData(monthLabels, monthValues);
+				logEvent('sedchart', 'Загружены данные за месяц');
+			});
+		}
+
+		if (btnRandom) {
+			btnRandom.addEventListener('click', () => {
+				const randVals = weekLabels.map(() => Math.floor(Math.random() * 4000) + 500);
+				demoChart.setData(weekLabels, randVals);
+				logEvent('sedchart', 'Случайные значения: ' + randVals.join(', '));
+			});
+		}
+	}
+
+	// 5. Инициализация автокомплита (Autocomplete)
+	const acInput = document.getElementById('demo_autocomplete_input');
+	if (acInput && typeof Autocomplete === 'function') {
+		new Autocomplete(acInput, {
+			lookup: [
+				{ value: 'Новости (News)', data: 'news' },
+				{ value: 'Страницы и статьи (Pages)', data: 'pages' },
+				{ value: 'Форум (Forums)', data: 'forums' },
+				{ value: 'Галерея и медиа (Gallery)', data: 'gallery' },
+				{ value: 'Персональные файлы (PFS)', data: 'pfs' },
+				{ value: 'Пользователи (Users)', data: 'users' },
+				{ value: 'Плагины (Plugins)', data: 'plugins' },
+				{ value: 'Конфигурация ядра (Config)', data: 'config' }
+			],
+			minChars: 1,
+			onSelect(suggestion) {
+				logEvent('autocomplete:select', suggestion.value + ' [data=' + suggestion.data + ']');
+			}
+		});
+	}
+});
+</script>
+
+</body>
+</html>

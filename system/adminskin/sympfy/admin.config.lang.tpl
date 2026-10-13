@@ -37,10 +37,18 @@
 						{LANG_LIST_DIRECTION}
 					</div>
 					<div class="table-td text-center resp-table-td" data-label="{PHP.L.Active}">
-						{LANG_LIST_ACTIVE}
+						<!-- IF {LANG_LIST_ACTIVE} -->
+						<span class="badge badge-success">{PHP.L.Yes}</span>
+						<!-- ELSE -->
+						<span class="badge badge-secondary">{PHP.L.No}</span>
+						<!-- ENDIF -->
 					</div>
 					<div class="table-td text-center resp-table-td" data-label="{PHP.L.Default}">
-						{LANG_LIST_DEFAULT}
+						<!-- IF {LANG_LIST_IS_DEFAULT} -->
+						<i class="ic-check"></i>
+						<!-- ELSE -->
+						<a href="{LANG_LIST_SET_DEFAULT_URL}" class="lang-set-default" title="{PHP.L.Default}"><i class="ic-wand"></i></a>
+						<!-- ENDIF -->
 					</div>
 				</div>
 

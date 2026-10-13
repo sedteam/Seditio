@@ -12,12 +12,24 @@ Localization done by : Antar, Antony, Amro
 [BEGIN_SED]
 File=system/lang/ru/admin.lang.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-09
 Type=Lang
 Author=Seditio Team
 Description=Admin Russian language file
 [END_SED]
 ==================== */
+
+/* ====== Form Elements Styling ====== */
+
+$L['cfg_yesno_type'] = array("Тип элементов «Да / Нет» по умолчанию", "Формат отображения бинарных переключателей на сайте и в админке");
+$L['cfg_yesno_type_switch'] = "Переключатель (Switch)";
+$L['cfg_yesno_type_radio'] = "Радиокнопки (Да / Нет)";
+$L['cfg_yesno_type_checkbox'] = "Стандартный чекбокс";
+$L['cfg_enable_sed_switch'] = array("Стилизация переключателей (SedSwitch)", "Включить анимированные переключатели On/Off вместо обычных чекбоксов");
+$L['cfg_enable_sed_select'] = array("Стилизация выпадающих списков (SedSelect)", "Включить кастомные выпадающие списки с поиском и мультиселектом");
+$L['cfg_enable_sed_input'] = array("Стилизация текстовых полей (SedInput)", "Включить кнопку быстрой очистки и показ пароля («глазик»)");
+$L['cfg_enable_sed_datepicker'] = array("Календарь выбора даты (SedDatepicker)", "Включить кастомный календарь выбора даты и времени");
+$L['cfg_enable_sed_file'] = array("Стилизация выбора файла (SedFile)", "Включить кастомное поле выбора файла с Drag & Drop и превью имени");
 
 /* ====== Dashboard & Admin Home ====== */
 

@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Seditio CMS — sedjs ve core.css Yetenekleri Tam Vitrini</title>
+	
+	<!-- Seditio Çekirdek Sistem Stilleri -->
+	<link rel="stylesheet" href="../system/assets/css/core.css">
+	<link rel="stylesheet" href="../system/assets/css/imageupload.css">
+
+	<!-- Sympfy Ön Yüz Tema Stilleri -->
+	<link rel="stylesheet" href="../skins/sympfy/css/framework.css">
+
+	<!-- Yönetim Teması Stilleri (Dinamik olarak bağlanır) -->
+	<link id="admin_theme_css" rel="stylesheet" href="../system/adminskin/sympfy/css/sympfy.css" disabled>
+
+	<style>
+		body {
+			background: #f1f5f9;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			padding: 20px 24px 80px 24px;
+			color: #1e293b;
+			margin: 0;
+			line-height: 1.5;
+			transition: background 0.2s ease;
+		}
+
+		body.admin-mode {
+			background: #ecedf0;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		.demo-wrapper {
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.demo-layout {
+			display: flex;
+			gap: 24px;
+			align-items: flex-start;
+		}
+
+		/* Sol sütun: gezinme ve içindekiler */
+		.demo-sidebar {
+			flex: 0 0 280px;
+			width: 280px;
+			position: sticky;
+			top: 20px;
+			max-height: calc(100vh - 40px);
+			overflow-y: auto;
+		}
+
+		.demo-toc {
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 8px;
+			padding: 16px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+		}
+
+		body.admin-mode .demo-toc {
+			background: #ffffff;
+			border-color: #cbd5e1;
+		}
+
+		.demo-toc-title {
+			font-size: 13px;
+			font-weight: 700;
+			color: #0f172a;
+			margin-bottom: 12px;
+			padding-bottom: 8px;
+			border-bottom: 1px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.demo-toc-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.demo-toc-item {
+			margin-bottom: 4px;
+		}
+
+		.demo-toc-link {
+			display: block;
+			padding: 6px 8px;
+			font-size: 13px;
+			color: #1e293b;
+			text-decoration: none;
+			border-radius: 4px;
+			transition: all 0.15s ease;
+			font-weight: 600;
+		}
+
+		.demo-toc-link:hover {
+			background: #f1f5f9;
+			color: #0284c7;
+		}
+
+		body.admin-mode .demo-toc-link:hover {
+			color: #57a000;
+		}
+
+		.demo-toc-sublist {
+			list-style: none;
+			padding: 2px 0 6px 10px;
+			margin: 0;
+		}
+
+		.demo-toc-sublink {
+			display: block;
+			padding: 4px 6px;
+			font-size: 12px;
+			color: #64748b;
+			text-decoration: none;
+			border-radius: 4px;
+			transition: all 0.15s ease;
+		}
+
+		.demo-toc-sublink:hover {
+			background: #f8fafc;
+			color: #0f172a;
+		}
+
+		/* Sağ sütun: ana içerik */
+		.demo-main {
+			flex: 1;
+			min-width: 0;
+			max-width: 1200px;
+		}
+
+		.section-title, .demo-card {
+			scroll-margin-top: 24px;
+		}
+
+		@media (max-width: 960px) {
+			.demo-layout {
+				flex-direction: column;
+			}
+			.demo-sidebar {
+				flex: 1 1 100%;
+				width: 100%;
+				position: static;
+				max-height: none;
+			}
+			.demo-main {
+				max-width: 100%;
+				width: 100%;
+			}
+		}
+
+		.demo-header {
+			margin-bottom: 25px;
+			padding-bottom: 18px;
+			border-bottom: 2px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 15px;
+		}
+
+		.demo-header-info h1 {
+			font-size: 24px;
+			font-weight: 700;
+			margin: 0 0 6px 0;
+			color: #0f172a;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.demo-header-info p {
+			font-size: 14px;
+			color: #64748b;
+			margin: 0;
+		}
+
+		.theme-switch-box {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			background: #ffffff;
+			padding: 6px 14px;
+			border: 1px solid #cbd5e1;
+			border-radius: 30px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		.theme-btn {
+			padding: 5px 12px;
+			border-radius: 20px;
+			border: 1px solid transparent;
+			background: #f1f5f9;
+			color: #475569;
+			cursor: pointer;
+			font-size: 12px;
+			font-weight: 600;
+			transition: all 0.15s ease;
+		}
+
+		.theme-btn.active.theme-front {
+			background: #0284c7;
+			color: #ffffff;
+			border-color: #0284c7;
+		}
+
+		.theme-btn.active.theme-admin {
+			background: #57a000;
+			color: #ffffff;
+			border-color: #57a000;
+		}
+
+		.demo-badge {
+			display: inline-block;
+			font-size: 11px;
+			font-weight: 600;
+			padding: 2px 8px;
+			border-radius: 12px;
+			background: #e2e8f0;
+			color: #475569;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+		.demo-badge.badge-core { background: #dbeafe; color: #1e40af; }
+		.demo-badge.badge-admin { background: #dcfce7; color: #166534; }
+
+		.section-title {
+			font-size: 18px;
+			font-weight: 700;
+			margin: 30px 0 14px 0;
+			color: #0f172a;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			border-bottom: 2px solid #cbd5e1;
+			padding-bottom: 8px;
+		}
+
+		.demo-card {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 6px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+			padding: 22px;
+			margin-bottom: 22px;
+			overflow: visible !important;
+		}
+
+		.demo-card h3 {
+			font-size: 16px;
+			font-weight: 600;
+			margin: 0 0 8px 0;
+			color: #0f172a;
+			display: block;
+		}
+
+		.demo-card h3 code {
+			font-size: 13px;
+			background: #f1f5f9;
+			padding: 2px 6px;
+			border-radius: 4px;
+			color: #0369a1;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-weight: 600;
+		}
+
+		body.admin-mode .demo-card h3 code {
+			background: #f0fdf4;
+			color: #15803d;
+		}
+
+		.demo-card p.desc {
+			font-size: 13px;
+			color: #64748b;
+			margin: 0 0 16px 0;
+		}
+
+		.demo-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.demo-table td {
+			padding: 14px 10px;
+			border-bottom: 1px solid #f1f5f9;
+			vertical-align: top;
+		}
+
+		.demo-table tr:last-child td {
+			border-bottom: none;
+		}
+
+		.demo-table td.td-label {
+			width: 260px;
+			font-weight: 600;
+			font-size: 13px;
+			color: #334155;
+			padding-top: 18px;
+		}
+
+		.demo-field-wrap {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		/* Açık renkli kod bloğu */
+		.demo-code-box {
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-left: 3px solid #0284c7;
+			border-radius: 4px;
+			padding: 8px 12px;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-size: 12px;
+			line-height: 1.5;
+			color: #334155;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+			overflow-x: auto;
+			transition: border-left-color 0.2s ease;
+		}
+
+		body.admin-mode .demo-code-box {
+			border-left-color: #57a000;
+		}
+
+		.demo-code-box .code-line {
+			display: block;
+			white-space: pre;
+		}
+
+		.demo-code-box .code-lbl {
+			color: #64748b;
+			font-weight: 700;
+			display: inline-block;
+			min-width: 48px;
+			user-select: none;
+		}
+
+		.demo-code-box .code-html {
+			color: #0369a1;
+			font-weight: 500;
+		}
+
+		body.admin-mode .demo-code-box .code-html {
+			color: #15803d;
+		}
+
+		.demo-code-box .code-php {
+			color: #7c3aed;
+			font-weight: 500;
+		}
+
+		.demo-code-box .code-js {
+			color: #d97706;
+			font-weight: 500;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 6px 14px;
+			font-size: 13px;
+			font-weight: 500;
+			border: 1px solid #cbd5e1;
+			border-radius: 3px;
+			background: #ffffff;
+			color: #334155;
+			cursor: pointer;
+			transition: all 0.15s ease;
+		}
+		.btn:hover { background: #f8fafc; border-color: #94a3b8; }
+		.btn-primary { background: #0284c7; border-color: #0284c7; color: #fff; }
+		.btn-primary:hover { background: #0369a1; border-color: #0369a1; color: #fff; }
+		body.admin-mode .btn-primary { background: #57a000; border-color: #57a000; }
+		body.admin-mode .btn-primary:hover { background: #4d8f00; border-color: #4d8f00; }
+
+		/* Sıralanabilir (Sortable) stilleri */
+		.sortable-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			min-height: 48px;
+		}
+
+		.kanban-sortable {
+			min-height: 100px;
+		}
+
+		.kanban-sortable:empty::after {
+			content: 'Kartı buraya sürükleyin';
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 60px;
+			border: 2px dashed #cbd5e1;
+			border-radius: 4px;
+			color: #94a3b8;
+			font-size: 12px;
+		}
+
+		.sortable-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+			padding: 8px 12px;
+			font-size: 13px;
+			color: #1e293b;
+			user-select: none;
+			box-sizing: border-box;
+		}
+
+		.drag-handle {
+			cursor: grab;
+			color: #94a3b8;
+			margin-right: 10px;
+			font-size: 16px;
+			line-height: 1;
+		}
+		.drag-handle:active { cursor: grabbing; }
+
+		.sortable-placeholder {
+			border: 2px dashed #94a3b8 !important;
+			background: #f1f5f9 !important;
+			border-radius: 4px;
+			min-height: 38px;
+			box-sizing: border-box;
+		}
+
+		.sortable-helper {
+			background: #ffffff !important;
+			border: 1px solid #0284c7 !important;
+			box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+			border-radius: 4px;
+		}
+		body.admin-mode .sortable-helper {
+			border-color: #57a000 !important;
+		}
+
+		.kanban-grid {
+			display: flex;
+			gap: 16px;
+			flex-wrap: wrap;
+		}
+
+		.kanban-col {
+			flex: 1;
+			min-width: 280px;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 6px;
+			padding: 12px;
+		}
+
+		.kanban-col-title {
+			font-size: 13px;
+			font-weight: 700;
+			color: #475569;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		/* Uyarılar */
+		.alert {
+			padding: 12px 16px;
+			border-radius: 4px;
+			font-size: 13px;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border: 1px solid transparent;
+		}
+		.alert .close {
+			background: transparent;
+			border: none;
+			font-size: 18px;
+			line-height: 1;
+			color: inherit;
+			cursor: pointer;
+			opacity: 0.6;
+		}
+		.alert .close:hover { opacity: 1; }
+		.alert-success { background: #dcfce7; border-color: #86efac; color: #166534; }
+		.alert-warning { background: #fef9c3; border-color: #fde047; color: #854d0e; }
+		.alert-danger { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+
+		/* Sekmeler */
+		.tabs-container {
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+			background: #ffffff;
+			overflow: hidden;
+		}
+		.tabs-nav {
+			display: flex;
+			background: #f8fafc;
+			border-bottom: 1px solid #cbd5e1;
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		.tabs-nav li a {
+			display: block;
+			padding: 10px 18px;
+			font-size: 13px;
+			font-weight: 600;
+			color: #64748b;
+			text-decoration: none;
+			border-right: 1px solid #e2e8f0;
+			transition: all 0.15s ease;
+		}
+		.tabs-nav li a:hover {
+			color: #0f172a;
+			background: #f1f5f9;
+		}
+		.tabs-nav li a.selected {
+			color: #0284c7;
+			background: #ffffff;
+			border-bottom: 2px solid #0284c7;
+			margin-bottom: -1px;
+		}
+		body.admin-mode .tabs-nav li a.selected {
+			color: #57a000;
+			border-bottom-color: #57a000;
+		}
+		.tab-pane {
+			padding: 16px;
+			font-size: 13px;
+			color: #334155;
+		}
+
+		/* Grafikler (SedChart) */
+		.chart-container {
+			background: #ffffff;
+			border: 1px solid #cbd5e1;
+			border-radius: 6px;
+			padding: 16px;
+			position: relative;
+			height: 320px;
+			margin-top: 10px;
+		}
+
+		/* Otomatik Tamamlama (Autocomplete) */
+		.autocomplete-suggestions {
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			cursor: default;
+			overflow: auto;
+			box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+			border-radius: 6px;
+			z-index: 9999;
+			max-height: 240px;
+			box-sizing: border-box;
+		}
+		.autocomplete-suggestion {
+			padding: 8px 12px;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: 13px;
+			color: #1e293b;
+			cursor: pointer;
+			transition: background 0.1s ease;
+		}
+		.autocomplete-selected {
+			background: #f1f5f9;
+			color: #0284c7;
+		}
+		body.admin-mode .autocomplete-selected {
+			color: #57a000;
+		}
+		.autocomplete-suggestions strong {
+			font-weight: 700;
+			color: #0284c7;
+		}
+		body.admin-mode .autocomplete-suggestions strong {
+			color: #57a000;
+		}
+
+		/* Olay Günlüğü */
+		.demo-log-box {
+			background: #0f172a;
+			color: #f8fafc;
+			font-family: Consolas, Monaco, "Courier New", monospace;
+			font-size: 12px;
+			padding: 14px;
+			border-radius: 6px;
+			max-height: 180px;
+			overflow-y: auto;
+			margin-top: 10px;
+		}
+		.demo-log-box .log-item { margin-bottom: 4px; line-height: 1.4; }
+		.demo-log-box .log-time { color: #64748b; margin-right: 6px; }
+		.demo-log-box .log-val { color: #38bdf8; font-weight: 600; }
+		body.admin-mode .demo-log-box .log-val { color: #86efac; }
+	</style>
+</head>
+<body>
+
+<div class="demo-wrapper">
+
+	<!-- İki Sütunlu Düzen (Flexbox) -->
+	<div class="demo-layout">
+
+		<!-- Sol Sütun: İçindekiler / Gezinme -->
+		<aside class="demo-sidebar">
+			<div class="demo-toc">
+				<div class="demo-toc-title">
+					<span>İçindekiler</span>
+					<span class="demo-badge" style="font-size:10px;">8 bölüm</span>
+				</div>
+				<nav>
+					<ul class="demo-toc-list">
+						<li class="demo-toc-item">
+							<a href="#sec_1" class="demo-toc-link">1. Form Öğeleri</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_1_1" class="demo-toc-sublink">1.1. SedSelect</a></li>
+								<li><a href="#sec_1_2" class="demo-toc-sublink">1.2. Anahtarlar (Switch)</a></li>
+								<li><a href="#sec_1_3" class="demo-toc-sublink">1.3. Parola ve Arama</a></li>
+								<li><a href="#sec_1_4" class="demo-toc-sublink">1.4. Tarih Seçici (DatePicker)</a></li>
+								<li><a href="#sec_1_5" class="demo-toc-sublink">1.5. Etiket Girişi (Tags)</a></li>
+								<li><a href="#sec_1_6" class="demo-toc-sublink">1.6. Bölümlenmiş Denetim</a></li>
+								<li><a href="#sec_1_7" class="demo-toc-sublink">1.7. Dosya Seçimi (SedFile)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_2" class="demo-toc-link">2. Sürükle-Bırak Sıralama</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_2_1" class="demo-toc-sublink">2.1. Tekli Liste</a></li>
+								<li><a href="#sec_2_2" class="demo-toc-sublink">2.2. Kanban (connectWith)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_3" class="demo-toc-link">3. Sekmeler ve Spoylerler</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_3_1" class="demo-toc-sublink">3.1. Sekmeler (SedTabs)</a></li>
+								<li><a href="#sec_3_2" class="demo-toc-sublink">3.2. Akordeon</a></li>
+								<li><a href="#sec_3_3" class="demo-toc-sublink">3.3. Spoyler</a></li>
+								<li><a href="#sec_3_4" class="demo-toc-sublink">3.4. Uyarılar (CloseAlert)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_4" class="demo-toc-link">4. Modal Pencereler</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_4_1" class="demo-toc-sublink">4.1. SedModal</a></li>
+								<li><a href="#sec_4_2" class="demo-toc-sublink">4.2. Açılır Bilgi (Popover)</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_5" class="demo-toc-link">5. Çekirdek Araçları</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_5_1" class="demo-toc-sublink">5.1. SEF URL Oluşturucu</a></li>
+								<li><a href="#sec_5_2" class="demo-toc-sublink">5.2. Bağlantıyı Kopyala</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_6" class="demo-toc-link">6. Grafikler (SedChart)</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_6_1" class="demo-toc-sublink">6.1. Canvas Çizgi Grafiği</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_7" class="demo-toc-link">7. Resim Yükleme</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_7_1" class="demo-toc-sublink">7.1. Döşeme Yükleyici</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item">
+							<a href="#sec_8" class="demo-toc-link">8. Otomatik Tamamlama</a>
+							<ul class="demo-toc-sublist">
+								<li><a href="#sec_8_1" class="demo-toc-sublink">8.1. Canlı Arama</a></li>
+							</ul>
+						</li>
+						<li class="demo-toc-item" style="margin-top:8px; padding-top:8px; border-top:1px solid #e2e8f0;">
+							<a href="#sec_log" class="demo-toc-link" style="color:#0284c7;">Olay Günlüğü (Log)</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+
+		<!-- Sağ Sütun: Ana İçerik (en fazla 1200px) -->
+		<main class="demo-main">
+
+			<!-- Başlık ve Tema Değiştirici (sağ sütunda) -->
+			<div class="demo-header">
+				<div class="demo-header-info">
+					<h1>
+						Seditio Core JS Showcase
+						<span class="demo-badge badge-core">sedjs API</span>
+					</h1>
+					<p>Çekirdek bileşenlerinin kapsamlı etkileşimli vitrini: formlar, Sürükle ve Bırak sıralama, sekmeler, modal pencereler, açılır bilgi panelleri, grafikler, dosya yükleme ve araçlar.</p>
+				</div>
+
+				<!-- Tema seçici kutusu -->
+				<div class="theme-switch-box">
+					<span>Görsel Tema:</span>
+					<button type="button" id="btn_theme_front" class="theme-btn theme-front active" onclick="setTheme('front')">Ön Yüz (Mavi)</button>
+					<button type="button" id="btn_theme_admin" class="theme-btn theme-admin" onclick="setTheme('admin')">Yönetim (Yeşil)</button>
+				</div>
+			</div>
+
+			<!-- ==========================================
+			     BÖLÜM 1: FORM ÖĞELERİ VE BİLEŞENLERİ
+			     ========================================== -->
+			<div class="section-title" id="sec_1">
+				<span>1. Form Öğeleri ve Bileşenleri</span>
+				<span class="demo-badge">Forms & Inputs</span>
+			</div>
+
+			<!-- 1.1 Özel Seçim Kutusu (SedSelect) -->
+			<div class="demo-card" id="sec_1_1">
+		<h3>1.1. Özel Seçim Kutusu (<code>sedjs.select</code>)</h3>
+		<p class="desc">3 genişlik modu (içeriğe göre otomatik, sabit genişlik, %100 genişleme), optgroup gruplandırma ve aramalı Multi-Select desteği.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Otomatik genişlik (içeriğe göre):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="status_auto" class="sed-select" onchange="logEvent('select:status_auto', this.value)">
+								<option value="draft">Taslak kayıt</option>
+								<option value="published" selected>Sitede yayınlandı</option>
+								<option value="moderation">Yönetici onayında</option>
+								<option value="archived">Arşiv</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="status" class="sed-select"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'status', $options_array, false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Sabit genişlik (260px):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="cat_fixed" class="sed-select" style="width: 260px;" data-search="true" onchange="logEvent('select:cat_fixed', this.value)">
+								<optgroup label="Ana Bölümler">
+									<option value="news">Haberler</option>
+									<option value="articles" selected>Makaleler</option>
+								</optgroup>
+								<optgroup label="Medya ve Dosyalar">
+									<option value="gallery">Fotoğraf Galerisi</option>
+									<option value="pfs">Dosya Arşivi</option>
+								</optgroup>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="cat" class="sed-select" style="width: 260px;" data-search="true"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'cat', $options, false, false, '', '', '', array('style' =&gt; 'width: 260px;'))</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">%100 kapsayıcı genişliği (Block):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="status_block" class="sed-select sed-select-block" onchange="logEvent('select:status_block', this.value)">
+								<option value="1">Aktif durum (üst sütunun %100 genişliğini kaplar)</option>
+								<option value="0">Devre Dışı</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="status_block" class="sed-select sed-select-block"&gt;...&lt;/select&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox($selected, 'status_block', $options, false, false, '', '', 'sed-select-block')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Çoklu seçim (Multi-Select):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<select name="groups[]" class="sed-select" multiple data-search="true" data-width="340px" data-placeholder="Grupları seçin..." onchange="logEvent('select:groups', Array.from(this.selectedOptions).map(o => o.value).join(', '))">
+								<option value="1">1. Yöneticiler</option>
+								<option value="2">2. Editörler</option>
+								<option value="3" selected>3. Moderatörler</option>
+								<option value="4" selected>4. Kullanıcılar</option>
+								<option value="5">5. Misafirler</option>
+							</select>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;select name="groups[]" class="sed-select" multiple data-search="true" data-width="340px"&gt;...&lt;/select&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.2 Anahtarlar / Geçiş Düğmeleri -->
+	<div class="demo-card" id="sec_1_2">
+		<h3>1.2. Anahtarlar / Geçiş Düğmeleri (<code>.sed-switch</code>)</h3>
+		<p class="desc">Standart onay kutuları yerine akıcı geçiş anahtarları.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Standart anahtar:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch">
+								<input type="checkbox" name="allow_comments" checked onchange="logEvent('switch:comments', this.checked)">
+								<span class="sed-switch-slider"></span>
+								<span>Sayfada yorumlara izin ver</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch"&gt;&lt;input type="checkbox" name="allow_comments" checked&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;span&gt;Metin&lt;/span&gt;&lt;/label&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_checkbox('allow_comments', 1, 'yes') // $cfg['yesno_type'] = 'switch' durumunda</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Kompakt anahtar (sm):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch sed-switch-sm">
+								<input type="checkbox" name="debug_mode" onchange="logEvent('switch:debug', this.checked)">
+								<span class="sed-switch-slider"></span>
+								<span>Hata Ayıklama Modunu Aç (Debug Mode)</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch sed-switch-sm"&gt;&lt;input type="checkbox"&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;/label&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Devre dışı anahtar (Disabled):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<label class="sed-switch">
+								<input type="checkbox" name="locked_feature" disabled checked>
+								<span class="sed-switch-slider"></span>
+								<span>Çekirdek sistem hizmeti (değiştirilemez)</span>
+							</label>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;label class="sed-switch"&gt;&lt;input type="checkbox" disabled checked&gt;&lt;span class="sed-switch-slider"&gt;&lt;/span&gt;&lt;/label&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.3 Parola Görünürlüğü ve Hızlı Temizleme -->
+	<div class="demo-card" id="sec_1_3">
+		<h3>1.3. Parola Görünürlüğü ve Hızlı Temizleme (<code>sedjs.input</code>)</h3>
+		<p class="desc">Simgeye tıklayarak parolayı gösterme/gizleme ve anında metin temizleme düğmesi.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Parola (Göster / Gizle):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="password" class="sed-password" value="secret_pass_123" style="width: 260px;" placeholder="Parolayı girin...">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="password" class="sed-password" value="..." style="width: 260px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('rpassword', '', 32, 64, false, 'password')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Temizleme düğmeli arama (Clear):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-clearable" value="Arama terimi" style="width: 260px;" placeholder="Sitede ara..." oninput="logEvent('input:search', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-clearable" value="..." style="width: 260px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('sq', $sq, 32, 64, false, 'text', 'sed-clearable')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.4 Date & Time Picker -->
+	<div class="demo-card" id="sec_1_4">
+		<h3>1.4. Açılır Tarih ve Saat Seçici (<code>sedjs.datepicker</code>)</h3>
+		<p class="desc"><code>window.L</code> üzerinden yerelleştirilmiş aylar/günler, hızlı "Bugün" / "Temizle" düğmeleri ve saat seçici takvim.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Tarih seçimi (Yalnızca Tarih):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-datepicker" value="2026-10-12" style="width: 180px;" placeholder="YYYY-AA-GG" onchange="logEvent('date:begin', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-datepicker" value="2026-10-12"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox_date($timestamp, 'short') // $cfg['enable_sed_datepicker'] = 1 durumunda</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Tarih ve saat seçimi (Tarih + Saat):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-datepicker" data-time="true" value="2026-10-12 14:30" style="width: 220px;" placeholder="YYYY-AA-GG SS:DD" onchange="logEvent('date:expire', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-datepicker" data-time="true" value="2026-10-12 14:30"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_selectbox_date($timestamp, 'long') // $cfg['enable_sed_datepicker'] = 1 durumunda</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.5 Etiket / Çip Girişi -->
+	<div class="demo-card" id="sec_1_5">
+		<h3>1.5. Etiket ve Anahtar Kelime Girişi (<code>sedjs.tags</code>)</h3>
+		<p class="desc">Etkileşimli etiket girişi. <kbd>Enter</kbd> veya <kbd>,</kbd> ile ekleyin, <kbd>&times;</kbd> veya <kbd>Backspace</kbd> ile silin.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Sayfa anahtar kelimeleri:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="text" class="sed-tags" value="seditio, cms, javascript, widgets" placeholder="Etiketi yazıp Enter'a basın..." onchange="logEvent('tags:keywords', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" class="sed-tags" value="seditio, cms, widgets"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('page_keywords', $keywords, 40, 255, false, 'text', 'sed-tags')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.6 Bölümlenmiş Denetim -->
+	<div class="demo-card" id="sec_1_6">
+		<h3>1.6. Bölümlenmiş Denetim (<code>.sed-segmented</code>)</h3>
+		<p class="desc">Akıcı animasyonlu ve tek satırlık modern radyo düğmesi alternatifi.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Katalog görüntüleme modu:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<div class="sed-segmented">
+								<input type="radio" name="view_mode" id="vm_grid" value="grid" checked onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_grid">Izgara</label>
+
+								<input type="radio" name="view_mode" id="vm_list" value="list" onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_list">Liste</label>
+
+								<input type="radio" name="view_mode" id="vm_table" value="table" onchange="logEvent('segmented:view', this.value)">
+								<label for="vm_table">Tablo</label>
+							</div>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-segmented"&gt;&lt;input type="radio" name="view_mode" id="vm_1" checked&gt;&lt;label for="vm_1"&gt;Izgara&lt;/label&gt;...&lt;/div&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_radiobox('view_mode', array('grid' =&gt; 'Izgara', 'list' =&gt; 'Liste'), 'grid')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Metin düzenleyici biçimi (sm):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<div class="sed-segmented sed-segmented-sm">
+								<input type="radio" name="editor_mode" id="ed_html" value="html" checked onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_html">HTML</label>
+
+								<input type="radio" name="editor_mode" id="ed_bbcode" value="bbcode" onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_bbcode">BBCode</label>
+
+								<input type="radio" name="editor_mode" id="ed_plain" value="plain" onchange="logEvent('segmented:editor', this.value)">
+								<label for="ed_plain">Metin</label>
+							</div>
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-segmented sed-segmented-sm"&gt;...&lt;/div&gt;</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.7 Özel Dosya Seçimi (SedFile) -->
+	<div class="demo-card" id="sec_1_7">
+		<h3>1.7. Özel Dosya Seçimi (<code>sedjs.file</code>)</h3>
+		<p class="desc">3 genişlik modu (otomatik, sabit 350px, %100 genişleme), tekli ve çoklu seçim ile Sürükle-Bırak desteği.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Otomatik genişlik (inline-flex):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file" data-file="true" onchange="logEvent('file:auto', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file" data-file="true"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file', false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Sabit genişlik (350px):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file" data-file="true" style="width: 350px;" onchange="logEvent('file:fixed', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file" data-file="true" style="width: 350px;"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file', false, '', false, array('style' =&gt; 'width: 350px;'))</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">%100 kapsayıcı genişliği (Block):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file sed-file-block" data-file="true" onchange="logEvent('file:block', this.files[0] ? this.files[0].name : '')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file sed-file-block" data-file="true"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile', 'file sed-file-block', false)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Çoklu dosya yükleme (Multiple):</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="file" class="sed-file sed-file-block" data-file="true" multiple onchange="logEvent('file:multiple', this.files.length + ' dosya')">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="file" class="sed-file sed-file-block" data-file="true" multiple&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_filebox('userfile[]', 'file sed-file-block', true)</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 1.8 Sayı Artırıcı (SedStepper) -->
+	<div class="demo-card" id="sec_1_8">
+		<h3>1.8. Sayı Artırıcı / Adım Denetimi (<code>sedjs.stepper</code>)</h3>
+		<p class="desc"><code>min</code>, <code>max</code> ve <code>step</code> niteliklerine tam uyumlu entegre artırma/azaltma düğmeleri.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Sayfa başına kayıt sayısı:</td>
+				<td>
+					<div class="demo-field-wrap">
+						<div>
+							<input type="number" class="sed-stepper" value="25" min="5" max="100" step="5" onchange="logEvent('stepper:count', this.value)">
+						</div>
+						<div class="demo-code-box">
+							<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="number" class="sed-stepper" value="25" min="5" max="100" step="5"&gt;</span></span>
+							<span class="code-line"><span class="code-lbl">PHP:</span><span class="code-php">sed_textbox('maxrows', 25, 6, 4, false, 'number', 'sed-stepper')</span></span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 2: SÜRÜKLE-BIRAK SIRALAMA
+	     ========================================== -->
+	<div class="section-title" id="sec_2">
+		<span>2. Liste ve Tabloların Sürükle-Bırak Sıralaması</span>
+		<span class="demo-badge">sedjs.sortable</span>
+	</div>
+
+	<!-- 2.1 Tutamaçlı sıralanabilir liste -->
+	<div class="demo-card" id="sec_2_1">
+		<h3>2.1. Y Ekseni Sabitlemeli Sıralanabilir Liste (<code>sedjs.sortable</code>)</h3>
+		<p class="desc"><span class="drag-handle" style="display:inline;">⠿</span> tutamacını fareyle sürükleyerek öğeleri yeniden sıralayın. Sıra <code>update()</code> geri çağrısıyla anında güncellenir.</p>
+
+		<ul id="sortable_single" class="sortable-list">
+			<li class="sortable-item" data-id="item-1">
+				<div><span class="drag-handle">⠿</span><strong>Madde 1:</strong> Ana sayfa ve başlık afişi</div>
+				<span class="demo-badge">Sıra: 1</span>
+			</li>
+			<li class="sortable-item" data-id="item-2">
+				<div><span class="drag-handle">⠿</span><strong>Madde 2:</strong> Ürün kataloğu</div>
+				<span class="demo-badge">Sıra: 2</span>
+			</li>
+			<li class="sortable-item" data-id="item-3">
+				<div><span class="drag-handle">⠿</span><strong>Madde 3:</strong> Müşteri yorumları</div>
+				<span class="demo-badge">Sıra: 3</span>
+			</li>
+			<li class="sortable-item" data-id="item-4">
+				<div><span class="drag-handle">⠿</span><strong>Madde 4:</strong> İletişim bilgileri</div>
+				<span class="demo-badge">Sıra: 4</span>
+			</li>
+		</ul>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(document.querySelector('#sortable_single'), {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    handle: '.drag-handle', axis: 'y',</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    update(e, ui) { /* Yeni sırayı AJAX ile kaydet */ }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+		</div>
+	</div>
+
+	<!-- 2.2 Bağlantılı Listeler (Kanban / connectWith) -->
+	<div class="demo-card" id="sec_2_2">
+		<h3>2.2. Bağlantılı Listeler (Kanban / <code>connectWith</code>)</h3>
+		<p class="desc">İki bağımsız sütun arasında kartları sürükleyip bırakın.</p>
+
+		<div class="kanban-grid">
+			<div class="kanban-col">
+				<div class="kanban-col-title">
+					<span>Devam Edenler (ToDo)</span>
+					<span class="demo-badge">Sütun 1</span>
+				</div>
+				<ul id="kanban_todo" class="sortable-list kanban-sortable">
+					<li class="sortable-item" data-id="task-1">
+						<div><span class="drag-handle">⠿</span>Site temalarını güncelle</div>
+					</li>
+					<li class="sortable-item" data-id="task-2">
+						<div><span class="drag-handle">⠿</span>VT önbelleğini yapılandır</div>
+					</li>
+					<li class="sortable-item" data-id="task-3">
+						<div><span class="drag-handle">⠿</span>PFS erişim izinlerini denetle</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="kanban-col">
+				<div class="kanban-col-title">
+					<span>Tamamlananlar (Done)</span>
+					<span class="demo-badge" style="background:#dcfce7;color:#166534;">Sütun 2</span>
+				</div>
+				<ul id="kanban_done" class="sortable-list kanban-sortable">
+					<li class="sortable-item" data-id="task-4">
+						<div><span class="drag-handle">⠿</span>SedFile modülünü geliştir</div>
+					</li>
+					<li class="sortable-item" data-id="task-5">
+						<div><span class="drag-handle">⠿</span>SedSelect bileşenini iyileştir</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(container1, { connectWith: '.kanban-sortable', handle: '.drag-handle' });</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sortable(container2, { connectWith: '.kanban-sortable', handle: '.drag-handle' });</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 3: YAPISAL BİLEŞENLER
+	     ========================================== -->
+	<div class="section-title" id="sec_3">
+		<span>3. Sekmeler, Spoylerler ve Akordeonlar</span>
+		<span class="demo-badge">Navigation & Disclosure</span>
+	</div>
+
+	<!-- 3.1 Sekmeler (SedTabs) -->
+	<div class="demo-card" id="sec_3_1">
+		<h3>3.1. Etkileşimli Sekmeler (<code>sedjs.sedtabs</code>)</h3>
+		<p class="desc">Sayfayı yenilemeden içerik bölümleri arasında geçiş yapın.</p>
+
+		<div class="tabs-container sedtabs">
+			<ul class="tabs-nav">
+				<li><a href="#tab_info" class="selected">Genel Bilgiler</a></li>
+				<li><a href="#tab_seo">SEO ve Meta Etiketleri</a></li>
+				<li><a href="#tab_extra">Gelişmiş</a></li>
+			</ul>
+			<div id="tab_info" class="tab-pane">
+				<strong>Sekme 1:</strong> Makale düzenleme veya sistem yapılandırmasının ana alanları burada yer alır.
+			</div>
+			<div id="tab_seo" class="tab-pane" style="display:none;">
+				<strong>Sekme 2:</strong> Meta Başlık, Meta Açıklama ve kurallı sayfa URL alanları.
+			</div>
+			<div id="tab_extra" class="tab-pane" style="display:none;">
+				<strong>Sekme 3:</strong> Kullanıcı grubu izinleri ve gelişmiş görüntüleme seçenekleri.
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sedtabs"&gt;&lt;ul class="tabs"&gt;&lt;li&gt;&lt;a href="#tab1" class="selected"&gt;Sekme 1&lt;/a&gt;&lt;/li&gt;...&lt;/ul&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.sedtabs({ containerClass: 'sedtabs', eventType: 'click', selectedClass: 'selected' });</span></span>
+		</div>
+	</div>
+
+	<!-- 3.2 Akordeon (SedAccordion) -->
+	<div class="demo-card" id="sec_3_2">
+		<h3>3.2. Otomatik Kapanan Akordeon (<code>sedjs.accordion</code>)</h3>
+		<p class="desc">Akordeon panelleri. Yeni bir panel açıldığında önceki açık olan otomatik olarak kapanır.</p>
+
+		<div class="sedaccordion">
+			<div class="accordion-item active">
+				<div class="accordion-header">Bölüm 1: Sympfy Tema Ayarları</div>
+				<div class="accordion-content">
+					Site temasının renk paleti, yazı tipleri ve ana düzen genişliği ayarları.
+				</div>
+			</div>
+			<div class="accordion-item">
+				<div class="accordion-header">Bölüm 2: Çekirdek Modülleri ve Güvenlik</div>
+				<div class="accordion-content" style="display:none;">
+					İki faktörlü kimlik doğrulama, kullanıcı parolası şifreleme ve spam koruma yönetimi.
+				</div>
+			</div>
+			<div class="accordion-item">
+				<div class="accordion-header">Bölüm 3: Önbelleğe Alma ve Performans</div>
+				<div class="accordion-content" style="display:none;">
+					Dahili sayfa önbelleği yapılandırması, statik CSS/JS sıkıştırması ve otomatik yükleme ayarları.
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sedaccordion"&gt;&lt;div class="accordion-item"&gt;&lt;div class="accordion-header"&gt;...&lt;/div&gt;...&lt;/div&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.accordion();</span></span>
+		</div>
+	</div>
+
+	<!-- 3.3 Spoyler (Spoiler) -->
+	<div class="demo-card" id="sec_3_3">
+		<h3>3.3. Açılır Kapanır Kutu (<code>sedjs.spoiler</code>)</h3>
+		<p class="desc">Başlığa veya düğmeye tıklayarak gizli bloğu açın.</p>
+
+		<div class="spoiler">
+			<div class="spoiler-title">
+				<span style="font-weight:600; font-size:13px; color:#334155;">Sunucu ve PHP Teknik Bilgileri</span>
+				<button type="button" class="btn spoiler-toggle" style="margin-left: 10px;">Ayrıntıları Göster</button>
+			</div>
+			<div class="spoiler-content" style="display:none; margin-top:10px;">
+				<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:4px; padding:12px; font-size:13px;">
+					<strong>PHP Version:</strong> 8.4.x | <strong>MySQL Engine:</strong> InnoDB | <strong>CMS Seditio:</strong> v186
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="spoiler"&gt;&lt;div class="spoiler-title"&gt;...&lt;/div&gt;&lt;div class="spoiler-content"&gt;...&lt;/div&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.spoiler();</span></span>
+		</div>
+	</div>
+
+	<!-- 3.4 Uyarı Bildirimleri (CloseAlert) -->
+	<div class="demo-card" id="sec_3_4">
+		<h3>3.4. Sistem Bildirimleri ve Uyarılar (<code>sedjs.closealert</code>)</h3>
+		<p class="desc">Kapatma düğmesine tıklandığında akıcı şekilde kaybolan sistem bildirimleri.</p>
+
+		<div class="alert alert-success">
+			<span><strong>Başarılı:</strong> Bölüm yapısı değişiklikleri veritabanına başarıyla kaydedildi!</span>
+			<button type="button" class="close" title="Kapat" onclick="logEvent('alert:close', 'Success alert')">&times;</button>
+		</div>
+
+		<div class="alert alert-warning">
+			<span><strong>Uyarı:</strong> Güncellemeye geçmeden önce veritabanı yedeği almanız önerilir.</span>
+			<button type="button" class="close" title="Kapat" onclick="logEvent('alert:close', 'Warning alert')">&times;</button>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="alert alert-success"&gt;&lt;span&gt;Metin&lt;/span&gt;&lt;button class="close"&gt;&amp;times;&lt;/button&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.closealert();</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 4: MODAL PENCERELER VE PANELLER
+	     ========================================== -->
+	<div class="section-title" id="sec_4">
+		<span>4. Modal Pencereler ve Açılır Paneller</span>
+		<span class="demo-badge">Modal & Popover</span>
+	</div>
+
+	<!-- 4.1 Kayan Pencere (SedModal) -->
+	<div class="demo-card" id="sec_4_1">
+		<h3>4.1. Seditio Kayan Pencere (<code>sedjs.modal.open</code>)</h3>
+		<p class="desc">Başlıktan sürükleme, boyutlandırma, alt tepsiye küçültme ve tam ekran geçişli tam özellikli pencere.</p>
+
+		<button type="button" class="btn btn-primary" onclick="openDemoModal()">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+			SedModal Kayan Penceresini Aç
+		</button>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.modal.open('my_win', 'inline', '&lt;div&gt;İçerik...&lt;/div&gt;', 'Başlık', 'width=560px,height=340px,resize=1,center=1');</span></span>
+		</div>
+	</div>
+
+	<!-- 4.2 Açılır Bilgi (SedPopover) -->
+	<div class="demo-card" id="sec_4_2">
+		<h3>4.2. Açılır Bilgi Kutusu (<code>sedjs.popover</code>)</h3>
+		<p class="desc">Tetikleyiciye tıklandığında açılan ve dışarı tıklandığında otomatik kapanan bilgi paneli.</p>
+
+		<div style="position:relative; display:inline-block;">
+			<button type="button" class="btn" data-sed-popover-trigger data-sed-popover-target="demo_popover_box">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+				Açılır Bilgi Panelini Göster
+			</button>
+
+			<div id="demo_popover_box" style="display:none;">
+				<h4 style="margin:0 0 6px 0; font-size:14px; font-weight:700;">XTemplate SE Etiketleri Kılavuzu</h4>
+				<p style="margin:0; font-size:12px; color:#475569;">
+					Seditio şablon motoru <code>&lt;!-- BEGIN: BLOCK --&gt;</code> bloklarını, döngüleri, filtreleri ve <code>IF / ELSE</code> koşul yönergelerini destekler.
+				</p>
+			</div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;button data-sed-popover-trigger data-sed-popover-target="my_pop"&gt;Aç&lt;/button&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.popover.init(document);</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 5: İÇERİK VE SEO ARAÇLARI
+	     ========================================== -->
+	<div class="section-title" id="sec_5">
+		<span>5. Content ve SEO Araçları</span>
+		<span class="demo-badge">Content Utilities</span>
+	</div>
+
+	<!-- 5.1 Canlı SEF URL Oluşturucu (genSEF) -->
+	<div class="demo-card" id="sec_5_1">
+		<h3>5.1. Canlı SEF URL / Sayfa Takma Adı Oluşturucu (<code>sedjs.genSEF</code>)</h3>
+		<p class="desc">Makale başlığını yazın — SEF takma ad alanı gerçek zamanlı harf dönüştürmeyle doldurulur.</p>
+
+		<table class="demo-table">
+			<tr>
+				<td class="td-label">Makale Başlığı (TR):</td>
+				<td>
+					<input type="text" id="sef_from" class="text" style="width: 100%; max-width: 460px;" value="Seditio CMS 186 Cekirdeginin Yeni Ozellikleri" placeholder="Başlığı girin...">
+				</td>
+			</tr>
+			<tr>
+				<td class="td-label">Sayfa Takma Adı (SEF):</td>
+				<td>
+					<input type="text" id="sef_to" class="text" style="width: 100%; max-width: 460px;" readonly style="background:#f8fafc;" placeholder="Dönüştürülmüş takma ad...">
+				</td>
+			</tr>
+		</table>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.genSEF(document.querySelector('#sef_from'), document.querySelector('#sef_to'), false);</span></span>
+		</div>
+	</div>
+
+	<!-- 5.2 Bağlantı Kopyalama (copyurl) -->
+	<div class="demo-card" id="sec_5_2">
+		<h3>5.2. URL Bağlantısını Panoya Kopyala (<code>sedjs.copyurl</code>)</h3>
+		<p class="desc"><code>href</code> niteliğindeki bağlantıyı doğrudan işletim sistemi panosuna kopyalar.</p>
+
+		<a href="https://seditio.org/demo/page?id=186" class="btn" onclick="sedjs.copyurl(this); logEvent('copyurl', this.href); alert('Bağlantı panoya kopyalandı: ' + this.href);">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+			Kalıcı Bağlantıyı Kopyala (URL)
+		</a>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;a href="https://seditio.org/..." onclick="sedjs.copyurl(this)"&gt;Kopyala&lt;/a&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.copyurl(element);</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 6: ETKİLEŞİMLİ GRAFİKLER (SEDCHART)
+	     ========================================== -->
+	<div class="section-title" id="sec_6">
+		<span>6. Etkileşimli Grafikler ve İstatistikler</span>
+		<span class="demo-badge">SedChart.js</span>
+	</div>
+
+	<!-- 6.1 Çizgi Dinamik Grafiği -->
+	<div class="demo-card" id="sec_6_1">
+		<h3>6.1. Canvas Çizgi Dinamik Grafiği (<code>SedChart</code>)</h3>
+		<p class="desc">Bağımsız ve son derece hafif (~2.5 KB) HTML5 Canvas grafik bileşeni. Dinamik ölçeklendirme, gezinme ipuçları ve otomatik yeniden boyutlandırmayı destekler.</p>
+
+		<div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+			<button type="button" class="btn" id="btn_chart_week">Haftalık</button>
+			<button type="button" class="btn" id="btn_chart_month">Aylık</button>
+			<button type="button" class="btn btn-primary" id="btn_chart_random">Rastgele Veri</button>
+		</div>
+
+		<div id="chart_demo_wrapper" class="chart-container">
+			<div id="chart_demo_canvas_container" style="width:100%; height:100%;"></div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div id="my_chart" class="chart-container"&gt;&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">const chart = new SedChart('my_chart', {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    labels: ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'],</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    values: [1250, 1890, 2430, 2120, 2800, 3450, 4100]</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">chart.setData(newLabels, newValues); // Dinamik veri güncelleme</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 7: RESİM YÜKLEME (IMAGEUPLOAD)
+	     ========================================== -->
+	<div class="section-title" id="sec_7">
+		<span>7. Resim Yükleyici ve Yöneticisi</span>
+		<span class="demo-badge">sedjs.imageUpload</span>
+	</div>
+
+	<!-- 7.1 Sürükle-Bırak Sıralamalı Döşeme Yükleyici -->
+	<div class="demo-card" id="sec_7_1">
+		<h3>7.1. Sürükle-Bırak Sıralamalı Döşeme Yükleyici (<code>sedjs.imageUpload</code>)</h3>
+		<p class="desc">PFS, galeriler ve ürün vitrinleri için gecikmeli resim yükleme bileşeni. Masaüstünden sürükle-bırak, yerel önizleme oluşturma, küçük resimleri sıralama (<code>sedjs.sortable</code> entegreli) ve bağlantıdan resim ekleme desteği.</p>
+
+		<div class="sed-image-upload sed-image-upload-mode-dropzone" id="demo_image_uploader" data-sed-image-upload='{"prefix":"gallery","maxFiles":8,"sortable":true,"dropzone":true,"urlUpload":true,"labels":{"drop":"Resimleri buraya sürükleyin","or":"veya","select":"Dosyaları seçin","url":"Bağlantıdan ekle (URL)","delete":"Sil"}}'>
+			<p class="sed-image-upload-sort-hint">Sıralamayı değiştirmek için küçük resimleri fareyle sürükleyin</p>
+			<ul class="sed-image-upload-list">
+				<li>
+					<a href="#" class="delete" title="Sil"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%230284c7'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Foto 1</text></svg>" alt="Foto 1">
+					<input type="hidden" name="gallery[]" value="1">
+				</li>
+				<li>
+					<a href="#" class="delete" title="Sil"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%2310b981'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Foto 2</text></svg>" alt="Foto 2">
+					<input type="hidden" name="gallery[]" value="2">
+				</li>
+				<li>
+					<a href="#" class="delete" title="Sil"></a>
+					<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'><rect width='120' height='90' fill='%23f59e0b'/><text x='60' y='50' fill='white' font-family='sans-serif' font-size='13' font-weight='bold' text-anchor='middle'>Foto 3</text></svg>" alt="Foto 3">
+					<input type="hidden" name="gallery[]" value="3">
+				</li>
+			</ul>
+			<div class="sed-image-upload-dropzone">
+				<div class="sed-image-upload-dropicon"></div>
+				<div class="sed-image-upload-dropmessage">Resimleri buraya sürükleyin</div>
+				<div class="sed-image-upload-dropor">veya</div>
+				<button type="button" class="sed-image-upload-select-btn">Dosyaları seçin</button>
+				<input type="file" name="gallery_drop[]" multiple="multiple" class="sed-image-upload-dropinput" accept="image/*">
+			</div>
+			<div class="sed-image-upload-add-box"></div>
+			<div class="sed-image-upload-url-link"><i class="dash_link">Bağlantıdan ekle (URL)</i></div>
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;div class="sed-image-upload" data-sed-image-upload='{"prefix":"gallery","sortable":true}'&gt;...&lt;/div&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">sedjs.imageUpload.init(document.querySelector('.sed-image-upload'));</span></span>
+		</div>
+	</div>
+
+	<!-- ==========================================
+	     BÖLÜM 8: OTOMATİK TAMAMLAMA VE ARAMA (AUTOCOMPLETE)
+	     ========================================== -->
+	<div class="section-title" id="sec_8">
+		<span>8. Akıllı Otomatik Tamamlama ve Canlı Arama</span>
+		<span class="demo-badge">Autocomplete.js</span>
+	</div>
+
+	<!-- 8.1 Otomatik Tamamlamalı Canlı Arama -->
+	<div class="demo-card" id="sec_8_1">
+		<h3>8.1. Vurgulanan Sonuçlarla Canlı Arama (<code>Autocomplete</code>)</h3>
+		<p class="desc">Giriş alanları (etiketler, yazarlar, kategoriler, ülkeler) için Vanilla JS otomatik tamamlama. Yerel dizi veya AJAX, klavye ok tuşlarıyla gezinme ve bulunan harfleri vurgulamayı destekler.</p>
+
+		<div style="max-width: 420px; position: relative;">
+			<label style="display:block; font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Bir Seditio bölümü yazmaya başlayın (ör. "Haber", "Sayfa", "Forum", "Galeri"):</label>
+			<input type="text" id="demo_autocomplete_input" class="sed-select" style="width:100%; box-sizing:border-box;" placeholder="Site bölümlerinde ara..." autocomplete="off">
+		</div>
+
+		<div class="demo-code-box" style="margin-top: 14px;">
+			<span class="code-line"><span class="code-lbl">HTML:</span><span class="code-html">&lt;input type="text" id="site_search" placeholder="Ara..."&gt;</span></span>
+			<span class="code-line"><span class="code-lbl">JS:</span><span class="code-js">new Autocomplete(document.getElementById('site_search'), {</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    lookup: [</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Haberler (News)', data: 'news' },</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Sayfalar ve Makaleler (Pages)', data: 'pages' },</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">        { value: 'Forumlar (Forums)', data: 'forums' }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    ],</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    minChars: 1,</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">    onSelect(suggestion) { logEvent('autocomplete:select', suggestion.value); }</span></span>
+			<span class="code-line"><span class="code-lbl"></span><span class="code-js">});</span></span>
+		</div>
+	</div>
+
+	<!-- Olay Günlüğü -->
+	<div class="demo-card" id="sec_log">
+		<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+			<h3 style="margin:0;">Çekirdek Olay Günlüğü (Event Log)</h3>
+			<button type="button" class="btn" style="padding:3px 8px; font-size:11px;" onclick="document.getElementById('event_log').innerHTML = '';">Günlüğü temizle</button>
+		</div>
+		<div id="event_log" class="demo-log-box">
+			<div class="log-item"><span class="log-time">[hazır]</span> sedjs kütüphanesi başarıyla başlatıldı. Yukarıdaki herhangi bir bileşenle etkileşime geçin...</div>
+		</div>
+	</div>
+
+		</main>
+	</div>
+</div>
+
+<!-- Seditio Çekirdek Sistem JavaScript -->
+<script src="../system/assets/js/core.js"></script>
+<script src="../system/assets/js/sedchart.js"></script>
+<script src="../system/assets/js/imageupload.js"></script>
+<script src="../system/assets/js/autocomplete.js"></script>
+
+<!-- Gösterim Vitrini Mantığı -->
+<script>
+function logEvent(name, val) {
+	const log = document.getElementById('event_log');
+	if (!log) return;
+	const time = new Date().toLocaleTimeString();
+	const item = document.createElement('div');
+	item.className = 'log-item';
+	item.innerHTML = `<span class="log-time">[${time}]</span> <strong>${name}</strong>: <span class="log-val">${val}</span>`;
+	log.appendChild(item);
+	log.scrollTop = log.scrollHeight;
+}
+
+function setTheme(theme) {
+	const adminCss = document.getElementById('admin_theme_css');
+	const btnFront = document.getElementById('btn_theme_front');
+	const btnAdmin = document.getElementById('btn_theme_admin');
+
+	if (theme === 'admin') {
+		adminCss.disabled = false;
+		document.body.classList.add('admin-mode');
+		btnAdmin.classList.add('active');
+		btnFront.classList.remove('active');
+	} else {
+		adminCss.disabled = true;
+		document.body.classList.remove('admin-mode');
+		btnFront.classList.add('active');
+		btnAdmin.classList.remove('active');
+	}
+}
+
+// SedModal tanıtım kayan penceresini aç
+function openDemoModal() {
+	const content = '<div style="padding:22px; font-size:13px; line-height:1.6; color:#334155;">' +
+		'<h3 style="margin-top:0; color:#0f172a;">Seditio Çekirdek Kayan Penceresi</h3>' +
+		'<p>Bu, tam özellikli bir çekirdek modal penceresidir. Deneyin:</p>' +
+		'<ul>' +
+		'<li><strong>Pencereyi taşıyın:</strong> başlığı sol fare düğmesiyle basılı tutun.</li>' +
+		'<li><strong>Boyutlandırın:</strong> sağ alt köşeden sürükleyin.</li>' +
+		'<li><strong>Küçültün:</strong> sağ üst köşedeki "−" düğmesine tıklayın (sol alta simge durumuna küçülür).</li>' +
+		'<li><strong>Tam ekran yapın:</strong> "▢" düğmesine tıklayın.</li>' +
+		'</ul>' +
+		'<div style="margin-top:16px;"><button type="button" class="btn btn-primary" onclick="window.demoModal.close();">Pencereyi Kapat</button></div>' +
+		'</div>';
+
+	window.demoModal = sedjs.modal.open(
+		'demo_floating_window',
+		'inline',
+		content,
+		'SedModal Kayan Penceresi',
+		'width=540px,height=340px,resize=1,scrolling=1,center=1',
+		'load'
+	);
+	logEvent('modal:open', 'demo_floating_window');
+}
+
+// DOM hazır olduğunda ek modülleri başlat
+sedjs.ready(() => {
+	// 1. Tekli sıralanabilir listeyi başlat (sedjs.sortable)
+	const singleSortableEl = document.querySelector('#sortable_single');
+	if (singleSortableEl && typeof sedjs.sortable === 'function') {
+		sedjs.sortable(singleSortableEl, {
+			handle: '.drag-handle',
+			axis: 'y',
+			update(e, ui) {
+				const items = Array.from(singleSortableEl.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder'));
+				items.forEach((li, idx) => {
+					const badge = li.querySelector('.demo-badge');
+					if (badge) badge.textContent = 'Sıra: ' + (idx + 1);
+				});
+				const order = items.map(li => li.dataset.id);
+				logEvent('sortable:single:update', order.join(' → '));
+			}
+		});
+	}
+
+	// 2. Bağlantılı listeleri başlat (Kanban connectWith)
+	const kanbanTodo = document.querySelector('#kanban_todo');
+	const kanbanDone = document.querySelector('#kanban_done');
+	if (kanbanTodo && kanbanDone && typeof sedjs.sortable === 'function') {
+		sedjs.sortable(kanbanTodo, {
+			connectWith: '.kanban-sortable',
+			handle: '.drag-handle',
+			update(e, ui) {
+				const items = Array.from(kanbanTodo.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder')).map(li => li.dataset.id);
+				logEvent('kanban:todo:update', items.join(', ') || '(boş)');
+			}
+		});
+
+		sedjs.sortable(kanbanDone, {
+			connectWith: '.kanban-sortable',
+			handle: '.drag-handle',
+			update(e, ui) {
+				const items = Array.from(kanbanDone.querySelectorAll('li')).filter(li => !li.classList.contains('sortable-placeholder')).map(li => li.dataset.id);
+				logEvent('kanban:done:update', items.join(', ') || '(boş)');
+			}
+		});
+	}
+
+	// 3. Canlı SEF URL üretimini başlat (sedjs.genSEF)
+	const sefFrom = document.getElementById('sef_from');
+	const sefTo = document.getElementById('sef_to');
+	if (sefFrom && sefTo && typeof sedjs.genSEF === 'function') {
+		const updateSEF = () => {
+			sedjs.genSEF(sefFrom, sefTo, false);
+		};
+		sefFrom.addEventListener('input', updateSEF);
+		updateSEF(); // Başlangıç dönüştürmesi
+	}
+
+	// 4. Grafiği başlat (SedChart)
+	const chartContainer = document.getElementById('chart_demo_canvas_container');
+	if (chartContainer && typeof SedChart === 'function') {
+		const weekLabels = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+		const weekValues = [1250, 1890, 2430, 2120, 2800, 3450, 4100];
+		const demoChart = new SedChart(chartContainer, {
+			labels: weekLabels,
+			values: weekValues
+		});
+
+		const btnWeek = document.getElementById('btn_chart_week');
+		const btnMonth = document.getElementById('btn_chart_month');
+		const btnRandom = document.getElementById('btn_chart_random');
+
+		if (btnWeek) {
+			btnWeek.addEventListener('click', () => {
+				demoChart.setData(weekLabels, [1250, 1890, 2430, 2120, 2800, 3450, 4100]);
+				logEvent('sedchart', 'Haftalık veriler yüklendi');
+			});
+		}
+
+		if (btnMonth) {
+			btnMonth.addEventListener('click', () => {
+				const monthLabels = ['1', '5', '10', '15', '20', '25', '30'];
+				const monthValues = [450, 920, 1340, 2100, 1950, 3100, 4800];
+				demoChart.setData(monthLabels, monthValues);
+				logEvent('sedchart', 'Aylık veriler yüklendi');
+			});
+		}
+
+		if (btnRandom) {
+			btnRandom.addEventListener('click', () => {
+				const randVals = weekLabels.map(() => Math.floor(Math.random() * 4000) + 500);
+				demoChart.setData(weekLabels, randVals);
+				logEvent('sedchart', 'Rastgele değerler: ' + randVals.join(', '));
+			});
+		}
+	}
+
+	// 5. Otomatik tamamlamayı başlat (Autocomplete)
+	const acInput = document.getElementById('demo_autocomplete_input');
+	if (acInput && typeof Autocomplete === 'function') {
+		new Autocomplete(acInput, {
+			lookup: [
+				{ value: 'Haberler (News)', data: 'news' },
+				{ value: 'Sayfalar ve Makaleler (Pages)', data: 'pages' },
+				{ value: 'Forumlar (Forums)', data: 'forums' },
+				{ value: 'Galeri ve Medya (Gallery)', data: 'gallery' },
+				{ value: 'Kişisel Dosyalar (PFS)', data: 'pfs' },
+				{ value: 'Kullanıcılar (Users)', data: 'users' },
+				{ value: 'Eklentiler (Plugins)', data: 'plugins' },
+				{ value: 'Çekirdek Yapılandırması (Config)', data: 'config' }
+			],
+			minChars: 1,
+			onSelect(suggestion) {
+				logEvent('autocomplete:select', suggestion.value + ' [data=' + suggestion.data + ']');
+			}
+		});
+	}
+});
+</script>
+
+</body>
+</html>

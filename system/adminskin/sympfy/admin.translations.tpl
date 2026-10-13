@@ -374,7 +374,11 @@
 						</div>
 
 						<div class="table-td text-center resp-table-td" data-label="{PHP.L.Active}">
-							{LANG_ROW_ACTIVE}
+							<!-- IF {LANG_ROW_ACTIVE} -->
+							<span class="badge badge-success">{PHP.L.Yes}</span>
+							<!-- ELSE -->
+							<span class="badge badge-secondary">{PHP.L.No}</span>
+							<!-- ENDIF -->
 						</div>
 
 						<div class="table-td text-center resp-table-td" data-label="{PHP.L.Default}">
@@ -506,6 +510,7 @@
 	<div class="content-box-content content-table">
 
 		<form action="{TRANSLATIONS_LANG_SAVE_URL}" method="post">
+			{LANG_EDIT_HIDDEN}
 
 			<div class="table cells striped resp-table">
 				<div class="table-body resp-table-body">
@@ -515,7 +520,7 @@
 							<strong>{PHP.L.adm_translations_lang_code}:</strong>
 						</div>
 						<div class="table-td text-left resp-table-td">
-							{LANG_EDIT_CODE_INPUT}
+							<span class="badge"><strong>{LANG_EDIT_FLAG}{LANG_EDIT_CODE}</strong></span>
 						</div>
 					</div>
 

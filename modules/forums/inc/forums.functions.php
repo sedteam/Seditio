@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/inc/forums.functions.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=Forums API functions
@@ -395,7 +395,7 @@ function sed_selectbox_forum_parent($name, $selected = 0, $category = '', $exclu
 	$tree = sed_forum_get_tree($category, $exclude);
 	$show_cat = empty($category);
 
-	$result = '<select name="' . $name . '"><option value="0">--</option>';
+	$result = '<select name="' . $name . '" class="sed-select"><option value="0">--</option>';
 	$prev_cat = '';
 
 	foreach ($tree as $item) {

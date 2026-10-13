@@ -12,12 +12,24 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/admin.lang.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-09
 Type=Lang
 Author=Seditio Team
 Description=Admin English language file
 [END_SED]
 ==================== */
+
+/* ====== Form Elements Styling ====== */
+
+$L['cfg_yesno_type'] = array("Default Yes/No element type", "Display format for binary switches on site and in admin panel");
+$L['cfg_yesno_type_switch'] = "Switch (Toggle)";
+$L['cfg_yesno_type_radio'] = "Radio buttons (Yes / No)";
+$L['cfg_yesno_type_checkbox'] = "Standard checkbox";
+$L['cfg_enable_sed_switch'] = array("Switch styling (SedSwitch)", "Enable animated On/Off toggle switches instead of standard checkboxes");
+$L['cfg_enable_sed_select'] = array("Select dropdown styling (SedSelect)", "Enable custom dropdown select menus with search and multiselect");
+$L['cfg_enable_sed_input'] = array("Input fields enhancement (SedInput)", "Enable quick clear button and password visibility toggle");
+$L['cfg_enable_sed_datepicker'] = array("Datepicker enhancement (SedDatepicker)", "Enable custom date and time picker");
+$L['cfg_enable_sed_file'] = array("File input styling (SedFile)", "Enable custom file upload box with drag & drop and name preview");
 
 /* ====== Dashboard & Admin Home ====== */
 

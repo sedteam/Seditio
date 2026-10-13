@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.config.inc.php
 Version=186
-Updated=2026-sep-18
+Updated=2026-oct-09
 Type=Core.admin
 Author=Seditio Team
 Description=Configuration
@@ -207,17 +207,22 @@ switch ($n) {
 			if ($config_type == 1) {
 				$config_field = sed_textbox($config_name, $config_value, 32, 255);
 			} elseif ($config_type == 2) {
-
 				if (is_array($config_variants)) {
-					$config_field = sed_selectbox($config_value, $config_name, $config_variants, false, false);
+					$variants_arr = array();
+					foreach ($config_variants as $var_item) {
+						$var_item = trim($var_item);
+						$var_title = isset($L['cfg_' . $config_name . '_' . $var_item]) ? $L['cfg_' . $config_name . '_' . $var_item] : (isset($L[$var_item]) ? $L[$var_item] : $var_item);
+						$variants_arr[$var_item] = $var_title;
+					}
+					$config_field = sed_selectbox($config_value, $config_name, $variants_arr, false, true);
 				} else {
 					$config_field = sed_textbox($config_name, $config_value, 8, 11);
 				}
 			} elseif ($config_type == 3) {
-				$config_field  = sed_radiobox($config_name, $yesno_arr, $config_value); // sed177			
+				$config_field = sed_yesno($config_name, $config_value);
 			} elseif ($config_type == 4) {
 				$varname = "sed_select_" . $config_name;
-				$config_field = "<select name=\"" . $config_name . "\" size=\"1\">";
+				$config_field = "<select name=\"" . $config_name . "\" class=\"sed-select\" size=\"1\">";
 				reset($$varname);
 				foreach ($$varname as $i => $x) {
 					$selected = ($config_value == $x[0]) ? "selected=\"selected\"" : '';

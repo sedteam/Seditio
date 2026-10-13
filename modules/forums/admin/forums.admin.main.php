@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/admin/forums.admin.main.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-09
 Type=Module.admin
 Author=Seditio Team
 Description=Forums & categories
@@ -136,12 +136,12 @@ if ($n == 'edit') {
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
 	$fs_countposts = $row['fs_countposts'];
 
-	$form_state = sed_radiobox("rstate", $yesno_arr, $fs_state);
-	$form_allowusertext = sed_radiobox("rallowusertext", $yesno_arr, $fs_allowusertext);
-	$form_allowbbcodes = sed_radiobox("rallowbbcodes", $yesno_arr, $fs_allowbbcodes);
-	$form_allowsmilies = sed_radiobox("rallowsmilies", $yesno_arr, $fs_allowsmilies);
-	$form_allowprvtopics = sed_radiobox("rallowprvtopics", $yesno_arr, $fs_allowprvtopics);
-	$form_countposts = sed_radiobox("rcountposts", $yesno_arr, $fs_countposts);
+	$form_state = sed_yesno("rstate", $fs_state);
+	$form_allowusertext = sed_yesno("rallowusertext", $fs_allowusertext);
+	$form_allowbbcodes = sed_yesno("rallowbbcodes", $fs_allowbbcodes);
+	$form_allowsmilies = sed_yesno("rallowsmilies", $fs_allowsmilies);
+	$form_allowprvtopics = sed_yesno("rallowprvtopics", $fs_allowprvtopics);
+	$form_countposts = sed_yesno("rcountposts", $fs_countposts);
 
 	$urlpaths[sed_url("admin", "m=forums&n=edit&id=" . $id)] = sed_cc($fs_title);
 	$admintitle = sed_cc($fs_title);

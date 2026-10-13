@@ -19,6 +19,12 @@
   --admin-primary-contrast: #ffffff;
   --admin-primary-focus-ring: rgba(87, 160, 0, 0.15);
 
+  /* SedSelect Admin Theme Overrides */
+  --admin-select-hover: #f0fdf4;
+  --admin-select-selected: #eef8df;
+  --admin-select-selected-text: #2d3748;
+  --admin-select-selected-hover: #e2f2c8;
+
   /* Page Background & Typography */
   --admin-body-bg: #ecedf0;
   --admin-body-bg-gradient-start: rgba(236, 237, 240, 1);
@@ -728,7 +734,7 @@ a.remove-link:hover {
   background-clip: border-box;
   border: 1px solid var(--admin-card-border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: var(--admin-card-shadow);
   margin-bottom: 24px;
 }
@@ -749,6 +755,7 @@ a.remove-link:hover {
   align-items: center;
   background: var(--admin-card-header-bg);
   border-bottom: 1px solid var(--admin-card-header-border);
+  border-radius: 11px 11px 0 0;
   position: relative;
   box-sizing: border-box;
 }
@@ -2572,6 +2579,37 @@ ul.content-box-tabs li a.current {
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
+}
+
+.badge-success {
+  background-color: #ebfbee;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-secondary,
+.badge-muted {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.badge-danger {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-warning {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.badge-info {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
 }
 
 .badge-controller {

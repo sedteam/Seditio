@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/en/main.lang.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-13
 Type=Lang
 Name=English
 Native=English
@@ -565,3 +565,16 @@ $sed_daysweek_list = array(
 	'friday',
 	'saturday'
 );
+
+$sed_daysweek_short = array('Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su');
+
+/* Calendar / Datepicker */
+$L['Today'] = "Today";
+$L['Clear'] = "Clear";
+$L['Time'] = "Time:";
+
+/* File input */
+$L['file_browse'] = "Browse";
+$L['file_change'] = "Change";
+$L['file_choose'] = "Choose a file or drag & drop...";
+$L['file_files_chosen'] = "files chosen";

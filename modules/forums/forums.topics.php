@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.topics.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-12
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -256,7 +256,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a)) {
 /* ===========  For Subforums =================*/
 
 $jumpbox_tree = sed_forum_get_tree();
-$jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
+$jumpbox = "<select name=\"jumpbox\" class=\"sed-select\" size=\"1\" onchange=\"sedjs.redirect(this)\">";
 $jumpbox .= "<option value=\"" . sed_url("forums") . "\">" . $L['Forums'] . "</option>";
 
 foreach ($jumpbox_tree as $jb_item) {

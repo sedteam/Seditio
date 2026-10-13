@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.translations.inc.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-13
 Type=Core.admin
 Author=Seditio Team
 Description=Translations and Languages administration
@@ -583,7 +583,7 @@ if ($s == 'languages') {
 			"LANG_ROW_NATIVE" => $l_data['lang_native'],
 			"LANG_ROW_DIRECTION" => strtoupper($l_data['lang_direction']),
 			"LANG_ROW_FLAG" => $flag_img,
-			"LANG_ROW_ACTIVE" => $l_data['lang_active'] ? $L['Yes'] : $L['No'],
+			"LANG_ROW_ACTIVE" => (int)$l_data['lang_active'],
 			"LANG_ROW_ORDER" => isset($l_data['lang_order']) ? $l_data['lang_order'] : 100,
 			"LANG_ROW_EDIT_URL" => sed_url("admin", "m=translations&s=lang_edit&code=" . $l_code),
 			"LANG_ROW_DELETE_URL" => sed_url("admin", "m=translations&a=lang_delete&code=" . $l_code . "&" . sed_xg())
@@ -613,7 +613,7 @@ if ($s == 'languages') {
 		"LANG_ADD_NATIVE_INPUT" => sed_textbox('lang_native', '', 40, 64, 'form-control', false, 'text', array('placeholder' => 'Deutsch', 'required' => 'required')),
 		"LANG_ADD_DIRECTION_SELECT" => sed_selectbox('ltr', 'lang_direction', array('ltr' => 'LTR (Left-to-Right)', 'rtl' => 'RTL (Right-to-Left)'), false),
 		"LANG_ADD_ORDER_INPUT" => sed_textbox('lang_order', '100', 5, 5, 'form-control', false, 'number'),
-		"LANG_ADD_ACTIVE_CHECKBOX" => sed_checkbox('lang_active', '1', true, $L['Active'])
+		"LANG_ADD_ACTIVE_CHECKBOX" => sed_checkbox('lang_active', '1', true, $L['Active'], false, array('class' => 'sed-switch'))
 	));
 
 	$t->parse("ADMIN_TRANSLATIONS.LANGUAGES");
@@ -634,12 +634,12 @@ if ($s == 'languages') {
 			"LANG_EDIT_CODE" => $edit_code,
 			"LANG_EDIT_TITLE" => $ed['lang_title'],
 			"LANG_EDIT_FLAG" => $flag_img,
-			"LANG_EDIT_CODE_INPUT" => '<input type="hidden" name="lang_code" value="' . $edit_code . '" /><input type="hidden" name="is_edit" value="1" /><span class="badge"><strong>' . $flag_img . $edit_code . '</strong></span>',
+			"LANG_EDIT_HIDDEN" => sed_textbox_hidden('lang_code', $edit_code) . sed_textbox_hidden('is_edit', 1),
 			"LANG_EDIT_TITLE_INPUT" => sed_textbox('lang_title', $ed['lang_title'], 40, 64, 'form-control', false, 'text', array('required' => 'required')),
 			"LANG_EDIT_NATIVE_INPUT" => sed_textbox('lang_native', $ed['lang_native'], 40, 64, 'form-control', false, 'text', array('required' => 'required')),
 			"LANG_EDIT_DIRECTION_SELECT" => sed_selectbox($ed['lang_direction'], 'lang_direction', array('ltr' => 'LTR (Left-to-Right)', 'rtl' => 'RTL (Right-to-Left)'), false),
 			"LANG_EDIT_ORDER_INPUT" => sed_textbox('lang_order', (isset($ed['lang_order']) ? $ed['lang_order'] : 100), 5, 5, 'form-control', false, 'number'),
-			"LANG_EDIT_ACTIVE_CHECKBOX" => sed_checkbox('lang_active', '1', !empty($ed['lang_active']), $L['Active']),
+			"LANG_EDIT_ACTIVE_CHECKBOX" => sed_checkbox('lang_active', '1', !empty($ed['lang_active']), $L['Active'], false, array('class' => 'sed-switch')),
 			"LANG_EDIT_CANCEL_URL" => sed_url("admin", "m=translations&s=languages")
 		));
 

@@ -544,7 +544,7 @@ const sedadminjs = (() => {
         for (const header of headers) {
             setStyles(header, { cursor: 'pointer' });
             header.addEventListener('click', function(e) {
-                if (e.target.closest('select, button, a, input, form')) return;
+                if (!this.contains(e.target) || e.target.closest('select, button, a, input, form, label, .sed-select-wrapper, .sed-select-dropdown, .sed-select-item, .sed-switch, .dropdown, .dropdown-menu, .card-header-right, .content-box-header-right, [data-toggle], .no-collapse')) return;
 
                 const contentBox = this.closest('.content-box, .content-card, .dashboard-card, .card');
                 if (!contentBox) return;

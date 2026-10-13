@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/admin/users.admin.php
 Version=186
-Updated=2026-feb-21
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=Users admin
@@ -139,7 +139,7 @@ switch ($n) {
 			$t->parse("ADMIN_USERS.USERS_EDIT.USERS_EDIT_ADMIN");
 		}
 
-		$grpcolor = "<select name=\"rcolor\" size=\"1\" style=\"color:#202020; background-color:" . $row['grp_color'] . ";\">";
+		$grpcolor = "<select name=\"rcolor\" class=\"sed-select\" size=\"1\" style=\"color:#202020; background-color:" . $row['grp_color'] . ";\">";
 		foreach ($cfg['group_colors'] as $color) {
 			$selected = ($color == $row['grp_color']) ? "selected=\"selected\"" : '';
 			$grpcolor .= "<option value=\"" . $color . "\" " . $selected . " style=\"color:#202020; background-color:" . $color . ";\">" . $color . "</option>";
@@ -147,18 +147,18 @@ switch ($n) {
 		$grpcolor .= "</select>";
 
 		if ($g > 5) {
-			$grpdisable = sed_radiobox("rdisabled", $yesno_revers_arr, $row['grp_disabled']);
+			$grpdisable = sed_yesno("rdisabled", $row['grp_disabled']);
 		} else {
-			$grpdisable = $L['Yes'];
+			$grpdisable = '<span class="badge badge-success">' . $L['Yes'] . '</span>';
 		}
 
 		if ($g != 4) {
-			$grphidden = sed_radiobox("rhidden", $yesno_arr, $row['grp_hidden']);
+			$grphidden = sed_yesno("rhidden", $row['grp_hidden']);
 		} else {
-			$grphidden = $L['No'];
+			$grphidden = '<span class="badge badge-secondary">' . $L['No'] . '</span>';
 		}
 
-		$grplevel = "<select name=\"rlevel\" size=\"1\">";
+		$grplevel = "<select name=\"rlevel\" class=\"sed-select\" size=\"1\">";
 		for ($i = 1; $i < 100; $i++) {
 			$selected = ($i == $row['grp_level']) ? "selected=\"selected\"" : '';
 			$grplevel .= "<option value=\"$i\" $selected>" . $i . "</option>";
@@ -221,20 +221,20 @@ switch ($n) {
 			}
 		}
 
-		$grpcolor = "<select name=\"ncolor\" size=\"1\">";
+		$grpcolor = "<select name=\"ncolor\" class=\"sed-select\" size=\"1\">";
 		foreach ($cfg['group_colors'] as $color) {
 			$grpcolor .= "<option value=\"" . $color . "\" style=\"color:#202020; background-color:" . $color . ";\">" . $color . "</option>";
 		}
 		$grpcolor .= "</select>";
 
-		$grplevel = "<select name=\"nlevel\" size=\"1\">";
+		$grplevel = "<select name=\"nlevel\" class=\"sed-select\" size=\"1\">";
 		for ($i = 1; $i < 100; $i++) {
 			$grplevel .= "<option value=\"$i\">" . $i . "</option>";
 		}
 		$grplevel .= "</select>";
 
-		$grpdisable = sed_radiobox("ndisabled", $yesno_revers_arr, 0);
-		$grphidden = sed_radiobox("nhidden", $yesno_arr, 0);
+		$grpdisable = sed_yesno("ndisabled", 0);
+		$grphidden = sed_yesno("nhidden", 0);
 
 		$t->assign(array(
 			"GROUP_ADD_SEND" => sed_url("admin", "m=users&n=add"),

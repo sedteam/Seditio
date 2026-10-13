@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/upgrade/upgrade_185_186.php
 Version=186
-Updated=2026-sep-28
+Updated=2026-oct-10
 Type=Core.upgrade
 Author=Seditio Team
 Description=Database upgrade: PFS nested folders; menu category auto-children; whosonline plugin hooks; dynamic translations & compiled cache; user password and salt columns enlarged
@@ -100,6 +100,26 @@ $adminmain .= "Checking users table (password and salt columns)...<br />";
 @sed_sql_query("ALTER TABLE $db_users MODIFY user_password VARCHAR(255) NOT NULL DEFAULT ''");
 @sed_sql_query("ALTER TABLE $db_users MODIFY user_salt VARCHAR(64) NOT NULL DEFAULT ''");
 $adminmain .= "users: user_password and user_salt columns enlarged.<br />";
+
+/* ======== UI Enhancements & Form Styling Configs (v186) ======== */
+$adminmain .= "Adding UI elements styling configs (disabled by default on upgrade)...<br />";
+
+$skin_configs = array(
+	array('skin', '20', 'yesno_type', 2, 'radio', 'switch,radio,checkbox'),
+	array('skin', '21', 'enable_sed_switch', 3, '0', ''),
+	array('skin', '22', 'enable_sed_select', 3, '0', ''),
+	array('skin', '23', 'enable_sed_input', 3, '0', ''),
+	array('skin', '24', 'enable_sed_datepicker', 3, '0', ''),
+	array('skin', '25', 'enable_sed_file', 3, '0', '')
+);
+
+foreach ($skin_configs as $sc) {
+	$chk = sed_sql_query("SELECT 1 FROM $db_config WHERE config_owner='core' AND config_cat='skin' AND config_name='" . sed_sql_prep($sc[2]) . "' LIMIT 1");
+	if (sed_sql_numrows($chk) == 0) {
+		sed_sql_query("INSERT INTO $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_variants) VALUES ('core', '" . $sc[0] . "', '" . $sc[1] . "', '" . sed_sql_prep($sc[2]) . "', " . (int)$sc[3] . ", '" . sed_sql_prep($sc[4]) . "', '" . sed_sql_prep($sc[4]) . "', '" . sed_sql_prep($sc[5]) . "')");
+	}
+}
+$adminmain .= "UI elements styling configs added.<br />";
 
 $adminmain .= "-----------------------<br />";
 $adminmain .= "Changing the SQL version number to 186...<br />";

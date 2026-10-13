@@ -69,7 +69,7 @@
 								<div class="add-poll-option">
 									{PHP.L.polls_option} #<span class="num">{EDIT_POLL_NUM}</span>: {EDIT_POLL_OPTION}
 									<!-- BEGIN: EDIT_POLL_OPTIONS_DELETE -->
-									<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>
+									<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">&times;</button>
 									<!-- END: EDIT_POLL_OPTIONS_DELETE -->
 								</div>
 								<!-- END: EDIT_POLL_OPTIONS -->

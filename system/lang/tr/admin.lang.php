@@ -12,12 +12,24 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/admin.lang.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-09
 Type=Lang
 Author=Seditio Team
 Description=Admin Turkish language file
 [END_SED]
 ==================== */
+
+/* ====== Form Elements Styling ====== */
+
+$L['cfg_yesno_type'] = array("Varsayılan Evet/Hayır öge türü", "İkili anahtarlar için görüntüleme biçimi");
+$L['cfg_yesno_type_switch'] = "Anahtar (Switch)";
+$L['cfg_yesno_type_radio'] = "Radyo butonları (Evet / Hayır)";
+$L['cfg_yesno_type_checkbox'] = "Standart onay kutusu";
+$L['cfg_enable_sed_switch'] = array("Anahtar biçimlendirmesi (SedSwitch)", "Standart onay kutuları yerine animasyonlu anahtarları etkinleştir");
+$L['cfg_enable_sed_select'] = array("Açılır liste biçimlendirmesi (SedSelect)", "Arama özellikli özel açılır menüleri etkinleştir");
+$L['cfg_enable_sed_input'] = array("Girdi alanları geliştirmesi (SedInput)", "Hızlı temizleme düğmesi ve şifre görünürlüğü anahtarını etkinleştir");
+$L['cfg_enable_sed_datepicker'] = array("Tarih seçici geliştirmesi (SedDatepicker)", "Özel tarih ve saat seçiciyi etkinleştir");
+$L['cfg_enable_sed_file'] = array("Dosya seçimi biçimlendirmesi (SedFile)", "Sürükle ve bırak ile özel dosya yükleme kutusunu etkinleştir");
 
 /* ====== Dashboard & Admin Home ====== */
 

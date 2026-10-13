@@ -191,7 +191,13 @@ const sedjs = {
      * @param {HTMLElement} url - The select element containing the URL options.
      */
     redirect(url) {
-        location.href = url.options[url.selectedIndex].value;
+        if (typeof url === 'string') {
+            location.href = url;
+        } else if (url && url.options && url.selectedIndex >= 0 && url.options[url.selectedIndex]) {
+            location.href = url.options[url.selectedIndex].value;
+        } else if (url && url.value) {
+            location.href = url.value;
+        }
     },
 
     /**
@@ -1703,7 +1709,7 @@ const sedjs = {
      * @param {string} apo - The CSS selector for the poll options container.
      */
     add_poll_option(apo) {
-        const delete_button = '<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">x</button>';
+        const delete_button = '<button type="button" class="poll-option-delete" onclick="sedjs.remove_poll_option(this);">&times;</button>';
         const elem = document.querySelectorAll(apo);
         const last = elem[elem.length - 1];
         const clone = last.cloneNode(true);
@@ -1746,16 +1752,20 @@ const sedjs = {
      * Automatically sets the file title input field based on the selected file name, excluding the file extension.
      */
     autofiletitle() {
-        const fileUpload = document.querySelectorAll('.file');
+        const fileUpload = document.querySelectorAll('.file, .sed-file, input[name^="userfile"]');
         for (let i = 0; i < fileUpload.length; i++) {
-            fileUpload[i].onchange = function () {
+            fileUpload[i].addEventListener('change', function () {
                 const filename = this.value;
+                if (!this.name || !this.name.includes('userfile')) return;
                 const inputFileTitleName = this.name.replace('userfile', 'ntitle');
-                const k = filename.split('\\').pop().split('/').pop();
-                const lastDotIndex = k.lastIndexOf('.');
-                const title = (lastDotIndex === -1) ? k : k.substring(0, lastDotIndex);
-                document.querySelector(`[name="${inputFileTitleName}"]`).value = title;
-            };
+                const titleInput = document.querySelector(`[name="${inputFileTitleName}"]`);
+                if (titleInput) {
+                    const k = filename.split('\\').pop().split('/').pop();
+                    const lastDotIndex = k.lastIndexOf('.');
+                    const title = (lastDotIndex === -1) ? k : k.substring(0, lastDotIndex);
+                    titleInput.value = title;
+                }
+            });
         }
     },
 
@@ -2107,16 +2117,49 @@ const sedjs = {
         let offsetX = 0; // Offset from mouse to element left
         let offsetY = 0; // Offset from mouse to element top
         let scrollIntervalId = null; // Auto-scroll interval ID
+        let initialItemRect = null; // Stored bounding rect of dragItem before drag
+
+        function getTargetContainer(c) {
+            if (!c) return null;
+            if (c.tagName && c.tagName.toLowerCase() === 'table') {
+                return c.querySelector('tbody') || c;
+            }
+            return c;
+        }
+
+        function getAllContainers() {
+            const list = [element];
+            if (settings.connectWith) {
+                const nodes = document.querySelectorAll(settings.connectWith);
+                for (let i = 0; i < nodes.length; i++) {
+                    if (nodes[i] !== element && list.indexOf(nodes[i]) === -1) {
+                        list.push(nodes[i]);
+                    }
+                }
+            }
+            return list.map(getTargetContainer).filter(Boolean);
+        }
+
+        function getContainerItems(cnt) {
+            const target = getTargetContainer(cnt);
+            if (!target) return [];
+            const result = [];
+            const ch = target.children;
+            for (let i = 0; i < ch.length; i++) {
+                const child = ch[i];
+                if (child === helper || child === placeholder || child === dragItem) continue;
+                if (matchesSelector(child, settings.items) && !sedjs.hasClass(child, 'disabled')) {
+                    result.push(child);
+                }
+            }
+            return result;
+        }
 
         /**
          * Initialize the sortable functionality.
          */
         function init() {
-            if (settings.connectWith) {
-                connectedLists = Array.prototype.slice.call(
-                    document.querySelectorAll(settings.connectWith)
-                );
-            }
+            updateConnectedLists();
             updateItems();
             bindEvents();
             setupDynamicCheck();
@@ -2125,16 +2168,33 @@ const sedjs = {
             }
         }
 
+        function updateConnectedLists() {
+            if (settings.connectWith) {
+                connectedLists = Array.prototype.slice.call(
+                    document.querySelectorAll(settings.connectWith)
+                ).filter(function(list) {
+                    return list !== element;
+                });
+            } else {
+                connectedLists = [];
+            }
+        }
+
         /**
          * Update the list of sortable items based on the current DOM state.
-         * @returns {boolean} Whether the items list has changed.
+         * Only immediate children of the target container are considered items!
          */
         function updateItems() {
-            const allItems = element.querySelectorAll(settings.items);
+            const targetContainer = getTargetContainer(element);
+            if (!targetContainer) return false;
+
+            const children = targetContainer.children;
             const newItems = [];
-            for (let i = 0; i < allItems.length; i++) {
-                if (!sedjs.hasClass(allItems[i], 'disabled')) {
-                    newItems.push(allItems[i]);
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child === helper || child === placeholder) continue;
+                if (matchesSelector(child, settings.items) && !sedjs.hasClass(child, 'disabled')) {
+                    newItems.push(child);
                 }
             }
 
@@ -2159,11 +2219,12 @@ const sedjs = {
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const dragElement = settings.handle ?
-                    item.querySelector(settings.handle) || item : item;
+                    (item.querySelector(settings.handle) || item) : item;
 
-                if (!dragElement._sortableBound) {
-                    dragElement._sortableBound = true;
-                    dragElement.style.cursor = 'move';
+                if (!item._sortableBound) {
+                    item._sortableBound = true;
+                    item._sortableDragEl = dragElement;
+                    dragElement.style.cursor = 'grab';
 
                     dragElement.addEventListener('mousedown', handlePointerDown, false);
                     dragElement.addEventListener('touchstart', handlePointerDown, false);
@@ -2177,15 +2238,13 @@ const sedjs = {
         function unbindEvents() {
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
-                const dragElement = settings.handle ?
-                    item.querySelector(settings.handle) || item : item;
-
-                if (dragElement._sortableBound) {
-                    dragElement._sortableBound = false;
+                if (item._sortableBound) {
+                    const dragElement = item._sortableDragEl || item;
                     dragElement.style.cursor = '';
-
-                    dragElement.removeEventListener('mousedown', handlePointerDown);
-                    dragElement.removeEventListener('touchstart', handlePointerDown);
+                    dragElement.removeEventListener('mousedown', handlePointerDown, false);
+                    dragElement.removeEventListener('touchstart', handlePointerDown, false);
+                    item._sortableBound = false;
+                    item._sortableDragEl = null;
                 }
             }
         }
@@ -2194,8 +2253,10 @@ const sedjs = {
          * Set up dynamic checking for DOM changes.
          */
         function setupDynamicCheck() {
+            const targetContainer = getTargetContainer(element) || element;
             if (window.MutationObserver) {
                 observer = new MutationObserver((mutations) => {
+                    if (isDragging) return; // Do not disrupt during active drag!
                     for (let i = 0; i < mutations.length; i++) {
                         const mutation = mutations[i];
                         if (mutation.addedNodes.length || mutation.removedNodes.length) {
@@ -2204,17 +2265,19 @@ const sedjs = {
                                 unbindEvents();
                                 bindEvents();
                             }
+                            break;
                         }
                     }
                 });
-                observer.observe(element, {
+                observer.observe(targetContainer, {
                     childList: true,
-                    subtree: true
+                    subtree: false // Watch immediate children only!
                 });
             } else {
-                let lastChildCount = element.children.length;
+                let lastChildCount = targetContainer.children.length;
                 intervalId = setInterval(() => {
-                    const currentChildCount = element.children.length;
+                    if (isDragging) return;
+                    const currentChildCount = targetContainer.children.length;
                     if (currentChildCount !== lastChildCount) {
                         const itemsChanged = updateItems();
                         if (itemsChanged && !settings.disabled) {
@@ -2228,11 +2291,44 @@ const sedjs = {
         }
 
         /**
+         * Get the sortable item from an event target.
+         * Must be an immediate child of one of the valid containers.
+         */
+        function getItem(el) {
+            const containers = getAllContainers();
+            while (el && el !== document.body && el !== document.documentElement) {
+                if (el.parentNode && containers.indexOf(el.parentNode) !== -1) {
+                    if (matchesSelector(el, settings.items) && !sedjs.hasClass(el, 'disabled')) {
+                        return el;
+                    }
+                }
+                el = el.parentNode;
+            }
+            return null;
+        }
+
+        /**
          * Handle pointer down (mousedown/touchstart).
          * @param {Event} e - The pointer down event.
          */
         function handlePointerDown(e) {
             if (settings.disabled || isDragging) return;
+            if (e.type === 'mousedown' && e.button !== 0) return;
+
+            // If handle is defined, ensure click was inside the handle
+            if (settings.handle) {
+                let handleEl = e.target;
+                let insideHandle = false;
+                while (handleEl && handleEl !== document.body) {
+                    if (matchesSelector(handleEl, settings.handle)) {
+                        insideHandle = true;
+                        break;
+                    }
+                    if (handleEl === element) break;
+                    handleEl = handleEl.parentNode;
+                }
+                if (!insideHandle) return;
+            }
 
             const target = getItem(e.target);
             if (!target) return;
@@ -2243,6 +2339,12 @@ const sedjs = {
             startY = touch.clientY;
 
             const rect = dragItem.getBoundingClientRect();
+            initialItemRect = {
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height
+            };
             offsetX = startX - rect.left;
             offsetY = startY - rect.top;
 
@@ -2251,7 +2353,9 @@ const sedjs = {
             document.addEventListener('mouseup', handlePointerUp, false);
             document.addEventListener('touchend', handlePointerUp, false);
 
-            e.preventDefault();
+            if (e.type === 'mousedown') {
+                e.preventDefault();
+            }
         }
 
         /**
@@ -2266,7 +2370,7 @@ const sedjs = {
             const moveY = touch.clientY - startY;
             const distance = Math.sqrt(moveX * moveX + moveY * moveY);
 
-            if (!isDragging && distance > 5) {
+            if (!isDragging && distance > 4) {
                 startDragging(e);
             }
 
@@ -2278,9 +2382,10 @@ const sedjs = {
                 if (settings.sort) {
                     settings.sort(e, { item: dragItem, helper: helper });
                 }
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
             }
-
-            e.preventDefault();
         }
 
         /**
@@ -2309,16 +2414,12 @@ const sedjs = {
             isDragging = true;
             orderChanged = false;
 
+            updateConnectedLists();
             cleanupExistingElements();
             createHelper();
             createPlaceholder();
 
-            dragItem.style.visibility = 'hidden';
-
-            const links = dragItem.querySelectorAll('a');
-            for (let i = 0; i < links.length; i++) {
-                links[i].style.pointerEvents = 'none';
-            }
+            dragItem.style.display = 'none';
 
             if (settings.start) {
                 settings.start(e, { item: dragItem, helper: helper });
@@ -2339,26 +2440,21 @@ const sedjs = {
                 settings.beforeStop(e, { item: dragItem });
             }
 
-            if (placeholder && placeholder.parentNode) {
-                placeholder.parentNode.insertBefore(dragItem, placeholder);
+            const placeholderParent = placeholder ? placeholder.parentNode : null;
+            const originalContainer = getTargetContainer(element);
+
+            if (placeholder && placeholderParent) {
+                placeholderParent.insertBefore(dragItem, placeholder);
+                placeholderParent.removeChild(placeholder);
             }
 
-            dragItem.style.visibility = '';
-
-            const links = dragItem.querySelectorAll('a');
-            for (let i = 0; i < links.length; i++) {
-                links[i].style.pointerEvents = 'auto';
-            }
+            dragItem.style.display = '';
 
             if (helper && helper.parentNode) {
                 helper.parentNode.removeChild(helper);
             }
 
-            if (placeholder && placeholder.parentNode) {
-                placeholder.parentNode.removeChild(placeholder);
-            }
-
-            const isReceived = placeholder && placeholder.parentNode !== element;
+            const isReceived = placeholderParent && placeholderParent !== originalContainer;
             if (isReceived && settings.receive) {
                 settings.receive(e, { item: dragItem, sender: element });
             }
@@ -2373,7 +2469,14 @@ const sedjs = {
 
             helper = null;
             placeholder = null;
+            initialItemRect = null;
             orderChanged = false;
+            isDragging = false;
+
+            // Re-sync items and listeners
+            updateItems();
+            unbindEvents();
+            bindEvents();
         }
 
         /**
@@ -2384,17 +2487,19 @@ const sedjs = {
             helper.removeAttribute('id');
             sedjs.addClass(helper, settings.helper);
 
-            const rect = dragItem.getBoundingClientRect();
-            helper.style.position = 'fixed';
-            helper.style.zIndex = '9999';
-            helper.style.width = rect.width + 'px';
-            helper.style.height = rect.height + 'px';
-            helper.style.boxSizing = 'border-box';
-            helper.style.pointerEvents = 'none';
-            helper.style.opacity = '0.8';
-            helper.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
-            helper.style.transform = 'rotate(-2deg)';
-            helper.style.transition = 'none';
+            const rect = initialItemRect || dragItem.getBoundingClientRect();
+            helper.style.setProperty('position', 'fixed', 'important');
+            helper.style.setProperty('z-index', '99999', 'important');
+            helper.style.setProperty('left', (settings.axis === 'y' ? rect.left : (startX - offsetX)) + 'px', 'important');
+            helper.style.setProperty('top', (settings.axis === 'x' ? rect.top : (startY - offsetY)) + 'px', 'important');
+            helper.style.setProperty('width', rect.width + 'px', 'important');
+            helper.style.setProperty('height', rect.height + 'px', 'important');
+            helper.style.setProperty('box-sizing', 'border-box', 'important');
+            helper.style.setProperty('pointer-events', 'none', 'important');
+            helper.style.setProperty('margin', '0', 'important');
+            helper.style.setProperty('opacity', '0.9', 'important');
+            helper.style.setProperty('cursor', 'grabbing', 'important');
+            helper.style.setProperty('transition', 'none', 'important');
 
             document.body.appendChild(helper);
         }
@@ -2406,18 +2511,11 @@ const sedjs = {
             placeholder = document.createElement(dragItem.tagName);
             sedjs.addClass(placeholder, settings.placeholder);
 
-            const rect = dragItem.getBoundingClientRect();
-            const computedStyle = window.getComputedStyle(dragItem);
-
-            placeholder.style.height = rect.height + 'px';
-            placeholder.style.width = rect.width + 'px';
-            placeholder.style.boxSizing = 'border-box';
-            placeholder.style.margin = computedStyle.margin;
-            placeholder.style.padding = '0';
-            placeholder.style.border = computedStyle.border;
-            placeholder.style.float = computedStyle.float;
-            placeholder.style.display = computedStyle.display;
-            placeholder.style.transition = 'all 0.2s ease';
+            const rect = initialItemRect || dragItem.getBoundingClientRect();
+            placeholder.style.setProperty('height', rect.height + 'px', 'important');
+            placeholder.style.setProperty('min-height', rect.height + 'px', 'important');
+            placeholder.style.setProperty('box-sizing', 'border-box', 'important');
+            placeholder.style.setProperty('transition', 'none', 'important');
 
             dragItem.parentNode.insertBefore(placeholder, dragItem);
         }
@@ -2433,61 +2531,74 @@ const sedjs = {
             let x = clientX - offsetX;
             let y = clientY - offsetY;
 
-            if (settings.axis === 'x') {
-                y = dragItem.getBoundingClientRect().top;
-            } else if (settings.axis === 'y') {
-                x = dragItem.getBoundingClientRect().left;
+            if (settings.axis === 'x' && initialItemRect) {
+                y = initialItemRect.top;
+            } else if (settings.axis === 'y' && initialItemRect) {
+                x = initialItemRect.left;
             }
 
-            helper.style.left = x + 'px';
-            helper.style.top = y + 'px';
+            helper.style.setProperty('left', x + 'px', 'important');
+            helper.style.setProperty('top', y + 'px', 'important');
         }
 
         /**
-         * Check intersection with other items and update placeholder position.
+         * Check intersection with items and update placeholder position.
          * @param {number} clientX - Cursor X position.
          * @param {number} clientY - Cursor Y position.
          */
         function checkIntersection(clientX, clientY) {
             if (!placeholder) return;
 
+            const containers = getAllContainers();
+            let matchedContainer = null;
+
+            // Find which container cursor is over or closest to
+            for (let c = 0; c < containers.length; c++) {
+                const cnt = containers[c];
+                const cRect = cnt.getBoundingClientRect();
+                if (clientX >= cRect.left - 20 && clientX <= cRect.right + 20 &&
+                    clientY >= cRect.top - 20 && clientY <= cRect.bottom + 20) {
+                    matchedContainer = cnt;
+                    break;
+                }
+            }
+
+            if (!matchedContainer) return;
+
+            const containerItems = getContainerItems(matchedContainer);
+
+            // If target container is empty (or has only our placeholder)
+            if (containerItems.length === 0) {
+                if (placeholder.parentNode !== matchedContainer) {
+                    matchedContainer.appendChild(placeholder);
+                    orderChanged = true;
+                    if (settings.change) {
+                        settings.change(null, { item: dragItem, placeholder: placeholder });
+                    }
+                }
+                return;
+            }
+
+            // Find closest or intersecting item in container
             let targetItem = null;
             let minDistance = Infinity;
 
-            const allContainers = [element].concat(connectedLists);
+            for (let i = 0; i < containerItems.length; i++) {
+                const item = containerItems[i];
+                const rect = item.getBoundingClientRect();
 
-            for (let c = 0; c < allContainers.length; c++) {
-                const container = allContainers[c];
-                const containerItems = container.querySelectorAll(settings.items);
-
-                for (let i = 0; i < containerItems.length; i++) {
-                    const item = containerItems[i];
-                    if (item === dragItem || item === placeholder) continue;
-
-                    const rect = item.getBoundingClientRect();
-
-                    if (settings.tolerance === 'pointer') {
-                        if (clientX >= rect.left && clientX <= rect.right &&
-                            clientY >= rect.top && clientY <= rect.bottom) {
-                            targetItem = item;
-                            break;
-                        }
-                    } else {
-                        const centerX = rect.left + rect.width / 2;
-                        const centerY = rect.top + rect.height / 2;
-                        const distance = Math.sqrt(
-                            Math.pow(clientX - centerX, 2) +
-                            Math.pow(clientY - centerY, 2)
-                        );
-
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            targetItem = item;
-                        }
-                    }
+                if (clientX >= rect.left && clientX <= rect.right &&
+                    clientY >= rect.top && clientY <= rect.bottom) {
+                    targetItem = item;
+                    break;
                 }
 
-                if (targetItem) break;
+                const centerY = rect.top + rect.height / 2;
+                const distance = Math.abs(clientY - centerY);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    targetItem = item;
+                }
             }
 
             if (targetItem) {
@@ -2502,7 +2613,7 @@ const sedjs = {
          * @param {number} clientY - Cursor Y position.
          */
         function movePlaceholder(target, clientX, clientY) {
-            if (!placeholder) return;
+            if (!placeholder || !target) return;
 
             const rect = target.getBoundingClientRect();
             const isVertical = !settings.axis || settings.axis === 'y';
@@ -2512,16 +2623,9 @@ const sedjs = {
                 clientX < rect.left + rect.width / 2;
 
             const parent = target.parentNode;
-            const currentPlaceholderParent = placeholder.parentNode;
+            const newPosition = shouldInsertBefore ? target : target.nextSibling;
 
-            let newPosition;
-            if (shouldInsertBefore) {
-                newPosition = target;
-            } else {
-                newPosition = target.nextSibling;
-            }
-
-            if (placeholder.nextSibling !== newPosition) {
+            if (placeholder.parentNode !== parent || placeholder.nextSibling !== newPosition) {
                 parent.insertBefore(placeholder, newPosition);
                 orderChanged = true;
 
@@ -2566,35 +2670,12 @@ const sedjs = {
                 }
             }
 
-            const existingPlaceholders = element.querySelectorAll(`.${settings.placeholder}`);
+            const existingPlaceholders = document.querySelectorAll(`.${settings.placeholder}`);
             for (let i = 0; i < existingPlaceholders.length; i++) {
                 if (existingPlaceholders[i].parentNode) {
                     existingPlaceholders[i].parentNode.removeChild(existingPlaceholders[i]);
                 }
             }
-        }
-
-        /**
-         * Get the sortable item from an event target.
-         * @param {HTMLElement} el - The element to check.
-         * @returns {HTMLElement|null} The matching item or null.
-         */
-        function getItem(el) {
-            return getClosest(el, settings.items);
-        }
-
-        /**
-         * Find the closest ancestor matching a selector.
-         * @param {HTMLElement} el - The starting element.
-         * @param {string} selector - The CSS selector to match.
-         * @returns {HTMLElement|null} The closest matching element or null.
-         */
-        function getClosest(el, selector) {
-            while (el && el !== document.body) {
-                if (matchesSelector(el, selector)) return el;
-                el = el.parentNode;
-            }
-            return null;
         }
 
         /**
@@ -2648,6 +2729,13 @@ const sedjs = {
                 clearInterval(scrollIntervalId);
                 scrollIntervalId = null;
             }
+            document.removeEventListener('mousemove', handlePointerMove);
+            document.removeEventListener('touchmove', handlePointerMove);
+            document.removeEventListener('mouseup', handlePointerUp);
+            document.removeEventListener('touchend', handlePointerUp);
+            if (helper && helper.parentNode) helper.parentNode.removeChild(helper);
+            if (placeholder && placeholder.parentNode) placeholder.parentNode.removeChild(placeholder);
+            if (dragItem) dragItem.style.display = '';
         }
 
         init();
@@ -2680,6 +2768,1583 @@ const sedjs = {
                 }
             }
         });
+    },
+
+    /**
+     * Universal Custom Selectbox module (sedjs.select)
+     */
+    select: {
+        instances: new WeakMap(),
+
+        /**
+         * Initialize custom selectbox on a single select element.
+         * @param {HTMLSelectElement} select
+         * @param {Object} [userOptions]
+         * @returns {Object} API instance
+         */
+        init(select, userOptions = {}) {
+            if (!select || select.tagName.toLowerCase() !== 'select') return null;
+            if (this.instances.has(select)) return this.instances.get(select);
+
+            const self = this;
+            const data = select.dataset || {};
+            const styleWidth = select.style.width;
+            const options = sedjs.extend({
+                placeholder: data.placeholder || self._getInitialPlaceholder(select) || '...',
+                search: data.search !== undefined ? (data.search === 'true' || data.search === '') : false,
+                searchPlaceholder: data.searchPlaceholder || '...',
+                showValues: data.showValues === 'true',
+                size: data.size || (sedjs.hasClass(select, 'sed-select-sm') ? 'sm' : ''),
+                width: data.width || (styleWidth && styleWidth !== 'auto' ? styleWidth : (sedjs.hasClass(select, 'sed-select-block') ? '100%' : null)),
+                searchThreshold: 8
+            }, userOptions);
+
+            const state = {
+                select: select,
+                options: options,
+                isMultiple: select.multiple,
+                isOpen: false,
+                highlightedIndex: -1,
+                flatItems: [],
+                wrapper: null,
+                toggle: null,
+                label: null,
+                arrow: null,
+                dropdown: null,
+                searchContainer: null,
+                searchInput: null,
+                actionsContainer: null,
+                list: null,
+                _onDocClick: null,
+                _onNativeChange: null
+            };
+
+            if (!select.dataset.search && select.options.length >= options.searchThreshold) {
+                options.search = true;
+            }
+
+            if (!options.width) {
+                options.width = self._calculateAutoWidth(select, options);
+            }
+
+            self._buildUI(state);
+            self._bindEvents(state);
+            self._update(state);
+
+            const api = {
+                open: () => self._open(state),
+                close: () => self._close(state),
+                toggle: () => self._toggle(state),
+                update: () => self._update(state),
+                refresh: () => self._refresh(state),
+                enable: () => self._enable(state),
+                disable: () => self._disable(state),
+                destroy: () => self._destroy(state)
+            };
+
+            select._sedSelect = api;
+            this.instances.set(select, api);
+            return api;
+        },
+
+        /**
+         * Initialize all matching selects within a container.
+         * @param {HTMLElement|Document|string} [container=document]
+         * @param {string} [selector='select.sed-select, select[data-sed-select]']
+         * @returns {Array}
+         */
+        initAll(container = document, selector = 'select.sed-select, select[data-sed-select]') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return [];
+            const elements = root.querySelectorAll(selector);
+            const apis = [];
+            elements.forEach(el => {
+                const api = this.init(el);
+                if (api) apis.push(api);
+            });
+            return apis;
+        },
+
+        /**
+         * Get API instance from select element.
+         * @param {HTMLSelectElement} select
+         * @returns {Object|null}
+         */
+        get(select) {
+            if (!select) return null;
+            return this.instances.get(select) || select._sedSelect || null;
+        },
+
+        /**
+         * Refresh select instance.
+         * @param {HTMLSelectElement} select
+         */
+        refresh(select) {
+            const api = this.get(select);
+            if (api) api.refresh();
+        },
+
+        /**
+         * Destroy select instance and restore native element.
+         * @param {HTMLSelectElement} select
+         */
+        destroy(select) {
+            const api = this.get(select);
+            if (api) api.destroy();
+        },
+
+        _getInitialPlaceholder(select) {
+            if (select.options.length > 0 && select.options[0].value === '') {
+                return select.options[0].text;
+            }
+            return '';
+        },
+
+        _calculateAutoWidth(select, options) {
+            // Check if element is currently rendered in DOM and has a measurable width
+            if (select.offsetWidth > 0) {
+                return Math.max(select.offsetWidth, 44) + 'px';
+            }
+
+            let longestText = '';
+            Array.from(select.options).forEach(opt => {
+                const txt = (opt.text || '').trim();
+                if (txt.length > longestText.length) {
+                    longestText = txt;
+                }
+            });
+
+            if (!longestText && options.placeholder) {
+                longestText = options.placeholder;
+            }
+
+            const span = document.createElement('span');
+            span.style.visibility = 'hidden';
+            span.style.position = 'absolute';
+            span.style.whiteSpace = 'nowrap';
+            span.style.fontSize = options.size === 'sm' ? '12px' : '13px';
+            const compStyle = window.getComputedStyle ? getComputedStyle(select) : null;
+            span.style.fontFamily = (compStyle && compStyle.fontFamily) ? compStyle.fontFamily : 'sans-serif';
+            span.textContent = longestText;
+            document.body.appendChild(span);
+            const textWidth = Math.ceil(span.getBoundingClientRect().width);
+            document.body.removeChild(span);
+
+            const minWidth = longestText.length <= 2 ? 64 : (longestText.length <= 4 ? 78 : 98);
+            return Math.max(minWidth, textWidth + 40) + 'px';
+        },
+
+        _buildUI(state) {
+            const select = state.select;
+            const options = state.options;
+
+            select.style.position = 'absolute';
+            select.style.opacity = '0';
+            select.style.height = '0';
+            select.style.width = '0';
+            select.style.pointerEvents = 'none';
+            select.setAttribute('tabindex', '-1');
+            select.setAttribute('aria-hidden', 'true');
+
+            const wrapper = document.createElement('div');
+            let wrapperClass = 'sed-select-wrapper';
+            if (state.isMultiple) wrapperClass += ' sed-multiselect';
+            if (options.size === 'sm') wrapperClass += ' sed-select-sm';
+            if (options.width === '100%') wrapperClass += ' sed-select-block';
+            if (select.disabled) wrapperClass += ' disabled';
+
+            wrapper.className = wrapperClass;
+            if (options.width && options.width !== '100%') {
+                wrapper.style.width = options.width;
+            }
+
+            const toggle = document.createElement('div');
+            toggle.className = 'sed-select-toggle';
+            toggle.setAttribute('tabindex', select.disabled ? '-1' : '0');
+            toggle.setAttribute('role', 'combobox');
+            toggle.setAttribute('aria-haspopup', 'listbox');
+            toggle.setAttribute('aria-expanded', 'false');
+
+            const label = document.createElement('span');
+            label.className = 'sed-select-label';
+
+            const arrow = document.createElement('span');
+            arrow.className = 'sed-select-arrow';
+
+            toggle.appendChild(label);
+            toggle.appendChild(arrow);
+            wrapper.appendChild(toggle);
+
+            const dropdown = document.createElement('div');
+            dropdown.className = 'sed-select-dropdown';
+            dropdown.setAttribute('role', 'listbox');
+            dropdown.addEventListener('click', (e) => e.stopPropagation());
+
+            if (options.search) {
+                const searchContainer = document.createElement('div');
+                searchContainer.className = 'sed-select-search';
+                const searchInput = document.createElement('input');
+                searchInput.type = 'text';
+                searchInput.placeholder = options.searchPlaceholder;
+                searchInput.setAttribute('autocomplete', 'off');
+                searchContainer.appendChild(searchInput);
+                dropdown.appendChild(searchContainer);
+                state.searchContainer = searchContainer;
+                state.searchInput = searchInput;
+            }
+
+            if (state.isMultiple) {
+                const actionsContainer = document.createElement('div');
+                actionsContainer.className = 'sed-select-actions';
+
+                const selectAllBtn = document.createElement('a');
+                selectAllBtn.textContent = 'Select all';
+                selectAllBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    Array.from(select.options).forEach(opt => {
+                        if (!opt.disabled) opt.selected = true;
+                    });
+                    this._triggerChange(state);
+                });
+
+                const clearAllBtn = document.createElement('a');
+                clearAllBtn.textContent = 'Clear';
+                clearAllBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    Array.from(select.options).forEach(opt => opt.selected = false);
+                    this._triggerChange(state);
+                });
+
+                actionsContainer.appendChild(selectAllBtn);
+                actionsContainer.appendChild(clearAllBtn);
+                dropdown.appendChild(actionsContainer);
+                state.actionsContainer = actionsContainer;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'sed-select-list';
+            dropdown.appendChild(list);
+
+            wrapper.appendChild(dropdown);
+            select.parentNode.insertBefore(wrapper, select.nextSibling);
+
+            state.wrapper = wrapper;
+            state.toggle = toggle;
+            state.label = label;
+            state.arrow = arrow;
+            state.dropdown = dropdown;
+            state.list = list;
+
+            this._renderItems(state);
+        },
+
+        _renderItems(state, filter = '') {
+            const list = state.list;
+            const select = state.select;
+            const options = state.options;
+            list.innerHTML = '';
+            const filterLower = filter.toLowerCase().trim();
+            let hasMatches = false;
+            state.flatItems = [];
+            state.highlightedIndex = -1;
+
+            const renderOption = (option, container) => {
+                const text = option.text;
+                const val = option.value;
+
+                if (filterLower && !text.toLowerCase().includes(filterLower) && !val.toLowerCase().includes(filterLower)) {
+                    return;
+                }
+                hasMatches = true;
+
+                const item = document.createElement('div');
+                let itemClass = 'sed-select-item';
+                if (option.selected) itemClass += ' selected';
+                if (option.disabled) itemClass += ' disabled';
+                item.className = itemClass;
+                item.setAttribute('role', 'option');
+                item.setAttribute('aria-selected', option.selected ? 'true' : 'false');
+                item._option = option;
+
+                if (state.isMultiple) {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = option.selected;
+                    checkbox.disabled = option.disabled;
+                    checkbox.tabIndex = -1;
+                    checkbox.addEventListener('change', () => {
+                        option.selected = checkbox.checked;
+                        item.classList.toggle('selected', checkbox.checked);
+                        item.setAttribute('aria-selected', checkbox.checked ? 'true' : 'false');
+                        this._triggerChange(state);
+                    });
+                    item.appendChild(checkbox);
+                }
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = text;
+                item.appendChild(textSpan);
+
+                if (options.showValues && val && val !== text) {
+                    const badge = document.createElement('span');
+                    badge.className = 'item-badge';
+                    badge.textContent = val;
+                    item.appendChild(badge);
+                }
+
+                if (!option.disabled) {
+                    state.flatItems.push(item);
+
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (e.target.tagName.toLowerCase() === 'input') return;
+                        if (state.isMultiple) {
+                            const cb = item.querySelector('input[type="checkbox"]');
+                            if (cb) {
+                                cb.checked = !cb.checked;
+                                cb.dispatchEvent(new Event('change'));
+                            }
+                        } else {
+                            Array.from(select.options).forEach(opt => opt.selected = false);
+                            option.selected = true;
+                            select.value = option.value;
+                            this._triggerChange(state);
+                            this._close(state);
+                            state.toggle.focus();
+                        }
+                    });
+
+                    item.addEventListener('mouseenter', () => {
+                        this._setHighlight(state, state.flatItems.indexOf(item));
+                    });
+                }
+
+                container.appendChild(item);
+            };
+
+            Array.from(select.children).forEach(child => {
+                if (child.tagName.toLowerCase() === 'optgroup') {
+                    const groupContainer = document.createElement('div');
+                    groupContainer.className = 'sed-select-group';
+
+                    const groupLabel = document.createElement('div');
+                    groupLabel.className = 'sed-select-group-label';
+                    groupLabel.textContent = child.label;
+                    groupContainer.appendChild(groupLabel);
+
+                    let groupHasMatches = false;
+                    Array.from(child.children).forEach(opt => {
+                        const countBefore = groupContainer.children.length;
+                        renderOption(opt, groupContainer);
+                        if (groupContainer.children.length > countBefore) {
+                            groupHasMatches = true;
+                        }
+                    });
+
+                    if (groupHasMatches) {
+                        list.appendChild(groupContainer);
+                    }
+                } else if (child.tagName.toLowerCase() === 'option') {
+                    renderOption(child, list);
+                }
+            });
+
+            if (!hasMatches) {
+                const empty = document.createElement('div');
+                empty.className = 'sed-select-empty';
+                empty.textContent = '...';
+                list.appendChild(empty);
+            }
+        },
+
+        _update(state) {
+            const select = state.select;
+            const selectedOptions = Array.from(select.selectedOptions);
+
+            if (selectedOptions.length === 0) {
+                state.label.innerHTML = `<span class="sed-select-placeholder">${state.options.placeholder}</span>`;
+            } else if (state.isMultiple) {
+                const names = selectedOptions.map(opt => opt.text);
+                state.label.textContent = names.join(', ');
+            } else {
+                state.label.textContent = selectedOptions[0].text;
+            }
+
+            state.wrapper.classList.toggle('disabled', select.disabled);
+            state.toggle.setAttribute('tabindex', select.disabled ? '-1' : '0');
+
+            this._syncItemStates(state);
+        },
+
+        _syncItemStates(state) {
+            if (!state.flatItems || state.flatItems.length === 0) {
+                this._renderItems(state, state.searchInput ? state.searchInput.value : '');
+                return;
+            }
+            state.flatItems.forEach(item => {
+                if (item._option) {
+                    const isSel = item._option.selected;
+                    item.classList.toggle('selected', isSel);
+                    item.setAttribute('aria-selected', isSel ? 'true' : 'false');
+                    if (state.isMultiple) {
+                        const cb = item.querySelector('input[type="checkbox"]');
+                        if (cb) cb.checked = isSel;
+                    }
+                }
+            });
+        },
+
+        _triggerChange(state) {
+            state.select.dispatchEvent(new Event('change', { bubbles: true }));
+            this._update(state);
+        },
+
+        _checkPosition(state) {
+            const rect = state.wrapper.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            const spaceBelow = viewportHeight - rect.bottom;
+            const spaceAbove = rect.top;
+            const dropdownHeight = (state.dropdown && state.dropdown.offsetHeight > 50) ? state.dropdown.offsetHeight : 240;
+
+            if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
+                state.wrapper.classList.add('sed-select-dropup');
+            } else {
+                state.wrapper.classList.remove('sed-select-dropup');
+            }
+        },
+
+        _open(state) {
+            if (state.isOpen || state.select.disabled) return;
+
+            document.querySelectorAll('.sed-select-wrapper.open').forEach(el => {
+                const sel = el.previousElementSibling;
+                if (sel && sel._sedSelect && sel !== state.select) {
+                    sel._sedSelect.close();
+                }
+            });
+
+            this._checkPosition(state);
+            state.wrapper.classList.add('open');
+            state.toggle.setAttribute('aria-expanded', 'true');
+            state.isOpen = true;
+
+            if (state.searchInput) {
+                state.searchInput.value = '';
+                this._renderItems(state);
+                this._checkPosition(state);
+                setTimeout(() => state.searchInput.focus(), 30);
+            } else {
+                const currentSelected = state.flatItems.find(item => item._option && item._option.selected);
+                if (currentSelected) {
+                    this._setHighlight(state, state.flatItems.indexOf(currentSelected));
+                    this._scrollToHighlighted(state);
+                }
+                this._checkPosition(state);
+            }
+        },
+
+        _close(state) {
+            if (!state.isOpen) return;
+            state.wrapper.classList.remove('open');
+            state.wrapper.classList.remove('sed-select-dropup');
+            state.toggle.setAttribute('aria-expanded', 'false');
+            state.isOpen = false;
+            state.highlightedIndex = -1;
+            this._clearHighlight(state);
+        },
+
+        _toggle(state) {
+            if (state.isOpen) {
+                this._close(state);
+            } else {
+                this._open(state);
+            }
+        },
+
+        _setHighlight(state, index) {
+            this._clearHighlight(state);
+            if (index >= 0 && index < state.flatItems.length) {
+                state.highlightedIndex = index;
+                state.flatItems[index].classList.add('highlighted');
+            }
+        },
+
+        _clearHighlight(state) {
+            state.flatItems.forEach(item => item.classList.remove('highlighted'));
+        },
+
+        _scrollToHighlighted(state) {
+            if (state.highlightedIndex >= 0 && state.flatItems[state.highlightedIndex]) {
+                state.flatItems[state.highlightedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        },
+
+        _navigateItems(state, direction) {
+            if (!state.isOpen) {
+                this._open(state);
+                return;
+            }
+            if (state.flatItems.length === 0) return;
+
+            let newIndex = state.highlightedIndex + direction;
+            if (newIndex < 0) newIndex = 0;
+            if (newIndex >= state.flatItems.length) newIndex = state.flatItems.length - 1;
+
+            this._setHighlight(state, newIndex);
+            this._scrollToHighlighted(state);
+        },
+
+        _selectHighlighted(state) {
+            if (state.highlightedIndex >= 0 && state.flatItems[state.highlightedIndex]) {
+                state.flatItems[state.highlightedIndex].click();
+            }
+        },
+
+        _bindEvents(state) {
+            state.toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this._toggle(state);
+            });
+
+            state.toggle.addEventListener('keydown', (e) => {
+                if (state.select.disabled) return;
+
+                switch (e.key) {
+                    case 'Enter':
+                    case ' ':
+                    case 'ArrowDown':
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        if (!state.isOpen) {
+                            this._open(state);
+                        } else if (e.key === 'ArrowDown') {
+                            this._navigateItems(state, 1);
+                        } else if (e.key === 'ArrowUp') {
+                            this._navigateItems(state, -1);
+                        } else if (e.key === 'Enter' || e.key === ' ') {
+                            this._selectHighlighted(state);
+                        }
+                        break;
+                    case 'Escape':
+                        if (state.isOpen) {
+                            e.preventDefault();
+                            this._close(state);
+                        }
+                        break;
+                    case 'Tab':
+                        if (state.isOpen) this._close(state);
+                        break;
+                }
+            });
+
+            if (state.searchInput) {
+                state.searchInput.addEventListener('input', (e) => {
+                    this._renderItems(state, e.target.value);
+                    if (state.flatItems.length > 0) {
+                        this._setHighlight(state, 0);
+                    }
+                });
+
+                state.searchInput.addEventListener('keydown', (e) => {
+                    switch (e.key) {
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            this._navigateItems(state, 1);
+                            break;
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            this._navigateItems(state, -1);
+                            break;
+                        case 'Enter':
+                            e.preventDefault();
+                            this._selectHighlighted(state);
+                            break;
+                        case 'Escape':
+                            e.preventDefault();
+                            this._close(state);
+                            state.toggle.focus();
+                            break;
+                    }
+                });
+
+                state.searchInput.addEventListener('click', (e) => e.stopPropagation());
+            }
+
+            state._onDocClick = (e) => {
+                if (state.isOpen && !state.wrapper.contains(e.target)) {
+                    this._close(state);
+                }
+            };
+            document.addEventListener('click', state._onDocClick);
+
+            state._onNativeChange = () => {
+                this._update(state);
+            };
+            state.select.addEventListener('change', state._onNativeChange);
+        },
+
+        _enable(state) {
+            state.select.disabled = false;
+            this._update(state);
+        },
+
+        _disable(state) {
+            state.select.disabled = true;
+            this._close(state);
+            this._update(state);
+        },
+
+        _refresh(state) {
+            state.options.width = this._calculateAutoWidth(state.select, state.options);
+            if (state.options.width && state.options.width !== '100%') {
+                state.wrapper.style.width = state.options.width;
+            }
+            this._renderItems(state, state.searchInput ? state.searchInput.value : '');
+            this._update(state);
+        },
+
+        _destroy(state) {
+            this._close(state);
+            document.removeEventListener('click', state._onDocClick);
+            state.select.removeEventListener('change', state._onNativeChange);
+
+            state.select.style.position = '';
+            state.select.style.opacity = '';
+            state.select.style.height = '';
+            state.select.style.width = '';
+            state.select.style.pointerEvents = '';
+            state.select.removeAttribute('tabindex');
+            state.select.removeAttribute('aria-hidden');
+
+            if (state.wrapper && state.wrapper.parentNode) {
+                state.wrapper.parentNode.removeChild(state.wrapper);
+            }
+
+            this.instances.delete(state.select);
+            delete state.select._sedSelect;
+        }
+    },
+
+    /**
+     * Switch / Toggle helper (Auto-wraps checkboxes with .sed-switch slider & label)
+     */
+    switch: {
+        init(input) {
+            if (!input || input._sedSwitchInit || input.type !== 'checkbox') return;
+            input._sedSwitchInit = true;
+
+            const isSm = input.classList.contains('sed-switch-sm') || input.dataset.size === 'sm';
+            const parent = input.parentElement;
+
+            // Check if already in a complete .sed-switch label
+            if (parent && parent.tagName.toLowerCase() === 'label' && parent.classList.contains('sed-switch')) {
+                if (!parent.querySelector('.sed-switch-slider')) {
+                    const slider = document.createElement('span');
+                    slider.className = 'sed-switch-slider';
+                    input.parentNode.insertBefore(slider, input.nextSibling);
+                }
+                this._syncState(input, parent);
+                return;
+            }
+
+            // Find associated label text if any
+            let labelText = '';
+            let labelElement = null;
+
+            if (input.id) {
+                const doc = input.ownerDocument || document;
+                const found = doc.querySelector(`label[for="${CSS.escape ? CSS.escape(input.id) : input.id}"]`);
+                if (found && !found.contains(input)) {
+                    labelElement = found;
+                    labelText = found.innerHTML;
+                }
+            }
+
+            // If inside a wrapper like <span class="checkbox-item">
+            if (!labelElement && parent) {
+                const siblingLabel = parent.querySelector(`label[for="${input.id || ''}"]`) || parent.querySelector('label');
+                if (siblingLabel && siblingLabel !== input) {
+                    labelElement = siblingLabel;
+                    labelText = siblingLabel.innerHTML;
+                }
+            }
+
+            const wrapper = document.createElement('label');
+            wrapper.className = 'sed-switch' + (isSm ? ' sed-switch-sm' : '');
+            if (input.disabled) wrapper.classList.add('disabled');
+
+            const slider = document.createElement('span');
+            slider.className = 'sed-switch-slider';
+
+            // Insert wrapper into DOM
+            if (parent && parent.classList.contains('checkbox-item')) {
+                parent.parentNode.insertBefore(wrapper, parent);
+                wrapper.appendChild(input);
+                wrapper.appendChild(slider);
+                if (labelText.trim()) {
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'sed-switch-label';
+                    textSpan.innerHTML = labelText;
+                    wrapper.appendChild(textSpan);
+                }
+                parent.parentNode.removeChild(parent);
+            } else {
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+                wrapper.appendChild(slider);
+                if (labelElement) {
+                    if (labelText.trim()) {
+                        const textSpan = document.createElement('span');
+                        textSpan.className = 'sed-switch-label';
+                        textSpan.innerHTML = labelText;
+                        wrapper.appendChild(textSpan);
+                    }
+                    if (labelElement.parentNode) {
+                        labelElement.parentNode.removeChild(labelElement);
+                    }
+                }
+            }
+
+            this._syncState(input, wrapper);
+        },
+
+        _syncState(input, wrapper) {
+            input.setAttribute('role', 'switch');
+            input.setAttribute('aria-checked', input.checked ? 'true' : 'false');
+            wrapper.classList.toggle('disabled', input.disabled);
+
+            input.addEventListener('change', () => {
+                input.setAttribute('aria-checked', input.checked ? 'true' : 'false');
+                wrapper.classList.toggle('disabled', input.disabled);
+            });
+        },
+
+        initAll(container = document, selector = 'input[type="checkbox"].sed-switch, input[type="checkbox"][data-switch]') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            const checkboxes = root.querySelectorAll(selector);
+            checkboxes.forEach(cb => this.init(cb));
+        }
+    },
+
+    /**
+     * Input helpers (Password show/hide toggle & clear button)
+     */
+    input: {
+        initPasswordToggle(container = document, selector = 'input.sed-password, input[type="password"]:not([data-toggle="false"]):not(.no-password-toggle)') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            const inputs = root.querySelectorAll(selector);
+            inputs.forEach(input => {
+                if (input._sedPasswordInit) return;
+                input._sedPasswordInit = true;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'sed-input-wrapper sed-input-has-action';
+                if (input.classList.contains('sed-input-block') || input.style.width === '100%') {
+                    wrapper.classList.add('sed-input-block');
+                } else if (input.style.width) {
+                    wrapper.style.width = input.style.width;
+                }
+
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'sed-input-action-btn sed-password-toggle-btn';
+                btn.setAttribute('tabindex', '-1');
+                btn.setAttribute('aria-label', 'Show / Hide Password');
+                btn.title = 'Show / Hide Password';
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isPass = input.type === 'password';
+                    input.type = isPass ? 'text' : 'password';
+                    btn.innerHTML = isPass
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+                        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+                });
+
+                wrapper.appendChild(btn);
+            });
+        },
+
+        initClearable(container = document, selector = 'input.sed-clearable, input[data-clear="true"], input[type="search"]') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            const inputs = root.querySelectorAll(selector);
+            inputs.forEach(input => {
+                if (input._sedClearInit) return;
+                input._sedClearInit = true;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'sed-input-wrapper sed-input-has-action';
+                if (input.classList.contains('sed-input-block') || input.style.width === '100%') {
+                    wrapper.classList.add('sed-input-block');
+                } else if (input.style.width) {
+                    wrapper.style.width = input.style.width;
+                }
+
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'sed-input-action-btn sed-clear-btn';
+                btn.setAttribute('tabindex', '-1');
+                btn.setAttribute('aria-label', 'Clear');
+                btn.title = 'Clear';
+                btn.style.display = input.value ? 'flex' : 'none';
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+                const toggleClearBtn = () => {
+                    btn.style.display = input.value ? 'flex' : 'none';
+                };
+
+                input.addEventListener('input', toggleClearBtn);
+                input.addEventListener('change', toggleClearBtn);
+
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    input.value = '';
+                    btn.style.display = 'none';
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                    input.focus();
+                });
+
+                wrapper.appendChild(btn);
+            });
+        },
+
+        initAll(container = document) {
+            this.initPasswordToggle(container);
+            this.initClearable(container);
+        }
+    },
+
+    /**
+     * Date & Time Picker module (sedjs.datepicker)
+     */
+    datepicker: {
+        activePopup: null,
+        _currentBinding: null,
+        _docClickAttached: false,
+
+        _createPopup() {
+            let popup = document.querySelector('.sed-datepicker-dropdown');
+            if (!popup) {
+                popup = document.createElement('div');
+                popup.className = 'sed-datepicker-dropdown';
+                document.body.appendChild(popup);
+            }
+            return popup;
+        },
+
+        initGroup(group) {
+            if (!group || group._sedDatepickerGroupInit) return;
+            group._sedDatepickerGroupInit = true;
+
+            const selYear = group.querySelector('select[name^="ryear"]');
+            const selMonth = group.querySelector('select[name^="rmonth"]');
+            const selDay = group.querySelector('select[name^="rday"]');
+            const selHour = group.querySelector('select[name^="rhour"]');
+            const selMin = group.querySelector('select[name^="rminute"]');
+
+            if (!selYear || !selMonth || !selDay) return;
+
+            group.classList.add('sed-date-group-enhanced');
+
+            // Hide/clean any loose text nodes (spaces, colons) outside wrapper
+            Array.from(group.childNodes).forEach(node => {
+                if (node.nodeType === 3) node.nodeValue = '';
+            });
+
+            const isTime = !!(selHour && selMin);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'sed-input-wrapper sed-input-has-action sed-datepicker-wrapper' + (isTime ? ' has-time' : '');
+
+            const displayInput = document.createElement('input');
+            displayInput.type = 'text';
+            displayInput.size = isTime ? 18 : 12;
+            displayInput.className = 'sed-datepicker-input text' + (isTime ? ' has-time' : '');
+            displayInput.readOnly = true;
+            displayInput.placeholder = isTime ? 'DD.MM.YYYY HH:mm' : 'DD.MM.YYYY';
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'sed-input-action-btn sed-datepicker-btn';
+            btn.setAttribute('tabindex', '-1');
+            btn.title = 'Calendar';
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+
+            wrapper.appendChild(displayInput);
+            wrapper.appendChild(btn);
+            group.appendChild(wrapper);
+
+            const updateDisplay = () => {
+                const y = parseInt(selYear.value, 10);
+                const m = parseInt(selMonth.value, 10);
+                const d = parseInt(selDay.value, 10);
+                if (y > 0 && m > 0 && d > 0) {
+                    const dd = String(d).padStart(2, '0');
+                    const mm = String(m).padStart(2, '0');
+                    if (isTime) {
+                        const hh = String(parseInt(selHour ? selHour.value : 0, 10) || 0).padStart(2, '0');
+                        const min = String(parseInt(selMin ? selMin.value : 0, 10) || 0).padStart(2, '0');
+                        displayInput.value = `${dd}.${mm}.${y} ${hh}:${min}`;
+                    } else {
+                        displayInput.value = `${dd}.${mm}.${y}`;
+                    }
+                } else {
+                    displayInput.value = '';
+                }
+            };
+
+            updateDisplay();
+
+            const onSelect = (dateObj) => {
+                if (dateObj) {
+                    selYear.value = dateObj.year;
+                    selMonth.value = dateObj.month;
+                    selDay.value = dateObj.day;
+                    if (isTime && selHour && selMin) {
+                        selHour.value = dateObj.hours;
+                        selMin.value = dateObj.minutes;
+                    }
+                } else {
+                    selYear.value = '0';
+                    selMonth.value = '0';
+                    selDay.value = '0';
+                    if (selHour) selHour.value = '0';
+                    if (selMin) selMin.value = '0';
+                }
+                [selYear, selMonth, selDay, selHour, selMin].forEach(sel => {
+                    if (sel) {
+                        sel.dispatchEvent(new Event('change', { bubbles: true }));
+                        if (sel._sedSelect) sel._sedSelect.update();
+                    }
+                });
+                updateDisplay();
+            };
+
+            this._bindPicker(displayInput, btn, {
+                isTime: isTime,
+                getInitialDate: () => {
+                    const y = parseInt(selYear.value, 10);
+                    const m = parseInt(selMonth.value, 10);
+                    const d = parseInt(selDay.value, 10);
+                    const hh = selHour ? parseInt(selHour.value, 10) : 0;
+                    const min = selMin ? parseInt(selMin.value, 10) : 0;
+                    if (y > 0 && m > 0 && d > 0) {
+                        return new Date(y, m - 1, d, hh, min);
+                    }
+                    return new Date();
+                },
+                onSelect: onSelect
+            });
+        },
+
+        init(input, userOptions = {}) {
+            if (!input || input._sedDatepickerInit) return;
+            input._sedDatepickerInit = true;
+
+            const isTime = input.dataset.time === 'true' || userOptions.time;
+            let wrapper = input.closest('.sed-datepicker-wrapper');
+            let btn = null;
+
+            if (!wrapper) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'sed-input-wrapper sed-input-has-action sed-datepicker-wrapper' + (isTime ? ' has-time' : '');
+                if (input.classList.contains('sed-input-block') || input.style.width === '100%') {
+                    wrapper.classList.add('sed-input-block');
+                }
+                if (!input.hasAttribute('size') && !input.style.width) {
+                    input.size = isTime ? 18 : 12;
+                }
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'sed-input-action-btn sed-datepicker-btn';
+                btn.setAttribute('tabindex', '-1');
+                btn.title = 'Calendar';
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+                wrapper.appendChild(btn);
+            } else {
+                btn = wrapper.querySelector('.sed-datepicker-btn');
+            }
+
+            const parseDate = (val) => {
+                if (!val) return null;
+                if (/^\d{2}\.\d{2}\.\d{4}/.test(val)) {
+                    const parts = val.split(/[\s\.]+/);
+                    const d = parseInt(parts[0], 10);
+                    const m = parseInt(parts[1], 10) - 1;
+                    const y = parseInt(parts[2], 10);
+                    let hh = 0, min = 0;
+                    if (parts[3] && parts[3].includes(':')) {
+                        const tp = parts[3].split(':');
+                        hh = parseInt(tp[0], 10) || 0;
+                        min = parseInt(tp[1], 10) || 0;
+                    }
+                    return new Date(y, m, d, hh, min);
+                }
+                const parsed = new Date(val.replace(' ', 'T'));
+                return isNaN(parsed) ? null : parsed;
+            };
+
+            this._bindPicker(input, btn, {
+                isTime: isTime,
+                getInitialDate: () => parseDate(input.value) || new Date(),
+                onSelect: (dateObj) => {
+                    if (dateObj) {
+                        const dd = String(dateObj.day).padStart(2, '0');
+                        const mm = String(dateObj.month).padStart(2, '0');
+                        const y = dateObj.year;
+                        if (isTime) {
+                            const hh = String(dateObj.hours).padStart(2, '0');
+                            const min = String(dateObj.minutes).padStart(2, '0');
+                            input.value = `${y}-${mm}-${dd} ${hh}:${min}`;
+                        } else {
+                            input.value = `${y}-${mm}-${dd}`;
+                        }
+                    } else {
+                        input.value = '';
+                    }
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        },
+
+        _bindPicker(inputEl, triggerBtn, options) {
+            const self = this;
+            const popup = this._createPopup();
+            const isTime = options.isTime;
+
+            const L = window.L || {};
+
+            const monthNames = (Array.isArray(L.months) && L.months.length === 12)
+                ? L.months
+                : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            const dayNames = (Array.isArray(L.days) && L.days.length === 7)
+                ? L.days
+                : ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+            const todayText = L.today || 'Today';
+            const clearText = L.clear || 'Clear';
+            const timeLabel = L.time || 'Time:';
+
+            let viewYear = new Date().getFullYear();
+            let viewMonth = new Date().getMonth();
+            let selectedDate = null;
+            let timeHours = 0;
+            let timeMinutes = 0;
+
+            function render() {
+                popup.innerHTML = '';
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'sed-dp-header';
+
+                const prevBtn = document.createElement('button');
+                prevBtn.type = 'button';
+                prevBtn.className = 'sed-dp-nav-btn';
+                prevBtn.setAttribute('tabindex', '-1');
+                prevBtn.innerHTML = '&lsaquo;';
+                prevBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    viewMonth--;
+                    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+                    render();
+                };
+
+                const title = document.createElement('span');
+                title.className = 'sed-dp-title';
+                title.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+
+                const nextBtn = document.createElement('button');
+                nextBtn.type = 'button';
+                nextBtn.className = 'sed-dp-nav-btn';
+                nextBtn.setAttribute('tabindex', '-1');
+                nextBtn.innerHTML = '&rsaquo;';
+                nextBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    viewMonth++;
+                    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+                    render();
+                };
+
+                header.appendChild(prevBtn);
+                header.appendChild(title);
+                header.appendChild(nextBtn);
+                popup.appendChild(header);
+
+                // Weekday labels (Flexbox)
+                const weekdays = document.createElement('div');
+                weekdays.className = 'sed-dp-weekdays';
+                dayNames.forEach(name => {
+                    const wd = document.createElement('div');
+                    wd.className = 'sed-dp-weekday';
+                    wd.textContent = name;
+                    weekdays.appendChild(wd);
+                });
+                popup.appendChild(weekdays);
+
+                // Calendar days grid (Flexbox wrap)
+                const daysGrid = document.createElement('div');
+                daysGrid.className = 'sed-dp-days';
+
+                const firstDay = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7;
+                const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+                const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+
+                for (let i = firstDay - 1; i >= 0; i--) {
+                    const d = document.createElement('div');
+                    d.className = 'sed-dp-day other-month';
+                    d.textContent = daysInPrevMonth - i;
+                    daysGrid.appendChild(d);
+                }
+
+                const today = new Date();
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const d = document.createElement('div');
+                    d.className = 'sed-dp-day';
+                    d.textContent = day;
+
+                    if (today.getFullYear() === viewYear && today.getMonth() === viewMonth && today.getDate() === day) {
+                        d.classList.add('today');
+                    }
+
+                    if (selectedDate && selectedDate.getFullYear() === viewYear && selectedDate.getMonth() === viewMonth && selectedDate.getDate() === day) {
+                        d.classList.add('selected');
+                    }
+
+                    d.onclick = (e) => {
+                        e.stopPropagation();
+                        selectedDate = new Date(viewYear, viewMonth, day, timeHours, timeMinutes);
+                        applySelected();
+                        if (!isTime) {
+                            close();
+                        } else {
+                            render();
+                        }
+                    };
+
+                    daysGrid.appendChild(d);
+                }
+                popup.appendChild(daysGrid);
+
+                // Time selector
+                if (isTime) {
+                    const timeBox = document.createElement('div');
+                    timeBox.className = 'sed-dp-time-box';
+
+                    const lbl = document.createElement('span');
+                    lbl.textContent = timeLabel;
+                    timeBox.appendChild(lbl);
+
+                    const hInp = document.createElement('input');
+                    hInp.type = 'number';
+                    hInp.min = 0; hInp.max = 23;
+                    hInp.value = String(timeHours).padStart(2, '0');
+                    hInp.onchange = () => {
+                        timeHours = parseInt(hInp.value, 10) || 0;
+                        if (selectedDate) selectedDate.setHours(timeHours);
+                        applySelected();
+                    };
+
+                    const colon = document.createElement('span');
+                    colon.textContent = ':';
+
+                    const mInp = document.createElement('input');
+                    mInp.type = 'number';
+                    mInp.min = 0; mInp.max = 59;
+                    mInp.value = String(timeMinutes).padStart(2, '0');
+                    mInp.onchange = () => {
+                        timeMinutes = parseInt(mInp.value, 10) || 0;
+                        if (selectedDate) selectedDate.setMinutes(timeMinutes);
+                        applySelected();
+                    };
+
+                    timeBox.appendChild(hInp);
+                    timeBox.appendChild(colon);
+                    timeBox.appendChild(mInp);
+                    popup.appendChild(timeBox);
+                }
+
+                // Footer
+                const footer = document.createElement('div');
+                footer.className = 'sed-dp-footer';
+
+                const todayLink = document.createElement('a');
+                todayLink.textContent = todayText;
+                todayLink.onclick = (e) => {
+                    e.stopPropagation();
+                    const now = new Date();
+                    viewYear = now.getFullYear();
+                    viewMonth = now.getMonth();
+                    selectedDate = now;
+                    timeHours = now.getHours();
+                    timeMinutes = now.getMinutes();
+                    applySelected();
+                    close();
+                };
+
+                const clearLink = document.createElement('a');
+                clearLink.textContent = clearText;
+                clearLink.onclick = (e) => {
+                    e.stopPropagation();
+                    selectedDate = null;
+                    options.onSelect(null);
+                    close();
+                };
+
+                footer.appendChild(todayLink);
+                footer.appendChild(clearLink);
+                popup.appendChild(footer);
+            }
+
+            function applySelected() {
+                if (!selectedDate) return;
+                options.onSelect({
+                    year: selectedDate.getFullYear(),
+                    month: selectedDate.getMonth() + 1,
+                    day: selectedDate.getDate(),
+                    hours: timeHours,
+                    minutes: timeMinutes
+                });
+            }
+
+            function open(e) {
+                if (e) e.stopPropagation();
+                if (self.activePopup && self.activePopup !== popup) {
+                    self.activePopup.classList.remove('open');
+                }
+
+                const initDate = options.getInitialDate();
+                if (initDate) {
+                    viewYear = initDate.getFullYear();
+                    viewMonth = initDate.getMonth();
+                    selectedDate = initDate;
+                    timeHours = initDate.getHours();
+                    timeMinutes = initDate.getMinutes();
+                }
+
+                const rect = inputEl.getBoundingClientRect();
+                const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+
+                popup.style.top = (scrollY + rect.bottom + 4) + 'px';
+                popup.style.left = (scrollX + rect.left) + 'px';
+
+                render();
+                popup.classList.add('open');
+                self.activePopup = popup;
+                self._currentBinding = { inputEl: inputEl, triggerBtn: triggerBtn, close: close };
+            }
+
+            function close() {
+                popup.classList.remove('open');
+                if (self.activePopup === popup) {
+                    self.activePopup = null;
+                    self._currentBinding = null;
+                }
+            }
+
+            inputEl.addEventListener('click', open);
+            if (triggerBtn) triggerBtn.addEventListener('click', open);
+
+            if (!self._docClickAttached) {
+                self._docClickAttached = true;
+                document.addEventListener('click', (e) => {
+                    if (self.activePopup && self._currentBinding) {
+                        const { inputEl, triggerBtn, close } = self._currentBinding;
+                        if (!self.activePopup.contains(e.target) && e.target !== inputEl && (!triggerBtn || !triggerBtn.contains(e.target))) {
+                            close();
+                        }
+                    }
+                });
+            }
+        },
+
+        initAll(container = document) {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+
+            // 1. Enhanced date select groups from sed_selectbox_date
+            root.querySelectorAll('.sed-date-group[data-datepicker="true"]').forEach(grp => this.initGroup(grp));
+
+            // 2. Standalone inputs
+            root.querySelectorAll('input.sed-datepicker, input[data-datepicker]').forEach(inp => this.init(inp));
+        }
+    },
+
+    /**
+     * Tags / Chips Input module (sedjs.tags)
+     */
+    tags: {
+        init(input, userOptions = {}) {
+            if (!input || input._sedTagsInit) return;
+            input._sedTagsInit = true;
+
+            input.style.position = 'absolute';
+            input.style.opacity = '0';
+            input.style.height = '0';
+            input.style.width = '0';
+            input.style.pointerEvents = 'none';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'sed-tags-wrapper';
+            if (input.disabled) wrapper.classList.add('disabled');
+
+            const textInput = document.createElement('input');
+            textInput.type = 'text';
+            textInput.className = 'sed-tags-input';
+            textInput.placeholder = input.placeholder || 'Add tag...';
+            textInput.disabled = input.disabled;
+
+            let tagsList = input.value ? input.value.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+            function render() {
+                wrapper.innerHTML = '';
+                tagsList.forEach((tag, idx) => {
+                    const chip = document.createElement('span');
+                    chip.className = 'sed-tag-chip';
+                    chip.textContent = tag;
+
+                    if (!input.disabled) {
+                        const removeBtn = document.createElement('span');
+                        removeBtn.className = 'sed-tag-remove';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            tagsList.splice(idx, 1);
+                            sync();
+                            render();
+                        };
+                        chip.appendChild(removeBtn);
+                    }
+                    wrapper.appendChild(chip);
+                });
+                wrapper.appendChild(textInput);
+            }
+
+            function sync() {
+                input.value = tagsList.join(', ');
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            function addTag(val) {
+                const clean = val.trim();
+                if (clean && !tagsList.includes(clean)) {
+                    tagsList.push(clean);
+                    sync();
+                    textInput.value = '';
+                    render();
+                }
+            }
+
+            textInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    addTag(textInput.value);
+                } else if (e.key === 'Backspace' && !textInput.value && tagsList.length > 0) {
+                    tagsList.pop();
+                    sync();
+                    render();
+                }
+            });
+
+            textInput.addEventListener('blur', () => {
+                if (textInput.value) addTag(textInput.value);
+                wrapper.classList.remove('focus');
+            });
+
+            textInput.addEventListener('focus', () => {
+                wrapper.classList.add('focus');
+            });
+
+            wrapper.addEventListener('click', () => {
+                textInput.focus();
+            });
+
+            input.parentNode.insertBefore(wrapper, input.nextSibling);
+            render();
+        },
+
+        initAll(container = document, selector = 'input.sed-tags, input[data-tags]') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            root.querySelectorAll(selector).forEach(inp => this.init(inp));
+        }
+    },
+
+    /**
+     * Number Stepper module (sedjs.stepper)
+     */
+    stepper: {
+        init(input) {
+            if (!input || input._sedStepperInit) return;
+            input._sedStepperInit = true;
+
+            const stepper = document.createElement('div');
+            stepper.className = 'sed-stepper';
+            if (input.disabled) stepper.classList.add('disabled');
+
+            const btnMinus = document.createElement('button');
+            btnMinus.type = 'button';
+            btnMinus.className = 'sed-step-btn';
+            btnMinus.textContent = '−';
+
+            const btnPlus = document.createElement('button');
+            btnPlus.type = 'button';
+            btnPlus.className = 'sed-step-btn';
+            btnPlus.textContent = '+';
+
+            const step = parseFloat(input.step) || 1;
+            const min = input.min !== '' ? parseFloat(input.min) : -Infinity;
+            const max = input.max !== '' ? parseFloat(input.max) : Infinity;
+
+            btnMinus.onclick = () => {
+                if (input.disabled) return;
+                let cur = parseFloat(input.value) || 0;
+                let next = Math.max(min, cur - step);
+                input.value = next;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            };
+
+            btnPlus.onclick = () => {
+                if (input.disabled) return;
+                let cur = parseFloat(input.value) || 0;
+                let next = Math.min(max, cur + step);
+                input.value = next;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            };
+
+            input.parentNode.insertBefore(stepper, input);
+            stepper.appendChild(btnMinus);
+            stepper.appendChild(input);
+            stepper.appendChild(btnPlus);
+        },
+
+        initAll(container = document, selector = 'input[type="number"].sed-stepper, input[data-stepper]') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            root.querySelectorAll(selector).forEach(inp => this.init(inp));
+        }
+    },
+
+    /**
+     * File Drop / Custom File Input module (sedjs.file)
+     */
+    file: {
+        init(input) {
+            if (!input || input._sedFileInit) return;
+            input._sedFileInit = true;
+
+            const inlineWidth = input.style.width;
+            const explicitWidth = input.dataset.width || (inlineWidth && inlineWidth !== '0px' && inlineWidth !== '0' ? inlineWidth : '');
+            const isBlock = input.classList.contains('sed-file-block') || explicitWidth === '100%' || input.classList.contains('sed-input-block');
+
+            input.style.position = 'absolute';
+            input.style.opacity = '0';
+            input.style.height = '0';
+            input.style.width = '0';
+            input.style.pointerEvents = 'none';
+
+            const L = window.L || {};
+            const browseText = L.file_browse || 'Browse';
+            const changeText = L.file_change || 'Change';
+            const choosePlaceholder = L.file_choose || 'Choose a file or drag & drop...';
+            const filesChosenText = L.file_files_chosen || 'files chosen';
+
+            const drop = document.createElement('div');
+            drop.className = 'sed-file-drop';
+
+            if (isBlock) {
+                drop.classList.add('sed-file-block');
+            } else if (explicitWidth) {
+                drop.style.width = explicitWidth;
+            }
+
+            if (input.disabled) {
+                drop.classList.add('disabled');
+            }
+
+            const info = document.createElement('div');
+            info.className = 'sed-file-info';
+
+            const btn = document.createElement('span');
+            btn.className = 'sed-file-btn';
+            btn.textContent = browseText;
+
+            function updateUI() {
+                if (input.files && input.files.length > 0) {
+                    if (input.files.length === 1) {
+                        const f = input.files[0];
+                        const kb = (f.size / 1024).toFixed(1);
+                        info.innerHTML = `<span class="sed-file-name" title="${f.name}">${f.name}</span> <span class="sed-file-size">(${kb} KB)</span>`;
+                    } else {
+                        let totalSize = 0;
+                        for (let i = 0; i < input.files.length; i++) {
+                            totalSize += input.files[i].size;
+                        }
+                        const totalKb = (totalSize / 1024).toFixed(1);
+                        info.innerHTML = `<span class="sed-file-name">${input.files.length} ${filesChosenText}</span> <span class="sed-file-size">(${totalKb} KB)</span>`;
+                    }
+                    btn.textContent = changeText;
+                } else {
+                    info.innerHTML = `<span class="sed-file-placeholder">${input.placeholder || choosePlaceholder}</span>`;
+                    btn.textContent = browseText;
+                }
+            }
+
+            drop.appendChild(info);
+            drop.appendChild(btn);
+            input.parentNode.insertBefore(drop, input.nextSibling);
+
+            drop.addEventListener('click', (e) => {
+                if (input.disabled) return;
+                input.click();
+            });
+
+            input.addEventListener('change', updateUI);
+
+            // Drag and drop support
+            drop.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (!input.disabled) drop.classList.add('dragover');
+            });
+            drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+            drop.addEventListener('drop', (e) => {
+                e.preventDefault();
+                drop.classList.remove('dragover');
+                if (input.disabled) return;
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    input.files = e.dataTransfer.files;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+
+            updateUI();
+        },
+
+        initAll(container = document, selector = 'input[type="file"].sed-file, input[data-file]') {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            root.querySelectorAll(selector).forEach(inp => this.init(inp));
+        }
     }
 };
 
@@ -2695,6 +4360,15 @@ sedjs.ready(() => {
     sedjs.accordion();
     sedjs.closealert();
     sedjs.popover.init(document);
+
+    sedjs.select.initAll();
+    sedjs.switch.initAll();
+    sedjs.input.initAll();
+    sedjs.datepicker.initAll();
+    sedjs.tags.initAll();
+    sedjs.stepper.initAll();
+    sedjs.file.initAll();
+
     sedjs.getrel("sedthumb");
     const cookie = sedjs.readCookie("style");
     const title = cookie ? cookie : sedjs.getPreferredStyleSheet();

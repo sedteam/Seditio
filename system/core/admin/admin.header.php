@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.header.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-13
 Type=Core
 Author=Seditio Team
 Description=Admin header
@@ -20,6 +20,8 @@ if (!defined('SED_CODE')) {
 }
 
 sed_add_javascript('system/assets/js/core.js', true, 10);
+
+sed_export_js_lang();
 
 /* === Hook === */
 foreach (sed_getextplugins('header.first') as $pl) {

@@ -12,7 +12,7 @@ Localization done by : Antar, Antony & Amro
 [BEGIN_SED]
 File=system/lang/ru/main.lang.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-13
 Type=Lang
 Name=Russian
 Native=Русский
@@ -812,3 +812,16 @@ $sed_daysweek_list = array(
 	'пятница',
 	'суббота'
 );
+
+$sed_daysweek_short = array('Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс');
+
+/* Calendar / Datepicker */
+$L['Today'] = "Сегодня";
+$L['Clear'] = "Очистить";
+$L['Time'] = "Время:";
+
+/* File input */
+$L['file_browse'] = "Обзор";
+$L['file_change'] = "Изменить";
+$L['file_choose'] = "Выберите файл или перетащите сюда...";
+$L['file_files_chosen'] = "файлов выбрано";

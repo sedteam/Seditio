@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.edit.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=Edit page
@@ -258,13 +258,13 @@ foreach (sed_getextplugins('page.edit.first') as $pl) {
 	}
 /* ===== */
 
-$page_form_delete =  sed_radiobox("rpagedelete", $yesno_arr, 0);
+$page_form_delete = sed_yesno("rpagedelete", 0);
 
 $page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');
 
-$page_form_file = sed_radiobox("rpagefile", $yesno_arr, $pag['page_file']);
-$page_form_allowcomments = sed_radiobox("rpageallowcomments", $yesno_arr, $pag['page_allowcomments']);
-$page_form_allowratings = sed_radiobox("rpageallowratings", $yesno_arr, $pag['page_allowratings']);
+$page_form_file = sed_yesno("rpagefile", !empty($pag['page_file']));
+$page_form_allowcomments = sed_yesno("rpageallowcomments", !empty($pag['page_allowcomments']));
+$page_form_allowratings = sed_yesno("rpageallowratings", !empty($pag['page_allowratings']));
 
 $pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
@@ -333,12 +333,12 @@ $t->assign(array(
 	"PAGEEDIT_FORM_SEODESC" => sed_textbox('rpageseodesc', $pag['page_seo_desc']),
 	"PAGEEDIT_FORM_SEOKEYWORDS" => sed_textbox('rpageseokeywords', $pag['page_seo_keywords']),
 	"PAGEEDIT_FORM_SEOH1" => sed_textbox('rpageseoh1', $pag['page_seo_h1']),
-	"PAGEEDIT_FORM_SEOINDEX" => sed_checkbox("rpageseoindex", "", $pag['page_seo_index']),
-	"PAGEEDIT_FORM_SEOFOLLOW" => sed_checkbox("rpageseofollow", "", $pag['page_seo_follow']),
+	"PAGEEDIT_FORM_SEOINDEX" => sed_checkbox("rpageseoindex", "", $pag['page_seo_index'], '', false, array('class' => 'sed-switch')),
+	"PAGEEDIT_FORM_SEOFOLLOW" => sed_checkbox("rpageseofollow", "", $pag['page_seo_follow'], '', false, array('class' => 'sed-switch')),
 	"PAGEEDIT_FORM_AUTHOR" => sed_textbox('rpageauthor', $pag['page_author'], 24, 32),
 	"PAGEEDIT_FORM_OWNERID" => sed_textbox('rpageownerid', $pag['page_ownerid'], 24, 32),
 	"PAGEEDIT_FORM_DATE" => $pag['page_date'] . " " . $usr['timetext'],
-	"PAGEEDIT_FORM_DATENOW" => sed_checkbox('rpagedatenow'),
+	"PAGEEDIT_FORM_DATENOW" => sed_checkbox('rpagedatenow', '', false, '', false, array('class' => 'sed-switch')),
 	"PAGEEDIT_FORM_BEGIN" => $pag['page_begin'] . " " . $usr['timetext'],
 	"PAGEEDIT_FORM_EXPIRE" => $pag['page_expire'] . " " . $usr['timetext'],
 	"PAGEEDIT_FORM_FILE" => $page_form_file,

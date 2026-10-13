@@ -79,12 +79,11 @@
 	opacity: 0;
 	cursor: pointer;
 }
-.sed-image-upload-list li.sortable-helper {
+.sed-image-upload-helper,
+li.sed-image-upload-helper {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 	opacity: 0.85;
 	z-index: 100;
-}
-li.sortable-helper {
 	width: 100px !important;
 	height: 100px !important;
 	overflow: hidden;
@@ -97,7 +96,8 @@ li.sortable-helper {
 	border: 1px solid #d0d0d0;
 	list-style: none;
 }
-li.sortable-helper img {
+.sed-image-upload-helper img,
+li.sed-image-upload-helper img {
 	display: block;
 	max-width: 100% !important;
 	max-height: 100% !important;

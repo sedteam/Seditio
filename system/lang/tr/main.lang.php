@@ -12,7 +12,7 @@ Localization done by : Neocrome
 [BEGIN_SED]
 File=system/lang/tr/main.lang.php
 Version=186
-Updated=2026-sep-23
+Updated=2026-oct-13
 Type=Lang
 Name=Turkish
 Native=Türkçe
@@ -565,3 +565,16 @@ $sed_daysweek_list = array(
 	'cuma',
 	'cumartesi'
 );
+
+$sed_daysweek_short = array('Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pz');
+
+/* Calendar / Datepicker */
+$L['Today'] = "Bugün";
+$L['Clear'] = "Temizle";
+$L['Time'] = "Saat:";
+
+/* File input */
+$L['file_browse'] = "Gözat";
+$L['file_change'] = "Değiştir";
+$L['file_choose'] = "Bir dosya seçin veya sürükleyip bırakın...";
+$L['file_files_chosen'] = "dosya seçildi";

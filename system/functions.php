@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-13
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -2069,8 +2069,15 @@ function sed_die_message($code, $message_title = '', $message_body = '', $redire
 function sed_diefatal($text = 'Reason is unknown.', $title = 'Fatal error')
 {
 	global $cfg;
+	@error_log("Seditio Fatal Error: " . $title . " - " . strip_tags($text));
+	if (!headers_sent()) {
+		while (ob_get_level() > 0) {
+			@ob_end_clean();
+		}
+		http_response_code(500);
+	}
 	$disp = "<div style=\"font:14px Segoe UI, Verdana, Arial; border:1px dashed #CCCCCC; padding:8px; margin:16px;\">";
-	$disp .= (isset($cfg['mainurl']) && isset($cfg['mainurl'])) ? "<strong>" . sed_link($cfg['mainurl'], $cfg['maintitle']) . "</strong><br />" : "";
+	$disp .= (isset($cfg['mainurl']) && isset($cfg['maintitle'])) ? "<strong>" . sed_link($cfg['mainurl'], $cfg['maintitle']) . "</strong><br />" : "";
 	$disp .= @date('Y-m-d H:i') . ' / ' . $title . ' : ' . $text;
 	$disp .= "</div>";
 	die($disp);
@@ -2144,13 +2151,21 @@ function sed_diemaintenance($err_msg = '')
  * @param array $additionalAttributes Additional HTML attributes
  * @return string HTML representation of the file input
  */
-function sed_filebox($name, $class = 'file', $multiple = false, $accept = '', $disabled = false, $additionalAttributes = [])
+function sed_filebox($name, $class = 'file', $multiple = false, $accept = '', $disabled = false, $additionalAttributes = array())
 {
-	$attributes = [
+	global $cfg;
+	$enable_file = isset($cfg['enable_sed_file']) ? (bool)$cfg['enable_sed_file'] : true;
+	if ($enable_file && strpos($class, 'sed-file') === false) {
+		$class .= ' sed-file';
+	}
+	$attributes = array(
 		'type' => 'file',
-		'class' => $class,
+		'class' => trim($class),
 		'name' => $name
-	];
+	);
+	if ($enable_file) {
+		$attributes['data-file'] = 'true';
+	}
 	if ($multiple) {
 		$attributes['multiple'] = 'multiple';
 	}
@@ -2790,6 +2805,39 @@ function sed_radiobox($name, $options, $checked_val = '', $additionalAttributes 
 	return $result;
 }
 
+/**
+ * Renders a Yes/No boolean control according to site settings ($cfg['yesno_type'], $cfg['enable_sed_switch'])
+ *
+ * @param string $name Form field name
+ * @param int|string|bool $checked_val Current checked state (1/0, true/false)
+ * @param array $additionalAttributes Additional HTML attributes
+ * @param string|null $type Override type ('switch', 'radio', 'checkbox')
+ * @return string HTML representation of the control
+ */
+function sed_yesno($name, $checked_val = '0', $additionalAttributes = array(), $type = null)
+{
+	global $cfg, $yesno_arr, $L;
+
+	$val_int = ((int)$checked_val === 1 || $checked_val === true || $checked_val === '1') ? 1 : 0;
+	$type = ($type !== null) ? $type : (!empty($cfg['yesno_type']) ? $cfg['yesno_type'] : 'switch');
+
+	// If switch is requested but switch styling is disabled, fallback to radio or standard checkbox
+	$enable_switch = isset($cfg['enable_sed_switch']) ? (bool)$cfg['enable_sed_switch'] : true;
+
+	if ($type === 'switch' && $enable_switch) {
+		$attrs = array_merge(array('class' => 'sed-switch', 'with_hidden' => true), $additionalAttributes);
+		return sed_checkbox($name, '1', ($val_int === 1), '', false, $attrs);
+	} elseif ($type === 'radio' || ($type === 'switch' && !$enable_switch)) {
+		if (empty($yesno_arr)) {
+			$yesno_arr = array(1 => (isset($L['Yes']) ? $L['Yes'] : 'Yes'), 0 => (isset($L['No']) ? $L['No'] : 'No'));
+		}
+		return sed_radiobox($name, $yesno_arr, (string)$val_int, $additionalAttributes);
+	} else {
+		$attrs = array_merge(array('with_hidden' => true), $additionalAttributes);
+		return sed_checkbox($name, '1', ($val_int === 1), '', false, $attrs);
+	}
+}
+
 /** 
  * Replace relative path to absolute url
  * 
@@ -2961,6 +3009,13 @@ function sed_textarea($name, $value, $rows, $cols, $editor = "noeditor", $disabl
  */
 function sed_checkbox($name, $data = '', $check_data = FALSE, $label = '', $disabled = FALSE, $additionalAttributes = array())
 {
+	$hidden_html = '';
+	if (!empty($additionalAttributes['with_hidden'])) {
+		$hidden_val = isset($additionalAttributes['hidden_value']) ? $additionalAttributes['hidden_value'] : '0';
+		unset($additionalAttributes['with_hidden'], $additionalAttributes['hidden_value']);
+		$hidden_html = '<input type="hidden" name="' . $name . '" value="' . $hidden_val . '" />';
+	}
+
 	if (empty($data) || !is_array($data)) {
 		$val = (empty($data)) ? '1' : $data;
 
@@ -2977,10 +3032,14 @@ function sed_checkbox($name, $data = '', $check_data = FALSE, $label = '', $disa
 		if ($disabled) {
 			$attributes['disabled'] = 'disabled';
 		}
+		if (!empty($additionalAttributes['class'])) {
+			$attributes['class'] .= ' ' . $additionalAttributes['class'];
+			unset($additionalAttributes['class']);
+		}
 		$attributes = array_merge($attributes, $additionalAttributes);
 
 		$lbl_text = (empty($label)) ? ' ' : $label;
-		$result = '<span class="checkbox-item"><input' . sed_attr($attributes) . ' /><label for="' . $attributes['id'] . '">' . $lbl_text . '</label></span>';
+		$result = $hidden_html . '<span class="checkbox-item"><input' . sed_attr($attributes) . ' /><label for="' . $attributes['id'] . '">' . $lbl_text . '</label></span>';
 	} else {
 		if (!is_array($data)) {
 			$data = explode(',', $data);
@@ -3283,6 +3342,61 @@ function sed_add_javascript($js = '', $is_file = false, $priority = 50, $cache =
 	} else {
 		$sed_js_collection['inline'][] = $js;
 	}
+}
+
+/**
+ * Exports localized strings for JavaScript core components (Datepicker, File Drop, etc.) into window.L
+ *
+ * @param array $extra Optional extra key-value pairs to merge into window.L
+ * @return void
+ */
+function sed_export_js_lang($extra = array())
+{
+	global $L, $usr, $sed_daysweek_short;
+
+	$days = (!empty($sed_daysweek_short) && is_array($sed_daysweek_short))
+		? $sed_daysweek_short
+		: array('Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su');
+
+	$js_lang = array(
+		'months' => array(
+			isset($L['January']) ? $L['January'] : 'January',
+			isset($L['February']) ? $L['February'] : 'February',
+			isset($L['March']) ? $L['March'] : 'March',
+			isset($L['April']) ? $L['April'] : 'April',
+			isset($L['May']) ? $L['May'] : 'May',
+			isset($L['June']) ? $L['June'] : 'June',
+			isset($L['July']) ? $L['July'] : 'July',
+			isset($L['August']) ? $L['August'] : 'August',
+			isset($L['September']) ? $L['September'] : 'September',
+			isset($L['October']) ? $L['October'] : 'October',
+			isset($L['November']) ? $L['November'] : 'November',
+			isset($L['December']) ? $L['December'] : 'December'
+		),
+		'days' => $days,
+		'today' => isset($L['Today']) ? $L['Today'] : 'Today',
+		'clear' => isset($L['Clear']) ? $L['Clear'] : 'Clear',
+		'time' => isset($L['Time']) ? $L['Time'] : 'Time:',
+		'file_browse' => isset($L['file_browse']) ? $L['file_browse'] : 'Browse',
+		'file_change' => isset($L['file_change']) ? $L['file_change'] : 'Change',
+		'file_choose' => isset($L['file_choose']) ? $L['file_choose'] : 'Choose a file or drag & drop...',
+		'file_files_chosen' => isset($L['file_files_chosen']) ? $L['file_files_chosen'] : 'files chosen'
+	);
+
+	if (!empty($usr['isadmin'])) {
+		$js_lang['pageadd'] = isset($L['admintooltip_pageadd']) ? $L['admintooltip_pageadd'] : 'Add page';
+		$js_lang['pageedit'] = isset($L['admintooltip_pageedit']) ? $L['admintooltip_pageedit'] : 'Edit page';
+		$js_lang['pageeditcategory'] = isset($L['admintooltip_pageeditcategory']) ? $L['admintooltip_pageeditcategory'] : 'Edit category';
+		$js_lang['pageeditoption'] = isset($L['admintooltip_pageeditoption']) ? $L['admintooltip_pageeditoption'] : 'Edit config option';
+		$js_lang['translateedit'] = isset($L['admintooltip_translateedit']) ? $L['admintooltip_translateedit'] : 'Edit translation';
+	}
+
+	if (!empty($extra) && is_array($extra)) {
+		$js_lang = array_merge($js_lang, $extra);
+	}
+
+	$js = "var L = L || {}; (function(d){for(var k in d){L[k]=d[k];}})(" . json_encode($js_lang) . ");";
+	sed_add_javascript($js);
 }
 
 /* sed_load_structure, sed_structure_sort moved to modules/page/inc/page.functions.php */
@@ -3848,7 +3962,8 @@ function sed_tree_flat_from_dotpath($rows, $path_key)
  */
 function sed_selectbox_tree_html($name, $items, $selected, $extra_html = '', $select_attrs = '')
 {
-	$result = '<select name="' . $name . '"' . $select_attrs . ' size="1">' . $extra_html;
+	$class_attr = (strpos($select_attrs, 'class=') === false) ? ' class="sed-select"' : '';
+	$result = '<select name="' . $name . '"' . $class_attr . $select_attrs . ' size="1">' . $extra_html;
 
 	foreach ($items as $item) {
 		if (!is_array($item)) {
@@ -4271,9 +4386,17 @@ function sed_selectbox($check, $name, $values, $empty_option = TRUE, $key_isvalu
 	$selected = 'selected="selected"';
 	$first_option = ($empty_option) ? '<option value="" ' . (($check === '') ? $selected : '') . '>---</option>' : '';
 
-	$attributes = array('name' => $name);
+	$attributes = array(
+		'name' => $name,
+		'class' => 'sed-select'
+	);
 	if ($isMultiple) {
 		$attributes['multiple'] = 'multiple';
+	}
+
+	if (!empty($additionalAttributes['class'])) {
+		$attributes['class'] .= ' ' . $additionalAttributes['class'];
+		unset($additionalAttributes['class']);
 	}
 
 	$attributes = array_merge($attributes, $additionalAttributes);
@@ -4309,10 +4432,10 @@ function sed_selectbox_countries($check, $name)
 {
 	global $sed_countries;
 
-	$selected = (empty($check) || $check == '00') ? "selected=\"selected\"" : '';
-	$result =  "<select name=\"$name\" size=\"1\">";
+	$check = (empty($check)) ? '00' : (string)$check;
+	$result = "<select name=\"$name\" class=\"sed-select\" size=\"1\">";
 	foreach ($sed_countries as $i => $x) {
-		$selected = ($i == $check) ? "selected=\"selected\"" : '';
+		$selected = ((string)$i === $check) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>" . $x . "</option>";
 	}
 	$result .= "</select>";
@@ -4330,7 +4453,7 @@ function sed_selectbox_countries($check, $name)
  */
 function sed_selectbox_date($utime, $mode, $ext = '')
 {
-	global $L;
+	global $cfg, $L;
 	list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
 	$p_monthes = array();
 	$p_monthes[] = array(1, $L['January']);
@@ -4346,14 +4469,20 @@ function sed_selectbox_date($utime, $mode, $ext = '')
 	$p_monthes[] = array(11, $L['November']);
 	$p_monthes[] = array(12, $L['December']);
 
-	$result = "<select name=\"ryear" . $ext . "\">";
+	$enable_dp = isset($cfg['enable_sed_datepicker']) ? (bool)$cfg['enable_sed_datepicker'] : true;
+	$dp_attr = $enable_dp ? ' data-datepicker="true"' : '';
+	$sel_class = (!isset($cfg['enable_sed_select']) || !empty($cfg['enable_sed_select'])) ? ' class="sed-select"' : '';
+
+	$result = '<div class="sed-date-group"' . $dp_attr . ' data-mode="' . $mode . '" data-time="' . (int)$utime . '">';
+	$result .= '<span class="sed-date-selects">';
+	$result .= "<select name=\"ryear" . $ext . "\"" . $sel_class . ">";
 	for ($i = 1902; $i < 2030; $i++) {
 		$selected = ($i == $s_year) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>$i</option>";
 	}
 	$result .= ($utime == 0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
 
-	$result .= "</select><select name=\"rmonth" . $ext . "\">";
+	$result .= "</select><select name=\"rmonth" . $ext . "\"" . $sel_class . ">";
 	reset($p_monthes);
 	foreach ($p_monthes as $k => $line) {
 		$selected = ($line[0] == $s_month) ? "selected=\"selected\"" : '';
@@ -4361,34 +4490,74 @@ function sed_selectbox_date($utime, $mode, $ext = '')
 	}
 	$result .= ($utime == 0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
 
-	$result .= "</select><select name=\"rday" . $ext . "\">";
+	$result .= "</select><select name=\"rday" . $ext . "\"" . $sel_class . ">";
 	for ($i = 1; $i < 32; $i++) {
 		$selected = ($i == $s_day) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>$i</option>";
 	}
 	$result .= ($utime == 0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-	$result .= "</select> ";
+	$result .= "</select>";
 
 	if ($mode == 'short') {
+		$result .= '</span></div>';
 		return ($result);
 	}
 
-	$result .= " <select name=\"rhour" . $ext . "\">";
+	$result .= " <select name=\"rhour" . $ext . "\"" . $sel_class . ">";
 	for ($i = 0; $i < 24; $i++) {
 		$selected = ($i == $s_hour) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>" . sprintf("%02d", $i) . "</option>";
 	}
 	$result .= ($utime == 0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
 
-	$result .= "</select>:<select name=\"rminute" . $ext . "\">";
+	$result .= "</select><span class=\"sed-date-separator\">:</span><select name=\"rminute" . $ext . "\"" . $sel_class . ">";
 	for ($i = 0; $i < 60; $i = $i + 1) {
 		$selected = ($i == $s_minute) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>" . sprintf("%02d", $i) . "</option>";
 	}
 	$result .= ($utime == 0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-	$result .= "</select>";
+	$result .= "</select></span></div>";
 
 	return ($result);
+}
+
+/**
+ * Renders a standalone datepicker input field
+ *
+ * @param string $name Name attribute for the input
+ * @param int|string $value UNIX timestamp or date string
+ * @param string $mode 'date' or 'datetime'
+ * @param array $additionalAttributes Additional HTML attributes
+ * @return string HTML representation of the datepicker
+ */
+function sed_datepicker($name, $value = '', $mode = 'date', $additionalAttributes = array())
+{
+	$val_str = '';
+	if (!empty($value)) {
+		if (is_numeric($value)) {
+			$format = ($mode === 'datetime' || $mode === 'long') ? 'Y-m-d H:i' : 'Y-m-d';
+			$val_str = @date($format, (int)$value);
+		} else {
+			$val_str = (string)$value;
+		}
+	}
+
+	$attributes = array(
+		'type' => 'text',
+		'name' => $name,
+		'value' => $val_str,
+		'class' => 'sed-datepicker text',
+		'data-time' => ($mode === 'datetime' || $mode === 'long') ? 'true' : 'false'
+	);
+
+	if (!empty($additionalAttributes['class'])) {
+		$attributes['class'] .= ' ' . $additionalAttributes['class'];
+		unset($additionalAttributes['class']);
+	}
+
+	$attributes = array_merge($attributes, $additionalAttributes);
+
+	return '<input' . sed_attr($attributes) . ' />';
 }
 
 
@@ -4405,7 +4574,7 @@ function sed_selectbox_gender($check, $name)
 	global $L;
 
 	$genlist = array('U', 'M', 'F');
-	$result =  "<select name=\"$name\" size=\"1\">";
+	$result =  "<select name=\"$name\" class=\"sed-select\" size=\"1\">";
 	foreach (array('U', 'M', 'F') as $i) {
 		$selected = ($i == $check) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>" . $L['Gender_' . $i] . "</option>";
@@ -4426,7 +4595,7 @@ function sed_selectbox_groups($check, $name, $skip = array(0))
 {
 	global $sed_groups;
 
-	$res = "<select name=\"$name\" size=\"1\">";
+	$res = "<select name=\"$name\" class=\"sed-select\" size=\"1\">";
 
 	foreach ($sed_groups as $k => $i) {
 		$selected = ($k == $check) ? "selected=\"selected\"" : '';
@@ -4459,7 +4628,7 @@ function sed_selectbox_lang($check, $name)
 	}
 
 	if (!empty($sed_languages_active) && is_array($sed_languages_active)) {
-		$result = "<select name=\"$name\" size=\"1\">";
+		$result = "<select name=\"$name\" class=\"sed-select\" size=\"1\">";
 		foreach ($sed_languages_active as $lcode => $ldata) {
 			$selected = ($lcode == $check) ? "selected=\"selected\"" : '';
 			$title = !empty($ldata['lang_title']) ? $ldata['lang_title'] : (isset($sed_languages[$lcode]) ? $sed_languages[$lcode] : ucfirst($lcode));
@@ -4472,11 +4641,11 @@ function sed_selectbox_lang($check, $name)
 
 	$lang_path = (defined('SED_ROOT') ? SED_ROOT : '') . '/system/lang/';
 	if (!is_dir($lang_path)) {
-		return "<select name=\"$name\" size=\"1\"><option value=\"$check\">$check</option></select>";
+		return "<select name=\"$name\" class=\"sed-select\" size=\"1\"><option value=\"$check\">$check</option></select>";
 	}
 	$handle = opendir($lang_path);
 	if ($handle === false) {
-		return "<select name=\"$name\" size=\"1\"><option value=\"$check\">$check</option></select>";
+		return "<select name=\"$name\" class=\"sed-select\" size=\"1\"><option value=\"$check\">$check</option></select>";
 	}
 	$langlist = array();
 	while ($f = readdir($handle)) {
@@ -4487,7 +4656,7 @@ function sed_selectbox_lang($check, $name)
 	closedir($handle);
 	sort($langlist);
 
-	$result = "<select name=\"$name\" size=\"1\">";
+	$result = "<select name=\"$name\" class=\"sed-select\" size=\"1\">";
 	foreach ($langlist as $i => $x) {
 		$selected = ($x == $check) ? "selected=\"selected\"" : '';
 		$lng = !empty($sed_languages[$x]) ? $sed_languages[$x] : ucfirst($x);
@@ -4523,7 +4692,7 @@ function sed_selectbox_skin($check, $name)
 		}
 	}
 
-	$result = "<select name=\"$name\" size=\"1\">";
+	$result = "<select name=\"$name\" class=\"sed-select\" size=\"1\">";
 	foreach ($skinlist as $i => $x) {
 		$selected = ($x == $check) ? "selected=\"selected\"" : '';
 		$skininfo = SED_ROOT . "/skins/" . $x . "/" . $x . ".php";
@@ -6157,7 +6326,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data, $importr
 
 			case 'checkbox':
 				if (empty($row['terms']) || !is_array($row['terms'])) {
-					$t2 = '<input type="hidden" name="' . $importrowname . $row['code'] . '" value="0" />' . sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value);
+					$t2 = sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value, '', false, array('with_hidden' => true));
 				} else {
 					$t2 = '<input type="hidden" name="' . $importrowname . $row['code'] . '_present" value="1" />' . sed_checkbox($importrowname . $row['code'], $row['terms'], $field_value);
 				}

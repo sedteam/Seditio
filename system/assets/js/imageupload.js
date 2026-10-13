@@ -437,8 +437,8 @@
 		self.sortableInstance = sedjs.sortable(self.list, {
 			items: 'li:not(.sed-image-upload-add-tile)',
 			tolerance: 'pointer',
-			placeholder: 'sortable-placeholder',
-			helper: 'sortable-helper',
+			placeholder: 'sed-image-upload-placeholder sortable-placeholder',
+			helper: 'sed-image-upload-helper sortable-helper',
 			update: function() {
 				self.notifyChange();
 			}

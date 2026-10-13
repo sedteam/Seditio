@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/jevix/jevix.setup.php
 Version=186
-Updated=2026-sep-22
+Updated=2026-oct-09
 Type=Plugin
 Author=Amro
 Description=

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/admin/page.admin.structure.php
 Version=186
-Updated=2026-oct-01
+Updated=2026-oct-09
 Type=Module.admin
 Author=Seditio Team
 Description=Page structure and queue
@@ -157,8 +157,8 @@ switch ($mn) {
 			$structure_allowcomments = $row['structure_allowcomments'];
 			$structure_allowratings = $row['structure_allowratings'];
 
-			$form_allowcomments = sed_radiobox("rallowcomments", $yesno_arr, $structure_allowcomments);
-			$form_allowratings = sed_radiobox("rallowratings", $yesno_arr, $structure_allowratings);
+			$form_allowcomments = sed_yesno("rallowcomments", !empty($structure_allowcomments));
+			$form_allowratings = sed_yesno("rallowratings", !empty($structure_allowratings));
 
 			if (empty($row['structure_tpl'])) {
 				$check_rtplmode = 1;
@@ -176,7 +176,7 @@ switch ($mn) {
 
 			$st_tpl = sed_radiobox("rtplmode", $rtplmode_arr, $check_rtplmode);
 
-			$st_tpl .=  " <select name=\"rtplforced\" size=\"1\">";
+			$st_tpl .=  " <select name=\"rtplforced\" class=\"sed-select\" size=\"1\">";
 			foreach ($sed_cat as $i => $x) {
 				if ($i != 'all') {
 					$selected = ($i == $row['structure_tpl']) ? "selected=\"selected\"" : '';
@@ -200,10 +200,10 @@ switch ($mn) {
 				"STRUCTURE_UPDATE_SEODESC" => sed_textbox('rseodesc', $structure_seo_desc, 64, 255),
 				"STRUCTURE_UPDATE_SEOKEYWORDS" => sed_textbox('rseokeywords', $structure_seo_keywords, 64, 255),
 				"STRUCTURE_UPDATE_SEOH1" => sed_textbox('rseoh1', $structure_seo_h1, 64, 255),
-				"STRUCTURE_UPDATE_SEOINDEX" => sed_checkbox("rseoindex", "", $structure_seo_index),
-				"STRUCTURE_UPDATE_SEOFOLLOW" => sed_checkbox("rseofollow", "", $structure_seo_follow),
+				"STRUCTURE_UPDATE_SEOINDEX" => sed_checkbox("rseoindex", "", $structure_seo_index, '', false, array('class' => 'sed-switch')),
+				"STRUCTURE_UPDATE_SEOFOLLOW" => sed_checkbox("rseofollow", "", $structure_seo_follow, '', false, array('class' => 'sed-switch')),
 				"STRUCTURE_UPDATE_TEXT" => sed_textarea('rstext', $structure_text, $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Extended') . " " . $pfs,
-				"STRUCTURE_UPDATE_GROUP" => sed_checkbox("rgroup", "", $structure_group),
+				"STRUCTURE_UPDATE_GROUP" => sed_checkbox("rgroup", "", $structure_group, '', false, array('class' => 'sed-switch')),
 				"STRUCTURE_UPDATE_TPL" => $st_tpl,
 				"STRUCTURE_UPDATE_ALLOWCOMMENTS" => $form_allowcomments,
 				"STRUCTURE_UPDATE_ALLOWRATINGS" => $form_allowratings,
@@ -328,7 +328,7 @@ switch ($mn) {
 				}
 				$st_tpl .= "</span>";
 
-				$st_group = "<select name=\"s[$structure_id][rgroup]\" size=\"1\">";
+				$st_group = "<select name=\"s[$structure_id][rgroup]\" class=\"sed-select\" size=\"1\">";
 				for ($i = 0; $i < 3; $i++) {
 					$selected = ($i == $structure_group) ? "selected=\"selected\"" : '';
 					$st_group .= "<option value=\"$i\" $selected>" . $structure_mode[$i] . "</option>";
@@ -363,7 +363,7 @@ switch ($mn) {
 				"PAGE_STRUCTURE_ADD_DESC" => sed_textbox('ndesc', isset($ndesc) ? $ndesc : '', 64, 255),
 				"PAGE_STRUCTURE_ADD_ICON" => sed_textbox('nicon', isset($nicon) ? $nicon : '', 64, 128),
 				"PAGE_STRUCTURE_ADD_THUMB" => sed_textbox('nthumb', isset($nicon) ? $nicon : '', 64, 255),
-				"PAGE_STRUCTURE_ADD_GROUP" => sed_checkbox('ngroup')
+				"PAGE_STRUCTURE_ADD_GROUP" => sed_checkbox('ngroup', '', false, '', false, array('class' => 'sed-switch'))
 			));
 
 			$t->parse("ADMIN_PAGE.PAGE_STRUCTURE");
@@ -443,14 +443,14 @@ switch ($mn) {
 			reset($options_sort);
 			reset($options_way);
 
-			$form_sort = "<select name=\"s[" . $structure_id . "][order]\" size=\"1\">";
+			$form_sort = "<select name=\"s[" . $structure_id . "][order]\" class=\"sed-select\" size=\"1\">";
 			foreach ($options_sort as $i => $x) {
 				$selected = ($i == $sort) ? 'selected="selected"' : '';
 				$form_sort .= "<option value=\"$i\" $selected>" . $x . "</option>";
 			}
 			$form_sort .= "</select> ";
 
-			$form_way = "<select name=\"s[" . $structure_id . "][way]\" size=\"1\">";
+			$form_way = "<select name=\"s[" . $structure_id . "][way]\" class=\"sed-select\" size=\"1\">";
 			foreach ($options_way as $i => $x) {
 				$selected = ($i == $way) ? 'selected="selected"' : '';
 				$form_way .= "<option value=\"$i\" $selected>" . $x . "</option>";

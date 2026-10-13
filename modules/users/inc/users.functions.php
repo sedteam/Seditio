@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/inc/users.functions.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=Users API functions
@@ -171,7 +171,7 @@ function sed_selectbox_users($to)
 {
 	global $db_users;
 
-	$result = "<select name=\"userid\">";
+	$result = "<select name=\"userid\" class=\"sed-select\" data-search=\"true\">";
 	$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users ORDER BY user_name ASC");
 	while ($row = sed_sql_fetchassoc($sql)) {
 		$selected = ($row['user_id'] == $to) ? "selected=\"selected\"" : '';

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.home.inc.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-09
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -99,7 +99,7 @@ if ($sys['user_istopadmin']) {
 	}
 
 	$forcesql = $L['upg_force'];
-	$forcesql .= "<select name=\"forcesql\" size=\"1\">";
+	$forcesql .= "<select name=\"forcesql\" class=\"sed-select\" size=\"1\">";
 
 	foreach ($cfg['versions_list'] as $x) {
 		$selected = ($x == $cfg['sqlversion']) ? "selected=\"selected\"" : '';

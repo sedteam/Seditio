@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.register.php
 Version=186
-Updated=2026-sep-28
+Updated=2026-oct-09
 Type=Module
 Author=Seditio Team
 Description=User registration
@@ -272,7 +272,7 @@ $rtimezone = (empty($rtimezone)) ? $cfg['defaulttimezone'] : $rtimezone;
 $rcountry = (empty($rcountry)) ? $cfg['defaultcountry'] : $rcountry;
 $timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
-$form_timezone = sed_textbox_hidden('rtimezone_p', 1) . "<select name=\"rtimezone\" size=\"1\">";
+$form_timezone = sed_textbox_hidden('rtimezone_p', 1) . "<select name=\"rtimezone\" class=\"sed-select\" size=\"1\">";
 foreach ($timezonelist as $i => $x) {
 	$selected = ($x == $rtimezone) ? "selected=\"selected\"" : '';
 	$form_timezone .= "<option value=\"$x\" $selected>GMT" . $x . "</option>";
