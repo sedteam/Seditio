@@ -76,9 +76,9 @@ During session initialization in the `system/common.php` file, a unique session 
   ```php
   $_SESSION['guest_sourcekey'] = md5(sed_unique(16));
   ```
-* **For Registered Members:** The key is generated dynamically based on the user's secret hash and last visit time:
+* **For Registered Members:** The key is generated based on the user's secret session hash (`user_secret`) and the site identifier (`site_id`):
   ```php
-  $usr['sourcekey'] = md5($row['user_secret'] . $row['user_lastvisit']);
+  $usr['sourcekey'] = md5($row['user_secret'] . $sys['site_id']);
   ```
 
 The `sed_sourcekey()` function in `system/functions.php` reads this key, extracts the first 6 characters, casts them to uppercase (prepending `GUEST_` for guests), and returns the generated token.
@@ -96,12 +96,12 @@ Any operations that modify system state via GET requests (e.g., deleting a page,
 
 When parsing this request, the core controller must call the validator:
 ```php
-sed_check_xg(); // Compares $_GET['x'] with current sed_sourcekey() or previous sed_sourcekey_prev() and aborts on mismatch
+sed_check_xg(); // Compares $_GET['x'] with current sed_sourcekey() and aborts on mismatch
 ```
 
 > [!NOTE]
-> **Previous Token Support (`sed_sourcekey_prev`):**
-> Starting with version 186, both `sed_check_xg()` and `sed_check_xp()` validate incoming security tokens against both the current `$sk = sed_sourcekey()` and the previous session token `$sk_prev = sed_sourcekey_prev()`. This prevents false-positive "Wrong parameter in the URL" errors when working across multiple browser tabs or after background session timestamp updates.
+> **Per-Session Token Binding:**
+> The token is tied to the authenticated user's session (`user_secret`) rather than the inactivity timer (`user_lastvisit`). As a result, the token remains consistent throughout the entire user session, avoids expiration during long form edits (exceeding 20 minutes), remains unaffected by multiple open browser tabs, and is regenerated only upon user logout or password changes.
 
 ### 10.2.3. Automatic POST Forms Protection (sed_check_xp)
 To defend against CSRF attacks, all POST forms must submit the security token in a hidden field named `x`.

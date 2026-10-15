@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.auth.php
 Version=186
-Updated=2026-oct-02
+Updated=2026-oct-15
 Type=Module
 Author=Seditio Team
 Description=User authentication
@@ -83,7 +83,6 @@ if ($a == 'check') {
 				}
 
 				if (empty($error_string)) {
-					$_SESSION['sed_sourcekey_prev'] = sed_sourcekey();
 					$ruserid = $row['user_id'];
 					$rdefskin = $row['user_skin'];
 					$rmdpass_secret = $row['user_secret'];

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/uploader/uploader.ajax.php
 Version=186
-Updated=2026-sep-30
+Updated=2026-oct-15
 Type=Plugin
 Author=Amro
 Description=
@@ -39,11 +39,10 @@ if (!$usr['auth_write']) {
 }
 
 $sk = sed_sourcekey();
-$sk_prev = sed_sourcekey_prev();
 $xg = sed_import('x', 'G', 'ALP');
 $xp = sed_import('xp', 'P', 'ALP');
 
-$csrf_valid = sed_check_csrf() || (!empty($xp) && ($xp === $sk || $xp === $sk_prev)) || (!empty($xg) && ($xg === $sk || $xg === $sk_prev));
+$csrf_valid = sed_check_csrf() || (!empty($xp) && $xp === $sk) || (!empty($xg) && $xg === $sk);
 
 if (!$csrf_valid) {
 	sed_sendheaders('application/json', 403);

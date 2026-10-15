@@ -302,7 +302,16 @@ const sedjs = {
 
     /**
      * Initialize Tabs functionality with specified settings.
-     * @param {Object} settings - The settings for the tab functionality.
+     * Supports URL hash deep linking (e.g. #tab2) and updates address bar on tab switch.
+     * @param {Object} [settings] - The settings for the tab functionality.
+     * @param {string} [settings.containerClass='sedtabs'] - CSS class of tab containers.
+     * @param {string} [settings.eventType='click'] - Event type triggering tab switch.
+     * @param {string} [settings.selectedClass='selected'] - CSS class for active tab.
+     * @param {number|string} [settings.defaultTabIndex=0] - Default active tab index or tab id.
+     * @param {boolean} [settings.updateHash=true] - Whether to update URL hash in address bar on tab switch.
+     * @param {boolean} [settings.useHash=true] - Whether to activate tab from window.location.hash on load and hashchange.
+     * @param {string} [settings.historyMethod='replace'] - History API method ('replace' or 'push').
+     * @param {Function|false} [settings.beforeSwitchCallback=false] - Callback before tab switch.
      */
     sedtabs(settings) {
         const getElementOrElements = (identifier) => {
@@ -326,11 +335,15 @@ const sedjs = {
             }
         };
 
-        const addClass = function (className) {
+        const addClass = function (className, containerClass) {
             sedjs.addClass(this, className);
             const tabTitle = this.getAttribute('data-tabtitle');
-            if (tabTitle && document.querySelector('.tab-title')) {
-                document.querySelector('.tab-title').textContent = tabTitle;
+            if (tabTitle) {
+                const container = (containerClass && this.closest) ? this.closest(`.${containerClass}`) : null;
+                const titleEl = (container && container.querySelector('.tab-title')) || document.querySelector('.tab-title');
+                if (titleEl) {
+                    titleEl.textContent = tabTitle;
+                }
             }
         };
 
@@ -348,9 +361,53 @@ const sedjs = {
 
         const switchTab = function (tabId, tabLinks, tabContents, settings) {
             applyToAllElements(removeClass, tabLinks, [settings.selectedClass]);
-            addClass.call(this, settings.selectedClass);
+            addClass.call(this, settings.selectedClass, settings.containerClass);
             applyToAllElements(hideElement, tabContents);
             applyToAllElements(showElement, document.querySelectorAll(`#${tabId}`));
+        };
+
+        const getTabId = (link) => {
+            let hash = '';
+            if (link && link.hash) {
+                hash = link.hash;
+            } else if (link && typeof link.getAttribute === 'function') {
+                const href = link.getAttribute('href') || '';
+                const hashPos = href.indexOf('#');
+                if (hashPos !== -1) {
+                    hash = href.substring(hashPos);
+                }
+            }
+            return hash ? hash.replace(/^#/, '') : '';
+        };
+
+        const safeDecode = (str) => {
+            if (!str) return '';
+            try {
+                return decodeURIComponent(str);
+            } catch (e) {
+                return str;
+            }
+        };
+
+        const updateUrlHash = (tabId, method) => {
+            if (!tabId) return;
+            const targetHash = '#' + tabId;
+            if (window.location.hash === targetHash) return;
+
+            if (window.history && (method === 'push' ? window.history.pushState : window.history.replaceState)) {
+                const url = window.location.pathname + window.location.search + targetHash;
+                try {
+                    if (method === 'push') {
+                        window.history.pushState(null, '', url);
+                    } else {
+                        window.history.replaceState(null, '', url);
+                    }
+                } catch (e) {
+                    window.location.hash = tabId;
+                }
+            } else {
+                window.location.hash = tabId;
+            }
         };
 
         const initTabs = (config) => {
@@ -359,19 +416,32 @@ const sedjs = {
                 eventType: 'click',
                 selectedClass: 'selected',
                 defaultTabIndex: 0,
-                beforeSwitchCallback: false
+                beforeSwitchCallback: false,
+                updateHash: true,
+                useHash: true,
+                historyMethod: 'replace'
             }, config);
 
             const tabContainers = document.querySelectorAll(`.${mergedConfig.containerClass}`);
+            const initialHash = safeDecode((window.location.hash || '').replace(/^#/, ''));
 
-            const handleTabClick = function () {
+            const handleTabClick = function (e) {
+                if (e) {
+                    if (typeof e.preventDefault === 'function') {
+                        e.preventDefault();
+                    }
+                    e.returnValue = false;
+                }
                 const clickedTab = this;
-                const tabLinks = this.tabLinks;
-                const tabContents = this.tabContents;
+                const tabId = clickedTab.tabId;
 
                 if (!mergedConfig.beforeSwitchCallback ||
                     mergedConfig.beforeSwitchCallback.apply(clickedTab, this.callbackArgs) !== false) {
                     switchTab.apply(clickedTab, this.callbackArgs);
+
+                    if (mergedConfig.updateHash && tabId) {
+                        updateUrlHash(tabId, mergedConfig.historyMethod);
+                    }
                 }
                 return false;
             };
@@ -384,23 +454,22 @@ const sedjs = {
                 let tabContents = [];
 
                 for (let j = 0; j < tabLinks.length; j++) {
-                    if (tabLinks[j].href.match(/#tab/)) {
-                        const tabId = tabLinks[j].href.split('#')[1];
-                        tabIds.push(tabId);
+                    const link = tabLinks[j];
+                    const tabId = safeDecode(getTabId(link));
 
-                        if (typeof mergedConfig.defaultTabIndex === 'string' &&
-                            tabId === mergedConfig.defaultTabIndex) {
-                            mergedConfig.defaultTabIndex = j;
-                        }
-
-                        tabs.push(tabLinks[j]);
-
+                    if (tabId && (tabId.indexOf('tab') === 0 || link.href.indexOf('#tab') !== -1 || document.getElementById(tabId))) {
                         const contentElements = document.querySelectorAll(`#${tabId}`);
-                        for (let k = 0; k < contentElements.length; k++) {
-                            tabContents.push(contentElements[k]);
+                        if (contentElements.length > 0) {
+                            tabIds.push(tabId);
+                            tabs.push(link);
+                            for (let k = 0; k < contentElements.length; k++) {
+                                tabContents.push(contentElements[k]);
+                            }
                         }
                     }
                 }
+
+                if (tabs.length === 0) continue;
 
                 for (let j = 0; j < tabs.length; j++) {
                     const callbackArgs = [
@@ -410,24 +479,105 @@ const sedjs = {
                         mergedConfig
                     ];
 
+                    tabs[j].tabId = tabIds[j];
                     tabs[j].tabLinks = tabs;
                     tabs[j].tabContents = tabContents;
                     tabs[j].callbackArgs = callbackArgs;
 
                     tabs[j][`on${mergedConfig.eventType}`] =
                         bindFunction.call(tabs[j], handleTabClick);
+
+                    if (mergedConfig.eventType !== 'click') {
+                        tabs[j].onclick = function (e) {
+                            if (e && typeof e.preventDefault === 'function') {
+                                e.preventDefault();
+                            }
+                            return false;
+                        };
+                    }
                 }
 
-                if (typeof mergedConfig.defaultTabIndex === 'number' &&
-                    mergedConfig.defaultTabIndex >= 0) {
+                // Determine active tab index for this container
+                let activeIndex = -1;
+
+                // 1. Activate tab from URL hash if useHash is enabled
+                if (mergedConfig.useHash && initialHash) {
+                    const hashIdx = tabIds.indexOf(initialHash);
+                    if (hashIdx !== -1) {
+                        activeIndex = hashIdx;
+                    }
+                }
+
+                // 2. Check if defaultTabIndex is a matching tab id
+                if (activeIndex === -1 && typeof mergedConfig.defaultTabIndex === 'string') {
+                    const namedIdx = tabIds.indexOf(mergedConfig.defaultTabIndex);
+                    if (namedIdx !== -1) {
+                        activeIndex = namedIdx;
+                    }
+                }
+
+                // 3. Check if any tab already has selectedClass in DOM
+                if (activeIndex === -1) {
+                    for (let j = 0; j < tabs.length; j++) {
+                        if (sedjs.hasClass(tabs[j], mergedConfig.selectedClass)) {
+                            activeIndex = j;
+                            break;
+                        }
+                    }
+                }
+
+                // 4. Fallback to defaultTabIndex (number) or first tab (0)
+                if (activeIndex === -1) {
+                    activeIndex = (typeof mergedConfig.defaultTabIndex === 'number' &&
+                                  mergedConfig.defaultTabIndex >= 0 &&
+                                  mergedConfig.defaultTabIndex < tabs.length)
+                        ? mergedConfig.defaultTabIndex
+                        : 0;
+                }
+
+                if (activeIndex >= 0 && activeIndex < tabs.length) {
                     switchTab.call(
-                        tabs[mergedConfig.defaultTabIndex],
-                        tabIds[mergedConfig.defaultTabIndex],
+                        tabs[activeIndex],
+                        tabIds[activeIndex],
                         tabs,
                         tabContents,
                         mergedConfig
                     );
                 }
+
+                // Store metadata on container for hashchange support
+                container._sedtabsData = {
+                    tabIds: tabIds,
+                    tabs: tabs,
+                    tabContents: tabContents,
+                    config: mergedConfig,
+                    switchTab: function (idx) {
+                        if (idx >= 0 && idx < tabs.length) {
+                            switchTab.call(tabs[idx], tabIds[idx], tabs, tabContents, mergedConfig);
+                        }
+                    }
+                };
+            }
+
+            // Bind single hashchange listener if useHash is enabled
+            if (mergedConfig.useHash && !sedjs.sedtabs._hashListenerBound) {
+                window.addEventListener('hashchange', () => {
+                    const rawHash = (window.location.hash || '').replace(/^#/, '');
+                    if (!rawHash) return;
+                    const currentHash = safeDecode(rawHash);
+
+                    const containers = document.querySelectorAll(`.${mergedConfig.containerClass}`);
+                    for (let i = 0; i < containers.length; i++) {
+                        const container = containers[i];
+                        if (!container._sedtabsData) continue;
+                        const data = container._sedtabsData;
+                        const idx = data.tabIds.indexOf(currentHash);
+                        if (idx !== -1 && !sedjs.hasClass(data.tabs[idx], data.config.selectedClass)) {
+                            data.switchTab(idx);
+                        }
+                    }
+                });
+                sedjs.sedtabs._hashListenerBound = true;
             }
         };
 

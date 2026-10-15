@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/common.php
 Version=186
-Updated=2026-oct-02
+Updated=2026-oct-15
 Type=Core
 Author=Seditio Team
 Description=Common
@@ -252,7 +252,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 		if ($row['user_maingrp'] > 3) {
 			$usr['id'] = $row['user_id'];
 			$usr['sessionid'] = ($cfg['authmode'] == 1) ? sed_hash($row['user_lastvisit'], 2) : sed_hash($row['user_secret'], 2);
-			$usr['sourcekey'] = md5($row['user_secret'] . $row['user_lastvisit']);
+			$usr['sourcekey'] = md5($row['user_secret'] . $sys['site_id']);
 			$usr['name'] = $row['user_name'];
 			$usr['maingrp'] = $row['user_maingrp'];
 			$usr['lastvisit'] = $row['user_lastvisit'];
@@ -269,9 +269,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 
 			if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset']) {
 				$sys['comingback'] = TRUE;
-				$_SESSION['sed_sourcekey_prev'] = sed_sourcekey();
 				$usr['lastvisit'] = $usr['lastlog'];
-				$usr['sourcekey'] = md5($row['user_secret'] . $usr['lastvisit']);
 				$sys['sql_update_lastvisit'] = ", user_lastvisit='" . $usr['lastvisit'] . "'";
 			}
 
