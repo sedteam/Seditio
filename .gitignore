@@ -16,6 +16,8 @@ local.properties
 .settings/
 .loadpath
 .vscode
+.vibe
+.dsh*
 
 # External tool builders
 .externalToolBuilders/
