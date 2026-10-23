@@ -460,7 +460,7 @@ if (!empty($_POST['ajax_action'])) {
 			$mdsalt = sed_unique(32);
 			$mdpass = sed_hash($rpassword, 1, $mdsalt);
 			$mdpass_secret = md5(sed_unique(16));
-			$validationkey = md5(microtime());
+			$validationkey = sed_unique(32);
             
             $sql = sed_sql_query("INSERT INTO " . $sqldbprefix . "users
 			(user_name,

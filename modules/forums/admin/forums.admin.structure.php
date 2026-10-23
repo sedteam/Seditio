@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/admin/forums.admin.structure.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module.admin
 Author=Seditio Team
 Description=Forums structure (categories)
@@ -35,6 +35,7 @@ $t = new XTemplate(sed_skinfile('admin.forums.structure', false, true));
 
 if ($n == 'options') {
 	if ($a == 'update') {
+		sed_check_xg();
 		$rpath = sed_import('rpath', 'P', 'TXT');
 		$rtitle = sed_import('rtitle', 'P', 'TXT');
 		$rtplmode = sed_import('rtplmode', 'P', 'INT');
@@ -111,7 +112,7 @@ if ($n == 'options') {
 
 	$t->assign(array(
 		"FN_UPDATE_FORM_TITLE" => sed_cc($fn_title),
-		"FN_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&n=options&a=update&id=" . $fn_id),
+		"FN_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&n=options&a=update&id=" . $fn_id . "&" . sed_xg()),
 		"FN_UPDATE_CODE" => $fn_code,
 		"FN_UPDATE_PATH" => sed_textbox('rpath', $fn_path, 16, 16),
 		"FN_UPDATE_TITLE" => sed_textbox('rtitle', $fn_title, 64, 255),
@@ -125,6 +126,7 @@ if ($n == 'options') {
 } else {
 
 	if ($a == 'update') {
+		sed_check_xg();
 		$s = sed_import('s', 'P', 'ARR');
 
 		foreach ($s as $i => $k) {
@@ -222,7 +224,7 @@ if ($n == 'options') {
 	$fn_defstate = sed_radiobox("ndefstate", array(0 => $L['adm_defstate_0'], 1 => $L['adm_defstate_1']), 1);
 
 	$t->assign(array(
-		"FORUMS_STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&a=update"),
+		"FORUMS_STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=forums&s=structure&a=update&" . sed_xg()),
 		"FN_ADD_SEND" => sed_url("admin", "m=forums&s=structure&a=add&" . sed_xg()),
 		"FN_ADD_CODE" => sed_textbox('ncode', isset($ncode) ? $ncode : '', 16, 16),
 		"FN_ADD_PATH" => sed_textbox('npath', isset($npath) ? $npath : '', 16, 16),

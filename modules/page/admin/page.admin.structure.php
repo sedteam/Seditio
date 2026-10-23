@@ -52,6 +52,7 @@ switch ($mn) {
 
 		if ($n == 'options') {
 			if ($a == 'update') {
+				sed_check_xg();
 
 				if (sed_plug_active('revisions') && !empty($id)) {
 					$sql_curr = sed_sql_query("SELECT * FROM $db_structure WHERE structure_id = '" . (int)$id . "' LIMIT 1");
@@ -189,7 +190,7 @@ switch ($mn) {
 			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, 'savestructure', 'rstext', $L['SFS']) : '';
 
 			$t->assign(array(
-				"STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=page&mn=structure&n=options&a=update&id=" . $structure_id),
+				"STRUCTURE_UPDATE_SEND" => sed_url("admin", "m=page&mn=structure&n=options&a=update&id=" . $structure_id . "&" . sed_xg()),
 				"STRUCTURE_UPDATE_CODE" => $structure_code,
 				"STRUCTURE_UPDATE_PATH" => sed_textbox('rpath', $structure_path, 16, 16),
 				"STRUCTURE_UPDATE_TITLE" => sed_textbox('rtitle', $structure_title, 48, 64),
@@ -223,6 +224,7 @@ switch ($mn) {
 			$t->parse("ADMIN_PAGE.STRUCTURE_UPDATE");
 		} else {
 			if ($a == 'update') {
+				sed_check_xg();
 				$s = sed_import('s', 'P', 'ARR');
 
 				foreach ($s as $i => $k) {
@@ -355,7 +357,7 @@ switch ($mn) {
 			}
 
 			$t->assign(array(
-				"PAGE_STRUCTURE_SEND" => sed_url("admin", "m=page&mn=structure&a=update"),
+				"PAGE_STRUCTURE_SEND" => sed_url("admin", "m=page&mn=structure&a=update&" . sed_xg()),
 				"PAGE_STRUCTURE_ADD_SEND" => sed_url("admin", "m=page&mn=structure&a=add&" . sed_xg()),
 				"PAGE_STRUCTURE_ADD_CODE" => sed_textbox('ncode', isset($ncode) ? $ncode : '', 48, 255),
 				"PAGE_STRUCTURE_ADD_PATH" => sed_textbox('npath', isset($npath) ? $npath : '', 16, 16),

@@ -5532,7 +5532,7 @@ function sed_title($mask, $tags, $data)
  */
 function sed_unique($l = 16)
 {
-	return (mb_substr(md5(mt_rand(0, 1000000)), 0, $l));
+	return (substr(md5(uniqid(mt_rand(), true)), 0, $l));
 }
 
 /** 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.dic.inc.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-23
 Type=Core.admin
 Author=Amro
 Description=Administration panel
@@ -49,6 +49,7 @@ switch ($mn) {
 	case 'dicitem':
 
 		if ($a == 'update' && (!empty($tid))) {
+			sed_check_xg();
 			$ititle = sed_import('ititle', 'P', 'TXT');
 			$icode = sed_import('icode', 'P', 'TXT');
 			$idefval = sed_import('idefval', 'P', 'INT');
@@ -62,12 +63,13 @@ switch ($mn) {
 			sed_cache_clear('sed_dic');
 			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did, "", true), false, ['msg' => '917']);
 		} elseif ($a == 'delete' && (!empty($tid))) {
+			sed_check_xg();
 			$sql = sed_sql_query("DELETE FROM $db_dic_items WHERE ditem_id = '" . $tid . "'");
 			sed_log("Deleted term #" . $tid, 'adm');
 			sed_cache_clear('sed_dic');
 			sed_redirect(sed_url("admin", "m=dic&mn=dicitem&did=" . $did, "", true), false, ['msg' => '302']);
 		} elseif ($a == 'add' && (!empty($did))) {
-
+			sed_check_xg();
 			$ditemtitle = sed_import('ditemtitle', 'P', 'TXT');
 			$ditemcode = sed_import('ditemcode', 'P', 'TXT');
 			$ditemdefval = sed_import('ditemdefval', 'P', 'TXT');
@@ -105,7 +107,7 @@ switch ($mn) {
 				"TERM_LIST_TITLE" => sed_cc($row['ditem_title']),
 				"TERM_LIST_CODE" => sed_cc($row['ditem_code']),
 				"TERM_LIST_CHILDRENDIC" => (!empty($row['ditem_children'])) ? "<a href=\"" . $children_url . "\">ID#" . $row['ditem_children'] . ' ' . $dic_list[$row['ditem_children']] . "</a>" : '',
-				"TERM_LIST_DELETE_URL" => sed_url('admin', 'm=dic&mn=dicitem&a=delete&tid=' . $row['ditem_id'] . "&did=" . $row['dic_id']),
+				"TERM_LIST_DELETE_URL" => sed_url('admin', 'm=dic&mn=dicitem&a=delete&tid=' . $row['ditem_id'] . "&did=" . $row['dic_id'] . "&" . sed_xg()),
 				"TERM_LIST_EDIT_URL" => sed_url('admin', 'm=dic&mn=dicitemedit&tid=' . $row['ditem_id'])
 			));
 
@@ -116,7 +118,7 @@ switch ($mn) {
 		$admintitle = $drow['dic_title'];
 
 		$t->assign(array(
-			"TERM_ADD_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=add&did=' . $did),
+			"TERM_ADD_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=add&did=' . $did . '&' . sed_xg()),
 			"TERM_ADD_TITLE" => sed_textbox('ditemtitle', isset($ditemtitle) ? $ditemtitle : ''),
 			"TERM_ADD_CODE" => sed_textbox('ditemcode', isset($ditemcode) ? $ditemcode : ''),
 			"TERM_ADD_CHILDRENDIC" => sed_selectbox('', 'ditemchildren', $dic_list),
@@ -139,7 +141,7 @@ switch ($mn) {
 		$row = sed_sql_fetchassoc($sql);
 
 		$t->assign(array(
-			"DIC_EDIT_SEND" => sed_url('admin', 'm=dic&a=update&did=' . $did),
+			"DIC_EDIT_SEND" => sed_url('admin', 'm=dic&a=update&did=' . $did . '&' . sed_xg()),
 			"DIC_EDIT_TITLE" => sed_textbox('dtitle', $row['dic_title']),
 			"DIC_EDIT_TYPE" => sed_selectbox($row['dic_type'], 'dtype', $dic_type),
 			"DIC_EDIT_VALUES" => sed_textarea('dvalues', $row['dic_values'], 5, 60),
@@ -165,7 +167,7 @@ switch ($mn) {
 
 		$t->assign(array(
 			"DIC_TITLE" => sed_cc($row['dic_title']),
-			"DIC_ITEM_EDIT_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=update&tid=' . $tid . "&did=" . $row['dic_id']),
+			"DIC_ITEM_EDIT_SEND" => sed_url('admin', 'm=dic&mn=dicitem&a=update&tid=' . $tid . "&did=" . $row['dic_id'] . "&" . sed_xg()),
 			"DIC_ITEM_EDIT_TITLE" => sed_textbox('ititle', $row['ditem_title']),
 			"DIC_ITEM_EDIT_CHILDRENDIC" => sed_selectbox($row['ditem_children'], 'ichildren', $dic_list),
 			"DIC_ITEM_EDIT_CODE" => sed_textbox('icode', $row['ditem_code']),
@@ -215,6 +217,7 @@ switch ($mn) {
 
 			//---
 			if ($a == 'add' && (!empty($did))) {
+				sed_check_xg();
 				if (empty($allowed_locations)) {
 					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '909']);
 				} elseif (!empty($extralocation) && !empty($row['dic_code'])) {
@@ -240,6 +243,7 @@ switch ($mn) {
 			}
 			//---
 			if ($a == 'update' && (!empty($did))) {
+				sed_check_xg();
 				if (empty($allowed_locations)) {
 					sed_redirect(sed_url("admin", "m=dic&mn=extra&did=" . $did, "", true), false, ['msg' => '909']);
 				} elseif (!isset($allowed_locations[$row['dic_extra_location']])) {
@@ -314,7 +318,7 @@ switch ($mn) {
 			}
 
 			$t->assign(array(
-				"DIC_EXTRA_SEND" => sed_url('admin', 'm=dic&mn=extra&did=' . $did . '&a=' . ((!empty($isset_column)) ? "update" : "add")),
+				"DIC_EXTRA_SEND" => sed_url('admin', 'm=dic&mn=extra&did=' . $did . '&a=' . ((!empty($isset_column)) ? "update" : "add") . '&' . sed_xg()),
 				"DIC_EXTRA_SUBMIT_NAME" => (!empty($isset_column)) ? $L['Update'] : $L['Add'],
 				"DIC_EXTRA_TITLE" => $row['dic_title'],
 				"DIC_EXTRA_DICCODE" => $row['dic_code'],
@@ -351,6 +355,7 @@ switch ($mn) {
 		$dformwysiwyg = sed_import('dformwysiwyg', 'P', 'TXT'); // new sed 180
 
 		if ($a == 'update' && (!empty($did))) {
+			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_dic SET 
 				dic_title = '" . sed_sql_prep($dtitle) . "', 
 				dic_type = '" . (int)$dtype . "', 
@@ -370,6 +375,7 @@ switch ($mn) {
 			sed_cache_clear('sed_dic');
 			sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '917']);
 		} elseif ($a == 'delete' && (!empty($did))) {
+			sed_check_xg();
 			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_dic_items WHERE ditem_dicid = '" . $did . "'");
 			$totalitems = sed_sql_result($sql, 0, "COUNT(*)");
 			if ($totalitems == 0) {
@@ -379,6 +385,7 @@ switch ($mn) {
 				sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '302']);
 			}
 		} elseif ($a == 'add') {
+			sed_check_xg();
 			if (empty($dtitle) || empty($dcode) || empty($dtype)) {
 				sed_redirect(sed_url("admin", "m=dic", "", true), false, ['msg' => '303']);
 				exit;
@@ -433,7 +440,7 @@ switch ($mn) {
 
 			if (!isset($termcount[$row['dic_id']])) {
 				$t->assign(array(
-					"DIC_LIST_DELETE_URL" => sed_url("admin", "m=dic&a=delete&did=" . $row['dic_id'])
+					"DIC_LIST_DELETE_URL" => sed_url("admin", "m=dic&a=delete&did=" . $row['dic_id'] . "&" . sed_xg())
 				));
 				$t->parse("ADMIN_DIC.DIC_STRUCTURE.DIC_LIST.ADMIN_DELETE");
 			}
@@ -472,7 +479,7 @@ switch ($mn) {
 		}
 
 		$t->assign(array(
-			"DIC_ADD_SEND" => sed_url('admin', 'm=dic&a=add'),
+			"DIC_ADD_SEND" => sed_url('admin', 'm=dic&a=add&' . sed_xg()),
 			"DIC_ADD_TITLE" => sed_textbox('dtitle', $dtitle),
 			"DIC_ADD_VALUES" => sed_textarea('dvalues', $dvalues, 5, 60),
 			"DIC_ADD_MERA" => sed_textbox('dmera', $dmera, 8, 50),

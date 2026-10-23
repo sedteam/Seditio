@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.add.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=Add page
@@ -43,6 +43,7 @@ $number_of_extrafields = count($extrafields);
 // ----------------------
 
 if ($a == 'add') {
+	sed_check_xg();
 	sed_shield_protect();
 
 	/* === Hook === */
@@ -306,7 +307,7 @@ if ($usr['isadmin']) {
 	$t->parse("MAIN.PAGEADD_PUBLISH");
 }
 
-$form_send_url = (defined('SED_ADMIN')) ? sed_url("admin", "m=page&s=add&a=add") : sed_url("page", "m=add&a=add");
+$form_send_url = (defined('SED_ADMIN')) ? sed_url("admin", "m=page&s=add&a=add&" . sed_xg()) : sed_url("page", "m=add&a=add&" . sed_xg());
 
 $t->assign(array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],

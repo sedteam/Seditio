@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.php
 Version=186
-Updated=2026-sep-28
+Updated=2026-oct-23
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -47,7 +47,7 @@ if ($a == 'request' && $email != '') {
 		$validationkey = $row['user_lostpass'];
 
 		if (empty($validationkey) || $validationkey == "0") {
-			$validationkey = md5(microtime());
+			$validationkey = sed_unique(32);
 			$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='" . $usr['ip'] . "' WHERE user_id='$ruserid'");
 		}
 
@@ -69,7 +69,7 @@ if ($a == 'request' && $email != '') {
 		sed_mail($email, $rsubject, $rbody);
 	} else {
 		sed_shield_update(10, "Password recovery requested");
-		sed_log("Pass recovery failed, user : " . $rusername);
+		sed_log("Pass recovery failed, email : " . $email);
 		sed_redirect(sed_url("message", "msg=151", "", true));
 		exit;
 	}
@@ -97,7 +97,7 @@ if ($a == 'request' && $email != '') {
 			exit;
 		}
 
-		$validationkey = md5(microtime());
+		$validationkey = sed_unique(32);
 		$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey' WHERE user_id='$ruserid'");
 
 		if ($generate_password == "yes" && $a == 'newpassword') {
@@ -131,7 +131,7 @@ if ($a == 'request' && $email != '') {
 		}
 	} else {
 		sed_shield_update(7, "Log in");
-		sed_log("Pass recovery failed, user : " . $rusername);
+		sed_log("Pass recovery failed, token : " . $v);
 		sed_redirect(sed_url("message", "msg=151", "", true));
 		exit;
 	}

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.rights.inc.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Core.admin
 Author=Seditio Team
 Description=Rights
@@ -44,6 +44,7 @@ if (!isset($L['adm_code']['manage'])) { $L['adm_code']['manage'] = isset($L['adm
 $t = new XTemplate(sed_skinfile('admin.rights', false, true));
 
 if ($a == 'update') {
+	sed_check_xg();
 	$ncopyrightsconf =  sed_import('ncopyrightsconf', 'P', 'BOL');
 	$ncopyrightsfrom =  sed_import('ncopyrightsfrom', 'P', 'INT');
 
@@ -136,7 +137,7 @@ $t->assign(array(
 	"RIGHTS_COLUMN_COUNT" => ($advanced) ? 8 : 3,
 	"RIGHTS_UPDATECOLUMN_COUNT" => ($advanced) ? 11 : 6,
 	"RIGHTS_GROUP_COLUMN_COUNT" => ($advanced) ? 13 : 8,
-	"RIGHTS_UPDATE_SEND" => sed_url("admin", "m=rights&a=update&g=" . $g)
+	"RIGHTS_UPDATE_SEND" => sed_url("admin", "m=rights&a=update&g=" . $g . "&" . sed_xg())
 ));
 
 if ($g > 5) {

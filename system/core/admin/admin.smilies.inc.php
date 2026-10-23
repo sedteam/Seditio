@@ -35,6 +35,7 @@ $urlpaths[sed_url("admin", "m=smilies")] =  $L['Smilies'];
 $admintitle = $L['Smilies'];
 
 if ($a == 'update') {
+	sed_check_xg();
 	$s = sed_import('s', 'P', 'ARR');
 	foreach ($s as $i => $k) {
 		$sql = sed_sql_query("UPDATE $db_smilies SET
@@ -48,6 +49,7 @@ if ($a == 'update') {
 	sed_redirect(sed_url("admin", "m=smilies", "", true), false, ['msg' => '917']);
 	exit;
 } elseif ($a == 'add') {
+	sed_check_xg();
 	$nsmiliecode = sed_sql_prep(sed_import('nsmiliecode', 'P', 'TXT'));
 	$nsmilieimage = sed_sql_prep(sed_import('nsmilieimage', 'P', 'TXT'));
 	$nsmilietext = sed_sql_prep(sed_import('nsmilietext', 'P', 'TXT'));
@@ -110,13 +112,13 @@ while ($row = sed_sql_fetchassoc($sql)) {
 }
 
 $t->assign(array(
-	"SMILIES_UPDATE_SEND" => sed_url("admin", "m=smilies&a=update")
+	"SMILIES_UPDATE_SEND" => sed_url("admin", "m=smilies&a=update&" . sed_xg())
 ));
 
 $t->parse("ADMIN_SMILIES.SMILIES_LIST");
 
 $t->assign(array(
-	"SMILIE_ADD_SEND" => sed_url("admin", "m=smilies&a=add"),
+	"SMILIE_ADD_SEND" => sed_url("admin", "m=smilies&a=add&" . sed_xg()),
 	"SMILIE_ADD_CODE" => sed_textbox("nsmiliecode", isset($nsmiliecode) ? $nsmiliecode : '', 10, 16),
 	"SMILIE_ADD_IMAGEURL" => sed_textbox("nsmilieimage", isset($nsmilieimage) ? $nsmilieimage : '', 32, 128),
 	"SMILIE_ADD_TEXT" => sed_textbox("nsmilietext", isset($nsmilietext) ? $nsmilietext : '', 12, 64),

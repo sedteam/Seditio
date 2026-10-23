@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.posts.php
 Version=186
-Updated=2026-oct-12
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -116,6 +116,7 @@ while ($row2 = sed_sql_fetchassoc($sql2)) {
 }
 
 if ($a == 'newpost' && $usr['auth_write']) {
+	sed_check_xg();
 	sed_shield_protect();
 
 	$sql = sed_sql_query("SELECT ft_state FROM $db_forum_topics WHERE ft_id='$q'");
@@ -659,7 +660,7 @@ if (!$notlastpage && !$ft_state && $usr['id'] > 0 && $allowreplybox && $usr['aut
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; " . sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
 	$t->assign(array(
-		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=" . $s . "&q=" . $q),
+		"FORUMS_POSTS_NEWPOST_SEND" => sed_url("forums", "m=posts&a=newpost&s=" . $s . "&q=" . $q . "&" . sed_xg()),
 		"FORUMS_POSTS_NEWPOST_TEXT" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', 12, 80, 'Basic') . " " . $pfs,
 		"FORUMS_POSTS_NEWPOST_TEXTONLY" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', 12, 80, 'Basic'),
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs

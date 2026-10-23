@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/admin/users.admin.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=Users admin
@@ -49,6 +49,7 @@ $t->parse("ADMIN_USERS.USERS_BUTTONS");
 switch ($n) {
 	case 'add':
 
+		sed_check_xg();
 		$ntitle = sed_import('ntitle', 'P', 'TXT');
 		$ndesc = sed_import('ndesc', 'P', 'TXT');
 		$ncolor = sed_import('ncolor', 'P', 'TXT');
@@ -80,13 +81,15 @@ switch ($n) {
 
 	case 'edit':
 
-		if ($a == 'syncrights' && $g > 0 && sed_xg()) {
+		if ($a == 'syncrights' && $g > 0) {
+			sed_check_xg();
 			sed_auth_sync_orphaned();
 			sed_redirect(sed_url("admin", "m=users&n=edit&g=" . $g, "", true), false, ['msg' => '917']);
 			exit;
 		}
 
 		if ($a == 'update') {
+			sed_check_xg();
 			$rtitle = sed_import('rtitle', 'P', 'TXT');
 			$rdesc = sed_import('rdesc', 'P', 'TXT');
 			$ricon = sed_import('ricon', 'P', 'TXT');
@@ -108,6 +111,7 @@ switch ($n) {
 			sed_redirect(sed_url("admin", "m=users", "", true), false, ['msg' => '917']);
 			exit;
 		} elseif ($a == 'delete' && $g > 5) {
+			sed_check_xg();
 			$sql = sed_sql_query("DELETE FROM $db_groups WHERE grp_id='$g'");
 			$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid='$g'");
 			$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
@@ -166,7 +170,7 @@ switch ($n) {
 		$grplevel .= "</select>";
 
 		$t->assign(array(
-			"USERS_EDIT_SEND" => sed_url("admin", "m=users&n=edit&a=update&g=" . $g),
+			"USERS_EDIT_SEND" => sed_url("admin", "m=users&n=edit&a=update&g=" . $g . "&" . sed_xg()),
 			"USERS_EDIT_TITLE" => sed_textbox('rtitle', $row['grp_title'], 40, 64),
 			"USERS_EDIT_DESC" => sed_textbox('rdesc', $row['grp_desc'], 40, 64),
 			"USERS_EDIT_ICON" => sed_textbox('ricon', $row['grp_icon'], 40, 128),
@@ -237,7 +241,7 @@ switch ($n) {
 		$grphidden = sed_yesno("nhidden", 0);
 
 		$t->assign(array(
-			"GROUP_ADD_SEND" => sed_url("admin", "m=users&n=add"),
+			"GROUP_ADD_SEND" => sed_url("admin", "m=users&n=add&" . sed_xg()),
 			"GROUP_ADD_TITLE" => sed_textbox('ntitle', '', 40, 64),
 			"GROUP_ADD_DESC" => sed_textbox('ndesc', '', 40, 64),
 			"GROUP_ADD_ICON" => sed_textbox('nicon', '', 40, 128),

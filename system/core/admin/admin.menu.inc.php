@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=admin.menu.inc.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Core.admin
 Author=Amro
 Description=Menu build module
@@ -45,6 +45,7 @@ $t = new XTemplate(sed_skinfile('admin.menu', false, true));
 switch ($a) {
 	case "add":
 
+		sed_check_xg();
 		$mparent = sed_import('mparent', 'P', 'INT');
 		$mtitle = sed_import('mtitle', 'P', 'TXT');
 		$murl = sed_import('murl', 'P', 'TXT');
@@ -103,6 +104,7 @@ switch ($a) {
 
 	case "updatepos":
 
+		sed_check_xg();
 		$mposition = sed_import('mposition', 'P', 'ARR');
 		if (count($mposition) > 0) {
 			foreach ($mposition as $key => $position) {
@@ -119,6 +121,7 @@ switch ($a) {
 
 	case "update":
 
+		sed_check_xg();
 		$mparent = sed_import('mparent', 'P', 'INT');
 		$mtitle = sed_import('mtitle', 'P', 'TXT');
 		$murl = sed_import('murl', 'P', 'TXT');
@@ -158,6 +161,7 @@ switch ($a) {
 
 	case "delete":
 
+		sed_check_xg();
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_menu WHERE menu_pid = '" . $mid . "'");
 		$childrens = sed_sql_result($sql, 0, "COUNT(*)");
 		if ($childrens > 0) {
@@ -190,7 +194,7 @@ switch ($mn) {
 		$mcat_pages = isset($row['menu_cat_pages']) ? (int)$row['menu_cat_pages'] : 0;
 
 		$t->assign(array(
-			"MENU_UPDATE_SEND" => sed_url('admin', 'm=menu&a=update&mid=' . $mid),
+			"MENU_UPDATE_SEND" => sed_url('admin', 'm=menu&a=update&mid=' . $mid . '&' . sed_xg()),
 			"MENU_UPDATE_PARENT" => $parent_select,
 			"MENU_UPDATE_TITLE" => sed_textbox('mtitle', $row['menu_title']),
 			"MENU_UPDATE_URL" => sed_textbox('murl', $row['menu_url']),
@@ -219,7 +223,7 @@ switch ($mn) {
 		$menu_flat = sed_menu_list_with_level($menu_row);
 
 		$t->assign(array(
-			"MENU_ADD_SEND" => sed_url('admin', 'm=menu&a=add'),
+			"MENU_ADD_SEND" => sed_url('admin', 'm=menu&a=add&' . sed_xg()),
 			"MENU_ADD_PARENT" => $parent_select,
 			"MENU_ADD_TITLE" => sed_textbox('mtitle', isset($mtitle) ? $mtitle : ''),
 			"MENU_ADD_URL" => sed_textbox('murl', isset($murl) ? $murl : ''),
@@ -246,7 +250,7 @@ switch ($mn) {
 				"MENU_TITLE" => $title,
 				"MENU_URL" => $frow['menu_url'],
 				"MENU_POSITION" => sed_textbox('mposition[' . $k . ']', $frow['menu_position'], 2, 3),
-				"MENU_DELETE_URL" => sed_url("admin", "m=menu&a=delete&mid=" . $k),
+				"MENU_DELETE_URL" => sed_url("admin", "m=menu&a=delete&mid=" . $k . "&" . sed_xg()),
 				"MENU_EDIT_URL" => sed_url("admin", "m=menu&mn=editmenu&mid=" . $k)
 			));
 
@@ -254,7 +258,7 @@ switch ($mn) {
 		}
 
 		$t->assign(array(
-			"MENU_UPDATE_POSITION_SEND" => sed_url('admin', 'm=menu&a=updatepos'),
+			"MENU_UPDATE_POSITION_SEND" => sed_url('admin', 'm=menu&a=updatepos&' . sed_xg()),
 		));
 
 

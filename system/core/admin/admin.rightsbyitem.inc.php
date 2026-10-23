@@ -38,6 +38,7 @@ $area_title = (isset($L['core_' . $ic]) && $L['core_' . $ic] !== '') ? $L['core_
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem', false, true));
 
 if ($a == 'update') {
+	sed_check_xg();
 	$mask = array();
 	$auth = sed_import('auth', 'P', 'ARR');
 
@@ -114,7 +115,7 @@ $t->assign(array(
 	"RIGHTS_TITLE" => $L['Rights'] . " / " . $area_title . $title,
 	"RIGHTS_COLUMN_COUNT" => ($advanced) ? 8 : 3,
 	"RIGHTS_UPDATECOLUMN_COUNT" => ($advanced) ? 12 : 7,
-	"RIGHTS_UPDATE_SEND" => sed_url("admin", "m=rightsbyitem&a=update&ic=" . $ic . "&io=" . $io)
+	"RIGHTS_UPDATE_SEND" => sed_url("admin", "m=rightsbyitem&a=update&" . sed_xg() . "&ic=" . $ic . "&io=" . $io)
 ));
 
 function sed_rights_parseline($row, $title, $link)

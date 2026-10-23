@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/admin/forums.admin.main.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module.admin
 Author=Seditio Team
 Description=Forums & categories
@@ -180,6 +180,7 @@ if ($n == 'edit') {
 	$t->parse("ADMIN_FORUMS.FS_UPDATE");
 } else {
 	if ($a == 'order') {
+		sed_check_xg();
 		$w = sed_import('w', 'G', 'ALP', 4);
 
 		$sql = sed_sql_query("SELECT fs_order, fs_category, fs_parentcat FROM $db_forum_sections WHERE fs_id='" . $id . "'");
@@ -290,8 +291,8 @@ if ($n == 'edit') {
 		$t->assign(array(
 			"FS_LIST_TITLE" => $tree_prefix . sed_link(sed_url("admin", "m=forums&n=edit&id=" . $fs_id), $fs_title),
 			"FS_LIST_DEPTH" => $depth,
-			"FS_LIST_ORDER_UP_URL" => sed_url("admin", "m=forums&id=" . $fs_id . "&a=order&w=up"),
-			"FS_LIST_ORDER_DOWN_URL" => sed_url("admin", "m=forums&id=" . $fs_id . "&a=order&w=down"),
+			"FS_LIST_ORDER_UP_URL" => sed_url("admin", "m=forums&id=" . $fs_id . "&a=order&w=up&" . sed_xg()),
+			"FS_LIST_ORDER_DOWN_URL" => sed_url("admin", "m=forums&id=" . $fs_id . "&a=order&w=down&" . sed_xg()),
 			"FS_LIST_ALLOWPRIWATETOPICS" => $sed_yesno[$row['fs_allowprvtopics']],
 			"FS_LIST_TOPICCOUNT" => $row['fs_topiccount'],
 			"FS_LIST_POSTCONT" => $row['fs_postcount'],

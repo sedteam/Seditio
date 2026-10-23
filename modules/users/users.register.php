@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.register.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=User registration
@@ -135,7 +135,7 @@ if ($a == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		$rtimezone = ($rtimezone_p) ? $rtimezone : $cfg['defaulttimezone'];
 
-		$validationkey = md5(microtime());
+		$validationkey = sed_unique(32);
 		sed_shield_update(20, "Registration");
 
 		$ssql_extra_columns = '';

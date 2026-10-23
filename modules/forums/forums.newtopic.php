@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/forums/forums.newtopic.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Forums
@@ -65,6 +65,7 @@ if ($fs_state) {
 }
 
 if ($a == 'newtopic') {
+	sed_check_xg();
 	sed_shield_protect();
 
 	/* === Hook === */
@@ -224,7 +225,7 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SHORTTITLE" => $L['for_newtopic'],
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_parse($fs_desc),
 	"FORUMS_NEWTOPIC_BREADCRUMBS" => sed_breadcrumbs($urlpaths),
-	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=" . $s . "&poll=" . $poll),
+	"FORUMS_NEWTOPIC_SEND" => sed_url("forums", "m=newtopic&a=newtopic&s=" . $s . "&poll=" . $poll . "&" . sed_xg()),
 	"FORUMS_NEWTOPIC_TITLE" => sed_textbox('newtopictitle', isset($newtopictitle) ? $newtopictitle : '', 56, 255),
 	"FORUMS_NEWTOPIC_DESC" => sed_textbox('newtopicdesc', isset($newtopicdesc) ? $newtopicdesc : '', 56, 255),
 	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', isset($newmsg) ? $newmsg : '', $cfg['textarea_default_height'], $cfg['textarea_default_width'], 'Basic') . " " . $pfs,
