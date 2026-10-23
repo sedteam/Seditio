@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.pfs.stndl.php
 Version=185
-Updated=2026-feb-14
+Updated=2026-oct-23
 Type=Plugin
 Author=Amro
 Description=
@@ -33,6 +33,9 @@ $openerparent = ($cfg['enablemodal']) ? 'parent' : 'opener';
 $openerparent_close = ($cfg['enablemodal']) ? 'window.parent.modal.close();' : 'window.close();';
 
 $auto_popup_close = ($cfg['plugin']['ckeditor']['auto_popup_close'] == "Yes") ? $openerparent_close : "";
+
+$c1 = sed_alphaonly($c1);
+$c2 = sed_alphaonly($c2);
 
 $init_ck = "
 function addthumb(thmb, image)

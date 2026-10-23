@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/plug/plug.inc.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Plugin loader
@@ -24,8 +24,8 @@ $o = sed_import('o', 'G', 'ALP');
 $s = sed_import('s', 'G', 'ALP');
 $r = sed_import('r', 'G', 'ALP');
 $h = sed_import('h', 'G', 'ALP');
-$c1 = sed_import('c1', 'G', 'ALP');
-$c2 = sed_import('c2', 'G', 'ALP');
+$c1 = sed_alphaonly(sed_import('c1', 'G', 'ALP'));
+$c2 = sed_alphaonly(sed_import('c2', 'G', 'ALP'));
 $ajx = sed_import('ajx', 'G', 'ALP');
 
 unset($plugin_title, $plugin_body);

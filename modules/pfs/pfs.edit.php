@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.edit.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=PFS edit file
@@ -24,8 +24,8 @@ $id = sed_import('id', 'G', 'INT');
 $o = sed_import('o', 'G', 'TXT');
 $f = sed_import('f', 'G', 'INT');
 $v = sed_import('v', 'G', 'TXT');
-$c1 = sed_import('c1', 'G', 'TXT');
-$c2 = sed_import('c2', 'G', 'TXT');
+$c1 = sed_alphaonly(sed_import('c1', 'G', 'ALP'));
+$c2 = sed_alphaonly(sed_import('c2', 'G', 'ALP'));
 $userid = sed_import('userid', 'G', 'INT');
 if (is_null($userid)) {
 	$userid = sed_import('userid', 'P', 'INT');

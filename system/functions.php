@@ -294,10 +294,31 @@ foreach ($sed_dbnames as $k => $i) {
  */
 function sed_addhttp($url, $scheme = "http://")
 {
-	if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
-		$url = empty(parse_url($url)['scheme']) ? $scheme . ltrim($url, '/') : $url;
+	$url = trim((string)$url);
+	if (empty($url)) {
+		return '';
 	}
-	return $url;
+
+	// Reject dangerous schemes
+	if (preg_match('/^(javascript|vbscript|data|file):/i', $url)) {
+		return '';
+	}
+
+	if (preg_match('~^(?:f|ht)tps?://~i', $url)) {
+		return $url;
+	}
+
+	if (strpos($url, '//') === 0) {
+		return 'http:' . $url;
+	}
+
+	$parsed = @parse_url($url);
+	if (!empty($parsed['scheme'])) {
+		// Contains an unsupported or invalid scheme
+		return '';
+	}
+
+	return $scheme . ltrim($url, '/');
 }
 
 /** 
@@ -411,48 +432,17 @@ function sed_attr($attrs)
 {
 	$attributes = '';
 
-	// List of JavaScript event attributes that should not be escaped
-	$no_escape_attrs = [
-		'onclick',
-		'ondblclick',
-		'onmouseover',
-		'onmouseout',
-		'onmousemove',
-		'onmousedown',
-		'onmouseup',
-		'onkeydown',
-		'onkeypress',
-		'onkeyup',
-		'onchange',
-		'oninput',
-		'onsubmit',
-		'onfocus',
-		'onblur',
-		'onload',
-		'onunload',
-		'onerror',
-		'onresize',
-		'onscroll',
-		'oncontextmenu',
-		'onselect',
-		'ondrag',
-		'ondrop'
-	];
-
 	if (is_array($attrs)) {
 		foreach ($attrs as $key => $value) {
-			$key_lower = mb_strtolower($key);
-			$escapedKey = sed_cc($key);
-			if (in_array($key_lower, $no_escape_attrs)) {
-				$escapedValue = $value;
-			} else {
-				$escapedValue = sed_cc($value);
+			$escapedKey = preg_replace('/[^a-zA-Z0-9_\-:]/', '', (string)$key);
+			if ($escapedKey === '') {
+				continue;
 			}
-
-			$attributes .= " $escapedKey=\"$escapedValue\"";
+			$escapedValue = htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+			$attributes .= " " . $escapedKey . "=\"" . $escapedValue . "\"";
 		}
 	} elseif (is_string($attrs) && !empty($attrs)) {
-		$attributes = " $attrs";
+		$attributes = " " . $attrs;
 	}
 
 	return $attributes;
@@ -1132,13 +1122,13 @@ function sed_build_url($text, $maxlen = 64)
 	global $cfg;
 
 	if (!empty($text)) {
-		$text = sed_cc($text);
-		$url = $text;
-		if (mb_stripos($url, 'http://') === FALSE) {
-			$url = 'http://' . $url;
+		$raw_text = trim((string)$text);
+		$url = sed_addhttp($raw_text);
+		if (empty($url)) {
+			return '';
 		}
 
-		$text = sed_link($url, sed_cutstring($text, $maxlen));
+		$text = sed_link($url, sed_cutstring(sed_cc($raw_text), $maxlen));
 	}
 	return ($text);
 }
@@ -2453,8 +2443,8 @@ function sed_htmlmetas($description = '', $keywords = '', $robots_index = 1, $ro
 {
 	global $cfg, $sys;
 
-	$description = (empty($description)) ? (string)$cfg['subtitle'] : htmlspecialchars((string)$description);
-	$keywords = (empty($keywords)) ? (string)$cfg['metakeywords'] : htmlspecialchars((string)$keywords);
+	$description = htmlspecialchars((empty($description)) ? (string)$cfg['subtitle'] : (string)$description, ENT_QUOTES, 'UTF-8');
+	$keywords = htmlspecialchars((empty($keywords)) ? (string)$cfg['metakeywords'] : (string)$keywords, ENT_QUOTES, 'UTF-8');
 
 	// Define robots directives
 	$robots_index = ($robots_index == 1) ? 'index' : 'noindex';
@@ -2705,11 +2695,21 @@ function sed_import($name, $source, $filter, $maxlen = 0, $dieonerror = false)
 
 		case 'HTM': // HTML with plugin filtering
 			$v = trim($v);
-			/* == Hook for plugins == */
-			foreach (sed_getextplugins('import.filter') as $pl) {
-				include $pl;
+			$extplugins = sed_getextplugins('import.filter');
+			if (!empty($extplugins)) {
+				/* == Hook for plugins == */
+				foreach ($extplugins as $pl) {
+					include $pl;
+				}
+				/* ===== */
+			} else {
+				// Basic fallback sanitization when no filtering plugin (e.g. jevix) is registered
+				$v = strip_tags($v, '<p><br><b><strong><i><em><u><a><ul><ol><li><blockquote><img><h1><h2><h3><h4><h5><h6><hr><table><tr><td><th><tbody><thead><tfoot>');
+				$v = preg_replace('#\s*on[a-z]+\s*=\s*(["\']).*?\1#is', '', $v);
+				$v = preg_replace('#\s*on[a-z]+\s*=\s*[^>\s]+#is', '', $v);
+				$v = preg_replace('#\s*(href|src)\s*=\s*(["\'])\s*(javascript|vbscript|data):.*?\2#is', '', $v);
+				$v = preg_replace('#\s*(href|src)\s*=\s*(javascript|vbscript|data):[^>\s]+#is', '', $v);
 			}
-			/* ===== */
 			$pass = true;
 			break;
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.profile.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=User profile
@@ -128,6 +128,7 @@ switch ($a) {
 		$ruserskin = sed_import('ruserskin', 'P', 'TXT');
 		$ruserlang = sed_import('ruserlang', 'P', 'ALP');
 		$ruserwebsite = sed_import('ruserwebsite', 'P', 'TXT');
+		$ruserwebsite = (!empty($ruserwebsite)) ? sed_addhttp($ruserwebsite) : '';
 		$ruserskype = sed_import('ruserskype', 'P', 'TXT');
 		$rusergender = sed_import('rusergender', 'P', 'ALP');
 		$ryear = sed_import('ryear', 'P', 'INT');
