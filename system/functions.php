@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.php
 Version=186
-Updated=2026-oct-15
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -5912,6 +5912,10 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 	$table_prefix = $cfg['sqldbprefix'];
 	$type = strtolower($type);
 
+	if (!preg_match('/^[a-zA-Z0-9_]+$/', $name) || !preg_match('/^[a-zA-Z0-9_]+$/', $sql_table)) {
+		return false;
+	}
+
 	/* === Checks: already exists === */
 	$res = sed_sql_query("SELECT dic_code FROM $db_dic WHERE dic_extra_location = '" . sed_sql_prep($sql_table) . "'");
 	while ($row = sed_sql_fetchassoc($res)) {
@@ -6008,7 +6012,11 @@ function sed_extrafield_add($sql_table, $name, $type, $size = 255, $default = ''
 	}
 
 	if (!empty($extra)) {
-		$sqltype .= ' ' . trim($extra);
+		$extra_clean = trim($extra);
+		if (!preg_match('/^(UNSIGNED|ZEROFILL|AUTO_INCREMENT|BINARY|ON UPDATE CURRENT_TIMESTAMP|\s+)+$/i', $extra_clean)) {
+			return false;
+		}
+		$sqltype .= ' ' . $extra_clean;
 	}
 
 	/* === Attributes: NULL/NOT NULL + DEFAULT === */
@@ -6080,6 +6088,10 @@ function sed_extrafield_update($sql_table, $name, $type, $size = 255, $default =
 
 	$table_prefix = $cfg['sqldbprefix'];
 	$type = strtolower($type);
+
+	if (!preg_match('/^[a-zA-Z0-9_]+$/', $name) || !preg_match('/^[a-zA-Z0-9_]+$/', $sql_table)) {
+		return false;
+	}
 
 	/* === Existence checks === */
 	$count_dic = sed_sql_query("SELECT COUNT(*) FROM $db_dic
@@ -6175,6 +6187,9 @@ function sed_extrafield_update($sql_table, $name, $type, $size = 255, $default =
 	}
 
 	if (!empty($extra_to_use)) {
+		if (!preg_match('/^(UNSIGNED|ZEROFILL|AUTO_INCREMENT|BINARY|ON UPDATE CURRENT_TIMESTAMP|\s+)+$/i', $extra_to_use)) {
+			return false;
+		}
 		$sqltype .= ' ' . $extra_to_use;
 	}
 

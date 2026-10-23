@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.main.php
 Version=186
-Updated=2026-oct-09
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=PFS main
@@ -24,7 +24,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', '
 list($usr['auth_read_gal'], $usr['auth_write_gal'], $usr['isadmin_gal']) = sed_auth('gallery', 'a');
 sed_block($usr['auth_read']);
 
-$id = sed_import('id', 'G', 'TXT');
+$id = sed_import('id', 'G', 'INT');
 $o = sed_import('o', 'G', 'TXT');
 $f = sed_import('f', 'G', 'INT');
 $v = sed_import('v', 'G', 'TXT');
@@ -255,7 +255,7 @@ if ($a == 'upload') {
 } elseif ($a == 'delete') {
     sed_block($usr['auth_write']);
     sed_check_xg();
-    $sql = sed_sql_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
+    $sql = sed_sql_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='" . (int)$userid . "' AND pfs_id='" . (int)$id . "' LIMIT 1");
 
     if ($row = sed_sql_fetchassoc($sql)) {
         $pfs_file = $row['pfs_file'];
@@ -272,7 +272,7 @@ if ($a == 'upload') {
             array_map("unlink", glob($cfg['res_dir'] . $pfs_filename . ".crop*x*"));
             array_map("unlink", glob($cfg['res_dir'] . $pfs_filename . ".resize*x*"));
         }
-        $sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
+        $sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='" . (int)$id . "' AND pfs_userid='" . (int)$userid . "'");
         sed_redirect(sed_url("pfs", "f=" . $f . "&o=" . $o . "&" . $more, "", true));
         exit;
     } else {
@@ -321,11 +321,11 @@ if ($a == 'upload') {
     sed_block($usr['auth_write']);
     sed_check_xg();
 
-    $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f'");
+    $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_userid='" . (int)$userid . "' AND pfs_folderid='" . (int)$f . "'");
     $files_count = sed_sql_result($sql, 0, "COUNT(*)");
     $subfolders_count = sed_pfs_folders_count_children($f, $userid);
     if ($files_count == 0 && $subfolders_count == 0) {
-        $sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f'");
+        $sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='" . (int)$userid . "' AND pff_id='" . (int)$f . "'");
         sed_pfs_folders_cache_clear($userid);
     }
 
@@ -334,8 +334,7 @@ if ($a == 'upload') {
 } elseif ($a == 'setsample') {
     sed_block($usr['auth_write']);
     sed_check_xg();
-    $id = sed_import('id', 'G', 'INT');
-    $sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_sample='$id' WHERE pff_id='$f' AND pff_userid='$userid'");
+    $sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_sample='" . (int)$id . "' WHERE pff_id='" . (int)$f . "' AND pff_userid='" . (int)$userid . "'");
     sed_redirect(sed_url("pfs", "f=" . $f . "&" . $more, "", true));
     exit;
 }

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/polls/admin/polls.admin.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-23
 Type=Module.admin
 Author=Seditio Team
 Description=Administration panel
@@ -24,8 +24,8 @@ sed_block($usr['isadmin']);
 
 require_once(SED_ROOT . '/modules/polls/inc/polls.functions.php');
 
-$id = sed_import('id', 'G', 'TXT');
-$po = sed_import('po', 'G', 'TXT');
+$id = sed_import('id', 'G', 'INT');
+$po = sed_import('po', 'G', 'INT');
 
 // ---------- Breadcrumbs
 $urlpaths = array();
@@ -41,12 +41,12 @@ $t = new XTemplate(sed_skinfile('admin.polls', false, true));
 if ($n == 'options') {
 	if ($a == 'update' && !empty($id) && !empty($po)) {
 		$rtext = sed_import('rtext', 'P', 'HTM');
-		$sql = sed_sql_query("UPDATE $db_polls_options SET po_text='" . sed_sql_prep($rtext) . "' WHERE po_id='$po' AND po_pollid='$id'");
+		$sql = sed_sql_query("UPDATE $db_polls_options SET po_text='" . sed_sql_prep($rtext) . "' WHERE po_id='" . (int)$po . "' AND po_pollid='" . (int)$id . "'");
 		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '917']);
 		exit;
 	} elseif ($a == 'updatetitle' && !empty($id)) {
 		$rtitle = sed_import('rtitle', 'P', 'HTM');
-		$sql = sed_sql_query("UPDATE $db_polls SET poll_text='" . sed_sql_prep($rtitle) . "' WHERE poll_id='$id'");
+		$sql = sed_sql_query("UPDATE $db_polls SET poll_text='" . sed_sql_prep($rtitle) . "' WHERE poll_id='" . (int)$id . "'");
 		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '917']);
 		exit;
 	} elseif ($a == 'add' && !empty($id)) {
@@ -57,13 +57,13 @@ if ($n == 'options') {
 		exit;
 	} elseif ($a == 'delete') {
 		sed_check_xg();
-		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_id='$po' AND po_pollid='$id'");
+		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_id='" . (int)$po . "' AND po_pollid='" . (int)$id . "'");
 		sed_redirect(sed_url("admin", "m=polls&n=options&id=" . $id, "", true), false, ['msg' => '302']);
 		exit;
 	}
 
-	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' ");
-	$sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
+	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='" . (int)$id . "' ");
+	$sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid='" . (int)$id . "' ORDER by po_id ASC");
 
 	$row = sed_sql_fetchassoc($sql);
 
@@ -138,7 +138,7 @@ if ($n == 'options') {
 		$id = $row['poll_id'];
 		$type = $row['poll_type'];
 
-		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
+		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='" . (int)$id . "'");
 		$totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
 
 		$t->assign(array(

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.rightsbyitem.inc.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Core.admin
 Author=Seditio Team
 Description=Rights
@@ -41,7 +41,7 @@ if ($a == 'update') {
 	$mask = array();
 	$auth = sed_import('auth', 'P', 'ARR');
 
-	$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_code='$ic' AND auth_option='$io'");
+	$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_code='$ic' AND auth_option='" . sed_sql_prep($io) . "'");
 
 	foreach ($auth as $i => $j) {
 		if (is_array($j)) {
@@ -49,7 +49,7 @@ if ($a == 'update') {
 			foreach ($j as $l => $m) {
 				$mask +=  sed_auth_getvalue($l);
 			}
-			$sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$i' AND auth_code='$ic' AND auth_option='$io'");
+			$sql = sed_sql_query("UPDATE $db_auth SET auth_rights='" . (int)$mask . "' WHERE auth_groupid='" . (int)$i . "' AND auth_code='$ic' AND auth_option='" . sed_sql_prep($io) . "'");
 		}
 	}
 
@@ -62,7 +62,7 @@ if ($a == 'update') {
 $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
-	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
+	WHERE auth_code='$ic' AND auth_option='" . sed_sql_prep($io) . "' ORDER BY grp_level DESC");
 
 sed_die(sed_sql_numrows($sql) == 0);
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/ajax/ajax.php
 Version=186
-Updated=2026-sep-02
+Updated=2026-oct-23
 Type=Core
 Author=Amro
 Description=Ajax Interface
@@ -33,7 +33,7 @@ if (!sed_check_csrf()) {
 $query = sed_import('query', 'G', 'TXT');
 $query = sed_sql_prep($query);
 
-$m = sed_import('m', 'G', 'TXT');
+$m = sed_import('m', 'G', 'ALP');
 $c = sed_import('c', 'G', 'TXT');
 
 $suggestions = array();
@@ -60,14 +60,16 @@ if ($m == 'pages' && !empty($query)) {
 		list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $c);
 		sed_block($usr['auth_read']);
 		$sys['catcode'] = $c;
-		$suggestion = new stdClass();
-		$suggestion->id = $sed_cat[$c]['id'];
-		$suggestion->title = $sed_cat[$c]['title'];
-		$suggestion->value = $sed_cat[$c]['title'];
-		$suggestion->url = sed_url("page", "c=" . $c);
-		$suggestion->data = $val;
-		$suggestions[] = $suggestion;
-		$sql_where = "page_cat='$c' AND";
+		if (isset($sed_cat[$c])) {
+			$suggestion = new stdClass();
+			$suggestion->id = $sed_cat[$c]['id'];
+			$suggestion->title = $sed_cat[$c]['title'];
+			$suggestion->value = $sed_cat[$c]['title'];
+			$suggestion->url = sed_url("page", "c=" . $c);
+			$suggestion->data = $sed_cat[$c];
+			$suggestions[] = $suggestion;
+		}
+		$sql_where = "page_cat='" . sed_sql_prep($c) . "' AND";
 	}
 
 	$sql_search = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias, page_thumb FROM $db_pages WHERE $sql_where page_title LIKE '%" . $query . "%' LIMIT 300");

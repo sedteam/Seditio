@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.view.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=PFS view
@@ -21,11 +21,11 @@ if (!defined('SED_CODE')) {
 }
 
 $v = sed_import('v', 'G', 'TXT');
+$v = basename($v);
 
 $error = FALSE;
 
-
-$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_file='$v' LIMIT 1");
+$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_file='" . sed_sql_prep($v) . "' LIMIT 1");
 
 if (sed_sql_numrows($sql) > 0) {
   $row = sed_sql_fetchassoc($sql);
@@ -67,7 +67,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $cfg['gd_suppo
   echo ("<img src=\"" . $imgpath . "\" alt=\"\" onClick=\"window.close()\"/>");
   echo ("</body></html>");
 
-  $sql = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_id='" . $row['pfs_id'] . "' LIMIT 1");
+  $sql = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_id='" . (int)$row['pfs_id'] . "' LIMIT 1");
 } else {
   echo ("Wrong URL.");
 }

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/inc/page.functions.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=Page structure, list API, list filters
@@ -247,8 +247,8 @@ function sed_structure_delcat($id, $c)
 {
 	global $db_structure, $db_auth;
 
-	$sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
-	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
+	$sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='" . (int)$id . "'");
+	$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='" . sed_sql_prep($c) . "'");
 	if (sed_plug_active('revisions')) {
 		sed_revision_wipe_entity('structure', (string)$id);
 	}
@@ -283,7 +283,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 	if (!empty($title) && !empty($code) && !empty($path) && $code != 'all') {
 		$code = sed_replacespace($code);  //New in175
 
-		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
+		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='" . sed_sql_prep($code) . "' LIMIT 1");
 		if (sed_sql_numrows($sql) == 0) {
 			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order) 
 					VALUES ('" . sed_sql_prep($code) . "', '" . sed_sql_prep($path) . "', '" . sed_sql_prep($title) . "', '" . sed_sql_prep($desc) . "', '" . sed_sql_prep($icon) . "', " . (int)$group . ", 'date.desc')");

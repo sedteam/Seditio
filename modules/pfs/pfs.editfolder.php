@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/pfs/pfs.editfolder.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=PFS edit folder
@@ -20,7 +20,7 @@ if (!defined('SED_CODE')) {
 	die('Wrong URL.');
 }
 
-$id = sed_import('id', 'G', 'TXT');
+
 $o = sed_import('o', 'G', 'TXT');
 $f = sed_import('f', 'G', 'INT');
 $v = sed_import('v', 'G', 'TXT');
@@ -91,7 +91,7 @@ $title_tags[] = array('%1$s', '%2$s', '%3$s');
 $title_data = array($cfg['maintitle'], $out['subtitle'], $cfg['subtitle']);
 $out['subtitle'] = sed_title('pfstitle', $title_tags, $title_data);
 
-$sql = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
+$sql = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='" . (int)$userid . "' AND pff_id='" . (int)$f . "' LIMIT 1");
 
 if ($row = sed_sql_fetchassoc($sql)) {
 	$pff_id = $row['pff_id'];
@@ -119,7 +119,7 @@ if ($a == 'update' && !empty($f)) {
 	$rdesc = sed_import('rdesc', 'P', 'HTM');
 	$folderid = sed_import('folderid', 'P', 'INT');
 	$rtype = sed_import('rtype', 'P', 'INT');
-	$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
+	$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='" . (int)$userid . "' AND pff_id='" . (int)$f . "' ");
 	sed_die(sed_sql_numrows($sql) == 0);
 	$rtype = ($rtype == 2 && !$usr['auth_write_gal']) ? 1 : $rtype;
 
@@ -131,9 +131,9 @@ if ($a == 'update' && !empty($f)) {
 		pff_title='" . sed_sql_prep($rtitle) . "',
 		pff_updated='" . $sys['now'] . "',
 		pff_desc='" . sed_sql_prep($rdesc) . "',
-		pff_type='$rtype',
+		pff_type='" . (int)$rtype . "',
 		pff_parentid='" . (int)$folderid . "'
-		WHERE pff_userid='$userid' AND pff_id='$f' ");
+		WHERE pff_userid='" . (int)$userid . "' AND pff_id='" . (int)$f . "' ");
 
 	sed_pfs_folders_cache_clear($userid);
 

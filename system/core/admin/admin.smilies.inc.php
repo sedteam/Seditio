@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.smilies.inc.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Core.admin
 Author=Seditio Team
 Description=Administration panel
@@ -41,8 +41,8 @@ if ($a == 'update') {
 			smilie_code='" . sed_sql_prep($s[$i]['code']) . "',
 			smilie_image='" . sed_sql_prep($s[$i]['image']) . "',
 			smilie_text='" . sed_sql_prep($s[$i]['text']) . "',
-			smilie_order='" . sed_sql_prep($s[$i]['order']) . "'
-			WHERE smilie_id='$i'");
+			smilie_order='" . (int)$s[$i]['order'] . "'
+			WHERE smilie_id='" . (int)$i . "'");
 	}
 	sed_cache_clear('sed_smilies');
 	sed_redirect(sed_url("admin", "m=smilies", "", true), false, ['msg' => '917']);
@@ -65,7 +65,7 @@ if ($a == 'update') {
 } elseif ($a == 'delete') {
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
-	$sql = sed_sql_query("DELETE FROM $db_smilies WHERE smilie_id='$id'");
+	$sql = sed_sql_query("DELETE FROM $db_smilies WHERE smilie_id='" . (int)$id . "'");
 
 	/* === Hook for the plugins === */
 	foreach (sed_getextplugins('admin.smilies.deleted') as $pl) {
