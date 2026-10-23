@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/uploader/uploader.ajax.php
 Version=186
-Updated=2026-oct-15
+Updated=2026-oct-23
 Type=Plugin
 Author=Amro
 Description=
@@ -232,5 +232,9 @@ if (in_array($f_extension, $allow_extension) == FALSE) {
 $res = new stdClass;
 $res->filename = $filename;
 $res->error = $disp_errors;
+if (ob_get_length()) {
+	ob_clean();
+}
 sed_sendheaders('application/json');
-print json_encode($res);
+echo json_encode($res);
+exit;

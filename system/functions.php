@@ -352,7 +352,10 @@ function sed_alert($alert, $type = 'i', $close = TRUE)
  */
 function sed_alphaonly($text)
 {
-	return (preg_replace('/[^a-zA-Z0-9_]/', '', $text));
+	if ($text === null || $text === '') {
+		return '';
+	}
+	return (preg_replace('/[^a-zA-Z0-9_]/', '', (string)$text));
 }
 
 /**
@@ -363,7 +366,10 @@ function sed_alphaonly($text)
  */
 function sed_onlydigits($text)
 {
-	return (preg_replace('/[^0-9+]/', '', $text));
+	if ($text === null || $text === '') {
+		return '';
+	}
+	return (preg_replace('/[^0-9+]/', '', (string)$text));
 }
 
 /**
@@ -5803,7 +5809,10 @@ function sed_sefurlredirect()
  */
 function sed_replacespace($text, $separator = '_')
 {
-	$text = preg_replace('|\s+|', $separator, $text);
+	if ($text === null || $text === '') {
+		return '';
+	}
+	$text = preg_replace('|\s+|', $separator, (string)$text);
 	return ($text);
 }
 
@@ -5819,6 +5828,9 @@ function sed_replacespace($text, $separator = '_')
  */
 function sed_valid_base64($s)
 {
+	if ($s === null || $s === '') {
+		return false;
+	}
 	// Check if there are valid base64 characters
 	if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s)) return false;
 

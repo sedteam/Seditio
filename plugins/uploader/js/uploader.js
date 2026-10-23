@@ -272,7 +272,16 @@
                 processData: false,
                 dataType: 'json',
                 success: function(response) {
-                    if (!response.error) {
+                    if (typeof response === 'string') {
+                        try {
+                            var jsonStart = response.indexOf('{');
+                            var jsonEnd = response.lastIndexOf('}');
+                            if (jsonStart !== -1 && jsonEnd !== -1) {
+                                response = JSON.parse(response.substring(jsonStart, jsonEnd + 1));
+                            }
+                        } catch (e) {}
+                    }
+                    if (typeof response === 'object' && response && !response.error) {
                         var rotation_html = self.settings.use_rotation ? '<div class="rotate_picture" degree-lvl="1">' + self.settings.file_rotation_label + '</div>' : '';
                         clone.innerHTML = [
                             '<div class="picture_insert"></div>',
