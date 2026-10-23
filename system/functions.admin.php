@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/functions.admin.php
 Version=186
-Updated=2026-oct-10
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Functions
@@ -608,6 +608,11 @@ function sed_plugin_install($pl)
 {
 	global $db_core, $db_plugins, $db_config, $db_auth, $db_users, $sed_groups, $usr, $cfg;
 
+	$pl = preg_replace('/[^a-zA-Z0-9_]/', '', $pl);
+	if (empty($pl)) {
+		return "Plugin code is empty or invalid.<br />";
+	}
+
 	$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 	$res = "<h3>Installing : plugins/" . $pl . "</h3>";
 	$res .= "<strong>Deleting old installation of this plugin...</strong> ";
@@ -815,6 +820,13 @@ function sed_plugin_install($pl)
 function sed_plugin_uninstall($pl, $all = FALSE, $drop_tables = false)
 {
 	global $cfg, $db_plugins, $db_config, $db_auth, $db_users;
+
+	if (!($all && $pl == "all")) {
+		$pl = preg_replace('/[^a-zA-Z0-9_]/', '', $pl);
+		if (empty($pl)) {
+			return "Plugin code is empty or invalid.<br />";
+		}
+	}
 
 	// New v173 Delete all plugins for upgrade mode
 	$where = ($all && $pl == "all") ? "" : " WHERE pl_code='$pl' LIMIT 1";

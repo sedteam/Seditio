@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/setup.main.php
 Version=186
-Updated=2026-sep-28
+Updated=2026-oct-23
 Type=Core.setup
 Author=Seditio Team
 Description=Main controller and API for modern setup installer
@@ -24,7 +24,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-$langinstall = sed_import('langinstall', 'P', 'TXT', 10);
+$langinstall = sed_import('langinstall', 'P', 'ALP', 10);
 if (!empty($langinstall)) {
 	$_SESSION['ilang'] = $langinstall;
 } elseif (isset($_SESSION['ilang'])) {
@@ -311,6 +311,8 @@ if (!empty($_POST['ajax_action'])) {
             $mysqldb = sed_import('mysqldb', 'P', 'TXT', 128);
             $sqldbprefix = sed_import('sqldbprefix', 'P', 'TXT', 16);
             if ($sqldbprefix === null) $sqldbprefix = 'sed_';
+            $sqldbprefix = preg_replace('/[^a-zA-Z0-9_]/', '', (string)$sqldbprefix);
+            if (empty($sqldbprefix)) $sqldbprefix = 'sed_';
             $cfg['sqldbprefix'] = $sqldbprefix;
             
             // Dynamically re-initialize all $db_* global variables with actual user prefix
@@ -367,7 +369,7 @@ if (!empty($_POST['ajax_action'])) {
             
             $db_clear_before_import = sed_import('db_clear_before_import', 'P', 'INT');
             
-            $defaultskin = sed_import('defaultskin', 'P', 'TXT', 32);
+            $defaultskin = sed_import('defaultskin', 'P', 'ALP', 32);
             $defaultlang = sed_import('defaultlang', 'P', 'ALP', 5);
             if (empty($defaultskin)) $defaultskin = 'sympfy';
             if (empty($defaultlang)) $defaultlang = isset($_SESSION['ilang']) ? $_SESSION['ilang'] : 'ru';
@@ -401,12 +403,12 @@ if (!empty($_POST['ajax_action'])) {
             // 2. Clear DB if requested
             if ($db_clear_before_import) {
                 sed_sql_query("SET FOREIGN_KEY_CHECKS = 0");
-                $sql_tables = sed_sql_query("SHOW TABLES FROM `$mysqldb`");
+                $sql_tables = sed_sql_query("SHOW TABLES FROM `" . str_replace('`', '``', $mysqldb) . "`");
                 $dropped = 0;
                 while ($row = sed_sql_fetcharray($sql_tables)) {
                     $tbl = current($row);
                     if ($tbl !== '') {
-                        sed_sql_query("DROP TABLE IF EXISTS `" . sed_sql_prep($tbl) . "`");
+                        sed_sql_query("DROP TABLE IF EXISTS `" . str_replace('`', '``', $tbl) . "`");
                         $dropped++;
                     }
                 }
@@ -547,16 +549,22 @@ if (!empty($_POST['ajax_action'])) {
             // 7. Install modules
             if (is_array($sel_modules)) {
                 foreach ($sel_modules as $mod) {
-                    sed_module_install($mod);
-                    $log[] = ['ok' => true, 'msg' => "Module '$mod' installed"];
+                    $mod = preg_replace('/[^a-zA-Z0-9_]/', '', $mod);
+                    if (!empty($mod)) {
+                        sed_module_install($mod);
+                        $log[] = ['ok' => true, 'msg' => "Module '$mod' installed"];
+                    }
                 }
             }
             
             // 8. Install plugins
             if (is_array($sel_plugins)) {
                 foreach ($sel_plugins as $pl) {
-                    sed_plugin_install($pl);
-                    $log[] = ['ok' => true, 'msg' => "Plugin '$pl' installed"];
+                    $pl = preg_replace('/[^a-zA-Z0-9_]/', '', $pl);
+                    if (!empty($pl)) {
+                        sed_plugin_install($pl);
+                        $log[] = ['ok' => true, 'msg' => "Plugin '$pl' installed"];
+                    }
                 }
             }
             

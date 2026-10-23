@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/setup/setup.config.php
 Version=186
-Updated=2026-sep-28
+Updated=2026-oct-23
 Type=Core.setup
 Author=Seditio Team
 Description=Default system configuration generator for setup installer
@@ -37,17 +37,17 @@ $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// MySQL database parameters. Change to fit your host.\n";
 $cfg_data .= "// ========================\n";
 
-$cfg_data .= "\n\$cfg['mysqlhost'] = '" . $mysqlhost . "';			// Database host URL\n";
-$cfg_data .= "\$cfg['mysqluser'] = '" . $mysqluser . "';			// Database user\n";
-$cfg_data .= "\$cfg['mysqlpassword'] = '" . $mysqlpassword . "';	// Database password\n";
-$cfg_data .= "\$cfg['mysqldb'] = '" . $mysqldb . "';				// Database name\n";
+$cfg_data .= "\n\$cfg['mysqlhost'] = '" . addcslashes($mysqlhost, "'\\") . "';			// Database host URL\n";
+$cfg_data .= "\$cfg['mysqluser'] = '" . addcslashes($mysqluser, "'\\") . "';			// Database user\n";
+$cfg_data .= "\$cfg['mysqlpassword'] = '" . addcslashes($mysqlpassword, "'\\") . "';	// Database password\n";
+$cfg_data .= "\$cfg['mysqldb'] = '" . addcslashes($mysqldb, "'\\") . "';				// Database name\n";
 
 $cfg_data .= "\n// ========================\n";
 $cfg_data .= "// Default skin and default language\n";
 $cfg_data .= "// ========================\n";
 
-$cfg_data .= "\n\$cfg['defaultskin'] = '" . $defaultskin . "';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/...\n";
-$cfg_data .= "\n\$cfg['defaultlang'] = '" . $defaultlang . "';	// Default language code\n";
+$cfg_data .= "\n\$cfg['defaultskin'] = '" . addcslashes($defaultskin, "'\\") . "';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/...\n";
+$cfg_data .= "\n\$cfg['defaultlang'] = '" . addcslashes($defaultlang, "'\\") . "';	// Default language code\n";
 $cfg_data .= "\$cfg['adminskin'] = 'sympfy';				// Default admin skin\n";
 
 $cfg_data .= "\n// ========================\n";
@@ -57,12 +57,12 @@ $cfg_data .= "// If you don't know, don't change.\n";
 $cfg_data .= "// TRUE = enabled / FALSE = disabled\n";
 $cfg_data .= "// ========================\n";
 
-$cfg_data .= "\n\$cfg['sqldbprefix'] = '" . $sqldbprefix . "';			// Database tables prefix\n";
+$cfg_data .= "\n\$cfg['sqldbprefix'] = '" . addcslashes($sqldbprefix, "'\\") . "';			// Database tables prefix\n";
 $cfg_data .= "\$cfg['sqldb'] = 'mysqli';  				// Database connector (mysqli only).\n";
 $cfg_data .= "\$cfg['mysqlengine'] = 'InnoDB';   // Table engine (InnoDB recommended)\n";
 $cfg_data .= "\$cfg['mysqlcharset'] = 'utf8mb4';\n";
 $cfg_data .= "\$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';\n";
-$cfg_data .= "\$cfg['site_secret'] = '" . $md_site_secret . "'; 					// Site secret key\n";
+$cfg_data .= "\$cfg['site_secret'] = '" . addcslashes($md_site_secret, "'\\") . "'; 					// Site secret key\n";
 $cfg_data .= "\$cfg['authmode'] = 3; 					// (1:cookies, 2:sessions, 3:cookies+sessions) default=3\n";
 $cfg_data .= "\$cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in on your server)\n";
 $cfg_data .= "\$cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed\n";
