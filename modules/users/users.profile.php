@@ -92,7 +92,7 @@ switch ($a) {
 		/* ============= */
 
 		sed_check_xg();
-		$avatar = $cfg['defav_dir'] . urldecode($id);
+		$avatar = $cfg['defav_dir'] . basename(urldecode($id));
 		$avatar = str_replace(array("'", ",", chr(0x00)), "", $avatar);
 		if (file_exists($avatar)) {
 			$sql = sed_sql_query("UPDATE $db_users SET user_avatar='" . sed_sql_prep($avatar) . "' WHERE user_id='" . $usr['id'] . "'");

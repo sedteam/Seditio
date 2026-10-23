@@ -120,6 +120,7 @@ if ($a == 'request' && $email != '') {
 			}
 
 			if ($cfg['authmode'] == 2 || $cfg['authmode'] == 3) {
+				session_regenerate_id(true);
 				$_SESSION[$sys['site_id'] . '_n'] = $ruserid;
 				$_SESSION[$sys['site_id'] . '_p'] = $rmdpass_secret;
 				$_SESSION[$sys['site_id'] . '_s'] = $rdefskin;

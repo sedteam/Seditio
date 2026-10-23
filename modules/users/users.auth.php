@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.auth.php
 Version=186
-Updated=2026-oct-15
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=User authentication
@@ -65,7 +65,7 @@ if ($a == 'check') {
 				$rmdpass = sed_hash($rpassword, 0, '', 'md5');
 			}
 
-			if ($rmdpass != $row['user_password']) {
+			if (!hash_equals($row['user_password'], $rmdpass)) {
 				sed_shield_update(7, "Log in");
 				sed_log("Log in failed, wrong password : " . $rusername, 'usr');
 				$error_string .= $L['msg151_1'];
@@ -102,6 +102,7 @@ if ($a == 'check') {
 					}
 
 					if ($cfg['authmode'] == 2 || $cfg['authmode'] == 3) {
+						session_regenerate_id(true);
 						$_SESSION[$sys['site_id'] . '_n'] = $ruserid;
 						$_SESSION[$sys['site_id'] . '_p'] = $rmdpass_secret;
 						$_SESSION[$sys['site_id'] . '_s'] = $rdefskin;

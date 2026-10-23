@@ -251,6 +251,9 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 	}
 
 	if ($row = sed_sql_fetcharray($sql)) {
+		if (empty($row['user_secret']) || !hash_equals($row['user_secret'], $rseditiop)) {
+			sed_diefatal('Wrong value for the password.');
+		}
 		if ($row['user_maingrp'] > 3) {
 			$usr['id'] = $row['user_id'];
 			$usr['sessionid'] = ($cfg['authmode'] == 1) ? sed_hash($row['user_lastvisit'], 2) : sed_hash($row['user_secret'], 2);

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/config.urlrewrite.php
 Version=186
-Updated=2026-jul-20
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Url rewriting config
@@ -17,7 +17,7 @@ Description=Url rewriting config
 
 /**
  * URL rewrite rules use numeric 'order' for processing sequence (lower = earlier).
- * Ranges: 100-199 system (go, ajax, resizer, install, captcha, robots);
+ * Ranges: 100-199 system (ajax, resizer, install, captcha, robots);
  * 200-499 modules (polls, gallery, pfs, pm, forums); RSS/Sitemap/View via plugins/rss, plugins/sitemap, plugins/view;
  * 500-549 plug, admin; 550-599 users, message; 600-649 list; 650-699 page; 700 index.
  * Modules set $mod_urlrewrite_order in their .urls.php.
@@ -26,13 +26,6 @@ Description=Url rewriting config
  */
 
 $sed_urlrewrite = array(
-
-     /*  External URL redirect rewriting */
-     array(
-          'order' => 100,
-          'cond' => '#^/go/#',
-          'rule' => 'system/core/go/go.php'
-     ),
 
      /*  Ajax rewriting */
      array(

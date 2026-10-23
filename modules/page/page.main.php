@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/page/page.main.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=Page view
@@ -91,13 +91,6 @@ sed_block($usr['auth_read']);
 if ($pag['page_state'] == 1 && !$usr['isadmin']) {
 	sed_log("Attempt to directly access an un-validated page", 'sec');
 	sed_redirect(sed_url("message", "msg=930", "", true));
-	exit;
-}
-
-if (preg_match("#{redir:(.*?)}#", $pag['page_text'], $find_out)) {
-	$redir = $find_out[1];
-	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='" . $pag['page_id'] . "'");
-	sed_redirect($redir);
 	exit;
 }
 

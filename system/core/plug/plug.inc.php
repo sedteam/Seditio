@@ -221,7 +221,7 @@ if (!empty($e)) {
 	$t->out("MAIN");
 } elseif (!empty($r)) {
 
-	if (mb_strpos($r, "\.") !== FALSE || mb_strpos($r, "/") !== FALSE) {
+	if (!preg_match('#^[a-zA-Z0-9_\-]+$#', $r)) {
 		sed_die();
 	}
 
