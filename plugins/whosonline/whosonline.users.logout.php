@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/whosonline.users.logout.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-oct-23
 Type=Plugin
 [END_SED]
 
@@ -27,5 +27,5 @@ if (!defined('SED_CODE')) {
 }
 
 if (!empty($db_online) && !empty($usr['ip'])) {
-	sed_sql_query("DELETE FROM $db_online WHERE online_ip = '" . $usr['ip'] . "'");
+	sed_sql_query("DELETE FROM $db_online WHERE online_ip = '" . sed_sql_prep($usr['ip']) . "'");
 }

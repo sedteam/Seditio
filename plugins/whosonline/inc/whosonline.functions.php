@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/whosonline/inc/whosonline.functions.php
 Version=186
-Updated=2026-sep-07
+Updated=2026-oct-23
 Type=Plugin
 [END_SED]
 ==================== */
@@ -45,14 +45,14 @@ function sed_whosonline_track($location, $sublocation = '')
 		if ($row = sed_sql_fetchassoc($sql)) {
 			sed_sql_query("UPDATE $db_online SET online_lastseen = " . $now . ", online_location = '" . $location . "', online_subloc = '" . $sublocation . "' WHERE online_userid = " . (int)$usr['id']);
 		} else {
-			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid) VALUES ('" . $usr['ip'] . "', '" . sed_sql_prep($usr['name']) . "', " . $now . ", '" . $location . "', '" . $sublocation . "', " . (int)$usr['id'] . ")");
+			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid) VALUES ('" . sed_sql_prep($usr['ip']) . "', '" . sed_sql_prep($usr['name']) . "', " . $now . ", '" . $location . "', '" . $sublocation . "', " . (int)$usr['id'] . ")");
 		}
 	} else {
-		$sql = sed_sql_query("SELECT online_id FROM $db_online WHERE online_userid = -1 AND online_ip = '" . $usr['ip'] . "' LIMIT 1");
+		$sql = sed_sql_query("SELECT online_id FROM $db_online WHERE online_userid = -1 AND online_ip = '" . sed_sql_prep($usr['ip']) . "' LIMIT 1");
 		if ($row = sed_sql_fetchassoc($sql)) {
-			sed_sql_query("UPDATE $db_online SET online_lastseen = " . $now . ", online_location = '" . $location . "', online_subloc = '" . $sublocation . "' WHERE online_userid = -1 AND online_ip = '" . $usr['ip'] . "'");
+			sed_sql_query("UPDATE $db_online SET online_lastseen = " . $now . ", online_location = '" . $location . "', online_subloc = '" . $sublocation . "' WHERE online_userid = -1 AND online_ip = '" . sed_sql_prep($usr['ip']) . "'");
 		} else {
-			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid) VALUES ('" . $usr['ip'] . "', 'v', " . $now . ", '" . $location . "', '" . $sublocation . "', -1)");
+			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid) VALUES ('" . sed_sql_prep($usr['ip']) . "', 'v', " . $now . ", '" . $location . "', '" . $sublocation . "', -1)");
 		}
 	}
 }

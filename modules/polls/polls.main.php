@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/polls/polls.main.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=Polls
@@ -72,9 +72,9 @@ if (empty($id) || $id == 'viewall') {
 			$urlpaths[sed_url("polls", "id=" . $id)] = $poll_title;
 
 			if ($usr['id'] > 0) {
-				$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='" . $usr['id'] . "' OR pv_userip='" . $usr['ip'] . "') LIMIT 1");
+				$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='" . $usr['id'] . "' OR pv_userip='" . sed_sql_prep($usr['ip']) . "') LIMIT 1");
 			} else {
-				$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='" . $usr['ip'] . "' LIMIT 1");
+				$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='" . sed_sql_prep($usr['ip']) . "' LIMIT 1");
 			}
 
 			$alreadyvoted = (sed_sql_numrows($sql2) > 0) ? 1 : 0;
@@ -88,7 +88,7 @@ if (empty($id) || $id == 'viewall') {
 
 				$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='$vote'");
 				if (sed_sql_affectedrows() == 1) {
-					$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (" . (int)$id . ", " . (int)$usr['id'] . ", '" . $usr['ip'] . "')");
+					$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (" . (int)$id . ", " . (int)$usr['id'] . ", '" . sed_sql_prep($usr['ip']) . "')");
 					$votecasted = TRUE;
 					$alreadyvoted = TRUE;
 				}

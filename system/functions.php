@@ -2306,46 +2306,83 @@ function sed_getcurrenturl()
 }
 
 /**
- * Retrieves the user's IP address from the server environment.
+ * Retrieves the user's IP address supporting both IPv4 and IPv6.
+ * Automatically detects trusted local/private reverse proxies (Nginx, Apache, Cloudflare)
+ * and prevents IP spoofing on direct client connections.
  *
- * This function checks various server headers to determine the user's IP address.
- * It is particularly useful when the site is behind a proxy server or load balancer,
- * as these headers may contain the original IP address of the client.
- *
- * The function supports both IPv4 and IPv6 addresses and validates the IP address
- * using PHP's filter_var function. If no valid IP address is found in the headers,
- * it returns '0.0.0.0'.
- *
- * @return string The user's IP address or '0.0.0.0' if not found.
+ * @return string Validated and escaped IPv4/IPv6 address or '0.0.0.0'
  */
 function sed_get_userip()
 {
-	// Headers that might contain the user's IP address
-	$headers = [
-		'HTTP_X_CLUSTER_CLIENT_IP',
-		'HTTP_X_FORWARDED_FOR',
-		'HTTP_X_FORWARDED',
-		'HTTP_FORWARDED_FOR',
-		'HTTP_FORWARDED',
-		'HTTP_X_REAL_IP',
-		'REMOTE_ADDR'
-	];
+	global $cfg;
 
-	foreach ($headers as $header) {
-		if (isset($_SERVER[$header])) {
-			// Split addresses if there are multiple (e.g., in the case of HTTP_X_FORWARDED_FOR)
-			$ipAddresses = explode(',', $_SERVER[$header]);
-			// Return the first address in the list
-			$ip = trim($ipAddresses[0]);
-			// Check if the address is a valid IPv4 or IPv6
-			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
-				return $ip;
+	$remote = !empty($_SERVER['REMOTE_ADDR']) ? trim($_SERVER['REMOTE_ADDR']) : '';
+
+	// Clean IPv6 brackets or ports from REMOTE_ADDR if present
+	if (preg_match('/^\[?([a-fA-F0-9:.]+)\]?(?::\d+)?$/', $remote, $m)) {
+		$remote = $m[1];
+	}
+
+	$ip = '';
+
+	// Determine if connection comes from a local/private reverse proxy (Nginx, Docker, HAProxy)
+	$is_private_proxy = false;
+	if (!empty($remote)) {
+		if (filter_var($remote, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+			$is_private_proxy = true;
+		} elseif (strpos($remote, ':') !== false) {
+			$lower = strtolower($remote);
+			if ($lower === '::1' || strpos($lower, 'fe80:') === 0 || strpos($lower, 'fc') === 0 || strpos($lower, 'fd') === 0) {
+				$is_private_proxy = true;
 			}
 		}
 	}
 
-	// If none of the headers contain a valid IP address, return '0.0.0.0'
-	return '0.0.0.0';
+	// Trust proxy headers if site is behind Cloudflare, behind a private proxy, or if explicitly enabled
+	$trust_headers = $is_private_proxy || !empty($cfg['trust_proxy']) || !empty($_SERVER['HTTP_CF_CONNECTING_IP']);
+
+	if ($trust_headers) {
+		$headers = array(
+			'HTTP_CF_CONNECTING_IP',
+			'HTTP_X_REAL_IP',
+			'HTTP_X_FORWARDED_FOR',
+			'HTTP_FORWARDED_FOR',
+			'HTTP_FORWARDED',
+			'HTTP_X_CLUSTER_CLIENT_IP',
+			'HTTP_CLIENT_IP'
+		);
+
+		foreach ($headers as $hdr) {
+			if (!empty($_SERVER[$hdr])) {
+				$addresses = explode(',', $_SERVER[$hdr]);
+				$candidate = trim($addresses[0]);
+
+				// Clean IPv6 brackets or ports if present
+				if (preg_match('/^\[?([a-fA-F0-9:.]+)\]?(?::\d+)?$/', $candidate, $m)) {
+					$candidate = $m[1];
+				}
+
+				if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+					$ip = $candidate;
+					break;
+				}
+			}
+		}
+	}
+
+	// Fallback to direct REMOTE_ADDR
+	if (empty($ip) && !empty($remote) && filter_var($remote, FILTER_VALIDATE_IP)) {
+		$ip = $remote;
+	}
+
+	// Safe fallback if no valid IP detected
+	if (empty($ip)) {
+		$ip = '0.0.0.0';
+	}
+
+	// IPv6 max length is 45 chars (with IPv4 mapping), escape for SQL safety
+	$ip = substr($ip, 0, 45);
+	return sed_sql_prep($ip);
 }
 
 /**
@@ -3425,7 +3462,7 @@ function sed_log($text, $group = 'def')
 	global $db_logger, $sys, $usr;
 
 	$text = mb_substr($text, 0, 250 - mb_strlen($sys['request_uri'])) . ' - ' . $sys['request_uri'];
-	$sql = sed_sql_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (" . (int)$sys['now_offset'] . ", '" . $usr['ip'] . "', '" . sed_sql_prep($usr['name']) . "', '$group', '" . sed_sql_prep($text) . "')");
+	$sql = sed_sql_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (" . (int)$sys['now_offset'] . ", '" . sed_sql_prep($usr['ip']) . "', '" . sed_sql_prep($usr['name']) . "', '$group', '" . sed_sql_prep($text) . "')");
 	return;
 }
 
@@ -5021,7 +5058,7 @@ function sed_shield_clearaction()
 {
 	global $db_shield, $usr;
 
-	$sql = sed_sql_query("UPDATE $db_shield SET shield_action='' WHERE shield_ip='" . $usr['ip'] . "'");
+	$sql = sed_sql_query("UPDATE $db_shield SET shield_action='' WHERE shield_ip='" . sed_sql_prep($usr['ip']) . "'");
 	return;
 }
 
@@ -5085,7 +5122,7 @@ function sed_shield_update($shield_add, $shield_newaction)
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] / 100);
 		$shield_newaction = sed_sql_prep($shield_newaction);
 		$sql = sed_sql_query("INSERT INTO $db_shield (shield_ip, shield_lastseen, shield_hammer, shield_limit, shield_action)
-			VALUES ('" . $usr['ip'] . "', " . (int)$sys['now'] . ", 0, " . (int)$shield_newlimit . ", '" . $shield_newaction . "')
+			VALUES ('" . sed_sql_prep($usr['ip']) . "', " . (int)$sys['now'] . ", 0, " . (int)$shield_newlimit . ", '" . $shield_newaction . "')
 			ON DUPLICATE KEY UPDATE shield_limit = " . (int)$shield_newlimit . ", shield_action = '" . $shield_newaction . "'");
 	}
 	return;

@@ -266,9 +266,9 @@ function sed_poll_vote($id, $vote)
 
 	if ($id > 0) {
 		if ($usr['id'] > 0) {
-			$sql = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='" . $usr['id'] . "' OR pv_userip='" . $usr['ip'] . "') LIMIT 1");
+			$sql = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='" . (int)$usr['id'] . "' OR pv_userip='" . sed_sql_prep($usr['ip']) . "') LIMIT 1");
 		} else {
-			$sql = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='" . $usr['ip'] . "' LIMIT 1");
+			$sql = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='" . sed_sql_prep($usr['ip']) . "' LIMIT 1");
 		}
 
 		$alreadyvoted = (sed_sql_numrows($sql) > 0) ? TRUE : FALSE;
@@ -276,7 +276,7 @@ function sed_poll_vote($id, $vote)
 		if (sed_sql_numrows($sql) == 0 && $vote > 0) {
 			$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='$vote'");
 			if (sed_sql_affectedrows() == 1) {
-				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (" . (int)$id . ", " . (int)$usr['id'] . ", '" . $usr['ip'] . "')");
+				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (" . (int)$id . ", " . (int)$usr['id'] . ", '" . sed_sql_prep($usr['ip']) . "')");
 				$votecasted = TRUE;
 				$alreadyvoted = TRUE;
 			}

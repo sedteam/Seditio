@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.details.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Module
 Author=Seditio Team
 Description=User details
@@ -83,7 +83,7 @@ $t->assign(array(
 	"USERS_DETAILS_NAME" => sed_cc($urr['user_name']),
 	"USERS_DETAILS_FIRSTNAME" => sed_cc($urr['user_firstname']),
 	"USERS_DETAILS_LASTNAME" => sed_cc($urr['user_lastname']),
-	"USERS_DETAILS_PASSWORD" => $urr['user_password'],
+
 	"USERS_DETAILS_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_DETAILS_MAINGRPID" => $urr['user_maingrp'],
 	"USERS_DETAILS_MAINGRPSTARS" => sed_build_stars($sed_groups[$urr['user_maingrp']]['level']),

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/common.php
 Version=186
-Updated=2026-oct-15
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Common
@@ -243,7 +243,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 	}
 
 	if ($cfg['ipcheck']) {
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_secret='$rseditiop' AND user_lastip='" . $usr['ip'] . "'");
+		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_secret='$rseditiop' AND user_lastip='" . sed_sql_prep($usr['ip']) . "'");
 	} else {
 		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_secret='$rseditiop'");
 	}
@@ -278,7 +278,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 				$sys['sql_update_auth'] = ", user_auth='" . serialize($usr['auth']) . "'";
 			}
 
-			$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='" . $sys['now_offset'] . "', user_lastip='" . $usr['ip'] . "', user_sid='" . $usr['sessionid'] . "', user_logcount=user_logcount+1 " . $sys['sql_update_lastvisit'] . " " . $sys['sql_update_auth'] . " WHERE user_id='" . $usr['id'] . "'");
+			$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='" . $sys['now_offset'] . "', user_lastip='" . sed_sql_prep($usr['ip']) . "', user_sid='" . $usr['sessionid'] . "', user_logcount=user_logcount+1 " . $sys['sql_update_lastvisit'] . " " . $sys['sql_update_auth'] . " WHERE user_id='" . $usr['id'] . "'");
 		}
 	}
 } else {
@@ -436,7 +436,7 @@ if ($cfg['shieldenabled']) {
 		sed_sql_query("DELETE FROM $db_shield WHERE shield_lastseen < $shield_timedout AND shield_limit < " . (int)$sys['now']);
 	}
 
-	$sql = sed_sql_query("SELECT shield_limit, shield_action, shield_hammer, shield_lastseen FROM $db_shield WHERE shield_ip='" . $usr['ip'] . "' LIMIT 1");
+	$sql = sed_sql_query("SELECT shield_limit, shield_action, shield_hammer, shield_lastseen FROM $db_shield WHERE shield_ip='" . sed_sql_prep($usr['ip']) . "' LIMIT 1");
 	if ($row = sed_sql_fetchassoc($sql)) {
 		$shield_limit = (int)$row['shield_limit'];
 		$shield_action = $row['shield_action'];

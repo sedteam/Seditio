@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=system/core/admin/admin.footer.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Core
 Author=Seditio Team
 Description=Global admin footer
@@ -31,7 +31,7 @@ $out['bottomline'] = ($cfg['keepcrbottom']) ? $out['copyright'] : '';
 
 if ($cfg['shieldenabled']) {
 	$sql = sed_sql_query("INSERT INTO $db_shield (shield_ip, shield_lastseen, shield_hammer, shield_limit, shield_action) 
-		VALUES ('" . $usr['ip'] . "', " . (int)$sys['now'] . ", " . (int)$shield_hammer . ", 0, '') 
+		VALUES ('" . sed_sql_prep($usr['ip']) . "', " . (int)$sys['now'] . ", " . (int)$shield_hammer . ", 0, '') 
 		ON DUPLICATE KEY UPDATE shield_lastseen = " . (int)$sys['now'] . ", shield_hammer = " . (int)$shield_hammer);
 }
 
