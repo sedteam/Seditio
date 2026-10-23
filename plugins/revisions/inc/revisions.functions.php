@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/revisions/inc/revisions.functions.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-23
 Type=Plugin
 Author=Seditio Team
 Description=Core API functions for universal revisions system
@@ -182,9 +182,9 @@ function sed_revision_get($rev_id)
 	if ($row = sed_sql_fetchassoc($sql)) {
 		if (substr($row['rev_datas'], 0, 3) === 'GZ:' && function_exists('gzuncompress')) {
 			$decompressed = gzuncompress(base64_decode(substr($row['rev_datas'], 3)));
-			$row['rev_datas'] = unserialize($decompressed);
+			$row['rev_datas'] = sed_unserialize($decompressed);
 		} else {
-			$row['rev_datas'] = unserialize($row['rev_datas']);
+			$row['rev_datas'] = sed_unserialize($row['rev_datas']);
 		}
 		return $row;
 	}

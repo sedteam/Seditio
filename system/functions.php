@@ -1294,6 +1294,32 @@ function sed_tplcache_clear()
 	return true;
 }
 
+/**
+ * Safely unserializes data with protection against PHP Object Injection.
+ * Fully compatible with PHP 5.6 and PHP 7.0 - 8.x.
+ *
+ * @param string $data Serialized data
+ * @return mixed Unserialized data or false on failure
+ */
+function sed_unserialize($data)
+{
+	if (empty($data) || !is_string($data)) {
+		return false;
+	}
+
+	// For PHP 7.0+, use native allowed_classes option to prevent object instantiation
+	if (PHP_VERSION_ID >= 70000) {
+		return @unserialize($data, array('allowed_classes' => false));
+	}
+
+	// For PHP 5.6: reject payloads containing serialized object markers (O: or C:)
+	if (preg_match('/(^|;|{|})[OC]:\+?[0-9]+:"/', $data)) {
+		return false;
+	}
+
+	return @unserialize($data);
+}
+
 /** 
  * Fetches cache value 
  * 
@@ -1313,7 +1339,7 @@ function sed_cache_get($name, $expire = true)
 
 	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name'" . $sql_exp);
 	if ($row = sed_sql_fetchassoc($sql)) {
-		return (unserialize($row['c_value']));
+		return (sed_unserialize($row['c_value']));
 	} else {
 		return (FALSE);
 	}

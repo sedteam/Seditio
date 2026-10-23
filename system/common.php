@@ -63,7 +63,9 @@ if ($cfg['cache']) {
 	if ($sql) {
 		while ($row = sed_sql_fetchassoc($sql)) {
 			$newvar = $row['c_name']; //fix 178 php7.1
-			$$newvar = unserialize($row['c_value']);
+			if (strpos($newvar, 'sed_') === 0 && preg_match('/^sed_[a-zA-Z0-9_]+$/', $newvar)) {
+				$$newvar = sed_unserialize($row['c_value']);
+			}
 		}
 	}
 }
@@ -261,7 +263,7 @@ if (isset($rsedition) && $rsedition > 0 && $cfg['authmode'] > 0) {
 			$usr['skin'] = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $row['user_skin'];
 			$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
 			$usr['newpm'] = $row['user_newpm'];
-			$usr['auth'] = !empty($row['user_auth']) ? unserialize($row['user_auth']) : array();
+			$usr['auth'] = !empty($row['user_auth']) ? sed_unserialize($row['user_auth']) : array();
 			$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
 			$usr['profile'] = $row;
 			$sys['sql_update_lastvisit'] = '';

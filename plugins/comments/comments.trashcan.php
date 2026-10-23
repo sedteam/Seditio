@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/comments/comments.trashcan.php
 Version=186
-Updated=2026-oct-05
+Updated=2026-oct-23
 Type=Plugin
 [END_SED]
 
@@ -59,7 +59,7 @@ function sed_trash_comment_restore($data, $itemid)
 		$to_restore[] = array(
 			'tr_id' => $row['tr_id'],
 			'tr_itemid' => $row['tr_itemid'],
-			'tr_datas' => unserialize($row['tr_datas'])
+			'tr_datas' => sed_unserialize($row['tr_datas'])
 		);
 	}
 

@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/trashcan/inc/trashcan.functions.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Plugin
 Description=Trash API (extensible via trashcan.api hook)
 [END_SED]
@@ -85,7 +85,7 @@ function sed_trash_get($id)
 
 	$sql = sed_sql_query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
 	if ($res = sed_sql_fetchassoc($sql)) {
-		$res['tr_datas'] = unserialize($res['tr_datas']);
+		$res['tr_datas'] = sed_unserialize($res['tr_datas']);
 		return ($res);
 	} else {
 		return (FALSE);

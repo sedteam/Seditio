@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/trashcan/trashcan.admin.plug.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-oct-23
 Type=Plugin
 [END_SED]
 
@@ -50,7 +50,7 @@ if ($a == 'wipe') {
 		$type = $row['tr_type'];
 		if (!empty($sed_trashcan_types[$type]['wipe']) && function_exists($sed_trashcan_types[$type]['wipe'])) {
 			$wipe_callback = $sed_trashcan_types[$type]['wipe'];
-			$datas = unserialize($row['tr_datas']);
+			$datas = sed_unserialize($row['tr_datas']);
 			$wipe_callback($datas, $row['tr_itemid']);
 		} else {
 			sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
