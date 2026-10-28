@@ -122,6 +122,11 @@ This document provides a comprehensive technical overview of the new features, a
   * Sidebar and content tab switching standardized on core `sedjs.sedtabs()`.
   * Core spoilers and accordions (`sedjs.spoiler`, `sedjs.accordion`) extended with custom container/title/content class configuration.
   * Desktop navigation dropdowns upgraded to 60 FPS hardware-accelerated CSS3 transitions (Fade & Slide).
+* **Interactive Form Widgets and Controls (`sedjs`):**
+  * **Custom SelectBox (`sedjs.select` / `.sed-select`):** Native replacement for standard dropdowns with auto-width, live search (`data-search="true"`), option grouping, and Multi-Select support.
+  * **Switch / Toggle Controls (`.sed-switch`):** Smooth toggle switches replacing traditional checkboxes (integrated into `sed_checkbox()`).
+  * **Password Toggle & Quick-Clear (`sedjs.input`):** Built-in password visibility toggle eye (`.sed-password`) and instant text clear button (`.sed-clearable`).
+  * **Date & Time Picker (`sedjs.datepicker` / `.sed-datepicker`):** Lightweight popup calendar for picking dates and times with localization and integration with `sed_selectbox_date()`.
 
 ---
 
