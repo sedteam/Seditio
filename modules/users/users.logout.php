@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.logout.php
 Version=186
-Updated=2026-sep-21
+Updated=2026-nov-19
 Type=Module
 Author=Seditio Team
 Description=User logout
@@ -30,6 +30,10 @@ foreach (sed_getextplugins('users.logout') as $pl) {
 
 if ($cfg['authmode'] == 1 || $cfg['authmode'] == 3) {
 	sed_setcookie($sys['site_id'], "", time() - 63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+}
+
+if (isset($_SESSION[$sys['site_id'] . '_passrecover_reset'])) {
+	unset($_SESSION[$sys['site_id'] . '_passrecover_reset']);
 }
 
 if ($cfg['authmode'] == 2 || $cfg['authmode'] == 3) {

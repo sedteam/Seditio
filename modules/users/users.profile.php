@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=modules/users/users.profile.php
 Version=186
-Updated=2026-oct-23
+Updated=2026-nov-19
 Type=Module
 Author=Seditio Team
 Description=User profile
@@ -155,7 +155,8 @@ switch ($a) {
 			$rnewpass1 = sed_import('rnewpass1', 'P', 'TXT');
 			$rnewpass2 = sed_import('rnewpass2', 'P', 'TXT');
 
-			$strictpasschange = (isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1;
+			$is_passrecover = (!empty($_SESSION[$sys['site_id'] . '_passrecover_reset']) && $_SESSION[$sys['site_id'] . '_passrecover_reset'] == $usr['id']);
+			$strictpasschange = ((isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1) && !$is_passrecover;
 
 			if ($strictpasschange) {
 				if (empty($ruseroldpass)) {
@@ -198,6 +199,10 @@ switch ($a) {
 
 				if ($cfg['authmode'] == 2 || $cfg['authmode'] == 3) {
 					$_SESSION[$sys['site_id'] . '_p'] = $rnewpass_secret;
+				}
+
+				if (isset($_SESSION[$sys['site_id'] . '_passrecover_reset'])) {
+					unset($_SESSION[$sys['site_id'] . '_passrecover_reset']);
 				}
 			}
 		}
@@ -336,7 +341,8 @@ $urlpaths = array();
 $urlpaths[sed_url("users")] = $L['Users'];
 $urlpaths[sed_url("users", "m=profile")] = $L['pro_title'];
 
-$strictpasschange = (isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1;
+$is_passrecover = (!empty($_SESSION[$sys['site_id'] . '_passrecover_reset']) && $_SESSION[$sys['site_id'] . '_passrecover_reset'] == $usr['id']);
+$strictpasschange = ((isset($cfg['strictpasschange']) ? (int)$cfg['strictpasschange'] : 1) === 1) && !$is_passrecover;
 
 $t->assign(array(
 	"USERS_PROFILE_TITLE" => sed_link(sed_url("users", "m=profile"), $L['pro_title']),

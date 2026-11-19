@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.php
 Version=186
-Updated=2026-oct-23
+Updated=2026-nov-19
 Type=Plugin
 Author=Seditio Team
 Description=
@@ -46,10 +46,8 @@ if ($a == 'request' && $email != '') {
 		$ruserid = $row['user_id'];
 		$validationkey = $row['user_lostpass'];
 
-		if (empty($validationkey) || $validationkey == "0") {
-			$validationkey = sed_unique(32);
-			$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='" . $usr['ip'] . "' WHERE user_id='$ruserid'");
-		}
+		$validationkey = sed_unique(32);
+		$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='" . $usr['ip'] . "' WHERE user_id='$ruserid'");
 
 		sed_shield_update(60, "Password recovery email sent");
 
@@ -76,10 +74,10 @@ if ($a == 'request' && $email != '') {
 } elseif (($a == 'auth' || $a == 'newpassword') && mb_strlen($v) == 32) {
 	sed_shield_protect();
 
-	$sql = sed_sql_query("SELECT user_name, user_id, user_secret, user_email, user_maingrp, user_banexpire, user_skin FROM $db_users WHERE user_lostpass='" . sed_sql_prep($v) . "'");
+	$sql = sed_sql_query("SELECT user_name, user_id, user_secret, user_email, user_maingrp, user_banexpire, user_skin FROM $db_users WHERE user_lostpass != '' AND user_lostpass != '0' AND user_lostpass='" . sed_sql_prep($v) . "'");
 
 	if ($row = sed_sql_fetchassoc($sql)) {
-		$rmdpass_secret  = $row['user_secret'];
+		$rmdpass_secret = $row['user_secret'];
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
 		$rdefskin = $row['user_skin'];
@@ -97,13 +95,13 @@ if ($a == 'request' && $email != '') {
 			exit;
 		}
 
-		$validationkey = sed_unique(32);
-		$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey' WHERE user_id='$ruserid'");
+		// Invalidate used password reset token
+		$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='' WHERE user_id='$ruserid'");
 
 		if ($generate_password == "yes" && $a == 'newpassword') {
-			$newpassword = sed_unique(7); // New sed172  					
-			$mdsalt = sed_unique(32); // New sed172    
-			$mdpass = sed_hash($newpassword, 1, $mdsalt);  // New sed172    		    	
+			$newpassword = sed_unique(10);
+			$mdsalt = sed_unique(32);
+			$mdpass = sed_hash($newpassword, 1, $mdsalt);
 
 			$sql = sed_sql_query("UPDATE $db_users SET user_password='$mdpass', user_salt='$mdsalt', user_passtype=2 WHERE user_id='$ruserid'");
 
@@ -114,21 +112,43 @@ if ($a == 'request' && $email != '') {
 
 			$t->parse("MAIN.PLUGIN_PASSRECOVER_GENERATEPASS");
 		} else {
+			// Update session secret token and current user IP
+			if (empty($rmdpass_secret) || $cfg['authsecret']) {
+				$rmdpass_secret = md5(sed_unique(16));
+				sed_sql_query("UPDATE $db_users SET user_secret = '" . $rmdpass_secret . "', user_lastip='" . $usr['ip'] . "' WHERE user_id='" . $ruserid . "' LIMIT 1");
+			} else {
+				sed_sql_query("UPDATE $db_users SET user_lastip='" . $usr['ip'] . "' WHERE user_id='" . $ruserid . "' LIMIT 1");
+			}
+
 			if ($cfg['authmode'] == 1 || $cfg['authmode'] == 3) {
-				$u = base64_encode("$ruserid:_:$rmdpass_secret:_:" . $cfg['defaultskin']);
+				$u = base64_encode("$ruserid:_:$rmdpass_secret:_:$rdefskin");
 				sed_setcookie($sys['site_id'], $u, time() + 86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 			}
 
 			if ($cfg['authmode'] == 2 || $cfg['authmode'] == 3) {
-				session_regenerate_id(true);
+				if (!headers_sent()) {
+					session_regenerate_id(true);
+				}
 				$_SESSION[$sys['site_id'] . '_n'] = $ruserid;
 				$_SESSION[$sys['site_id'] . '_p'] = $rmdpass_secret;
 				$_SESSION[$sys['site_id'] . '_s'] = $rdefskin;
 			}
 
-			$t->assign("PLUGIN_PASSRECOVER_LOGGED_USERNAME", $rusername);
+			// One-time session flag for password change in profile without requiring the old password
+			$_SESSION[$sys['site_id'] . '_passrecover_reset'] = $ruserid;
 
-			$t->parse("MAIN.PLUGIN_PASSRECOVER_LOGGED");
+			sed_log("User logged in via password recovery: " . $rusername, 'usr');
+
+			// Redirect to profile for password change while preserving authorization
+			$redirect_url = sed_url("users", "m=profile", "", true);
+			if (headers_sent()) {
+				echo '<script>window.location.href = ' . json_encode($redirect_url) . ';</script>';
+				echo '<noscript><meta http-equiv="refresh" content="0;url=' . sed_cc($redirect_url) . '"></noscript>';
+				exit;
+			} else {
+				sed_redirect($redirect_url, false, array(), 302);
+				exit;
+			}
 		}
 	} else {
 		sed_shield_update(7, "Log in");
