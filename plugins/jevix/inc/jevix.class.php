@@ -52,7 +52,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagShort(array('br', 'img', 'hr', 'source', 'col'));
 
 			// Establish preformatted tags
-			$jevix->cfgSetTagPreformatted(array('code'));
+			$jevix->cfgSetTagPreformatted(array('code', 'pre'));
 
 			// Establish tags which are cut with content (prevent XSS / scripts)
 			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta', 'applet'));
@@ -129,7 +129,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagChilds('figure', array('figcaption', 'img', 'video', 'audio', 'picture', 'blockquote', 'div', 'p'), false, false);
 			$jevix->cfgSetTagChilds('object', 'param', false, true);
 			$jevix->cfgSetTagChilds('object', 'embed', false, false);
-			$jevix->cfgSetTagChilds('pre', array('code'), false, false);
+			// $jevix->cfgSetTagChilds('pre', array('code'), false, false);
 
 			// Empty tags permitted
 			$jevix->cfgSetTagIsEmpty(array('param', 'embed', 'a', 'i', 'span', 'div', 'iframe', 'source', 'video', 'audio', 'col', 'hr', 'br', 'img'));
@@ -158,7 +158,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			));
 
 			$jevix->cfgSetTagShort(array('br', 'img', 'hr'));
-			$jevix->cfgSetTagPreformatted(array('code'));
+			$jevix->cfgSetTagPreformatted(array('code', 'pre'));
 			$jevix->cfgSetTagCutWithContent(array('script', 'style', 'meta', 'applet'));
 
 			// Common attributes for block & inline tags
@@ -213,7 +213,7 @@ function sed_jevix($text, $filter = 'medium', $xhtml = false, $use_admin = true,
 			$jevix->cfgSetTagChilds('tfoot', array('tr'), false, true);
 			$jevix->cfgSetTagChilds('tr', array('td', 'th'), false, true);
 			$jevix->cfgSetTagChilds('figure', array('figcaption', 'img', 'blockquote', 'div', 'p'), false, false);
-			$jevix->cfgSetTagChilds('pre', array('code'), false, false);
+			// $jevix->cfgSetTagChilds('pre', array('code'), false, false);
 
 			// Empty tags permitted
 			$jevix->cfgSetTagIsEmpty(array('a', 'i', 'span', 'div', 'iframe', 'hr', 'br', 'img'));

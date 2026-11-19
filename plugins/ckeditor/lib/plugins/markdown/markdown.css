@@ -1,0 +1,315 @@
+/* Prevent CKEditor dialog stretching specifically for Markdown dialog */
+.cke_dialog_markdownDialog .cke_dialog_contents_body {
+    max-width: 100% !important;
+}
+
+/* Dialog container */
+.sed-md-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Quick action toolbar buttons */
+.sed-md-tool-btn {
+    border: 1px solid #d0d7de;
+    background: #fff;
+    color: #24292f;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1.3;
+    transition: all 0.12s ease;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sed-md-tool-btn:hover {
+    background: #f3f4f6;
+    border-color: #0969da;
+    color: #0969da;
+}
+
+.sed-md-tool-btn:active {
+    background: #e5e7eb;
+}
+
+/* Two-column Split-View container */
+.sed-md-wrapper {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    max-width: 860px;
+    box-sizing: border-box;
+}
+
+.sed-md-col {
+    flex: 1 1 0;
+    min-width: 0; /* Critical for flex layout */
+    width: 50%;
+    box-sizing: border-box;
+}
+
+/* Column header */
+.sed-md-col-header {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    box-sizing: border-box;
+}
+
+.sed-md-col-title {
+    font-weight: bold;
+    font-size: 12px;
+    color: #24292f;
+}
+
+/* Mode toggle buttons on right (Live / HTML Code) */
+.sed-md-modes {
+    display: inline-flex;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ebebeb;
+}
+
+.sed-md-mode-btn {
+    border: none;
+    background: transparent;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    line-height: 1.4;
+    transition: all 0.15s ease;
+    outline: none;
+}
+
+.sed-md-mode-btn:hover {
+    background: #dfdfdf;
+    color: #111;
+}
+
+.sed-md-mode-btn.active {
+    background: #fff;
+    color: #0969da;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+/* Input and output fields (fixed 390px height) */
+#sed-md-input,
+.sed-md-input,
+#sed-html-code,
+.sed-html-code,
+#sed-md-preview-container,
+.sed-md-preview-container {
+    width: 100% !important;
+    height: 390px !important;
+    min-height: 390px !important;
+    max-height: 390px !important;
+    box-sizing: border-box !important;
+    border: 1px solid #c9c9c9 !important;
+    border-radius: 4px !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+}
+
+#sed-md-input,
+.sed-md-input {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+    background: #fff !important;
+    color: #1f2328 !important;
+    resize: none !important;
+    outline: none !important;
+}
+
+#sed-md-input:focus,
+.sed-md-input:focus {
+    border-color: #0969da !important;
+    box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.2) !important;
+}
+
+#sed-html-code,
+.sed-html-code {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+    background: #fafbfc !important;
+    color: #24292f !important;
+    resize: none !important;
+    outline: none !important;
+}
+
+#sed-md-preview-container,
+.sed-md-preview-container {
+    background: #fff !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    word-break: break-word !important;
+}
+
+/* Styles for Markdown rendering within preview */
+.sed-md-preview {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #24292f;
+}
+
+.sed-md-preview h1, 
+.sed-md-preview h2, 
+.sed-md-preview h3, 
+.sed-md-preview h4, 
+.sed-md-preview h5, 
+.sed-md-preview h6 {
+    margin-top: 14px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #1f2328;
+}
+
+.sed-md-preview h1 { font-size: 1.6em; border-bottom: 1px solid #d8dee4; padding-bottom: 4px; }
+.sed-md-preview h2 { font-size: 1.35em; border-bottom: 1px solid #d8dee4; padding-bottom: 4px; }
+.sed-md-preview h3 { font-size: 1.15em; }
+.sed-md-preview h4 { font-size: 1.02em; }
+
+.sed-md-preview p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.sed-md-preview ul, 
+.sed-md-preview ol {
+    padding-left: 22px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.sed-md-preview li {
+    margin-bottom: 3px;
+}
+
+.sed-md-preview blockquote {
+    margin: 10px 0;
+    padding: 6px 14px;
+    color: #57606a;
+    border-left: 4px solid #0969da;
+    background-color: #f6f8fa;
+    border-radius: 0 4px 4px 0;
+}
+
+.sed-md-preview table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 14px;
+    font-size: 12.5px;
+}
+
+.sed-md-preview table th, 
+.sed-md-preview table td {
+    padding: 6px 12px;
+    border: 1px solid #d0d7de;
+}
+
+.sed-md-preview table th {
+    background-color: #f6f8fa;
+    font-weight: 600;
+    text-align: left;
+}
+
+.sed-md-preview table tr:nth-child(2n) {
+    background-color: #fcfcfc;
+}
+
+.sed-md-preview code {
+    padding: 2px 5px;
+    margin: 0;
+    font-size: 85%;
+    background-color: #eff1f3;
+    border-radius: 4px;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    color: #b31d28;
+}
+
+.sed-md-preview pre {
+    position: relative;
+    padding: 12px 14px;
+    margin-top: 10px;
+    margin-bottom: 14px;
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.45;
+    background-color: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    color: #24292f;
+    white-space: pre;
+    box-sizing: border-box;
+}
+
+.sed-md-preview pre::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #8c959f;
+    background: #e9ecef;
+    padding: 1px 6px;
+    border-radius: 3px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.sed-md-preview hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #d0d7de;
+    border: 0;
+}
+
+.sed-md-preview a {
+    color: #0969da;
+    text-decoration: underline;
+}
+
+.sed-md-preview img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive layout for viewports under 840px */
+@media (max-width: 840px) {
+    .sed-md-wrapper {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    .sed-md-col {
+        width: 100% !important;
+    }
+    #sed-md-input,
+    .sed-md-input,
+    #sed-html-code,
+    .sed-html-code,
+    #sed-md-preview-container,
+    .sed-md-preview-container {
+        height: 240px !important;
+        min-height: 240px !important;
+        max-height: 240px !important;
+    }
+}

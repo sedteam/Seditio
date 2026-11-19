@@ -1,7 +1,7 @@
 CKEDITOR.editorConfig = function(config) {
     config.toolbar = 'Basic';
 
-    config.extraPlugins = 'more,html5video,spoiler,internallink,tabber,accordion,syntaxhighlight,layoutmanager,iconic';
+    config.extraPlugins = 'more,html5video,spoiler,internallink,tabber,accordion,syntaxhighlight,layoutmanager,iconic,markdown';
 
     config.iconic_columns = 14;
 
@@ -40,7 +40,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Table', 'HorizontalRule', 'Smiley', 'Iconic', 'SpecialChar', 'PageBreak', 'Iframe'],
         '/', ['Styles', 'Format', 'Font', 'FontSize'],
         ['TextColor', 'BGColor'],
-        ['Syntaxhighlight'],
+        ['Syntaxhighlight', 'Markdown'],
         ['Maximize', 'ShowBlocks'],
         ['More', 'Templates', 'AddLayout', 'Spoiler', 'Tabber', 'Accordion']
     ];
@@ -51,7 +51,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Table', 'HorizontalRule', 'Smiley', 'Iconic', 'SpecialChar', 'PageBreak'],
         ['Link', 'Unlink', 'Anchor', 'InternalLink'],
         ['Image', 'Youtube', 'MediaEmbed', 'Html5video'],
-        ['Syntaxhighlight', 'More', 'Maximize', 'ShowBlocks'],
+        ['Syntaxhighlight', 'Markdown', 'More', 'Maximize', 'ShowBlocks'],
         ['Templates', 'AddLayout', 'Spoiler', 'Tabber', 'Accordion'],
         ['Source'],
         '/', ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
@@ -68,7 +68,7 @@ CKEDITOR.editorConfig = function(config) {
         ['Image', 'Youtube', 'MediaEmbed', 'Link', 'Unlink', 'Anchor', 'Smiley', 'Iconic'],
         ['TextColor', 'BGColor'],
         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
-        ['Syntaxhighlight', 'Spoiler', 'Accordion']
+        ['Syntaxhighlight', 'Markdown', 'Spoiler', 'Accordion']
     ];
 
     config.toolbar_Micro = [

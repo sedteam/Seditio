@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/ckeditor/ckeditor.php
 Version=185
-Updated=2026-feb-14
+Updated=2026-nov-19
 Type=Plugin
 Author=Amro
 Description=
@@ -84,7 +84,7 @@ if ($usr['maingrp'] > 3) {
 						height = CkTextareas[editorType];
 					}
 
-					CKEDITOR.timestamp='ABCDF5';
+					CKEDITOR.timestamp='ABCDF6';
 					CKEDITOR.config.customConfig = '" . $ck_config . "';
 					CKEDITOR.config.baseHref = '" . $sys['abs_url'] . "';
 					CKEDITOR.replace(textarea, {

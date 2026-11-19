@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/syntaxhighlight/syntaxhighlight.php
 Version=186
-Updated=2026-feb-14
+Updated=2026-nov-19
 Type=Plugin
 Author=Amro
 Description=
@@ -60,7 +60,10 @@ $sh_autoloader = "
 		'py python				" . $sh_dir . "shBrushPython.js',
 		'ruby rails ror rb		" . $sh_dir . "shBrushRuby.js',
 		'scala					" . $sh_dir . "shBrushScala.js',
-		'sql					" . $sh_dir . "hBrushSql.js',
+		'sql					" . $sh_dir . "shBrushSql.js',
+		'ps powershell posh		" . $sh_dir . "shBrushPowerShell.js',
+		'sass scss				" . $sh_dir . "shBrushSass.js',
+		'yaml yml				" . $sh_dir . "shBrushYaml.js',
 		'vb vbnet				" . $sh_dir . "shBrushVb.js',
 		'xml xhtml xslt html	" . $sh_dir . "shBrushXml.js'
 	);
