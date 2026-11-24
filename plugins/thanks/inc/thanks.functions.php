@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/inc/thanks.functions.php
 Version=186
-Updated=2026-sep-15
+Updated=2026-nov-24
 Type=Plugin
 Description=Thanks API
 [END_SED]
@@ -439,7 +439,7 @@ function sed_build_thanks($ext, $item, $to_userid, $allow = true, $inner_only = 
 		: (string)$tags['THANKS_COUNT'];
 
 	$thank_url = sed_url('plug', 'e=thanks&a=thank&ext=' . $ext . '&item=' . $item . '&' . sed_xg());
-	$thank_ajax_url = sed_url('plug', 'ajx=thanks&a=thank&ext=' . $ext . '&item=' . $item . '&' . sed_xg());
+	$thank_ajax_url = sed_url('plug', 'ajx=thanks&a=thank&ext=' . $ext . '&item=' . $item . '&' . sed_xg(), '', false, false);
 	$can_thank = $usr['auth_write_th'] && !$th_thanked && ($usr['isadmin_th'] || $usr['id'] != $to_userid) && $to_userid > 0 && $allow && !thanks_check_item($usr['id'], $ext, $item);
 
 	if ($can_thank) {

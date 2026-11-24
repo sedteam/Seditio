@@ -8,7 +8,7 @@ https://seditio.org
 [BEGIN_SED]
 File=plugins/thanks/thanks.ajax.php
 Version=186
-Updated=2026-mar-12
+Updated=2026-nov-24
 Type=Plugin
 [END_SED]
 
@@ -29,9 +29,21 @@ if (!defined('SED_CODE')) {
 
 global $db_thanks, $db_pages, $db_forum_posts, $db_com, $db_users, $cfg, $usr, $L, $sys;
 
-$a = sed_import('a', 'G', 'ALP') ?: sed_import('a', 'P', 'ALP');
-$ext = sed_import('ext', 'G', 'ALP') ?: sed_import('ext', 'P', 'ALP');
-$item = (int)(sed_import('item', 'G', 'INT') ?: sed_import('item', 'P', 'INT'));
+$a = sed_import('a', 'G', 'ALP');
+if (empty($a)) {
+	$a = sed_import('a', 'P', 'ALP');
+}
+
+$ext = sed_import('ext', 'G', 'ALP');
+if (empty($ext)) {
+	$ext = sed_import('ext', 'P', 'ALP');
+}
+
+$item = sed_import('item', 'G', 'INT');
+if (empty($item)) {
+	$item = sed_import('item', 'P', 'INT');
+}
+$item = (int)$item;
 
 if ($a != 'thank' || empty($ext) || $item <= 0 || $usr['id'] <= 0) {
 	sed_ajax_flush('<span class="text-muted">' . $L['thanks_err_item'] . '</span>', true);

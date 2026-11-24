@@ -799,6 +799,9 @@ const sedjs = {
             onError: null
         };
         const options = sedjs.extend({}, defaults, userOptions);
+        if (options.url) {
+            options.url = options.url.replace(/&amp;/g, '&');
+        }
 
         const formElement = options.formid ? document.querySelector(options.formid) : null;
         const updateElement = options.update ? document.querySelector(options.update) : null;
