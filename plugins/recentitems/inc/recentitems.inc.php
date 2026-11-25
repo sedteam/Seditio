@@ -94,55 +94,165 @@ function sed_get_latestpages($limit, $mask)
 
 /* ------------------ */
 
-function sed_get_latestcomments($limit, $mask)
+function sed_get_latestcomments($limit, $mask, $group_by_item = false)
 {
 	global $t, $L, $db_com, $sys, $db_pages, $db_users, $usr, $cfg, $sed_cat, $plu_empty, $ishtml;
 
-	if (!sed_plug_active('comments')) {
+	if (!sed_plug_active('comments') || !sed_auth('plug', 'comments', 'R')) {
+		return '';
+	}
+
+	$limit = (int)$limit;
+	if ($limit <= 0) {
 		return '';
 	}
 
 	$modal = ($cfg['enablemodal']) ? ',1' : '';
+	$pcomments = (!empty($cfg['plugin']['comments']['showcommentsonpage'])) ? "" : "&comments=1";
+	$charset = !empty($cfg['charset']) ? $cfg['charset'] : 'UTF-8';
 
 	$res = '';
-
-	$sql = sed_sql_query("SELECT MAX(com_id) AS max_com_id, MAX(com_date) AS max_com_date FROM $db_com WHERE com_isspecial = 0 GROUP BY com_code ORDER BY max_com_date DESC LIMIT $limit");
-
-	$com_latest = array();
-
-	while ($row = sed_sql_fetchassoc($sql)) $com_latest[] = $row['max_com_id'];
-
-	$sql = sed_sql_query("SELECT c.com_id, c.com_code, c.com_text_ishtml, c.com_date, c.com_text, c.com_author, c.com_authorid, u.user_id, u.user_avatar, u.user_maingrp  
-					FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid 
-					WHERE c.com_id IN('" . implode("','", $com_latest) . "') 
-					ORDER BY c.com_date DESC");
-
 	$comments_rows = array();
-	while ($row = sed_sql_fetchassoc($sql)) {
-		$comments_rows[] = $row;
-	}
-
-	$page_ids = array();
-	foreach ($comments_rows as $row) {
-		$j = substr($row['com_code'], 0, 1);
-		$k = substr($row['com_code'], 1);
-		if ($j === 'p' && $k !== '' && sed_module_active('page')) {
-			$page_ids[(int)$k] = true;
-		}
-	}
-
 	$pages_data = array();
-	if (!empty($page_ids)) {
-		$ids_list = implode(',', array_map('intval', array_keys($page_ids)));
-		$sql_pages = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias FROM $db_pages WHERE page_id IN ($ids_list)");
-		while ($p = sed_sql_fetchassoc($sql_pages)) {
-			$pages_data[$p['page_id']] = $p;
+	$item_counts = array();
+	$last_author_by_code = array();
+
+	$page_active = sed_module_active('page');
+	$polls_active = sed_module_active('polls') && sed_auth('polls', 'a', 'R');
+	$gallery_active = sed_module_active('gallery') && sed_auth('gallery', 'a', 'R');
+	$users_active = sed_module_active('users') && sed_auth('users', 'a', 'R');
+
+	$batch_size = max($limit * 2, 20);
+	$offset = 0;
+	$max_iterations = 10;
+
+	for ($iter = 0; $iter < $max_iterations && count($comments_rows) < $limit; $iter++) {
+		$batch_rows = array();
+
+		if ($group_by_item) {
+			$sql = sed_sql_query("SELECT MAX(com_id) AS max_com_id, MAX(com_date) AS max_com_date, COUNT(*) AS com_total
+				FROM $db_com
+				WHERE com_isspecial = 0
+				GROUP BY com_code
+				ORDER BY max_com_date DESC, max_com_id DESC
+				LIMIT $offset, $batch_size");
+
+			$com_latest = array();
+			while ($row = sed_sql_fetchassoc($sql)) {
+				$cid = (int)$row['max_com_id'];
+				if ($cid > 0) {
+					$com_latest[] = $cid;
+					$item_counts[$cid] = (int)$row['com_total'];
+				}
+			}
+
+			if (empty($com_latest)) {
+				break;
+			}
+
+			$sql = sed_sql_query("SELECT c.com_id, c.com_code, c.com_text_ishtml, c.com_date, c.com_text, c.com_author, c.com_authorid, u.user_id, u.user_avatar, u.user_maingrp
+				FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid
+				WHERE c.com_id IN (" . implode(',', $com_latest) . ")
+				ORDER BY c.com_date DESC, c.com_id DESC");
+
+			while ($row = sed_sql_fetchassoc($sql)) {
+				$batch_rows[] = $row;
+			}
+		} else {
+			$sql = sed_sql_query("SELECT c.com_id, c.com_code, c.com_text_ishtml, c.com_date, c.com_text, c.com_author, c.com_authorid, u.user_id, u.user_avatar, u.user_maingrp
+				FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid
+				WHERE c.com_isspecial = 0
+				ORDER BY c.com_date DESC, c.com_id DESC
+				LIMIT $offset, $batch_size");
+
+			while ($row = sed_sql_fetchassoc($sql)) {
+				$batch_rows[] = $row;
+			}
 		}
 
+		if (empty($batch_rows)) {
+			break;
+		}
+
+		$page_ids = array();
+		foreach ($batch_rows as $row) {
+			$j = substr($row['com_code'], 0, 1);
+			$k = substr($row['com_code'], 1);
+			if ($j === 'p' && $k !== '' && $page_active && !isset($pages_data[(int)$k])) {
+				$page_ids[(int)$k] = true;
+			}
+		}
+
+		if (!empty($page_ids)) {
+			$ids_list = implode(',', array_map('intval', array_keys($page_ids)));
+			$sql_pages = sed_sql_query("SELECT page_id, page_title, page_cat, page_alias, page_state, page_comcount FROM $db_pages WHERE page_id IN ($ids_list)");
+			while ($p = sed_sql_fetchassoc($sql_pages)) {
+				$pages_data[(int)$p['page_id']] = $p;
+			}
+		}
+
+		foreach ($batch_rows as $row) {
+			$j = substr($row['com_code'], 0, 1);
+			$k = substr($row['com_code'], 1);
+			$allowed = false;
+
+			switch ($j) {
+				case 'p':
+					$pid = (int)$k;
+					if ($page_active && isset($pages_data[$pid])) {
+						$p = $pages_data[$pid];
+						if ((int)$p['page_state'] === 0 && $p['page_cat'] !== 'system' && sed_auth('page', $p['page_cat'], 'R')) {
+							$allowed = true;
+						}
+					}
+					break;
+
+				case 'v':
+					$allowed = $polls_active;
+					break;
+
+				case 'g':
+					$allowed = $gallery_active;
+					break;
+
+				case 'u':
+					$allowed = $users_active;
+					break;
+
+				default:
+					$allowed = true;
+					break;
+			}
+
+			if ($allowed) {
+				if (!$group_by_item) {
+					$com_code = $row['com_code'];
+					$author_key = ((int)$row['com_authorid'] > 0)
+						? 'u:' . (int)$row['com_authorid']
+						: 'g:' . mb_strtolower(trim((string)$row['com_author']), $charset);
+					if (isset($last_author_by_code[$com_code]) && $last_author_by_code[$com_code] === $author_key) {
+						continue;
+					}
+					$last_author_by_code[$com_code] = $author_key;
+				}
+				$comments_rows[] = $row;
+				if (count($comments_rows) >= $limit) {
+					break;
+				}
+			}
+		}
+
+		if (count($batch_rows) < $batch_size) {
+			break;
+		}
+		$offset += $batch_size;
+	}
+
+	if (!empty($pages_data)) {
 		/* === Hook === */
 		foreach (sed_getextplugins('recentitems.comments.pages') as $pl) {
-		include $pl;
-	}
+			include $pl;
+		}
 		/* ============ */
 	}
 
@@ -150,21 +260,29 @@ function sed_get_latestcomments($limit, $mask)
 
 		$com_code = $row['com_code'];
 
-		$com_text = sed_cutstring(strip_tags($row['com_text']), 100);
+		$com_plain = html_entity_decode(strip_tags((string)$row['com_text']), ENT_QUOTES, $charset);
+		$com_plain_clean = preg_replace('/\s+/u', ' ', $com_plain);
+		if ($com_plain_clean === null) {
+			$com_plain_clean = preg_replace('/\s+/', ' ', $com_plain);
+		}
+		$com_plain = trim($com_plain_clean !== null ? $com_plain_clean : $com_plain);
+		$com_text = sed_cc(sed_cutstring($com_plain, 100));
 
 		$j = substr($com_code, 0, 1);
 		$k = substr($com_code, 1);
+		$com_item_url = '';
+		$com_count = isset($item_counts[(int)$row['com_id']]) ? $item_counts[(int)$row['com_id']] : 0;
 
 		switch ($j) {
 			case 'p':
-				if (sed_module_active('page')) {
-					$row2 = isset($pages_data[(int)$k]) ? $pages_data[(int)$k] : null;
-					if ($row2) {
-						$sys['catcode'] = $row2['page_cat']; //new in v175
-						$row2['page_pageurl'] = (empty($row2['page_alias'])) ? sed_url("page", "id=" . $row2['page_id'] . "&comments=1", "#c" . $row['com_id']) : sed_url("page", "al=" . $row2['page_alias'] . "&comments=1", "#c" . $row['com_id']);
-						$lnk = "<a href=\"" . $row2['page_pageurl'] . "\">" . sed_cutstring(stripslashes($row2['page_title']), 60) . "</a>";
-					} else {
-						$lnk = $L['Page'] . " #" . $k;
+				$row2 = isset($pages_data[(int)$k]) ? $pages_data[(int)$k] : null;
+				if ($row2) {
+					$sys['catcode'] = $row2['page_cat']; //new in v175
+					$url_param = (empty($row2['page_alias'])) ? "id=" . $row2['page_id'] : "al=" . $row2['page_alias'];
+					$com_item_url = sed_url("page", $url_param . $pcomments . "&b=" . $row['com_id'], "#c" . $row['com_id']);
+					$lnk = "<a href=\"" . $com_item_url . "\">" . sed_cutstring(stripslashes($row2['page_title']), 60) . "</a>";
+					if ($com_count == 0 && isset($row2['page_comcount'])) {
+						$com_count = (int)$row2['page_comcount'];
 					}
 				} else {
 					$lnk = $L['Page'] . " #" . $k;
@@ -172,15 +290,18 @@ function sed_get_latestcomments($limit, $mask)
 				break;
 
 			case 'v':
-				$lnk = "<a href=\"javascript:sedjs.polls('" . $k . "&comments=1#c" . $row['com_id'] . "'" . $modal . ")\">" . $L['Poll'] . " #" . $k . "</a>";
+				$com_item_url = "javascript:sedjs.polls('" . $k . "&comments=1&b=" . $row['com_id'] . "#c" . $row['com_id'] . "'" . $modal . ")";
+				$lnk = "<a href=\"" . $com_item_url . "\">" . $L['Poll'] . " #" . $k . "</a>";
 				break;
 
 			case 'g':
-				$lnk = "<a href=\"" . sed_url("gallery", "id=" . $k . "&comments=1", "#c" . $row['com_id']) . "\">" . $L['Gallery'] . " #" . $k . "</a>";
+				$com_item_url = sed_url("gallery", "id=" . $k . "&comments=1&b=" . $row['com_id'], "#c" . $row['com_id']);
+				$lnk = "<a href=\"" . $com_item_url . "\">" . $L['Gallery'] . " #" . $k . "</a>";
 				break;
 
 			case 'u':
-				$lnk = "<a href=\"" . sed_url("users", "m=details&id=" . $k . "&comments=1", "#c" . $row['com_id']) . "\">" . $L['Users'] . " #" . $k . "</a>";
+				$com_item_url = sed_url("users", "m=details&id=" . $k . "&comments=1&b=" . $row['com_id'], "#c" . $row['com_id']);
+				$lnk = "<a href=\"" . $com_item_url . "\">" . $L['Users'] . " #" . $k . "</a>";
 				break;
 
 			default:
@@ -196,6 +317,8 @@ function sed_get_latestcomments($limit, $mask)
 			"LATEST_COMMENTS_ROW_AUTHOR" => $com_author,
 			"LATEST_COMMENTS_ROW_AUTHORLINK" => $com_authorlink,
 			"LATEST_COMMENTS_ROW_LNK" => $lnk,
+			"LATEST_COMMENTS_ROW_URL" => $com_item_url,
+			"LATEST_COMMENTS_ROW_COUNT" => $com_count,
 			"LATEST_COMMENTS_ROW_DATE" => sed_build_date($cfg['formatyearmonthday'], $row['com_date'], $cfg['plu_mask_comments_date']),
 			"LATEST_COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
 			"LATEST_COMMENTS_ROW_TEXT" => $com_text

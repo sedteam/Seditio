@@ -35,6 +35,7 @@ maxpages=01:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Recent pages displayed
 maxtopics=02:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Recent topics in forums displayed
 maxpolls=03:select:0,1,2,3,4,5:1:Recent polls displayed
 maxcomments=04:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30:10:Recent comments displayed
+groupcomments=05:radio:0,1:0:Group comments by item (show only latest per item)
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */

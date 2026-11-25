@@ -66,20 +66,26 @@ $plu_empty = $L['None'] . "<br />";
 
 $latestpages = $latesttopics = $latestpoll = $latestcomments = '';
 
-if ($cfg['plugin']['recentitems']['maxpages'] > 0 && sed_module_active('page')) {
-	$latestpages = sed_get_latestpages($cfg['plugin']['recentitems']['maxpages'], $cfg['plu_mask_pages']);
+$maxpages = isset($cfg['plugin']['recentitems']['maxpages']) ? (int)$cfg['plugin']['recentitems']['maxpages'] : 0;
+$maxtopics = isset($cfg['plugin']['recentitems']['maxtopics']) ? (int)$cfg['plugin']['recentitems']['maxtopics'] : 0;
+$maxpolls = isset($cfg['plugin']['recentitems']['maxpolls']) ? (int)$cfg['plugin']['recentitems']['maxpolls'] : 0;
+$maxcomments = isset($cfg['plugin']['recentitems']['maxcomments']) ? (int)$cfg['plugin']['recentitems']['maxcomments'] : 0;
+$groupcomments = !empty($cfg['plugin']['recentitems']['groupcomments']);
+
+if ($maxpages > 0 && sed_module_active('page')) {
+	$latestpages = sed_get_latestpages($maxpages, $cfg['plu_mask_pages']);
 }
 
-if ($cfg['plugin']['recentitems']['maxtopics'] > 0 && sed_module_active('forums')) {
-	$latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics'], $cfg['plu_mask_topics']);
+if ($maxtopics > 0 && sed_module_active('forums')) {
+	$latesttopics = sed_get_latesttopics($maxtopics, $cfg['plu_mask_topics']);
 }
 
-if ($cfg['plugin']['recentitems']['maxpolls'] > 0 && sed_module_active('polls')) {
-	$latestpoll = sed_get_latestpolls($cfg['plugin']['recentitems']['maxpolls'], $cfg['plu_mask_polls']);
+if ($maxpolls > 0 && sed_module_active('polls')) {
+	$latestpoll = sed_get_latestpolls($maxpolls, $cfg['plu_mask_polls']);
 }
 
-if ($cfg['plugin']['recentitems']['maxcomments'] > 0 && sed_plug_active('comments')) {
-	$latestcomments = sed_get_latestcomments($cfg['plugin']['recentitems']['maxcomments'], $cfg['plu_mask_comments']);
+if ($maxcomments > 0 && sed_plug_active('comments')) {
+	$latestcomments = sed_get_latestcomments($maxcomments, $cfg['plu_mask_comments'], $groupcomments);
 }
 
 $t->assign(array(

@@ -19,3 +19,5 @@ Translations=1
 $L['cfg_recentitems_maxpages'] = array("Görüntülenecek sayfa sayısı", "");
 $L['cfg_maxtopics'] = array("Görüntülenecek konu sayısı", "");
 $L['cfg_maxpolls'] = array("Görüntülenecek anket sayısı", "");
+$L['cfg_maxcomments'] = array("Görüntülenecek yorum sayısı", "");
+$L['cfg_groupcomments'] = array("Yorumları öğeye göre grupla", "Her sayfa veya öğe için yalnızca en son yorumu göster");

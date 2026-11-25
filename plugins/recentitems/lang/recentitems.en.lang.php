@@ -19,3 +19,5 @@ Translations=1
 $L['cfg_recentitems_maxpages'] = array("Number of pages to display", "");
 $L['cfg_maxtopics'] = array("Number of topics to display", "");
 $L['cfg_maxpolls'] = array("Number of polls to display", "");
+$L['cfg_maxcomments'] = array("Number of comments to display", "");
+$L['cfg_groupcomments'] = array("Group comments by item", "Show only the latest comment per page or item");
